@@ -1,0 +1,9 @@
+[
+  {
+    "messageText": "Type 'number' is not assignable to type 'IColumn<ColumnData>'.",
+    "code": 2322,
+    "category": 1,
+    "length": 1,
+    "start": 303
+  }
+]

@@ -1,0 +1,34 @@
+[
+  {
+    "messageText": {
+      "messageText": "Argument of type '(c: { readonly x: Column<{ tableAlias: \"table\"; name: \"x\"; assertDelegate: Mapper<unknown, number>; }>; readonly y: Column<{ tableAlias: \"table\"; name: \"y\"; assertDelegate: Mapper<unknown, string>; }>; readonly z: Column<...>; readonly w: Column<...>; }) => (Column<...> | Column<...>)[]' is not assignable to parameter of type '((c: { readonly x: Column<{ tableAlias: \"table\"; name: \"x\"; assertDelegate: Mapper<unknown, number>; }>; readonly y: Column<{ tableAlias: \"table\"; name: \"y\"; assertDelegate: Mapper<unknown, string>; }>; readonly z: Column<...>; readonly w: Column<...>; }) => (Column<...> | Column<...>)[]) & [...]'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Type '(c: { readonly x: Column<{ tableAlias: \"table\"; name: \"x\"; assertDelegate: Mapper<unknown, number>; }>; readonly y: Column<{ tableAlias: \"table\"; name: \"y\"; assertDelegate: Mapper<unknown, string>; }>; readonly z: Column<...>; readonly w: Column<...>; }) => (Column<...> | Column<...>)[]' is not assignable to type '[\"Cannot add key as candidate key\", \"x\" | \"y\", \"is a super key of\", (\"x\" | \"y\")[]]'.",
+        "category": 1,
+        "code": 2322
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 35,
+    "start": 611
+  },
+  {
+    "messageText": {
+      "messageText": "Argument of type '(c: { readonly x: Column<{ tableAlias: \"table\"; name: \"x\"; assertDelegate: Mapper<unknown, number>; }>; readonly y: Column<{ tableAlias: \"table\"; name: \"y\"; assertDelegate: Mapper<unknown, string>; }>; readonly z: Column<...>; readonly w: Column<...>; }) => (Column<...> | ... 1 more ... | Column<...>)[]' is not assignable to parameter of type '((c: { readonly x: Column<{ tableAlias: \"table\"; name: \"x\"; assertDelegate: Mapper<unknown, number>; }>; readonly y: Column<{ tableAlias: \"table\"; name: \"y\"; assertDelegate: Mapper<unknown, string>; }>; readonly z: Column<...>; readonly w: Column<...>; }) => (Column<...> | ... 1 more ... | Column<...>)[]) & [...]'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Type '(c: { readonly x: Column<{ tableAlias: \"table\"; name: \"x\"; assertDelegate: Mapper<unknown, number>; }>; readonly y: Column<{ tableAlias: \"table\"; name: \"y\"; assertDelegate: Mapper<unknown, string>; }>; readonly z: Column<...>; readonly w: Column<...>; }) => (Column<...> | ... 1 more ... | Column<...>)[]' is not assignable to type '[\"Cannot add key as candidate key\", \"x\" | \"y\" | \"z\", \"is a super key of\", (\"x\" | \"y\")[] | (\"y\" | \"z\")[]]'.",
+        "category": 1,
+        "code": 2322
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 35,
+    "start": 672
+  }
+]

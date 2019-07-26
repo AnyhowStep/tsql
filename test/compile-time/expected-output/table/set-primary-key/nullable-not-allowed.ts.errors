@@ -1,0 +1,9 @@
+[
+  {
+    "messageText": "Property 'y' does not exist on type '{ readonly a: Column<{ tableAlias: \"joined1\"; columnAlias: \"a\"; mapper: Mapper<unknown, Date>; }>; readonly b: Column<{ tableAlias: \"joined1\"; columnAlias: \"b\"; mapper: Mapper<unknown, number>; }>; readonly c: Column<...>; readonly d: Column<...>; }'.",
+    "code": 2339,
+    "category": 1,
+    "length": 1,
+    "start": 316
+  }
+]
