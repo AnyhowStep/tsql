@@ -1,0 +1,55 @@
+{
+    "parser": "@typescript-eslint/parser",
+    "plugins": ["@typescript-eslint", "local"],
+    "parserOptions": {
+        "ecmaVersion": 8,
+        "sourceType": "module",
+        "ecmaFeatures": {
+        },
+
+        "tsconfigRootDir": "./src",
+        "useJSXTextNode": true,
+        "warnOnUnsupportedTypeScriptVersion": true
+    },
+    "rules": {
+        "local/no-method": ["error"],
+
+        "func-call-spacing": "off",
+        "@typescript-eslint/func-call-spacing": ["error"],
+        "@typescript-eslint/no-floating-promises": ["error"],
+        "@typescript-eslint/no-for-in-array": ["error"],
+        "@typescript-eslint/no-misused-promises": [
+            "off",
+            {
+              "checksVoidReturn": true,
+              "checksConditionals": true
+            }
+        ],
+        "@typescript-eslint/no-non-null-assertion": ["error"],
+        "@typescript-eslint/no-this-alias": [
+            "error",
+            {
+                "allowDestructuring": false,
+                "allowedNames": []
+            }
+        ],
+        "@typescript-eslint/prefer-for-of": ["error"],
+        "no-return-await": ["error"],
+        "require-await": "off",
+
+        "@typescript-eslint/require-await": "off",
+
+        "@typescript-eslint/strict-boolean-expressions": ["error"],
+        "@typescript-eslint/type-annotation-spacing": [
+            "off",
+            {
+                "before": true,
+                "after": true
+            }
+        ],
+        "@typescript-eslint/prefer-string-starts-ends-with": ["error"],
+        "@typescript-eslint/unbound-method": ["error"],
+
+        "prefer-const": ["error"]
+    }
+  }

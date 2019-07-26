@@ -1,0 +1,42 @@
+{
+  "name": "typed-orm",
+  "version": "2.0.0",
+  "description": "A SQL query-builder/ORM",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-custom-eslint-rules": "tsc -p ./custom-typescript-eslint-rules/tsconfig.json",
+    "lint": "eslint --ext .ts",
+    "lint-all": "npm run lint -- ./src",
+    "clean": "rm -r ./dist || true",
+    "build": "tsc",
+    "rebuild": "(npm run clean) && (npm run build)",
+    "test-compile-time": "ts-node -P ./test/compile-time/tsconfig.json ./test/compile-time/runner.ts",
+    "accept-compile-time": "ts-node -P ./test/compile-time/tsconfig.json ./test/compile-time/accept-actual.ts",
+    "accept-one": "ts-node -P ./test/compile-time/tsconfig.json ./test/compile-time/accept-one.ts",
+    "test-compile-time-interactive": "ts-node -P ./test/compile-time/tsconfig.json ./test/compile-time/interactive.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@anyhowstep/typed-env": "^2.1.0",
+    "@types/diff": "^4.0.2",
+    "@types/node": "^12.6.2",
+    "@types/tape": "^4.2.33",
+    "@typescript-eslint/eslint-plugin": "^1.13.0",
+    "@typescript-eslint/parser": "^1.13.0",
+    "c8": "^5.0.1",
+    "diff": "^4.0.1",
+    "eslint": "^6.1.0",
+    "eslint-plugin-local": "^1.0.0",
+    "tape": "^4.11.0",
+    "ts-node": "^8.3.0",
+    "ts-simple-type": "^0.3.5",
+    "typescript": "^3.5.1"
+  },
+  "dependencies": {
+    "@types/mysql": "^2.15.6",
+    "mysql": "^2.17.1",
+    "type-mapping": "^1.17.0"
+  }
+}

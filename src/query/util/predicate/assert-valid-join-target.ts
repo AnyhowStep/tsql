@@ -1,0 +1,106 @@
+import {IQuery} from "../../query";
+import {IAliasedTable} from "../../../aliased-table";
+import {IJoin, JoinArrayUtil} from "../../../join";
+import {ColumnUtil} from "../../../column";
+import {ColumnIdentifierUtil} from "../../../column-identifier";
+import {CompileError} from "../../../compile-error";
+import {Writable} from "../../../type-util";
+import { AssertAliasedTableNotInJoins } from "./assert-aliased-table-not-in-joins";
+import { AssertAliasedTableNotInParentJoins } from "./assert-aliased-table-not-in-parent-joins";
+import { AssertNoUsedRef } from "./assert-no-used-ref";
+import { AssertNotLateral } from "./assert-not-lateral";
+
+/*
+This is commented out now but will be useful as part of implementing
+support for MySQL 8.0; where it allows references to parent query tables.
+
+Also, for `LATERAL derived tables`,
+We also need to check `QueryT["_joins"]` because you can
+reference previous tables with `LATERAL`
+(
+    QueryT["_parentJoins"] extends IJoin[] ?
+    (
+        Exclude<
+            ColumnUtil.FromColumnRef<AliasedTableT["usedRef"]>,
+            ColumnUtil.FromJoinArray<QueryT["_parentJoins"]>
+        > extends never ?
+        //All of usedRef exist in parentJoins
+        unknown :
+        [
+            "Incompatible usedRef",
+            Exclude<
+                ColumnUtil.FromColumnRef<AliasedTableT["usedRef"]>,
+                ColumnUtil.FromJoinArray<QueryT["_parentJoins"]>
+            >
+        ]
+    ) :
+    //You can't have any usedRef if there are no parentJoins
+    [
+        "Incompatible usedRef",
+        //All columns in the usedRef are incompatible
+        ColumnIdentifierUtil.FromColumnRef<AliasedTableT["usedRef"]>
+    ]
+)*/
+
+/**
+ *
+ * Checks if `AliasedTableT` can be added to the `FROM/JOIN`
+ * clause of `QueryT`
+ *
+ * @todo Implement `LATERAL`
+ * @todo Move to MySQL 5.7-specific package
+ */
+export type AssertValidJoinTarget<
+    QueryT extends IQuery,
+    AliasedTableT extends IAliasedTable,
+    TrueT
+> = (
+    AssertAliasedTableNotInJoins<
+        QueryT,
+        AliasedTableT,
+        AssertAliasedTableNotInParentJoins<
+            QueryT,
+            AliasedTableT,
+            /**
+             * Refernce to parent query tables and same `FROM/JOIN` clause tables
+             * not supported in MySQL 5.7
+             */
+            AssertNoUsedRef<
+                AliasedTableT,
+                /**
+                 * `LATERAL` not supported in MySQL 5.7
+                 */
+                AssertNotLateral<
+                    AliasedTableT,
+                    TrueT
+                >
+            >
+        >
+    >
+);
+export function assertValidJoinTarget (
+    query : IQuery,
+    aliasedTable : IAliasedTable
+) {
+    if (query._joins != undefined) {
+        if (query._joins.some(j => j.aliasedTable.alias == aliasedTable.alias)) {
+            throw new Error(`Alias ${aliasedTable.alias} already used in previous JOINs`);
+        }
+    }
+    if (query._parentJoins != undefined) {
+        if (query._parentJoins.some(j => j.aliasedTable.alias == aliasedTable.alias)) {
+            throw new Error(`Alias ${aliasedTable.alias} already used in parent JOINs`);
+        }
+    }
+    if (query._parentJoins == undefined) {
+        ColumnIdentifierRefUtil.assertHasColumnIdentifiers(
+            {},
+            ColumnIdentifierUtil.Array.fromColumnRef(aliasedTable.usedRef)
+        );
+    } else {
+        ColumnIdentifierRefUtil.assertHasColumnIdentifiers(
+            ColumnIdentifierRefUtil.fromJoinArray(query._parentJoins),
+            ColumnIdentifierUtil.Array.fromColumnRef(aliasedTable.usedRef)
+        );
+    }
+}

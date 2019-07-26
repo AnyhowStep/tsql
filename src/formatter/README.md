@@ -1,0 +1,1 @@
+The code in this folder was taken from [here](https://github.com/zeroturnaround/sql-formatter) and adapted for use in this project.

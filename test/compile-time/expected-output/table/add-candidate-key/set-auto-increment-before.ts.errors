@@ -1,0 +1,34 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type 'Column<{ tableAlias: \"joined1\"; columnAlias: \"y\"; mapper: Mapper<unknown, string>; }>[]' is not assignable to type 'Column<{ tableAlias: \"joined1\"; columnAlias: \"y\"; mapper: Mapper<unknown, string>; }>[] & CompileError<[readonly \"y\"[], \"is a sub key of\", readonly \"y\"[]]> & CompileError<[readonly \"y\"[], \"is a super key of\", readonly \"y\"[]]>'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Property '__compileError' is missing in type 'Column<{ tableAlias: \"joined1\"; columnAlias: \"y\"; mapper: Mapper<unknown, string>; }>[]' but required in type 'CompileError<[readonly \"y\"[], \"is a sub key of\", readonly \"y\"[]]>'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 5,
+    "start": 338
+  },
+  {
+    "messageText": {
+      "messageText": "Type '(Column<{ tableAlias: \"joined1\"; columnAlias: \"y\"; mapper: Mapper<unknown, string>; }> | Column<{ tableAlias: \"joined1\"; columnAlias: \"d\"; mapper: Mapper<unknown, string>; }>)[]' is not assignable to type '(Column<{ tableAlias: \"joined1\"; columnAlias: \"y\"; mapper: Mapper<unknown, string>; }> | Column<{ tableAlias: \"joined1\"; columnAlias: \"d\"; mapper: Mapper<unknown, string>; }>)[] & CompileError<[readonly (\"y\" | \"d\")[], \"is a super key of\", readonly \"y\"[]]>'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Property '__compileError' is missing in type '(Column<{ tableAlias: \"joined1\"; columnAlias: \"y\"; mapper: Mapper<unknown, string>; }> | Column<{ tableAlias: \"joined1\"; columnAlias: \"d\"; mapper: Mapper<unknown, string>; }>)[]' but required in type 'CompileError<[readonly (\"y\" | \"d\")[], \"is a super key of\", readonly \"y\"[]]>'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 10,
+    "start": 375
+  }
+]

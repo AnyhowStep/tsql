@@ -1,0 +1,12 @@
+//
+//
+/**
+ * In particular,
+ * + `BLOB` data should be sent as a `Buffer`
+ * + `JSON` data should be sent as a `string`
+ * + `undefined` IS NOT ALLOWED
+ * + `DECIMAL` data is sent as `string` for now because
+ *   there is no native arbitrary-precision-floting-point or fixed-point type in JS
+ */
+export type PrimitiveExpr = bigint|number|string|boolean|Date|Buffer|null;
+export type NonNullPrimitiveExpr = Exclude<PrimitiveExpr, null>;

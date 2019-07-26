@@ -1,0 +1,24 @@
+{
+    "extends" : "./tsconfig-base.json",
+    "compilerOptions": {
+        "outDir": "./dist",
+        "rootDir": "./src",
+        "types": [
+            "@types/mysql"
+        ]
+    },
+    "include" : [
+        "./src/type-util/**/*",
+        "./src/ast/**/*",
+        "./src/column/**/*",
+        "./src/column-map/**/*",
+        "./src/column-ref/**/*",
+        "./src/aliased-table/**/*",
+        "./src/key/**/*",
+        "./src/table/**/*.ts",
+        "./src/candidate-key/**/*",
+        "./src/super-key/**/*",
+        "./src/primary-key/**/*",
+        "./src/index.ts"
+    ]
+}
