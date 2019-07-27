@@ -89,7 +89,7 @@ export class Table<DataT extends TableData> implements ITable<DataT> {
      */
     readonly as = <NewTableAliasT extends string> (newTableAlias : NewTableAliasT) : TableUtil.As<Table<DataT>, NewTableAliasT> => {
         return TableUtil.as(this, newTableAlias);
-    }
+    };
 
     /**
      * Change the table's `tableAlias` entirely without an `AS` clause
@@ -100,7 +100,7 @@ export class Table<DataT extends TableData> implements ITable<DataT> {
         newTableAlias : NewTableAliasT
     ) : TableUtil.SetTableAlias<Table<DataT>, NewTableAliasT> => {
         return TableUtil.setTableAlias(this, newTableAlias);
-    }
+    };
 
     /**
      * Adds columns to the table
@@ -122,7 +122,7 @@ export class Table<DataT extends TableData> implements ITable<DataT> {
         )
     ) = (rawColumns : any) : any => {
         return TableUtil.addColumns(this, rawColumns);
-    }
+    };
 
     readonly addCandidateKey = <
         KeyT extends readonly ColumnUtil.FromColumnMap<this["columns"]>[]
@@ -188,7 +188,7 @@ export class Table<DataT extends TableData> implements ITable<DataT> {
             Table<DataT>,
             IdT
         >(this, delegate);
-    }
+    };
     /**
      * Designates one column as the `AUTO_INCREMENT` column
      *
@@ -216,72 +216,45 @@ export class Table<DataT extends TableData> implements ITable<DataT> {
             Table<DataT>,
             AutoIncrementT
         >(this, delegate);
-    }
+    };
+
     readonly setDatabaseName = (
         newDatabaseName : string
     ) : (
         TableUtil.SetDatabaseName<Table<DataT>>
     ) => {
         return TableUtil.setDatabaseName(this, newDatabaseName);
-    }
-    /*
-    setPrimaryKey<
-        DelegateT extends TableUtil.PrimaryKeyDelegate<this>
-    > (
-        delegate : TableUtil.AssertValidCandidateKeyDelegate<this, DelegateT>
-    ) : (
-        TableUtil.AssertValidCandidateKeyDelegate_Hack<
-            this,
-            DelegateT,
-            TableUtil.SetPrimaryKey<this, DelegateT>
-        >
-        //TableUtil.SetPrimaryKey<this, DelegateT>
-    ) {
-        return TableUtil.setPrimaryKey<
-            this,
-            DelegateT
-        >(this, delegate);
-    }
-    /*
-        Adding a candidate key that is a super-set of
-        an existing candidate key should throw an error,
-        both during compile-time and run-time.
+    };
 
-        Candidate keys should be as small as possible.
-    */
-   /*
-    addCandidateKey<
-        DelegateT extends TableUtil.CandidateKeyDelegate<this>
+    readonly addGenerated = <
+        ColumnsT extends readonly ColumnUtil.FromColumnMap<TableUtil.AllowedGeneratedColumnMap<Table<DataT>>>[]
     > (
-        delegate : TableUtil.AssertValidCandidateKeyDelegate<this, DelegateT>
+        delegate : (
+            TableUtil.GeneratedDelegate<
+                Table<DataT>,
+                ColumnsT
+            >
+        )
     ) : (
-        TableUtil.AssertValidCandidateKeyDelegate_Hack<
-            this,
-            DelegateT,
-            TableUtil.AddCandidateKey<this, DelegateT>
-        >
-        //TableUtil.AddCandidateKey<this, DelegateT>
-    ) {
-        return TableUtil.addCandidateKey<this, DelegateT>(this, delegate);
-    }
-    addGenerated<
-        DelegateT extends TableUtil.GeneratedDelegate<this>
+        TableUtil.AddGenerated<Table<DataT>, ColumnsT>
+    ) => {
+        return TableUtil.addGenerated<Table<DataT>, ColumnsT>(this, delegate);
+    };
+    readonly addExplicitDefaultValue = <
+        ColumnsT extends readonly ColumnUtil.FromColumnMap<TableUtil.AllowedExplicitDefaultValueColumnMap<Table<DataT>>>[]
     > (
-        delegate : DelegateT
+        delegate : (
+            TableUtil.ExplicitDefaultValueDelegate<
+                Table<DataT>,
+                ColumnsT
+            >
+        )
     ) : (
-        TableUtil.AddGenerated<this, DelegateT>
-    ) {
-        return TableUtil.addGenerated(this, delegate);
-    }
-    addHasExplicitDefaultValue<
-        DelegateT extends TableUtil.HasExplicitDefaultValueDelegate<this>
-    > (
-        delegate : DelegateT
-    ) : (
-        TableUtil.AddHasExplicitDefaultValue<this, DelegateT>
-    ) {
-        return TableUtil.addHasExplicitDefaultValue(this, delegate);
-    }
+        TableUtil.AddExplicitDefaultValue<Table<DataT>, ColumnsT>
+    ) => {
+        return TableUtil.addExplicitDefaultValue<Table<DataT>, ColumnsT>(this, delegate);
+    };
+    /*
     setImmutable () : TableUtil.SetImmutable<this> {
         return TableUtil.setImmutable(this);
     }

@@ -3,7 +3,7 @@ import {Table} from "../../table-impl";
 import {CompileError} from "../../../compile-error";
 import {ColumnUtil, IColumn} from "../../../column";
 import {KeyUtil, KeyArrayUtil} from "../../../key";
-import {ColumnIdentifierMapUtil} from "../../../column-identifier-map";
+import {assertHasColumnIdentifiers} from "../predicate";
 
 export type CandidateKeyDelegate<
     TableT extends Pick<ITable, "columns">,
@@ -101,11 +101,7 @@ export function assertValidCandidateKey (
     table : Pick<ITable, "candidateKeys"|"columns">,
     columns : readonly IColumn[]
 ) {
-    //An extra run-time check, just to be safe...
-    //For all the JS-land users
-    for (const column of columns) {
-        ColumnIdentifierMapUtil.assertHasColumnIdentifier(table.columns, column);
-    }
+    assertHasColumnIdentifiers(table, columns);
 
     assertNotSubKey(table, columns);
     assertNotSuperKey(table, columns);
