@@ -1521,7 +1521,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         return this;
     }
     insertIgnoreInto<
-        TableT extends ITable & { insertAllowed : true }
+        TableT extends ITable & { insertEnabled : true }
     > (
         this : Extract<this, QueryUtil.AfterSelectClause>,
         table : TableT,
@@ -1542,7 +1542,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         );
     }
     insertInto<
-        TableT extends ITable & { insertAllowed : true }
+        TableT extends ITable & { insertEnabled : true }
     > (
         this : Extract<this, QueryUtil.AfterSelectClause>,
         table : TableT,
@@ -1563,7 +1563,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         );
     }
     replaceInto<
-        TableT extends ITable & { insertAllowed : true }
+        TableT extends ITable & { insertEnabled : true }
     > (
         this : Extract<this, QueryUtil.AfterSelectClause>,
         table : TableT,
@@ -1629,7 +1629,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     ) : (
         Delete<{
             _query : DeletableQuery,
-            _tables : (ITable & { deleteAllowed : true })[],
+            _tables : (ITable & { deleteEnabled : true })[],
             _modifier : undefined,
         }>
     ) {
@@ -1641,7 +1641,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     ) : (
         Delete<{
             _query : DeletableQuery,
-            _tables : (ITable & { deleteAllowed : true })[],
+            _tables : (ITable & { deleteEnabled : true })[],
             _modifier : DeleteModifier.IGNORE,
         }>
     ) {

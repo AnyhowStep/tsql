@@ -62,7 +62,7 @@ export function assertHasColumnIdentifier (map : ColumnIdentifierMap, identifier
         throw new Error(`Column ${identifier.tableAlias}.${identifier.columnAlias} does not exist in column identifier map`);
     }
 }
-export function assertHasColumnIdentifiers (map : ColumnIdentifierMap, identifiers : ColumnIdentifier[]) {
+export function assertHasColumnIdentifiers (map : ColumnIdentifierMap, identifiers : readonly ColumnIdentifier[]) {
     for (const columnIdentifier of identifiers) {
         assertHasColumnIdentifier(map, columnIdentifier);
     }

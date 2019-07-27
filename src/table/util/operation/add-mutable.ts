@@ -5,48 +5,55 @@ import {KeyUtil} from "../../../key";
 import {pickOwnEnumerable} from "../../../type-util";
 import {ColumnIdentifierMapUtil} from "../../../column-identifier-map";
 
-export type AllowedExplicitDefaultValueColumnAlias<TableT extends Pick<ITable, "columns"|"explicitDefaultValueColumns">> = (
+/**
+ * Generated columns cannot be mutable.
+ */
+export type AllowedMutableColumnAlias<TableT extends Pick<ITable, "columns"|"generatedColumns"|"mutableColumns">> = (
     Exclude<
         Extract<keyof TableT["columns"], string>,
-        TableT["explicitDefaultValueColumns"][number]
+        (
+            | TableT["generatedColumns"][number]
+            | TableT["mutableColumns"][number]
+        )
     >
 );
-export type AllowedExplicitDefaultValueColumnMap<TableT extends Pick<ITable, "columns"|"explicitDefaultValueColumns">> = (
+export type AllowedMutableColumnMap<TableT extends Pick<ITable, "columns"|"generatedColumns"|"mutableColumns">> = (
     {
-        readonly [columnAlias in AllowedExplicitDefaultValueColumnAlias<TableT>] : (
+        readonly [columnAlias in AllowedMutableColumnAlias<TableT>] : (
             TableT["columns"][columnAlias]
         )
     }
 );
-export function allowedExplicitDefaultValueColumnMap<
-    TableT extends Pick<ITable, "columns"|"explicitDefaultValueColumns">
+export function allowedMutableColumnMap<
+    TableT extends Pick<ITable, "columns"|"generatedColumns"|"mutableColumns">
 > (
     table : TableT
 ) : (
-    AllowedExplicitDefaultValueColumnMap<TableT>
+    AllowedMutableColumnMap<TableT>
 ) {
-    const result : AllowedExplicitDefaultValueColumnMap<TableT> = pickOwnEnumerable(
+    const result : AllowedMutableColumnMap<TableT> = pickOwnEnumerable(
         table.columns,
         ColumnArrayUtil.fromColumnMap(table.columns)
             .filter(column => {
                 return (
-                    !table.explicitDefaultValueColumns.includes(column.columnAlias)
+                    !table.generatedColumns.includes(column.columnAlias) &&
+                    !table.mutableColumns.includes(column.columnAlias)
                 );
             })
             .map(column => column.columnAlias)
-    ) as AllowedExplicitDefaultValueColumnMap<TableT>;
+    ) as AllowedMutableColumnMap<TableT>;
     return result;
 }
-export type ExplicitDefaultValueDelegate<
-    TableT extends Pick<ITable, "columns"|"explicitDefaultValueColumns">,
-    ColumnsT extends readonly ColumnUtil.FromColumnMap<AllowedExplicitDefaultValueColumnMap<TableT>>[]
+export type MutableDelegate<
+    TableT extends Pick<ITable, "columns"|"generatedColumns"|"mutableColumns">,
+    ColumnsT extends readonly ColumnUtil.FromColumnMap<AllowedMutableColumnMap<TableT>>[]
 > = (
-    (columnMap : AllowedExplicitDefaultValueColumnMap<TableT>) => ColumnsT
+    (columnMap : AllowedMutableColumnMap<TableT>) => ColumnsT
 );
 
-export type AddExplicitDefaultValue<
+export type AddMutable<
     TableT extends ITable,
-    ColumnsT extends readonly ColumnUtil.FromColumnMap<AllowedExplicitDefaultValueColumnMap<TableT>>[]
+    ColumnsT extends readonly ColumnUtil.FromColumnMap<AllowedMutableColumnMap<TableT>>[]
 > = (
     Table<{
         lateral : TableT["lateral"],
@@ -64,48 +71,48 @@ export type AddExplicitDefaultValue<
 
         generatedColumns : TableT["generatedColumns"],
         nullableColumns : TableT["nullableColumns"],
+        explicitDefaultValueColumns : TableT["explicitDefaultValueColumns"],
         /**
-         * Our new columns with explicit default values
+         * Our new mutable columns
          */
-        explicitDefaultValueColumns : KeyUtil.Concat<
-            TableT["explicitDefaultValueColumns"],
+        mutableColumns : KeyUtil.Concat<
+            TableT["mutableColumns"],
             KeyUtil.FromColumnArray<ColumnsT>
         >,
-        mutableColumns : TableT["mutableColumns"],
 
         parents : TableT["parents"],
     }>
 );
-export function addExplicitDefaultValue<
+export function addMutable<
     TableT extends ITable,
-    ColumnsT extends readonly ColumnUtil.FromColumnMap<AllowedExplicitDefaultValueColumnMap<TableT>>[]
+    ColumnsT extends readonly ColumnUtil.FromColumnMap<AllowedMutableColumnMap<TableT>>[]
 > (
     table : TableT,
     delegate : (
-        ExplicitDefaultValueDelegate<
+        MutableDelegate<
             TableT,
             ColumnsT
         >
     )
 ) : (
-    AddExplicitDefaultValue<TableT, ColumnsT>
+    AddMutable<TableT, ColumnsT>
 ) {
-    const allowedColumns = allowedExplicitDefaultValueColumnMap(table);
-    const newExplicitDefaultValue : ColumnsT = delegate(allowedColumns);
+    const allowedColumns = allowedMutableColumnMap(table);
+    const newMutable : ColumnsT = delegate(allowedColumns);
 
     ColumnIdentifierMapUtil.assertHasColumnIdentifiers(
         allowedColumns,
-        newExplicitDefaultValue
+        newMutable
     );
 
-    const explicitDefaultValueColumns : (
+    const mutableColumns : (
         KeyUtil.Concat<
-            TableT["explicitDefaultValueColumns"],
+            TableT["mutableColumns"],
             KeyUtil.FromColumnArray<ColumnsT>
         >
     ) = KeyUtil.concat(
-        table.explicitDefaultValueColumns,
-        KeyUtil.fromColumnArray(newExplicitDefaultValue)
+        table.mutableColumns,
+        KeyUtil.fromColumnArray(newMutable)
     );
 
     const {
@@ -124,14 +131,14 @@ export function addExplicitDefaultValue<
 
         generatedColumns,
         nullableColumns,
-        //explicitDefaultValueColumns,
-        mutableColumns,
+        explicitDefaultValueColumns,
+        //mutableColumns,
 
         parents,
     } = table;
 
 
-    const result : AddExplicitDefaultValue<TableT, ColumnsT> = new Table(
+    const result : AddMutable<TableT, ColumnsT> = new Table(
         {
             lateral,
             tableAlias,

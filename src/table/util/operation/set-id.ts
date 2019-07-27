@@ -6,6 +6,7 @@ import {NonNullPrimitiveExpr} from "../../../primitive-expr";
 import {KeyArrayUtil, KeyUtil} from "../../../key";
 import {assertValidPrimaryKey, AssertValidPrimaryKey, AllowedPrimaryKeyColumnMap} from "./set-primary-key";
 import { pickOwnEnumerable } from "../../../type-util";
+import { ColumnIdentifierMapUtil } from "../../../column-identifier-map";
 
 /**
  * The aliases of columns that can be an `id-column`
@@ -96,6 +97,9 @@ export function assertValidId (
     table : Pick<ITable, "candidateKeys"|"columns">,
     id : IColumn
 ) {
+    const allowedColumns = allowedIdColumnMap(table);
+    ColumnIdentifierMapUtil.assertHasColumnIdentifier(allowedColumns, id);
+
     assertValidPrimaryKey(table, [id]);
 }
 /**
@@ -136,8 +140,8 @@ export type SetId<
             KeyUtil.FromColumn<IdT>
         >,
 
-        insertAllowed : TableT["insertAllowed"],
-        deleteAllowed : TableT["deleteAllowed"],
+        insertEnabled : TableT["insertEnabled"],
+        deleteEnabled : TableT["deleteEnabled"],
 
         generatedColumns : TableT["generatedColumns"],
         nullableColumns : TableT["nullableColumns"],
@@ -197,8 +201,8 @@ export function setId<
         //primaryKey,
         //candidateKeys,
 
-        insertAllowed,
-        deleteAllowed,
+        insertEnabled,
+        deleteEnabled,
 
         generatedColumns,
         nullableColumns,
@@ -220,8 +224,8 @@ export function setId<
             primaryKey,
             candidateKeys,
 
-            insertAllowed,
-            deleteAllowed,
+            insertEnabled,
+            deleteEnabled,
 
             generatedColumns,
             nullableColumns,

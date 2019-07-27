@@ -8,8 +8,8 @@ export interface TableData extends AliasedTableData {
     readonly primaryKey : undefined|Key;
     readonly candidateKeys : readonly Key[];
 
-    readonly insertAllowed : boolean;
-    readonly deleteAllowed : boolean;
+    readonly insertEnabled : boolean;
+    readonly deleteEnabled : boolean;
 
     readonly generatedColumns : readonly string[];
     readonly nullableColumns : readonly string[];
@@ -91,13 +91,13 @@ export interface ITable<DataT extends TableData=TableData> extends IAliasedTable
      *
      * Defaults to `true`
      */
-    readonly insertAllowed : DataT["insertAllowed"];
+    readonly insertEnabled : DataT["insertEnabled"];
     /**
      * Determines if rows of this table can be deleted through this library.
      *
      * Defaults to `true`
      */
-    readonly deleteAllowed : DataT["deleteAllowed"];
+    readonly deleteEnabled : DataT["deleteEnabled"];
 
     /**
      * The name of `GENERATED` columns.
@@ -159,6 +159,12 @@ export interface ITable<DataT extends TableData=TableData> extends IAliasedTable
     readonly mutableColumns : DataT["mutableColumns"];
 
     /**
+     * @todo Refactor and move to a different directory
+     *
+     * Should not tightly couple feature to table implementation
+     *
+     * -----
+     *
      * Used to implement table-per-type inheritance.
      *
      * Note:
@@ -202,11 +208,11 @@ export interface ITable<DataT extends TableData=TableData> extends IAliasedTable
 
 export type InsertableTable = (
     ITable &
-    { insertAllowed : true }
+    { insertEnabled : true }
 );
 export type DeletableTable = (
     ITable &
-    { deleteAllowed : true }
+    { deleteEnabled : true }
 );
 export type TableWithPrimaryKey = (
     ITable &

@@ -18,8 +18,8 @@ export type SetTableAlias<TableT extends ITable, NewTableAliasT extends string> 
         primaryKey : TableT["primaryKey"],
         candidateKeys : TableT["candidateKeys"],
 
-        insertAllowed : TableT["insertAllowed"],
-        deleteAllowed : TableT["deleteAllowed"],
+        insertEnabled : TableT["insertEnabled"],
+        deleteEnabled : TableT["deleteEnabled"],
 
         generatedColumns : TableT["generatedColumns"],
         nullableColumns : TableT["nullableColumns"],
@@ -55,8 +55,8 @@ export function setTableAlias<TableT extends ITable, NewTableAliasT extends stri
         primaryKey,
         candidateKeys,
 
-        insertAllowed,
-        deleteAllowed,
+        insertEnabled,
+        deleteEnabled,
 
         generatedColumns,
         nullableColumns,
@@ -81,8 +81,8 @@ export function setTableAlias<TableT extends ITable, NewTableAliasT extends stri
             primaryKey,
             candidateKeys,
 
-            insertAllowed,
-            deleteAllowed,
+            insertEnabled,
+            deleteEnabled,
 
             generatedColumns,
             nullableColumns,

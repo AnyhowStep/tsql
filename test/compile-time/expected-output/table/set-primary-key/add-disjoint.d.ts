@@ -34,8 +34,8 @@ export declare const joined1: import("../../../../../dist/table/table-impl").Tab
     id: undefined;
     primaryKey: readonly "b"[];
     candidateKeys: readonly (readonly ("y" | "c")[] | readonly "b"[])[];
-    insertAllowed: true;
-    deleteAllowed: true;
+    insertEnabled: true;
+    deleteEnabled: true;
     generatedColumns: readonly [];
     nullableColumns: never[];
     explicitDefaultValueColumns: readonly [];

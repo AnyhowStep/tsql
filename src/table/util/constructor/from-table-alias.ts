@@ -15,8 +15,8 @@ export type FromTableAlias<
         primaryKey : undefined,
         candidateKeys : readonly [],
 
-        insertAllowed : true,
-        deleteAllowed : true,
+        insertEnabled : true,
+        deleteEnabled : true,
 
         generatedColumns : readonly [],
         nullableColumns : readonly [],
@@ -45,8 +45,8 @@ export function fromTableAlias<
             primaryKey : undefined,
             candidateKeys : [],
 
-            insertAllowed : true,
-            deleteAllowed : true,
+            insertEnabled : true,
+            deleteEnabled : true,
 
             generatedColumns : [],
             nullableColumns : [],

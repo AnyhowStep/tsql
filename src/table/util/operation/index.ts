@@ -4,6 +4,7 @@ export * from "./add-columns-from-mapper-map";
 export * from "./add-columns";
 export * from "./add-explicit-default-value";
 export * from "./add-generated";
+export * from "./add-mutable";
 export * from "./as";
 export * from "./set-auto-increment";
 export * from "./set-database-name";

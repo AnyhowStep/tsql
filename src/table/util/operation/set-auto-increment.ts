@@ -5,6 +5,7 @@ import {IAnonymousColumn, ColumnArrayUtil, ColumnUtil, IColumn} from "../../../c
 import {KeyArrayUtil, KeyUtil} from "../../../key";
 import {pickOwnEnumerable} from "../../../type-util";
 import {AssertValidPrimaryKey, AllowedPrimaryKeyColumnMap, assertValidPrimaryKey} from "./set-primary-key";
+import { ColumnIdentifierMapUtil } from "../../../column-identifier-map";
 
 /**
  * The aliases of columns that can be `AUTO_INCREMENT`
@@ -97,6 +98,9 @@ export function assertValidAutoIncrement (
     table : Pick<ITable, "candidateKeys"|"columns">,
     autoIncrement : IColumn
 ) {
+    const allowedColumns = allowedAutoIncrementColumnMap(table);
+    ColumnIdentifierMapUtil.assertHasColumnIdentifier(allowedColumns, autoIncrement);
+
     assertValidPrimaryKey(table, [autoIncrement]);
 }
 /**
@@ -144,8 +148,8 @@ export type SetAutoIncrement<
             KeyUtil.FromColumn<AutoIncrementT>
         >;
 
-        insertAllowed : TableT["insertAllowed"];
-        deleteAllowed : TableT["deleteAllowed"];
+        insertEnabled : TableT["insertEnabled"];
+        deleteEnabled : TableT["deleteEnabled"];
 
         /**
          * By default, we make the `AUTO_INCREMENT` column
@@ -273,8 +277,8 @@ export function setAutoIncrement<
         //primaryKey,
         //candidateKeys,
 
-        insertAllowed,
-        deleteAllowed,
+        insertEnabled,
+        deleteEnabled,
 
         //generatedColumns,
         nullableColumns,
@@ -296,8 +300,8 @@ export function setAutoIncrement<
             primaryKey,
             candidateKeys,
 
-            insertAllowed,
-            deleteAllowed,
+            insertEnabled,
+            deleteEnabled,
 
             generatedColumns,
             nullableColumns,

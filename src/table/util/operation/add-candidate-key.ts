@@ -125,8 +125,8 @@ export type AddCandidateKey<
             KeyUtil.FromColumnArray<KeyT>
         >,
 
-        insertAllowed : TableT["insertAllowed"],
-        deleteAllowed : TableT["deleteAllowed"],
+        insertEnabled : TableT["insertEnabled"],
+        deleteEnabled : TableT["deleteEnabled"],
 
         generatedColumns : TableT["generatedColumns"],
         nullableColumns : TableT["nullableColumns"],
@@ -181,8 +181,8 @@ export function addCandidateKey<
         primaryKey,
         //candidateKeys,
 
-        insertAllowed,
-        deleteAllowed,
+        insertEnabled,
+        deleteEnabled,
 
         generatedColumns,
         nullableColumns,
@@ -205,8 +205,8 @@ export function addCandidateKey<
             primaryKey,
             candidateKeys,
 
-            insertAllowed,
-            deleteAllowed,
+            insertEnabled,
+            deleteEnabled,
 
             generatedColumns,
             nullableColumns,

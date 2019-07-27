@@ -34,8 +34,8 @@ export declare const ai: import("../../../../../dist/table/table-impl").Table<{
     id: "b";
     primaryKey: readonly "b"[];
     candidateKeys: readonly (readonly "b"[] | readonly "y"[] | readonly ("c" | "d")[])[];
-    insertAllowed: true;
-    deleteAllowed: true;
+    insertEnabled: true;
+    deleteEnabled: true;
     generatedColumns: readonly [];
     nullableColumns: never[];
     explicitDefaultValueColumns: readonly [];

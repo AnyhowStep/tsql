@@ -1,8 +1,12 @@
-import {escapeIdentifier} from "../../../sqlstring";
 import {ITable} from "../../table";
 import {Table} from "../../table-impl";
 
-export type SetDatabaseName<TableT extends ITable> = (
+/**
+ * @todo Add `EnableInsert`? Will it even ever see use?
+ */
+export type DisableInsert<
+    TableT extends ITable
+> = (
     Table<{
         lateral : TableT["lateral"],
         tableAlias : TableT["tableAlias"],
@@ -14,7 +18,7 @@ export type SetDatabaseName<TableT extends ITable> = (
         primaryKey : TableT["primaryKey"],
         candidateKeys : TableT["candidateKeys"],
 
-        insertEnabled : TableT["insertEnabled"],
+        insertEnabled : false,
         deleteEnabled : TableT["deleteEnabled"],
 
         generatedColumns : TableT["generatedColumns"],
@@ -25,11 +29,12 @@ export type SetDatabaseName<TableT extends ITable> = (
         parents : TableT["parents"],
     }>
 );
-export function setDatabaseName<TableT extends ITable> (
-    table : TableT,
-    newDatabaseName : string
+export function disableInsert<
+    TableT extends ITable
+> (
+    table : TableT
 ) : (
-    SetDatabaseName<TableT>
+    DisableInsert<TableT>
 ) {
     const {
         lateral,
@@ -42,7 +47,7 @@ export function setDatabaseName<TableT extends ITable> (
         primaryKey,
         candidateKeys,
 
-        insertEnabled,
+        //insertEnabled,
         deleteEnabled,
 
         generatedColumns,
@@ -53,7 +58,8 @@ export function setDatabaseName<TableT extends ITable> (
         parents,
     } = table;
 
-    return new Table(
+
+    const result : DisableInsert<TableT> = new Table(
         {
             lateral,
             tableAlias,
@@ -65,7 +71,7 @@ export function setDatabaseName<TableT extends ITable> (
             primaryKey,
             candidateKeys,
 
-            insertEnabled,
+            insertEnabled : false,
             deleteEnabled,
 
             generatedColumns,
@@ -75,10 +81,7 @@ export function setDatabaseName<TableT extends ITable> (
 
             parents,
         },
-        [
-            escapeIdentifier(newDatabaseName),
-            ".",
-            escapeIdentifier(tableAlias),
-        ]
+        table.unaliasedAst
     );
+    return result;
 }

@@ -34,8 +34,8 @@ export declare const t: import("../../../../../dist/table/table-impl").Table<{
     id: undefined;
     primaryKey: readonly any[];
     candidateKeys: readonly (readonly any[])[];
-    insertAllowed: true;
-    deleteAllowed: true;
+    insertEnabled: true;
+    deleteEnabled: true;
     generatedColumns: readonly [];
     nullableColumns: "y"[];
     explicitDefaultValueColumns: readonly [];

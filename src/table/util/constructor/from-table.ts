@@ -13,8 +13,8 @@ export type FromTable<TableT extends ITable> = (
         primaryKey : TableT["primaryKey"],
         candidateKeys : TableT["candidateKeys"],
 
-        insertAllowed : TableT["insertAllowed"],
-        deleteAllowed : TableT["deleteAllowed"],
+        insertEnabled : TableT["insertEnabled"],
+        deleteEnabled : TableT["deleteEnabled"],
 
         generatedColumns : TableT["generatedColumns"],
         nullableColumns : TableT["nullableColumns"],

@@ -21,8 +21,8 @@ export type AddColumnsFromFieldArray<
         primaryKey : TableT["primaryKey"],
         candidateKeys : TableT["candidateKeys"],
 
-        insertAllowed : TableT["insertAllowed"],
-        deleteAllowed : TableT["deleteAllowed"],
+        insertEnabled : TableT["insertEnabled"],
+        deleteEnabled : TableT["deleteEnabled"],
 
         generatedColumns : TableT["generatedColumns"],
         nullableColumns : ColumnMapUtil.NullableColumnAlias<

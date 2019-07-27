@@ -1,6 +1,6 @@
 [
   {
-    "messageText": "Type 'number' is not assignable to type 'IColumn<ColumnData>'.",
+    "messageText": "Type 'number' is not assignable to type 'Column<{ tableAlias: \"joined1\"; columnAlias: \"a\"; mapper: Mapper<unknown, Date>; }> | Column<{ tableAlias: \"joined1\"; columnAlias: \"b\"; mapper: Mapper<unknown, number>; }> | Column<{ tableAlias: \"joined1\"; columnAlias: \"y\"; mapper: Mapper<...>; }> | Column<...> | Column<...>'.",
     "code": 2322,
     "category": 1,
     "length": 1,

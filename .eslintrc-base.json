@@ -12,7 +12,7 @@
         "warnOnUnsupportedTypeScriptVersion": true
     },
     "rules": {
-        "local/no-method": ["error"],
+        "local/no-method": ["off"],
 
         "func-call-spacing": "off",
         "@typescript-eslint/func-call-spacing": ["error"],

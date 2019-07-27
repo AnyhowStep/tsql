@@ -3,7 +3,7 @@ import {Table} from "../../table-impl";
 import {ColumnUtil, ColumnArrayUtil} from "../../../column";
 import {KeyUtil} from "../../../key";
 import {pickOwnEnumerable} from "../../../type-util";
-import {assertHasColumnIdentifiers} from "../predicate";
+import {ColumnIdentifierMapUtil} from "../../../column-identifier-map";
 
 export type AllowedGeneratedColumnAlias<TableT extends Pick<ITable, "columns"|"generatedColumns">> = (
     Exclude<
@@ -59,8 +59,8 @@ export type AddGenerated<
         primaryKey : TableT["primaryKey"],
         candidateKeys : TableT["candidateKeys"],
 
-        insertAllowed : TableT["insertAllowed"],
-        deleteAllowed : TableT["deleteAllowed"],
+        insertEnabled : TableT["insertEnabled"],
+        deleteEnabled : TableT["deleteEnabled"],
 
         /**
          * Our new generated columns
@@ -102,9 +102,13 @@ export function addGenerated<
 ) : (
     AddGenerated<TableT, ColumnsT>
 ) {
-    const newGenerated : ColumnsT = delegate(allowedGeneratedColumnMap(table));
+    const allowedColumns = allowedGeneratedColumnMap(table);
+    const newGenerated : ColumnsT = delegate(allowedColumns);
 
-    assertHasColumnIdentifiers(table, newGenerated);
+    ColumnIdentifierMapUtil.assertHasColumnIdentifiers(
+        allowedColumns,
+        newGenerated
+    );
 
     const generatedColumns : (
         KeyUtil.Concat<
@@ -145,8 +149,8 @@ export function addGenerated<
         primaryKey,
         candidateKeys,
 
-        insertAllowed,
-        deleteAllowed,
+        insertEnabled,
+        deleteEnabled,
 
         //generatedColumns,
         nullableColumns,
@@ -169,8 +173,8 @@ export function addGenerated<
             primaryKey,
             candidateKeys,
 
-            insertAllowed,
-            deleteAllowed,
+            insertEnabled,
+            deleteEnabled,
 
             generatedColumns,
             nullableColumns,

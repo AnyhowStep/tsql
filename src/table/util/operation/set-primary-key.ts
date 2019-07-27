@@ -111,8 +111,8 @@ export type SetPrimaryKey<
             KeyUtil.FromColumnArray<KeyT>
         >,
 
-        insertAllowed : TableT["insertAllowed"],
-        deleteAllowed : TableT["deleteAllowed"],
+        insertEnabled : TableT["insertEnabled"],
+        deleteEnabled : TableT["deleteEnabled"],
 
         generatedColumns : TableT["generatedColumns"],
         nullableColumns : TableT["nullableColumns"],
@@ -169,8 +169,8 @@ export function setPrimaryKey<
         //primaryKey,
         //candidateKeys,
 
-        insertAllowed,
-        deleteAllowed,
+        insertEnabled,
+        deleteEnabled,
 
         generatedColumns,
         nullableColumns,
@@ -192,8 +192,8 @@ export function setPrimaryKey<
             primaryKey,
             candidateKeys,
 
-            insertAllowed,
-            deleteAllowed,
+            insertEnabled,
+            deleteEnabled,
 
             generatedColumns,
             nullableColumns,

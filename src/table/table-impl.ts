@@ -21,7 +21,7 @@ import {InsertRow, InsertUtil} from "../insert";
 import {UpdateUtil} from "../update";
 import {DeleteUtil} from "../delete";*/
 
-export class Table<DataT extends TableData> implements ITable<DataT> {
+export class Table<DataT extends TableData> implements ITable {
     readonly lateral : DataT["lateral"];
     readonly tableAlias : DataT["tableAlias"];
     readonly columns : DataT["columns"];
@@ -29,8 +29,8 @@ export class Table<DataT extends TableData> implements ITable<DataT> {
 
     readonly unaliasedAst : Ast;
 
-    readonly insertAllowed : DataT["insertAllowed"];
-    readonly deleteAllowed : DataT["deleteAllowed"];
+    readonly insertEnabled : DataT["insertEnabled"];
+    readonly deleteEnabled : DataT["deleteEnabled"];
 
     readonly autoIncrement : DataT["autoIncrement"];
     readonly id : DataT["id"];
@@ -62,8 +62,8 @@ export class Table<DataT extends TableData> implements ITable<DataT> {
 
         this.unaliasedAst = unaliasedAst;
 
-        this.insertAllowed = data.insertAllowed;
-        this.deleteAllowed = data.deleteAllowed;
+        this.insertEnabled = data.insertEnabled;
+        this.deleteEnabled = data.deleteEnabled;
 
         this.autoIncrement = data.autoIncrement;
         this.id = data.id;
@@ -87,44 +87,39 @@ export class Table<DataT extends TableData> implements ITable<DataT> {
      *      myTable AS newTableAlias
      * ```
      */
-    readonly as = <NewTableAliasT extends string> (newTableAlias : NewTableAliasT) : TableUtil.As<Table<DataT>, NewTableAliasT> => {
+    as<NewTableAliasT extends string> (newTableAlias : NewTableAliasT) : TableUtil.As<this, NewTableAliasT> {
         return TableUtil.as(this, newTableAlias);
-    };
+    }
 
     /**
      * Change the table's `tableAlias` entirely without an `AS` clause
      *
      * @param newTableAlias
      */
-    readonly setTableAlias = <NewTableAliasT extends string>(
+    setTableAlias <NewTableAliasT extends string>(
         newTableAlias : NewTableAliasT
-    ) : TableUtil.SetTableAlias<Table<DataT>, NewTableAliasT> => {
+    ) : TableUtil.SetTableAlias<this, NewTableAliasT> {
         return TableUtil.setTableAlias(this, newTableAlias);
     };
 
     /**
      * Adds columns to the table
      */
-    readonly addColumns : (
-        & (
-            <FieldsT extends tm.AnyField[]> (
-                fields : FieldsT
-            ) => (
-                TableUtil.AddColumnsFromFieldArray<this, FieldsT>
-            )
-        )
-        & (
-            <MapperMapT extends MapperMap> (
-                mapperMap : MapperMapT
-            ) => (
-                TableUtil.AddColumnsFromMapperMap<this, MapperMapT>
-            )
-        )
-    ) = (rawColumns : any) : any => {
+    addColumns<FieldsT extends tm.AnyField[]> (
+        fields : FieldsT
+    ) : (
+        TableUtil.AddColumnsFromFieldArray<this, FieldsT>
+    );
+    addColumns<MapperMapT extends MapperMap> (
+        mapperMap : MapperMapT
+    ) : (
+        TableUtil.AddColumnsFromMapperMap<this, MapperMapT>
+    );
+    addColumns (rawColumns : any) : any {
         return TableUtil.addColumns(this, rawColumns);
-    };
+    }
 
-    readonly addCandidateKey = <
+    addCandidateKey<
         KeyT extends readonly ColumnUtil.FromColumnMap<this["columns"]>[]
     > (
         delegate : (
@@ -140,120 +135,136 @@ export class Table<DataT extends TableData> implements ITable<DataT> {
             >
         )
     ) : (
-        TableUtil.AddCandidateKey<Table<DataT>, KeyT>
-    ) => {
+        TableUtil.AddCandidateKey<this, KeyT>
+    ) {
         return TableUtil.addCandidateKey<this, KeyT>(this, delegate);
-    };
+    }
 
-    readonly setPrimaryKey = <
-        KeyT extends readonly ColumnUtil.FromColumnMap<TableUtil.AllowedPrimaryKeyColumnMap<Table<DataT>>>[]
+    setPrimaryKey<
+        KeyT extends readonly ColumnUtil.FromColumnMap<TableUtil.AllowedPrimaryKeyColumnMap<this>>[]
     > (
         delegate : (
             TableUtil.PrimaryKeyDelegate<
-                Table<DataT>,
+                this,
                 (
                     & KeyT
                     & TableUtil.AssertValidPrimaryKey<
-                        Table<DataT>,
+                        this,
                         KeyT
                     >
                 )
             >
         )
     ) : (
-        TableUtil.SetPrimaryKey<Table<DataT>, KeyT>
-    ) => {
-        return TableUtil.setPrimaryKey<Table<DataT>, KeyT>(this, delegate);
-    };
+        TableUtil.SetPrimaryKey<this, KeyT>
+    ) {
+        return TableUtil.setPrimaryKey<this, KeyT>(this, delegate);
+    }
 
-    readonly setId = <
-        IdT extends ColumnUtil.FromColumnMap<TableUtil.AllowedIdColumnMap<Table<DataT>>>
+    /**
+     * Sets the single-column `PRIMARY KEY` of the table.
+     *
+     * @param delegate
+     */
+    setId<
+        IdT extends ColumnUtil.FromColumnMap<TableUtil.AllowedIdColumnMap<this>>
     > (
         delegate : (
             TableUtil.IdDelegate<
-                Table<DataT>,
+                this,
                 (
                     & IdT
                     & TableUtil.AssertValidId<
-                        Table<DataT>,
+                        this,
                         IdT
                     >
                 )
             >
         )
     ) : (
-        TableUtil.SetId<Table<DataT>, IdT>
-    ) => {
-        return TableUtil.setId<
-            Table<DataT>,
-            IdT
-        >(this, delegate);
-    };
+        TableUtil.SetId<this, IdT>
+    ) {
+        return TableUtil.setId<this, IdT>(this, delegate);
+    }
     /**
-     * Designates one column as the `AUTO_INCREMENT` column
+     * Designates one column as the `AUTO_INCREMENT` column.
      *
      * @param delegate - A function that returns the `AUTO_INCREMENT` column
      */
-    readonly setAutoIncrement = <
-        AutoIncrementT extends ColumnUtil.FromColumnMap<TableUtil.AllowedAutoIncrementColumnMap<Table<DataT>>>
+    setAutoIncrement<
+        AutoIncrementT extends ColumnUtil.FromColumnMap<TableUtil.AllowedAutoIncrementColumnMap<this>>
     > (
         delegate : (
             TableUtil.AutoIncrementDelegate<
-                Table<DataT>,
+                this,
                 (
                     & AutoIncrementT
                     & TableUtil.AssertValidAutoIncrement<
-                        Table<DataT>,
+                        this,
                         AutoIncrementT
                     >
                 )
             >
         )
     ) : (
-        TableUtil.SetAutoIncrement<Table<DataT>, AutoIncrementT>
-    ) => {
+        TableUtil.SetAutoIncrement<this, AutoIncrementT>
+    ) {
         return TableUtil.setAutoIncrement<
-            Table<DataT>,
+            this,
             AutoIncrementT
         >(this, delegate);
-    };
+    }
 
-    readonly setDatabaseName = (
+    setDatabaseName (
         newDatabaseName : string
     ) : (
-        TableUtil.SetDatabaseName<Table<DataT>>
-    ) => {
+        TableUtil.SetDatabaseName<this>
+    ) {
         return TableUtil.setDatabaseName(this, newDatabaseName);
-    };
+    }
 
-    readonly addGenerated = <
-        ColumnsT extends readonly ColumnUtil.FromColumnMap<TableUtil.AllowedGeneratedColumnMap<Table<DataT>>>[]
+    addGenerated<
+        ColumnsT extends readonly ColumnUtil.FromColumnMap<TableUtil.AllowedGeneratedColumnMap<this>>[]
     > (
         delegate : (
             TableUtil.GeneratedDelegate<
-                Table<DataT>,
+                this,
                 ColumnsT
             >
         )
     ) : (
-        TableUtil.AddGenerated<Table<DataT>, ColumnsT>
-    ) => {
-        return TableUtil.addGenerated<Table<DataT>, ColumnsT>(this, delegate);
-    };
-    readonly addExplicitDefaultValue = <
-        ColumnsT extends readonly ColumnUtil.FromColumnMap<TableUtil.AllowedExplicitDefaultValueColumnMap<Table<DataT>>>[]
+        TableUtil.AddGenerated<this, ColumnsT>
+    ) {
+        return TableUtil.addGenerated<this, ColumnsT>(this, delegate);
+    }
+    addExplicitDefaultValue<
+        ColumnsT extends readonly ColumnUtil.FromColumnMap<TableUtil.AllowedExplicitDefaultValueColumnMap<this>>[]
     > (
         delegate : (
             TableUtil.ExplicitDefaultValueDelegate<
-                Table<DataT>,
+                this,
                 ColumnsT
             >
         )
     ) : (
-        TableUtil.AddExplicitDefaultValue<Table<DataT>, ColumnsT>
-    ) => {
-        return TableUtil.addExplicitDefaultValue<Table<DataT>, ColumnsT>(this, delegate);
-    };
+        TableUtil.AddExplicitDefaultValue<this, ColumnsT>
+    ) {
+        return TableUtil.addExplicitDefaultValue<this, ColumnsT>(this, delegate);
+    }
+    addMutable<
+        ColumnsT extends readonly ColumnUtil.FromColumnMap<TableUtil.AllowedMutableColumnMap<this>>[]
+    > (
+        delegate : (
+            TableUtil.MutableDelegate<
+                this,
+                ColumnsT
+            >
+        )
+    ) : (
+        TableUtil.AddMutable<this, ColumnsT>
+    ) {
+        return TableUtil.addMutable<this, ColumnsT>(this, delegate);
+    }
     /*
     setImmutable () : TableUtil.SetImmutable<this> {
         return TableUtil.setImmutable(this);
