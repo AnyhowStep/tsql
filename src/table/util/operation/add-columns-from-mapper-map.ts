@@ -37,6 +37,12 @@ export type AddColumnsFromMapperMap<
         parents : TableT["parents"],
     }>
 );
+/**
+ * Converts a map of `columnAlias -> mapper` to columns of the table
+ *
+ * @param table
+ * @param mapperMap
+ */
 export function addColumnsFromMapperMap<
     TableT extends ITable,
     MapperMapT extends MapperMap

@@ -13,6 +13,16 @@ export type As<TableT extends ITable, NewTableAliasT extends string> = (
         usedRef : TableT["usedRef"];
     }>
 );
+/**
+ * Aliases a table reference in a query.
+ *
+ * ```sql
+ *  SELECT
+ *      *
+ *  FROM
+ *      myTable AS aliasedTable
+ * ```
+ */
 export function as<TableT extends ITable, NewTableAliasT extends string> (
     {
         lateral,

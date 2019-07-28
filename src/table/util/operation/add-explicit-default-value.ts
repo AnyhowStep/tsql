@@ -5,48 +5,62 @@ import {KeyUtil} from "../../../key";
 import {pickOwnEnumerable} from "../../../type-util";
 import {ColumnIdentifierMapUtil} from "../../../column-identifier-map";
 
-export type AllowedExplicitDefaultValueColumnAlias<TableT extends Pick<ITable, "columns"|"explicitDefaultValueColumns">> = (
+/**
+ * + Generated columns have implicit default values
+ * + nullable columns have implicit default values
+ */
+export type AddExplicitDefaultValueColumnAlias<
+    TableT extends Pick<ITable, "columns"|"generatedColumns"|"nullableColumns"|"explicitDefaultValueColumns">
+> = (
     Exclude<
         Extract<keyof TableT["columns"], string>,
-        TableT["explicitDefaultValueColumns"][number]
+        (
+            | TableT["generatedColumns"][number]
+            | TableT["nullableColumns"][number]
+            | TableT["explicitDefaultValueColumns"][number]
+        )
     >
 );
-export type AllowedExplicitDefaultValueColumnMap<TableT extends Pick<ITable, "columns"|"explicitDefaultValueColumns">> = (
+export type AddExplicitDefaultValueColumnMap<
+    TableT extends Pick<ITable, "columns"|"generatedColumns"|"nullableColumns"|"explicitDefaultValueColumns">
+> = (
     {
-        readonly [columnAlias in AllowedExplicitDefaultValueColumnAlias<TableT>] : (
+        readonly [columnAlias in AddExplicitDefaultValueColumnAlias<TableT>] : (
             TableT["columns"][columnAlias]
         )
     }
 );
-export function allowedExplicitDefaultValueColumnMap<
-    TableT extends Pick<ITable, "columns"|"explicitDefaultValueColumns">
+export function addExplicitDefaultValueColumnMap<
+    TableT extends Pick<ITable, "columns"|"generatedColumns"|"nullableColumns"|"explicitDefaultValueColumns">
 > (
     table : TableT
 ) : (
-    AllowedExplicitDefaultValueColumnMap<TableT>
+    AddExplicitDefaultValueColumnMap<TableT>
 ) {
-    const result : AllowedExplicitDefaultValueColumnMap<TableT> = pickOwnEnumerable(
+    const result : AddExplicitDefaultValueColumnMap<TableT> = pickOwnEnumerable(
         table.columns,
         ColumnArrayUtil.fromColumnMap(table.columns)
             .filter(column => {
                 return (
+                    !table.generatedColumns.includes(column.columnAlias) &&
+                    !table.nullableColumns.includes(column.columnAlias) &&
                     !table.explicitDefaultValueColumns.includes(column.columnAlias)
                 );
             })
             .map(column => column.columnAlias)
-    ) as AllowedExplicitDefaultValueColumnMap<TableT>;
+    ) as AddExplicitDefaultValueColumnMap<TableT>;
     return result;
 }
-export type ExplicitDefaultValueDelegate<
-    TableT extends Pick<ITable, "columns"|"explicitDefaultValueColumns">,
-    ColumnsT extends readonly ColumnUtil.FromColumnMap<AllowedExplicitDefaultValueColumnMap<TableT>>[]
+export type AddExplicitDefaultValueDelegate<
+    TableT extends Pick<ITable, "columns"|"generatedColumns"|"nullableColumns"|"explicitDefaultValueColumns">,
+    ColumnsT extends readonly ColumnUtil.FromColumnMap<AddExplicitDefaultValueColumnMap<TableT>>[]
 > = (
-    (columnMap : AllowedExplicitDefaultValueColumnMap<TableT>) => ColumnsT
+    (columnMap : AddExplicitDefaultValueColumnMap<TableT>) => ColumnsT
 );
 
 export type AddExplicitDefaultValue<
     TableT extends ITable,
-    ColumnsT extends readonly ColumnUtil.FromColumnMap<AllowedExplicitDefaultValueColumnMap<TableT>>[]
+    ColumnsT extends readonly ColumnUtil.FromColumnMap<AddExplicitDefaultValueColumnMap<TableT>>[]
 > = (
     Table<{
         lateral : TableT["lateral"],
@@ -76,13 +90,30 @@ export type AddExplicitDefaultValue<
         parents : TableT["parents"],
     }>
 );
+/**
+ * Tells the library that these columns have explicit `DEFAULT` values.
+ *
+ * An example of an "explicit" default value,
+ * ```sql
+ * `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+ * ```
+ *
+ * + Columns with server default values are optional with `INSERT` statements.
+ * + Generated columns have implicit default values.
+ * + Nullable columns have implicit default values.
+ *
+ * -----
+ *
+ * @param table
+ * @param delegate
+ */
 export function addExplicitDefaultValue<
     TableT extends ITable,
-    ColumnsT extends readonly ColumnUtil.FromColumnMap<AllowedExplicitDefaultValueColumnMap<TableT>>[]
+    ColumnsT extends readonly ColumnUtil.FromColumnMap<AddExplicitDefaultValueColumnMap<TableT>>[]
 > (
     table : TableT,
     delegate : (
-        ExplicitDefaultValueDelegate<
+        AddExplicitDefaultValueDelegate<
             TableT,
             ColumnsT
         >
@@ -90,12 +121,12 @@ export function addExplicitDefaultValue<
 ) : (
     AddExplicitDefaultValue<TableT, ColumnsT>
 ) {
-    const allowedColumns = allowedExplicitDefaultValueColumnMap(table);
-    const newExplicitDefaultValue : ColumnsT = delegate(allowedColumns);
+    const columnMap = addExplicitDefaultValueColumnMap(table);
+    const columnsT : ColumnsT = delegate(columnMap);
 
     ColumnIdentifierMapUtil.assertHasColumnIdentifiers(
-        allowedColumns,
-        newExplicitDefaultValue
+        columnMap,
+        columnsT
     );
 
     const explicitDefaultValueColumns : (
@@ -105,7 +136,7 @@ export function addExplicitDefaultValue<
         >
     ) = KeyUtil.concat(
         table.explicitDefaultValueColumns,
-        KeyUtil.fromColumnArray(newExplicitDefaultValue)
+        KeyUtil.fromColumnArray(columnsT)
     );
 
     const {

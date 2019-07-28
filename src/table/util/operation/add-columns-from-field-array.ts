@@ -37,6 +37,12 @@ export type AddColumnsFromFieldArray<
         parents : TableT["parents"],
     }>
 );
+/**
+ * Converts an array of fields to columns of the table
+ *
+ * @param table
+ * @param fields
+ */
 export function addColumnsFromFieldArray<
     TableT extends ITable,
     FieldsT extends readonly tm.AnyField[]

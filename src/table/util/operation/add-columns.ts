@@ -4,6 +4,9 @@ import {MapperMap} from "../../../mapper-map";
 import {AddColumnsFromFieldArray, addColumnsFromFieldArray} from "./add-columns-from-field-array";
 import {AddColumnsFromMapperMap, addColumnsFromMapperMap} from "./add-columns-from-mapper-map";
 
+/**
+ * Adds columns to the table
+ */
 export function addColumns<
     TableT extends ITable,
     FieldsT extends sd.AnyField[]

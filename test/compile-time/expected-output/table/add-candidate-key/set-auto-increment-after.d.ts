@@ -38,7 +38,7 @@ export declare const ai: import("../../../../../dist/table/table-impl").Table<{
     deleteEnabled: true;
     generatedColumns: readonly "b"[];
     nullableColumns: never[];
-    explicitDefaultValueColumns: readonly "b"[];
+    explicitDefaultValueColumns: readonly never[];
     mutableColumns: readonly never[];
     parents: readonly [];
 }>;

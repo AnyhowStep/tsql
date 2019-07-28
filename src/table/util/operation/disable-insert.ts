@@ -29,6 +29,13 @@ export type DisableInsert<
         parents : TableT["parents"],
     }>
 );
+/**
+ * Prevents rows from being inserted through this library.
+ *
+ * Good for look-up tables.
+ *
+ * @param table
+ */
 export function disableInsert<
     TableT extends ITable
 > (

@@ -79,28 +79,47 @@ export class Table<DataT extends TableData> implements ITable {
     }
 
     /**
+     * Makes all non-generated columns mutable.
      *
-     * ```sql
-     *  SELECT
-     *      *
-     *  FROM
-     *      myTable AS newTableAlias
-     * ```
+     * + Mutable columns may be modified with `UPDATE` statements using this library.
+     * + Immutable columns may not be modified with this library
+     *   (but could still be modified outside of this library)
      */
-    as<NewTableAliasT extends string> (newTableAlias : NewTableAliasT) : TableUtil.As<this, NewTableAliasT> {
-        return TableUtil.as(this, newTableAlias);
+    addAllMutable () : TableUtil.AddAllMutable<this> {
+        return TableUtil.addAllMutable(this);
     }
 
     /**
-     * Change the table's `tableAlias` entirely without an `AS` clause
+     * Adds a candidate key to the table.
      *
-     * @param newTableAlias
+     * A candidate key is a minimal set of columns that uniquely identifies a row in a table.
+     *
+     * + A table may have zero-to-many candidate keys. (recommended to have at least one)
+     * + A candidate key cannot be a subset of other candidate keys.
+     * + A candidate key cannot be a superset of other candidate keys.
+     * + A candidate key can intersect other candidate keys.
+     * + A candidate key can be disjoint from other candidate keys.
      */
-    setTableAlias <NewTableAliasT extends string>(
-        newTableAlias : NewTableAliasT
-    ) : TableUtil.SetTableAlias<this, NewTableAliasT> {
-        return TableUtil.setTableAlias(this, newTableAlias);
-    };
+    addCandidateKey<
+        KeyT extends readonly ColumnUtil.FromColumnMap<this["columns"]>[]
+    > (
+        delegate : (
+            TableUtil.AddCandidateKeyDelegate<
+                this,
+                (
+                    & KeyT
+                    & TableUtil.AssertValidCandidateKey<
+                        this,
+                        KeyT
+                    >
+                )
+            >
+        )
+    ) : (
+        TableUtil.AddCandidateKey<this, KeyT>
+    ) {
+        return TableUtil.addCandidateKey<this, KeyT>(this, delegate);
+    }
 
     /**
      * Adds columns to the table
@@ -119,32 +138,242 @@ export class Table<DataT extends TableData> implements ITable {
         return TableUtil.addColumns(this, rawColumns);
     }
 
-    addCandidateKey<
-        KeyT extends readonly ColumnUtil.FromColumnMap<this["columns"]>[]
+    /**
+     * Tells the library that these columns have explicit `DEFAULT` values.
+     *
+     * An example of an "explicit" default value,
+     * ```sql
+     * `createdAt` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+     * ```
+     *
+     * + Columns with server default values are optional with `INSERT` statements.
+     * + Generated columns have implicit default values.
+     * + Nullable columns have implicit default values.
+     */
+    addExplicitDefaultValue<
+        ColumnsT extends readonly ColumnUtil.FromColumnMap<TableUtil.AddExplicitDefaultValueColumnMap<this>>[]
     > (
         delegate : (
-            TableUtil.CandidateKeyDelegate<
+            TableUtil.AddExplicitDefaultValueDelegate<
+                this,
+                ColumnsT
+            >
+        )
+    ) : (
+        TableUtil.AddExplicitDefaultValue<this, ColumnsT>
+    ) {
+        return TableUtil.addExplicitDefaultValue<this, ColumnsT>(this, delegate);
+    }
+    /**
+     * Adds a `GENERATED` column to the table.
+     *
+     * + Setting generated column values will not be allowed with `INSERT` statements.
+     * + Updating generated column values will also not be allowed with `UPDATE` statements.
+     */
+    addGenerated<
+        ColumnsT extends readonly ColumnUtil.FromColumnMap<TableUtil.AddGeneratedColumnMap<this>>[]
+    > (
+        delegate : (
+            TableUtil.AddGeneratedDelegate<
+                this,
+                ColumnsT
+            >
+        )
+    ) : (
+        TableUtil.AddGenerated<this, ColumnsT>
+    ) {
+        return TableUtil.addGenerated<this, ColumnsT>(this, delegate);
+    }
+    /**
+     * Lets these columns be updated through this library.
+     */
+    addMutable<
+        ColumnsT extends readonly ColumnUtil.FromColumnMap<TableUtil.AddMutableColumnMap<this>>[]
+    > (
+        delegate : (
+            TableUtil.AddMutableDelegate<
+                this,
+                ColumnsT
+            >
+        )
+    ) : (
+        TableUtil.AddMutable<this, ColumnsT>
+    ) {
+        return TableUtil.addMutable<this, ColumnsT>(this, delegate);
+    }
+
+    /**
+     * Aliases a table reference in a query.
+     *
+     * ```sql
+     *  SELECT
+     *      *
+     *  FROM
+     *      myTable AS aliasedTable
+     * ```
+     */
+    as<NewTableAliasT extends string> (newTableAlias : NewTableAliasT) : TableUtil.As<this, NewTableAliasT> {
+        return TableUtil.as(this, newTableAlias);
+    }
+
+    /**
+     * Prevents rows of this table from being deleted through this library.
+     *
+     * Good for look-up tables, or append-only tables.
+     */
+    disableDelete () : TableUtil.DisableDelete<this> {
+        return TableUtil.disableDelete(this);
+    }
+    /**
+     * Prevents rows from being inserted through this library.
+     *
+     * Good for look-up tables.
+     */
+    disableInsert () : TableUtil.DisableInsert<this> {
+        return TableUtil.disableInsert(this);
+    }
+
+    /**
+     * Makes all columns immutable.
+     */
+    removeAllMutable () : TableUtil.RemoveAllMutable<this> {
+        return TableUtil.removeAllMutable(this);
+    }
+    /**
+     * Removes columns from the set of columns with explicit `DEFAULT` values
+     *
+     */
+    removeExplicitDefaultValue<
+        ColumnsT extends readonly ColumnUtil.FromColumnMap<TableUtil.RemoveExplicitDefaultValueColumnMap<this>>[]
+    > (
+        delegate : (
+            TableUtil.RemoveExplicitDefaultValueDelegate<
+                this,
+                ColumnsT
+            >
+        )
+    ) : (
+        TableUtil.RemoveExplicitDefaultValue<this, ColumnsT>
+    ) {
+        return TableUtil.removeExplicitDefaultValue<this, ColumnsT>(this, delegate);
+    }
+    /**
+     * Removes columns from the set of `GENERATED` columns.
+     *
+     */
+    removeGenerated<
+        ColumnsT extends readonly ColumnUtil.FromColumnMap<TableUtil.RemoveGeneratedColumnMap<this>>[]
+    > (
+        delegate : (
+            TableUtil.RemoveGeneratedDelegate<
+                this,
+                ColumnsT
+            >
+        )
+    ) : (
+        TableUtil.RemoveGenerated<this, ColumnsT>
+    ) {
+        return TableUtil.removeGenerated<this, ColumnsT>(this, delegate);
+    }
+    /**
+     * Removes columns from the set of mutable columns.
+     *
+     * You will not be able to update them through this library.
+     *
+     */
+    removeMutable<
+        ColumnsT extends readonly ColumnUtil.FromColumnMap<TableUtil.RemoveMutableColumnMap<this>>[]
+    > (
+        delegate : (
+            TableUtil.RemoveMutableDelegate<
+                this,
+                ColumnsT
+            >
+        )
+    ) : (
+        TableUtil.RemoveMutable<this, ColumnsT>
+    ) {
+        return TableUtil.removeMutable<this, ColumnsT>(this, delegate);
+    }
+
+    /**
+     * Designates one column as the `AUTO_INCREMENT` column.
+     *
+     * -----
+     *
+     * + `AUTO_INCREMENT` columns cannot be nullable
+     * + `AUTO_INCREMENT` columns must be a candidate key
+     * + `AUTO_INCREMENT` columns must be a `PRIMARY KEY`
+     * + The `number|string|bigint` requirement is only a compile-time constraint
+     */
+    setAutoIncrement<
+        AutoIncrementT extends ColumnUtil.FromColumnMap<TableUtil.SetAutoIncrementColumnMap<this>>
+    > (
+        delegate : (
+            TableUtil.SetAutoIncrementDelegate<
                 this,
                 (
-                    & KeyT
-                    & TableUtil.AssertValidCandidateKey<
+                    & AutoIncrementT
+                    & TableUtil.AssertValidAutoIncrement<
                         this,
-                        KeyT
+                        AutoIncrementT
                     >
                 )
             >
         )
     ) : (
-        TableUtil.AddCandidateKey<this, KeyT>
+        TableUtil.SetAutoIncrement<this, AutoIncrementT>
     ) {
-        return TableUtil.addCandidateKey<this, KeyT>(this, delegate);
+        return TableUtil.setAutoIncrement<this, AutoIncrementT>(this, delegate);
     }
 
-    setPrimaryKey<
-        KeyT extends readonly ColumnUtil.FromColumnMap<TableUtil.AllowedPrimaryKeyColumnMap<this>>[]
+    /**
+     * Sets a column as the single-column identifier for this table.
+     *
+     * -----
+     *
+     * + `id-column`s cannot be nullable
+     * + `id-column`s must be a candidate key
+     * + `id-column`s must be a `PRIMARY KEY`
+     *
+     */
+    setId<
+        IdT extends ColumnUtil.FromColumnMap<TableUtil.SetIdColumnMap<this>>
     > (
         delegate : (
-            TableUtil.PrimaryKeyDelegate<
+            TableUtil.SetIdDelegate<
+                this,
+                (
+                    & IdT
+                    & TableUtil.AssertValidId<
+                        this,
+                        IdT
+                    >
+                )
+            >
+        )
+    ) : (
+        TableUtil.SetId<this, IdT>
+    ) {
+        return TableUtil.setId<this, IdT>(this, delegate);
+    }
+
+    /**
+     * Sets the `PRIMARY KEY` of the table.
+     *
+     * In MySQL, a `PRIMARY KEY` is just a candidate key
+     * where all its columns are non-nullable.
+     *
+     * -----
+     *
+     * + `PRIMARY KEY` columns cannot be nullable
+     * + `PRIMARY KEY` columns must be a candidate key
+     */
+    setPrimaryKey<
+        KeyT extends readonly ColumnUtil.FromColumnMap<TableUtil.SetPrimaryKeyColumnMap<this>>[]
+    > (
+        delegate : (
+            TableUtil.SetPrimaryKeyDelegate<
                 this,
                 (
                     & KeyT
@@ -162,109 +391,43 @@ export class Table<DataT extends TableData> implements ITable {
     }
 
     /**
-     * Sets the single-column `PRIMARY KEY` of the table.
+     * Sets the `schema` that this table belongs to.
      *
-     * @param delegate
+     * This is usually not required because the schema used
+     * will be the one your database connection session is using.
+     *
+     * -----
+     *
+     * This library does not support cross-schema compile-time safe queries.
+     *
+     * However, if you **do** need cross-schema support,
+     * this library can support it somewhat.
      */
-    setId<
-        IdT extends ColumnUtil.FromColumnMap<TableUtil.AllowedIdColumnMap<this>>
-    > (
-        delegate : (
-            TableUtil.IdDelegate<
-                this,
-                (
-                    & IdT
-                    & TableUtil.AssertValidId<
-                        this,
-                        IdT
-                    >
-                )
-            >
-        )
+    setSchemaName (
+        newSchemaName : string
     ) : (
-        TableUtil.SetId<this, IdT>
+        TableUtil.SetSchemaName<this>
     ) {
-        return TableUtil.setId<this, IdT>(this, delegate);
+        return TableUtil.setSchemaName(this, newSchemaName);
     }
+
     /**
-     * Designates one column as the `AUTO_INCREMENT` column.
+     * Changes the alias of the table.
      *
-     * @param delegate - A function that returns the `AUTO_INCREMENT` column
+     * Useful if you have multiple tables with exactly the same structure.
+     *
+     * This is different from `.as()`!
+     *
+     * -----
+     *
+     * You will have to call `.setSchemaName()` again if you called it before.
      */
-    setAutoIncrement<
-        AutoIncrementT extends ColumnUtil.FromColumnMap<TableUtil.AllowedAutoIncrementColumnMap<this>>
-    > (
-        delegate : (
-            TableUtil.AutoIncrementDelegate<
-                this,
-                (
-                    & AutoIncrementT
-                    & TableUtil.AssertValidAutoIncrement<
-                        this,
-                        AutoIncrementT
-                    >
-                )
-            >
-        )
-    ) : (
-        TableUtil.SetAutoIncrement<this, AutoIncrementT>
-    ) {
-        return TableUtil.setAutoIncrement<
-            this,
-            AutoIncrementT
-        >(this, delegate);
-    }
+    setTableAlias <NewTableAliasT extends string>(
+        newTableAlias : NewTableAliasT
+    ) : TableUtil.SetTableAlias<this, NewTableAliasT> {
+        return TableUtil.setTableAlias(this, newTableAlias);
+    };
 
-    setDatabaseName (
-        newDatabaseName : string
-    ) : (
-        TableUtil.SetDatabaseName<this>
-    ) {
-        return TableUtil.setDatabaseName(this, newDatabaseName);
-    }
-
-    addGenerated<
-        ColumnsT extends readonly ColumnUtil.FromColumnMap<TableUtil.AllowedGeneratedColumnMap<this>>[]
-    > (
-        delegate : (
-            TableUtil.GeneratedDelegate<
-                this,
-                ColumnsT
-            >
-        )
-    ) : (
-        TableUtil.AddGenerated<this, ColumnsT>
-    ) {
-        return TableUtil.addGenerated<this, ColumnsT>(this, delegate);
-    }
-    addExplicitDefaultValue<
-        ColumnsT extends readonly ColumnUtil.FromColumnMap<TableUtil.AllowedExplicitDefaultValueColumnMap<this>>[]
-    > (
-        delegate : (
-            TableUtil.ExplicitDefaultValueDelegate<
-                this,
-                ColumnsT
-            >
-        )
-    ) : (
-        TableUtil.AddExplicitDefaultValue<this, ColumnsT>
-    ) {
-        return TableUtil.addExplicitDefaultValue<this, ColumnsT>(this, delegate);
-    }
-    addMutable<
-        ColumnsT extends readonly ColumnUtil.FromColumnMap<TableUtil.AllowedMutableColumnMap<this>>[]
-    > (
-        delegate : (
-            TableUtil.MutableDelegate<
-                this,
-                ColumnsT
-            >
-        )
-    ) : (
-        TableUtil.AddMutable<this, ColumnsT>
-    ) {
-        return TableUtil.addMutable<this, ColumnsT>(this, delegate);
-    }
     /*
     setImmutable () : TableUtil.SetImmutable<this> {
         return TableUtil.setImmutable(this);
@@ -286,12 +449,6 @@ export class Table<DataT extends TableData> implements ITable {
         TableUtil.AddParent<this, ParentT>
     ) {
         return TableUtil.addParent<this, ParentT>(this, parent);
-    }
-    disallowInsert () : TableUtil.DisallowInsert<this> {
-        return TableUtil.disallowInsert(this);
-    }
-    disallowDelete () : TableUtil.DisallowDelete<this> {
-        return TableUtil.disallowDelete(this);
     }
 
     /*

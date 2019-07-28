@@ -4,22 +4,10 @@ import {Table} from "../../table-impl";
 import {IAnonymousColumn, ColumnArrayUtil, ColumnUtil, IColumn} from "../../../column";
 import {KeyArrayUtil, KeyUtil} from "../../../key";
 import {pickOwnEnumerable} from "../../../type-util";
-import {AssertValidPrimaryKey, AllowedPrimaryKeyColumnMap, assertValidPrimaryKey} from "./set-primary-key";
-import { ColumnIdentifierMapUtil } from "../../../column-identifier-map";
+import {AssertValidPrimaryKey, SetPrimaryKeyColumnMap, assertValidPrimaryKey} from "./set-primary-key";
+import {ColumnIdentifierMapUtil} from "../../../column-identifier-map";
 
-/**
- * The aliases of columns that can be `AUTO_INCREMENT`
- *
- * -----
- *
- * + `AUTO_INCREMENT` columns cannot be nullable
- * + `AUTO_INCREMENT` columns must be a candidate key
- * + `AUTO_INCREMENT` columns must be a `PRIMARY KEY`
- * + The `number|string|bigint` requirement is only a compile-time constraint
- *
- * @todo Consider having run-time checks to see if it allows 1,2,3,4,5,... ?
- */
-export type AllowedAutoIncrementColumnAlias<TableT extends Pick<ITable, "columns"|"candidateKeys">> = (
+export type SetAutoIncrementColumnAlias<TableT extends Pick<ITable, "columns"|"candidateKeys">> = (
     {
         [columnAlias in Extract<keyof TableT["columns"], string>] : (
             TableT["columns"][columnAlias] extends IAnonymousColumn<number|string|bigint> ?
@@ -38,24 +26,22 @@ export type AllowedAutoIncrementColumnAlias<TableT extends Pick<ITable, "columns
         )
     }[Extract<keyof TableT["columns"], string>]
 );
-/**
- * @see {@link AllowedAutoIncrementColumnAlias}
- */
-export type AllowedAutoIncrementColumnMap<TableT extends Pick<ITable, "columns"|"candidateKeys">> = (
+
+export type SetAutoIncrementColumnMap<TableT extends Pick<ITable, "columns"|"candidateKeys">> = (
     {
-        readonly [columnName in AllowedAutoIncrementColumnAlias<TableT>] : (
+        readonly [columnName in SetAutoIncrementColumnAlias<TableT>] : (
             TableT["columns"][columnName]
         )
     }
 );
-export function allowedAutoIncrementColumnMap<
+export function setAutoIncrementColumnMap<
     TableT extends Pick<ITable, "columns"|"candidateKeys">
 > (
     table : TableT
 ) : (
-    AllowedAutoIncrementColumnMap<TableT>
+    SetAutoIncrementColumnMap<TableT>
 ) {
-    const result : AllowedAutoIncrementColumnMap<TableT> = pickOwnEnumerable(
+    const result : SetAutoIncrementColumnMap<TableT> = pickOwnEnumerable(
         table.columns,
         ColumnArrayUtil.fromColumnMap(table.columns)
             .filter(column => {
@@ -68,29 +54,27 @@ export function allowedAutoIncrementColumnMap<
                 );
             })
             .map(column => column.columnAlias)
-    ) as AllowedAutoIncrementColumnMap<TableT>;
+    ) as SetAutoIncrementColumnMap<TableT>;
     return result;
 }
-/**
- * @see {@link AllowedAutoIncrementColumnAlias}
- */
-export type AutoIncrementDelegate<
+
+export type SetAutoIncrementDelegate<
     TableT extends Pick<ITable, "columns"|"candidateKeys">,
-    AutoIncrementT extends ColumnUtil.FromColumnMap<AllowedAutoIncrementColumnMap<TableT>>
+    AutoIncrementT extends ColumnUtil.FromColumnMap<SetAutoIncrementColumnMap<TableT>>
 > = (
-    (columnMap : AllowedAutoIncrementColumnMap<TableT>) => (
+    (columnMap : SetAutoIncrementColumnMap<TableT>) => (
         AutoIncrementT
     )
 );
 export type AssertValidAutoIncrement<
     TableT extends Pick<ITable, "columns"|"candidateKeys">,
-    AutoIncrementT extends ColumnUtil.FromColumnMap<AllowedAutoIncrementColumnMap<TableT>>
+    AutoIncrementT extends ColumnUtil.FromColumnMap<SetAutoIncrementColumnMap<TableT>>
 > = (
     AssertValidPrimaryKey<
         TableT,
         Extract<
         AutoIncrementT[],
-            readonly ColumnUtil.FromColumnMap<AllowedPrimaryKeyColumnMap<TableT>>[]
+            readonly ColumnUtil.FromColumnMap<SetPrimaryKeyColumnMap<TableT>>[]
         >
     >
 );
@@ -98,17 +82,15 @@ export function assertValidAutoIncrement (
     table : Pick<ITable, "candidateKeys"|"columns">,
     autoIncrement : IColumn
 ) {
-    const allowedColumns = allowedAutoIncrementColumnMap(table);
-    ColumnIdentifierMapUtil.assertHasColumnIdentifier(allowedColumns, autoIncrement);
+    const columnMap = setAutoIncrementColumnMap(table);
+    ColumnIdentifierMapUtil.assertHasColumnIdentifier(columnMap, autoIncrement);
 
     assertValidPrimaryKey(table, [autoIncrement]);
 }
-/**
- * @see {@link AllowedAutoIncrementColumnAlias}
- */
+
 export type SetAutoIncrement<
     TableT extends ITable,
-    AutoIncrementT extends ColumnUtil.FromColumnMap<AllowedAutoIncrementColumnMap<TableT>>
+    AutoIncrementT extends ColumnUtil.FromColumnMap<SetAutoIncrementColumnMap<TableT>>
 > = (
     Table<{
         lateral : TableT["lateral"],
@@ -172,9 +154,10 @@ export type SetAutoIncrement<
         >;
         nullableColumns : TableT["nullableColumns"];
         /**
-         * `AUTO_INCREMENT` columns have explicit default values.
+         * `AUTO_INCREMENT` columns are generated
+         * and have implicit default values.
          */
-        explicitDefaultValueColumns : KeyUtil.Append<
+        explicitDefaultValueColumns : KeyUtil.Remove<
             TableT["explicitDefaultValueColumns"],
             AutoIncrementT["columnAlias"]
         >;
@@ -199,15 +182,24 @@ export type SetAutoIncrement<
     }>
 );
 /**
- * @see {@link AllowedAutoIncrementColumnAlias}
+ * Designates one column as the `AUTO_INCREMENT` column.
+ *
+ * -----
+ *
+ * + `AUTO_INCREMENT` columns cannot be nullable
+ * + `AUTO_INCREMENT` columns must be a candidate key
+ * + `AUTO_INCREMENT` columns must be a `PRIMARY KEY`
+ * + The `number|string|bigint` requirement is only a compile-time constraint
+ *
+ * @todo Consider having run-time checks to see if it allows 1,2,3,4,5,... ?
  */
 export function setAutoIncrement<
     TableT extends ITable,
-    AutoIncrementT extends ColumnUtil.FromColumnMap<AllowedAutoIncrementColumnMap<TableT>>
+    AutoIncrementT extends ColumnUtil.FromColumnMap<SetAutoIncrementColumnMap<TableT>>
 > (
     table : TableT,
     delegate : (
-        AutoIncrementDelegate<
+        SetAutoIncrementDelegate<
             TableT,
             (
                 & AutoIncrementT
@@ -221,7 +213,7 @@ export function setAutoIncrement<
 ) : (
     SetAutoIncrement<TableT, AutoIncrementT>
 ) {
-    const newAutoIncrement : AutoIncrementT = delegate(allowedAutoIncrementColumnMap(table));
+    const newAutoIncrement : AutoIncrementT = delegate(setAutoIncrementColumnMap(table));
 
     assertValidAutoIncrement(table, newAutoIncrement);
 
@@ -248,11 +240,11 @@ export function setAutoIncrement<
         newAutoIncrement.columnAlias
     );
     const explicitDefaultValueColumns : (
-        KeyUtil.Append<
+        KeyUtil.Remove<
             TableT["explicitDefaultValueColumns"],
             AutoIncrementT["columnAlias"]
         >
-    ) = KeyUtil.append(
+    ) = KeyUtil.remove(
         table.explicitDefaultValueColumns,
         newAutoIncrement.columnAlias
     );

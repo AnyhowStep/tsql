@@ -5,7 +5,10 @@ import {ColumnUtil, IColumn} from "../../../column";
 import {KeyUtil, KeyArrayUtil} from "../../../key";
 import {assertHasColumnIdentifiers} from "../predicate";
 
-export type CandidateKeyDelegate<
+/**
+ * This delegate returns a candidate key
+ */
+export type AddCandidateKeyDelegate<
     TableT extends Pick<ITable, "columns">,
     KeyT extends readonly ColumnUtil.FromColumnMap<TableT["columns"]>[]
 > = (
@@ -78,7 +81,7 @@ export function assertNotSuperKey (
  * Otherwise, either the new or existing key is not a candidate key
  * **by definition**.
  *
- * The definition of a candidate key is the
+ * The definition of a candidate key is a
  * **smallest** possible set of columns that
  * uniquely identifies a row in a table.
  *
@@ -107,6 +110,17 @@ export function assertValidCandidateKey (
     assertNotSuperKey(table, columns);
 }
 
+/**
+ * Adds a candidate key to the table.
+ *
+ * A candidate key is a minimal set of columns that uniquely identifies a row in a table.
+ *
+ * + A table may have zero-to-many candidate keys. (recommended to have at least one)
+ * + A candidate key cannot be a subset of other candidate keys.
+ * + A candidate key cannot be a superset of other candidate keys.
+ * + A candidate key can intersect other candidate keys.
+ * + A candidate key can be disjoint from other candidate keys.
+ */
 export type AddCandidateKey<
     TableT extends ITable,
     KeyT extends readonly ColumnUtil.FromColumnMap<TableT["columns"]>[]
@@ -136,13 +150,27 @@ export type AddCandidateKey<
         parents : TableT["parents"],
     }>
 );
+/**
+ * Adds a candidate key to the table.
+ *
+ * A candidate key is a minimal set of columns that uniquely identifies a row in a table.
+ *
+ * + A table may have zero-to-many candidate keys. (recommended to have at least one)
+ * + A candidate key cannot be a subset of other candidate keys.
+ * + A candidate key cannot be a superset of other candidate keys.
+ * + A candidate key can intersect other candidate keys.
+ * + A candidate key can be disjoint from other candidate keys.
+ *
+ * @param table
+ * @param delegate
+ */
 export function addCandidateKey<
     TableT extends ITable,
     KeyT extends readonly ColumnUtil.FromColumnMap<TableT["columns"]>[]
 > (
     table : TableT,
     delegate : (
-        CandidateKeyDelegate<
+        AddCandidateKeyDelegate<
             TableT,
             (
                 & KeyT

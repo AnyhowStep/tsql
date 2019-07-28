@@ -5,55 +5,45 @@ import {KeyUtil} from "../../../key";
 import {pickOwnEnumerable} from "../../../type-util";
 import {ColumnIdentifierMapUtil} from "../../../column-identifier-map";
 
-/**
- * Generated columns cannot be mutable.
- */
-export type AddMutableColumnAlias<TableT extends Pick<ITable, "columns"|"generatedColumns"|"mutableColumns">> = (
-    Exclude<
-        Extract<keyof TableT["columns"], string>,
-        (
-            | TableT["generatedColumns"][number]
-            | TableT["mutableColumns"][number]
-        )
-    >
+export type RemoveGeneratedColumnAlias<TableT extends Pick<ITable, "columns"|"generatedColumns">> = (
+    Extract<keyof TableT["columns"], TableT["generatedColumns"][number]>
 );
-export type AddMutableColumnMap<TableT extends Pick<ITable, "columns"|"generatedColumns"|"mutableColumns">> = (
+export type RemoveGeneratedColumnMap<TableT extends Pick<ITable, "columns"|"generatedColumns">> = (
     {
-        readonly [columnAlias in AddMutableColumnAlias<TableT>] : (
+        readonly [columnAlias in RemoveGeneratedColumnAlias<TableT>] : (
             TableT["columns"][columnAlias]
         )
     }
 );
-export function addMutableColumnMap<
-    TableT extends Pick<ITable, "columns"|"generatedColumns"|"mutableColumns">
+export function removeGeneratedColumnMap<
+    TableT extends Pick<ITable, "columns"|"generatedColumns">
 > (
     table : TableT
 ) : (
-    AddMutableColumnMap<TableT>
+    RemoveGeneratedColumnMap<TableT>
 ) {
-    const result : AddMutableColumnMap<TableT> = pickOwnEnumerable(
+    const result : RemoveGeneratedColumnMap<TableT> = pickOwnEnumerable(
         table.columns,
         ColumnArrayUtil.fromColumnMap(table.columns)
             .filter(column => {
                 return (
-                    !table.generatedColumns.includes(column.columnAlias) &&
-                    !table.mutableColumns.includes(column.columnAlias)
+                    table.generatedColumns.includes(column.columnAlias)
                 );
             })
             .map(column => column.columnAlias)
-    ) as AddMutableColumnMap<TableT>;
+    ) as RemoveGeneratedColumnMap<TableT>;
     return result;
 }
-export type AddMutableDelegate<
-    TableT extends Pick<ITable, "columns"|"generatedColumns"|"mutableColumns">,
-    ColumnsT extends readonly ColumnUtil.FromColumnMap<AddMutableColumnMap<TableT>>[]
+export type RemoveGeneratedDelegate<
+    TableT extends Pick<ITable, "columns"|"generatedColumns">,
+    ColumnsT extends readonly ColumnUtil.FromColumnMap<RemoveGeneratedColumnMap<TableT>>[]
 > = (
-    (columnMap : AddMutableColumnMap<TableT>) => ColumnsT
+    (columnMap : RemoveGeneratedColumnMap<TableT>) => ColumnsT
 );
 
-export type AddMutable<
+export type RemoveGenerated<
     TableT extends ITable,
-    ColumnsT extends readonly ColumnUtil.FromColumnMap<AddMutableColumnMap<TableT>>[]
+    ColumnsT extends readonly ColumnUtil.FromColumnMap<RemoveGeneratedColumnMap<TableT>>[]
 > = (
     Table<{
         lateral : TableT["lateral"],
@@ -69,41 +59,45 @@ export type AddMutable<
         insertEnabled : TableT["insertEnabled"],
         deleteEnabled : TableT["deleteEnabled"],
 
-        generatedColumns : TableT["generatedColumns"],
+        /**
+         * Subtract from `generatedColumns`
+         */
+        generatedColumns : KeyUtil.Subtract<
+            TableT["generatedColumns"],
+            KeyUtil.FromColumnArray<ColumnsT>
+        >,
         nullableColumns : TableT["nullableColumns"],
         explicitDefaultValueColumns : TableT["explicitDefaultValueColumns"],
         /**
-         * Our new mutable columns
+         * The column is no longer generated and you may make it
+         * mutable by using `.addMutable()`
          */
-        mutableColumns : KeyUtil.Concat<
-            TableT["mutableColumns"],
-            KeyUtil.FromColumnArray<ColumnsT>
-        >,
+        mutableColumns : TableT["mutableColumns"],
 
         parents : TableT["parents"],
     }>
 );
 /**
- * Lets these columns be updated through this library.
+ * Removes columns from the set of `GENERATED` columns.
  *
  * @param table
  * @param delegate
  */
-export function addMutable<
+export function removeGenerated<
     TableT extends ITable,
-    ColumnsT extends readonly ColumnUtil.FromColumnMap<AddMutableColumnMap<TableT>>[]
+    ColumnsT extends readonly ColumnUtil.FromColumnMap<RemoveGeneratedColumnMap<TableT>>[]
 > (
     table : TableT,
     delegate : (
-        AddMutableDelegate<
+        RemoveGeneratedDelegate<
             TableT,
             ColumnsT
         >
     )
 ) : (
-    AddMutable<TableT, ColumnsT>
+    RemoveGenerated<TableT, ColumnsT>
 ) {
-    const columnMap = addMutableColumnMap(table);
+    const columnMap = removeGeneratedColumnMap(table);
     const columnsT : ColumnsT = delegate(columnMap);
 
     ColumnIdentifierMapUtil.assertHasColumnIdentifiers(
@@ -111,13 +105,13 @@ export function addMutable<
         columnsT
     );
 
-    const mutableColumns : (
-        KeyUtil.Concat<
-            TableT["mutableColumns"],
+    const generatedColumns : (
+        KeyUtil.Subtract<
+            TableT["generatedColumns"],
             KeyUtil.FromColumnArray<ColumnsT>
         >
-    ) = KeyUtil.concat(
-        table.mutableColumns,
+    ) = KeyUtil.subtract(
+        table.generatedColumns,
         KeyUtil.fromColumnArray(columnsT)
     );
 
@@ -135,16 +129,16 @@ export function addMutable<
         insertEnabled,
         deleteEnabled,
 
-        generatedColumns,
+        //generatedColumns,
         nullableColumns,
         explicitDefaultValueColumns,
-        //mutableColumns,
+        mutableColumns,
 
         parents,
     } = table;
 
 
-    const result : AddMutable<TableT, ColumnsT> = new Table(
+    const result : RemoveGenerated<TableT, ColumnsT> = new Table(
         {
             lateral,
             tableAlias,

@@ -1,16 +1,13 @@
-import {escapeIdentifier} from "../../../sqlstring";
 import {ITable} from "../../table";
 import {Table} from "../../table-impl";
-import {ColumnMapUtil} from "../../../column-map";
 
-export type SetTableAlias<TableT extends ITable, NewTableAliasT extends string> = (
+export type RemoveAllMutable<
+    TableT extends ITable
+> = (
     Table<{
         lateral : TableT["lateral"],
-        tableAlias : NewTableAliasT,
-        columns : ColumnMapUtil.WithTableAlias<
-            TableT["columns"],
-            NewTableAliasT
-        >,
+        tableAlias : TableT["tableAlias"],
+        columns : TableT["columns"],
         usedRef : TableT["usedRef"],
 
         autoIncrement : TableT["autoIncrement"],
@@ -24,38 +21,32 @@ export type SetTableAlias<TableT extends ITable, NewTableAliasT extends string> 
         generatedColumns : TableT["generatedColumns"],
         nullableColumns : TableT["nullableColumns"],
         explicitDefaultValueColumns : TableT["explicitDefaultValueColumns"],
-        mutableColumns : TableT["mutableColumns"],
+        /**
+         * No columns are mutable
+         */
+        mutableColumns : readonly [],
 
         parents : TableT["parents"],
     }>
 );
 /**
- * Changes the alias of the table.
- *
- * Useful if you have multiple tables with exactly the same structure.
- *
- * This is different from `.as()`!
- *
- * -----
- *
- * You will have to call `.setSchemaName()` again if you called it before.
+ * Makes all columns immutable.
  *
  * @param table
- * @param newTableAlias
  */
-export function setTableAlias<TableT extends ITable, NewTableAliasT extends string> (
-    table : TableT,
-    newTableAlias : NewTableAliasT
+export function removeAllMutable<
+    TableT extends ITable
+> (
+    table : TableT
 ) : (
-    SetTableAlias<TableT, NewTableAliasT>
+    RemoveAllMutable<TableT>
 ) {
-    //https://github.com/Microsoft/TypeScript/issues/28592
-    const columns : TableT["columns"] = table.columns;
+    const mutableColumns : readonly [] = [];
 
     const {
         lateral,
-        //tableAlias,
-        //columns,
+        tableAlias,
+        columns,
         usedRef,
 
         autoIncrement,
@@ -69,19 +60,17 @@ export function setTableAlias<TableT extends ITable, NewTableAliasT extends stri
         generatedColumns,
         nullableColumns,
         explicitDefaultValueColumns,
-        mutableColumns,
+        //mutableColumns,
 
         parents,
     } = table;
 
-    return new Table(
+
+    const result : RemoveAllMutable<TableT> = new Table(
         {
             lateral,
-            tableAlias : newTableAlias,
-            columns : ColumnMapUtil.withTableAlias<TableT["columns"], NewTableAliasT>(
-                columns,
-                newTableAlias
-            ),
+            tableAlias,
+            columns,
             usedRef,
 
             autoIncrement,
@@ -99,6 +88,7 @@ export function setTableAlias<TableT extends ITable, NewTableAliasT extends stri
 
             parents,
         },
-        escapeIdentifier(newTableAlias)
+        table.unaliasedAst
     );
+    return result;
 }

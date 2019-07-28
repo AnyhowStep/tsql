@@ -1,16 +1,16 @@
-import {escapeIdentifier} from "../../../sqlstring";
 import {ITable} from "../../table";
 import {Table} from "../../table-impl";
-import {ColumnMapUtil} from "../../../column-map";
 
-export type SetTableAlias<TableT extends ITable, NewTableAliasT extends string> = (
+/**
+ * @todo Add `EnableDelete`? Will it even ever see use?
+ */
+export type DisableDelete<
+    TableT extends ITable
+> = (
     Table<{
         lateral : TableT["lateral"],
-        tableAlias : NewTableAliasT,
-        columns : ColumnMapUtil.WithTableAlias<
-            TableT["columns"],
-            NewTableAliasT
-        >,
+        tableAlias : TableT["tableAlias"],
+        columns : TableT["columns"],
         usedRef : TableT["usedRef"],
 
         autoIncrement : TableT["autoIncrement"],
@@ -19,7 +19,7 @@ export type SetTableAlias<TableT extends ITable, NewTableAliasT extends string> 
         candidateKeys : TableT["candidateKeys"],
 
         insertEnabled : TableT["insertEnabled"],
-        deleteEnabled : TableT["deleteEnabled"],
+        deleteEnabled : false,
 
         generatedColumns : TableT["generatedColumns"],
         nullableColumns : TableT["nullableColumns"],
@@ -30,32 +30,23 @@ export type SetTableAlias<TableT extends ITable, NewTableAliasT extends string> 
     }>
 );
 /**
- * Changes the alias of the table.
+ * Prevents rows of this table from being deleted through this library.
  *
- * Useful if you have multiple tables with exactly the same structure.
- *
- * This is different from `.as()`!
- *
- * -----
- *
- * You will have to call `.setSchemaName()` again if you called it before.
+ * Good for look-up tables, or append-only tables.
  *
  * @param table
- * @param newTableAlias
  */
-export function setTableAlias<TableT extends ITable, NewTableAliasT extends string> (
-    table : TableT,
-    newTableAlias : NewTableAliasT
+export function disableDelete<
+    TableT extends ITable
+> (
+    table : TableT
 ) : (
-    SetTableAlias<TableT, NewTableAliasT>
+    DisableDelete<TableT>
 ) {
-    //https://github.com/Microsoft/TypeScript/issues/28592
-    const columns : TableT["columns"] = table.columns;
-
     const {
         lateral,
-        //tableAlias,
-        //columns,
+        tableAlias,
+        columns,
         usedRef,
 
         autoIncrement,
@@ -64,7 +55,7 @@ export function setTableAlias<TableT extends ITable, NewTableAliasT extends stri
         candidateKeys,
 
         insertEnabled,
-        deleteEnabled,
+        //deleteEnabled,
 
         generatedColumns,
         nullableColumns,
@@ -74,14 +65,12 @@ export function setTableAlias<TableT extends ITable, NewTableAliasT extends stri
         parents,
     } = table;
 
-    return new Table(
+
+    const result : DisableDelete<TableT> = new Table(
         {
             lateral,
-            tableAlias : newTableAlias,
-            columns : ColumnMapUtil.withTableAlias<TableT["columns"], NewTableAliasT>(
-                columns,
-                newTableAlias
-            ),
+            tableAlias,
+            columns,
             usedRef,
 
             autoIncrement,
@@ -90,7 +79,7 @@ export function setTableAlias<TableT extends ITable, NewTableAliasT extends stri
             candidateKeys,
 
             insertEnabled,
-            deleteEnabled,
+            deleteEnabled : false,
 
             generatedColumns,
             nullableColumns,
@@ -99,6 +88,7 @@ export function setTableAlias<TableT extends ITable, NewTableAliasT extends stri
 
             parents,
         },
-        escapeIdentifier(newTableAlias)
+        table.unaliasedAst
     );
+    return result;
 }

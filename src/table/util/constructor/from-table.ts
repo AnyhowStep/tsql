@@ -29,8 +29,29 @@ export function fromTable<TableT extends ITable> (
 ) : (
     FromTable<TableT>
 ) {
-    return new Table(
+    const result : FromTable<TableT> = new Table<{
+        lateral : TableT["lateral"],
+        tableAlias : TableT["tableAlias"],
+        columns : TableT["columns"],
+        usedRef : TableT["usedRef"],
+
+        autoIncrement : TableT["autoIncrement"],
+        id : TableT["id"],
+        primaryKey : TableT["primaryKey"],
+        candidateKeys : TableT["candidateKeys"],
+
+        insertEnabled : TableT["insertEnabled"],
+        deleteEnabled : TableT["deleteEnabled"],
+
+        generatedColumns : TableT["generatedColumns"],
+        nullableColumns : TableT["nullableColumns"],
+        explicitDefaultValueColumns : TableT["explicitDefaultValueColumns"],
+        mutableColumns : TableT["mutableColumns"],
+
+        parents : TableT["parents"],
+    }>(
         table,
         table.unaliasedAst
     );
+    return result;
 }

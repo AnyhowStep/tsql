@@ -2,7 +2,7 @@ import {escapeIdentifier} from "../../../sqlstring";
 import {ITable} from "../../table";
 import {Table} from "../../table-impl";
 
-export type SetDatabaseName<TableT extends ITable> = (
+export type SetSchemaName<TableT extends ITable> = (
     Table<{
         lateral : TableT["lateral"],
         tableAlias : TableT["tableAlias"],
@@ -25,11 +25,29 @@ export type SetDatabaseName<TableT extends ITable> = (
         parents : TableT["parents"],
     }>
 );
-export function setDatabaseName<TableT extends ITable> (
+/**
+ * Sets the `schema` that this table belongs to.
+ *
+ * This is usually not required because the schema used
+ * will be the one your database connection session is using.
+ *
+ * -----
+ *
+ * This library does not support cross-schema compile-time safe queries.
+ *
+ * However, if you **do** need cross-schema support,
+ * this library can support it somewhat.
+ *
+ * -----
+ *
+ * @param table
+ * @param newSchemaName
+ */
+export function setSchemaName<TableT extends ITable> (
     table : TableT,
-    newDatabaseName : string
+    newSchemaName : string
 ) : (
-    SetDatabaseName<TableT>
+    SetSchemaName<TableT>
 ) {
     const {
         lateral,
@@ -76,7 +94,7 @@ export function setDatabaseName<TableT extends ITable> (
             parents,
         },
         [
-            escapeIdentifier(newDatabaseName),
+            escapeIdentifier(newSchemaName),
             ".",
             escapeIdentifier(tableAlias),
         ]

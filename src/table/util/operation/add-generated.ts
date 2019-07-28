@@ -5,27 +5,27 @@ import {KeyUtil} from "../../../key";
 import {pickOwnEnumerable} from "../../../type-util";
 import {ColumnIdentifierMapUtil} from "../../../column-identifier-map";
 
-export type AllowedGeneratedColumnAlias<TableT extends Pick<ITable, "columns"|"generatedColumns">> = (
+export type AddGeneratedColumnAlias<TableT extends Pick<ITable, "columns"|"generatedColumns">> = (
     Exclude<
         Extract<keyof TableT["columns"], string>,
         TableT["generatedColumns"][number]
     >
 );
-export type AllowedGeneratedColumnMap<TableT extends Pick<ITable, "columns"|"generatedColumns">> = (
+export type AddGeneratedColumnMap<TableT extends Pick<ITable, "columns"|"generatedColumns">> = (
     {
-        readonly [columnAlias in AllowedGeneratedColumnAlias<TableT>] : (
+        readonly [columnAlias in AddGeneratedColumnAlias<TableT>] : (
             TableT["columns"][columnAlias]
         )
     }
 );
-export function allowedGeneratedColumnMap<
+export function addGeneratedColumnMap<
     TableT extends Pick<ITable, "columns"|"generatedColumns">
 > (
     table : TableT
 ) : (
-    AllowedGeneratedColumnMap<TableT>
+    AddGeneratedColumnMap<TableT>
 ) {
-    const result : AllowedGeneratedColumnMap<TableT> = pickOwnEnumerable(
+    const result : AddGeneratedColumnMap<TableT> = pickOwnEnumerable(
         table.columns,
         ColumnArrayUtil.fromColumnMap(table.columns)
             .filter(column => {
@@ -34,19 +34,19 @@ export function allowedGeneratedColumnMap<
                 );
             })
             .map(column => column.columnAlias)
-    ) as AllowedGeneratedColumnMap<TableT>;
+    ) as AddGeneratedColumnMap<TableT>;
     return result;
 }
-export type GeneratedDelegate<
+export type AddGeneratedDelegate<
     TableT extends Pick<ITable, "columns"|"generatedColumns">,
-    ColumnsT extends readonly ColumnUtil.FromColumnMap<AllowedGeneratedColumnMap<TableT>>[]
+    ColumnsT extends readonly ColumnUtil.FromColumnMap<AddGeneratedColumnMap<TableT>>[]
 > = (
-    (columnMap : AllowedGeneratedColumnMap<TableT>) => ColumnsT
+    (columnMap : AddGeneratedColumnMap<TableT>) => ColumnsT
 );
 
 export type AddGenerated<
     TableT extends ITable,
-    ColumnsT extends readonly ColumnUtil.FromColumnMap<AllowedGeneratedColumnMap<TableT>>[]
+    ColumnsT extends readonly ColumnUtil.FromColumnMap<AddGeneratedColumnMap<TableT>>[]
 > = (
     Table<{
         lateral : TableT["lateral"],
@@ -63,7 +63,7 @@ export type AddGenerated<
         deleteEnabled : TableT["deleteEnabled"],
 
         /**
-         * Our new generated columns
+         * Our new generated columns.
          */
         generatedColumns : KeyUtil.Concat<
             TableT["generatedColumns"],
@@ -71,14 +71,16 @@ export type AddGenerated<
         >,
         nullableColumns : TableT["nullableColumns"],
         /**
-         * Generated columns have explicit default values
+         * Generated columns have implicit default values.
+         * Not explicit.
          */
-        explicitDefaultValueColumns : KeyUtil.Concat<
+        explicitDefaultValueColumns : KeyUtil.Subtract<
             TableT["explicitDefaultValueColumns"],
             KeyUtil.FromColumnArray<ColumnsT>
         >,
         /**
-         * Generated columns cannot be mutable
+         * Generated columns cannot be mutable.
+         * Their value is controlled by the database server.
          */
         mutableColumns : KeyUtil.Subtract<
             TableT["mutableColumns"],
@@ -88,13 +90,22 @@ export type AddGenerated<
         parents : TableT["parents"],
     }>
 );
+/**
+ * Adds a `GENERATED` column to the table.
+ *
+ * + Setting generated column values will not be allowed with `INSERT` statements.
+ * + Updating generated column values will also not be allowed with `UPDATE` statements.
+ *
+ * @param table
+ * @param delegate
+ */
 export function addGenerated<
     TableT extends ITable,
-    ColumnsT extends readonly ColumnUtil.FromColumnMap<AllowedGeneratedColumnMap<TableT>>[]
+    ColumnsT extends readonly ColumnUtil.FromColumnMap<AddGeneratedColumnMap<TableT>>[]
 > (
     table : TableT,
     delegate : (
-        GeneratedDelegate<
+        AddGeneratedDelegate<
             TableT,
             ColumnsT
         >
@@ -102,12 +113,12 @@ export function addGenerated<
 ) : (
     AddGenerated<TableT, ColumnsT>
 ) {
-    const allowedColumns = allowedGeneratedColumnMap(table);
-    const newGenerated : ColumnsT = delegate(allowedColumns);
+    const columnMap = addGeneratedColumnMap(table);
+    const columnsT : ColumnsT = delegate(columnMap);
 
     ColumnIdentifierMapUtil.assertHasColumnIdentifiers(
-        allowedColumns,
-        newGenerated
+        columnMap,
+        columnsT
     );
 
     const generatedColumns : (
@@ -117,16 +128,16 @@ export function addGenerated<
         >
     ) = KeyUtil.concat(
         table.generatedColumns,
-        KeyUtil.fromColumnArray(newGenerated)
+        KeyUtil.fromColumnArray(columnsT)
     );
     const explicitDefaultValueColumns : (
-        KeyUtil.Concat<
+        KeyUtil.Subtract<
             TableT["explicitDefaultValueColumns"],
             KeyUtil.FromColumnArray<ColumnsT>
         >
-    ) = KeyUtil.concat(
+    ) = KeyUtil.subtract(
         table.explicitDefaultValueColumns,
-        KeyUtil.fromColumnArray(newGenerated)
+        KeyUtil.fromColumnArray(columnsT)
     );
     const mutableColumns : (
         KeyUtil.Subtract<
@@ -135,7 +146,7 @@ export function addGenerated<
         >
     ) = KeyUtil.subtract(
         table.mutableColumns,
-        KeyUtil.fromColumnArray(newGenerated)
+        KeyUtil.fromColumnArray(columnsT)
     );
 
     const {

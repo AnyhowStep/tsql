@@ -142,7 +142,9 @@ export interface ITable<DataT extends TableData=TableData> extends IAliasedTable
      * like `CURRENT_TIMESTAMP` or some other value,
      * you will have to specify as such manually.
      *
-     * Columns with server default values are optional with `INSERT` statements.
+     * + Columns with server default values are optional with `INSERT` statements.
+     * + Generated columns have implicit default values.
+     * + Nullable columns have implicit default values.
      */
     readonly explicitDefaultValueColumns : DataT["explicitDefaultValueColumns"];
     /**
@@ -150,10 +152,10 @@ export interface ITable<DataT extends TableData=TableData> extends IAliasedTable
      *
      * By default, all columns are immutable.
      *
-     * + Calling `setMutable()` will set only the specified columns as mutable.
-     * + Calling `setImmutable()` will make all columns immutable.
      * + Calling `addMutable()` will add the specified columns to the set of mutable columns.
      * + Calling `removeMutable()` will remove the specified columns from the set of mutable columns.
+     * + Calling `addAllMutable()` will make as many columns as possible mutable.
+     * + Calling `removeAllMutable()` will make all columns immutable.
      * + Generated columns cannot be mutable.
      */
     readonly mutableColumns : DataT["mutableColumns"];

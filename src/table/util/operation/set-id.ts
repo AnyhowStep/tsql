@@ -4,21 +4,11 @@ import {Table} from "../../table-impl";
 import {IAnonymousColumn, ColumnUtil, IColumn, ColumnArrayUtil} from "../../../column";
 import {NonNullPrimitiveExpr} from "../../../primitive-expr";
 import {KeyArrayUtil, KeyUtil} from "../../../key";
-import {assertValidPrimaryKey, AssertValidPrimaryKey, AllowedPrimaryKeyColumnMap} from "./set-primary-key";
-import { pickOwnEnumerable } from "../../../type-util";
-import { ColumnIdentifierMapUtil } from "../../../column-identifier-map";
+import {assertValidPrimaryKey, AssertValidPrimaryKey, SetPrimaryKeyColumnMap} from "./set-primary-key";
+import {pickOwnEnumerable} from "../../../type-util";
+import {ColumnIdentifierMapUtil} from "../../../column-identifier-map";
 
-/**
- * The aliases of columns that can be an `id-column`
- *
- * -----
- *
- * + `id-column`s cannot be nullable
- * + `id-column`s must be a candidate key
- * + `id-column`s must be a `PRIMARY KEY`
- *
- */
-export type AllowedIdColumnAlias<TableT extends Pick<ITable, "columns"|"candidateKeys">> = (
+export type SetIdColumnAlias<TableT extends Pick<ITable, "columns"|"candidateKeys">> = (
     {
         [columnAlias in Extract<keyof TableT["columns"], string>] : (
             TableT["columns"][columnAlias] extends IAnonymousColumn<NonNullPrimitiveExpr> ?
@@ -37,24 +27,22 @@ export type AllowedIdColumnAlias<TableT extends Pick<ITable, "columns"|"candidat
         )
     }[Extract<keyof TableT["columns"], string>]
 );
-/**
- * @see {@link AllowedIdColumnAlias}
- */
-export type AllowedIdColumnMap<TableT extends Pick<ITable, "columns"|"candidateKeys">> = (
+
+export type SetIdColumnMap<TableT extends Pick<ITable, "columns"|"candidateKeys">> = (
     {
-        readonly [columnAlias in AllowedIdColumnAlias<TableT>] : (
+        readonly [columnAlias in SetIdColumnAlias<TableT>] : (
             TableT["columns"][columnAlias]
         )
     }
 );
-export function allowedIdColumnMap<
+export function setIdColumnMap<
     TableT extends Pick<ITable, "columns"|"candidateKeys">
 > (
     table : TableT
 ) : (
-    AllowedIdColumnMap<TableT>
+    SetIdColumnMap<TableT>
 ) {
-    const result : AllowedIdColumnMap<TableT> = pickOwnEnumerable(
+    const result : SetIdColumnMap<TableT> = pickOwnEnumerable(
         table.columns,
         ColumnArrayUtil.fromColumnMap(table.columns)
             .filter(column => {
@@ -67,29 +55,27 @@ export function allowedIdColumnMap<
                 );
             })
             .map(column => column.columnAlias)
-    ) as AllowedIdColumnMap<TableT>;
+    ) as SetIdColumnMap<TableT>;
     return result;
 }
-/**
- * @see {@link AllowedIdColumnAlias}
- */
-export type IdDelegate<
+
+export type SetIdDelegate<
     TableT extends Pick<ITable, "columns"|"candidateKeys">,
-    IdT extends ColumnUtil.FromColumnMap<AllowedIdColumnMap<TableT>>
+    IdT extends ColumnUtil.FromColumnMap<SetIdColumnMap<TableT>>
 > = (
-    (columnMap : AllowedIdColumnMap<TableT>) => (
+    (columnMap : SetIdColumnMap<TableT>) => (
         IdT
     )
 );
 export type AssertValidId<
     TableT extends Pick<ITable, "columns"|"candidateKeys">,
-    IdT extends ColumnUtil.FromColumnMap<AllowedIdColumnMap<TableT>>
+    IdT extends ColumnUtil.FromColumnMap<SetIdColumnMap<TableT>>
 > = (
     AssertValidPrimaryKey<
         TableT,
         Extract<
             IdT[],
-            readonly ColumnUtil.FromColumnMap<AllowedPrimaryKeyColumnMap<TableT>>[]
+            readonly ColumnUtil.FromColumnMap<SetPrimaryKeyColumnMap<TableT>>[]
         >
     >
 );
@@ -97,17 +83,15 @@ export function assertValidId (
     table : Pick<ITable, "candidateKeys"|"columns">,
     id : IColumn
 ) {
-    const allowedColumns = allowedIdColumnMap(table);
-    ColumnIdentifierMapUtil.assertHasColumnIdentifier(allowedColumns, id);
+    const columnMap = setIdColumnMap(table);
+    ColumnIdentifierMapUtil.assertHasColumnIdentifier(columnMap, id);
 
     assertValidPrimaryKey(table, [id]);
 }
-/**
- * @see {@link AllowedIdColumnAlias}
- */
+
 export type SetId<
     TableT extends ITable,
-    IdT extends ColumnUtil.FromColumnMap<AllowedIdColumnMap<TableT>>
+    IdT extends ColumnUtil.FromColumnMap<SetIdColumnMap<TableT>>
 > = (
     Table<{
         lateral : TableT["lateral"],
@@ -152,15 +136,22 @@ export type SetId<
     }>
 );
 /**
- * @see {@link AllowedIdColumnAlias}
+ * Sets a column as the single-column identifier for this table.
+ *
+ * -----
+ *
+ * + `id-column`s cannot be nullable
+ * + `id-column`s must be a candidate key
+ * + `id-column`s must be a `PRIMARY KEY`
+ *
  */
 export function setId<
     TableT extends ITable,
-    IdT extends ColumnUtil.FromColumnMap<AllowedIdColumnMap<TableT>>
+    IdT extends ColumnUtil.FromColumnMap<SetIdColumnMap<TableT>>
 > (
     table : TableT,
     delegate : (
-        IdDelegate<
+        SetIdDelegate<
             TableT,
             (
                 & IdT
@@ -174,7 +165,7 @@ export function setId<
 ) : (
     SetId<TableT, IdT>
 ) {
-    const newId : IdT = delegate(allowedIdColumnMap(table));
+    const newId : IdT = delegate(setIdColumnMap(table));
 
     assertValidId(table, newId);
 

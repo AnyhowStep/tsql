@@ -7,15 +7,7 @@ import {AssertValidCandidateKey, assertValidCandidateKey} from "./add-candidate-
 import {KeyArrayUtil, KeyUtil} from "../../../key";
 import {pickOwnEnumerable} from "../../../type-util";
 
-/**
- * The aliases of columns that can be part of a `PRIMARY KEY`
- *
- * -----
- *
- * + `PRIMARY KEY` columns cannot be nullable
- * + `PRIMARY KEY` columns must be a candidate key
- */
-export type AllowedPrimaryKeyColumnAlias<TableT extends Pick<ITable, "columns">> = (
+export type SetPrimaryKeyColumnAlias<TableT extends Pick<ITable, "columns">> = (
     {
         [columnAlias in Extract<keyof TableT["columns"], string>] : (
             TableT["columns"][columnAlias] extends IAnonymousColumn<NonNullPrimitiveExpr> ?
@@ -27,45 +19,41 @@ export type AllowedPrimaryKeyColumnAlias<TableT extends Pick<ITable, "columns">>
         )
     }[Extract<keyof TableT["columns"], string>]
 );
-/**
- * @see {@link AllowedPrimaryKeyColumnAlias}
- */
-export type AllowedPrimaryKeyColumnMap<TableT extends Pick<ITable, "columns">> = (
+
+export type SetPrimaryKeyColumnMap<TableT extends Pick<ITable, "columns">> = (
     {
-        readonly [columnName in AllowedPrimaryKeyColumnAlias<TableT>] : (
+        readonly [columnName in SetPrimaryKeyColumnAlias<TableT>] : (
             TableT["columns"][columnName]
         )
     }
 );
-export function allowedPrimaryKeyColumnMap<
+export function setPrimaryKeyColumnMap<
     TableT extends Pick<ITable, "columns">
 > (
     table : TableT
 ) : (
-    AllowedPrimaryKeyColumnMap<TableT>
+    SetPrimaryKeyColumnMap<TableT>
 ) {
-    const result : AllowedPrimaryKeyColumnMap<TableT> = pickOwnEnumerable(
+    const result : SetPrimaryKeyColumnMap<TableT> = pickOwnEnumerable(
         table.columns,
         ColumnArrayUtil.fromColumnMap(table.columns)
             .filter(column => !tm.canOutputNull(column.mapper))
             .map(column => column.columnAlias)
-    ) as AllowedPrimaryKeyColumnMap<TableT>;
+    ) as SetPrimaryKeyColumnMap<TableT>;
     return result;
 }
-/**
- * @see {@link AllowedPrimaryKeyColumnAlias}
- */
-export type PrimaryKeyDelegate<
+
+export type SetPrimaryKeyDelegate<
     TableT extends Pick<ITable, "columns"|"candidateKeys">,
-    KeyT extends readonly ColumnUtil.FromColumnMap<AllowedPrimaryKeyColumnMap<TableT>>[]
+    KeyT extends readonly ColumnUtil.FromColumnMap<SetPrimaryKeyColumnMap<TableT>>[]
 > = (
-    (columnMap : AllowedPrimaryKeyColumnMap<TableT>) => (
+    (columnMap : SetPrimaryKeyColumnMap<TableT>) => (
         KeyT
     )
 );
 export type AssertValidPrimaryKey<
     TableT extends Pick<ITable, "columns"|"candidateKeys">,
-    KeyT extends readonly ColumnUtil.FromColumnMap<AllowedPrimaryKeyColumnMap<TableT>>[]
+    KeyT extends readonly ColumnUtil.FromColumnMap<SetPrimaryKeyColumnMap<TableT>>[]
 > = (
     AssertValidCandidateKey<
         TableT,
@@ -88,12 +76,10 @@ export function assertValidPrimaryKey (
     }
     assertValidCandidateKey(table, columns);
 }
-/**
- * @see {@link AllowedPrimaryKeyColumnAlias}
- */
+
 export type SetPrimaryKey<
     TableT extends ITable,
-    KeyT extends readonly ColumnUtil.FromColumnMap<AllowedPrimaryKeyColumnMap<TableT>>[]
+    KeyT extends readonly ColumnUtil.FromColumnMap<SetPrimaryKeyColumnMap<TableT>>[]
 > = (
     Table<{
         lateral : TableT["lateral"],
@@ -122,13 +108,24 @@ export type SetPrimaryKey<
         parents : TableT["parents"],
     }>
 );
+/**
+ * Sets the `PRIMARY KEY` of the table.
+ *
+ * In MySQL, a `PRIMARY KEY` is just a candidate key
+ * where all its columns are non-nullable.
+ *
+ * -----
+ *
+ * + `PRIMARY KEY` columns cannot be nullable
+ * + `PRIMARY KEY` columns must be a candidate key
+ */
 export function setPrimaryKey<
     TableT extends ITable,
-    KeyT extends readonly ColumnUtil.FromColumnMap<AllowedPrimaryKeyColumnMap<TableT>>[]
+    KeyT extends readonly ColumnUtil.FromColumnMap<SetPrimaryKeyColumnMap<TableT>>[]
 > (
     table : TableT,
     delegate : (
-        PrimaryKeyDelegate<
+        SetPrimaryKeyDelegate<
             TableT,
             (
                 & KeyT
@@ -142,7 +139,7 @@ export function setPrimaryKey<
 ) : (
     SetPrimaryKey<TableT, KeyT>
 ) {
-    const newPrimaryKey : KeyT = delegate(allowedPrimaryKeyColumnMap(table));
+    const newPrimaryKey : KeyT = delegate(setPrimaryKeyColumnMap(table));
 
     assertValidPrimaryKey(table, newPrimaryKey);
 

@@ -33,7 +33,7 @@ export function fromTableAlias<
 ) : (
     FromTableAlias<TableAliasT>
 ) {
-    return new Table(
+    const result : FromTableAlias<TableAliasT> = new Table(
         {
             lateral : false,
             tableAlias,
@@ -54,9 +54,10 @@ export function fromTableAlias<
             mutableColumns : [],
 
             parents : [],
-        },
+        } as const,
         escapeIdentifier(tableAlias)
     );
+    return result;
 }
 
 /*
