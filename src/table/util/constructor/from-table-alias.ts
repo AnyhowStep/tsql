@@ -26,6 +26,11 @@ export type FromTableAlias<
         parents : readonly [],
     }>
 );
+/**
+ * Creates a table with the given alias
+ *
+ * @param tableAlias
+ */
 export function fromTableAlias<
     TableAliasT extends string
 > (
@@ -59,31 +64,3 @@ export function fromTableAlias<
     );
     return result;
 }
-
-/*
-import * as tm from "type-mapping/fluent";
-const otherTable = fromTableAlias("otherTable")
-    .addColumns({
-        x : () => 1,
-        y : () => "str",
-        wtf : () => "str"
-    })
-const t = fromTableAlias("test")
-    .addColumns({
-        x : () => 1,
-        y : () => "str"
-    })
-    .addColumns([
-        tm.boolean().withName("z"),
-        tm.mysql.bigIntUnsigned().withName("b"),
-    ])
-    .addCandidateKey((c) => [c.x])
-    //.addCandidateKey(c => [c.x])
-    .addCandidateKey(c => [c.y, c.z])
-    //.addCandidateKey(c => [c.y])
-    //.addCandidateKey(c => [c.y, c.x])
-    .addCandidateKey(c => [otherTable.columns.y])
-    //.addCandidateKey(c => [c.x])
-    //.addCandidateKey(c => [c.x])
-
-//*/

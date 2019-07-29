@@ -1,8 +1,9 @@
 {
-  "name": "typed-orm",
-  "version": "2.0.0",
+  "name": "@tsql/tsql",
+  "version": "0.0.0",
   "description": "A SQL query-builder/ORM",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build-custom-eslint-rules": "tsc -p ./custom-typescript-eslint-rules/tsconfig.json",
@@ -16,8 +17,12 @@
     "accept-one": "ts-node -P ./test/compile-time/tsconfig.json ./test/compile-time/accept-one.ts",
     "test-compile-time-interactive": "ts-node -P ./test/compile-time/tsconfig.json ./test/compile-time/interactive.ts"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "anyhowstep",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AnyhowStep/tsql"
+  },
   "devDependencies": {
     "@anyhowstep/typed-env": "^2.1.0",
     "@types/diff": "^4.0.2",

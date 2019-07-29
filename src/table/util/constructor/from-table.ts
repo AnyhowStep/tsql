@@ -24,6 +24,11 @@ export type FromTable<TableT extends ITable> = (
         parents : TableT["parents"],
     }>
 );
+/**
+ * Creates a copy of the `table`
+ *
+ * @param table
+ */
 export function fromTable<TableT extends ITable> (
     table : TableT
 ) : (

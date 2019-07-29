@@ -1,15 +1,26 @@
-Written with MySQL 5.7.26 in mind.
+At the moment, written with MySQL 5.7.26 in mind.
 
-Important, create sub-packages for different MySQL versions/different DBMSs
+This library is unusable at the moment.
+It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyhowstep/typed-orm)
+
+-----
+
+### Documentation
+
+0. [Defining Tables](doc/00-getting-started/00-defining-tables.md)
+
+-----
 
 ### TODO
 
++ Important, create sub-packages for different MySQL versions/different DBMSs
 + Add `fetchOneByPrimaryKey` alias for `fetchOneByPk` and other similar methods
 + Support for other DBMS'
   > random 2cents: if you're going for this, I say ideally support every sql offered by aws rds (aurora, postgres, my, maira, oracle & MS)
 + Avoid single-letter names in documentation/readme; prefer `columns` over `c`
 + `fetchOneByArbitraryCondition`
-+ eslint integration?
+
+<!--
 > I'm just thinking about how...
 yeah the nicity of being able to call like find, and have the code manage going like
 "they've given a primary key, so I can build the query like this to leveage that" and what not
@@ -24,3 +35,4 @@ your library looks cool man - keep me in the loop :D
 btw have you ever checked out loki?
 http://lokijs.org/
 
+-->

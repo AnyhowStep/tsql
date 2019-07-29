@@ -149,6 +149,7 @@ export class Table<DataT extends TableData> implements ITable {
      * + Columns with server default values are optional with `INSERT` statements.
      * + Generated columns have implicit default values.
      * + Nullable columns have implicit default values.
+     * + `AUTO_INCREMENT` columns have implicit default values
      */
     addExplicitDefaultValue<
         ColumnsT extends readonly ColumnUtil.FromColumnMap<TableUtil.AddExplicitDefaultValueColumnMap<this>>[]

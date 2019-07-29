@@ -8,21 +8,23 @@ import {ColumnIdentifierMapUtil} from "../../../column-identifier-map";
 /**
  * + Generated columns have implicit default values
  * + nullable columns have implicit default values
+ * + `AUTO_INCREMENT` columns have implicit default values
  */
 export type AddExplicitDefaultValueColumnAlias<
-    TableT extends Pick<ITable, "columns"|"generatedColumns"|"nullableColumns"|"explicitDefaultValueColumns">
+    TableT extends Pick<ITable, "columns"|"generatedColumns"|"nullableColumns"|"autoIncrement"|"explicitDefaultValueColumns">
 > = (
     Exclude<
         Extract<keyof TableT["columns"], string>,
         (
             | TableT["generatedColumns"][number]
             | TableT["nullableColumns"][number]
+            | TableT["autoIncrement"]
             | TableT["explicitDefaultValueColumns"][number]
         )
     >
 );
 export type AddExplicitDefaultValueColumnMap<
-    TableT extends Pick<ITable, "columns"|"generatedColumns"|"nullableColumns"|"explicitDefaultValueColumns">
+    TableT extends Pick<ITable, "columns"|"generatedColumns"|"nullableColumns"|"autoIncrement"|"explicitDefaultValueColumns">
 > = (
     {
         readonly [columnAlias in AddExplicitDefaultValueColumnAlias<TableT>] : (
@@ -31,7 +33,7 @@ export type AddExplicitDefaultValueColumnMap<
     }
 );
 export function addExplicitDefaultValueColumnMap<
-    TableT extends Pick<ITable, "columns"|"generatedColumns"|"nullableColumns"|"explicitDefaultValueColumns">
+    TableT extends Pick<ITable, "columns"|"generatedColumns"|"nullableColumns"|"autoIncrement"|"explicitDefaultValueColumns">
 > (
     table : TableT
 ) : (
@@ -44,6 +46,7 @@ export function addExplicitDefaultValueColumnMap<
                 return (
                     !table.generatedColumns.includes(column.columnAlias) &&
                     !table.nullableColumns.includes(column.columnAlias) &&
+                    (table.autoIncrement != column.columnAlias) &&
                     !table.explicitDefaultValueColumns.includes(column.columnAlias)
                 );
             })
@@ -52,7 +55,7 @@ export function addExplicitDefaultValueColumnMap<
     return result;
 }
 export type AddExplicitDefaultValueDelegate<
-    TableT extends Pick<ITable, "columns"|"generatedColumns"|"nullableColumns"|"explicitDefaultValueColumns">,
+    TableT extends Pick<ITable, "columns"|"generatedColumns"|"nullableColumns"|"autoIncrement"|"explicitDefaultValueColumns">,
     ColumnsT extends readonly ColumnUtil.FromColumnMap<AddExplicitDefaultValueColumnMap<TableT>>[]
 > = (
     (columnMap : AddExplicitDefaultValueColumnMap<TableT>) => ColumnsT
@@ -101,6 +104,7 @@ export type AddExplicitDefaultValue<
  * + Columns with server default values are optional with `INSERT` statements.
  * + Generated columns have implicit default values.
  * + Nullable columns have implicit default values.
+ * + `AUTO_INCREMENT` columns have implicit default values
  *
  * -----
  *
