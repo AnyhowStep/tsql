@@ -15,9 +15,9 @@ export function append<
     JoinT extends IJoin
 > (
     arr : ArrT,
-    join : JoinT
+    ...join : JoinT[]
 ) : (
     Append<ArrT, JoinT>
 ) {
-    return [...arr, join];
+    return [...arr, ...join];
 }

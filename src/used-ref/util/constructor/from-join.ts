@@ -15,9 +15,14 @@ export type FromJoin<JoinT extends IJoin> = (
                         string
                     >
                 )] : (
-                    tm.OutputOf<
+                    | tm.OutputOf<
                         JoinUtil.ExtractWithTableAlias<JoinT, tableAlias>["columns"][columnAlias]["mapper"]
                     >
+                    | (
+                        true extends JoinUtil.ExtractWithTableAlias<JoinT, tableAlias>["nullable"] ?
+                        null :
+                        never
+                    )
                 )
             }
         )

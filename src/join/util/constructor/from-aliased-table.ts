@@ -3,7 +3,7 @@ import {IAliasedTable, AliasedTableUtil} from "../../../aliased-table";
 import {JoinType} from "../../join";
 import {IColumn} from "../../../column";
 
-export type FromAliasedTable<
+export type FromAliasedTableImpl<
     AliasedTableT extends IAliasedTable,
     NullableT extends boolean
 > = (
@@ -40,6 +40,14 @@ export type FromAliasedTable<
         readonly mutableColumns : AliasedTableUtil.MutableColumns<AliasedTableT>;
     }>
 );
+export type FromAliasedTable<
+    AliasedTableT extends IAliasedTable,
+    NullableT extends boolean
+> = (
+    AliasedTableT extends IAliasedTable ?
+    FromAliasedTableImpl<AliasedTableT, NullableT> :
+    never
+);
 export function fromAliasedTable<
     AliasedTableT extends IAliasedTable,
     NullableT extends boolean
@@ -52,7 +60,7 @@ export function fromAliasedTable<
 ) : (
     FromAliasedTable<AliasedTableT, NullableT>
 ) {
-    const result : FromAliasedTable<AliasedTableT, NullableT> = new Join(
+    const result : FromAliasedTableImpl<AliasedTableT, NullableT> = new Join(
         {
             tableAlias : aliasedTable.tableAlias,
             nullable,
@@ -68,5 +76,5 @@ export function fromAliasedTable<
         from,
         to
     );
-    return result;
+    return result as FromAliasedTable<AliasedTableT, NullableT>;
 }
