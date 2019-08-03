@@ -2,7 +2,7 @@ import {IFromClause} from "../../from-clause";
 import {IAliasedTable} from "../../../aliased-table";
 import {AfterFromClause} from "../helper-type";
 import {JoinUtil, JoinType, JoinArrayUtil} from "../../../join";
-import {assertAfterFromClause, assertValidJoinTargetBase, AssertValidJoinTargetBase} from "../predicate";
+import {assertAfterFromClause, assertValidCurrentJoinBase, AssertValidCurentJoinBase} from "../predicate";
 
 export type CrossJoin<
     FromClauseT extends AfterFromClause,
@@ -23,13 +23,13 @@ export function crossJoin<
     fromClause : FromClauseT,
     aliasedTable : (
         & AliasedTableT
-        & AssertValidJoinTargetBase<FromClauseT, AliasedTableT>
+        & AssertValidCurentJoinBase<FromClauseT, AliasedTableT>
     )
 ) : (
     CrossJoin<FromClauseT, AliasedTableT>
 ) {
     assertAfterFromClause(fromClause);
-    assertValidJoinTargetBase(fromClause, aliasedTable);
+    assertValidCurrentJoinBase(fromClause, aliasedTable);
 
     const result : CrossJoin<FromClauseT, AliasedTableT> = {
         outerQueryJoins : fromClause.outerQueryJoins,

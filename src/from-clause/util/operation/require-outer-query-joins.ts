@@ -1,7 +1,7 @@
 import {IFromClause} from "../../from-clause";
-import {IAliasedTable, AliasedTableArrayUtil} from "../../../aliased-table";
-import {AssertNotInCurrentJoins, AssertNotInOuterQueryJoins} from "../predicate";
+import {IAliasedTable} from "../../../aliased-table";
 import {RequireOuterQueryJoinsImpl, requireOuterQueryJoinsImpl} from "./require-outer-query-joins-impl";
+import {AssertValidOuterQueryJoins} from "../predicate";
 
 export type RequireOuterQueryJoins<
     FromClauseT extends IFromClause,
@@ -16,9 +16,7 @@ export function requireOuterQueryJoins<
     fromClause : FromClauseT,
     ...aliasedTables : (
         & AliasedTablesT
-        & AssertNotInCurrentJoins<FromClauseT, AliasedTablesT[number]>
-        & AssertNotInOuterQueryJoins<FromClauseT, AliasedTablesT[number]>
-        & AliasedTableArrayUtil.AssertNoDuplicateTableAlias<AliasedTablesT>
+        & AssertValidOuterQueryJoins<FromClauseT, AliasedTablesT>
     )
 ) : (
     RequireOuterQueryJoins<FromClauseT, AliasedTablesT>

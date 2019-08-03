@@ -1,7 +1,7 @@
 import {IFromClause} from "../../from-clause";
-import {IAliasedTable, AliasedTableArrayUtil} from "../../../aliased-table";
+import {IAliasedTable} from "../../../aliased-table";
 import {JoinUtil, JoinType, JoinArrayUtil, IJoin} from "../../../join";
-import {assertNotInCurrentJoins, assertNotInOuterQueryJoins, AssertNotInCurrentJoins, AssertNotInOuterQueryJoins} from "../predicate";
+import {AssertValidOuterQueryJoins, assertValidOuterQueryJoins} from "../predicate";
 
 export type RequireOuterQueryJoinsImpl<
     FromClauseT extends IFromClause,
@@ -31,9 +31,7 @@ export function requireOuterQueryJoinsImpl<
     nullable : NullableT,
     ...aliasedTables : (
         & AliasedTablesT
-        & AssertNotInCurrentJoins<FromClauseT, AliasedTablesT[number]>
-        & AssertNotInOuterQueryJoins<FromClauseT, AliasedTablesT[number]>
-        & AliasedTableArrayUtil.AssertNoDuplicateTableAlias<AliasedTablesT>
+        & AssertValidOuterQueryJoins<FromClauseT, AliasedTablesT>
     )
 ) : (
     RequireOuterQueryJoinsImpl<FromClauseT, NullableT, AliasedTablesT>
@@ -42,11 +40,7 @@ export function requireOuterQueryJoinsImpl<
         return fromClause as RequireOuterQueryJoinsImpl<FromClauseT, NullableT, AliasedTablesT>;
     }
 
-    for (const aliasedTable of aliasedTables) {
-        assertNotInCurrentJoins(fromClause, aliasedTable);
-        assertNotInOuterQueryJoins(fromClause, aliasedTable);
-    }
-    AliasedTableArrayUtil.assertNoDuplicateTableAlias(aliasedTables);
+    assertValidOuterQueryJoins(fromClause, aliasedTables);
 
     const required = aliasedTables.map(aliasedTable => (
         JoinUtil.fromAliasedTable(
