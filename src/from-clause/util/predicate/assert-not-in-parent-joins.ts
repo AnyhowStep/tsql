@@ -42,7 +42,7 @@ import {CompileError} from "../../../compile-error";
  */
 export type AssertNotInParentJoins<
     FromClauseT extends IFromClause,
-    AliasedTableT extends IAliasedTable,
+    AliasedTableT extends Pick<IAliasedTable, "tableAlias">,
     TrueT
 > = (
     FromClauseT["parentJoins"] extends readonly IJoin[] ?
@@ -66,7 +66,7 @@ export type AssertNotInParentJoins<
 );
 export function assertAliasedTableNotInParentJoins (
     fromClause : IFromClause,
-    aliasedTable : IAliasedTable
+    aliasedTable : Pick<IAliasedTable, "tableAlias">
 ) {
     if (fromClause.parentJoins != undefined) {
         if (fromClause.parentJoins.some(j => j.tableAlias == aliasedTable.tableAlias)) {

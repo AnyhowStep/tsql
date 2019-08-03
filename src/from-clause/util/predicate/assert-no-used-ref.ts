@@ -1,7 +1,6 @@
 import {IAliasedTable} from "../../../aliased-table";
-import {ColumnIdentifierUtil} from "../../../column-identifier";
 import {CompileError} from "../../../compile-error";
-import {Writable} from "../../../type-util";
+import {UsedRefUtil} from "../../../used-ref";
 
 /**
  * Problem: Derived tables cannot reference same `FROM/JOIN` clause tables
@@ -111,24 +110,22 @@ import {Writable} from "../../../type-util";
  *
  */
 export type AssertNoUsedRef<
-    AliasedTableT extends IAliasedTable,
+    AliasedTableT extends Pick<IAliasedTable, "tableAlias"|"usedRef">,
     TrueT
 > = (
-    Extract<keyof AliasedTableT["usedRef"], string> extends never ?
+    UsedRefUtil.TableAlias<AliasedTableT["usedRef"]> extends never ?
     TrueT :
     CompileError<[
         "Derived table",
         AliasedTableT["tableAlias"],
         "must not reference parent query tables or tables in the same FROM/JOIN clause",
-        Writable<
-            ColumnIdentifierUtil.FromColumnRef<AliasedTableT["usedRef"]>
-        >
+        UsedRefUtil.TableAlias<AliasedTableT["usedRef"]>
     ]>
 );
 export function assertNoUsedRef (
-    aliasedTable : IAliasedTable
+    aliasedTable : Pick<IAliasedTable, "tableAlias"|"usedRef">
 ) {
-    if (Object.keys(aliasedTable.usedRef).length > 0) {
+    if (Object.keys(aliasedTable.usedRef.columns).length > 0) {
         throw new Error(`Derived table ${aliasedTable.tableAlias} must not reference parent query tables or tables in the same FROM/JOIN clause`);
     }
 }

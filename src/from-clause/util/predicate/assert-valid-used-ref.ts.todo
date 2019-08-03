@@ -5,10 +5,8 @@ import {CompileError} from "../../../compile-error";
 import {IJoin} from "../../../join";
 import {ColumnUtil} from "../../../column";
 import {ColumnIdentifierRefUtil} from "../../../column-identifier-ref";
+import {UsedRefUtil} from "../../../used-ref";
 
-/**
- * @todo `usedRef` is supposed to be contravariant!
- */
 type AllowedColumns<
     FromClauseT extends IFromClause,
     AliasedTableT extends IAliasedTable
@@ -149,7 +147,7 @@ export type AssertValidUsedRef<
     AliasedTableT extends IAliasedTable,
     TrueT
 > = (
-    Extract<keyof AliasedTableT["usedRef"], string> extends never ?
+    UsedRefUtil.TableAlias<AliasedTableT["usedRef"]> extends never ?
     //Having no `usedRef` is the best.
     TrueT :
     (

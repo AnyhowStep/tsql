@@ -26,7 +26,7 @@ import {CompileError} from "../../../compile-error";
  */
 export type AssertNotInCurrentJoins<
     FromClauseT extends IFromClause,
-    AliasedTableT extends IAliasedTable,
+    AliasedTableT extends Pick<IAliasedTable, "tableAlias">,
     TrueT
 > = (
     FromClauseT["currentJoins"] extends readonly IJoin[] ?
@@ -50,7 +50,7 @@ export type AssertNotInCurrentJoins<
 );
 export function assertNotInCurrentJoins (
     fromClause : IFromClause,
-    aliasedTable : IAliasedTable
+    aliasedTable : Pick<IAliasedTable, "tableAlias">
 ) {
     if (fromClause.currentJoins != undefined) {
         if (fromClause.currentJoins.some(j => j.tableAlias == aliasedTable.tableAlias)) {

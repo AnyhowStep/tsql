@@ -26,7 +26,7 @@
         "./src/super-key/**/*",
         "./src/primary-key/**/*",
         "./src/join/**/*",
-        "./src/from-clause-todo/**/*",
+        "./src/from-clause/**/*",
         "./src/index.ts"
     ]
 }
