@@ -2,7 +2,7 @@ import {IFromClause} from "../../from-clause";
 import {IAliasedTable} from "../../../aliased-table";
 import {BeforeFromClause} from "../helper-type";
 import {JoinUtil, JoinType} from "../../../join";
-import {assertBeforeFromClause, assertValidCurrentJoinBase, AssertValidCurentJoinBase} from "../predicate";
+import {assertBeforeFromClause, assertValidCurrentJoinBase, AssertValidCurrentJoinBase} from "../predicate";
 
 export type From<
     FromClauseT extends BeforeFromClause,
@@ -20,7 +20,7 @@ export function from<
     fromClause : FromClauseT,
     aliasedTable : (
         & AliasedTableT
-        & AssertValidCurentJoinBase<FromClauseT, AliasedTableT>
+        & AssertValidCurrentJoinBase<FromClauseT, AliasedTableT>
     )
 ) : (
     From<FromClauseT, AliasedTableT>

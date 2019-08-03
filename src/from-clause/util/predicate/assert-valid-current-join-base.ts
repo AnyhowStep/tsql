@@ -6,7 +6,7 @@ import {AssertNotInOuterQueryJoins, assertNotInOuterQueryJoins} from "./assert-n
 /**
  * These constraints are required, no matter what database.
  */
-export type AssertValidCurentJoinBase<
+export type AssertValidCurrentJoinBase<
     FromClauseT extends IFromClause,
     AliasedTableT extends Pick<IAliasedTable, "tableAlias">
 > = (
