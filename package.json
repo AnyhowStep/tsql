@@ -23,6 +23,10 @@
     "type": "git",
     "url": "https://github.com/AnyhowStep/tsql"
   },
+  "bugs": {
+    "url": "https://github.com/AnyhowStep/tsql/issues"
+  },
+  "homepage": "https://github.com/AnyhowStep/tsql#readme",
   "devDependencies": {
     "@anyhowstep/typed-env": "^2.1.0",
     "@types/diff": "^4.0.2",
@@ -40,8 +44,6 @@
     "typescript": "^3.5.1"
   },
   "dependencies": {
-    "@types/mysql": "^2.15.6",
-    "mysql": "^2.17.1",
     "type-mapping": "^1.17.0"
   }
 }
