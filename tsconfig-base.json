@@ -30,8 +30,8 @@
 
         "module": "commonjs",
         "moduleResolution": "node",
-        "target": "es5",
-        "lib": ["es5"],
+        "target": "es2019",
+        "lib": ["es2019"],
         "jsx": "react",
         "jsxFactory": "React.createElement"
     },
