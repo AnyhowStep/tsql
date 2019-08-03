@@ -1,6 +1,6 @@
 import {IFromClause} from "../../from-clause";
 import {IAliasedTable} from "../../../aliased-table";
-import {AfterFromClause} from "../../helper-type";
+import {AfterFromClause} from "../helper-type";
 import {JoinUtil, JoinType, JoinArrayUtil} from "../../../join";
 
 export type CrossJoin<

@@ -1,5 +1,5 @@
-import {IFromClause} from "../from-clause";
-import {IJoin} from "../../join";
+import {IFromClause} from "../../from-clause";
+import {IJoin} from "../../../join";
 
 export type BeforeFromClause = (
     IFromClause<{

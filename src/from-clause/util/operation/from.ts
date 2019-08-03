@@ -1,6 +1,6 @@
 import {IFromClause} from "../../from-clause";
 import {IAliasedTable} from "../../../aliased-table";
-import {BeforeFromClause} from "../../helper-type";
+import {BeforeFromClause} from "../helper-type";
 import {JoinUtil, JoinType} from "../../../join";
 
 export type From<
