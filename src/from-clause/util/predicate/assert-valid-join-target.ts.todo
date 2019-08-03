@@ -18,23 +18,23 @@ Also, for `LATERAL derived tables`,
 We also need to check `QueryT["_joins"]` because you can
 reference previous tables with `LATERAL`
 (
-    QueryT["_parentJoins"] extends IJoin[] ?
+    QueryT["_outerQueryJoins"] extends IJoin[] ?
     (
         Exclude<
             ColumnUtil.FromColumnRef<AliasedTableT["usedRef"]>,
-            ColumnUtil.FromJoinArray<QueryT["_parentJoins"]>
+            ColumnUtil.FromJoinArray<QueryT["_outerQueryJoins"]>
         > extends never ?
-        //All of usedRef exist in parentJoins
+        //All of usedRef exist in outerQueryJoins
         unknown :
         [
             "Incompatible usedRef",
             Exclude<
                 ColumnUtil.FromColumnRef<AliasedTableT["usedRef"]>,
-                ColumnUtil.FromJoinArray<QueryT["_parentJoins"]>
+                ColumnUtil.FromJoinArray<QueryT["_outerQueryJoins"]>
             >
         ]
     ) :
-    //You can't have any usedRef if there are no parentJoins
+    //You can't have any usedRef if there are no outerQueryJoins
     [
         "Incompatible usedRef",
         //All columns in the usedRef are incompatible
@@ -87,19 +87,19 @@ export function assertValidJoinTarget (
             throw new Error(`Alias ${aliasedTable.alias} already used in previous JOINs`);
         }
     }
-    if (query._parentJoins != undefined) {
-        if (query._parentJoins.some(j => j.aliasedTable.alias == aliasedTable.alias)) {
+    if (query._outerQueryJoins != undefined) {
+        if (query._outerQueryJoins.some(j => j.aliasedTable.alias == aliasedTable.alias)) {
             throw new Error(`Alias ${aliasedTable.alias} already used in parent JOINs`);
         }
     }
-    if (query._parentJoins == undefined) {
+    if (query._outerQueryJoins == undefined) {
         ColumnIdentifierRefUtil.assertHasColumnIdentifiers(
             {},
             ColumnIdentifierUtil.Array.fromColumnRef(aliasedTable.usedRef)
         );
     } else {
         ColumnIdentifierRefUtil.assertHasColumnIdentifiers(
-            ColumnIdentifierRefUtil.fromJoinArray(query._parentJoins),
+            ColumnIdentifierRefUtil.fromJoinArray(query._outerQueryJoins),
             ColumnIdentifierUtil.Array.fromColumnRef(aliasedTable.usedRef)
         );
     }

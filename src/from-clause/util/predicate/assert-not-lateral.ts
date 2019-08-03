@@ -6,11 +6,10 @@ import {CompileError} from "../../../compile-error";
  * + The `LATERAL` keyword is not in MySQL 5.7
  */
 export type AssertNotLateral<
-    AliasedTableT extends IAliasedTable,
-    TrueT
+    AliasedTableT extends IAliasedTable
 > = (
     Extract<AliasedTableT["lateral"], true> extends never ?
-    TrueT :
+    unknown :
     CompileError<[
         AliasedTableT["tableAlias"],
         "cannot be LATERAL; does your DBMS support it?"

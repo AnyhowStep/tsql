@@ -17,8 +17,8 @@ type AllowedColumns<
      * parent queries
      */
     | (
-        FromClauseT["parentJoins"] extends readonly IJoin[] ?
-        ColumnUtil.FromJoinArray<FromClauseT["parentJoins"]> :
+        FromClauseT["outerQueryJoins"] extends readonly IJoin[] ?
+        ColumnUtil.FromJoinArray<FromClauseT["outerQueryJoins"]> :
         never
     )
     /**
@@ -182,9 +182,9 @@ export function assertValidUsedRef (
     }
     const used = ColumnIdentifierArrayUtil.fromColumnRef(aliasedTable.usedRef);
     const allowedFromParentQuery = (
-        query.parentJoins == undefined ?
+        query.outerQueryJoins == undefined ?
         {} :
-        ColumnIdentifierRefUtil.fromJoinArray(query.parentJoins)
+        ColumnIdentifierRefUtil.fromJoinArray(query.outerQueryJoins)
     );
     const allowedFromSameQuery = (
         aliasedTable.lateral ?

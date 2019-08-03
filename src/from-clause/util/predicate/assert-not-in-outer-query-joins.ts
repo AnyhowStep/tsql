@@ -4,14 +4,14 @@ import {IJoin, JoinArrayUtil} from "../../../join";
 import {CompileError} from "../../../compile-error";
 
 /**
- * Problem: Duplicate table names in parent `FROM/JOIN` clause and current `FROM/JOIN` clause not allowed
+ * Problem: Duplicate table names in outer query `FROM/JOIN` clause and current `FROM/JOIN` clause not allowed
  * ```sql
  *  SELECT
  *      *
  *  FROM
- *      tableA --parentJoins
+ *      tableA --outerQueryJoins
  *  WHERE (
- *      EXISTS ( --This sub query says it requires parentJoins `tableA`
+ *      EXISTS ( --This sub query says it requires outerQueryJoins `tableA`
  *          SELECT
  *              *
  *          FROM
@@ -27,9 +27,9 @@ import {CompileError} from "../../../compile-error";
  *  SELECT
  *      *
  *  FROM
- *      tableA --parentJoins
+ *      tableA --outerQueryJoins
  *  WHERE (
- *      EXISTS ( --This sub query says it requires parentJoins `tableA`
+ *      EXISTS ( --This sub query says it requires outerQueryJoins `tableA`
  *          SELECT
  *              *
  *          FROM
@@ -40,37 +40,36 @@ import {CompileError} from "../../../compile-error";
  *  )
  * ```
  */
-export type AssertNotInParentJoins<
+export type AssertNotInOuterQueryJoins<
     FromClauseT extends IFromClause,
-    AliasedTableT extends Pick<IAliasedTable, "tableAlias">,
-    TrueT
+    AliasedTableT extends Pick<IAliasedTable, "tableAlias">
 > = (
-    FromClauseT["parentJoins"] extends readonly IJoin[] ?
+    FromClauseT["outerQueryJoins"] extends readonly IJoin[] ?
     (
         Extract<
             AliasedTableT["tableAlias"],
-            JoinArrayUtil.TableAliases<FromClauseT["parentJoins"]>
+            JoinArrayUtil.TableAliases<FromClauseT["outerQueryJoins"]>
         > extends never ?
-        TrueT :
+        unknown :
         CompileError<[
             "Table alias",
             Extract<
                 AliasedTableT["tableAlias"],
-                JoinArrayUtil.TableAliases<FromClauseT["parentJoins"]>
+                JoinArrayUtil.TableAliases<FromClauseT["outerQueryJoins"]>
             >,
-            "already used in parent query JOINs",
-            JoinArrayUtil.TableAliases<FromClauseT["parentJoins"]>
+            "already used in outer query JOINs",
+            JoinArrayUtil.TableAliases<FromClauseT["outerQueryJoins"]>
         ]>
     ) :
-    TrueT
+    unknown
 );
-export function assertAliasedTableNotInParentJoins (
+export function assertNotInOuterQueryJoins (
     fromClause : IFromClause,
     aliasedTable : Pick<IAliasedTable, "tableAlias">
 ) {
-    if (fromClause.parentJoins != undefined) {
-        if (fromClause.parentJoins.some(j => j.tableAlias == aliasedTable.tableAlias)) {
-            throw new Error(`Table alias ${aliasedTable.tableAlias} already used in parent query JOINs`);
+    if (fromClause.outerQueryJoins != undefined) {
+        if (fromClause.outerQueryJoins.some(j => j.tableAlias == aliasedTable.tableAlias)) {
+            throw new Error(`Table alias ${aliasedTable.tableAlias} already used in outer query JOINs`);
         }
     }
 }

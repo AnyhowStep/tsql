@@ -2,13 +2,14 @@ import {IFromClause} from "../../from-clause";
 import {IAliasedTable} from "../../../aliased-table";
 import {BeforeFromClause} from "../helper-type";
 import {JoinUtil, JoinType} from "../../../join";
+import {assertBeforeFromClause} from "../predicate";
 
 export type From<
     FromClauseT extends BeforeFromClause,
     AliasedTableT extends IAliasedTable
 > = (
     IFromClause<{
-        parentJoins : FromClauseT["parentJoins"],
+        outerQueryJoins : FromClauseT["outerQueryJoins"],
         currentJoins : readonly JoinUtil.FromAliasedTable<AliasedTableT, false>[],
     }>
 );
@@ -21,8 +22,10 @@ export function from<
 ) : (
     From<FromClauseT, AliasedTableT>
 ) {
+    assertBeforeFromClause(fromClause);
+
     const result : From<FromClauseT, AliasedTableT> = {
-        parentJoins : fromClause.parentJoins,
+        outerQueryJoins : fromClause.outerQueryJoins,
         currentJoins : [
             JoinUtil.fromAliasedTable(aliasedTable, false, JoinType.FROM, [], [])
         ],

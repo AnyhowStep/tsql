@@ -1,12 +1,12 @@
 import {IFromClause} from "../../from-clause";
 
 export type NewInstance = IFromClause<{
-    parentJoins : undefined,
+    outerQueryJoins : undefined,
     currentJoins : undefined,
 }>;
 export function newInstance () : NewInstance {
     const result : NewInstance = {
-        parentJoins : undefined,
+        outerQueryJoins : undefined,
         currentJoins : undefined,
     };
     return result;

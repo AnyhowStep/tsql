@@ -110,11 +110,10 @@ import {UsedRefUtil} from "../../../used-ref";
  *
  */
 export type AssertNoUsedRef<
-    AliasedTableT extends Pick<IAliasedTable, "tableAlias"|"usedRef">,
-    TrueT
+    AliasedTableT extends Pick<IAliasedTable, "tableAlias"|"usedRef">
 > = (
     UsedRefUtil.TableAlias<AliasedTableT["usedRef"]> extends never ?
-    TrueT :
+    unknown :
     CompileError<[
         "Derived table",
         AliasedTableT["tableAlias"],

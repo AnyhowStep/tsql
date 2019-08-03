@@ -11,11 +11,11 @@ export type AllowedUsedRef<
         /**
          * According to the SQL standard,
          * a derived table may reference columns from
-         * parent queries
+         * outer queries
          */
         | (
-            FromClauseT["parentJoins"] extends readonly IJoin[] ?
-            FromClauseT["parentJoins"] :
+            FromClauseT["outerQueryJoins"] extends readonly IJoin[] ?
+            FromClauseT["outerQueryJoins"] :
             never
         )
         /**

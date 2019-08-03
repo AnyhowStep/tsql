@@ -26,8 +26,7 @@ import {CompileError} from "../../../compile-error";
  */
 export type AssertNotInCurrentJoins<
     FromClauseT extends IFromClause,
-    AliasedTableT extends Pick<IAliasedTable, "tableAlias">,
-    TrueT
+    AliasedTableT extends Pick<IAliasedTable, "tableAlias">
 > = (
     FromClauseT["currentJoins"] extends readonly IJoin[] ?
     (
@@ -35,7 +34,7 @@ export type AssertNotInCurrentJoins<
             AliasedTableT["tableAlias"],
             JoinArrayUtil.TableAliases<FromClauseT["currentJoins"]>
         > extends never ?
-        TrueT :
+        unknown :
         CompileError<[
             "Table alias",
             Extract<
@@ -46,7 +45,7 @@ export type AssertNotInCurrentJoins<
             JoinArrayUtil.TableAliases<FromClauseT["currentJoins"]>
         ]>
     ) :
-    TrueT
+    unknown
 );
 export function assertNotInCurrentJoins (
     fromClause : IFromClause,

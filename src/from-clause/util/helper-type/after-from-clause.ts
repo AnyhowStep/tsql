@@ -3,7 +3,7 @@ import {IJoin} from "../../../join";
 
 export type AfterFromClause = (
     IFromClause<{
-        parentJoins : (readonly IJoin[])|undefined,
+        outerQueryJoins : (readonly IJoin[])|undefined,
         currentJoins : readonly IJoin[],
     }>
 );
