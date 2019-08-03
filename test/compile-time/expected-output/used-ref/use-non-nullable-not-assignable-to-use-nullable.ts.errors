@@ -1,0 +1,43 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type 'IUsedRef<{ myTable: { columnA: bigint; }; }>' is not assignable to type 'IUsedRef<{ myTable: { columnA: bigint | null; }; }>'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Type '{ myTable: { columnA: bigint | null; }; }' is not assignable to type '{ myTable: { columnA: bigint; }; }'.",
+        "category": 1,
+        "code": 2322,
+        "next": {
+          "messageText": "Types of property 'myTable' are incompatible.",
+          "category": 1,
+          "code": 2326,
+          "next": {
+            "messageText": "Type '{ columnA: bigint | null; }' is not assignable to type '{ columnA: bigint; }'.",
+            "category": 1,
+            "code": 2322,
+            "next": {
+              "messageText": "Types of property 'columnA' are incompatible.",
+              "category": 1,
+              "code": 2326,
+              "next": {
+                "messageText": "Type 'bigint | null' is not assignable to type 'bigint'.",
+                "category": 1,
+                "code": 2322,
+                "next": {
+                  "messageText": "Type 'null' is not assignable to type 'bigint'.",
+                  "category": 1,
+                  "code": 2322
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 11,
+    "start": 158
+  }
+]

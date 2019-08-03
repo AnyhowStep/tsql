@@ -14,6 +14,22 @@ export type AddCandidateKeyDelegate<
 > = (
     (columnMap : TableT["columns"]) => KeyT
 );
+export type AssertNotEmptyKey<
+    KeyT extends readonly IColumn[]
+> = (
+    KeyT[number] extends never ?
+    CompileError<[
+        "Key cannot be empty"
+    ]> :
+    unknown
+);
+export function assertNotEmptyKey (
+    columns : readonly IColumn[]
+) {
+    if (columns.length == 0) {
+        throw new Error(`Key cannot be empty`);
+    }
+}
 export type AssertNotSubKey<
     TableT extends Pick<ITable, "candidateKeys"|"columns">,
     KeyT extends readonly ColumnUtil.FromColumnMap<TableT["columns"]>[]
@@ -91,6 +107,9 @@ export type AssertValidCandidateKey<
     TableT extends Pick<ITable, "candidateKeys"|"columns">,
     KeyT extends readonly ColumnUtil.FromColumnMap<TableT["columns"]>[]
 > = (
+    & AssertNotEmptyKey<
+        KeyT
+    >
     & AssertNotSubKey<
         TableT,
         KeyT
@@ -106,6 +125,7 @@ export function assertValidCandidateKey (
 ) {
     assertHasColumnIdentifiers(table, columns);
 
+    assertNotEmptyKey(columns);
     assertNotSubKey(table, columns);
     assertNotSuperKey(table, columns);
 }

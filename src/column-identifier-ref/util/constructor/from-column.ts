@@ -21,6 +21,6 @@ export function appendColumn (
         map = {};
         ref[column.tableAlias] = map;
     }
-    map[column.name] = ColumnIdentifierUtil.fromColumn(column);
+    map[column.columnAlias] = ColumnIdentifierUtil.fromColumn(column);
     return ref;
 }

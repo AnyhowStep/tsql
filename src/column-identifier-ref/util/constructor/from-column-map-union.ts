@@ -21,10 +21,10 @@ export type FromColumnMapUnion<ColumnMapT extends ColumnMap> = (
             readonly [columnAlias in ColumnMapUtil.FindWithTableAlias<
                 ColumnMapT,
                 tableAlias
-            >["name"]] : (
+            >["columnAlias"]] : (
                 {
                     readonly tableAlias : tableAlias,
-                    readonly name : columnAlias,
+                    readonly columnAlias : columnAlias,
                 }
             )
         }

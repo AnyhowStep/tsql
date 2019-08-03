@@ -11,7 +11,7 @@ export type FromColumnMap<ColumnMapT extends ColumnMap> = (
                 readonly [columnAlias in ColumnMapUtil.FindWithTableAlias<
                     ColumnMapT,
                     tableAlias
-                >["name"]] : (
+                >["columnAlias"]] : (
                     ColumnIdentifierUtil.FromColumn<ColumnMapT[columnAlias]>
                 )
             }

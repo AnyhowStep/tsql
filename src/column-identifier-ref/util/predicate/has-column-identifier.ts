@@ -1,7 +1,7 @@
 import {ColumnIdentifierRef} from "../../column-identifier-ref";
 import {ColumnIdentifier} from "../../../column-identifier";
 import {ColumnIdentifierMapUtil} from "../../../column-identifier-map";
-import {ColumnNames} from "../query";
+import {ColumnAlias} from "../query";
 
 export type HasColumnIdentifier<
     RefT extends ColumnIdentifierRef,
@@ -18,9 +18,9 @@ export type HasColumnIdentifier<
             boolean :
             string extends IdentifierT["tableAlias"] ?
             (
-                string extends IdentifierT["name"] ?
+                string extends IdentifierT["columnAlias"] ?
                 boolean :
-                IdentifierT["name"] extends ColumnNames<RefT> ?
+                IdentifierT["columnAlias"] extends ColumnAlias<RefT> ?
                 boolean :
                 false
             ) :
@@ -51,7 +51,7 @@ export function hasColumnIdentifier<
 }
 export function assertHasColumnIdentifier (ref : ColumnIdentifierRef, identifier : ColumnIdentifier) {
     if (!hasColumnIdentifier(ref, identifier)) {
-        throw new Error(`Column ${identifier.tableAlias}.${identifier.name} does not exist in column identifier ref`);
+        throw new Error(`Column ${identifier.tableAlias}.${identifier.columnAlias} does not exist in column identifier ref`);
     }
 }
 export function assertHasColumnIdentifiers (ref : ColumnIdentifierRef, identifiers : ColumnIdentifier[]) {

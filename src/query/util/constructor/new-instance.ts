@@ -1,46 +1,12 @@
 import {Query} from "../../query-impl";
+import {FromClauseUtil} from "../../../from-clause";
 
 export type NewInstance = Query<{
-    _distinct : false;
-    _sqlCalcFoundRows : false;
-
-    _joins : undefined;
-    _parentJoins : undefined;
-    _selects : undefined;
-    _where : undefined;
-
-    _grouped : undefined;
-    _having : undefined;
-
-    _orders : undefined;
-    _limit : undefined;
-
-    _unions : undefined;
-    _unionOrders : undefined;
-    _unionLimit : undefined;
-
-    _mapDelegate : undefined;
+    fromClause : FromClauseUtil.NewInstance,
 }>;
 export function newInstance () : NewInstance {
-    return new Query({
-        _distinct : false,
-        _sqlCalcFoundRows : false,
-
-        _joins : undefined,
-        _parentJoins : undefined,
-        _selects : undefined,
-        _where : undefined,
-
-        _grouped : undefined,
-        _having : undefined,
-
-        _orders : undefined,
-        _limit : undefined,
-
-        _unions : undefined,
-        _unionOrders : undefined,
-        _unionLimit : undefined,
-
-        _mapDelegate : undefined,
+    const result : NewInstance = new Query({
+        fromClause : FromClauseUtil.newInstance(),
     });
+    return result;
 }

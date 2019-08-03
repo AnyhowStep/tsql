@@ -9,16 +9,24 @@
     },
     "include" : [
         "./src/type-util/**/*",
+        "./src/type-map/**/*",
+        "./src/type-ref/**/*",
+        "./src/column-identifier/**/*",
+        "./src/column-identifier-map/**/*",
+        "./src/column-identifier-ref/**/*",
         "./src/ast/**/*",
         "./src/column/**/*",
         "./src/column-map/**/*",
         "./src/column-ref/**/*",
+        "./src/used-ref/**/*",
         "./src/aliased-table/**/*",
         "./src/key/**/*",
         "./src/table/**/*.ts",
         "./src/candidate-key/**/*",
         "./src/super-key/**/*",
         "./src/primary-key/**/*",
+        "./src/join/**/*",
+        "./src/from-clause-todo/**/*",
         "./src/index.ts"
     ]
 }

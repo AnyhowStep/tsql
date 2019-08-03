@@ -1,1 +1,1 @@
-export * from "./column-names";
+export * from "./column-alias";

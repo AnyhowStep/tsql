@@ -1,5 +1,10 @@
 export * from "./table";
 
+import * as TableUtil from "./util";
+export {
+    TableUtil,
+};
+
 import {fromTableAlias as table} from "./util";
 export {
     /**

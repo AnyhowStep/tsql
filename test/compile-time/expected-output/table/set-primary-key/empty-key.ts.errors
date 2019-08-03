@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type 'never[]' is not assignable to type 'never[] & CompileError<[\"Key cannot be empty\"]>'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Type 'never[]' is not assignable to type 'CompileError<[\"Key cannot be empty\"]>'.",
+        "category": 1,
+        "code": 2322
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 2,
+    "start": 303
+  }
+]
