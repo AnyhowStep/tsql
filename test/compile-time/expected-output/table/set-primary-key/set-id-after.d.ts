@@ -1,4 +1,5 @@
 import * as sd from "type-mapping";
+import * as o from "../../../../../dist";
 export declare const ai: import("../../../../../dist/table/table-impl").Table<{
     lateral: false;
     tableAlias: "joined1";
@@ -29,7 +30,7 @@ export declare const ai: import("../../../../../dist/table/table-impl").Table<{
             mapper: sd.Mapper<unknown, string>;
         }>;
     };
-    usedRef: {};
+    usedRef: o.IUsedRef<{}>;
     autoIncrement: undefined;
     id: "b";
     primaryKey: readonly "b"[];

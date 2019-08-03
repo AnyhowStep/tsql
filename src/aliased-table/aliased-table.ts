@@ -1,12 +1,12 @@
 import {ColumnMap} from "../column-map";
-import {ColumnRef} from "../column-ref";
 import {Ast} from "../ast";
+import {IUsedRef} from "../used-ref";
 
 export interface AliasedTableData {
     readonly lateral : boolean;
     readonly tableAlias : string;
     readonly columns : ColumnMap;
-    readonly usedRef : ColumnRef;
+    readonly usedRef : IUsedRef;
 }
 
 export interface IAliasedTable<DataT extends AliasedTableData=AliasedTableData> {

@@ -1,5 +1,6 @@
 import {escapeIdentifier} from "../../../sqlstring";
 import {Table} from "../../table-impl";
+import {IUsedRef, UsedRefUtil} from "../../../used-ref";
 
 export type FromTableAlias<
     TableAliasT extends string
@@ -8,7 +9,7 @@ export type FromTableAlias<
         lateral : false,
         tableAlias : TableAliasT,
         columns : {},
-        usedRef : {},
+        usedRef : IUsedRef<{}>,
 
         autoIncrement : undefined,
         id : undefined,
@@ -43,7 +44,7 @@ export function fromTableAlias<
             lateral : false,
             tableAlias,
             columns : {},
-            usedRef : {},
+            usedRef : UsedRefUtil.fromColumnRef({}),
 
             autoIncrement : undefined,
             id : undefined,

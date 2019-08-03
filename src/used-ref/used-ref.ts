@@ -1,7 +1,7 @@
 import {ColumnIdentifierRef} from "../column-identifier-ref";
 import {TypeRef} from "../type-ref";
 
-export interface IUsedRef<RefT extends TypeRef> {
+export interface IUsedRef<RefT extends TypeRef=TypeRef> {
     /**
      * A no-op function during run-time.
      * Is used for contravariant assignability.
