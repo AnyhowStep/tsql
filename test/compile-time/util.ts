@@ -83,6 +83,8 @@ export function copyFileSync (fromRootDir : string, toRootDir : string, relative
             toRootDir + relativePath.replace(".d.ts", ".ts.errors"),
             data
         );
+    } else {
+        fs.unlinkSync(toRootDir + relativePath.replace(".d.ts", ".ts.errors"));
     }
 }
 export function copyAllFilesAndDirectoriesSync (fromRootDir : string, toRootDir : string) {
@@ -209,15 +211,15 @@ export function runTest () {
     }[] = [];
 
     function diffFiles (actualPath : string, expectedPath : string) {
-        if (!fs.existsSync(actualPath)) {
-            return [];
-        }
+        const actualData = fs.existsSync(actualPath) ?
+            fs.readFileSync(actualPath).toString() :
+            "";
         const expectedData = fs.existsSync(expectedPath) ?
             fs.readFileSync(expectedPath).toString() :
             "";
         return diff.diffLines(
             expectedData,
-            fs.readFileSync(actualPath).toString(),
+            actualData,
             {
                 ignoreCase : false,
                 newlineIsToken : true,

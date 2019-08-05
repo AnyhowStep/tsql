@@ -4,17 +4,34 @@ import {AfterFromClause} from "../helper-type";
 import {JoinUtil, JoinType, JoinArrayUtil} from "../../../join";
 import {assertAfterFromClause, assertValidCurrentJoinBase, AssertValidCurrentJoinBase} from "../predicate";
 
+/**
+ * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966
+ *
+ * This hack should only really be reserved for types that are more likely
+ * to trigger max depth/max count errors.
+ */
+export type CrossJoinImpl<
+    AliasedTableT extends IAliasedTable,
+    OuterQueryJoinsT extends AfterFromClause["outerQueryJoins"],
+    CurrentJoinsT extends AfterFromClause["currentJoins"]
+> = (
+    IFromClause<{
+        outerQueryJoins : OuterQueryJoinsT,
+        currentJoins : JoinArrayUtil.Append<
+            CurrentJoinsT,
+            JoinUtil.FromAliasedTable<AliasedTableT, false>
+        >,
+    }>
+);
 export type CrossJoin<
     FromClauseT extends AfterFromClause,
     AliasedTableT extends IAliasedTable
 > = (
-    IFromClause<{
-        outerQueryJoins : FromClauseT["outerQueryJoins"],
-        currentJoins : JoinArrayUtil.Append<
-            FromClauseT["currentJoins"],
-            JoinUtil.FromAliasedTable<AliasedTableT, false>
-        >,
-    }>
+    CrossJoinImpl<
+        AliasedTableT,
+        FromClauseT["outerQueryJoins"],
+        FromClauseT["currentJoins"]
+    >
 );
 export function crossJoin<
     FromClauseT extends AfterFromClause,
