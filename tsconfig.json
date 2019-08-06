@@ -28,6 +28,7 @@
         "./src/primary-key/**/*",
         "./src/join/**/*",
         "./src/from-clause/**/*",
+        "./src/expr/**/*",
         "./src/index.ts"
     ]
 }
