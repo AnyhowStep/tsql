@@ -49,7 +49,7 @@ export type AddGenerated<
     ColumnsT extends readonly ColumnUtil.FromColumnMap<AddGeneratedColumnMap<TableT>>[]
 > = (
     Table<{
-        lateral : TableT["lateral"],
+        isLateral : TableT["isLateral"],
         tableAlias : TableT["tableAlias"],
         columns : TableT["columns"],
         usedRef : TableT["usedRef"],
@@ -150,7 +150,7 @@ export function addGenerated<
     );
 
     const {
-        lateral,
+        isLateral: isLateral,
         tableAlias,
         columns,
         usedRef,
@@ -174,7 +174,7 @@ export function addGenerated<
 
     const result : AddGenerated<TableT, ColumnsT> = new Table(
         {
-            lateral,
+            isLateral,
             tableAlias,
             columns,
             usedRef,

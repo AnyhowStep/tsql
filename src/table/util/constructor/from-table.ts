@@ -3,7 +3,7 @@ import {Table} from "../../table-impl";
 
 export type FromTable<TableT extends ITable> = (
     Table<{
-        lateral : TableT["lateral"],
+        isLateral : TableT["isLateral"],
         tableAlias : TableT["tableAlias"],
         columns : TableT["columns"],
         usedRef : TableT["usedRef"],
@@ -35,7 +35,7 @@ export function fromTable<TableT extends ITable> (
     FromTable<TableT>
 ) {
     const result : FromTable<TableT> = new Table<{
-        lateral : TableT["lateral"],
+        isLateral : TableT["isLateral"],
         tableAlias : TableT["tableAlias"],
         columns : TableT["columns"],
         usedRef : TableT["usedRef"],

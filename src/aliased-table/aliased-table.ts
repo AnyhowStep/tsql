@@ -3,7 +3,7 @@ import {Ast} from "../ast";
 import {IUsedRef} from "../used-ref";
 
 export interface AliasedTableData {
-    readonly lateral : boolean;
+    readonly isLateral : boolean;
     readonly tableAlias : string;
     readonly columns : ColumnMap;
     readonly usedRef : IUsedRef;
@@ -60,7 +60,7 @@ export interface IAliasedTable<DataT extends AliasedTableData=AliasedTableData> 
      *      ) AS derivedTable
      * ```
      */
-    readonly lateral : DataT["lateral"];
+    readonly isLateral : DataT["isLateral"];
 
     /**
      * The alias of the table.
@@ -136,23 +136,6 @@ export interface IAliasedTable<DataT extends AliasedTableData=AliasedTableData> 
 }
 
 /**
- * A query can be aliased,
- *
- * ```sql
- * SELECT
- *  *
- * FROM
- *  myTable
- * CROSS JOIN
- *  (
- *      SELECT
- *          RAND() AS randomNumber,
- *          UTC_TIMESTAMP() AS timeNow
- *  ) AS tmpTable --This is an `AliasedTable`
- * ```
- *
- * -----
- *
  * A table can be aliased,
  *
  * ```sql
@@ -165,9 +148,11 @@ export interface IAliasedTable<DataT extends AliasedTableData=AliasedTableData> 
  *      myTable
  *  ) AS otherTable --This is an `AliasedTable`
  * ```
+ *
+ * For aliasing a query (derived tables), @see {@link DerivedTable}
  */
 export class AliasedTable<DataT extends AliasedTableData> implements IAliasedTable<DataT> {
-    readonly lateral : DataT["lateral"];
+    readonly isLateral : DataT["isLateral"];
     readonly tableAlias : DataT["tableAlias"];
     readonly columns : DataT["columns"];
     readonly usedRef : DataT["usedRef"];
@@ -178,7 +163,7 @@ export class AliasedTable<DataT extends AliasedTableData> implements IAliasedTab
         data : DataT,
         unaliasedAst : Ast
     ) {
-        this.lateral = data.lateral;
+        this.isLateral = data.isLateral;
         this.tableAlias = data.tableAlias;
         this.columns = data.columns;
         this.usedRef = data.usedRef;

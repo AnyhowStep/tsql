@@ -9,7 +9,7 @@ export type AssertNotLateral<
     AliasedTableT extends IAliasedTable,
     TrueT
 > = (
-    Extract<AliasedTableT["lateral"], true> extends never ?
+    Extract<AliasedTableT["isLateral"], true> extends never ?
     TrueT :
     CompileError<[
         AliasedTableT["alias"],

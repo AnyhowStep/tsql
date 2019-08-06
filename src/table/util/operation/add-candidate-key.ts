@@ -146,7 +146,7 @@ export type AddCandidateKey<
     KeyT extends readonly ColumnUtil.FromColumnMap<TableT["columns"]>[]
 > = (
     Table<{
-        lateral : TableT["lateral"],
+        isLateral : TableT["isLateral"],
         tableAlias : TableT["tableAlias"],
         columns : TableT["columns"],
         usedRef : TableT["usedRef"],
@@ -219,7 +219,7 @@ export function addCandidateKey<
     );
 
     const {
-        lateral,
+        isLateral: isLateral,
         tableAlias,
         columns,
         usedRef,
@@ -243,7 +243,7 @@ export function addCandidateKey<
 
     const result : AddCandidateKey<TableT, KeyT> = new Table(
         {
-            lateral,
+            isLateral,
             tableAlias,
             columns,
             usedRef,

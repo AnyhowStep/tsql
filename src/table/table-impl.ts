@@ -22,7 +22,7 @@ import {UpdateUtil} from "../update";
 import {DeleteUtil} from "../delete";*/
 
 export class Table<DataT extends TableData> implements ITable {
-    readonly lateral : DataT["lateral"];
+    readonly isLateral : DataT["isLateral"];
     readonly tableAlias : DataT["tableAlias"];
     readonly columns : DataT["columns"];
     readonly usedRef : DataT["usedRef"];
@@ -55,7 +55,7 @@ export class Table<DataT extends TableData> implements ITable {
         data : DataT,
         unaliasedAst : Ast
     ) {
-        this.lateral = data.lateral;
+        this.isLateral = data.isLateral;
         this.tableAlias = data.tableAlias;
         this.columns = data.columns;
         this.usedRef = data.usedRef;

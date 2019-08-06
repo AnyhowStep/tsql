@@ -66,7 +66,7 @@ export type AddExplicitDefaultValue<
     ColumnsT extends readonly ColumnUtil.FromColumnMap<AddExplicitDefaultValueColumnMap<TableT>>[]
 > = (
     Table<{
-        lateral : TableT["lateral"],
+        isLateral : TableT["isLateral"],
         tableAlias : TableT["tableAlias"],
         columns : TableT["columns"],
         usedRef : TableT["usedRef"],
@@ -144,7 +144,7 @@ export function addExplicitDefaultValue<
     );
 
     const {
-        lateral,
+        isLateral: isLateral,
         tableAlias,
         columns,
         usedRef,
@@ -168,7 +168,7 @@ export function addExplicitDefaultValue<
 
     const result : AddExplicitDefaultValue<TableT, ColumnsT> = new Table(
         {
-            lateral,
+            isLateral,
             tableAlias,
             columns,
             usedRef,

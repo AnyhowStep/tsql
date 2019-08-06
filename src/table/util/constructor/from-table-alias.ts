@@ -6,7 +6,7 @@ export type FromTableAlias<
     TableAliasT extends string
 > = (
     Table<{
-        lateral : false,
+        isLateral : false,
         tableAlias : TableAliasT,
         columns : {},
         usedRef : IUsedRef<{}>,
@@ -41,7 +41,7 @@ export function fromTableAlias<
 ) {
     const result : FromTableAlias<TableAliasT> = new Table(
         {
-            lateral : false,
+            isLateral : false,
             tableAlias,
             columns : {},
             usedRef : UsedRefUtil.fromColumnRef({}),

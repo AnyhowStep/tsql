@@ -82,7 +82,7 @@ export type SetPrimaryKey<
     KeyT extends readonly ColumnUtil.FromColumnMap<SetPrimaryKeyColumnMap<TableT>>[]
 > = (
     Table<{
-        lateral : TableT["lateral"],
+        isLateral : TableT["isLateral"],
         tableAlias : TableT["tableAlias"],
         columns : TableT["columns"],
         usedRef : TableT["usedRef"],
@@ -156,7 +156,7 @@ export function setPrimaryKey<
         primaryKey
     );
     const {
-        lateral,
+        isLateral: isLateral,
         tableAlias,
         columns,
         usedRef,
@@ -179,7 +179,7 @@ export function setPrimaryKey<
 
     const result : SetPrimaryKey<TableT, KeyT> = new Table(
         {
-            lateral,
+            isLateral,
             tableAlias,
             columns,
             usedRef,

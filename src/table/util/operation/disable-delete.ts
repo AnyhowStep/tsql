@@ -8,7 +8,7 @@ export type DisableDelete<
     TableT extends ITable
 > = (
     Table<{
-        lateral : TableT["lateral"],
+        isLateral : TableT["isLateral"],
         tableAlias : TableT["tableAlias"],
         columns : TableT["columns"],
         usedRef : TableT["usedRef"],
@@ -44,7 +44,7 @@ export function disableDelete<
     DisableDelete<TableT>
 ) {
     const {
-        lateral,
+        isLateral: isLateral,
         tableAlias,
         columns,
         usedRef,
@@ -68,7 +68,7 @@ export function disableDelete<
 
     const result : DisableDelete<TableT> = new Table(
         {
-            lateral,
+            isLateral,
             tableAlias,
             columns,
             usedRef,

@@ -5,7 +5,7 @@ import {UsedRefUtil} from "../../../used-ref";
 
 export type AllowedUsedRef<
     FromClauseT extends IFromClause,
-    AliasedTableT extends Pick<IAliasedTable, "lateral">
+    AliasedTableT extends Pick<IAliasedTable, "isLateral">
 > = (
     UsedRefUtil.FromJoinArray<
         /**
@@ -23,7 +23,7 @@ export type AllowedUsedRef<
          * the same `FROM/JOIN` clause
          */
         | (
-            AliasedTableT["lateral"] extends true ?
+            AliasedTableT["isLateral"] extends true ?
             (
                 FromClauseT["currentJoins"] extends readonly IJoin[] ?
                 FromClauseT["currentJoins"] :

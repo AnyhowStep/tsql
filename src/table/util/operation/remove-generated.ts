@@ -46,7 +46,7 @@ export type RemoveGenerated<
     ColumnsT extends readonly ColumnUtil.FromColumnMap<RemoveGeneratedColumnMap<TableT>>[]
 > = (
     Table<{
-        lateral : TableT["lateral"],
+        isLateral : TableT["isLateral"],
         tableAlias : TableT["tableAlias"],
         columns : TableT["columns"],
         usedRef : TableT["usedRef"],
@@ -116,7 +116,7 @@ export function removeGenerated<
     );
 
     const {
-        lateral,
+        isLateral: isLateral,
         tableAlias,
         columns,
         usedRef,
@@ -140,7 +140,7 @@ export function removeGenerated<
 
     const result : RemoveGenerated<TableT, ColumnsT> = new Table(
         {
-            lateral,
+            isLateral,
             tableAlias,
             columns,
             usedRef,

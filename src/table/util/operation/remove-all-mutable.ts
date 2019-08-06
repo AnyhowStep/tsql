@@ -5,7 +5,7 @@ export type RemoveAllMutable<
     TableT extends ITable
 > = (
     Table<{
-        lateral : TableT["lateral"],
+        isLateral : TableT["isLateral"],
         tableAlias : TableT["tableAlias"],
         columns : TableT["columns"],
         usedRef : TableT["usedRef"],
@@ -44,7 +44,7 @@ export function removeAllMutable<
     const mutableColumns : readonly [] = [];
 
     const {
-        lateral,
+        isLateral: isLateral,
         tableAlias,
         columns,
         usedRef,
@@ -68,7 +68,7 @@ export function removeAllMutable<
 
     const result : RemoveAllMutable<TableT> = new Table(
         {
-            lateral,
+            isLateral,
             tableAlias,
             columns,
             usedRef,

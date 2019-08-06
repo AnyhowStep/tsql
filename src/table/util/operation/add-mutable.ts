@@ -56,7 +56,7 @@ export type AddMutable<
     ColumnsT extends readonly ColumnUtil.FromColumnMap<AddMutableColumnMap<TableT>>[]
 > = (
     Table<{
-        lateral : TableT["lateral"],
+        isLateral : TableT["isLateral"],
         tableAlias : TableT["tableAlias"],
         columns : TableT["columns"],
         usedRef : TableT["usedRef"],
@@ -122,7 +122,7 @@ export function addMutable<
     );
 
     const {
-        lateral,
+        isLateral: isLateral,
         tableAlias,
         columns,
         usedRef,
@@ -146,7 +146,7 @@ export function addMutable<
 
     const result : AddMutable<TableT, ColumnsT> = new Table(
         {
-            lateral,
+            isLateral,
             tableAlias,
             columns,
             usedRef,

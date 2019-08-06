@@ -8,7 +8,7 @@ import {CompileError} from "../../../compile-error";
 export type AssertNotLateral<
     AliasedTableT extends IAliasedTable
 > = (
-    Extract<AliasedTableT["lateral"], true> extends never ?
+    Extract<AliasedTableT["isLateral"], true> extends never ?
     unknown :
     CompileError<[
         AliasedTableT["tableAlias"],
@@ -18,7 +18,7 @@ export type AssertNotLateral<
 export function assertNotLateral (
     aliasedTable : IAliasedTable
 ) {
-    if (aliasedTable.lateral) {
+    if (aliasedTable.isLateral) {
         throw new Error(`${aliasedTable.tableAlias} cannot be LATERAL; does your DBMS support it?`);
     }
 }

@@ -8,7 +8,7 @@ export type AddColumnsFromFieldArray<
     FieldsT extends readonly tm.AnyField[]
 > = (
     Table<{
-        lateral : TableT["lateral"],
+        isLateral : TableT["isLateral"],
         tableAlias : TableT["tableAlias"],
         columns : ColumnMapUtil.Intersect<
             TableT["columns"],

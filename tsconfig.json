@@ -20,6 +20,7 @@
         "./src/column-ref/**/*",
         "./src/used-ref/**/*",
         "./src/aliased-table/**/*",
+        "./src/derived-table/**/*",
         "./src/key/**/*",
         "./src/table/**/*.ts",
         "./src/candidate-key/**/*",

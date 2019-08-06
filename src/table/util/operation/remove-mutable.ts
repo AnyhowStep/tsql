@@ -46,7 +46,7 @@ export type RemoveMutable<
     ColumnsT extends readonly ColumnUtil.FromColumnMap<RemoveMutableColumnMap<TableT>>[]
 > = (
     Table<{
-        lateral : TableT["lateral"],
+        isLateral : TableT["isLateral"],
         tableAlias : TableT["tableAlias"],
         columns : TableT["columns"],
         usedRef : TableT["usedRef"],
@@ -114,7 +114,7 @@ export function removeMutable<
     );
 
     const {
-        lateral,
+        isLateral: isLateral,
         tableAlias,
         columns,
         usedRef,
@@ -138,7 +138,7 @@ export function removeMutable<
 
     const result : RemoveMutable<TableT, ColumnsT> = new Table(
         {
-            lateral,
+            isLateral,
             tableAlias,
             columns,
             usedRef,

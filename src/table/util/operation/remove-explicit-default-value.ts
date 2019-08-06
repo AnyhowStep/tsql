@@ -51,7 +51,7 @@ export type RemoveExplicitDefaultValue<
     ColumnsT extends readonly ColumnUtil.FromColumnMap<RemoveExplicitDefaultValueColumnMap<TableT>>[]
 > = (
     Table<{
-        lateral : TableT["lateral"],
+        isLateral : TableT["isLateral"],
         tableAlias : TableT["tableAlias"],
         columns : TableT["columns"],
         usedRef : TableT["usedRef"],
@@ -117,7 +117,7 @@ export function removeExplicitDefaultValue<
     );
 
     const {
-        lateral,
+        isLateral: isLateral,
         tableAlias,
         columns,
         usedRef,
@@ -141,7 +141,7 @@ export function removeExplicitDefaultValue<
 
     const result : RemoveExplicitDefaultValue<TableT, ColumnsT> = new Table(
         {
-            lateral,
+            isLateral,
             tableAlias,
             columns,
             usedRef,

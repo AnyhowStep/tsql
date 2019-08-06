@@ -10,7 +10,7 @@ export function isTable (mixed : unknown) : mixed is ITable {
     return isObjectWithOwnEnumerableKeys<ITable>()(
         mixed,
         [
-            "lateral",
+            "isLateral",
             "tableAlias",
             "columns",
             "usedRef",

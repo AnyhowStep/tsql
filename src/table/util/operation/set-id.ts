@@ -94,7 +94,7 @@ export type SetId<
     IdT extends ColumnUtil.FromColumnMap<SetIdColumnMap<TableT>>
 > = (
     Table<{
-        lateral : TableT["lateral"],
+        isLateral : TableT["isLateral"],
         tableAlias : TableT["tableAlias"],
         columns : TableT["columns"],
         usedRef : TableT["usedRef"],
@@ -182,7 +182,7 @@ export function setId<
         primaryKey
     );
     const {
-        lateral,
+        isLateral: isLateral,
         tableAlias,
         columns,
         usedRef,
@@ -205,7 +205,7 @@ export function setId<
 
     const result : SetId<TableT, IdT> = new Table(
         {
-            lateral,
+            isLateral,
             tableAlias,
             columns,
             usedRef,

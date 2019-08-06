@@ -8,7 +8,7 @@ export type AddColumnsFromMapperMap<
     MapperMapT extends MapperMap
 > = (
     Table<{
-        lateral : TableT["lateral"],
+        isLateral : TableT["isLateral"],
         tableAlias : TableT["tableAlias"],
         columns : ColumnMapUtil.Intersect<
             TableT["columns"],

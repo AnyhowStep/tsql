@@ -93,7 +93,7 @@ export type SetAutoIncrement<
     AutoIncrementT extends ColumnUtil.FromColumnMap<SetAutoIncrementColumnMap<TableT>>
 > = (
     Table<{
-        lateral : TableT["lateral"],
+        isLateral : TableT["isLateral"],
         tableAlias : TableT["tableAlias"],
         columns : TableT["columns"],
         usedRef : TableT["usedRef"],
@@ -259,7 +259,7 @@ export function setAutoIncrement<
     );
 
     const {
-        lateral,
+        isLateral: isLateral,
         tableAlias,
         columns,
         usedRef,
@@ -282,7 +282,7 @@ export function setAutoIncrement<
 
     const result : SetAutoIncrement<TableT, AutoIncrementT> = new Table(
         {
-            lateral,
+            isLateral,
             tableAlias,
             columns,
             usedRef,

@@ -25,7 +25,7 @@ type AllowedColumns<
      * the same `FROM/JOIN` clause
      */
     | (
-        AliasedTableT["lateral"] extends true ?
+        AliasedTableT["isLateral"] extends true ?
         (
             QueryT["_joins"] extends readonly IJoin[] ?
             ColumnUtil.FromJoinArray<QueryT["_joins"]> :
