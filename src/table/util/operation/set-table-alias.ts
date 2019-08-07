@@ -6,7 +6,7 @@ import {ColumnMapUtil} from "../../../column-map";
 export type SetTableAlias<TableT extends ITable, NewTableAliasT extends string> = (
     Table<{
         isLateral : TableT["isLateral"],
-        tableAlias : NewTableAliasT,
+        alias : NewTableAliasT,
         columns : ColumnMapUtil.WithTableAlias<
             TableT["columns"],
             NewTableAliasT
@@ -53,7 +53,7 @@ export function setTableAlias<TableT extends ITable, NewTableAliasT extends stri
     const columns : TableT["columns"] = table.columns;
 
     const {
-        isLateral: isLateral,
+        isLateral,
         //tableAlias,
         //columns,
         usedRef,
@@ -77,7 +77,7 @@ export function setTableAlias<TableT extends ITable, NewTableAliasT extends stri
     return new Table(
         {
             isLateral,
-            tableAlias : newTableAlias,
+            alias : newTableAlias,
             columns : ColumnMapUtil.withTableAlias<TableT["columns"], NewTableAliasT>(
                 columns,
                 newTableAlias

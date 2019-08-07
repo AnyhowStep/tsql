@@ -11,7 +11,7 @@ export type AssertNotLateral<
     Extract<AliasedTableT["isLateral"], true> extends never ?
     unknown :
     CompileError<[
-        AliasedTableT["tableAlias"],
+        AliasedTableT["alias"],
         "cannot be LATERAL; does your DBMS support it?"
     ]>
 );
@@ -19,6 +19,6 @@ export function assertNotLateral (
     aliasedTable : IAliasedTable
 ) {
     if (aliasedTable.isLateral) {
-        throw new Error(`${aliasedTable.tableAlias} cannot be LATERAL; does your DBMS support it?`);
+        throw new Error(`${aliasedTable.alias} cannot be LATERAL; does your DBMS support it?`);
     }
 }

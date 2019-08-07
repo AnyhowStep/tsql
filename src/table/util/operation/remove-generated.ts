@@ -47,7 +47,7 @@ export type RemoveGenerated<
 > = (
     Table<{
         isLateral : TableT["isLateral"],
-        tableAlias : TableT["tableAlias"],
+        alias : TableT["alias"],
         columns : TableT["columns"],
         usedRef : TableT["usedRef"],
 
@@ -116,8 +116,8 @@ export function removeGenerated<
     );
 
     const {
-        isLateral: isLateral,
-        tableAlias,
+        isLateral,
+        alias,
         columns,
         usedRef,
 
@@ -141,7 +141,7 @@ export function removeGenerated<
     const result : RemoveGenerated<TableT, ColumnsT> = new Table(
         {
             isLateral,
-            tableAlias,
+            alias,
             columns,
             usedRef,
 

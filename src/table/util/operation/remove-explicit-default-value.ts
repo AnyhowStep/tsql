@@ -52,7 +52,7 @@ export type RemoveExplicitDefaultValue<
 > = (
     Table<{
         isLateral : TableT["isLateral"],
-        tableAlias : TableT["tableAlias"],
+        alias : TableT["alias"],
         columns : TableT["columns"],
         usedRef : TableT["usedRef"],
 
@@ -117,8 +117,8 @@ export function removeExplicitDefaultValue<
     );
 
     const {
-        isLateral: isLateral,
-        tableAlias,
+        isLateral,
+        alias,
         columns,
         usedRef,
 
@@ -142,7 +142,7 @@ export function removeExplicitDefaultValue<
     const result : RemoveExplicitDefaultValue<TableT, ColumnsT> = new Table(
         {
             isLateral,
-            tableAlias,
+            alias,
             columns,
             usedRef,
 

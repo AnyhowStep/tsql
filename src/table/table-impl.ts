@@ -23,7 +23,7 @@ import {DeleteUtil} from "../delete";*/
 
 export class Table<DataT extends TableData> implements ITable {
     readonly isLateral : DataT["isLateral"];
-    readonly tableAlias : DataT["tableAlias"];
+    readonly alias : DataT["alias"];
     readonly columns : DataT["columns"];
     readonly usedRef : DataT["usedRef"];
 
@@ -56,7 +56,7 @@ export class Table<DataT extends TableData> implements ITable {
         unaliasedAst : Ast
     ) {
         this.isLateral = data.isLateral;
-        this.tableAlias = data.tableAlias;
+        this.alias = data.alias;
         this.columns = data.columns;
         this.usedRef = data.usedRef;
 

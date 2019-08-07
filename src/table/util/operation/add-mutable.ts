@@ -57,7 +57,7 @@ export type AddMutable<
 > = (
     Table<{
         isLateral : TableT["isLateral"],
-        tableAlias : TableT["tableAlias"],
+        alias : TableT["alias"],
         columns : TableT["columns"],
         usedRef : TableT["usedRef"],
 
@@ -122,8 +122,8 @@ export function addMutable<
     );
 
     const {
-        isLateral: isLateral,
-        tableAlias,
+        isLateral,
+        alias,
         columns,
         usedRef,
 
@@ -147,7 +147,7 @@ export function addMutable<
     const result : AddMutable<TableT, ColumnsT> = new Table(
         {
             isLateral,
-            tableAlias,
+            alias,
             columns,
             usedRef,
 

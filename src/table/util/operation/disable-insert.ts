@@ -9,7 +9,7 @@ export type DisableInsert<
 > = (
     Table<{
         isLateral : TableT["isLateral"],
-        tableAlias : TableT["tableAlias"],
+        alias : TableT["alias"],
         columns : TableT["columns"],
         usedRef : TableT["usedRef"],
 
@@ -44,8 +44,8 @@ export function disableInsert<
     DisableInsert<TableT>
 ) {
     const {
-        isLateral: isLateral,
-        tableAlias,
+        isLateral,
+        alias,
         columns,
         usedRef,
 
@@ -69,7 +69,7 @@ export function disableInsert<
     const result : DisableInsert<TableT> = new Table(
         {
             isLateral,
-            tableAlias,
+            alias,
             columns,
             usedRef,
 

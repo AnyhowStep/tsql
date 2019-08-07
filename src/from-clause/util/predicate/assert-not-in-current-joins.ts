@@ -26,19 +26,19 @@ import {CompileError} from "../../../compile-error";
  */
 export type AssertNotInCurrentJoins<
     FromClauseT extends IFromClause,
-    AliasedTableT extends Pick<IAliasedTable, "tableAlias">
+    AliasedTableT extends Pick<IAliasedTable, "alias">
 > = (
     FromClauseT["currentJoins"] extends readonly IJoin[] ?
     (
         Extract<
-            AliasedTableT["tableAlias"],
+            AliasedTableT["alias"],
             JoinArrayUtil.TableAlias<FromClauseT["currentJoins"]>
         > extends never ?
         unknown :
         CompileError<[
             "Table alias",
             Extract<
-                AliasedTableT["tableAlias"],
+                AliasedTableT["alias"],
                 JoinArrayUtil.TableAlias<FromClauseT["currentJoins"]>
             >,
             "already used in current query JOINs",
@@ -49,11 +49,11 @@ export type AssertNotInCurrentJoins<
 );
 export function assertNotInCurrentJoins (
     fromClause : IFromClause,
-    aliasedTable : Pick<IAliasedTable, "tableAlias">
+    aliasedTable : Pick<IAliasedTable, "alias">
 ) {
     if (fromClause.currentJoins != undefined) {
-        if (fromClause.currentJoins.some(j => j.tableAlias == aliasedTable.tableAlias)) {
-            throw new Error(`Table alias ${aliasedTable.tableAlias} already used in current query JOINs`);
+        if (fromClause.currentJoins.some(j => j.tableAlias == aliasedTable.alias)) {
+            throw new Error(`Table alias ${aliasedTable.alias} already used in current query JOINs`);
         }
     }
 }

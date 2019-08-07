@@ -110,21 +110,21 @@ import {UsedRefUtil} from "../../../used-ref";
  *
  */
 export type AssertNoUsedRef<
-    AliasedTableT extends Pick<IAliasedTable, "tableAlias"|"usedRef">
+    AliasedTableT extends Pick<IAliasedTable, "alias"|"usedRef">
 > = (
     UsedRefUtil.TableAlias<AliasedTableT["usedRef"]> extends never ?
     unknown :
     CompileError<[
         "Derived table",
-        AliasedTableT["tableAlias"],
+        AliasedTableT["alias"],
         "must not reference parent query tables or tables in the same FROM/JOIN clause",
         UsedRefUtil.TableAlias<AliasedTableT["usedRef"]>
     ]>
 );
 export function assertNoUsedRef (
-    aliasedTable : Pick<IAliasedTable, "tableAlias"|"usedRef">
+    aliasedTable : Pick<IAliasedTable, "alias"|"usedRef">
 ) {
     if (Object.keys(aliasedTable.usedRef.columns).length > 0) {
-        throw new Error(`Derived table ${aliasedTable.tableAlias} must not reference parent query tables or tables in the same FROM/JOIN clause`);
+        throw new Error(`Derived table ${aliasedTable.alias} must not reference parent query tables or tables in the same FROM/JOIN clause`);
     }
 }

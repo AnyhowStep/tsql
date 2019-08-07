@@ -8,7 +8,7 @@ export type FromAliasedTableImpl<
     NullableT extends boolean
 > = (
     Join<{
-        readonly tableAlias : AliasedTableT["tableAlias"],
+        readonly tableAlias : AliasedTableT["alias"],
         readonly nullable : NullableT,
         /**
          * These columns can have their types narrowed.
@@ -62,7 +62,7 @@ export function fromAliasedTable<
 ) {
     const result : FromAliasedTableImpl<AliasedTableT, NullableT> = new Join(
         {
-            tableAlias : aliasedTable.tableAlias,
+            tableAlias : aliasedTable.alias,
             nullable,
 
             columns : aliasedTable.columns,

@@ -147,7 +147,7 @@ export type AddCandidateKey<
 > = (
     Table<{
         isLateral : TableT["isLateral"],
-        tableAlias : TableT["tableAlias"],
+        alias : TableT["alias"],
         columns : TableT["columns"],
         usedRef : TableT["usedRef"],
 
@@ -219,8 +219,8 @@ export function addCandidateKey<
     );
 
     const {
-        isLateral: isLateral,
-        tableAlias,
+        isLateral,
+        alias,
         columns,
         usedRef,
 
@@ -244,7 +244,7 @@ export function addCandidateKey<
     const result : AddCandidateKey<TableT, KeyT> = new Table(
         {
             isLateral,
-            tableAlias,
+            alias,
             columns,
             usedRef,
 

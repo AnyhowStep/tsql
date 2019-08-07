@@ -21,7 +21,7 @@ export interface TableData extends AliasedTableData {
 
 export interface ITable<DataT extends TableData=TableData> extends IAliasedTable<DataT> {
     readonly isLateral : DataT["isLateral"];
-    readonly tableAlias : DataT["tableAlias"];
+    readonly alias : DataT["alias"];
     readonly columns : DataT["columns"];
     readonly usedRef : DataT["usedRef"];
 

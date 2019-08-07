@@ -8,14 +8,14 @@ import {AssertNotInOuterQueryJoins, assertNotInOuterQueryJoins} from "./assert-n
  */
 export type AssertValidCurrentJoinBase<
     FromClauseT extends IFromClause,
-    AliasedTableT extends Pick<IAliasedTable, "tableAlias">
+    AliasedTableT extends Pick<IAliasedTable, "alias">
 > = (
     & AssertNotInCurrentJoins<FromClauseT, AliasedTableT>
     & AssertNotInOuterQueryJoins<FromClauseT, AliasedTableT>
 );
 export function assertValidCurrentJoinBase (
     fromClause : IFromClause,
-    aliasedTable : Pick<IAliasedTable, "tableAlias">
+    aliasedTable : Pick<IAliasedTable, "alias">
 ) {
     assertNotInCurrentJoins(fromClause, aliasedTable);
     assertNotInOuterQueryJoins(fromClause, aliasedTable);

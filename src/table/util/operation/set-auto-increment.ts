@@ -94,7 +94,7 @@ export type SetAutoIncrement<
 > = (
     Table<{
         isLateral : TableT["isLateral"],
-        tableAlias : TableT["tableAlias"],
+        alias : TableT["alias"],
         columns : TableT["columns"],
         usedRef : TableT["usedRef"],
 
@@ -259,8 +259,8 @@ export function setAutoIncrement<
     );
 
     const {
-        isLateral: isLateral,
-        tableAlias,
+        isLateral,
+        alias,
         columns,
         usedRef,
 
@@ -283,7 +283,7 @@ export function setAutoIncrement<
     const result : SetAutoIncrement<TableT, AutoIncrementT> = new Table(
         {
             isLateral,
-            tableAlias,
+            alias,
             columns,
             usedRef,
 

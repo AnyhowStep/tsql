@@ -21,7 +21,7 @@ import * as DerivedTableUtil from "./util";
  */
 export class DerivedTable<DataT extends AliasedTableData> implements IAliasedTable<DataT> {
     readonly isLateral : DataT["isLateral"];
-    readonly tableAlias : DataT["tableAlias"];
+    readonly alias : DataT["alias"];
     readonly columns : DataT["columns"];
     readonly usedRef : DataT["usedRef"];
 
@@ -32,7 +32,7 @@ export class DerivedTable<DataT extends AliasedTableData> implements IAliasedTab
         unaliasedAst : Ast
     ) {
         this.isLateral = data.isLateral;
-        this.tableAlias = data.tableAlias;
+        this.alias = data.alias;
         this.columns = data.columns;
         this.usedRef = data.usedRef;
 

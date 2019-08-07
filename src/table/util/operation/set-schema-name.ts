@@ -5,7 +5,7 @@ import {Table} from "../../table-impl";
 export type SetSchemaName<TableT extends ITable> = (
     Table<{
         isLateral : TableT["isLateral"],
-        tableAlias : TableT["tableAlias"],
+        alias : TableT["alias"],
         columns : TableT["columns"],
         usedRef : TableT["usedRef"],
 
@@ -50,8 +50,8 @@ export function setSchemaName<TableT extends ITable> (
     SetSchemaName<TableT>
 ) {
     const {
-        isLateral: isLateral,
-        tableAlias,
+        isLateral,
+        alias,
         columns,
         usedRef,
 
@@ -74,7 +74,7 @@ export function setSchemaName<TableT extends ITable> (
     return new Table(
         {
             isLateral,
-            tableAlias,
+            alias,
             columns,
             usedRef,
 
@@ -96,7 +96,7 @@ export function setSchemaName<TableT extends ITable> (
         [
             escapeIdentifier(newSchemaName),
             ".",
-            escapeIdentifier(tableAlias),
+            escapeIdentifier(alias),
         ]
     );
 }

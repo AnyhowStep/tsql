@@ -28,7 +28,7 @@ export type AddAllMutable<
 > = (
     Table<{
         isLateral : TableT["isLateral"],
-        tableAlias : TableT["tableAlias"],
+        alias : TableT["alias"],
         columns : TableT["columns"],
         usedRef : TableT["usedRef"],
 
@@ -81,8 +81,8 @@ export function addAllMutable<
     ) as readonly AddAllMutableColumnAlias<TableT>[];
 
     const {
-        isLateral: isLateral,
-        tableAlias,
+        isLateral,
+        alias,
         columns,
         usedRef,
 
@@ -106,7 +106,7 @@ export function addAllMutable<
     const result : AddAllMutable<TableT> = new Table(
         {
             isLateral,
-            tableAlias,
+            alias,
             columns,
             usedRef,
 

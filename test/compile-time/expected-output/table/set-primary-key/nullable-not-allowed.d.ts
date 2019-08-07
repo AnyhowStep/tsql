@@ -2,7 +2,7 @@ import * as sd from "type-mapping";
 import * as o from "../../../../../dist";
 export declare const t: import("../../../../../dist/table/table-impl").Table<{
     isLateral: false;
-    tableAlias: "joined1";
+    alias: "joined1";
     columns: {
         readonly a: import("../../../../../dist/column").Column<{
             tableAlias: "joined1";

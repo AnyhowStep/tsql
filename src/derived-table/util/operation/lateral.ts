@@ -8,13 +8,13 @@ import {DerivedTable} from "../../derived-table-impl";
  * to trigger max depth/max count errors.
  */
 export type LateralImpl<
-    TableAliasT extends AliasedTableData["tableAlias"],
+    TableAliasT extends AliasedTableData["alias"],
     ColumnsT extends AliasedTableData["columns"],
     UsedRefT extends AliasedTableData["usedRef"]
 > = (
     DerivedTable<{
         isLateral : true,
-        tableAlias : TableAliasT,
+        alias : TableAliasT,
         columns : ColumnsT,
         usedRef : UsedRefT,
     }>
@@ -23,7 +23,7 @@ export type Lateral<
     DerivedTableT extends DerivedTable<AliasedTableData>
 > = (
     LateralImpl<
-        DerivedTableT["tableAlias"],
+        DerivedTableT["alias"],
         DerivedTableT["columns"],
         DerivedTableT["usedRef"]
     >
@@ -79,7 +79,7 @@ export function lateral<
     const result : Lateral<DerivedTableT> = new DerivedTable(
         {
             isLateral : true,
-            tableAlias : derivedTable.tableAlias,
+            alias : derivedTable.alias,
             columns : derivedTable.columns,
             usedRef : derivedTable.usedRef,
         },

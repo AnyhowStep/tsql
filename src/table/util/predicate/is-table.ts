@@ -11,7 +11,7 @@ export function isTable (mixed : unknown) : mixed is ITable {
         mixed,
         [
             "isLateral",
-            "tableAlias",
+            "alias",
             "columns",
             "usedRef",
             "unaliasedAst",

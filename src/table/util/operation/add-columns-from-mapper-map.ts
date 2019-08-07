@@ -9,10 +9,10 @@ export type AddColumnsFromMapperMap<
 > = (
     Table<{
         isLateral : TableT["isLateral"],
-        tableAlias : TableT["tableAlias"],
+        alias : TableT["alias"],
         columns : ColumnMapUtil.Intersect<
             TableT["columns"],
-            ColumnMapUtil.FromMapperMap<TableT["tableAlias"], MapperMapT>
+            ColumnMapUtil.FromMapperMap<TableT["alias"], MapperMapT>
         >,
         usedRef : TableT["usedRef"],
 
@@ -28,7 +28,7 @@ export type AddColumnsFromMapperMap<
         nullableColumns : ColumnMapUtil.NullableColumnAlias<
             ColumnMapUtil.Intersect<
                 TableT["columns"],
-                ColumnMapUtil.FromMapperMap<TableT["tableAlias"], MapperMapT>
+                ColumnMapUtil.FromMapperMap<TableT["alias"], MapperMapT>
             >
         >[],
         explicitDefaultValueColumns : TableT["explicitDefaultValueColumns"],
@@ -58,17 +58,17 @@ export function addColumnsFromMapperMap<
     const columns : (
         ColumnMapUtil.Intersect<
             TableT["columns"],
-            ColumnMapUtil.FromMapperMap<TableT["tableAlias"], MapperMapT>
+            ColumnMapUtil.FromMapperMap<TableT["alias"], MapperMapT>
         >
     ) = ColumnMapUtil.intersect(
         tableColumns,
-        ColumnMapUtil.fromMapperMap(table.tableAlias, mapperMap)
+        ColumnMapUtil.fromMapperMap(table.alias, mapperMap)
     );
     const nullableColumns : (
         ColumnMapUtil.NullableColumnAlias<
             ColumnMapUtil.Intersect<
                 TableT["columns"],
-                ColumnMapUtil.FromMapperMap<TableT["tableAlias"], MapperMapT>
+                ColumnMapUtil.FromMapperMap<TableT["alias"], MapperMapT>
             >
         >[]
     ) = ColumnMapUtil.nullableColumnAliases(columns);

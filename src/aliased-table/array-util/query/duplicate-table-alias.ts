@@ -6,12 +6,12 @@ export type DuplicateTableAlias<
     ArrT extends readonly IAliasedTable[]
 > = (
     {
-        [tableAlias in ArrT[number]["tableAlias"]] : (
+        [tableAlias in ArrT[number]["alias"]] : (
             IsUnion<ExtractWithTableAlias<ArrT[number], tableAlias>> extends true ?
             tableAlias :
             never
         )
-    }[ArrT[number]["tableAlias"]]
+    }[ArrT[number]["alias"]]
 );
 export function duplicateTableAlias<
     ArrT extends readonly IAliasedTable[]
@@ -23,9 +23,9 @@ export function duplicateTableAlias<
     const result : string[] = [];
 
     for (let i=0; i<arr.length; ++i) {
-        const cur = arr[i].tableAlias;
+        const cur = arr[i].alias;
         for (let j=i+1; j<arr.length; ++j) {
-            const nxt = arr[j].tableAlias;
+            const nxt = arr[j].alias;
             if (cur == nxt && !result.includes(cur)) {
                 result.push(cur);
             }

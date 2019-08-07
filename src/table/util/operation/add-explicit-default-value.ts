@@ -67,7 +67,7 @@ export type AddExplicitDefaultValue<
 > = (
     Table<{
         isLateral : TableT["isLateral"],
-        tableAlias : TableT["tableAlias"],
+        alias : TableT["alias"],
         columns : TableT["columns"],
         usedRef : TableT["usedRef"],
 
@@ -144,8 +144,8 @@ export function addExplicitDefaultValue<
     );
 
     const {
-        isLateral: isLateral,
-        tableAlias,
+        isLateral,
+        alias,
         columns,
         usedRef,
 
@@ -169,7 +169,7 @@ export function addExplicitDefaultValue<
     const result : AddExplicitDefaultValue<TableT, ColumnsT> = new Table(
         {
             isLateral,
-            tableAlias,
+            alias,
             columns,
             usedRef,
 

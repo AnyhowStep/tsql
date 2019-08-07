@@ -9,10 +9,10 @@ export type AddColumnsFromFieldArray<
 > = (
     Table<{
         isLateral : TableT["isLateral"],
-        tableAlias : TableT["tableAlias"],
+        alias : TableT["alias"],
         columns : ColumnMapUtil.Intersect<
             TableT["columns"],
-            ColumnMapUtil.FromFieldArray<TableT["tableAlias"], FieldsT>
+            ColumnMapUtil.FromFieldArray<TableT["alias"], FieldsT>
         >,
         usedRef : TableT["usedRef"],
 
@@ -28,7 +28,7 @@ export type AddColumnsFromFieldArray<
         nullableColumns : ColumnMapUtil.NullableColumnAlias<
             ColumnMapUtil.Intersect<
                 TableT["columns"],
-                ColumnMapUtil.FromFieldArray<TableT["tableAlias"], FieldsT>
+                ColumnMapUtil.FromFieldArray<TableT["alias"], FieldsT>
             >
         >[],
         explicitDefaultValueColumns : TableT["explicitDefaultValueColumns"],
@@ -55,14 +55,14 @@ export function addColumnsFromFieldArray<
     //https://github.com/Microsoft/TypeScript/issues/28592
     const tableColumns: TableT["columns"] = table.columns;
     //https://github.com/Microsoft/TypeScript/issues/28592
-    const columnMapFromFieldArray = ColumnMapUtil.fromFieldArray<TableT["tableAlias"], FieldsT>(
-        table.tableAlias,
+    const columnMapFromFieldArray = ColumnMapUtil.fromFieldArray<TableT["alias"], FieldsT>(
+        table.alias,
         fields
     );
     const columns : (
         ColumnMapUtil.Intersect<
             TableT["columns"],
-            ColumnMapUtil.FromFieldArray<TableT["tableAlias"], FieldsT>
+            ColumnMapUtil.FromFieldArray<TableT["alias"], FieldsT>
         >
     ) = ColumnMapUtil.intersect(
         tableColumns,

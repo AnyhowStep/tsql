@@ -4,7 +4,39 @@ import {IUsedRef} from "../used-ref";
 
 export interface AliasedTableData {
     readonly isLateral : boolean;
-    readonly tableAlias : string;
+    /**
+     * This has to be called `alias` and not `tableAlias`.
+     *
+     * `IExprSelectItem` has `tableAlias` and `alias`.
+     * When the SQL is generated, it should look like, `tableAlias--alias`.
+     *
+     * When an `IQueryBase` is aliased, it can be,
+     * + `DerivedTable`
+     *   ```sql
+     *      SELECT
+     *          *
+     *      FROM
+     *          (
+     *              SELECT
+     *                  *
+     *              FROM
+     *                  myTable
+     *          ) AS q
+     *   ```
+     * + `DerivedTable` & `IExprSelectItem`
+     *    The below SQL snippet can be used as both a derived table
+     *    and a correlated subquery!
+     *    ```sql
+     *      (SELECT myColumn FROM myTable LIMIT 1) AS q
+     *    ```
+     *
+     * When we have `DerivedTable` & `IExprSelectItem`,
+     * + `tableAlias` will be set to `typeof ALIASED`
+     * + `alias` will be set to `q` (given the above example)
+     *
+     * So, the `alias` of `DerivedTable` must also be `q`.
+     */
+    readonly alias : string;
     readonly columns : ColumnMap;
     readonly usedRef : IUsedRef;
 }
@@ -69,7 +101,7 @@ export interface IAliasedTable<DataT extends AliasedTableData=AliasedTableData> 
      * SELECT
      *  *
      * FROM
-     *  --The `tableAlias` is `myAlias`
+     *  --The `alias` is `myAlias`
      *  (
      *      SELECT
      *          *
@@ -78,7 +110,7 @@ export interface IAliasedTable<DataT extends AliasedTableData=AliasedTableData> 
      *  ) AS myAlias
      * ```
      */
-    readonly tableAlias : DataT["tableAlias"];
+    readonly alias : DataT["alias"];
 
     /**
      * The columns of this table
@@ -153,7 +185,7 @@ export interface IAliasedTable<DataT extends AliasedTableData=AliasedTableData> 
  */
 export class AliasedTable<DataT extends AliasedTableData> implements IAliasedTable<DataT> {
     readonly isLateral : DataT["isLateral"];
-    readonly tableAlias : DataT["tableAlias"];
+    readonly alias : DataT["alias"];
     readonly columns : DataT["columns"];
     readonly usedRef : DataT["usedRef"];
 
@@ -164,7 +196,7 @@ export class AliasedTable<DataT extends AliasedTableData> implements IAliasedTab
         unaliasedAst : Ast
     ) {
         this.isLateral = data.isLateral;
-        this.tableAlias = data.tableAlias;
+        this.alias = data.alias;
         this.columns = data.columns;
         this.usedRef = data.usedRef;
 
