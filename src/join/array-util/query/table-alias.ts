@@ -1,5 +1,5 @@
 import {IJoin} from "../../join";
 
-export type TableAliases<JoinsT extends readonly IJoin[]> = (
+export type TableAlias<JoinsT extends readonly IJoin[]> = (
     JoinsT[number]["tableAlias"]
 );

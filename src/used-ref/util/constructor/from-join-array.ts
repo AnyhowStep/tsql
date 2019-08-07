@@ -14,7 +14,7 @@ export function fromJoinArray<
 ) {
     const result : FromJoinArray<JoinsT> = {
         __contravarianceMarker : () => {},
-        columns : ColumnIdentifierRefUtil.fromJoinArray(joins)
+        columns : ColumnIdentifierRefUtil.fromJoinArray(joins),
     };
     return result as FromJoinArray<JoinsT>;
 }

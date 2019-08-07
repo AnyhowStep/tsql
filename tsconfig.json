@@ -29,6 +29,15 @@
         "./src/join/**/*",
         "./src/from-clause/**/*",
         "./src/expr/**/*",
+        "./src/expr-select-item/**/*",
+        "./src/select-item/**/*",
+        "./src/select-clause/**/*",
+        "./src/union/**/*",
+        "./src/query/**/*",
+        "./src/primitive-expr/**/*",
+        "./src/raw-expr/**/*",
+        "./src/expr-library/**/*",
+        "./src/where-clause/**/*",
         "./src/index.ts"
     ]
 }

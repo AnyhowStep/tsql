@@ -48,17 +48,17 @@ export type AssertNotInOuterQueryJoins<
     (
         Extract<
             AliasedTableT["tableAlias"],
-            JoinArrayUtil.TableAliases<FromClauseT["outerQueryJoins"]>
+            JoinArrayUtil.TableAlias<FromClauseT["outerQueryJoins"]>
         > extends never ?
         unknown :
         CompileError<[
             "Table alias",
             Extract<
                 AliasedTableT["tableAlias"],
-                JoinArrayUtil.TableAliases<FromClauseT["outerQueryJoins"]>
+                JoinArrayUtil.TableAlias<FromClauseT["outerQueryJoins"]>
             >,
             "already used in outer query JOINs",
-            JoinArrayUtil.TableAliases<FromClauseT["outerQueryJoins"]>
+            JoinArrayUtil.TableAlias<FromClauseT["outerQueryJoins"]>
         ]>
     ) :
     unknown

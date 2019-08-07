@@ -1,11 +1,10 @@
 import {IColumn} from "../../column";
 import {IExprSelectItem} from "../../../expr-select-item";
-import {ColumnRefUtil} from "../../../column-ref";
 import {buildAst} from "./build-ast";
+import {UsedRefUtil} from "../../../used-ref";
 
 export type As<ColumnT extends IColumn, AliasT extends string> = (
     IExprSelectItem<{
-        usedRef : ColumnRefUtil.FromColumn<ColumnT>;
         mapper : ColumnT["mapper"];
 
         /*
@@ -33,6 +32,8 @@ export type As<ColumnT extends IColumn, AliasT extends string> = (
         */
         tableAlias : ColumnT["tableAlias"];
         alias : AliasT;
+
+        usedRef : UsedRefUtil.FromColumn<ColumnT>;
     }>
 );
 export function as<ColumnT extends IColumn, AliasT extends string> (
@@ -40,7 +41,7 @@ export function as<ColumnT extends IColumn, AliasT extends string> (
     alias : AliasT
 ) : As<ColumnT, AliasT> {
     return {
-        usedRef : ColumnRefUtil.fromColumn(column),
+        usedRef : UsedRefUtil.fromColumn(column),
         mapper : column.mapper,
         tableAlias : column.tableAlias,
         alias : alias,

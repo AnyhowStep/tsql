@@ -1,32 +1,21 @@
 import * as tm from "type-mapping";
-import {ColumnRef} from "../column-ref";
+import {IUsedRef} from "../used-ref";
 import {Ast} from "../ast";
 
 export interface ExprSelectItemData {
-    readonly usedRef : ColumnRef;
     readonly mapper : tm.SafeMapper<any>;
 
     readonly tableAlias : string;
     readonly alias : string;
+
+    readonly usedRef : IUsedRef;
 }
 
+/**
+ * Could be an aliased expression, or an aliased subquery with one expression selected.
+ */
 //There doesn't seem to be a point in making a class for this...
 export interface IExprSelectItem<DataT extends ExprSelectItemData=ExprSelectItemData> {
-    /**
-     * The columns used by this expression.
-     * ```sql
-     * SELECT
-     *  --The `usedRef` of this expression are the two columns involved
-     *  (myTable.myColumn + otherTable.otherColumn)
-     * FROM
-     *  myTable
-     * JOIN
-     *  otherTable
-     * ON
-     *  myTable.id = otherTable.id
-     * ```
-     */
-    readonly usedRef : DataT["usedRef"];
     /**
      * The mapper that validates/converts raw values for use
      */
@@ -68,6 +57,22 @@ export interface IExprSelectItem<DataT extends ExprSelectItemData=ExprSelectItem
     readonly alias : DataT["alias"];
 
     /**
+     * The columns used by this expression.
+     * ```sql
+     * SELECT
+     *  --The `usedRef` of this expression are the two columns involved
+     *  (myTable.myColumn + otherTable.otherColumn)
+     * FROM
+     *  myTable
+     * JOIN
+     *  otherTable
+     * ON
+     *  myTable.id = otherTable.id
+     * ```
+     */
+    readonly usedRef : DataT["usedRef"];
+
+    /**
      * The AST without the `AS alias` part.
      *
      * The full AST would be,
@@ -85,10 +90,11 @@ export interface IExprSelectItem<DataT extends ExprSelectItemData=ExprSelectItem
 
 export type IAnonymousExprSelectItem<TypeT> = (
     IExprSelectItem<{
-        usedRef : ColumnRef,
         mapper : tm.SafeMapper<TypeT>,
 
         tableAlias : string,
         alias : string,
+
+        usedRef : IUsedRef,
     }>
 );

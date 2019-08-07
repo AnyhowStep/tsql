@@ -2,16 +2,6 @@ import {escapeIdentifier} from "../../../sqlstring";
 import {IColumn} from "../../column";
 import {ALIASED, SEPARATOR} from "../../../constants";
 
-/**
- * **THIS FUNCTON SHOULD NOT BE USED**
- *
- * Instead, each `clause` should build its own AST.
- *
- * A column in the `SELECT` clause will have a different AST
- * from the same column in the `ORDER BY` clause.
- *
- * @deprecated
- */
 export function buildAst (
     {
         tableAlias,
@@ -38,10 +28,7 @@ export function buildAst (
          */
         return escapeIdentifier(`${tableAlias}${SEPARATOR}${columnAlias}`);
     } else {
-        if (unaliasedAst != undefined) {
-            throw new Error(`Should use unaliasedAst, tableAlias, columnAlias in SELECT clause, use tableAlias, columnAlias in ORDER BY clause`);
-            //return escapeIdentifier(`${tableAlias}${SEPARATOR}${columnAlias}`);
-        } else {
+        if (unaliasedAst == undefined) {
             /*
                 The most common case, I think.
             */
@@ -50,6 +37,14 @@ export function buildAst (
                 "." +
                 escapeIdentifier(columnAlias)
             );
+        } else {
+            /**
+             * @todo Investigate what should be here.
+             * Does the `SELECT` clause even ever have an `IColumn` with `unaliasedAst` set?
+             * Initial inspection says "No"
+             */
+            //throw new Error(`Should use unaliasedAst, tableAlias, columnAlias in SELECT clause, use tableAlias, columnAlias in ORDER BY clause`);
+            return escapeIdentifier(`${tableAlias}${SEPARATOR}${columnAlias}`);
         }
     }
 }

@@ -7,3 +7,5 @@ export * from "./assert-not-in-outer-query-joins";
 export * from "./assert-not-lateral";
 export * from "./assert-valid-current-join-base";
 export * from "./assert-valid-outer-query-joins";
+export * from "./is-before-from-clause";
+export * from "./is-from-clause";

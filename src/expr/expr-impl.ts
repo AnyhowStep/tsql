@@ -1,13 +1,14 @@
 import * as tm from "type-mapping";
+import {ExprData, IExpr} from "./expr";
 import {Ast, parentheses} from "../ast";
 import {ColumnMap} from "../column-map";
-import {ColumnRef} from "../column-ref";
 import {SortDirection} from "../sort-direction";
 import * as ExprUtil from "./util";
+import { IUsedRef } from "../used-ref";
 
 export class Expr<DataT extends ExprData> implements IExpr<DataT> {
-    readonly usedRef : DataT["usedRef"];
     readonly mapper : DataT["mapper"];
+    readonly usedRef : DataT["usedRef"];
 
     readonly ast : Ast;
 
@@ -15,8 +16,8 @@ export class Expr<DataT extends ExprData> implements IExpr<DataT> {
         data : DataT,
         ast : Ast
     ) {
-        this.usedRef = data.usedRef;
         this.mapper = data.mapper;
+        this.usedRef = data.usedRef;
 
         //Gotta' play it safe.
         //We want to preserve the order of operations.
@@ -35,10 +36,9 @@ export class Expr<DataT extends ExprData> implements IExpr<DataT> {
      *
      * @param alias
      */
-    as = <AliasT extends string> (
+    as <AliasT extends string> (
         alias : AliasT
-    ) : ExprUtil.As<this, AliasT> => {
-    //) : ExprUtil.As<DataT & {ast : Ast}, AliasT> {
+    ) : ExprUtil.As<this, AliasT> {
         return ExprUtil.as(this, alias);
     }
 
@@ -48,7 +48,7 @@ export class Expr<DataT extends ExprData> implements IExpr<DataT> {
      *  RAND() ASC
      * ```
      */
-    asc = () : ExprUtil.Asc<this> => {
+    asc () : ExprUtil.Asc<this> {
         return ExprUtil.asc(this);
     }
     /**
@@ -57,7 +57,7 @@ export class Expr<DataT extends ExprData> implements IExpr<DataT> {
      *  RAND() DESC
      * ```
      */
-    desc = () : ExprUtil.Desc<this> => {
+    desc () : ExprUtil.Desc<this> {
         return ExprUtil.desc(this);
     }
     /**
@@ -67,7 +67,7 @@ export class Expr<DataT extends ExprData> implements IExpr<DataT> {
      *  RAND() DESC
      * ```
      */
-    sort = (sortDirection : SortDirection) : ExprUtil.Sort<this> => {
+    sort (sortDirection : SortDirection) : ExprUtil.Sort<this> {
         return ExprUtil.sort(this, sortDirection);
     }
 }
@@ -84,37 +84,39 @@ export class Expr<DataT extends ExprData> implements IExpr<DataT> {
  * Example:
  *
  * ```ts
- * const expr : orm.TableExpr<typeof myTable, bigint> = (
- *  orm.requireParentJoins(myTable)
- *      .from(otherTable)
- *      .where(c => orm.eq(c.myTable.myColumn, c.otherTable.otherColumn))
- *      .select(c => [otherTable.amount])
- *      .limit(1)
- *      .coalesce(null)
- * );
+ *  const expr : tsql.TableExpr<typeof myTable, bigint> = (
+ *      tsql.requireParentJoins(myTable)
+ *          .from(otherTable)
+ *          .where(c => tsql.eq(c.myTable.myColumn, c.otherTable.otherColumn))
+ *          .select(c => [otherTable.amount])
+ *          .limit(1)
+ *          .coalesce(null)
+ *  );
  * ```
  *
  * Or,
  * ```ts
- * function amount () : orm.TableExpr<typeof myTable, bigint> {
- *  return orm.requireParentJoins(myTable)
- *      .from(otherTable)
- *      .where(c => orm.eq(c.myTable.myColumn, c.otherTable.otherColumn))
- *      .select(c => [otherTable.amount])
- *      .limit(1)
- *      .coalesce(null)
- * }
+ *  function amount () : tsql.TableExpr<typeof myTable, bigint> {
+ *      return tsql.requireParentJoins(myTable)
+ *          .from(otherTable)
+ *          .where(c => tsql.eq(c.myTable.myColumn, c.otherTable.otherColumn))
+ *          .select(c => [otherTable.amount])
+ *          .limit(1)
+ *          .coalesce(null)
+ *  }
  * ```
  */
 export type TableExpr<
     TableT extends { tableAlias : string, columns : ColumnMap },
     TypeT
-> = Expr<{
-    /**
-     * @todo Change this to `ColumnRefUtil.FromTable<>` ?
-     */
-    usedRef : {
-        [alias in TableT["alias"]] : TableT["columns"]
-    },
-    mapper : tm.SafeMapper<TypeT>
-}>;
+> = (
+    Expr<{
+        mapper : tm.SafeMapper<TypeT>,
+        /**
+         * @todo Change this to `UsedRefUtil.FromTable<>` ?
+         */
+        usedRef : IUsedRef<{
+            [alias in TableT["tableAlias"]] : TableT["columns"]
+        }>,
+    }>
+);

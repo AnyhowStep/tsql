@@ -8,7 +8,7 @@ export type SingleValueSelectItem = (
     IExprSelectItem
 );
 
-export type AnonymousTypedSingleValueSelectItem<TypeT> = (
+export type AnonymousSingleValueSelectItem<TypeT> = (
     IAnonymousColumn<TypeT> |
     IAnonymousExprSelectItem<TypeT>
 );

@@ -32,17 +32,17 @@ export type AssertNotInCurrentJoins<
     (
         Extract<
             AliasedTableT["tableAlias"],
-            JoinArrayUtil.TableAliases<FromClauseT["currentJoins"]>
+            JoinArrayUtil.TableAlias<FromClauseT["currentJoins"]>
         > extends never ?
         unknown :
         CompileError<[
             "Table alias",
             Extract<
                 AliasedTableT["tableAlias"],
-                JoinArrayUtil.TableAliases<FromClauseT["currentJoins"]>
+                JoinArrayUtil.TableAlias<FromClauseT["currentJoins"]>
             >,
             "already used in current query JOINs",
-            JoinArrayUtil.TableAliases<FromClauseT["currentJoins"]>
+            JoinArrayUtil.TableAlias<FromClauseT["currentJoins"]>
         ]>
     ) :
     unknown
