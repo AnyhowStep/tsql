@@ -4,7 +4,7 @@ import {TypeOf} from "./type-of";
 import {ExprUtil} from "../../../expr";
 import {ColumnUtil} from "../../../column";
 import {ExprSelectItemUtil} from "../../../expr-select-item";
-import {QueryUtil} from "../../../query";
+import {QueryBaseUtil} from "../../../query-base";
 
 export type Mapper<RawExprT extends AnyRawExpr> = (
     tm.SafeMapper<TypeOf<RawExprT>>
@@ -51,10 +51,10 @@ export function mapper<RawExprT extends AnyRawExpr> (
     }
 
     if (
-        QueryUtil.isOneSelectItem(rawExpr) &&
-        QueryUtil.isZeroOrOneRow(rawExpr)
+        QueryBaseUtil.isOneSelectItem(rawExpr) &&
+        QueryBaseUtil.isZeroOrOneRow(rawExpr)
     ) {
-        return QueryUtil.mapper(rawExpr) as tm.AnySafeMapper as Mapper<RawExprT>;
+        return QueryBaseUtil.mapper(rawExpr) as tm.AnySafeMapper as Mapper<RawExprT>;
     }
 
     if (ExprSelectItemUtil.isExprSelectItem(rawExpr)) {

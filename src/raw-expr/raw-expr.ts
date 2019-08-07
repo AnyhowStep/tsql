@@ -2,7 +2,7 @@ import {PrimitiveExpr} from "../primitive-expr";
 import {IAnonymousExpr, IExpr} from "../expr";
 import {IAnonymousColumn, IColumn} from "../column";
 import {IAnonymousExprSelectItem, IExprSelectItem} from "../expr-select-item";
-import {QueryUtil} from "../query";
+import {QueryBaseUtil} from "../query-base";
 
 export type RawExpr<TypeT> = (
     | (
@@ -14,8 +14,8 @@ export type RawExpr<TypeT> = (
     | IAnonymousColumn<TypeT>
     | (
         null extends TypeT ?
-        (QueryUtil.OneSelectItem<TypeT> & QueryUtil.ZeroOrOneRow) :
-        (QueryUtil.OneSelectItem<TypeT> & QueryUtil.OneRow)
+        (QueryBaseUtil.OneSelectItem<TypeT> & QueryBaseUtil.ZeroOrOneRow) :
+        (QueryBaseUtil.OneSelectItem<TypeT> & QueryBaseUtil.OneRow)
     )
     | IAnonymousExprSelectItem<TypeT>
 );
@@ -24,6 +24,6 @@ export type AnyRawExpr = (
     | PrimitiveExpr
     | IExpr
     | IColumn
-    | (QueryUtil.OneSelectItem<any> & QueryUtil.ZeroOrOneRow)
+    | (QueryBaseUtil.OneSelectItem<any> & QueryBaseUtil.ZeroOrOneRow)
     | IExprSelectItem
 );

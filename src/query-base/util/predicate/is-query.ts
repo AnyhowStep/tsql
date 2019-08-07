@@ -1,4 +1,4 @@
-import {IQuery} from "../../query";
+import {IQueryBase} from "../../query-base";
 import {isObjectWithOwnEnumerableKeys } from "../../../type-util";
 //import {UsedRefUtil} from "../../../used-ref";
 //import {AstUtil} from "../../../ast";
@@ -9,8 +9,8 @@ import {isObjectWithOwnEnumerableKeys } from "../../../type-util";
  *
  * @todo Consider adding checks for increased type safety.
  */
-export function isQuery (x : unknown) : x is IQuery {
-    if (!isObjectWithOwnEnumerableKeys<IQuery>()(
+export function isQuery (x : unknown) : x is IQueryBase {
+    if (!isObjectWithOwnEnumerableKeys<IQueryBase>()(
         x,
         [
             "fromClause",

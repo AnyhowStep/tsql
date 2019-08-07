@@ -1,7 +1,7 @@
 import {IUsedRef} from "../../used-ref";
 import {TypeRefUtil} from "../../../type-ref";
 import {TypeRef} from "../query";
-import { ColumnIdentifierRefUtil, ColumnIdentifierRef } from "../../../column-identifier-ref";
+import {ColumnIdentifierRefUtil, ColumnIdentifierRef} from "../../../column-identifier-ref";
 
 /**
  * Assumes `U` is a union

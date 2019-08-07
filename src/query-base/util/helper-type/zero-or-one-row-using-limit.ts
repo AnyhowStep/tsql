@@ -1,9 +1,9 @@
-import {IQuery} from "../../query";
+import {IQueryBase} from "../../query-base";
 import {IFromClause} from "../../../from-clause";
 import {SelectClause} from "../../../select-clause";
 
 export type ZeroOrOneRowUsingLimit = (
-    IQuery<{
+    IQueryBase<{
         fromClause : IFromClause,
         selectClause : SelectClause|undefined,
 

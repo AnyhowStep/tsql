@@ -1,20 +1,17 @@
-import {IQuery} from "../../query";
+import {IQueryBase} from "../../query-base";
 import {FromClauseUtil} from "../../../from-clause";
 import {SelectClause} from "../../../select-clause";
+import {UnionClause} from "../../../union-clause";
 import {LimitData} from "../../../limit";
 
-/**
- * To guarantee a query returns one row only,
- * you cannot have a `FROM` clause or `UNION` clause.
- */
-export type OneRow = (
-    IQuery<{
-        fromClause : FromClauseUtil.BeforeFromClause,
+export type AfterFromClause = (
+    IQueryBase<{
+        fromClause : FromClauseUtil.AfterFromClause,
         selectClause : SelectClause|undefined,
 
         limitClause : LimitData|undefined,
 
-        unionClause : undefined,
+        unionClause : UnionClause|undefined,
         unionLimitClause : LimitData|undefined,
     }>
 );

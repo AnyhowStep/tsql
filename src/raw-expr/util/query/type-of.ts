@@ -4,7 +4,7 @@ import {PrimitiveExpr} from "../../../primitive-expr";
 import {IExpr} from "../../../expr";
 import {IColumn} from "../../../column";
 import {IExprSelectItem} from "../../../expr-select-item";
-import {QueryUtil} from "../../../query";
+import {QueryBaseUtil} from "../../../query-base";
 
 export type TypeOf<RawExprT extends AnyRawExpr> = (
     RawExprT extends PrimitiveExpr ?
@@ -13,8 +13,8 @@ export type TypeOf<RawExprT extends AnyRawExpr> = (
     tm.OutputOf<RawExprT["mapper"]> :
     RawExprT extends IColumn ?
     tm.OutputOf<RawExprT["mapper"]> :
-    RawExprT extends QueryUtil.OneSelectItem<unknown> & QueryUtil.ZeroOrOneRow ?
-    QueryUtil.TypeOf<RawExprT> :
+    RawExprT extends QueryBaseUtil.OneSelectItem<unknown> & QueryBaseUtil.ZeroOrOneRow ?
+    QueryBaseUtil.TypeOf<RawExprT> :
     RawExprT extends IExprSelectItem ?
     tm.OutputOf<RawExprT["mapper"]> :
     never

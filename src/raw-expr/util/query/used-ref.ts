@@ -5,7 +5,7 @@ import {IUsedRef, UsedRefUtil} from "../../../used-ref";
 import {IExpr, ExprUtil} from "../../../expr";
 import {IColumn, ColumnUtil} from "../../../column";
 import {IExprSelectItem, ExprSelectItemUtil} from "../../../expr-select-item";
-import {IQuery, QueryUtil} from "../../../query";
+import {IQueryBase, QueryBaseUtil} from "../../../query-base";
 
 export type UsedRef<RawExprT extends AnyRawExpr> = (
     RawExprT extends PrimitiveExpr ?
@@ -14,8 +14,8 @@ export type UsedRef<RawExprT extends AnyRawExpr> = (
     RawExprT["usedRef"] :
     RawExprT extends IColumn ?
     UsedRefUtil.FromColumn<RawExprT> :
-    RawExprT extends IQuery ?
-    UsedRefUtil.FromFromClause<IQuery["fromClause"]> :
+    RawExprT extends IQueryBase ?
+    UsedRefUtil.FromFromClause<IQueryBase["fromClause"]> :
     RawExprT extends IExprSelectItem ?
     RawExprT["usedRef"] :
     never
@@ -38,7 +38,7 @@ export function usedRef<RawExprT extends AnyRawExpr> (
         return UsedRefUtil.fromColumn(rawExpr) as UsedRef<RawExprT>;
     }
 
-    if (QueryUtil.isQuery(rawExpr)) {
+    if (QueryBaseUtil.isQuery(rawExpr)) {
         return UsedRefUtil.fromFromClause(rawExpr.fromClause) as UsedRef<RawExprT>;
     }
 

@@ -4,7 +4,7 @@ import {Ast, Parentheses} from "../../../ast";
 import {escapeValue} from "../../../sqlstring";
 import {ExprUtil} from "../../../expr";
 import {ColumnUtil} from "../../../column";
-import {QueryUtil} from "../../../query";
+import {QueryBaseUtil} from "../../../query-base";
 import {ExprSelectItemUtil} from "../../../expr-select-item";
 import * as DateTimeUtil from "../../../date-time-util";
 
@@ -43,7 +43,7 @@ export function buildAst (rawExpr : AnyRawExpr) : Ast {
         return ColumnUtil.buildAst(rawExpr);
     }
 
-    if (QueryUtil.isOneSelectItem(rawExpr)) {
+    if (QueryBaseUtil.isOneSelectItem(rawExpr)) {
         return rawExpr.buildExprAst();
     }
 

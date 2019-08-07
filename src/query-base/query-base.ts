@@ -4,7 +4,7 @@ import {UnionClause} from "../union-clause";
 import {LimitData} from "../limit";
 import {Ast} from "../ast";
 
-export interface QueryData {
+export interface QueryBaseData {
     readonly fromClause : IFromClause,
     readonly selectClause : SelectClause|undefined,
 
@@ -15,7 +15,10 @@ export interface QueryData {
 
 }
 
-export interface IQuery<DataT extends QueryData=QueryData> {
+/**
+ * All database-specific libraries should implement this interface.
+ */
+export interface IQueryBase<DataT extends QueryBaseData=QueryBaseData> {
     readonly fromClause : DataT["fromClause"],
     readonly selectClause : DataT["selectClause"],
 

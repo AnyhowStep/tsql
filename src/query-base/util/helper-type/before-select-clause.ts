@@ -1,16 +1,16 @@
-import {IQuery} from "../../query";
+import {IQueryBase} from "../../query-base";
 import {IFromClause} from "../../../from-clause";
-import {SelectClause} from "../../../select-clause";
+import {UnionClause} from "../../../union-clause";
 import {LimitData} from "../../../limit";
 
-export type BeforeUnionClause = (
-    IQuery<{
+export type BeforeSelectClause = (
+    IQueryBase<{
         fromClause : IFromClause,
-        selectClause : SelectClause|undefined,
+        selectClause : undefined,
 
         limitClause : LimitData|undefined,
 
-        unionClause : undefined,
+        unionClause : UnionClause|undefined,
         unionLimitClause : LimitData|undefined,
     }>
 );

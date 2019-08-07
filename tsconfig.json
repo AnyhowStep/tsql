@@ -34,6 +34,7 @@
         "./src/select-clause/**/*",
         "./src/union/**/*",
         "./src/query/**/*",
+        "./src/query-base/**/*",
         "./src/primitive-expr/**/*",
         "./src/raw-expr/**/*",
         "./src/expr-library/**/*",

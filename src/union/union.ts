@@ -1,4 +1,4 @@
-import {QueryUtil} from "../query";
+import {QueryBaseUtil} from "../query-base";
 
 export interface UnionData {
     /**
@@ -7,5 +7,5 @@ export interface UnionData {
      * Used for `UNION DISTINCT` or `UNION ALL`.
      */
     readonly isDistinct : boolean;
-    readonly query : QueryUtil.AfterSelectClause;
+    readonly query : QueryBaseUtil.AfterSelectClause;
 }

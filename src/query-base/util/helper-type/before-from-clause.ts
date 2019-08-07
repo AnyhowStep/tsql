@@ -1,21 +1,12 @@
-import {IQuery} from "../../query";
+import {IQueryBase} from "../../query-base";
 import {FromClauseUtil} from "../../../from-clause";
 import {SelectClause} from "../../../select-clause";
 import {UnionClause} from "../../../union-clause";
 import {LimitData} from "../../../limit";
 
-/**
- * The opposite of a correlated subquery.
- *
- * -----
- *
- * A correlated subquery is a subquery that contains a reference to a table that also appears in the outer query.
- *
- * https://dev.mysql.com/doc/refman/8.0/en/correlated-subqueries.html
- */
-export type NonCorrelated = (
-    IQuery<{
-        fromClause : FromClauseUtil.NonCorrelated,
+export type BeforeFromClause = (
+    IQueryBase<{
+        fromClause : FromClauseUtil.BeforeFromClause,
         selectClause : SelectClause|undefined,
 
         limitClause : LimitData|undefined,
