@@ -58,10 +58,10 @@ export type WhereIsNotNullDelegateImpl<
     (
         columns : (
             ColumnRefUtil.TryFlatten<
-                ColumnRefUtil.FromColumnArray<
-                    ColumnUtil.ExtractNullable<
-                        ColumnUtil.FromJoinArray<CurrentJoinsT>
-                    >[]
+                ColumnRefUtil.ExtractNullable<
+                    ColumnRefUtil.FromColumnArray<
+                        ColumnUtil.FromJoinArray<CurrentJoinsT>[]
+                    >
                 >
             >
         )
@@ -110,14 +110,14 @@ export function whereIsNotNull<
         whereClause : WhereClause,
     }
 ) {
-    const columns = ColumnRefUtil.fromColumnArray(
-        ColumnUtil.extractNullable(
+    const columns = ColumnRefUtil.extractNullable(
+        ColumnRefUtil.fromColumnArray(
             ColumnUtil.fromJoinArray<FromClauseT["currentJoins"]>(fromClause.currentJoins)
         )
     );
-    const column = whereIsNotNullDelegate(ColumnRefUtil.tryFlatten(
-        columns
-    ));
+    const column = whereIsNotNullDelegate(
+        ColumnRefUtil.tryFlatten(columns)
+    );
 
     ColumnIdentifierRefUtil.assertHasColumnIdentifier(
         columns,
