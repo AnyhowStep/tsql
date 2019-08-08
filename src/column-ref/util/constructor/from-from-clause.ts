@@ -1,6 +1,5 @@
 import {IFromClause} from "../../../from-clause";
 import {IJoin} from "../../../join";
-import {Merge} from "../../../type-util";
 import {FromJoinArray, setJoinArray} from "./from-join-array";
 import {WritableColumnRef} from "../../column-ref";
 
@@ -10,18 +9,16 @@ import {WritableColumnRef} from "../../column-ref";
 export type FromFromClause<
     FromClauseT extends IFromClause
 > = (
-    Merge<
-        & (
-            FromClauseT["currentJoins"] extends readonly IJoin[] ?
-            FromJoinArray<FromClauseT["currentJoins"]> :
-            {}
-        )
-        & (
-            FromClauseT["outerQueryJoins"] extends readonly IJoin[] ?
-            FromJoinArray<FromClauseT["outerQueryJoins"]> :
-            {}
-        )
-    >
+    & (
+        FromClauseT["currentJoins"] extends readonly IJoin[] ?
+        FromJoinArray<FromClauseT["currentJoins"]> :
+        {}
+    )
+    & (
+        FromClauseT["outerQueryJoins"] extends readonly IJoin[] ?
+        FromJoinArray<FromClauseT["outerQueryJoins"]> :
+        {}
+    )
 );
 export function setFromClause (ref : WritableColumnRef, fromClause : IFromClause) {
     if (fromClause.currentJoins != undefined) {

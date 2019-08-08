@@ -2,7 +2,6 @@ import {IFromClause} from "../../../from-clause";
 import {WhereDelegate} from "../../where-delegate";
 import {WhereClause} from "../../where-clause";
 import {ColumnRefUtil} from "../../../column-ref";
-import {IAnonymousExpr} from "../../../expr";
 import {and} from "../../../expr-library";
 
 /**
@@ -16,12 +15,14 @@ export function where<
     FromClauseT extends IFromClause
 > (
     fromClause : FromClauseT,
-    whereClause : WhereClause,
+    whereClause : WhereClause|undefined,
     whereDelegate : WhereDelegate<FromClauseT>
 ) : (
-    IAnonymousExpr<boolean>
+    WhereClause
 ) {
-    const columns = ColumnRefUtil.fromFromClause(fromClause);
+    const columns = ColumnRefUtil.tryFlatten(
+        ColumnRefUtil.fromFromClause(fromClause)
+    );
     const operand = whereDelegate(columns);
     return (
         whereClause == undefined ?

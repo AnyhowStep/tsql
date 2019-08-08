@@ -8,7 +8,9 @@ export type WhereDelegate<
     FromClauseT extends IFromClause
 > = (
     (
-        columns : ColumnRefUtil.FromFromClause<FromClauseT>
+        columns : ColumnRefUtil.TryFlatten<
+            ColumnRefUtil.FromFromClause<FromClauseT>
+        >
     ) => IExpr<{
         mapper : tm.SafeMapper<boolean>,
         usedRef : WhereClauseUtil.AllowedUsedRef<FromClauseT>

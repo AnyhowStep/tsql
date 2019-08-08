@@ -6,3 +6,4 @@ export * from "./sort";
 export * from "./to-nullable";
 export * from "./to-error-message-friendly-type";
 export * from "./with-table-alias";
+export * from "./with-type";

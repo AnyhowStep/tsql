@@ -5,4 +5,4 @@ import {IAnonymousExpr} from "../expr";
  *
  * This is not meant to be used as a generic type parameter constraint.
  */
-export type WhereClause = IAnonymousExpr<boolean>|undefined;
+export type WhereClause = IAnonymousExpr<boolean>;
