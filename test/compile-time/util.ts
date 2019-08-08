@@ -77,14 +77,18 @@ export function copyFileSync (fromRootDir : string, toRootDir : string, relative
             data
         );
     }
-    if (fs.existsSync(path.replace(".d.ts", ".ts.errors"))) {
-        const data = fs.readFileSync(path.replace(".d.ts", ".ts.errors"));
+    const errorSrc = path.replace(".d.ts", ".ts.errors");
+    const errorDst = toRootDir + relativePath.replace(".d.ts", ".ts.errors");
+    if (fs.existsSync(errorSrc)) {
+        const data = fs.readFileSync(errorSrc);
         fs.writeFileSync(
-            toRootDir + relativePath.replace(".d.ts", ".ts.errors"),
+            errorDst,
             data
         );
     } else {
-        fs.unlinkSync(toRootDir + relativePath.replace(".d.ts", ".ts.errors"));
+        if (fs.existsSync(errorDst)) {
+            fs.unlinkSync(errorDst);
+        }
     }
 }
 export function copyAllFilesAndDirectoriesSync (fromRootDir : string, toRootDir : string) {
