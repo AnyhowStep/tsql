@@ -2,6 +2,17 @@ import * as tm from "type-mapping";
 import {IColumn} from "../../column";
 import {Column} from "../../column-impl";
 
+export type WithTypeImpl<
+    TypeT,
+    TableAliasT extends string,
+    ColumnAliasT extends string,
+> = (
+    Column<{
+        tableAlias : TableAliasT,
+        columnAlias : ColumnAliasT,
+        mapper : tm.SafeMapper<TypeT>,
+    }>
+);
 /**
  * Used to narrow the type of a column
  */
@@ -10,11 +21,11 @@ export type WithType<
     TypeT
 > = (
     ColumnT extends IColumn ?
-    Column<{
-        tableAlias : ColumnT["tableAlias"],
-        columnAlias : ColumnT["columnAlias"],
-        mapper : tm.SafeMapper<TypeT>,
-    }> :
+    WithTypeImpl<
+        TypeT,
+        ColumnT["tableAlias"],
+        ColumnT["columnAlias"]
+    > :
     never
 );
 export function withType<

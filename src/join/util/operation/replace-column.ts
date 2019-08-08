@@ -1,30 +1,81 @@
 import * as tm from "type-mapping";
 import {IJoin} from "../../join";
-import {IColumn} from "../../../column";
 import {ColumnMapUtil} from "../../../column-map";
 import {Join} from "../../join-impl";
+import {IColumn} from "../../../column";
 
+export type ReplaceColumnImpl<
+    ColumnAliasT extends string,
+    TypeT,
+    TableAliasT extends IJoin["tableAlias"],
+    NullableT extends IJoin["nullable"],
+    ColumnsT extends IJoin["columns"],
+    OriginalColumnsT extends IJoin["originalColumns"],
+    PrimaryKeyT extends IJoin["primaryKey"],
+    DeleteEnabledT extends IJoin["deleteEnabled"],
+    MutableColumnsT extends IJoin["mutableColumns"]
+> = (
+    Join<{
+        tableAlias : TableAliasT,
+        nullable : NullableT,
+        columns : ColumnMapUtil.ReplaceColumn<
+            ColumnsT,
+            ColumnAliasT,
+            TypeT
+        >,
+        originalColumns : OriginalColumnsT,
+        primaryKey : PrimaryKeyT,
+        deleteEnabled : DeleteEnabledT,
+        mutableColumns : MutableColumnsT,
+    }>
+);
 export type ReplaceColumn<
     JoinT extends IJoin,
     TableAliasT extends string,
     ColumnAliasT extends string,
     TypeT
 > = (
+    /*JoinT extends IJoin ?
+    (
+        JoinT["tableAlias"] extends TableAliasT ?
+        (
+            /**
+             * ColumnAliasT shouldn't be a union type, in general.
+             * Should be a unit type.
+             * So, this should work.
+             * /
+            ColumnAliasT extends keyof JoinT["columns"] ?
+            ReplaceColumnImpl<
+                ColumnAliasT,
+                TypeT,
+                JoinT["tableAlias"],
+                JoinT["nullable"],
+                JoinT["columns"],
+                JoinT["originalColumns"],
+                JoinT["primaryKey"],
+                JoinT["deleteEnabled"],
+                JoinT["mutableColumns"]
+            > :
+            //No replacement
+            JoinT
+        ) :
+        //No replacement
+        JoinT
+    ) :
+    never*/
     JoinT extends { tableAlias : TableAliasT, columns : { [columnAlias in ColumnAliasT] : IColumn } } ?
     (
-        Join<{
-            tableAlias : JoinT["tableAlias"],
-            nullable : JoinT["nullable"],
-            columns : ColumnMapUtil.ReplaceColumn<
-                JoinT["columns"],
-                ColumnAliasT,
-                TypeT
-            >,
-            originalColumns : JoinT["originalColumns"],
-            primaryKey : JoinT["primaryKey"],
-            deleteEnabled : JoinT["deleteEnabled"],
-            mutableColumns : JoinT["mutableColumns"],
-        }>
+        ReplaceColumnImpl<
+            ColumnAliasT,
+            TypeT,
+            JoinT["tableAlias"],
+            JoinT["nullable"],
+            JoinT["columns"],
+            JoinT["originalColumns"],
+            JoinT["primaryKey"],
+            JoinT["deleteEnabled"],
+            JoinT["mutableColumns"]
+        >
     ) :
     //No replacement
     JoinT
@@ -63,11 +114,27 @@ export function replaceColumn<
             mutableColumns,
         } = join;
 
-        const result = new Join(
+        const result = new Join<{
+            tableAlias : JoinT["tableAlias"],
+            nullable : JoinT["nullable"],
+            columns : ColumnMapUtil.ReplaceColumn<
+                JoinT["columns"],
+                ColumnAliasT,
+                TypeT
+            >,
+            originalColumns : JoinT["originalColumns"],
+            primaryKey : JoinT["primaryKey"],
+            deleteEnabled : JoinT["deleteEnabled"],
+            mutableColumns : JoinT["mutableColumns"],
+        }>(
             {
                 tableAlias,
                 nullable,
-                columns : ColumnMapUtil.replaceColumn(
+                columns : ColumnMapUtil.replaceColumn<
+                    JoinT["columns"],
+                    ColumnAliasT,
+                    TypeT
+                >(
                     columns,
                     columnAlias,
                     mapper

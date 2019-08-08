@@ -1,4 +1,5 @@
 export * from "./aliased-table";
+export * from "./column";
 export * from "./derived-table";
 export * from "./expr";
 export * from "./from-clause";

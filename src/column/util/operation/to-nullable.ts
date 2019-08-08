@@ -2,6 +2,20 @@ import * as tm from "type-mapping";
 import {IColumn} from "../../column";
 import {Column} from "../../column-impl";
 
+export type ToNullableImpl<
+    TableAliasT extends IColumn["tableAlias"],
+    ColumnAliasT extends IColumn["columnAlias"],
+    MapperT extends IColumn["mapper"],
+> = (
+    Column<{
+        tableAlias : TableAliasT,
+        columnAlias : ColumnAliasT,
+        mapper : tm.SafeMapper<
+            null|
+            tm.OutputOf<MapperT>
+        >,
+    }>
+);
 /*
     Used to implement LEFT/RIGHT JOINs.
 
@@ -11,14 +25,11 @@ import {Column} from "../../column-impl";
 */
 export type ToNullable<ColumnT extends IColumn> = (
     ColumnT extends IColumn ?
-    Column<{
-        tableAlias : ColumnT["tableAlias"],
-        columnAlias : ColumnT["columnAlias"],
-        mapper : tm.SafeMapper<
-            null|
-            ReturnType<ColumnT["mapper"]>
-        >,
-    }> :
+    ToNullableImpl<
+        ColumnT["tableAlias"],
+        ColumnT["columnAlias"],
+        ColumnT["mapper"]
+    > :
     never
 );
 export function toNullable<ColumnT extends IColumn> (
