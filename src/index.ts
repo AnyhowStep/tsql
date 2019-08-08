@@ -2,6 +2,7 @@ export * from "./aliased-table";
 export * from "./column";
 export * from "./derived-table";
 export * from "./expr";
+export * from "./expr-library";
 export * from "./from-clause";
 export * from "./query-base";
 export * from "./table";
