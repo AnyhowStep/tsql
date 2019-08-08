@@ -4,12 +4,12 @@ import {ChainableOperator, makeChainableOperator} from "../make-chainable-operat
 /**
  * https://dev.mysql.com/doc/refman/8.0/en/logical-operators.html#operator_or
  *
- * This version of the `OR` operator forbids `NULL`.
+ * This version of the `OR` operator allows `NULL`.
  *
- * For three-valued logic, @see {@link or3}
+ * For two-valued logic, @see {@link or}
  */
-export const or : ChainableOperator<boolean> = makeChainableOperator<boolean>(
+export const or3 : ChainableOperator<boolean|null> = makeChainableOperator<boolean|null>(
     "OR",
     false,
-    tm.mysql.boolean()
+    tm.mysql.boolean().orNull()
 );

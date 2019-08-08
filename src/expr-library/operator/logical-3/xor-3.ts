@@ -4,11 +4,11 @@ import {BinaryOperator, makeBinaryOperator} from "../make-binary-operator";
 /**
  * https://dev.mysql.com/doc/refman/8.0/en/logical-operators.html#operator_xor
  *
- * This version of the `XOR` operator forbids `NULL`.
+ * This version of the `XOR` operator allows `NULL`.
  *
- * For three-valued logic, @see {@link xor3}
+ * For two-valued logic, @see {@link xor}
  */
-export const xor : BinaryOperator<boolean, boolean> = makeBinaryOperator(
+export const xor3 : BinaryOperator<boolean|null, boolean|null> = makeBinaryOperator(
     "XOR",
-    tm.mysql.boolean()
+    tm.mysql.boolean().orNull()
 );

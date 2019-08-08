@@ -5,7 +5,7 @@ import {JoinArrayUtil} from "../../../join";
 import {AfterFromClause} from "../helper-type";
 import {WhereClause, WhereClauseUtil} from "../../../where-clause";
 import {ColumnRefUtil} from "../../../column-ref";
-import {isNull} from "../../../expr-library";
+import {isNotNull} from "../../../expr-library";
 import {ColumnIdentifierRefUtil} from "../../../column-identifier-ref";
 
 /**
@@ -14,7 +14,7 @@ import {ColumnIdentifierRefUtil} from "../../../column-identifier-ref";
  * This hack should only really be reserved for types that are more likely
  * to trigger max depth/max count errors.
  */
-export type WhereIsNullImpl<
+export type WhereIsNotNullImpl<
     ColumnT extends ColumnUtil.ExtractNullable<
         ColumnUtil.FromJoinArray<CurrentJoinsT>
     >,
@@ -27,17 +27,17 @@ export type WhereIsNullImpl<
             CurrentJoinsT,
             ColumnT["tableAlias"],
             ColumnT["columnAlias"],
-            null
+            Exclude<tm.OutputOf<ColumnT["mapper"]>, null>
         >
     }>
 );
-export type WhereIsNull<
+export type WhereIsNotNull<
     FromClauseT extends AfterFromClause,
     ColumnT extends ColumnUtil.ExtractNullable<
         ColumnUtil.FromJoinArray<FromClauseT["currentJoins"]>
     >
 > = (
-    WhereIsNullImpl<
+    WhereIsNotNullImpl<
         ColumnT,
         FromClauseT["outerQueryJoins"],
         FromClauseT["currentJoins"]
@@ -49,7 +49,7 @@ export type WhereIsNull<
  * This hack should only really be reserved for types that are more likely
  * to trigger max depth/max count errors.
  */
-export type WhereIsNullDelegateImpl<
+export type WhereIsNotNullDelegateImpl<
     ColumnT extends ColumnUtil.ExtractNullable<
         ColumnUtil.FromJoinArray<CurrentJoinsT>
     >,
@@ -67,13 +67,13 @@ export type WhereIsNullDelegateImpl<
         )
     ) => ColumnT
 );
-export type WhereIsNullDelegate<
+export type WhereIsNotNullDelegate<
     FromClauseT extends Pick<AfterFromClause, "currentJoins">,
     ColumnT extends ColumnUtil.ExtractNullable<
         ColumnUtil.FromJoinArray<FromClauseT["currentJoins"]>
     >
 > = (
-    WhereIsNullDelegateImpl<
+    WhereIsNotNullDelegateImpl<
         ColumnT,
         FromClauseT["currentJoins"]
     >
@@ -95,7 +95,7 @@ export type WhereIsNullDelegate<
  * that the type of `myTable.myColumn` for all rows
  * in the result set will be `null`.
  */
-export function whereIsNull<
+export function whereIsNotNull<
     FromClauseT extends AfterFromClause,
     ColumnT extends ColumnUtil.ExtractNullable<
         ColumnUtil.FromJoinArray<FromClauseT["currentJoins"]>
@@ -103,10 +103,10 @@ export function whereIsNull<
 > (
     fromClause : FromClauseT,
     whereClause : WhereClause|undefined,
-    whereIsNullDelegate : WhereIsNullDelegate<FromClauseT, ColumnT>
+    whereIsNotNullDelegate : WhereIsNotNullDelegate<FromClauseT, ColumnT>
 ) : (
     {
-        fromClause : WhereIsNull<FromClauseT, ColumnT>,
+        fromClause : WhereIsNotNull<FromClauseT, ColumnT>,
         whereClause : WhereClause,
     }
 ) {
@@ -115,7 +115,7 @@ export function whereIsNull<
             ColumnUtil.fromJoinArray<FromClauseT["currentJoins"]>(fromClause.currentJoins)
         )
     );
-    const column = whereIsNullDelegate(ColumnRefUtil.tryFlatten(
+    const column = whereIsNotNullDelegate(ColumnRefUtil.tryFlatten(
         columns
     ));
 
@@ -126,7 +126,7 @@ export function whereIsNull<
 
     const result : (
         {
-            fromClause : WhereIsNull<FromClauseT, ColumnT>,
+            fromClause : WhereIsNotNull<FromClauseT, ColumnT>,
             whereClause : WhereClause,
         }
     ) = {
@@ -136,18 +136,18 @@ export function whereIsNull<
                 FromClauseT["currentJoins"],
                 ColumnT["tableAlias"],
                 ColumnT["columnAlias"],
-                null
+                Exclude<tm.OutputOf<ColumnT["mapper"]>, null>
             >(
                 fromClause.currentJoins,
                 column.tableAlias,
                 column.columnAlias,
-                tm.null()
+                tm.excludeLiteral(column.mapper, null)
             ),
         },
         whereClause : WhereClauseUtil.where(
             fromClause,
             whereClause,
-            () => isNull(column)
+            () => isNotNull(column)
         ),
     };
     return result;

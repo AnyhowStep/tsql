@@ -4,6 +4,12 @@ import {ColumnMapUtil} from "../../../column-map";
 import {Join} from "../../join-impl";
 import {IColumn} from "../../../column";
 
+/**
+ * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966
+ *
+ * This hack should only really be reserved for types that are more likely
+ * to trigger max depth/max count errors.
+ */
 export type ReplaceColumnImpl<
     ColumnAliasT extends string,
     TypeT,
