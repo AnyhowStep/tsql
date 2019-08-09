@@ -4,6 +4,7 @@ export * from "./derived-table";
 export * from "./expr";
 export * from "./expr-library";
 export * from "./from-clause";
+export * from "./primitive-expr";
 export * from "./query-base";
 export * from "./table";
 export * from "./used-ref";

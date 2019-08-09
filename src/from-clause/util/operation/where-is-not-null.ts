@@ -79,7 +79,7 @@ export type WhereIsNotNullDelegate<
     >
 );
 /**
- * Narrows a column's type to `null`
+ * Narrows a column's type to **exclude** `null`
  *
  * Given the below expression,
  * ```sql
@@ -88,12 +88,12 @@ export type WhereIsNotNullDelegate<
  *  FROM
  *      myTable
  *  WHERE
- *      myTable.myColumn IS NULL
+ *      myTable.myColumn IS NOT NULL
  * ```
  *
  * We know, without even executing the query,
  * that the type of `myTable.myColumn` for all rows
- * in the result set will be `null`.
+ * in the result set **WILL NOT** be `null`.
  */
 export function whereIsNotNull<
     FromClauseT extends AfterFromClause,

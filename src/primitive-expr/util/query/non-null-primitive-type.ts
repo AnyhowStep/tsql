@@ -1,6 +1,6 @@
 import {NonNullPrimitiveExpr} from "../../primitive-expr";
 
-export type ToNonNullableSuperType<T extends NonNullPrimitiveExpr> = (
+export type NonNullPrimitiveType<T extends NonNullPrimitiveExpr> = (
     T extends bigint ?
     bigint :
     T extends number ?

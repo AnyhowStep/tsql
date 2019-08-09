@@ -16,9 +16,9 @@ export type NullSafeUnaryComparison = (
         }>
     )
 );
-/*
-    Factory for making null-safe unary comparison operators.
-*/
+/**
+ * Factory for making null-safe unary comparison operators.
+ */
 export function makeNullSafeUnaryComparison (postFixOperatorAst : string) : NullSafeUnaryComparison {
     const result : NullSafeUnaryComparison = (rawExpr) => {
         return new Expr(

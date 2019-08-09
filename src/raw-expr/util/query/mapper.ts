@@ -22,7 +22,7 @@ export function mapper<RawExprT extends AnyRawExpr> (
         return tm.toBigInt() as tm.AnySafeMapper as Mapper<RawExprT>;
     }
     if (typeof rawExpr == "string") {
-        return tm.literal(rawExpr) as tm.AnySafeMapper as Mapper<RawExprT>;
+        return tm.string() as tm.AnySafeMapper as Mapper<RawExprT>;
     }
     if (typeof rawExpr == "boolean") {
         return (
