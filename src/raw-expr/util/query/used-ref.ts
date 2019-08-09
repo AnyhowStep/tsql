@@ -1,12 +1,19 @@
 import * as tm from "type-mapping";
 import {AnyRawExpr} from "../../raw-expr";
 import {PrimitiveExpr, PrimitiveExprUtil} from "../../../primitive-expr";
-import {IUsedRef, UsedRefUtil} from "../../../used-ref";
+import {UsedRefUtil, IUsedRef} from "../../../used-ref";
 import {IExpr, ExprUtil} from "../../../expr";
 import {IColumn, ColumnUtil} from "../../../column";
 import {IExprSelectItem, ExprSelectItemUtil} from "../../../expr-select-item";
 import {IQueryBase, QueryBaseUtil} from "../../../query-base";
 
+/**
+ * Conditional types seem to reduce the amount of nesting allowed
+ * before hitting the max instantiation depth.
+ *
+ * @todo Refactor this to not require conditional types?
+ * Seems impossible.
+ */
 export type UsedRef<RawExprT extends AnyRawExpr> = (
     RawExprT extends PrimitiveExpr ?
     IUsedRef<{}> :

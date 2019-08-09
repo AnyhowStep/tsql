@@ -7,5 +7,12 @@ export type ExtractWithTableAlias<
     JoinT extends IJoin,
     TableAliasT extends string
 > = (
-    Extract<JoinT, { tableAlias : TableAliasT }>
+    //Extract<JoinT, { tableAlias : TableAliasT }>
+    JoinT extends IJoin ?
+    (
+        JoinT["tableAlias"] extends TableAliasT ?
+        JoinT :
+        never
+    ) :
+    never
 );

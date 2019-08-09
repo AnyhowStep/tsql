@@ -1,5 +1,5 @@
 import {TypeMap} from "../../type-map";
-import {UnionToIntersection, Merge} from "../../../type-util";
+import {UnionToIntersection} from "../../../type-util";
 
 /**
  * Assumes `U` is a union
@@ -7,5 +7,5 @@ import {UnionToIntersection, Merge} from "../../../type-util";
 export type Intersect<
     U extends TypeMap
 > = (
-    Merge<UnionToIntersection<U>>
+    Extract<UnionToIntersection<U>, TypeMap>
 );
