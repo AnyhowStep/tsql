@@ -38,7 +38,7 @@ export class Column<DataT extends ColumnData> implements IColumn<DataT> {
      *
      * @param alias - The new column name
      */
-    readonly as = <AliasT extends string> (alias : AliasT) : ColumnUtil.As<Column<DataT>, AliasT> => {
+    as<AliasT extends string> (alias : AliasT) : ColumnUtil.As<this, AliasT> {
         return ColumnUtil.as(this, alias);
     };
 
@@ -52,7 +52,7 @@ export class Column<DataT extends ColumnData> implements IColumn<DataT> {
      *  myTable.myColumn ASC
      * ```
      */
-    readonly asc = () : ColumnUtil.Asc<Column<DataT>> => {
+    asc () : ColumnUtil.Asc<this> {
         return ColumnUtil.asc(this);
     }
     /**
@@ -65,7 +65,7 @@ export class Column<DataT extends ColumnData> implements IColumn<DataT> {
      *  myTable.myColumn DESC
      * ```
      */
-    readonly desc = () : ColumnUtil.Desc<Column<DataT>> => {
+    desc () : ColumnUtil.Desc<this> {
         return ColumnUtil.desc(this);
     }
     /**
@@ -79,7 +79,7 @@ export class Column<DataT extends ColumnData> implements IColumn<DataT> {
      *  myTable.myOtherColumn DESC
      * ```
      */
-    readonly sort = (sortDirection : SortDirection) : ColumnUtil.Sort<Column<DataT>> => {
+    sort (sortDirection : SortDirection) : ColumnUtil.Sort<this> {
         return ColumnUtil.sort(this, sortDirection);
     }
 }

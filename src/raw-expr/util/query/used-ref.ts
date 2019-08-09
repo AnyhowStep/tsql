@@ -22,7 +22,7 @@ export type UsedRef<RawExprT extends AnyRawExpr> = (
     RawExprT extends IColumn ?
     UsedRefUtil.FromColumn<RawExprT> :
     RawExprT extends IQueryBase ?
-    UsedRefUtil.FromFromClause<IQueryBase["fromClause"]> :
+    UsedRefUtil.FromFromClause<RawExprT["fromClause"]> :
     RawExprT extends IExprSelectItem ?
     RawExprT["usedRef"] :
     never
