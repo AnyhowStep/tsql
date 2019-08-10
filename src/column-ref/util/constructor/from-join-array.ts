@@ -21,3 +21,14 @@ export function setJoinArray (ref : WritableColumnRef, joins : readonly IJoin[])
         setJoin(ref, join);
     }
 }
+export function fromJoinArray<
+    JoinsT extends readonly IJoin[]
+> (
+    joins : JoinsT
+) : (
+    FromJoinArray<JoinsT>
+) {
+    const result : WritableColumnRef = {};
+    setJoinArray(result, joins);
+    return result as FromJoinArray<JoinsT>;
+}

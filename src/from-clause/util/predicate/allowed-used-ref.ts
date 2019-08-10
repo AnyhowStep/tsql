@@ -2,12 +2,13 @@ import {IFromClause} from "../../from-clause";
 import {IAliasedTable} from "../../../aliased-table";
 import {IJoin} from "../../../join";
 import {UsedRefUtil} from "../../../used-ref";
+import {ColumnRefUtil} from "../../../column-ref";
 
-export type AllowedUsedRef<
+export type AllowedJoinArray<
     FromClauseT extends IFromClause,
     AliasedTableT extends Pick<IAliasedTable, "isLateral">
 > = (
-    UsedRefUtil.FromJoinArray<
+    readonly (
         /**
          * According to the SQL standard,
          * a derived table may reference columns from
@@ -31,5 +32,70 @@ export type AllowedUsedRef<
             ) :
             never
         )
+    )[number][]
+);
+export type AllowedColumnRef<
+    FromClauseT extends IFromClause,
+    AliasedTableT extends Pick<IAliasedTable, "isLateral">
+> = (
+    ColumnRefUtil.FromJoinArray<
+        AllowedJoinArray<FromClauseT, AliasedTableT>
     >
 );
+export type AllowedUsedRef<
+    FromClauseT extends IFromClause,
+    AliasedTableT extends Pick<IAliasedTable, "isLateral">
+> = (
+    UsedRefUtil.FromJoinArray<
+        AllowedJoinArray<FromClauseT, AliasedTableT>
+    >
+);
+export function allowedJoinArray<
+    FromClauseT extends IFromClause,
+    AliasedTableT extends Pick<IAliasedTable, "isLateral">
+> (
+    fromClause : FromClauseT,
+    aliasedTable : AliasedTableT
+) : (
+    AllowedJoinArray<FromClauseT, AliasedTableT>
+) {
+    return [
+        ...(
+            (fromClause.outerQueryJoins != undefined) ?
+            fromClause.outerQueryJoins :
+            []
+        ),
+        ...(
+            (aliasedTable.isLateral && fromClause.currentJoins != undefined) ?
+            fromClause.currentJoins :
+            []
+        ),
+    ];
+}
+export function allowedColumnRef<
+    FromClauseT extends IFromClause,
+    AliasedTableT extends Pick<IAliasedTable, "isLateral">
+> (
+    fromClause : FromClauseT,
+    aliasedTable : AliasedTableT
+) : (
+    AllowedColumnRef<FromClauseT, AliasedTableT>
+) {
+    return ColumnRefUtil.fromJoinArray(
+        allowedJoinArray(fromClause, aliasedTable)
+    );
+}
+
+export function allowedUsedRef<
+    FromClauseT extends IFromClause,
+    AliasedTableT extends Pick<IAliasedTable, "isLateral">
+> (
+    fromClause : FromClauseT,
+    aliasedTable : AliasedTableT
+) : (
+    AllowedUsedRef<FromClauseT, AliasedTableT>
+) {
+    return UsedRefUtil.fromJoinArray(
+        allowedJoinArray(fromClause, aliasedTable)
+    );
+}

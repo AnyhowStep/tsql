@@ -1,8 +1,8 @@
-import {ColumnMap} from "../../../column-map";
 import {FromColumn} from "./from-column";
+import {ColumnIdentifierMap} from "../../../column-identifier-map";
 
-export type FromColumnMap<ColumnMapT extends ColumnMap> = (
-    ColumnMapT extends ColumnMap ?
+export type FromColumnMap<ColumnMapT extends ColumnIdentifierMap> = (
+    ColumnMapT extends ColumnIdentifierMap ?
     FromColumn<ColumnMapT[Extract<keyof ColumnMapT, string>]> :
     never
 );

@@ -1,14 +1,14 @@
-import {IColumn} from "../../../column";
+import {ColumnIdentifier} from "../../column-identifier";
 
-export type FromColumn<ColumnT extends IColumn> = (
-    ColumnT extends IColumn ?
+export type FromColumn<ColumnT extends ColumnIdentifier> = (
+    ColumnT extends ColumnIdentifier ?
     {
         readonly tableAlias : ColumnT["tableAlias"],
         readonly columnAlias : ColumnT["columnAlias"],
     } :
     never
 );
-export function fromColumn<ColumnT extends IColumn> (
+export function fromColumn<ColumnT extends ColumnIdentifier> (
     column : ColumnT
 ) : FromColumn<ColumnT> {
     const result : {

@@ -9,7 +9,7 @@ export type WhereDelegate<
 > = (
     (
         columns : ColumnRefUtil.TryFlatten<
-            ColumnRefUtil.FromFromClause<FromClauseT>
+            WhereClauseUtil.AllowedColumnRef<FromClauseT>
         >
     ) => IExpr<{
         mapper : tm.SafeMapper<boolean>,

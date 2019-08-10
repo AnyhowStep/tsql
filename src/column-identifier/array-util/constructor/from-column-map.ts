@@ -1,13 +1,13 @@
 import {ColumnIdentifier} from "../../column-identifier";
 import * as ColumnIdentifierUtil from "../../util";
-import {ColumnMap} from "../../../column-map";
+import {ColumnIdentifierMap} from "../../../column-identifier-map";
 
-export type FromColumnMap<ColumnMapT extends ColumnMap> = (
-    ColumnMapT extends ColumnMap ?
+export type FromColumnMap<ColumnMapT extends ColumnIdentifierMap> = (
+    ColumnMapT extends ColumnIdentifierMap ?
     ColumnIdentifierUtil.FromColumnMap<ColumnMapT>[] :
     never
 );
-export function fromColumnMap<ColumnMapT extends ColumnMap> (
+export function fromColumnMap<ColumnMapT extends ColumnIdentifierMap> (
     columnMap : ColumnMapT
 ) : FromColumnMap<ColumnMapT> {
     const result : ColumnIdentifier[] = [];
