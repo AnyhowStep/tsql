@@ -26,6 +26,8 @@ export type Comparison = (
  */
 export function makeComparison (operator : string) : Comparison {
     const result : Comparison = (left, right) => {
+        RawExprUtil.assertNonNull("LHS", left);
+        RawExprUtil.assertNonNull("RHS", left);
         return expr(
             {
                 mapper : tm.mysql.boolean(),

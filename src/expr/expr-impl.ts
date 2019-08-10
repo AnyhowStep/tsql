@@ -7,7 +7,10 @@ import * as ExprUtil from "./util";
 import { IUsedRef } from "../used-ref";
 
 /**
+ * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966
  *
+ * This hack should only really be reserved for types that are more likely
+ * to trigger max depth/max count errors.
  */
 export class ExprImpl<
     MapperT extends ExprData["mapper"],

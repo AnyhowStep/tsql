@@ -6,6 +6,6 @@ import {makeComparison, Comparison} from "./make-comparison";
  * This version of the `<` operator prevents `NULL`.
  *
  */
-export const gt : Comparison = makeComparison(
+export const lt : Comparison = makeComparison(
     "<"
 );

@@ -15,6 +15,10 @@ import {IQueryBase, QueryBaseUtil} from "../../../query-base";
  * Seems impossible.
  */
 export type UsedRef<RawExprT extends AnyRawExpr> = (
+    /**
+     * This implementation is the same as the implementation commented out below.
+     * For some reason, this implementation is more efficient in terms of instantiation depth used.
+     */
     | Extract<
         Exclude<
             RawExprT,
