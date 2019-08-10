@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {RawExpr, RawExprUtil, AnyRawExpr} from "../../raw-expr";
-import {Expr, ExprUtil} from "../../expr";
+import {Expr, ExprUtil, expr} from "../../expr";
 import {Ast, Parentheses, AstArray} from "../../ast";
 import {escapeValue} from "../../sqlstring";
 
@@ -107,7 +107,7 @@ export function makeChainableOperator<TypeT extends null|boolean|number|bigint|s
             /**
              * By convention, applying the operator to zero operands gives you the identity element
              */
-            return new Expr(
+            return expr(
                 {
                     mapper,
                     usedRef,
@@ -115,7 +115,7 @@ export function makeChainableOperator<TypeT extends null|boolean|number|bigint|s
                 identityAst
             );
         } else {
-            return new Expr(
+            return expr(
                 {
                     mapper,
                     usedRef,

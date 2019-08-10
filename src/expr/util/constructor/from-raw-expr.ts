@@ -1,4 +1,4 @@
-import {Expr} from "../../expr-impl";
+import {Expr, ExprImpl, expr} from "../../expr-impl";
 import {RawExpr, RawExprUtil} from "../../../raw-expr";
 import {PrimitiveExpr} from "../../../primitive-expr";
 
@@ -15,13 +15,13 @@ export function fromRawExpr<
 ) : (
     FromRawExpr<RawExprT>
 ) {
-    if (rawExpr instanceof Expr) {
+    if (rawExpr instanceof ExprImpl) {
         return rawExpr;
     }
     const mapper = RawExprUtil.mapper(rawExpr);
     const usedRef = RawExprUtil.usedRef(rawExpr);
     const ast = RawExprUtil.buildAst(rawExpr);
-    return new Expr(
+    return expr(
         {
             mapper,
             usedRef,

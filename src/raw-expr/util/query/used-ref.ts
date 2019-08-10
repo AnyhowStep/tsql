@@ -2,9 +2,9 @@ import * as tm from "type-mapping";
 import {AnyRawExpr} from "../../raw-expr";
 import {PrimitiveExpr, PrimitiveExprUtil} from "../../../primitive-expr";
 import {UsedRefUtil, IUsedRef} from "../../../used-ref";
-import {IExpr, ExprUtil} from "../../../expr";
+import {ExprUtil} from "../../../expr";
 import {IColumn, ColumnUtil} from "../../../column";
-import {IExprSelectItem, ExprSelectItemUtil} from "../../../expr-select-item";
+import {ExprSelectItemUtil} from "../../../expr-select-item";
 import {IQueryBase, QueryBaseUtil} from "../../../query-base";
 
 /**
@@ -15,7 +15,25 @@ import {IQueryBase, QueryBaseUtil} from "../../../query-base";
  * Seems impossible.
  */
 export type UsedRef<RawExprT extends AnyRawExpr> = (
-    RawExprT extends PrimitiveExpr ?
+    | Extract<
+        Exclude<
+            RawExprT,
+            (
+                | PrimitiveExpr
+                | IColumn
+                | IQueryBase
+            )
+        >["usedRef"],
+        IUsedRef
+    >
+    | (
+        RawExprT extends IColumn ?
+        UsedRefUtil.FromColumn<RawExprT> :
+        RawExprT extends IQueryBase ?
+        UsedRefUtil.FromFromClause<RawExprT["fromClause"]> :
+        never
+    )
+    /*RawExprT extends PrimitiveExpr ?
     IUsedRef<{}> :
     RawExprT extends IExpr ?
     RawExprT["usedRef"] :
@@ -25,7 +43,7 @@ export type UsedRef<RawExprT extends AnyRawExpr> = (
     UsedRefUtil.FromFromClause<RawExprT["fromClause"]> :
     RawExprT extends IExprSelectItem ?
     RawExprT["usedRef"] :
-    never
+    never*/
 );
 export function usedRef<RawExprT extends AnyRawExpr> (
     rawExpr : RawExprT

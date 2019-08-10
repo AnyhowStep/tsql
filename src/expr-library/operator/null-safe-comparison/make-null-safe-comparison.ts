@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {Expr} from "../../../expr";
+import {Expr, expr} from "../../../expr";
 import {RawExpr} from "../../../raw-expr";
 import {PrimitiveExpr} from "../../../primitive-expr";
 import {RawExprUtil} from "../../../raw-expr";
@@ -26,7 +26,7 @@ export type NullSafeComparison = (
  */
 export function makeNullSafeComparison (operator : string) : NullSafeComparison {
     const result : NullSafeComparison = (left, right) => {
-        return new Expr(
+        return expr(
             {
                 mapper : tm.mysql.boolean(),
                 usedRef : RawExprUtil.intersectUsedRef(

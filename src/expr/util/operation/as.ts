@@ -1,5 +1,5 @@
 import {IExpr} from "../../expr";
-import {Expr} from "../../expr-impl";
+import {ExprImpl} from "../../expr-impl";
 import {IExprSelectItem, ExprSelectItemData} from "../../../expr-select-item";
 import {Ast} from "../../../ast";
 import {ALIASED} from "../../../constants";
@@ -118,7 +118,14 @@ import {ALIASED} from "../../../constants";
  * ```
  *
  */
-export class AliasedExpr<DataT extends ExprSelectItemData> extends Expr<DataT> implements IExprSelectItem<DataT> {
+export class AliasedExpr<
+    DataT extends ExprSelectItemData
+> extends ExprImpl<
+    DataT["mapper"],
+    DataT["usedRef"]
+> implements IExprSelectItem<
+    DataT
+> {
     readonly tableAlias : DataT["tableAlias"];
     readonly alias : DataT["alias"];
 

@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {RawExpr, RawExprUtil} from "../../../raw-expr";
-import {Expr, ExprUtil} from "../../../expr";
+import {Expr, ExprUtil, expr} from "../../../expr";
 import {Parentheses} from "../../../ast";
 
 /**
@@ -37,7 +37,7 @@ export function not3<RawExprT extends RawExpr<boolean|null>> (
             if (tree instanceof Array && tree.length == 2) {
                 if (tree[0] === "NOT") {
                     //NOT (NOT (expr)) === expr
-                    return new Expr(
+                    return expr(
                         {
                             mapper : tm.mysql.boolean().orNull(),
                             usedRef : RawExprUtil.usedRef(rawExpr),
@@ -58,7 +58,7 @@ export function not3<RawExprT extends RawExpr<boolean|null>> (
             return ExprUtil.fromRawExpr(null) as any;
         }
     }
-    return new Expr(
+    return expr(
         {
             mapper : tm.mysql.boolean().orNull(),
             usedRef : RawExprUtil.usedRef(rawExpr),

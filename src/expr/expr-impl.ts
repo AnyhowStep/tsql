@@ -6,14 +6,26 @@ import {SortDirection} from "../sort-direction";
 import * as ExprUtil from "./util";
 import { IUsedRef } from "../used-ref";
 
-export class Expr<DataT extends ExprData> implements IExpr<DataT> {
-    readonly mapper : DataT["mapper"];
-    readonly usedRef : DataT["usedRef"];
+/**
+ *
+ */
+export class ExprImpl<
+    MapperT extends ExprData["mapper"],
+    UsedRefT extends ExprData["usedRef"]
+> implements IExpr<{
+    mapper : MapperT,
+    usedRef : UsedRefT,
+}> {
+    readonly mapper : MapperT;
+    readonly usedRef : UsedRefT;
 
     readonly ast : Ast;
 
     public constructor (
-        data : DataT,
+        data : {
+            mapper : MapperT,
+            usedRef : UsedRefT,
+        },
         ast : Ast
     ) {
         this.mapper = data.mapper;
@@ -71,6 +83,85 @@ export class Expr<DataT extends ExprData> implements IExpr<DataT> {
         return ExprUtil.sort(this, sortDirection);
     }
 }
+export type Expr<DataT extends ExprData> = (
+    ExprImpl<
+        DataT["mapper"],
+        DataT["usedRef"]
+    >
+);
+export function expr<DataT extends ExprData> (
+    data : DataT,
+    ast : Ast
+) : (
+    Expr<DataT>
+) {
+    return new ExprImpl(data, ast);
+}
+// export class Expr<DataT extends ExprData> implements IExpr<DataT> {
+//     readonly mapper : DataT["mapper"];
+//     readonly usedRef : DataT["usedRef"];
+
+//     readonly ast : Ast;
+
+//     public constructor (
+//         data : DataT,
+//         ast : Ast
+//     ) {
+//         this.mapper = data.mapper;
+//         this.usedRef = data.usedRef;
+
+//         //Gotta' play it safe.
+//         //We want to preserve the order of operations.
+//         this.ast = parentheses(ast);
+//     }
+
+//     /**
+//      * If you are running into "max instantiation depth" errors,
+//      * consider adding explicit `TableExpr<>` type annotations.
+//      *
+//      * If that doesn't help,
+//      * consider using `ExprUtil.as()` instead.
+//      *
+//      * Also, consider reading this to understand my frustration,
+//      * https://github.com/microsoft/TypeScript/issues/29511
+//      *
+//      * @param alias
+//      */
+//     as <AliasT extends string> (
+//         alias : AliasT
+//     ) : ExprUtil.As<this, AliasT> {
+//         return ExprUtil.as(this, alias);
+//     }
+
+//     /**
+//      * ```sql
+//      * ORDER BY
+//      *  RAND() ASC
+//      * ```
+//      */
+//     asc () : ExprUtil.Asc<this> {
+//         return ExprUtil.asc(this);
+//     }
+//     /**
+//      * ```sql
+//      * ORDER BY
+//      *  RAND() DESC
+//      * ```
+//      */
+//     desc () : ExprUtil.Desc<this> {
+//         return ExprUtil.desc(this);
+//     }
+//     /**
+//      * ```sql
+//      * ORDER BY
+//      *  (myTable.myColumn IS NOT NULL) ASC,
+//      *  RAND() DESC
+//      * ```
+//      */
+//     sort (sortDirection : SortDirection) : ExprUtil.Sort<this> {
+//         return ExprUtil.sort(this, sortDirection);
+//     }
+// }
 
 /**
  * This is useful for avoiding "max instantiation depth" problems.

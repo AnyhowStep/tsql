@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {RawExpr, RawExprUtil} from "../../raw-expr";
-import {Expr} from "../../expr";
+import {Expr, expr} from "../../expr";
 
 export type BinaryOperator<
     InputTypeT,
@@ -44,7 +44,7 @@ export function makeBinaryOperator<
             >,
         }>
     ) => {
-        return new Expr(
+        return expr(
             {
                 mapper,
                 usedRef : RawExprUtil.intersectUsedRef(
