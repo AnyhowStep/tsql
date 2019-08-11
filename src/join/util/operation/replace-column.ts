@@ -18,6 +18,7 @@ export type ReplaceColumnImpl<
     ColumnsT extends IJoin["columns"],
     OriginalColumnsT extends IJoin["originalColumns"],
     PrimaryKeyT extends IJoin["primaryKey"],
+    CandidateKeysT extends IJoin["candidateKeys"],
     DeleteEnabledT extends IJoin["deleteEnabled"],
     MutableColumnsT extends IJoin["mutableColumns"]
 > = (
@@ -31,6 +32,7 @@ export type ReplaceColumnImpl<
         >,
         originalColumns : OriginalColumnsT,
         primaryKey : PrimaryKeyT,
+        candidateKeys : CandidateKeysT,
         deleteEnabled : DeleteEnabledT,
         mutableColumns : MutableColumnsT,
     }>
@@ -79,6 +81,7 @@ export type ReplaceColumn<
             JoinT["columns"],
             JoinT["originalColumns"],
             JoinT["primaryKey"],
+            JoinT["candidateKeys"],
             JoinT["deleteEnabled"],
             JoinT["mutableColumns"]
         >
@@ -116,6 +119,7 @@ export function replaceColumn<
             columns,
             originalColumns,
             primaryKey,
+            candidateKeys,
             deleteEnabled,
             mutableColumns,
         } = join;
@@ -130,6 +134,7 @@ export function replaceColumn<
             >,
             originalColumns : JoinT["originalColumns"],
             primaryKey : JoinT["primaryKey"],
+            candidateKeys : JoinT["candidateKeys"],
             deleteEnabled : JoinT["deleteEnabled"],
             mutableColumns : JoinT["mutableColumns"],
         }>(
@@ -147,6 +152,7 @@ export function replaceColumn<
                 ),
                 originalColumns,
                 primaryKey,
+                candidateKeys,
                 deleteEnabled,
                 mutableColumns,
             },

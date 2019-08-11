@@ -23,9 +23,14 @@ export type FromAliasedTableImpl<
         readonly originalColumns : AliasedTableT["columns"],
 
         /**
-         * Needed for `joinFromPk()`
+         * Needed for `whereEqPrimaryKey()`
          */
         readonly primaryKey : AliasedTableUtil.PrimaryKey<AliasedTableT>;
+
+        /**
+         * Needed for `whereEqCandidateKey()`
+         */
+        readonly candidateKeys : AliasedTableUtil.CandidateKeys<AliasedTableT>;
 
         /**
          * Needed for multi-table `DELETE` statements.
@@ -69,6 +74,7 @@ export function fromAliasedTable<
             originalColumns : aliasedTable.columns,
 
             primaryKey : AliasedTableUtil.primaryKey(aliasedTable),
+            candidateKeys : AliasedTableUtil.candidateKeys(aliasedTable),
             deleteEnabled : AliasedTableUtil.deleteEnabled(aliasedTable),
             mutableColumns : AliasedTableUtil.mutableColumns(aliasedTable),
         },

@@ -10,6 +10,8 @@ export class Join<DataT extends JoinData> implements IJoin<DataT> {
 
     readonly primaryKey : DataT["primaryKey"];
 
+    readonly candidateKeys : DataT["candidateKeys"];
+
     readonly deleteEnabled : DataT["deleteEnabled"];
 
     readonly mutableColumns : DataT["mutableColumns"];
@@ -32,6 +34,8 @@ export class Join<DataT extends JoinData> implements IJoin<DataT> {
         this.originalColumns = data.originalColumns;
 
         this.primaryKey = data.primaryKey;
+
+        this.candidateKeys = data.candidateKeys;
 
         this.deleteEnabled = data.deleteEnabled;
 

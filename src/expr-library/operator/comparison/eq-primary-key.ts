@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {TableWithPrimaryKey} from "../../../table";
-import {PrimaryKey_Input, PrimaryKeyUtil} from "../../../primary-key";
+import {PrimaryKey_Input, PrimaryKeyUtil, PrimaryKey_Output} from "../../../primary-key";
 import {Expr} from "../../../expr";
 import {UsedRefUtil} from "../../../used-ref";
 import {eq} from "./eq";
@@ -21,29 +21,29 @@ import {and} from "../logical";
  * cannot have nullable columns.
  *
  * @param table - The table with a primary key
- * @param primaryKey - The primary key values to compare against
+ * @param primaryKeyInput - The primary key values to compare against
  */
 export function eqPrimaryKey<
     TableT extends Pick<TableWithPrimaryKey, "columns"|"primaryKey">
 > (
     table : TableT,
-    primaryKey : PrimaryKey_Input<TableT>
+    primaryKeyInput : PrimaryKey_Input<TableT>
 ) : (
     Expr<{
         mapper : tm.SafeMapper<boolean>,
         usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>
     }>
 ) {
-    PrimaryKeyUtil.mapper(table)(`${table}.primaryKey`, primaryKey);
+    const primaryKey = PrimaryKeyUtil.mapper(table)(`${table}.primaryKey`, primaryKeyInput);
 
-    const arr = table.primaryKey.map((columnAlias) => {
+    const arr = Object.keys(primaryKey).map((columnAlias) => {
         /**
          * We use `eq` because the primary key of a table cannot have
          * nullable columns.
          */
         const expr = eq(
             table.columns[columnAlias],
-            primaryKey[columnAlias as keyof PrimaryKey_Input<TableT>]
+            primaryKey[columnAlias as keyof PrimaryKey_Output<TableT>]
         );
         return expr as Expr<{
             mapper : tm.SafeMapper<boolean>,

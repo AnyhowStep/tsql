@@ -28,9 +28,14 @@ export interface JoinData {
     readonly originalColumns : ColumnMap,
 
     /**
-     * Needed for `joinFromPk()`
+     * Needed for `whereEqPrimaryKey()`
      */
     readonly primaryKey : undefined|Key;
+
+    /**
+     * Needed for `whereEqCandidateKey()`
+     */
+    readonly candidateKeys : readonly Key[];
 
     /**
      * Needed for multi-table `DELETE` statements.
@@ -80,9 +85,14 @@ export interface IJoin<DataT extends JoinData=JoinData> {
     readonly originalColumns : DataT["originalColumns"],
 
     /**
-     * Needed for `joinFromPk()`
+     * Needed for `whereEqPrimaryKey()`
      */
     readonly primaryKey : DataT["primaryKey"];
+
+    /**
+     * Needed for `whereEqCandidateKey()`
+     */
+    readonly candidateKeys : readonly Key[];
 
     /**
      * Needed for multi-table `DELETE` statements.
