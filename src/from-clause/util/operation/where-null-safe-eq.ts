@@ -131,14 +131,36 @@ export function whereNullSafeEq<
      * @see {@link null-safe-eq.ts} for more details
      */
     nullSafeEq : NullSafeComparison,
-    whereNullSafeEqDelegate : WhereNullSafeEqDelegate<FromClauseT, ColumnT>,
-    value : ValueT
+    /**
+     * This construction effectively makes it impossible for `WhereNullSafeEqDelegate<>`
+     * to return a union type.
+     *
+     * This is unfortunate but a necessary compromise for now.
+     *
+     * https://github.com/microsoft/TypeScript/issues/32804#issuecomment-520199818
+     *
+     * https://github.com/microsoft/TypeScript/issues/32804#issuecomment-520201877
+     */
+    ...args : (
+        ColumnT extends ColumnUtil.ExtractWithType<
+            ColumnUtil.FromJoinArray<FromClauseT["currentJoins"]>,
+            PrimitiveExpr
+        > ?
+        [
+            WhereNullSafeEqDelegate<FromClauseT, ColumnT>,
+            ValueT
+        ] :
+        never
+    )
 ) : (
     {
         fromClause : WhereNullSafeEq<FromClauseT, ColumnT, ValueT>,
         whereClause : WhereClause,
     }
 ) {
+    const whereNullSafeEqDelegate = args[0];
+    const value = args[1];
+
     const columns = ColumnRefUtil.__noOp_extractWithType<PrimitiveExpr>()(
         ColumnRefUtil.fromColumnArray(
             ColumnUtil.fromJoinArray<FromClauseT["currentJoins"]>(fromClause.currentJoins)

@@ -136,6 +136,7 @@ export function whereEqPrimaryKey<
 ) {
     const whereEqPrimaryKeyDelegate = args[0];
     const primaryKey = args[1];
+
     const table : TableT = whereEqPrimaryKeyDelegate(
         JoinMapUtil.fromJoinArray(
             JoinArrayUtil.extractWithPrimaryKey<FromClauseT["currentJoins"]>(
