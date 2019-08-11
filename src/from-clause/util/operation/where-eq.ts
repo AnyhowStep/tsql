@@ -118,14 +118,36 @@ export function whereEq<
 > (
     fromClause : FromClauseT,
     whereClause : WhereClause|undefined,
-    whereEqDelegate : WhereEqDelegate<FromClauseT, ColumnT>,
-    value : ValueT
+    /**
+     * This construction effectively makes it impossible for `WhereEqDelegate<>`
+     * to return a union type.
+     *
+     * This is unfortunate but a necessary compromise for now.
+     *
+     * https://github.com/microsoft/TypeScript/issues/32804#issuecomment-520199818
+     *
+     * https://github.com/microsoft/TypeScript/issues/32804#issuecomment-520201877
+     */
+    ...args : (
+        ColumnT extends ColumnUtil.ExtractWithType<
+            ColumnUtil.FromJoinArray<FromClauseT["currentJoins"]>,
+            NonNullPrimitiveExpr
+        > ?
+        [
+            WhereEqDelegate<FromClauseT, ColumnT>,
+            ValueT
+        ] :
+        never
+    )
 ) : (
     {
         fromClause : WhereEq<FromClauseT, ColumnT, ValueT>,
         whereClause : WhereClause,
     }
 ) {
+    const whereEqDelegate = args[0];
+    const value = args[1];
+
     const columns = ColumnRefUtil.__noOp_extractWithType<NonNullPrimitiveExpr>()(
         ColumnRefUtil.fromColumnArray(
             ColumnUtil.fromJoinArray<FromClauseT["currentJoins"]>(fromClause.currentJoins)
