@@ -3,7 +3,7 @@ import {JoinArrayUtil} from "../../../join";
 import {AfterFromClause} from "../helper-type";
 import {WhereClause, WhereClauseUtil} from "../../../where-clause";
 import {eqPrimaryKey} from "../../../expr-library";
-import {PrimaryKey} from "../../../primary-key";
+import {PrimaryKey_NonUnion} from "../../../primary-key";
 import {JoinMapUtil} from "../../../join-map";
 
 /**
@@ -124,7 +124,7 @@ export function whereEqPrimaryKey<
         TableT extends JoinArrayUtil.ExtractWithPrimaryKey<FromClauseT["currentJoins"]> ?
         [
             WhereEqPrimaryKeyDelegate<FromClauseT, TableT>,
-            PrimaryKey<TableT>
+            PrimaryKey_NonUnion<TableT>
         ] :
         never
     )

@@ -1,0 +1,55 @@
+export declare const k: ({
+    readonly aa: Date;
+    readonly bb: number;
+} & {
+    readonly ee: Date;
+    readonly ff: number;
+}) | ({
+    readonly aa: Date;
+    readonly bb: number;
+} & {
+    readonly gg: Buffer;
+    readonly hh: string;
+}) | ({
+    readonly aa: Date;
+    readonly bb: number;
+} & {
+    readonly ee: Date;
+    readonly hh: string;
+}) | ({
+    readonly dd: string;
+    readonly cc: Buffer;
+} & {
+    readonly ee: Date;
+    readonly ff: number;
+}) | ({
+    readonly dd: string;
+    readonly cc: Buffer;
+} & {
+    readonly gg: Buffer;
+    readonly hh: string;
+}) | ({
+    readonly dd: string;
+    readonly cc: Buffer;
+} & {
+    readonly ee: Date;
+    readonly hh: string;
+}) | ({
+    readonly dd: string;
+    readonly aa: Date;
+} & {
+    readonly ee: Date;
+    readonly ff: number;
+}) | ({
+    readonly dd: string;
+    readonly aa: Date;
+} & {
+    readonly gg: Buffer;
+    readonly hh: string;
+}) | ({
+    readonly dd: string;
+    readonly aa: Date;
+} & {
+    readonly ee: Date;
+    readonly hh: string;
+});

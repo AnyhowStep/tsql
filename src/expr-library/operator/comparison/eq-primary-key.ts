@@ -1,7 +1,6 @@
 import * as tm from "type-mapping";
 import {TableWithPrimaryKey} from "../../../table";
-import {PrimaryKey, PrimaryKeyUtil} from "../../../primary-key";
-import {UnionToIntersection} from "../../../type-util";
+import {PrimaryKey_Input, PrimaryKeyUtil} from "../../../primary-key";
 import {Expr} from "../../../expr";
 import {UsedRefUtil} from "../../../used-ref";
 import {eq} from "./eq";
@@ -28,7 +27,7 @@ export function eqPrimaryKey<
     TableT extends Pick<TableWithPrimaryKey, "columns"|"primaryKey">
 > (
     table : TableT,
-    primaryKey : UnionToIntersection<PrimaryKey<TableT>>
+    primaryKey : PrimaryKey_Input<TableT>
 ) : (
     Expr<{
         mapper : tm.SafeMapper<boolean>,
@@ -44,7 +43,7 @@ export function eqPrimaryKey<
          */
         const expr = eq(
             table.columns[columnAlias],
-            primaryKey[columnAlias as keyof UnionToIntersection<PrimaryKey<TableT>>]
+            primaryKey[columnAlias as keyof PrimaryKey_Input<TableT>]
         );
         return expr as Expr<{
             mapper : tm.SafeMapper<boolean>,

@@ -6,6 +6,12 @@ export interface TableData extends AliasedTableData {
     readonly autoIncrement : undefined|string;
     readonly id : undefined|string;
     readonly primaryKey : undefined|Key;
+    /**
+     * @todo Debate making this `undefined|(readonly Key[])`
+     *
+     * Right now `eqPrimaryKey()` and `eqCandidateKey()` are slightly different.
+     * `eqPrimaryKey()` requires `primaryKey : Key`.
+     */
     readonly candidateKeys : readonly Key[];
 
     readonly insertEnabled : boolean;

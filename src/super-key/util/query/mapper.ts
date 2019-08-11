@@ -1,11 +1,11 @@
 import * as tm from "type-mapping";
-import {SuperKey} from "../../super-key";
+import {SuperKey_Output} from "../../super-key";
 import {ITable} from "../../../table";
 import {ColumnMapUtil} from "../../../column-map";
 import {pickOwnEnumerable, omitOwnEnumerable} from "../../../type-util";
 
 export type Mapper<TableT extends Pick<ITable, "columns"|"candidateKeys">> = (
-    tm.SafeMapper<SuperKey<TableT>>
+    tm.SafeMapper<SuperKey_Output<TableT>>
 );
 export function mapper<TableT extends Pick<ITable, "columns"|"candidateKeys">> (
     table : TableT
