@@ -19,6 +19,7 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
   > random 2cents: if you're going for this, I say ideally support every sql offered by aws rds (aurora, postgres, my, maira, oracle & MS)
 + Avoid single-letter names in documentation/readme; prefer `columns` over `c`
 + `fetchOneByArbitraryCondition`
++ Refactor `FromXxx` to `FromXxxArray` if it is meant to distribute?
 
 <!--
 > I'm just thinking about how...

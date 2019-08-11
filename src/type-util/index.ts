@@ -1,6 +1,7 @@
 export * from "./is-object-with-own-enumerable-keys";
 export * from "./is-union";
 export * from "./merge";
+export * from "./no-infer";
 export * from "./non-optional-partial";
 export * from "./omit-own-enumerable";
 export * from "./pick-own-enumerable";

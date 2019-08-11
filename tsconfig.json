@@ -27,6 +27,7 @@
         "./src/super-key/**/*",
         "./src/primary-key/**/*",
         "./src/join/**/*",
+        "./src/join-map/**/*",
         "./src/from-clause/**/*",
         "./src/expr/**/*",
         "./src/expr-select-item/**/*",
