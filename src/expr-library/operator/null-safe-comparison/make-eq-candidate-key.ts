@@ -6,6 +6,7 @@ import {and} from "../logical";
 import {CandidateKey_Input, CandidateKeyUtil, CandidateKey_Output} from "../../../candidate-key";
 import {NullSafeComparison} from "./make-null-safe-comparison";
 import {ColumnMapUtil} from "../../../column-map";
+import {StrictUnion} from "../../../type-util";
 
 /**
  * Convenience function for,
@@ -35,7 +36,7 @@ export type EqCandidateKey = (
         TableT extends Pick<ITable, "columns"|"candidateKeys">
     > (
         table : TableT,
-        candidateKeyInput : CandidateKey_Input<TableT>
+        candidateKeyInput : StrictUnion<CandidateKey_Input<TableT>>
     ) => (
         Expr<{
             mapper : tm.SafeMapper<boolean>,
@@ -53,7 +54,7 @@ export function makeEqCandidateKey (
             TableT extends Pick<ITable, "columns"|"candidateKeys">
         > (
             table : TableT,
-            candidateKeyInput : CandidateKey_Input<TableT>
+            candidateKeyInput : StrictUnion<CandidateKey_Input<TableT>>
         ) : (
             Expr<{
                 mapper : tm.SafeMapper<boolean>,
