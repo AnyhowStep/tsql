@@ -40,7 +40,11 @@ export function eqPrimaryKey<
         primaryKeyInput
     );
 
-    const arr = Object.keys(primaryKey).map((columnAlias) => {
+    /**
+     * We `.sort()` the keys so our resulting SQL is deterministic,
+     * regardless of how `primaryKey` was constructed.
+     */
+    const arr = Object.keys(primaryKey).sort().map((columnAlias) => {
         /**
          * We use `eq` because the primary key of a table cannot have
          * nullable columns.

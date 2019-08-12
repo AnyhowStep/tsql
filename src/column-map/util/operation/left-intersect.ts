@@ -14,8 +14,8 @@ export type LeftIntersect<
                 tableAlias : MapA[columnAlias]["tableAlias"],
                 columnAlias : MapA[columnAlias]["columnAlias"],
                 mapper : tm.SafeMapper<
-                    ReturnType<MapA[columnAlias]["mapper"]> &
-                    ReturnType<MapB[columnAlias]["mapper"]>
+                    tm.OutputOf<MapA[columnAlias]["mapper"]> &
+                    tm.OutputOf<MapB[columnAlias]["mapper"]>
                 >
             }> :
             MapA[columnAlias]

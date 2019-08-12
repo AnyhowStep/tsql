@@ -1,3 +1,4 @@
+import * as tm from "type-mapping";
 import {IColumn} from "../../column";
 
 /**
@@ -9,7 +10,7 @@ export type ToErrorMessageFriendlyType<ColumnT extends IColumn> = (
         [
             ColumnT["tableAlias"],
             ColumnT["columnAlias"],
-            ReturnType<ColumnT["mapper"]>
+            tm.OutputOf<ColumnT["mapper"]>
         ]
     ) :
     never

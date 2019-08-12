@@ -72,6 +72,11 @@ export function makeEqSuperKey (
                 .filter((columnAlias) => {
                     return superKey[columnAlias as keyof SuperKey_Output<TableT>] !== undefined;
                 })
+                /**
+                 * We `.sort()` the keys so our resulting SQL is deterministic,
+                 * regardless of how `superKey` was constructed.
+                 */
+                .sort()
                 .map((columnAlias) => {
                     const expr = nullSafeEq(
                         table.columns[columnAlias],

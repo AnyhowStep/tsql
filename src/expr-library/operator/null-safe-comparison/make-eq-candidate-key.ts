@@ -66,7 +66,11 @@ export function makeEqCandidateKey (
                 candidateKeyInput
             );
 
-            const arr = Object.keys(candidateKey).map((columnAlias) => {
+            /**
+             * We `.sort()` the keys so our resulting SQL is deterministic,
+             * regardless of how `candidateKey` was constructed.
+             */
+            const arr = Object.keys(candidateKey).sort().map((columnAlias) => {
                 const expr = nullSafeEq(
                     table.columns[columnAlias],
                     candidateKey[columnAlias as keyof CandidateKey_Output<TableT>]

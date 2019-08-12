@@ -23,6 +23,7 @@
         "./src/derived-table/**/*",
         "./src/key/**/*",
         "./src/table/**/*.ts",
+        "./src/row/**/*.ts",
         "./src/candidate-key/**/*",
         "./src/super-key/**/*",
         "./src/primary-key/**/*",
