@@ -6,5 +6,6 @@ export * from "./non-optional-partial";
 export * from "./omit-own-enumerable";
 export * from "./pick-own-enumerable";
 export * from "./replace-property";
+export * from "./strict-union";
 export * from "./union-to-intersection";
 export * from "./writable";

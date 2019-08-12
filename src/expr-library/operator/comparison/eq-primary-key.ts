@@ -5,6 +5,7 @@ import {Expr} from "../../../expr";
 import {UsedRefUtil} from "../../../used-ref";
 import {eq} from "./eq";
 import {and} from "../logical";
+import {ColumnMapUtil} from "../../../column-map";
 
 /**
  * Convenience function for,
@@ -34,7 +35,10 @@ export function eqPrimaryKey<
         usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>
     }>
 ) {
-    const primaryKey = PrimaryKeyUtil.mapper(table)(`${table}.primaryKey`, primaryKeyInput);
+    const primaryKey = PrimaryKeyUtil.mapper(table)(
+        `${ColumnMapUtil.tableAlias(table.columns)}.primaryKey`,
+        primaryKeyInput
+    );
 
     const arr = Object.keys(primaryKey).map((columnAlias) => {
         /**

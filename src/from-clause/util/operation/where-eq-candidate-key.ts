@@ -5,6 +5,7 @@ import {WhereClause, WhereClauseUtil} from "../../../where-clause";
 import {JoinMapUtil} from "../../../join-map";
 import {CandidateKey_NonUnion} from "../../../candidate-key";
 import {EqCandidateKey} from "../../../expr-library";
+import {StrictUnion} from "../../../type-util";
 
 /**
  * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966
@@ -127,7 +128,7 @@ export function whereEqCandidateKey<
         TableT extends JoinArrayUtil.ExtractWithCandidateKey<FromClauseT["currentJoins"]> ?
         [
             WhereEqCandidateKeyDelegate<FromClauseT, TableT>,
-            CandidateKey_NonUnion<TableT>
+            StrictUnion<CandidateKey_NonUnion<TableT>>
         ] :
         never
     )
