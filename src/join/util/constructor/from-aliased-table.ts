@@ -8,41 +8,41 @@ export type FromAliasedTableImpl<
     NullableT extends boolean
 > = (
     Join<{
-        readonly tableAlias : AliasedTableT["alias"],
-        readonly nullable : NullableT,
+        tableAlias : AliasedTableT["alias"],
+        nullable : NullableT,
         /**
          * These columns can have their types narrowed.
          * For example, with the `IS NULL` or `IS NOT NULL` or `=` operators.
          */
-        readonly columns : AliasedTableT["columns"],
+        columns : AliasedTableT["columns"],
 
         /**
          * Needed for multi-table `UPDATE` statements.
          * So, we will know the data type of each column.
          */
-        readonly originalColumns : AliasedTableT["columns"],
+        originalColumns : AliasedTableT["columns"],
 
         /**
          * Needed for `whereEqPrimaryKey()`
          */
-        readonly primaryKey : AliasedTableUtil.PrimaryKey<AliasedTableT>;
+        primaryKey : AliasedTableUtil.PrimaryKey<AliasedTableT>;
 
         /**
          * Needed for `whereEqCandidateKey()`
          */
-        readonly candidateKeys : AliasedTableUtil.CandidateKeys<AliasedTableT>;
+        candidateKeys : AliasedTableUtil.CandidateKeys<AliasedTableT>;
 
         /**
          * Needed for multi-table `DELETE` statements.
          * We need to know which tables we can delete rows from.
          */
-        readonly deleteEnabled : AliasedTableUtil.DeleteEnabled<AliasedTableT>,
+        deleteEnabled : AliasedTableUtil.DeleteEnabled<AliasedTableT>,
 
         /**
          * Needed for multi-table `UPDATE` statements.
          * We need to know which columns are mutable.
          */
-        readonly mutableColumns : AliasedTableUtil.MutableColumns<AliasedTableT>;
+        mutableColumns : AliasedTableUtil.MutableColumns<AliasedTableT>;
     }>
 );
 export type FromAliasedTable<
