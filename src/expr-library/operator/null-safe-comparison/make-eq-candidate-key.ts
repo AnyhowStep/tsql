@@ -25,6 +25,9 @@ import {NullSafeComparison} from "./make-null-safe-comparison";
  *
  * @todo Maybe call it `nullSafeEqCandidateKey()` instead?
  * It doesn't use `eq()` at all. It uses `nullSafeEq()`.
+ *
+ * @todo Maybe have it use `eq()` for columns we know are non-nullable
+ * and use `nullSafeEq()` for columns that are nullable?
  */
 export type EqCandidateKey = (
     <
