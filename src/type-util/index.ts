@@ -1,3 +1,5 @@
+export * from "./is-comparable";
+export * from "./is-null-safe-comparable";
 export * from "./is-object-with-own-enumerable-keys";
 export * from "./is-union";
 export * from "./merge";

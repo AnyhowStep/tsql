@@ -1,0 +1,68 @@
+import {IJoin} from "../../join";
+import * as JoinUtil from "../../util";
+import {ColumnMap, ColumnMapUtil} from "../../../column-map";
+
+/**
+ * Given an array of `IJoin`, it extracts the ones with the a primary key
+ * **null-safe** comparable to `ColumnMapT`
+ */
+export type ExtractWithComparablePrimaryKey<
+    JoinsT extends readonly IJoin[],
+    ColumnMapT extends ColumnMap
+> = (
+    JoinUtil.ExtractWithComparablePrimaryKey<JoinsT[number], ColumnMapT>
+);
+/**
+ * Ideally, we'd want to have run-time checks
+ * ensuring PK columns and `columnMap` columns
+ * have comparable types.
+ *
+ * However, due to how the project is structured,
+ * this is not possible.
+ *
+ * So, at the very least, we just check
+ * the columns exist and
+ * we aren't trying to compare against nullable
+ * columns.
+ */
+export function extractWithComparablePrimaryKey<
+    JoinsT extends readonly IJoin[],
+    ColumnMapT extends ColumnMap
+> (
+    joins : JoinsT,
+    columnMap : ColumnMapT
+) : (
+    ExtractWithComparablePrimaryKey<JoinsT, ColumnMapT>[]
+) {
+    return joins.filter(
+        (join) : join is ExtractWithComparablePrimaryKey<JoinsT, ColumnMapT> => {
+            if (join.primaryKey == undefined) {
+                return false;
+            }
+            /**
+             * Ideally, we'd want to have run-time checks
+             * ensuring PK columns and `columnMap` columns
+             * have comparable types.
+             *
+             * However, due to how the project is structured,
+             * this is not possible.
+             *
+             * So, at the very least, we just check
+             * the columns exist and
+             * we aren't trying to compare against nullable
+             * columns.
+             */
+            const nonNullableColumnAliases : string[] = ColumnMapUtil.nonNullableColumnAliases(columnMap);
+            for (const pkColumnAlias of join.primaryKey) {
+                if (!nonNullableColumnAliases.includes(pkColumnAlias)) {
+                    /**
+                     * Either the column is nullable,
+                     * or the column does not exist.
+                     */
+                    return false;
+                }
+            }
+            return true;
+        }
+    );
+}

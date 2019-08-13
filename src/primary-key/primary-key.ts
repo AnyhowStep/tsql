@@ -1,6 +1,6 @@
 import {TableWithPrimaryKey} from "../table";
 import {TypeMapUtil} from "../type-map";
-import {UnionToIntersection} from "type-mapping/dist/type-util";
+import {UnionToIntersection} from "../type-util";
 
 /**
  * Assumes `TableT` is not a union.

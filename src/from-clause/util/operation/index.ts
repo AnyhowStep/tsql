@@ -5,6 +5,7 @@ export * from "./require-outer-query-joins-impl";
 export * from "./require-outer-query-joins";
 export * from "./where-eq-candidate-key";
 export * from "./where-eq-columns";
+export * from "./where-eq-outer-query-primary-key";
 export * from "./where-eq-primary-key";
 export * from "./where-eq-super-key";
 export * from "./where-eq";

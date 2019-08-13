@@ -2,7 +2,7 @@ import {IJoin} from "../../join";
 import * as JoinUtil from "../../util";
 
 /**
- * Given a array of `IJoin`, it extracts the ones with the a primary key
+ * Given an array of `IJoin`, it extracts the ones with the a primary key
  */
 export type ExtractWithPrimaryKey<
     JoinsT extends readonly IJoin[]

@@ -3,6 +3,9 @@ import {TypeRefUtil} from "../../../type-ref";
 import {ColumnMap} from "../../../column-map";
 import {ColumnIdentifierRefUtil} from "../../../column-identifier-ref";
 
+/**
+ * Can handle union types
+ */
 export type FromColumnMap<MapT extends ColumnMap> = (
     IUsedRef<TypeRefUtil.FromColumnMap<MapT>>
 );

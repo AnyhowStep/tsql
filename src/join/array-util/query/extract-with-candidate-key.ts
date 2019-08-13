@@ -2,7 +2,7 @@ import {IJoin} from "../../join";
 import * as JoinUtil from "../../util";
 
 /**
- * Given a array of `IJoin`, it extracts the ones with at least one candidate key
+ * Given an array of `IJoin`, it extracts the ones with at least one candidate key
  */
 export type ExtractWithCandidateKey<
     JoinsT extends readonly IJoin[]
