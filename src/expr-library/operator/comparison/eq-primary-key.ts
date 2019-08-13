@@ -18,6 +18,16 @@ import {ColumnMapUtil} from "../../../column-map";
  *  );
  * ```
  *
+ * -----
+ *
+ * It is recommended to **only** use this with **object literals**.
+ * Excess property checks are disabled for non-object literals.
+ * Even if they were enabled, it is possible to slip in extra properties.
+ *
+ * Extra properties are ignored during run-time but may indicate lapses in logic.
+ *
+ * -----
+ *
  * Uses `eq()` internally because the primary key of a table
  * cannot have nullable columns.
  *

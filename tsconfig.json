@@ -24,6 +24,7 @@
         "./src/key/**/*",
         "./src/table/**/*.ts",
         "./src/row/**/*.ts",
+        "./src/partial-row/**/*.ts",
         "./src/candidate-key/**/*",
         "./src/super-key/**/*",
         "./src/primary-key/**/*",

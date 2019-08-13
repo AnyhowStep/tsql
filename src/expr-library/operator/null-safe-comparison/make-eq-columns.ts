@@ -3,20 +3,17 @@ import {ITable} from "../../../table";
 import {Expr} from "../../../expr";
 import {UsedRefUtil} from "../../../used-ref";
 import {and} from "../logical";
-import {SuperKey_Input, SuperKeyUtil, SuperKey_Output} from "../../../super-key";
 import {NullSafeComparison} from "./make-null-safe-comparison";
 import {ColumnMapUtil} from "../../../column-map";
+import {PartialRow_Input, PartialRowUtil, PartialRow_Output} from "../../../partial-row";
 
 /**
  * Convenience function for,
  * ```ts
  *  tsql.and(
- *      tsql.nullSafeEq(candidateKeyColumn0, value0),
- *      tsql.nullSafeEq(candidateKeyColumn1, value1),
- *      tsql.nullSafeEq(candidateKeyColumn2, value2),
- *      tsql.nullSafeEq(nonCandidateKeyColumn0, value3),
- *      tsql.nullSafeEq(nonCandidateKeyColumn1, value4),
- *      tsql.nullSafeEq(nonCandidateKeyColumn2, value5),
+ *      tsql.nullSafeEq(column0, value0),
+ *      tsql.nullSafeEq(column1, value1),
+ *      tsql.nullSafeEq(column2, value2),
  *      //etc.
  *  );
  * ```
@@ -31,24 +28,24 @@ import {ColumnMapUtil} from "../../../column-map";
  *
  * -----
  *
- * Uses `nullSafeEq()` internally because the super key of a table
+ * Uses `nullSafeEq()` internally because a table
  * may have nullable columns.
  *
- * @param table - The table with a candidate key
- * @param superKeyInput - The super key values to compare against
+ * @param table - The table
+ * @param columnsInput - The column values to compare against
  *
- * @todo Maybe call it `nullSafeEqSuperKey()` instead?
+ * @todo Maybe call it `nullSafeEqColumns()` instead?
  * It doesn't use `eq()` at all. It uses `nullSafeEq()`.
  *
  * @todo Maybe have it use `eq()` for columns we know are non-nullable
  * and use `nullSafeEq()` for columns that are nullable?
  */
-export type EqSuperKey = (
+export type EqColumns = (
     <
-        TableT extends Pick<ITable, "columns"|"candidateKeys">
+        TableT extends Pick<ITable, "columns">
     > (
         table : TableT,
-        superKeyInput : SuperKey_Input<TableT>
+        columnsInput : PartialRow_Input<TableT>
     ) => (
         Expr<{
             mapper : tm.SafeMapper<boolean>,
@@ -56,41 +53,41 @@ export type EqSuperKey = (
         }>
     )
 );
-export function makeEqSuperKey (
+export function makeEqColumns (
     nullSafeEq : NullSafeComparison
 ) : (
-    EqSuperKey
+    EqColumns
 ) {
-    const result : EqSuperKey = (
+    const result : EqColumns = (
         <
-            TableT extends Pick<ITable, "columns"|"candidateKeys">
+            TableT extends Pick<ITable, "columns">
         > (
             table : TableT,
-            superKeyInput : SuperKey_Input<TableT>
+            columnsInput : PartialRow_Input<TableT>
         ) : (
             Expr<{
                 mapper : tm.SafeMapper<boolean>,
                 usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>
             }>
         ) => {
-            const superKey = SuperKeyUtil.mapper(table)(
-                `${ColumnMapUtil.tableAlias(table.columns)}.superKey`,
-                superKeyInput
+            const columns = PartialRowUtil.mapper(table)(
+                `${ColumnMapUtil.tableAlias(table.columns)}.columns`,
+                columnsInput
             );
 
-            const arr = Object.keys(superKey)
+            const arr = Object.keys(columns)
                 .filter((columnAlias) => {
-                    return superKey[columnAlias as keyof SuperKey_Output<TableT>] !== undefined;
+                    return columns[columnAlias as keyof PartialRow_Output<TableT>] !== undefined;
                 })
                 /**
                  * We `.sort()` the keys so our resulting SQL is deterministic,
-                 * regardless of how `superKey` was constructed.
+                 * regardless of how `columns` was constructed.
                  */
                 .sort()
                 .map((columnAlias) => {
                     const expr = nullSafeEq(
                         table.columns[columnAlias],
-                        superKey[columnAlias as keyof SuperKey_Output<TableT>]
+                        columns[columnAlias as keyof PartialRow_Output<TableT>]
                     );
                     return expr as Expr<{
                         mapper : tm.SafeMapper<boolean>,

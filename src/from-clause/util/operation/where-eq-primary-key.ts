@@ -103,6 +103,14 @@ export type WhereEqPrimaryKeyDelegate<
  *          myPrimaryKey
  *      ));
  * ```
+ * -----
+ *
+ * It is recommended to **only** use this with **object literals**.
+ * Excess property checks are disabled for non-object literals.
+ * Even if they were enabled, it is possible to slip in extra properties.
+ *
+ * Extra properties are ignored during run-time but may indicate lapses in logic.
+ *
  */
 export function whereEqPrimaryKey<
     FromClauseT extends AfterFromClause,

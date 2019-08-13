@@ -1,10 +1,9 @@
 import {IFromClause} from "../../from-clause";
-import {JoinArrayUtil} from "../../../join";
 import {AfterFromClause} from "../helper-type";
 import {WhereClause, WhereClauseUtil} from "../../../where-clause";
 import {JoinMapUtil} from "../../../join-map";
-import {EqSuperKey} from "../../../expr-library";
-import {SuperKey_NonUnion} from "../../../super-key";
+import {EqColumns} from "../../../expr-library";
+import {PartialRow_NonUnion} from "../../../partial-row";
 
 /**
  * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966
@@ -12,7 +11,7 @@ import {SuperKey_NonUnion} from "../../../super-key";
  * This hack should only really be reserved for types that are more likely
  * to trigger max depth/max count errors.
  */
-export type WhereEqSuperKeyImpl<
+export type WhereEqColumnsImpl<
     OuterQueryJoinsT extends AfterFromClause["outerQueryJoins"],
     CurrentJoinsT extends AfterFromClause["currentJoins"],
 > = (
@@ -22,49 +21,13 @@ export type WhereEqSuperKeyImpl<
     }>
 );
 /**
- * @todo Consider making `nullable` joins non-nullable when
- * used with `whereEqSuperKey()`
- *
- * Not a priority because people should not usually
- * write such a query.
- *
- * -----
- *
- * Assume `tableB.tableBId` is the candidate key of `tableB`.
- *
- * Normally, `tableB` should be `nullable` in the following query,
- * ```sql
- *  SELECT
- *      *
- *  FROM
- *      tableA
- *  LEFT JOIN
- *      tableB
- *  ON
- *      tableA.tableBId = tableB.tableBId
- * ```
- *
- * However, `tableB` should not be `nullable` in the following query,
- * ```sql
- *  SELECT
- *      *
- *  FROM
- *      tableA
- *  LEFT JOIN
- *      tableB
- *  ON
- *      tableA.tableBId = tableB.tableBId
- *  WHERE
- *      --If you want to follow the SQL standard,
- *      --tableB.tableBId IS NOT DISTINCT FROM 1
- *      tableB.tableBId <=> 1 AND
- *      tableB.otherColumn <=> 'hi'
- * ```
+ * @todo Consider narrowing the values of columns?
+ * @todo If at least one of the columns is narrowed to non-null, make the `IJoin` non-nullable?
  */
-export type WhereEqSuperKey<
+export type WhereEqColumns<
     FromClauseT extends AfterFromClause
 > = (
-    WhereEqSuperKeyImpl<
+    WhereEqColumnsImpl<
         FromClauseT["outerQueryJoins"],
         FromClauseT["currentJoins"]
     >
@@ -75,24 +38,22 @@ export type WhereEqSuperKey<
  * This hack should only really be reserved for types that are more likely
  * to trigger max depth/max count errors.
  */
-export type WhereEqSuperKeyDelegateImpl<
-    TableT extends JoinArrayUtil.ExtractWithCandidateKey<CurrentJoinsT>,
+export type WhereEqColumnsDelegateImpl<
+    TableT extends CurrentJoinsT[number],
     CurrentJoinsT extends AfterFromClause["currentJoins"]
 > = (
     (
         /**
          * Is called `tables` but is really a map of joins
          */
-        tables : JoinMapUtil.FromJoinArray<
-            JoinArrayUtil.ExtractWithCandidateKey<CurrentJoinsT>[]
-        >
+        tables : JoinMapUtil.FromJoinArray<CurrentJoinsT>
     ) => TableT
 );
-export type WhereEqSuperKeyDelegate<
+export type WhereEqColumnsDelegate<
     FromClauseT extends Pick<AfterFromClause, "currentJoins">,
-    TableT extends JoinArrayUtil.ExtractWithCandidateKey<FromClauseT["currentJoins"]>
+    TableT extends FromClauseT["currentJoins"][number]
 > = (
-    WhereEqSuperKeyDelegateImpl<
+    WhereEqColumnsDelegateImpl<
         TableT,
         FromClauseT["currentJoins"]
     >
@@ -101,9 +62,9 @@ export type WhereEqSuperKeyDelegate<
  * Convenience function for,
  * ```ts
  *  myQuery
- *      .where(() => tsql.eqSuperKey(
+ *      .where(() => tsql.eqColumns(
  *          myTable,
- *          mySuperKey
+ *          myColumns
  *      ));
  * ```
  *
@@ -116,15 +77,15 @@ export type WhereEqSuperKeyDelegate<
  * Extra properties are ignored during run-time but may indicate lapses in logic.
  *
  */
-export function whereEqSuperKey<
+export function whereEqColumns<
     FromClauseT extends AfterFromClause,
-    TableT extends JoinArrayUtil.ExtractWithCandidateKey<FromClauseT["currentJoins"]>
+    TableT extends FromClauseT["currentJoins"][number]
 > (
     fromClause : FromClauseT,
     whereClause : WhereClause|undefined,
-    eqSuperKey : EqSuperKey,
+    eqColumns : EqColumns,
     /**
-     * This construction effectively makes it impossible for `WhereEqSuperKeyDelegate<>`
+     * This construction effectively makes it impossible for `WhereEqColumnsDelegate<>`
      * to return a union type.
      *
      * This is unfortunate but a necessary compromise for now.
@@ -134,33 +95,33 @@ export function whereEqSuperKey<
      * https://github.com/microsoft/TypeScript/issues/32804#issuecomment-520201877
      */
     ...args : (
-        TableT extends JoinArrayUtil.ExtractWithCandidateKey<FromClauseT["currentJoins"]> ?
+        TableT extends FromClauseT["currentJoins"][number] ?
         [
-            WhereEqSuperKeyDelegate<FromClauseT, TableT>,
-            SuperKey_NonUnion<TableT>
+            WhereEqColumnsDelegate<FromClauseT, TableT>,
+            PartialRow_NonUnion<TableT>
         ] :
         never
     )
 ) : (
     {
-        fromClause : WhereEqSuperKey<FromClauseT>,
+        fromClause : WhereEqColumns<FromClauseT>,
         whereClause : WhereClause,
     }
 ) {
-    const whereEqSuperKeyDelegate = args[0];
-    const superKey = args[1];
-
-    const table : TableT = whereEqSuperKeyDelegate(
-        JoinMapUtil.fromJoinArray(
-            JoinArrayUtil.extractWithCandidateKey<FromClauseT["currentJoins"]>(
-                fromClause.currentJoins
-            )
+    const whereEqColumnsDelegate = args[0];
+    const columns : PartialRow_NonUnion<TableT> = args[1];
+    /**
+     * @todo Investigate assignability
+     */
+    const table : TableT = whereEqColumnsDelegate(
+        JoinMapUtil.fromJoinArray<FromClauseT["currentJoins"]>(
+            fromClause.currentJoins
         )
-    ) as TableT;
+    ) as FromClauseT["currentJoins"][number] as TableT;
 
     const result : (
         {
-            fromClause : WhereEqSuperKey<FromClauseT>,
+            fromClause : WhereEqColumns<FromClauseT>,
             whereClause : WhereClause,
         }
     ) = {
@@ -171,9 +132,12 @@ export function whereEqSuperKey<
             /**
              * @todo Investigate assignability
              */
-            () => eqSuperKey(
+            () => eqColumns<TableT>(
                 table,
-                superKey
+                /**
+                 * @todo Investigate assignability
+                 */
+                columns as any
             ) as any
         ),
     };

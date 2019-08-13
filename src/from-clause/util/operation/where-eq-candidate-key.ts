@@ -106,6 +106,26 @@ export type WhereEqCandidateKeyDelegate<
  *          myCandidateKey
  *      ));
  * ```
+ *
+ * -----
+ *
+ * It is recommended to **only** use this with **object literals**.
+ * Excess property checks are disabled for non-object literals.
+ * Even if they were enabled, it is possible to slip in extra properties.
+ *
+ * Extra properties are ignored during run-time but may indicate lapses in logic.
+ *
+ * -----
+ *
+ * Excess properties are especially dangerous for this function.
+ *
+ * If your `candidateKeyInput` is actually a super key of two candidate keys,
+ * then the candidate key this function compares against is arbitrary.
+ *
+ * The extra properties will be discarded.
+ *
+ * If you want to compare against a super key, use `whereEqSuperKey()` instead.
+ *
  */
 export function whereEqCandidateKey<
     FromClauseT extends AfterFromClause,
