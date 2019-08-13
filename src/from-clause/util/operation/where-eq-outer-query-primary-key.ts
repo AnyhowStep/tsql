@@ -210,18 +210,15 @@ export function whereEqOuterQueryPrimaryKey<
         JoinMapUtil.fromJoinArray<FromClauseT["currentJoins"]>(
             fromClause.currentJoins
         )
-    ) as SrcT;
+    );
     const dst : DstT = dstDelegate(
-        /**
-         * @todo Investigate assignability
-         */
         JoinMapUtil.fromJoinArray(
-            JoinArrayUtil.extractWithNullSafeComparablePrimaryKey<FromClauseT["currentJoins"], SrcT["columns"]>(
-                fromClause.currentJoins,
+            JoinArrayUtil.extractWithNullSafeComparablePrimaryKey<FromClauseT["outerQueryJoins"], SrcT["columns"]>(
+                fromClause.outerQueryJoins,
                 src.columns
             )
-        ) as any
-    ) as DstT;
+        )
+    );
 
     const result : (
         {
