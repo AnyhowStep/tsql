@@ -164,8 +164,7 @@ export function whereEqOuterQueryPrimaryKey<
     eqPrimaryKeyOfTable : EqPrimaryKeyOfTable,
     /**
      * This construction effectively makes it impossible for
-     * `WhereEqOuterQueryPrimaryKeySrcDelegate<>`,
-     * `WhereEqOuterQueryPrimaryKeyDstDelegate<>`
+     * `WhereEqOuterQueryPrimaryKeySrcDelegate<>`
      * to return a union type.
      *
      * This is unfortunate but a necessary compromise for now.
@@ -174,21 +173,17 @@ export function whereEqOuterQueryPrimaryKey<
      *
      * https://github.com/microsoft/TypeScript/issues/32804#issuecomment-520201877
      */
-    ...args : (
+    srcDelegate : (
         SrcT extends FromClauseT["currentJoins"][number] ?
-        (
-            DstT extends JoinArrayUtil.ExtractWithNullSafeComparablePrimaryKey<FromClauseT["outerQueryJoins"], SrcT["columns"]> ?
-            [
-                WhereEqOuterQueryPrimaryKeySrcDelegate<FromClauseT, SrcT>,
-                WhereEqOuterQueryPrimaryKeyDstDelegate<
-                    FromClauseT,
-                    SrcT,
-                    DstT
-                >
-            ] :
-            never
-        ) :
+        WhereEqOuterQueryPrimaryKeySrcDelegate<FromClauseT, SrcT> :
         never
+    ),
+    dstDelegate : (
+        WhereEqOuterQueryPrimaryKeyDstDelegate<
+            FromClauseT,
+            SrcT,
+            DstT
+        >
     )
 ) : (
     {
@@ -196,21 +191,11 @@ export function whereEqOuterQueryPrimaryKey<
         whereClause : WhereClause,
     }
 ) {
-    const srcDelegate = args[0] as WhereEqOuterQueryPrimaryKeySrcDelegate<FromClauseT, SrcT>;
-    /**
-     * @todo Investigate assignability
-     */
-    const dstDelegate = args[1] as unknown as WhereEqOuterQueryPrimaryKeyDstDelegate<
-        FromClauseT,
-        SrcT,
-        DstT
-    >;
-
     const src : SrcT = srcDelegate(
         JoinMapUtil.fromJoinArray<FromClauseT["currentJoins"]>(
             fromClause.currentJoins
         )
-    );
+    ) as SrcT;
     const dst : DstT = dstDelegate(
         JoinMapUtil.fromJoinArray(
             JoinArrayUtil.extractWithNullSafeComparablePrimaryKey<FromClauseT["outerQueryJoins"], SrcT["columns"]>(
