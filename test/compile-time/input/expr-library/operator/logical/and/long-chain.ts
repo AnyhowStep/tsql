@@ -73,59 +73,260 @@ export const expr2 = tsql.and(
                                                                                 tsql.and(
                                                                                     tsql.and(
                                                                                         expr,
-                                                                                        true
+                                                                                        expr
                                                                                     ),
-                                                                                    true
+                                                                                    expr
                                                                                 ),
-                                                                                true
+                                                                                expr
                                                                             ),
-                                                                            true
+                                                                            expr
                                                                         ),
-                                                                        true
+                                                                        expr
                                                                     ),
-                                                                    true
+                                                                    expr
                                                                 ),
-                                                                true
+                                                                expr
                                                             ),
-                                                            true
+                                                            expr
                                                         ),
-                                                        true
+                                                        expr
                                                     ),
-                                                    true
+                                                    expr
                                                 ),
-                                                true
+                                                expr
                                             ),
-                                            true
+                                            expr
                                         ),
-                                        true
+                                        expr
                                     ),
-                                    true
+                                    expr
                                 ),
-                                true
+                                expr
                             ),
-                            true
+                            expr
                         ),
-                        true
+                        expr
                     ),
-                    true
+                    expr
                 ),
-                true
+                expr
             ),
-            true
+            expr
         ),
-        true
+        expr
     ),
-    true
+    expr
+);
+export const expr3 = tsql.and(
+    tsql.and(
+        tsql.and(
+            tsql.and(
+                tsql.and(
+                    tsql.and(
+                        tsql.and(
+                            tsql.and(
+                                tsql.and(
+                                    tsql.and(
+                                        tsql.and(
+                                            tsql.and(
+                                                tsql.and(
+                                                    tsql.and(
+                                                        tsql.and(
+                                                            tsql.and(
+                                                                tsql.and(
+                                                                    tsql.and(
+                                                                        tsql.and(
+                                                                            tsql.and(
+                                                                                tsql.and(
+                                                                                    tsql.and(
+                                                                                        expr2,
+                                                                                        expr2
+                                                                                    ),
+                                                                                    expr2
+                                                                                ),
+                                                                                expr2
+                                                                            ),
+                                                                            expr2
+                                                                        ),
+                                                                        expr2
+                                                                    ),
+                                                                    expr2
+                                                                ),
+                                                                expr2
+                                                            ),
+                                                            expr2
+                                                        ),
+                                                        expr2
+                                                    ),
+                                                    expr2
+                                                ),
+                                                expr2
+                                            ),
+                                            expr2
+                                        ),
+                                        expr2
+                                    ),
+                                    expr2
+                                ),
+                                expr2
+                            ),
+                            expr2
+                        ),
+                        expr2
+                    ),
+                    expr2
+                ),
+                expr2
+            ),
+            expr2
+        ),
+        expr2
+    ),
+    expr2
+);
+export const expr4 = tsql.and(
+    tsql.and(
+        tsql.and(
+            tsql.and(
+                tsql.and(
+                    tsql.and(
+                        tsql.and(
+                            tsql.and(
+                                tsql.and(
+                                    tsql.and(
+                                        tsql.and(
+                                            tsql.and(
+                                                tsql.and(
+                                                    tsql.and(
+                                                        tsql.and(
+                                                            tsql.and(
+                                                                tsql.and(
+                                                                    tsql.and(
+                                                                        tsql.and(
+                                                                            tsql.and(
+                                                                                tsql.and(
+                                                                                    tsql.and(
+                                                                                        expr3,
+                                                                                        expr3
+                                                                                    ),
+                                                                                    expr3
+                                                                                ),
+                                                                                expr3
+                                                                            ),
+                                                                            expr3
+                                                                        ),
+                                                                        expr3
+                                                                    ),
+                                                                    expr3
+                                                                ),
+                                                                expr3
+                                                            ),
+                                                            expr3
+                                                        ),
+                                                        expr3
+                                                    ),
+                                                    expr3
+                                                ),
+                                                expr3
+                                            ),
+                                            expr3
+                                        ),
+                                        expr3
+                                    ),
+                                    expr3
+                                ),
+                                expr3
+                            ),
+                            expr3
+                        ),
+                        expr3
+                    ),
+                    expr3
+                ),
+                expr3
+            ),
+            expr3
+        ),
+        expr3
+    ),
+    expr3
 );
 
+export const expr5 = tsql.and(
+    tsql.and(
+        tsql.and(
+            tsql.and(
+                tsql.and(
+                    tsql.and(
+                        tsql.and(
+                            tsql.and(
+                                tsql.and(
+                                    tsql.and(
+                                        tsql.and(
+                                            tsql.and(
+                                                tsql.and(
+                                                    tsql.and(
+                                                        tsql.and(
+                                                            tsql.and(
+                                                                tsql.and(
+                                                                    tsql.and(
+                                                                        tsql.and(
+                                                                            tsql.and(
+                                                                                tsql.and(
+                                                                                    tsql.and(
+                                                                                        expr4,
+                                                                                        expr4
+                                                                                    ),
+                                                                                    expr4
+                                                                                ),
+                                                                                expr4
+                                                                            ),
+                                                                            expr4
+                                                                        ),
+                                                                        expr4
+                                                                    ),
+                                                                    expr4
+                                                                ),
+                                                                expr4
+                                                            ),
+                                                            expr4
+                                                        ),
+                                                        expr4
+                                                    ),
+                                                    expr4
+                                                ),
+                                                expr4
+                                            ),
+                                            expr4
+                                        ),
+                                        expr4
+                                    ),
+                                    expr4
+                                ),
+                                expr4
+                            ),
+                            expr4
+                        ),
+                        expr4
+                    ),
+                    expr4
+                ),
+                expr4
+            ),
+            expr4
+        ),
+        expr4
+    ),
+    expr4
+);
+
+
+
 /**
- * @todo Find a way to increase the limit to 60 or more
- *
- * http://www.typescriptlang.org/play/#code/C4TwDgpgBAKuEFkCGYoF4oG8DaBjA9gDYCuAtgHYCChAlkgM4Bc9wATjeQOYC6jS5IAL4BuALAAoUJFjwAShABm6LFGzAkAI0IRqdJi3ZdecSMlQiJHYBFYKkuaAEkAqvQgATeQoA8XmFAgAD2tyd3oZSC80cggANxsAPiwJKFSoAH10gnI2JFikdn4HZFYAaxsoRigAClZFSqg-AEp0JNj8GncAGhS0uqUqzFV1LR1aBmY2Dh5GHAISCl0Jg2neTEDGcjING0FBKEEJQ-FcQgZwgFFAsFZvABEkdX8gkLDk8TSoUhRIVgbqlpoJL8EA9D5pYhuTz1KouKFeMGCJKYXqpb5gX4AQgaDye2AAROjfvjuGJwalIR4vNiqrikDACZToQoSWTjkEwPhWMAoFJoM5yDR8OQYPhHDkbG5cMAheRvM4khhqqiairPs4AsEIKFwiCoAB+GqlKrOQFtDruBoxeKsFUtF7at7K8mfI1VDgKCqOM1QdqdO0GqCOK1xGwSJpk8hIUgQehgezQEyIFDOGWEd4qjlcnl8oMS1hS4DeNVpDUOnURZNgFWK1Uuz5XXLS+WC4Wi8XWAsQaWy+UJLqVswJO1ko4SKMxuMJyteVM0dMo+uu1Iq3ON1j2YBJszFpepMtaitJhEl1IwTTaJb0Z6Ht4rLg15TO5epAD0r-Xm-lA6G2FKUA4XkLzGPRuAaPUkVPKAD1ecJj3qfUoOfF9PnPUYrxvWCoHKEB8CUDVEL3V1nGwNDL3Ga8wMYKDPmtMMiJaaiiLo20XQjCRM2ubNeXgPNO0LXcUJgx04LkRRHyVKDFxQz46iQdxhUIEBhmAq8APIKBP2bHC8Og1sRTFfNC17BUB3vTgEiousZJfbcUzTAA6DtJW7IsaJszTgg3aU7LAb8gPQijhyIlDgo8qAmig45PnY8Qx3ECdY3jBxoPhRQ5wXDiXSzbkeOkeCfFcKlFEwkSgyK5la2Q5cKr8TUsLhYqfA9Co-CSQiULqpiUJYkcss+HKc145yu2bYSK0ayqnygyavEEjyCoypyjNc+bwrPMTCrCjztuXXaIrZcdoyS6dZCQAB3K4bgy95PlzWrFDW4j6rK6qZOqDR8CICB+AAMkwJkvH1TZQ1YQRIpCtIAB8rtuIYiQqKoAVaKAQQHQGYXKtKlEghiJOsl8tKLEj8QxlluAHWbFH22KBq43LcxGwsHp8KDxreT7vv4GHrjhr4fkRmofTRqAyYaKmcf2qq2expamdW9z92xvsoJpw6EuOqcUuAegAEdMuy+meXcbszjqKBshYVHQgabxKFYVhSorD6vu0bnYe8eGBb+JGfU5t3yHR7HxZZg4EiabBuCSN7PgcuOCh9qB7cdgMgQJ5cPekjyEcT5G0-9n7A8V0Xg6qM7Lt5uWVulFm7YdhktlIHZWCjsEUNxmL1aywaLeFK2OT+DAdf1hz+HcN7h8IUfQhjtJJ+n8fi-nsfZ5s5eZ+LlD18XyH1t5PWp5Xze9-3kej93k-l231fL-W6-j9vmT74vx+9+f1+P6fg+F5vz+-9Pw+G8X7-w-u-EB4C16sGIBANuEC4FXygRAB+8D1pNFgSg8BbBoHIIwcuNBODcF3UQQQjB+DgGENSFgpB5CUFkIoR5KhJDP50Poa6RhNCP4sPoewwhXCUE8LgXwkBAi-5CNfiI2+Yi37EJoVIp+MjwpyKIdghi6C2EKLSHw9hsVXwACpdESF0VAAAAsAfACkoAADEOCWiQFAc6SBlJmPUrgOSbheQAAtoC0FIDQHM+AoAADYAAMUAuRfC5NQ3Rr4JBgNSAPNR2iyRAA
- *
- * http://www.typescriptlang.org/play/#code/LAKApgHgDg9gTgFwAQIJ5TEgqgOwJYw4AqMAkjgmHAM5gDGCBOAPFgHxIC8SAFKEgN79BIrEkiUcAE2pIAhjlRIA-LwDWALmwBKLhwBuMPFKRacYfVWEDdEsNNl8QIkT01I8OAGZUkpXZwGRlLWSLqqpKZI5pZwoNoA3KA4cgC2YNRQcnSYROhgALJyUFiMADZIAN6hAPQAVHWhSHVIRHAK1F7wqbKVEBoIcACuYAC+AD6VqBpecmW0oygwVf2DI6MAZFMzcwtNdTWhkLCIKPl+FFS0DMxNgmJ2Dq35RVChHNxOLoIAohCD2QQrHwhBI5EoNHojEIrDYABpnhhXmxQolQKBRsk0hksjlEWAAEpgLylPAVarOQShNAYJB-AEMPJI4q3SnfB7-ewyfFErxwu4CIhyABGZTAAEEyng5NQiOJOU9qINPABzd5cIRslw1Gr09o3LAIypIADaag8OFaIrFkulsoAulEFEpRmwTULRRKpTKiPaBdh5ZJuUzCcSVP6vt8XB6bd7ZYGubI1GBUDAvAHlP7RO7rV67b7TFnBDErFqRLoNP6S3Ey4IdQdUUkQNTzgBpVgJp4h3kfTVRgOPYP5Xnh2sCZOp9NiStj6IWUvlpsiY7wZA0zDgq5Q1n9jlB2Td4nqz7+in9kRwMByKSEMpKE0IXO2mUWun-fVA9vsBFKuCqtiOlokbntGLzFKSZQAHSbpCNxFiBeqAiGrysAij6es+1AorO-bYSBNj+piWpos2IBESk6SZNkmBYLQUi8hBVTolqK6nOuPLEqwdG8nKg6yKQtFgPRxK9sBLiCcJXhECaABEl5eDJfqzvUEk8Z23ICdxnGeD4cBIDxHCZrOakzv21YNsRTZHNAq5nLSMHXECe6Jn4qkiRqYkiJpQm8ju+GHiS5TQZcsFAvBoEYL57DhXhUaxTYTZEexyHFBqxomnQMBlEMqQ4JhGi-qq9oaM6SCjE2yXDmG3DpehsZ2gVyo4CqxUpVAZVNp4EKzHi3mScwal8RxXicM6HBnnWNQAPpTZlFDtPoch-goORFHAyZ6UB8lRDxARBMYoTbVoPEYqAXVUD1G5-FAcDMAAInIj68Qq3KVEMWnplofW8qMnBvR9GjfcSrpMVq70+WGWgPU9sng5JimJaAdBlDKsgAMLXbd0NyM9+6uR9HB4KkUBiukFD8ZjzDGnDI5Q49ONleNoQ08SACEUTY0QiOkexlOc+pvQs59+MQ14v3-aLgNuWLomhBj0BY-T0kyULinYSRoD1EjKPULIfNKwLVRC1EQNi39QtSx9INDfLN33UrsMfWroMYhZFE4tR+lyAA7pjjETQI7HS357KG55UY8MKMBZVeOBbELygaNWozaOF4yY2nOBDGUZT+qnWqy8pNTOU8pCY6O-aITcfzI0MUhgKh0TZ2U4yzPMYBuirTv2giptsDqplRjqptU66-o6lXTmO6Lim99L8VhEugisWu5wOVCwf+iX3JRzHCjjGXCvHn2UbSxBwUQo5IfnsH0WzgvJHkdiVF4gg1AAI7ktZJzIPXyNLZgOaSp5DSCiMwcUcA4C4xcpHaOYp96HxutoE09oODhwEJBTBS1NpIAgVA1EegT7fEpuFCWkkNAEh9n7IK68GDBzwdJLOqRhRUFQURXCjZTqkVACvJAQDkDHD0twN+n9IIKCkGJERUFxHoJQB-aR0hZEiCkWIxR4VlHyNURI9RUYVEyJ0SBPRaicL4X7EY7RJjTGGM0foyxVjTHmKUfY5xgcbHGJcR4-CjiDGeOcd4uxvjAlyNEbYoJYSrH+PCVEiJwxMAviGDgNQOAYDe0tC+SmAdolZJAqkYoGAcE8D2kgXe8CcD8gCdkqJxsvrB0yZU+pUYIBRDqQ01p3wlBaBKbHHxbTAnsN6Q0seFSBmmNdOUkZ0S1hgB6RMwQ2hxmzM8VMmZAz5krN6cs4ZvS1lbLaZsxZ3wdkHJcPsg5RyDmnNWQsgZlz6nnIabcqJ9zJmxPWeWa5QTHnOOeS4r5IEfleNeXYgF3w-lhA+cooF7zqRApIvURoIAWgAAEEAwBvEgAAYp4EwcgkDezkEoVFFo6CXhlJgBAAALTAUpUh4DXMsAAbAABiQPAJAqR4DTMRYcEAkTBB8tBW4ixDihVOO+IIiFgKRjhRBScqFUZZW3OeZsjWvLRXUnVbOAV55tUipCe43xEr1lgv7LKsx8r-mStBRalwiqbXKthVZHmmqNH6uFbol1XjPX2N1X471QSjW7N0TalxZqpVctDVanVIaFVRshdK2cdqE3Qq1Cqp1SNCDAKacI-1vrXFurFcEhR7qfX+t+WW3xebPkVqyVWypdbWkNpuTW45RatGFuOU21trri0du7Sclt-aImDqHX6gtbzR2CvHUGydere0TtnV66di6JldpXdktd676mbq3Y2kdu7Fk7oPau-dx7+1HrPa2i9l7z2npvVu6997F2Pqfeul9r7d3vo-cer937L2-r-fegDgHX3AZA9+sD4HAOQag+BmDsHYPwYQ8hpDyG0NttCehrDDy73Ybw0s3D+GiMeNQ8RsjpGyOUYwwaqjtG93Lro4xvZhGmOsYIwxtjnH6PzpnVxvjpaOP8aEzhwTwmxPbpY+JqTJHJPSbk+W0T8mlP1tk8ptTY6ePqa0xs1T2m9MCc0-pozzHFPGbMxu3T5mrPDtM9ZuztbLP2ac3O9tC7nPuesbZjz3nJmOZ8-5pdhmAvBe4653jIWIs2aC5FmLInouxYSxJrziWUtRIo6ljL6WMvZeoyWnL+WTPxYK8VuLYWSvlZGVlir1WqvVbq7lvt9WmvhNq81trrW2udYa25rrvWNNlb64Nw9fmhujYU0Vsbk2dPJam7NpLE25uLcKwNpbq3ZkdbW5tjbm2dvdfC7tg7gTtuHZO8dk7529sXau7emb127vLcw-dp7V6RvPbe5W2Jcb3vfYeTGn7-3olhoB8Dkjf2Qfg9MUDiH0P40Rph-Dw5X2Ecg5Ncjn7UO0fPdR5ju7GOcfnex-jg7eOidrcJ6TxbJOKeTfJ9TobVO6dddp4z5rDOWc1bB+z1nSOucc+TbztrbOBcJeZ8LmLQuxcBdF5LnzEuZdOel-LuzculfGcV6r-TKuNdqfV9rpTWu9fid14b4TBuTeceN+b1jZurdUct7bsjNuHfYft879DTu3dQdd57kDHufegc5-77Dfug8Hu96H3dIeI+TvD9H0dUe48XMD4ns9CeU97OT+nxdaes8vP57nrdOeC9LMz8XkZRey-hp65XyN1ea8+tL-XsJFea+x6b3Mnn7fQf5670Elvie28F-70Hwfifh-O9H0H8fJvJ-O+n6r2fJv59i8X6r5f7PV9i-XxTzf7Pt+Y93xT-fMPD+Y+P8D0-MPz-vcv8D6-d3b-vfv6dxvdPn9bdf-j9-c3H+7e-6N3-Jbf-JnT-AHYA+rQAwbcAkrSAwXTvN7WA6raAxLRAgrZAiLVA1LdAnzTA8XeApbXAgLbAqzQg9zYg-TUg6zcgnXUApA-AiA2gtA+gmAxgrA5g7LSgqTagpjTg-jbgyjXg63dg-zQQqjfgtDUQ-DcQuDVgozaQj9SQqDeQ-9WQ+TZQh9VQsTdQmPTQrjbQq9XQxjfQ1dQwx3YQng0w4PcwgQywhDYwlrWwwDewkvHvIw6wr3Rw1PdwiDTw9dZwuVVwtDfwxQ+xfQkI88eQ8IlNaDXwu5bw9bWIp5eIjPQIydd-TA8-SA9fW-cfXfCvWfBPNvD3V3A3XXCXUXKnQnKHMFJNOHGwD5FVIAA
+ * No more errors after 100+ calls.
+ * This is good.
  */
 tsql.and(
-    expr2,
-    true
+    expr5,
+    expr5
 );

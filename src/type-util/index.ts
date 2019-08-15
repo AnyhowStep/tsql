@@ -2,6 +2,7 @@ export * from "./assert-same-own-enumerable-keys";
 export * from "./is-comparable";
 export * from "./is-null-safe-comparable";
 export * from "./is-object-with-own-enumerable-keys";
+export * from "./is-strict-same-type";
 export * from "./is-union";
 export * from "./merge";
 export * from "./no-infer";

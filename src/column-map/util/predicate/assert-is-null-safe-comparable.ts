@@ -2,7 +2,6 @@ import {ColumnMap} from "../../column-map";
 import {IsNullSafeComparable, isNullSafeComparable} from "./is-null-safe-comparable";
 import {CompileError} from "../../../compile-error";
 import {TypeMapUtil} from "../../../type-map";
-import * as TypeUtil from "../../../type-util";
 import {tableAlias} from "../query";
 import {Writable} from "../../../type-util";
 

@@ -20,6 +20,9 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
 + Avoid single-letter names in documentation/readme; prefer `columns` over `c`
 + `fetchOneByArbitraryCondition`
 + Refactor `FromXxx` to `FromXxxArray` if it is meant to distribute?
++ Monitor this issue,
+  https://github.com/microsoft/TypeScript/issues/32824
+  + Remove all "unnecessary" parentheses from top-level type aliases
 
 <!--
 > I'm just thinking about how...

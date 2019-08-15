@@ -5,7 +5,7 @@ import {ColumnRefUtil} from "../../../column-ref";
 import {and} from "../../../expr-library";
 import {ColumnIdentifierRefUtil} from "../../../column-identifier-ref";
 import {ColumnIdentifierArrayUtil} from "../../../column-identifier";
-import {WhereClauseUtil} from "../..";
+import {allowedColumnRef} from "../query";
 
 /**
  * Returns the MySQL equivalent of `whereClause AND whereDelegate(columns)`
@@ -23,7 +23,7 @@ export function where<
 ) : (
     WhereClause
 ) {
-    const columns = WhereClauseUtil.allowedColumnRef(fromClause);
+    const columns = allowedColumnRef(fromClause);
     const operand = whereDelegate(ColumnRefUtil.tryFlatten(
         columns
     ));
