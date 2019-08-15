@@ -1,6 +1,6 @@
 import {IColumn} from "../../column";
 import {isObjectWithOwnEnumerableKeys} from "../../../type-util";
-import { AstUtil } from "../../../ast";
+import {AstUtil} from "../../../ast";
 
 export function isColumn (raw : unknown) : raw is IColumn {
     if (!isObjectWithOwnEnumerableKeys<IColumn>()(

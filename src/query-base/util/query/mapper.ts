@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {OneSelectItem, ZeroOrOneRow} from "../helper-type";
 import {TypeOf} from "./type-of";
-import { isOneRow } from "../predicate";
+import {isOneRow} from "../predicate";
 
 export type Mapper<
     QueryT extends OneSelectItem<unknown> & ZeroOrOneRow

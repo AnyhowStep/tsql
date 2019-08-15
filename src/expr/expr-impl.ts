@@ -4,7 +4,7 @@ import {Ast, parentheses} from "../ast";
 import {ColumnMap} from "../column-map";
 import {SortDirection} from "../sort-direction";
 import * as ExprUtil from "./util";
-import { IUsedRef } from "../used-ref";
+import {IUsedRef} from "../used-ref";
 
 /**
  * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966

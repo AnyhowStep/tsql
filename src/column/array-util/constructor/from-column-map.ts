@@ -1,6 +1,6 @@
 import * as ColumnUtil from "../../util";
 import {ColumnMap} from "../../../column-map";
-import { IColumn } from "../../column";
+import {IColumn} from "../../column";
 
 export type FromColumnMap<ColumnMapT extends ColumnMap> = (
     ColumnMapT extends ColumnMap ?

@@ -1,6 +1,9 @@
 import {IColumn} from "../../../column";
 import {removeDuplicates} from "../operation";
 
+/**
+ * + Assumes `ArrT` may be a union
+ */
 export type FromColumnArray<
     ArrT extends readonly IColumn[]
 > = (

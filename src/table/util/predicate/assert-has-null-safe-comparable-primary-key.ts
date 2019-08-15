@@ -5,7 +5,7 @@ import {CompileError} from "../../../compile-error";
 import {TypeMapUtil} from "../../../type-map";
 
 /**
- * Returns `true` if all primary key columns of `TableT`
+ * Returns `unknown` if all primary key columns of `TableT`
  * are **null-safe** comparable with columns in `ColumnMapT` that have the same name
  *
  * Assumes `TableT` is not a union

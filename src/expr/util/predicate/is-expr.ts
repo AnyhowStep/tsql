@@ -1,5 +1,5 @@
 import {IAnonymousExpr} from "../../expr";
-import {isObjectWithOwnEnumerableKeys } from "../../../type-util";
+import {isObjectWithOwnEnumerableKeys} from "../../../type-util";
 //import {UsedRefUtil} from "../../../used-ref";
 //import {AstUtil} from "../../../ast";
 

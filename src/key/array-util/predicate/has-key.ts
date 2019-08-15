@@ -1,7 +1,11 @@
 import {Key} from "../../key";
 import * as KeyUtil from "../../util";
 
-export type HasKey<
+/**
+ * + Assumes `ArrT` is not a union
+ * + Assumes `KeyT` may be a union
+ */
+export type HasKey_NonUnion<
     ArrT extends readonly Key[],
     KeyT extends Key
 >= (
@@ -12,6 +16,18 @@ export type HasKey<
         true
     ) :
     false
+);
+/**
+ * + Assumes `ArrT` may be a union
+ * + Assumes `KeyT` may be a union
+ */
+export type HasKey<
+    ArrT extends readonly Key[],
+    KeyT extends Key
+> = (
+    ArrT extends readonly Key[] ?
+    HasKey_NonUnion<ArrT, KeyT> :
+    never
 );
 export function hasKey<
     ArrT extends readonly Key[],

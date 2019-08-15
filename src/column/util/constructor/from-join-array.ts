@@ -1,6 +1,6 @@
 import {IJoin} from "../../../join";
 import {FromJoin, fromJoin} from "./from-join";
-import { IColumn } from "../../column";
+import {IColumn} from "../../column";
 
 export type FromJoinArray<JoinsT extends readonly IJoin[]> = (
     JoinsT extends readonly IJoin[] ?

@@ -1,5 +1,8 @@
 import {IColumn} from "../../../column";
 
+/**
+ * + Assumes `ColumnT` may be a union
+ */
 export type FromColumn<
     ColumnT extends IColumn
 > = (

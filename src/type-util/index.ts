@@ -1,3 +1,4 @@
+export * from "./assert-same-own-enumerable-keys";
 export * from "./is-comparable";
 export * from "./is-null-safe-comparable";
 export * from "./is-object-with-own-enumerable-keys";
@@ -6,8 +7,10 @@ export * from "./merge";
 export * from "./no-infer";
 export * from "./non-optional-partial";
 export * from "./omit-own-enumerable";
+export * from "./pick-multi";
 export * from "./pick-own-enumerable";
 export * from "./replace-property";
+export * from "./replace";
 export * from "./strict-union";
 export * from "./union-to-intersection";
 export * from "./writable";

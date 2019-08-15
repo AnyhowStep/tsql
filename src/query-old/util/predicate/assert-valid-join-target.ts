@@ -5,10 +5,10 @@ import {ColumnUtil} from "../../../column";
 import {ColumnIdentifierUtil} from "../../../column-identifier";
 import {CompileError} from "../../../compile-error";
 import {Writable} from "../../../type-util";
-import { AssertAliasedTableNotInJoins } from "./assert-aliased-table-not-in-joins";
-import { AssertAliasedTableNotInParentJoins } from "./assert-aliased-table-not-in-parent-joins";
-import { AssertNoUsedRef } from "./assert-no-used-ref";
-import { AssertNotLateral } from "./assert-not-lateral";
+import {AssertAliasedTableNotInJoins} from "./assert-aliased-table-not-in-joins";
+import {AssertAliasedTableNotInParentJoins} from "./assert-aliased-table-not-in-parent-joins";
+import {AssertNoUsedRef} from "./assert-no-used-ref";
+import {AssertNotLateral} from "./assert-not-lateral";
 
 /*
 This is commented out now but will be useful as part of implementing

@@ -1,10 +1,16 @@
+import {NonNullPrimitiveExpr} from "../primitive-expr";
+
 /**
- * Implements `tsql`'s notion of comparability
+ * Implements `tsql`'s notion of comparability.
+ *
+ * @todo Move this to `PrimitiveExprUtil`
  */
-export type IsComparable<T extends unknown, U extends unknown> = (
+export type IsComparable<T extends NonNullPrimitiveExpr, U extends NonNullPrimitiveExpr> = (
     [T] extends [U] ?
-    true :
-    [U] extends [T] ?
-    true :
+    (
+        [U] extends [T] ?
+        true :
+        false
+    ) :
     false
 );

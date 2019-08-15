@@ -5,6 +5,11 @@ import {Key} from "../../key";
  *
  * This works and I have no idea why.
  * Please don't kill me.
+ *
+ * -----
+ *
+ * If `A` is a super key of `B`, `A` is returned.
+ * Otherwise, `never` is returned.
  */
 export type ExtractSuperKey<
     A extends Key,
