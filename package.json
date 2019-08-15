@@ -44,6 +44,6 @@
     "typescript": "^3.5.1"
   },
   "dependencies": {
-    "type-mapping": "^1.17.0"
+    "type-mapping": "^1.19.3"
   }
 }
