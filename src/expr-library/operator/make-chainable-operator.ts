@@ -3,10 +3,7 @@ import {RawExpr, RawExprUtil, AnyRawExpr} from "../../raw-expr";
 import {Expr, ExprUtil, expr} from "../../expr";
 import {Ast, Parentheses, AstArray} from "../../ast";
 import {escapeValue} from "../../sqlstring";
-import {IExpr} from "../../expr/expr";
-import {IsStrictSameType} from "../../type-util";
-import {IUsedRef} from "../../used-ref";
-import {PrimitiveExpr} from "../../primitive-expr";
+import {TryReuseExistingType} from "../../type-util";
 
 function tryGetChainableOperatorAst (
     rawExpr : RawExpr<AnyRawExpr>,
@@ -53,69 +50,26 @@ function tryGetChainableOperatorAst (
     }
     return undefined;
 }
-export type ChainableOperatorReturn_ExprOnly<
-    TypeT,
-    RawExprT extends IExpr
-> =
-    IsStrictSameType<
-        RawExprT,
-        Expr<{
-            mapper : tm.SafeMapper<TypeT>,
-            usedRef : RawExprUtil.IntersectUsedRef<RawExprT>,
-        }>
-    > extends true ?
-    /**
-     * Re-use the existing type and sidestep the max-depth error.
-     */
-    RawExprT :
-    Expr<{
-        mapper : tm.SafeMapper<TypeT>,
-        usedRef : RawExprUtil.IntersectUsedRef<RawExprT>,
-    }>
-;
 export type ChainableOperatorReturn<
     TypeT,
     ArrT extends RawExpr<TypeT>[]
 > =
     /**
-     * We can technically use the commented out type.
-     * A super-simple type.
-     *
-     * However, we end up with this super-messy conditional type
-     * to squeeze more depth limit out of TS!
-     *
-     * The principle behind this... Optimization
-     * is that we try to re-use `ArrT[number]`
-     * as much as possible, instead of creating a new type.
-     *
-     * So, TL;DR,
-     * The commented out type is a simplification of the
-     * max-depth-optimized type.
+     * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-521819804
      */
     /*
     Expr<{
         mapper : tm.SafeMapper<TypeT>,
-        usedRef : IUsedRef<{}>,
-    }>
-    */
-    Exclude<ArrT[number], PrimitiveExpr> extends never ?
-    //All elements are `PrimitiveExpr` or `ArrT[number]` is `never`
-    //We can early-exit.
-    Expr<{
-        mapper : tm.SafeMapper<TypeT>,
-        usedRef : IUsedRef<{}>,
-    }> :
-    Exclude<ArrT[number], PrimitiveExpr|IExpr> extends never ?
-    //All elements are `IExpr`, it is possible to apply the optimization
-    ChainableOperatorReturn_ExprOnly<
-        TypeT,
-        Extract<ArrT[number], IExpr>
-    > :
-    //Some elements are not `IExpr`
-    Expr<{
-        mapper : tm.SafeMapper<TypeT>,
         usedRef : RawExprUtil.IntersectUsedRef<ArrT[number]>,
     }>
+    */
+    TryReuseExistingType<
+        ArrT[number],
+        Expr<{
+            mapper : tm.SafeMapper<TypeT>,
+            usedRef : RawExprUtil.IntersectUsedRef<ArrT[number]>,
+        }>
+    >
 ;
 export type ChainableOperator<TypeT extends null|boolean|number|bigint|string|Buffer> =
     <ArrT extends RawExpr<TypeT>[]> (

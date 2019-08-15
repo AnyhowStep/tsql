@@ -3,3 +3,29 @@ export type IsStrictSameType<A1 extends any, A2 extends any> =
     ? true
     : false
 ;
+
+export type ExtractStrictSameType<
+    A1,
+    A2
+> =
+    A1 extends any ?
+    (
+        IsStrictSameType<A1, A2> extends true ?
+        A1 :
+        never
+    ) :
+    never
+;
+/**
+ * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-521819804
+ */
+export type TryReuseExistingType<
+    A1,
+    A2
+> =
+    ExtractStrictSameType<A1, A2> extends never ?
+    //Could not reuse anything in `A1`
+    A2 :
+    //We can reuse something in `A1`
+    ExtractStrictSameType<A1, A2>
+;
