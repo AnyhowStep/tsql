@@ -18,6 +18,9 @@ export type ExtractStrictSameType<
 ;
 /**
  * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-521819804
+ *
+ * @todo Support both `A1` and `A2` being union types
+ * At the moment, it only works right if `A2` is not a union
  */
 export type TryReuseExistingType<
     A1,
