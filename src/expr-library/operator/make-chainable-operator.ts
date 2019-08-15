@@ -4,7 +4,7 @@ import {Expr, ExprUtil, expr} from "../../expr";
 import {Ast, Parentheses, AstArray} from "../../ast";
 import {escapeValue} from "../../sqlstring";
 import {IExpr} from "../../expr/expr";
-import {IsUnion, IsStrictSameType} from "../../type-util";
+import {IsStrictSameType} from "../../type-util";
 import {IUsedRef} from "../../used-ref";
 import {PrimitiveExpr} from "../../primitive-expr";
 
@@ -57,16 +57,16 @@ export type ChainableOperatorReturn_ExprOnly<
     TypeT,
     RawExprT extends IExpr
 > =
-    //All elements are IExpr
-    IsUnion<RawExprT> extends true ?
-    Expr<{
-        mapper : tm.SafeMapper<TypeT>,
-        usedRef : RawExprUtil.IntersectUsedRef<RawExprT>,
-    }> :
     IsStrictSameType<
-        RawExprUtil.TypeOf<RawExprT>,
-        TypeT
+        RawExprT,
+        Expr<{
+            mapper : tm.SafeMapper<TypeT>,
+            usedRef : RawExprUtil.IntersectUsedRef<RawExprT>,
+        }>
     > extends true ?
+    /**
+     * Re-use the existing type and sidestep the max-depth error.
+     */
     RawExprT :
     Expr<{
         mapper : tm.SafeMapper<TypeT>,
@@ -99,16 +99,19 @@ export type ChainableOperatorReturn<
     }>
     */
     Exclude<ArrT[number], PrimitiveExpr> extends never ?
+    //All elements are `PrimitiveExpr` or `ArrT[number]` is `never`
+    //We can early-exit.
     Expr<{
         mapper : tm.SafeMapper<TypeT>,
         usedRef : IUsedRef<{}>,
     }> :
     Exclude<ArrT[number], PrimitiveExpr|IExpr> extends never ?
+    //All elements are `IExpr`, it is possible to apply the optimization
     ChainableOperatorReturn_ExprOnly<
         TypeT,
         Extract<ArrT[number], IExpr>
     > :
-    //Some elements are not IExpr
+    //Some elements are not `IExpr`
     Expr<{
         mapper : tm.SafeMapper<TypeT>,
         usedRef : RawExprUtil.IntersectUsedRef<ArrT[number]>,
