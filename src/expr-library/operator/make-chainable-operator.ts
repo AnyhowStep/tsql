@@ -4,6 +4,8 @@ import {Expr, ExprUtil, expr} from "../../expr";
 import {Ast, Parentheses, AstArray} from "../../ast";
 import {escapeValue} from "../../sqlstring";
 import {TryReuseExistingType} from "../../type-util";
+import {IExpr} from "../../expr/expr";
+import {IExprSelectItem} from "../../expr-select-item";
 
 function tryGetChainableOperatorAst (
     rawExpr : RawExpr<AnyRawExpr>,
@@ -67,7 +69,10 @@ export type ChainableOperatorReturn<
         ArrT[number],
         Expr<{
             mapper : tm.SafeMapper<TypeT>,
-            usedRef : RawExprUtil.IntersectUsedRef<ArrT[number]>,
+            usedRef : TryReuseExistingType<
+                Extract<ArrT[number], IExpr|IExprSelectItem>["usedRef"],
+                RawExprUtil.IntersectUsedRef<ArrT[number]>
+            >,
         }>
     >
 ;
