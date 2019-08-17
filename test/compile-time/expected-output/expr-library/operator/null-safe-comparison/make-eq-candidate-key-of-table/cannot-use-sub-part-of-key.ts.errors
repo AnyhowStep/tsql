@@ -1,0 +1,34 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type '[Column<{ tableAlias: \"childTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>]' is not assignable to type '[Column<{ tableAlias: \"childTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>] & CompileError<[\"userId\"[], \"is invalid candidate key; expecting one of\", (\"userId\" | \"computerId\")[]]>'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Property '__compileError' is missing in type '[Column<{ tableAlias: \"childTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>]' but required in type 'CompileError<[\"userId\"[], \"is invalid candidate key; expecting one of\", (\"userId\" | \"computerId\")[]]>'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 10,
+    "start": 717
+  },
+  {
+    "messageText": {
+      "messageText": "Type '[Column<{ tableAlias: \"childTable\"; columnAlias: \"computerId\"; mapper: Mapper<unknown, string>; }>]' is not assignable to type '[Column<{ tableAlias: \"childTable\"; columnAlias: \"computerId\"; mapper: Mapper<unknown, string>; }>] & CompileError<[\"computerId\"[], \"is invalid candidate key; expecting one of\", (\"userId\" | \"computerId\")[]]>'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Property '__compileError' is missing in type '[Column<{ tableAlias: \"childTable\"; columnAlias: \"computerId\"; mapper: Mapper<unknown, string>; }>]' but required in type 'CompileError<[\"computerId\"[], \"is invalid candidate key; expecting one of\", (\"userId\" | \"computerId\")[]]>'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 14,
+    "start": 813
+  }
+]

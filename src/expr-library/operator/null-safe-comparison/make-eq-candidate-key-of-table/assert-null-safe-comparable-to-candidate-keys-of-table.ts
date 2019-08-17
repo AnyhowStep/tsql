@@ -47,20 +47,27 @@ export type AssertNullSafeComparableToCandidateKeysOfTable<
         [unknown]
     >[0] :
     CompileError<[
-        KeyUtil.ExcludeIfInKeyArray<
-            KeyUtil.FromColumnArray<SrcColumnsT>,
-            TableUtil.ExtractCandidateKeysWithColumnAliasInOneOfColumnArray<
-                DstT,
-                SrcColumnsT
-            >[]
-            //TableUtil.ExtractCandidateKeysWithColumnAliasInTable<DstT, SrcT>[]
+        KeyUtil.ToErrorMessageFriendlyType<
+            KeyUtil.ExcludeIfInKeyArray<
+                KeyUtil.FromColumnArray<SrcColumnsT>,
+                TableUtil.ExtractCandidateKeysWithColumnAliasInOneOfColumnArray<
+                    DstT,
+                    SrcColumnsT
+                >[]
+                //TableUtil.ExtractCandidateKeysWithColumnAliasInTable<DstT, SrcT>[]
+            >
         >,
         "is invalid candidate key; expecting one of",
-        TableUtil.ExtractCandidateKeysWithColumnAliasInOneOfColumnArray<
-            DstT,
-            SrcColumnsT
+        KeyUtil.ToErrorMessageFriendlyType<
+            /*TableUtil.ExtractCandidateKeysWithColumnAliasInOneOfColumnArray<
+                DstT,
+                SrcColumnsT
+            >*/
+            /**
+             * We use this type for better error message reporting.
+             */
+            TableUtil.ExtractCandidateKeysWithColumnAliasInTable_Input<DstT, SrcT>
         >
-        //TableUtil.ExtractCandidateKeysWithColumnAliasInTable<DstT, SrcT>
     ]>
 ;
 

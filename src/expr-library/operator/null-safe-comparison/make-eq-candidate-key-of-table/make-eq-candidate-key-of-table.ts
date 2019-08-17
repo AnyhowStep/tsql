@@ -78,6 +78,7 @@ export function makeEqCandidateKeyOfTable (
 
 /*
 import {table} from "../../../../table";
+declare const eqCandidateKeyOfTable : EqCandidateKeyOfTable;
 const myTable = table("myTable")
     .addColumns({
         outerTableIdA : tm.mysql.bigIntUnsigned(),

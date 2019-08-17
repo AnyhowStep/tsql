@@ -5,3 +5,4 @@ export * from "./extract-super-key";
 export * from "./remove-duplicates";
 export * from "./remove";
 export * from "./subtract";
+export * from "./to-error-message-friendly-type";
