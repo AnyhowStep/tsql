@@ -5,7 +5,7 @@ import {removeDuplicates} from "../operation";
  * + Assumes `ArrT` may be a union
  */
 export type FromColumnArray<
-    ArrT extends readonly IColumn[]
+    ArrT extends readonly Pick<IColumn, "columnAlias">[]
 > = (
     ArrT extends readonly IColumn[] ?
     readonly (ArrT[number]["columnAlias"])[] :

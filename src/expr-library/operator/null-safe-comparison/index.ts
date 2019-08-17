@@ -1,3 +1,5 @@
+export * from "./make-eq-candidate-key-of-table";
+
 export * from "./is-not-null";
 export * from "./is-null";
 export * from "./make-eq-candidate-key";
