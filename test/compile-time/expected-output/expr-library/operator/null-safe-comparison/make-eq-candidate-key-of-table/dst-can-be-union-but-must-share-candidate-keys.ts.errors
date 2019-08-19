@@ -1,0 +1,30 @@
+[
+  {
+    "messageText": "Type 'any' is not assignable to type 'never'.",
+    "code": 2322,
+    "category": 1,
+    "length": 8,
+    "start": 1064
+  },
+  {
+    "messageText": "Property 'userId' does not exist on type '{}'.",
+    "code": 2339,
+    "category": 1,
+    "length": 6,
+    "start": 1066
+  },
+  {
+    "messageText": "Type 'any' is not assignable to type 'never'.",
+    "code": 2322,
+    "category": 1,
+    "length": 12,
+    "start": 1074
+  },
+  {
+    "messageText": "Property 'computerId' does not exist on type '{}'.",
+    "code": 2339,
+    "category": 1,
+    "length": 10,
+    "start": 1076
+  }
+]
