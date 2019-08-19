@@ -2,7 +2,7 @@ import {IFromClause} from "../../from-clause";
 import {JoinArrayUtil} from "../../../join";
 import {AfterFromClause, Correlated} from "../helper-type";
 import {WhereClause, WhereClauseUtil} from "../../../where-clause";
-import {EqPrimaryKeyOfTable} from "../../../expr-library";
+import {EqCandidateKeyOfTable, EqCandidateKeyOfTableDelegate} from "../../../expr-library";
 import {JoinMapUtil} from "../../../join-map";
 import {TableUtil} from "../../../table";
 
@@ -12,7 +12,7 @@ import {TableUtil} from "../../../table";
  * This hack should only really be reserved for types that are more likely
  * to trigger max depth/max count errors.
  */
-export type WhereEqOuterQueryPrimaryKeyImpl<
+export type WhereEqOuterQueryCandidateKeyImpl<
     OuterQueryJoinsT extends AfterFromClause["outerQueryJoins"],
     CurrentJoinsT extends AfterFromClause["currentJoins"],
 > = (
@@ -21,10 +21,10 @@ export type WhereEqOuterQueryPrimaryKeyImpl<
         currentJoins : CurrentJoinsT,
     }>
 );
-export type WhereEqOuterQueryPrimaryKey<
+export type WhereEqOuterQueryCandidateKey<
     FromClauseT extends AfterFromClause
 > = (
-    WhereEqOuterQueryPrimaryKeyImpl<
+    WhereEqOuterQueryCandidateKeyImpl<
         FromClauseT["outerQueryJoins"],
         FromClauseT["currentJoins"]
     >
@@ -35,7 +35,7 @@ export type WhereEqOuterQueryPrimaryKey<
  * This hack should only really be reserved for types that are more likely
  * to trigger max depth/max count errors.
  */
-export type WhereEqOuterQueryPrimaryKeySrcDelegateImpl<
+export type WhereEqOuterQueryCandidateKeySrcDelegateImpl<
     SrcT extends CurrentJoinsT[number],
     CurrentJoinsT extends AfterFromClause["currentJoins"]
 > = (
@@ -46,11 +46,11 @@ export type WhereEqOuterQueryPrimaryKeySrcDelegateImpl<
         tables : JoinMapUtil.FromJoinArray<CurrentJoinsT>
     ) => SrcT
 );
-export type WhereEqOuterQueryPrimaryKeySrcDelegate<
+export type WhereEqOuterQueryCandidateKeySrcDelegate<
     FromClauseT extends Pick<AfterFromClause, "currentJoins">,
     SrcT extends FromClauseT["currentJoins"][number]
 > = (
-    WhereEqOuterQueryPrimaryKeySrcDelegateImpl<
+    WhereEqOuterQueryCandidateKeySrcDelegateImpl<
         SrcT,
         FromClauseT["currentJoins"]
     >
@@ -61,10 +61,8 @@ export type WhereEqOuterQueryPrimaryKeySrcDelegate<
  * This hack should only really be reserved for types that are more likely
  * to trigger max depth/max count errors.
  */
-export type WhereEqOuterQueryPrimaryKeyDstDelegateImpl<
-    SrcT extends CurrentJoinsT[number],
-    DstT extends JoinArrayUtil.ExtractWithNullSafeComparablePrimaryKey<OuterQueryJoinsT, SrcT["columns"]>,
-    CurrentJoinsT extends AfterFromClause["currentJoins"],
+export type WhereEqOuterQueryCandidateKeyDstDelegateImpl<
+    DstT extends JoinArrayUtil.ExtractWithCandidateKey<OuterQueryJoinsT>,
     OuterQueryJoinsT extends Correlated["outerQueryJoins"]
 > = (
     (
@@ -72,19 +70,16 @@ export type WhereEqOuterQueryPrimaryKeyDstDelegateImpl<
          * Is called `tables` but is really a map of joins
          */
         tables : JoinMapUtil.FromJoinArray<
-            JoinArrayUtil.ExtractWithNullSafeComparablePrimaryKey<OuterQueryJoinsT, SrcT["columns"]>[]
+            JoinArrayUtil.ExtractWithCandidateKey<OuterQueryJoinsT>[]
         >
     ) => DstT
 );
-export type WhereEqOuterQueryPrimaryKeyDstDelegate<
+export type WhereEqOuterQueryCandidateKeyDstDelegate<
     FromClauseT extends (Correlated & AfterFromClause),
-    SrcT extends FromClauseT["currentJoins"][number],
-    DstT extends JoinArrayUtil.ExtractWithNullSafeComparablePrimaryKey<FromClauseT["outerQueryJoins"], SrcT["columns"]>
+    DstT extends JoinArrayUtil.ExtractWithCandidateKey<FromClauseT["outerQueryJoins"]>
 > = (
-    WhereEqOuterQueryPrimaryKeyDstDelegateImpl<
-        SrcT,
+    WhereEqOuterQueryCandidateKeyDstDelegateImpl<
         DstT,
-        FromClauseT["currentJoins"],
         FromClauseT["outerQueryJoins"]
     >
 );
@@ -92,51 +87,42 @@ export type WhereEqOuterQueryPrimaryKeyDstDelegate<
  * Convenience function for,
  * ```ts
  *  myQuery
- *      .where(() => tsql.eqPrimaryKeyOfTable(
+ *      .where(() => tsql.eqCandidateKeyOfTable(
  *          currentQueryTable,
- *          outerQueryTable
+ *          outerQueryTable,
+ *          columns => [
+ *              columns.candidateKey0,
+ *              columns.candidateKey1,
+ *              //etc.
+ *          ]
  *      ));
  * ```
  * -----
  *
  * + The `currentQueryTable` does not need to have keys.
- * + The `outerQueryTable` must have a primary key.
- * + The `currentQueryTable` must have columns comparable to columns of `outerQueryTable`'s primary key.
+ * + The `outerQueryTable` must have at least one candidate key.
+ * + The `currentQueryTable` must have columns comparable to columns of `outerQueryTable`'s candidate key.
  */
-export function whereEqOuterQueryPrimaryKey<
+export function whereEqOuterQueryCandidateKey<
     FromClauseT extends (Correlated & AfterFromClause),
     SrcT extends FromClauseT["currentJoins"][number],
-    DstT extends JoinArrayUtil.ExtractWithNullSafeComparablePrimaryKey<FromClauseT["outerQueryJoins"], SrcT["columns"]>
+    DstT extends JoinArrayUtil.ExtractWithCandidateKey<FromClauseT["outerQueryJoins"]>,
+    SrcColumnsT extends TableUtil.ColumnArraysFromCandidateKeys<SrcT, DstT>
 > (
     fromClause : FromClauseT,
     whereClause : WhereClause|undefined,
-    eqPrimaryKeyOfTable : EqPrimaryKeyOfTable,
-    /**
-     * This construction effectively makes it impossible for
-     * `WhereEqOuterQueryPrimaryKeySrcDelegate<>`
-     * to return a union type.
-     *
-     * This is unfortunate but a necessary compromise for now.
-     *
-     * https://github.com/microsoft/TypeScript/issues/32804#issuecomment-520199818
-     *
-     * https://github.com/microsoft/TypeScript/issues/32804#issuecomment-520201877
-     */
-    srcDelegate : (
-        SrcT extends FromClauseT["currentJoins"][number] ?
-        WhereEqOuterQueryPrimaryKeySrcDelegate<FromClauseT, SrcT> :
-        never
-    ),
+    eqCandidateKeyOfTable : EqCandidateKeyOfTable,
+    srcDelegate : WhereEqOuterQueryCandidateKeySrcDelegate<FromClauseT, SrcT>,
     dstDelegate : (
-        WhereEqOuterQueryPrimaryKeyDstDelegate<
+        WhereEqOuterQueryCandidateKeyDstDelegate<
             FromClauseT,
-            SrcT,
             DstT
         >
-    )
+    ),
+    eqCandidateKeyofTableDelegate : EqCandidateKeyOfTableDelegate<SrcT, DstT, SrcColumnsT>
 ) : (
     {
-        fromClause : WhereEqOuterQueryPrimaryKey<FromClauseT>,
+        fromClause : WhereEqOuterQueryCandidateKey<FromClauseT>,
         whereClause : WhereClause,
     }
 ) {
@@ -144,19 +130,19 @@ export function whereEqOuterQueryPrimaryKey<
         JoinMapUtil.fromJoinArray<FromClauseT["currentJoins"]>(
             fromClause.currentJoins
         )
-    ) as SrcT;
+    );
     const dst : DstT = dstDelegate(
         JoinMapUtil.fromJoinArray(
-            JoinArrayUtil.extractWithNullSafeComparablePrimaryKey<FromClauseT["outerQueryJoins"], SrcT["columns"]>(
-                fromClause.outerQueryJoins,
-                src.columns
+            JoinArrayUtil.extractWithCandidateKey<FromClauseT["outerQueryJoins"]>(
+                fromClause.outerQueryJoins
             )
         )
     );
+    ;
 
     const result : (
         {
-            fromClause : WhereEqOuterQueryPrimaryKey<FromClauseT>,
+            fromClause : WhereEqOuterQueryCandidateKey<FromClauseT>,
             whereClause : WhereClause,
         }
     ) = {
@@ -167,12 +153,10 @@ export function whereEqOuterQueryPrimaryKey<
             /**
              * @todo Investigate assignability
              */
-            () => eqPrimaryKeyOfTable<SrcT, DstT>(
+            () => eqCandidateKeyOfTable<SrcT, DstT, SrcColumnsT>(
                 src,
-                dst as (
-                    & DstT
-                    & TableUtil.AssertHasNullSafeComparablePrimaryKey<DstT, SrcT["columns"]>
-                )
+                dst,
+                eqCandidateKeyofTableDelegate
             ) as any
         ),
     };
