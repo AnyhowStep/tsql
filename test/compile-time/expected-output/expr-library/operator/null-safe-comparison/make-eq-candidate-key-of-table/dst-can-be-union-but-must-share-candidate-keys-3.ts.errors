@@ -1,0 +1,86 @@
+[
+  {
+    "messageText": "Type 'any' is not assignable to type 'never'.",
+    "code": 2322,
+    "category": 1,
+    "length": 8,
+    "start": 1014
+  },
+  {
+    "messageText": "Property 'userId' does not exist on type '{}'.",
+    "code": 2339,
+    "category": 1,
+    "length": 6,
+    "start": 1016
+  },
+  {
+    "messageText": "Type 'any' is not assignable to type 'never'.",
+    "code": 2322,
+    "category": 1,
+    "length": 12,
+    "start": 1024
+  },
+  {
+    "messageText": "Property 'computerId' does not exist on type '{}'.",
+    "code": 2339,
+    "category": 1,
+    "length": 10,
+    "start": 1026
+  },
+  {
+    "messageText": "Type 'any' is not assignable to type 'never'.",
+    "code": 2322,
+    "category": 1,
+    "length": 8,
+    "start": 1158
+  },
+  {
+    "messageText": "Property 'userId' does not exist on type '{}'.",
+    "code": 2339,
+    "category": 1,
+    "length": 6,
+    "start": 1160
+  },
+  {
+    "messageText": "Type 'any' is not assignable to type 'never'.",
+    "code": 2322,
+    "category": 1,
+    "length": 11,
+    "start": 1168
+  },
+  {
+    "messageText": "Property 'createdAt' does not exist on type '{}'.",
+    "code": 2339,
+    "category": 1,
+    "length": 9,
+    "start": 1170
+  },
+  {
+    "messageText": "Type 'any' is not assignable to type 'never'.",
+    "code": 2322,
+    "category": 1,
+    "length": 11,
+    "start": 1301
+  },
+  {
+    "messageText": "Property 'createdAt' does not exist on type '{}'.",
+    "code": 2339,
+    "category": 1,
+    "length": 9,
+    "start": 1303
+  },
+  {
+    "messageText": "Type 'any' is not assignable to type 'never'.",
+    "code": 2322,
+    "category": 1,
+    "length": 12,
+    "start": 1314
+  },
+  {
+    "messageText": "Property 'computerId' does not exist on type '{}'.",
+    "code": 2339,
+    "category": 1,
+    "length": 10,
+    "start": 1316
+  }
+]

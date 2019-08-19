@@ -1,0 +1,9 @@
+[
+  {
+    "messageText": "Property 'outerTableIdB' does not exist on type '{ readonly outerTableIdA: Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }>; readonly outerColumn: Column<{ tableAlias: \"myTable\"; columnAlias: \"outerColumn\"; mapper: Mapper<...>; }>; }'. Did you mean 'outerTableIdA'?",
+    "code": 2551,
+    "category": 1,
+    "length": 13,
+    "start": 1147
+  }
+]

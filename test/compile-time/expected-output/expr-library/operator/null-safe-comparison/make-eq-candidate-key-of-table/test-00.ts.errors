@@ -1,0 +1,28 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type '[Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }>, Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdB\"; mapper: Mapper<unknown, boolean>; }>] | [...]' is not assignable to type '([Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }>, Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdB\"; mapper: Mapper<unknown, boolean>; }>] & CompileError<...>) | ([...] & CompileError<...>)'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Type '[Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }>, Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdB\"; mapper: Mapper<unknown, boolean>; }>]' is not assignable to type '([Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }>, Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdB\"; mapper: Mapper<unknown, boolean>; }>] & CompileError<...>) | ([...] & CompileError<...>)'.",
+        "category": 1,
+        "code": 2322,
+        "next": {
+          "messageText": "Type '[Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }>, Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdB\"; mapper: Mapper<unknown, boolean>; }>]' is not assignable to type '[Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }>, Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdB\"; mapper: Mapper<unknown, boolean>; }>] & CompileError<...>'.",
+          "category": 1,
+          "code": 2322,
+          "next": {
+            "messageText": "Property '__compileError' is missing in type '[Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }>, Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdB\"; mapper: Mapper<unknown, boolean>; }>]' but required in type 'CompileError<[\"outerTableIdA\"[], \"is invalid candidate key; expecting one of\", (\"outerTableIdA\" | \"outerTableIdB\")[] | (\"outerTableIdA\" | \"outerColumn\")[]]>'.",
+            "category": 1,
+            "code": 2741
+          }
+        }
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 108,
+    "start": 836
+  }
+]

@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type '[Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }> | Column<{ tableAlias: \"myTable3\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }>, Column<...> | Column<...>]' is not assignable to type '[Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }> | Column<{ tableAlias: \"myTable3\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }>, Column<...> | Column<...>] & CompileError<...>'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Property '__compileError' is missing in type '[Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }> | Column<{ tableAlias: \"myTable3\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }>, Column<...> | Column<...>]' but required in type 'CompileError<[{ outerTableIdA: bigint; outerTableIdB: string | boolean; }, \"is not null-safe comparable to\", { outerTableIdA: bigint; outerTableIdB: boolean; }]>'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 34,
+    "start": 1140
+  }
+]
