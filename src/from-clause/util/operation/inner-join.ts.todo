@@ -1,9 +1,11 @@
+import * as tm from "type-mapping";
 import {IFromClause} from "../../from-clause";
-import {IAliasedTable} from "../../../aliased-table";
 import {AfterFromClause} from "../helper-type";
-import {JoinUtil, JoinType, JoinArrayUtil} from "../../../join";
+import {IAliasedTable} from "../../../aliased-table";
 import {assertAfterFromClause, assertValidCurrentJoinBase, AssertValidCurrentJoinBase} from "../predicate";
-import {AssertNonUnion} from "../../../type-util";
+import {JoinArrayUtil, JoinUtil, JoinType} from "../../../join";
+import {IExpr} from "../../../expr";
+import {ColumnRefUtil} from "../../../column-ref";
 
 /**
  * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966
@@ -11,7 +13,7 @@ import {AssertNonUnion} from "../../../type-util";
  * This hack should only really be reserved for types that are more likely
  * to trigger max depth/max count errors.
  */
-export type CrossJoinImpl<
+export type InnerJoinImpl<
     AliasedTableT extends IAliasedTable,
     OuterQueryJoinsT extends AfterFromClause["outerQueryJoins"],
     CurrentJoinsT extends AfterFromClause["currentJoins"]
@@ -24,37 +26,61 @@ export type CrossJoinImpl<
         >,
     }>
 );
-export type CrossJoin<
+export type InnerJoin<
     FromClauseT extends AfterFromClause,
     AliasedTableT extends IAliasedTable
 > = (
-    CrossJoinImpl<
+    InnerJoinImpl<
         AliasedTableT,
         FromClauseT["outerQueryJoins"],
         FromClauseT["currentJoins"]
     >
 );
-export function crossJoin<
+
+export type OnDelegate<
+    FromClauseT extends AfterFromClause,
+    AliasedTableT extends IAliasedTable
+> = (
+    (
+        columns : ColumnRefUtil.FromJoinArray<
+            | FromClauseT["currentJoins"]
+            | JoinUtil.FromAliasedTable<AliasedTableT, false>[]
+        >
+    ) => IExpr<{
+        mapper : tm.SafeMapper<boolean>,
+        usedRef : WhereClauseUtil.AllowedUsedRef<FromClauseT>
+    }>
+);
+
+/**
+ * ```sql
+ *  INNER JOIN
+ *      myTable
+ *  ON
+ *      --condition
+ * ```
+ */
+export function innerJoin<
     FromClauseT extends AfterFromClause,
     AliasedTableT extends IAliasedTable
 > (
     fromClause : FromClauseT,
     aliasedTable : (
         & AliasedTableT
-        & AssertNonUnion<AliasedTableT>
         & AssertValidCurrentJoinBase<FromClauseT, AliasedTableT>
-    )
+    ),
+    onDelegate : OnDelegate<FromClauseT, AliasedTableT>
 ) : (
-    CrossJoin<FromClauseT, AliasedTableT>
+    InnerJoin<FromClauseT, AliasedTableT>
 ) {
     assertAfterFromClause(fromClause);
     assertValidCurrentJoinBase(fromClause, aliasedTable);
 
-    const result : CrossJoin<FromClauseT, AliasedTableT> = {
+    const result : InnerJoin<FromClauseT, AliasedTableT> = {
         outerQueryJoins : fromClause.outerQueryJoins,
         currentJoins : JoinArrayUtil.append(
             fromClause.currentJoins,
-            JoinUtil.fromAliasedTable(aliasedTable, false, JoinType.CROSS, [], [])
+            JoinUtil.fromAliasedTable(aliasedTable, false, JoinType.INNER, [], [])
         ),
     };
     return result;

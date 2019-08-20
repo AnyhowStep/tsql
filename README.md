@@ -11,6 +11,20 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
 
 -----
 
+### Notes
+
++ `typed-orm` supported `RIGHT JOIN`s. Support is removed in this rewrite.
+  + All `RIGHT JOIN`s can be rewritten as `LEFT JOIN`s
+  + Using `RIGHT JOIN` on a `LATERAL` derived table introduces problems,
+    https://dev.mysql.com/doc/refman/8.0/en/lateral-derived-tables.html
+    > If the table is in the left operand and contains a reference to the right operand, the join operation must be an INNER JOIN, CROSS JOIN, or RIGHT [OUTER] JOIN.
+
+    It is possible to use a column before it even exists in the query.
+    This complicates compile-time type checking code.
+  + Maybe keep support for `RIGHT JOIN` but not support `RIGHT JOIN LATERAL`?
+
+-----
+
 ### TODO
 
 + Important, create sub-packages for different MySQL versions/different DBMSs

@@ -7,6 +7,9 @@ export enum JoinType {
     FROM  = "FROM",
     INNER = "INNER",
     LEFT  = "LEFT",
+    /**
+     * @todo Remove this?
+     */
     RIGHT = "RIGHT",
     CROSS = "CROSS",
 };

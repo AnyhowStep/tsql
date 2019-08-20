@@ -7,7 +7,6 @@ export * from "./is-union";
 export * from "./merge";
 export * from "./no-infer";
 export * from "./non-optional-partial";
-export * from "./non-union";
 export * from "./omit-own-enumerable";
 export * from "./pick-multi";
 export * from "./pick-own-enumerable";
