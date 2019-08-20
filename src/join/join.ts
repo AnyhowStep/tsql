@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {ColumnMap} from "../column-map";
-import {IColumn} from "../column";
 import {Key} from "../key";
+import {OnClause} from "../on-clause";
 
 export enum JoinType {
     FROM  = "FROM",
@@ -117,29 +117,8 @@ export interface IJoin<DataT extends JoinData=JoinData> {
      */
     readonly joinType : JoinType,
     /**
-     * The "from" and "to" columns must have the same length
-     * ```sql
-     * FROM
-     *  `from`
-     * JOIN
-     *  `to`
-     * ON
-     *  `from`.`x` = `to`.`x`,
-     *  `from`.`y` = `to`.`y`
-     * ```
+     * + `FROM` and `CROSS JOIN` do not have `ON` clause.
+     * + All other `JOIN`s have `ON` clause.
      */
-    readonly from : readonly IColumn[],
-    /**
-     * The "from" and "to" columns must have the same length
-     * ```sql
-     * FROM
-     *  `from`
-     * JOIN
-     *  `to`
-     * ON
-     *  `from`.`x` = `to`.`x`,
-     *  `from`.`y` = `to`.`y`
-     * ```
-     */
-    readonly to : readonly IColumn[],
+    readonly onClause : OnClause|undefined;
 }

@@ -28,6 +28,7 @@
         "./src/candidate-key/**/*",
         "./src/super-key/**/*",
         "./src/primary-key/**/*",
+        "./src/on-clause/**/*",
         "./src/join/**/*",
         "./src/join-map/**/*",
         "./src/from-clause/**/*",

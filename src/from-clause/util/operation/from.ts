@@ -31,7 +31,7 @@ export function from<
     const result : From<FromClauseT, AliasedTableT> = {
         outerQueryJoins : fromClause.outerQueryJoins,
         currentJoins : [
-            JoinUtil.fromAliasedTable(aliasedTable, false, JoinType.FROM, [], [])
+            JoinUtil.fromAliasedTable(aliasedTable, false, JoinType.FROM, undefined)
         ],
     };
     return result;

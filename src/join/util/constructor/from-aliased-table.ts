@@ -1,7 +1,7 @@
 import {Join} from "../../join-impl";
 import {IAliasedTable, AliasedTableUtil} from "../../../aliased-table";
 import {JoinType} from "../../join";
-import {IColumn} from "../../../column";
+import {OnClause} from "../../../on-clause";
 
 export type FromAliasedTableImpl<
     AliasedTableT extends IAliasedTable,
@@ -60,8 +60,7 @@ export function fromAliasedTable<
     aliasedTable : AliasedTableT,
     nullable : NullableT,
     joinType : JoinType,
-    from : readonly IColumn[],
-    to : readonly IColumn[],
+    onClause : OnClause|undefined
 ) : (
     FromAliasedTable<AliasedTableT, NullableT>
 ) {
@@ -79,8 +78,7 @@ export function fromAliasedTable<
             mutableColumns : AliasedTableUtil.mutableColumns(aliasedTable),
         },
         joinType,
-        from,
-        to
+        onClause
     );
     return result as FromAliasedTable<AliasedTableT, NullableT>;
 }

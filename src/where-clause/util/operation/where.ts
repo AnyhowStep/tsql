@@ -3,9 +3,8 @@ import {WhereDelegate} from "../../where-delegate";
 import {WhereClause} from "../../where-clause";
 import {ColumnRefUtil} from "../../../column-ref";
 import {and} from "../../../expr-library";
-import {ColumnIdentifierRefUtil} from "../../../column-identifier-ref";
-import {ColumnIdentifierArrayUtil} from "../../../column-identifier";
 import {allowedColumnRef} from "../query";
+import {UsedRefUtil} from "../../../used-ref";
 
 /**
  * Returns the MySQL equivalent of `whereClause AND whereDelegate(columns)`
@@ -28,9 +27,9 @@ export function where<
         columns
     ));
 
-    ColumnIdentifierRefUtil.assertHasColumnIdentifiers(
-        columns,
-        ColumnIdentifierArrayUtil.fromColumnRef(operand.usedRef.columns)
+    UsedRefUtil.assertAllowed(
+        { columns, },
+        operand.usedRef
     );
 
     return (

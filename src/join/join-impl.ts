@@ -1,5 +1,5 @@
-import {IColumn} from "../column";
 import {JoinData, IJoin, JoinType} from "./join";
+import {OnClause} from "../on-clause";
 
 export class Join<DataT extends JoinData> implements IJoin<DataT> {
     readonly tableAlias : DataT["tableAlias"];
@@ -17,15 +17,12 @@ export class Join<DataT extends JoinData> implements IJoin<DataT> {
     readonly mutableColumns : DataT["mutableColumns"];
 
     readonly joinType : JoinType;
-    //The from and to columns must have the same length
-    readonly from : readonly IColumn[];
-    readonly to : readonly IColumn[];
+    readonly onClause : OnClause|undefined;
 
     constructor (
         data : DataT,
         joinType : JoinType,
-        from : readonly IColumn[],
-        to : readonly IColumn[],
+        onClause : OnClause|undefined
     ) {
         this.tableAlias = data.tableAlias;
         this.columns = data.columns;
@@ -42,7 +39,6 @@ export class Join<DataT extends JoinData> implements IJoin<DataT> {
         this.mutableColumns = data.mutableColumns;
 
         this.joinType = joinType;
-        this.from = from;
-        this.to = to;
+        this.onClause = onClause;
     }
 }

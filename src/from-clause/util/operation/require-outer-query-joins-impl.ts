@@ -51,10 +51,9 @@ export function requireOuterQueryJoinsImpl<
              */
             JoinType.FROM,
             /**
-             * The columns don't matter, either.
+             * The `ON` clause doesn't matter, either.
              */
-            [],
-            []
+            undefined
         )
     ));
     const outerQueryJoins = (

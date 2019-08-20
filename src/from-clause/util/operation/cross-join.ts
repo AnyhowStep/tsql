@@ -54,7 +54,7 @@ export function crossJoin<
         outerQueryJoins : fromClause.outerQueryJoins,
         currentJoins : JoinArrayUtil.append(
             fromClause.currentJoins,
-            JoinUtil.fromAliasedTable(aliasedTable, false, JoinType.CROSS, [], [])
+            JoinUtil.fromAliasedTable(aliasedTable, false, JoinType.CROSS, undefined)
         ),
     };
     return result;

@@ -6,6 +6,8 @@ import {assertAfterFromClause, assertValidCurrentJoinBase, AssertValidCurrentJoi
 import {JoinArrayUtil, JoinUtil, JoinType} from "../../../join";
 import {IExpr} from "../../../expr";
 import {ColumnRefUtil} from "../../../column-ref";
+import {AssertNonUnion} from "../../../type-util";
+import {UsedRefUtil} from "../../../used-ref";
 
 /**
  * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966
@@ -37,21 +39,6 @@ export type InnerJoin<
     >
 );
 
-export type OnDelegate<
-    FromClauseT extends AfterFromClause,
-    AliasedTableT extends IAliasedTable
-> = (
-    (
-        columns : ColumnRefUtil.FromJoinArray<
-            | FromClauseT["currentJoins"]
-            | JoinUtil.FromAliasedTable<AliasedTableT, false>[]
-        >
-    ) => IExpr<{
-        mapper : tm.SafeMapper<boolean>,
-        usedRef : WhereClauseUtil.AllowedUsedRef<FromClauseT>
-    }>
-);
-
 /**
  * ```sql
  *  INNER JOIN
@@ -67,6 +54,7 @@ export function innerJoin<
     fromClause : FromClauseT,
     aliasedTable : (
         & AliasedTableT
+        & AssertNonUnion<AliasedTableT>
         & AssertValidCurrentJoinBase<FromClauseT, AliasedTableT>
     ),
     onDelegate : OnDelegate<FromClauseT, AliasedTableT>
