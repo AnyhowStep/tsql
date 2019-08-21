@@ -1,13 +1,10 @@
-import * as tm from "type-mapping";
 import {IFromClause} from "../../from-clause";
 import {AfterFromClause} from "../helper-type";
 import {IAliasedTable} from "../../../aliased-table";
 import {assertAfterFromClause, assertValidCurrentJoinBase, AssertValidCurrentJoinBase} from "../predicate";
 import {JoinArrayUtil, JoinUtil, JoinType} from "../../../join";
-import {IExpr} from "../../../expr";
-import {ColumnRefUtil} from "../../../column-ref";
 import {AssertNonUnion} from "../../../type-util";
-import {UsedRefUtil} from "../../../used-ref";
+import {OnDelegate, OnUtil} from "../../../on-clause";
 
 /**
  * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966
@@ -19,7 +16,7 @@ export type InnerJoinImpl<
     AliasedTableT extends IAliasedTable,
     OuterQueryJoinsT extends AfterFromClause["outerQueryJoins"],
     CurrentJoinsT extends AfterFromClause["currentJoins"]
-> = (
+> =
     IFromClause<{
         outerQueryJoins : OuterQueryJoinsT,
         currentJoins : JoinArrayUtil.Append<
@@ -27,17 +24,17 @@ export type InnerJoinImpl<
             JoinUtil.FromAliasedTable<AliasedTableT, false>
         >,
     }>
-);
+;
 export type InnerJoin<
     FromClauseT extends AfterFromClause,
     AliasedTableT extends IAliasedTable
-> = (
+> =
     InnerJoinImpl<
         AliasedTableT,
         FromClauseT["outerQueryJoins"],
         FromClauseT["currentJoins"]
     >
-);
+;
 
 /**
  * ```sql
@@ -68,7 +65,19 @@ export function innerJoin<
         outerQueryJoins : fromClause.outerQueryJoins,
         currentJoins : JoinArrayUtil.append(
             fromClause.currentJoins,
-            JoinUtil.fromAliasedTable(aliasedTable, false, JoinType.INNER, [], [])
+            JoinUtil.fromAliasedTable(
+                aliasedTable,
+                false,
+                JoinType.INNER,
+                OnUtil.on<
+                    FromClauseT,
+                    AliasedTableT
+                >(
+                    fromClause,
+                    aliasedTable,
+                    onDelegate
+                )
+            )
         ),
     };
     return result;

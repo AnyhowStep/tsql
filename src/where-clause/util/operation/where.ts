@@ -28,7 +28,7 @@ export function where<
     ));
 
     UsedRefUtil.assertAllowed(
-        { columns, },
+        { columns },
         operand.usedRef
     );
 
