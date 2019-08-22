@@ -19,10 +19,8 @@ export const fromClause = tsql.FromClauseUtil.innerJoin(
         myTable
     ),
     otherTable,
-    columns => {
-        return tsql.eq(
-            columns.myTable.myTableId,
-            columns.otherTable.otherTableId
-        );
-    }
+    columns => tsql.eq(
+        columns.myTable.myTableId,
+        columns.otherTable.otherTableId
+    )
 );

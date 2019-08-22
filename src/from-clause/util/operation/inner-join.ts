@@ -5,6 +5,7 @@ import {assertAfterFromClause, assertValidCurrentJoinBase, AssertValidCurrentJoi
 import {JoinArrayUtil, JoinUtil, JoinType} from "../../../join";
 import {AssertNonUnion} from "../../../type-util";
 import {OnDelegate, OnClauseUtil} from "../../../on-clause";
+import {RawExpr} from "../../../raw-expr";
 
 /**
  * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966
@@ -46,7 +47,8 @@ export type InnerJoin<
  */
 export function innerJoin<
     FromClauseT extends AfterFromClause,
-    AliasedTableT extends IAliasedTable
+    AliasedTableT extends IAliasedTable,
+    RawOnClauseT extends RawExpr<boolean>
 > (
     fromClause : FromClauseT,
     aliasedTable : (
@@ -54,7 +56,7 @@ export function innerJoin<
         & AssertNonUnion<AliasedTableT>
         & AssertValidCurrentJoinBase<FromClauseT, AliasedTableT>
     ),
-    onDelegate : OnDelegate<FromClauseT, AliasedTableT>
+    onDelegate : OnDelegate<FromClauseT, AliasedTableT, RawOnClauseT>
 ) : (
     InnerJoin<FromClauseT, AliasedTableT>
 ) {
@@ -71,7 +73,8 @@ export function innerJoin<
                 JoinType.INNER,
                 OnClauseUtil.on<
                     FromClauseT,
-                    AliasedTableT
+                    AliasedTableT,
+                    RawOnClauseT
                 >(
                     fromClause,
                     aliasedTable,

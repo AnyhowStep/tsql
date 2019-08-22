@@ -1,27 +1,31 @@
 import {FromClauseUtil} from "../../../from-clause";
 import {allowedColumnRef} from "../query";
-import {UsedRefUtil} from "../../../used-ref";
 import {IAliasedTable} from "../../../aliased-table";
 import {OnDelegate} from "../../on-delegate";
 import {OnClause} from "../../on-clause";
+import {RawExpr} from "../../../raw-expr";
+import {assertValidUsedRef} from "../predicate";
+import {ExprUtil} from "../../../expr";
 
 export function on<
     FromClauseT extends FromClauseUtil.AfterFromClause,
-    AliasedTableT extends IAliasedTable
+    AliasedTableT extends IAliasedTable,
+    RawOnClauseT extends RawExpr<boolean>
 > (
     fromClause : FromClauseT,
     aliasedTable : AliasedTableT,
-    onDelegate : OnDelegate<FromClauseT, AliasedTableT>
+    onDelegate : OnDelegate<FromClauseT, AliasedTableT, RawOnClauseT>
 ) : (
     OnClause
 ) {
     const columns = allowedColumnRef(fromClause, aliasedTable);
-    const operand = onDelegate(columns);
+    const rawOnClause = onDelegate(columns);
 
-    UsedRefUtil.assertAllowed(
-        { columns },
-        operand.usedRef
+    assertValidUsedRef(
+        fromClause,
+        aliasedTable,
+        rawOnClause
     );
 
-    return operand;
+    return ExprUtil.fromRawExpr(rawOnClause);
 }

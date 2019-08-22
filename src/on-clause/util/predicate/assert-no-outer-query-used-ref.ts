@@ -1,7 +1,7 @@
 import {CompileError} from "../../../compile-error";
 import {UsedRefUtil} from "../../../used-ref";
-import {OnClause} from "../../on-clause";
 import {IFromClause, FromClauseUtil} from "../../../from-clause";
+import {RawExpr, RawExprUtil} from "../../../raw-expr";
 
 /**
  * Problem: `ON` clause cannot reference outer query tables
@@ -55,27 +55,27 @@ import {IFromClause, FromClauseUtil} from "../../../from-clause";
  */
 export type AssertNoOuterQueryUsedRef<
     FromClauseT extends Pick<IFromClause, "outerQueryJoins">,
-    OnClauseT extends OnClause
+    RawOnClauseT extends RawExpr<boolean>
 > = (
     Extract<
-        UsedRefUtil.TableAlias<OnClauseT["usedRef"]>,
+        UsedRefUtil.TableAlias<RawExprUtil.UsedRef<RawOnClauseT>>,
         FromClauseUtil.OuterQueryTableAlias<FromClauseT>
     > extends never ?
     unknown :
     CompileError<[
         "ON clause must not reference outer query tables",
         Extract<
-            UsedRefUtil.TableAlias<OnClauseT["usedRef"]>,
+            UsedRefUtil.TableAlias<RawExprUtil.UsedRef<RawOnClauseT>>,
             FromClauseUtil.OuterQueryTableAlias<FromClauseT>
         >
     ]>
 );
 export function assertNoOuterQueryUsedRef (
     fromClause : Pick<IFromClause, "outerQueryJoins">,
-    onClause : OnClause
+    rawOnClause : RawExpr<boolean>
 ) {
     const outerQueryTableAliases : string[] = FromClauseUtil.outerQueryTableAlias(fromClause);
-    const usedOuterQueryTableAliases = Object.keys(onClause.usedRef.columns)
+    const usedOuterQueryTableAliases = Object.keys(RawExprUtil.usedRef(rawOnClause).columns)
         .filter(usedTableAlias => {
             return outerQueryTableAliases.includes(usedTableAlias);
         });

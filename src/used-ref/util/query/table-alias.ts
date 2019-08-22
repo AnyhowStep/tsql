@@ -1,6 +1,6 @@
 import {IUsedRef} from "../../used-ref";
-import {TypeRef} from "./type-ref";
+import {TypeRefOf} from "./type-ref-of";
 
 export type TableAlias<UsedRefT extends IUsedRef> = (
-    Extract<keyof TypeRef<UsedRefT>, string>
+    Extract<keyof TypeRefOf<UsedRefT>, string>
 );

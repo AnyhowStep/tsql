@@ -1,6 +1,6 @@
 import {IUsedRef} from "../../used-ref";
 import {TypeRefUtil} from "../../../type-ref";
-import {TypeRef} from "../query";
+import {TypeRefOf} from "../query";
 import {ColumnIdentifierRefUtil, ColumnIdentifierRef} from "../../../column-identifier-ref";
 
 /**
@@ -11,7 +11,7 @@ export type Intersect<
 > = (
     IUsedRef<
         TypeRefUtil.Intersect<
-            TypeRef<U>
+            TypeRefOf<U>
         >
     >
 );
