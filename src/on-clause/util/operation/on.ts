@@ -6,7 +6,7 @@ import {OnDelegate} from "../../on-delegate";
 import {OnClause} from "../../on-clause";
 
 export function on<
-    FromClauseT extends Pick<FromClauseUtil.AfterFromClause, "currentJoins">,
+    FromClauseT extends FromClauseUtil.AfterFromClause,
     AliasedTableT extends IAliasedTable
 > (
     fromClause : FromClauseT,

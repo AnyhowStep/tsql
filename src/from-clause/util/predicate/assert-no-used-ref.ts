@@ -61,32 +61,32 @@ import {UsedRefUtil} from "../../../used-ref";
  *
  * -----
  *
- * Problem: Derived tables cannot reference parent query tables
+ * Problem: Derived tables cannot reference outer query tables
  * ```sql
  *  SELECT
  *      *
  *  FROM
- *      parentQueryTable
+ *      outerQueryTable
  *  WHERE
  *      --This is a subquery
  *      EXISTS (
  *          SELECT
  *              *
  *          FROM
- *              --This derived table references `parentQueryTable.parentQueryColumn`
+ *              --This derived table references `outerQueryTable.outerQueryColumn`
  *              (
  *                  SELECT
  *                      *
  *                  FROM
  *                      innerTable
  *                  WHERE
- *                      --This expression references `parentQueryTable.parentQueryColumn`
- *                      parentQueryTable.parentQueryColumn > innerTable.innerColumn
+ *                      --This expression references `outerQueryTable.outerQueryColumn`
+ *                      outerQueryTable.outerQueryColumn > innerTable.innerColumn
  *              ) AS derivedTable
  *      )
  * ```
  *
- * + In MySQL 8.0, you can reference parent query tables
+ * + In MySQL 8.0, you can reference outer query tables
  * + In MySQL 5.7, you cannot
  * + This is not a restriction of the SQL standard. Just a MySQL limitation.
  *
@@ -95,7 +95,7 @@ import {UsedRefUtil} from "../../../used-ref";
  *  SELECT
  *      *
  *  FROM
- *      parentQueryTable
+ *      outerQueryTable
  *  WHERE
  *      EXISTS (
  *          SELECT
@@ -103,8 +103,8 @@ import {UsedRefUtil} from "../../../used-ref";
  *          FROM
  *              innerTable
  *          WHERE
- *              --This expression references `parentQueryTable.parentQueryColumn`
- *              parentQueryTable.parentQueryColumn > innerTable.innerColumn
+ *              --This expression references `outerQueryTable.outerQueryColumn`
+ *              outerQueryTable.outerQueryColumn > innerTable.innerColumn
  *      )
  * ```
  *
@@ -117,7 +117,7 @@ export type AssertNoUsedRef<
     CompileError<[
         "Derived table",
         AliasedTableT["alias"],
-        "must not reference parent query tables or tables in the same FROM/JOIN clause",
+        "must not reference outer query tables or tables in the same FROM/JOIN clause",
         UsedRefUtil.TableAlias<AliasedTableT["usedRef"]>
     ]>
 );
@@ -125,6 +125,6 @@ export function assertNoUsedRef (
     aliasedTable : Pick<IAliasedTable, "alias"|"usedRef">
 ) {
     if (Object.keys(aliasedTable.usedRef.columns).length > 0) {
-        throw new Error(`Derived table ${aliasedTable.alias} must not reference parent query tables or tables in the same FROM/JOIN clause`);
+        throw new Error(`Derived table ${aliasedTable.alias} must not reference outer query tables or tables in the same FROM/JOIN clause`);
     }
 }

@@ -5,7 +5,7 @@ import {IExpr} from "../expr";
 import * as OnClauseUtil from "./util";
 
 export type OnDelegate<
-    FromClauseT extends Pick<FromClauseUtil.AfterFromClause, "currentJoins">,
+    FromClauseT extends FromClauseUtil.AfterFromClause,
     AliasedTableT extends IAliasedTable
 > =
     (

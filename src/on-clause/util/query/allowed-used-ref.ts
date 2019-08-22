@@ -7,16 +7,23 @@
 import {FromClauseUtil} from "../../../from-clause";
 import {IAliasedTable} from "../../../aliased-table";
 import {ColumnRefUtil} from "../../../column-ref";
-import {JoinUtil, JoinArrayUtil, JoinType} from "../../../join";
+import {JoinUtil, JoinArrayUtil, JoinType, IJoin} from "../../../join";
 import {UsedRefUtil} from "../../../used-ref";
 
 export type AllowedColumnRef<
-    FromClauseT extends Pick<FromClauseUtil.AfterFromClause, "currentJoins">,
+    FromClauseT extends FromClauseUtil.AfterFromClause,
     AliasedTableT extends IAliasedTable
 > =
     ColumnRefUtil.FromJoinArray<
         JoinArrayUtil.Append<
-            FromClauseT["currentJoins"],
+            JoinArrayUtil.Append<
+                FromClauseT["currentJoins"],
+                (
+                    FromClauseT["outerQueryJoins"] extends readonly IJoin[] ?
+                    FromClauseT["outerQueryJoins"][number] :
+                    never
+                )
+            >,
             /**
              * Inside the `ON` clause,
              * even if we are using a `LEFT` join,
@@ -40,17 +47,22 @@ export type AllowedColumnRef<
              */
             JoinUtil.FromAliasedTable<AliasedTableT, false>
         >
-        //| FromClauseT["currentJoins"]
-        //| JoinUtil.FromAliasedTable<AliasedTableT, false>[]
     >
 ;
 export type AllowedUsedRef<
-    FromClauseT extends Pick<FromClauseUtil.AfterFromClause, "currentJoins">,
+    FromClauseT extends FromClauseUtil.AfterFromClause,
     AliasedTableT extends IAliasedTable
 > =
     UsedRefUtil.FromJoinArray<
         JoinArrayUtil.Append<
-            FromClauseT["currentJoins"],
+            JoinArrayUtil.Append<
+                FromClauseT["currentJoins"],
+                (
+                    FromClauseT["outerQueryJoins"] extends readonly IJoin[] ?
+                    FromClauseT["outerQueryJoins"][number] :
+                    never
+                )
+            >,
             /**
              * Inside the `ON` clause,
              * even if we are using a `LEFT` join,
@@ -74,12 +86,10 @@ export type AllowedUsedRef<
              */
             JoinUtil.FromAliasedTable<AliasedTableT, false>
         >
-        //| FromClauseT["currentJoins"]
-        //| JoinUtil.FromAliasedTable<AliasedTableT, false>[]
     >
 ;
 export function allowedColumnRef<
-    FromClauseT extends Pick<FromClauseUtil.AfterFromClause, "currentJoins">,
+    FromClauseT extends FromClauseUtil.AfterFromClause,
     AliasedTableT extends IAliasedTable
 > (
     fromClause : FromClauseT,
@@ -89,10 +99,35 @@ export function allowedColumnRef<
 ) {
     return ColumnRefUtil.fromJoinArray(
         JoinArrayUtil.append<
-            FromClauseT["currentJoins"],
+            JoinArrayUtil.Append<
+                FromClauseT["currentJoins"],
+                (
+                    FromClauseT["outerQueryJoins"] extends readonly IJoin[] ?
+                    FromClauseT["outerQueryJoins"][number] :
+                    never
+                )
+            >,
             JoinUtil.FromAliasedTable<AliasedTableT, false>
         >(
-            fromClause.currentJoins,
+            JoinArrayUtil.append<
+                FromClauseT["currentJoins"],
+                (
+                    FromClauseT["outerQueryJoins"] extends readonly IJoin[] ?
+                    FromClauseT["outerQueryJoins"][number] :
+                    never
+                )
+            >(
+                fromClause.currentJoins,
+                ...(
+                    fromClause.outerQueryJoins == undefined ?
+                    [] :
+                    fromClause.outerQueryJoins
+                ) as (
+                    FromClauseT["outerQueryJoins"] extends readonly IJoin[] ?
+                    FromClauseT["outerQueryJoins"][number] :
+                    never
+                )[]
+            ),
             JoinUtil.fromAliasedTable(
                 aliasedTable,
                 false,
@@ -110,7 +145,7 @@ export function allowedColumnRef<
 }
 
 export function allowedUsedRef<
-    FromClauseT extends Pick<FromClauseUtil.AfterFromClause, "currentJoins">,
+    FromClauseT extends FromClauseUtil.AfterFromClause,
     AliasedTableT extends IAliasedTable
 > (
     fromClause : FromClauseT,
@@ -118,12 +153,40 @@ export function allowedUsedRef<
 ) : (
     AllowedUsedRef<FromClauseT, AliasedTableT>
 ) {
+    /**
+     * @todo Investigate assignability
+     */
     return UsedRefUtil.fromJoinArray(
         JoinArrayUtil.append<
-            FromClauseT["currentJoins"],
+            JoinArrayUtil.Append<
+                FromClauseT["currentJoins"],
+                (
+                    FromClauseT["outerQueryJoins"] extends readonly IJoin[] ?
+                    FromClauseT["outerQueryJoins"][number] :
+                    never
+                )
+            >,
             JoinUtil.FromAliasedTable<AliasedTableT, false>
         >(
-            fromClause.currentJoins,
+            JoinArrayUtil.append<
+                FromClauseT["currentJoins"],
+                (
+                    FromClauseT["outerQueryJoins"] extends readonly IJoin[] ?
+                    FromClauseT["outerQueryJoins"][number] :
+                    never
+                )
+            >(
+                fromClause.currentJoins,
+                ...(
+                    fromClause.outerQueryJoins == undefined ?
+                    [] :
+                    fromClause.outerQueryJoins
+                ) as (
+                    FromClauseT["outerQueryJoins"] extends readonly IJoin[] ?
+                    FromClauseT["outerQueryJoins"][number] :
+                    never
+                )[]
+            ),
             JoinUtil.fromAliasedTable(
                 aliasedTable,
                 false,
@@ -137,5 +200,5 @@ export function allowedUsedRef<
                 undefined
             )
         )
-    );
+    ) as AllowedUsedRef<FromClauseT, AliasedTableT>;
 }
