@@ -10,12 +10,12 @@ type ExtractedStrictSubTypeToCompileError<
 > = (
     T extends [string, string, any, any] ?
     CompileError<[
+        "expected to handle",
         T[0],
         T[1],
-        "expected to handle",
         T[3],
         "actually handles",
-        T[4]
+        T[2]
     ]> :
     never
 );

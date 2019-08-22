@@ -37,6 +37,7 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
 + Monitor this issue,
   https://github.com/microsoft/TypeScript/issues/32824
   + Remove all "unnecessary" parentheses from top-level type aliases
++ Read https://stackoverflow.com/questions/41312641/is-it-possible-to-have-a-datetime-mapper-for-every-underlaying-rdbms
 
 <!--
 > I'm just thinking about how...

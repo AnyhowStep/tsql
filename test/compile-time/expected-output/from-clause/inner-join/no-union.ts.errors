@@ -1,0 +1,28 @@
+[
+  {
+    "messageText": {
+      "messageText": "Argument of type 'Table<{ isLateral: false; alias: \"otherTable\"; columns: { readonly createdAt: Column<{ tableAlias: \"otherTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }>; readonly otherTableId: Column<{ tableAlias: \"otherTable\"; columnAlias: \"otherTableId\"; mapper: Mapper<...>; }>; }; ... 11 more ...; parents: re...' is not assignable to parameter of type '(Table<{ isLateral: false; alias: \"otherTable\"; columns: { readonly createdAt: Column<{ tableAlias: \"otherTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }>; readonly otherTableId: Column<{ ...; }>; }; ... 11 more ...; parents: readonly []; }> & CompileError<...> & { ...; }) | (Table<...> & ... 1 mo...'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Type 'Table<{ isLateral: false; alias: \"otherTable\"; columns: { readonly createdAt: Column<{ tableAlias: \"otherTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }>; readonly otherTableId: Column<{ tableAlias: \"otherTable\"; columnAlias: \"otherTableId\"; mapper: Mapper<...>; }>; }; ... 11 more ...; parents: re...' is not assignable to type '(Table<{ isLateral: false; alias: \"otherTable\"; columns: { readonly createdAt: Column<{ tableAlias: \"otherTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }>; readonly otherTableId: Column<{ ...; }>; }; ... 11 more ...; parents: readonly []; }> & CompileError<...> & { ...; }) | (Table<...> & ... 1 mo...'.",
+        "category": 1,
+        "code": 2322,
+        "next": {
+          "messageText": "Type 'import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/table/table-impl\").Table<{ isLateral: false; alias: \"otherTable\"; columns: { readonly createdAt: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/column/column-impl\").Column<{ tableAlias: \"otherTable\"; columnAlias: \"createdAt\"; mapper: import(\"/home/anyhowst...' is not assignable to type 'import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/table/table-impl\").Table<{ isLateral: false; alias: \"otherTable\"; columns: { readonly createdAt: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/column/column-impl\").Column<{ tableAlias: \"otherTable\"; columnAlias: \"createdAt\"; mapper: import(\"/home/anyhowst...'. Two different types with this name exist, but they are unrelated.",
+          "category": 1,
+          "code": 2719,
+          "next": {
+            "messageText": "Property '__compileError' is missing in type 'Table<{ isLateral: false; alias: \"otherTable\"; columns: { readonly createdAt: Column<{ tableAlias: \"otherTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }>; readonly otherTableId: Column<{ tableAlias: \"otherTable\"; columnAlias: \"otherTableId\"; mapper: Mapper<...>; }>; }; ... 11 more ...; parents: re...' but required in type 'CompileError<[\"Union type not allowed\"]>'.",
+            "category": 1,
+            "code": 2741
+          }
+        }
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 46,
+    "start": 719
+  }
+]

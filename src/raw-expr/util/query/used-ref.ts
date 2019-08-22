@@ -35,6 +35,8 @@ export type UsedRef<RawExprT extends AnyRawExpr> = (
         UsedRefUtil.FromColumn<RawExprT> :
         RawExprT extends IQueryBase ?
         UsedRefUtil.FromFromClause<RawExprT["fromClause"]> :
+        RawExprT extends PrimitiveExpr ?
+        IUsedRef<{}> :
         never
     )
     /*RawExprT extends PrimitiveExpr ?

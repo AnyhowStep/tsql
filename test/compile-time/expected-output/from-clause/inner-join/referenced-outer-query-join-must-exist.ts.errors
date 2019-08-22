@@ -1,0 +1,33 @@
+[
+  {
+    "messageText": {
+      "messageText": "Argument of type 'AliasedTable<{ isLateral: false; alias: \"otherTable\"; columns: { otherTableId: IColumn<{ tableAlias: \"otherTable\"; columnAlias: \"otherTableId\"; mapper: Mapper<unknown, bigint>; }>; }; usedRef: IUsedRef<{ outerQueryTable: { ...; }; }>; }>' is not assignable to parameter of type 'AliasedTable<{ isLateral: false; alias: \"otherTable\"; columns: { otherTableId: IColumn<{ tableAlias: \"otherTable\"; columnAlias: \"otherTableId\"; mapper: Mapper<unknown, bigint>; }>; }; usedRef: IUsedRef<{ outerQueryTable: { ...; }; }>; }> & { ...; }'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Type 'AliasedTable<{ isLateral: false; alias: \"otherTable\"; columns: { otherTableId: IColumn<{ tableAlias: \"otherTable\"; columnAlias: \"otherTableId\"; mapper: Mapper<unknown, bigint>; }>; }; usedRef: IUsedRef<{ outerQueryTable: { ...; }; }>; }>' is not assignable to type '{ usedRef: IUsedRef<{}>; }'.",
+        "category": 1,
+        "code": 2322,
+        "next": {
+          "messageText": "Types of property 'usedRef' are incompatible.",
+          "category": 1,
+          "code": 2326,
+          "next": {
+            "messageText": "Type 'IUsedRef<{ outerQueryTable: { outerQueryTableId: bigint; }; }>' is not assignable to type 'IUsedRef<{}>'.",
+            "category": 1,
+            "code": 2322,
+            "next": {
+              "messageText": "Property 'outerQueryTable' is missing in type '{}' but required in type '{ outerQueryTable: { outerQueryTableId: bigint; }; }'.",
+              "category": 1,
+              "code": 2741
+            }
+          }
+        }
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 10,
+    "start": 815
+  }
+]

@@ -1,0 +1,9 @@
+[
+  {
+    "messageText": "Argument of type 'IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>' is not assignable to parameter of type 'IFromClause<{ outerQueryJoins: readonly IJoin<JoinData>[] | undefined; currentJoins: readonly IJoin<JoinData>[]; }>'.",
+    "code": 2345,
+    "category": 1,
+    "length": 33,
+    "start": 284
+  }
+]
