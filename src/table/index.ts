@@ -1,3 +1,4 @@
+export * from "./table-impl";
 export * from "./table";
 
 import * as TableUtil from "./util";

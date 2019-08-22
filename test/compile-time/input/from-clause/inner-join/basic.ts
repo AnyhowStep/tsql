@@ -13,7 +13,7 @@ const otherTable = tsql.table("otherTable")
         createdAt : tm.mysql.dateTime(),
     });
 
-tsql.FromClauseUtil.innerJoin(
+export const fromClause = tsql.FromClauseUtil.innerJoin(
     tsql.FromClauseUtil.from(
         tsql.FromClauseUtil.newInstance(),
         myTable
@@ -24,21 +24,5 @@ tsql.FromClauseUtil.innerJoin(
             columns.myTable.myTableId,
             columns.otherTable.otherTableId
         );
-    }
-);
-tsql.FromClauseUtil.innerJoin(
-    tsql.FromClauseUtil.from(
-        tsql.FromClauseUtil.newInstance(),
-        myTable
-    ),
-    otherTable,
-    columns => {
-        //Temporary variable to avoid max depth error.
-        //Wtf?
-        const tmp = tsql.eq(
-            columns.myTable.myTableId,
-            columns.otherTable.otherTableId
-        );
-        return tmp;
     }
 );

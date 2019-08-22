@@ -1,7 +1,7 @@
 export * from "./on-clause";
 export * from "./on-delegate";
 
-import * as OnUtil from "./util";
+import * as OnClauseUtil from "./util";
 export {
-    OnUtil,
+    OnClauseUtil,
 };

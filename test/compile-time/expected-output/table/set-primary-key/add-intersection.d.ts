@@ -1,6 +1,6 @@
 import * as sd from "type-mapping";
 import * as o from "../../../../../dist";
-export declare const joined1: import("../../../../../dist/table/table-impl").Table<{
+export declare const joined1: o.Table<{
     isLateral: false;
     alias: "joined1";
     columns: {
