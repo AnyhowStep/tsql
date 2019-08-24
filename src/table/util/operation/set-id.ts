@@ -131,8 +131,6 @@ export type SetId<
         nullableColumns : TableT["nullableColumns"],
         explicitDefaultValueColumns : TableT["explicitDefaultValueColumns"],
         mutableColumns : TableT["mutableColumns"],
-
-        parents : TableT["parents"],
     }>
 );
 /**
@@ -199,8 +197,6 @@ export function setId<
         nullableColumns,
         explicitDefaultValueColumns,
         mutableColumns,
-
-        parents,
     } = table;
 
     const result : SetId<TableT, IdT> = new Table(
@@ -222,8 +218,6 @@ export function setId<
             nullableColumns,
             explicitDefaultValueColumns,
             mutableColumns,
-
-            parents,
         },
         table.unaliasedAst
     );

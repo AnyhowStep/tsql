@@ -69,8 +69,6 @@ export type RemoveMutable<
             TableT["mutableColumns"],
             KeyUtil.FromColumnArray<ColumnsT>
         >,
-
-        parents : TableT["parents"],
     }>
 );
 /**
@@ -131,8 +129,6 @@ export function removeMutable<
         nullableColumns,
         explicitDefaultValueColumns,
         //mutableColumns,
-
-        parents,
     } = table;
 
 
@@ -155,8 +151,6 @@ export function removeMutable<
             nullableColumns,
             explicitDefaultValueColumns,
             mutableColumns,
-
-            parents,
         },
         table.unaliasedAst
     );

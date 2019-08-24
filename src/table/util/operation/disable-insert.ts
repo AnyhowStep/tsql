@@ -25,8 +25,6 @@ export type DisableInsert<
         nullableColumns : TableT["nullableColumns"],
         explicitDefaultValueColumns : TableT["explicitDefaultValueColumns"],
         mutableColumns : TableT["mutableColumns"],
-
-        parents : TableT["parents"],
     }>
 );
 /**
@@ -61,8 +59,6 @@ export function disableInsert<
         nullableColumns,
         explicitDefaultValueColumns,
         mutableColumns,
-
-        parents,
     } = table;
 
 
@@ -85,8 +81,6 @@ export function disableInsert<
             nullableColumns,
             explicitDefaultValueColumns,
             mutableColumns,
-
-            parents,
         },
         table.unaliasedAst
     );

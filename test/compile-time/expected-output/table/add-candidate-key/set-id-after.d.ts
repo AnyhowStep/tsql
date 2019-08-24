@@ -41,5 +41,4 @@ export declare const ai: o.Table<{
     nullableColumns: never[];
     explicitDefaultValueColumns: readonly [];
     mutableColumns: readonly [];
-    parents: readonly [];
 }>;

@@ -25,8 +25,6 @@ export type RemoveAllMutable<
          * No columns are mutable
          */
         mutableColumns : readonly [],
-
-        parents : TableT["parents"],
     }>
 );
 /**
@@ -61,8 +59,6 @@ export function removeAllMutable<
         nullableColumns,
         explicitDefaultValueColumns,
         //mutableColumns,
-
-        parents,
     } = table;
 
 
@@ -85,8 +81,6 @@ export function removeAllMutable<
             nullableColumns,
             explicitDefaultValueColumns,
             mutableColumns,
-
-            parents,
         },
         table.unaliasedAst
     );

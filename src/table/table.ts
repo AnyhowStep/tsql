@@ -2,6 +2,13 @@ import {Key} from "../key";
 import {AliasedTableData, IAliasedTable} from "../aliased-table";
 import {Ast} from "../ast";
 
+/**
+ * Does not have `parents` property.
+ * https://www.postgresql.org/docs/9.1/ddl-inherit.html
+ *
+ * If a DBMS supports table inheritance, they should implement it
+ * on their DBMS-specific repositories.
+ */
 export interface TableData extends AliasedTableData {
     readonly autoIncrement : undefined|string;
     readonly id : undefined|string;
@@ -21,8 +28,6 @@ export interface TableData extends AliasedTableData {
     readonly nullableColumns : readonly string[];
     readonly explicitDefaultValueColumns : readonly string[];
     readonly mutableColumns : readonly string[];
-
-    readonly parents : readonly ITable[];
 }
 
 export interface ITable<DataT extends TableData=TableData> extends IAliasedTable<DataT> {
@@ -211,7 +216,7 @@ export interface ITable<DataT extends TableData=TableData> extends IAliasedTable
      * no default  | has default   | The parent column must a unique key we can use to retrieve after insertion, to get the value
      * no default  | no default    | The value must be provided, it'll set both to the value
     */
-    readonly parents : DataT["parents"];
+    //readonly parents : DataT["parents"];
 }
 
 export type InsertableTable = (

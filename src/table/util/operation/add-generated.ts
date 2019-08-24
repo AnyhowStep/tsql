@@ -86,8 +86,6 @@ export type AddGenerated<
             TableT["mutableColumns"],
             KeyUtil.FromColumnArray<ColumnsT>
         >,
-
-        parents : TableT["parents"],
     }>
 );
 /**
@@ -167,8 +165,6 @@ export function addGenerated<
         nullableColumns,
         //explicitDefaultValueColumns,
         //mutableColumns,
-
-        parents,
     } = table;
 
 
@@ -191,8 +187,6 @@ export function addGenerated<
             nullableColumns,
             explicitDefaultValueColumns,
             mutableColumns,
-
-            parents,
         },
         table.unaliasedAst
     );

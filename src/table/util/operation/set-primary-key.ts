@@ -104,8 +104,6 @@ export type SetPrimaryKey<
         nullableColumns : TableT["nullableColumns"],
         explicitDefaultValueColumns : TableT["explicitDefaultValueColumns"],
         mutableColumns : TableT["mutableColumns"],
-
-        parents : TableT["parents"],
     }>
 );
 /**
@@ -173,8 +171,6 @@ export function setPrimaryKey<
         nullableColumns,
         explicitDefaultValueColumns,
         mutableColumns,
-
-        parents,
     } = table;
 
     const result : SetPrimaryKey<TableT, KeyT> = new Table(
@@ -196,8 +192,6 @@ export function setPrimaryKey<
             nullableColumns,
             explicitDefaultValueColumns,
             mutableColumns,
-
-            parents,
         },
         table.unaliasedAst
     );

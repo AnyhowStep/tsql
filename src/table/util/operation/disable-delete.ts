@@ -25,8 +25,6 @@ export type DisableDelete<
         nullableColumns : TableT["nullableColumns"],
         explicitDefaultValueColumns : TableT["explicitDefaultValueColumns"],
         mutableColumns : TableT["mutableColumns"],
-
-        parents : TableT["parents"],
     }>
 );
 /**
@@ -61,8 +59,6 @@ export function disableDelete<
         nullableColumns,
         explicitDefaultValueColumns,
         mutableColumns,
-
-        parents,
     } = table;
 
 
@@ -85,8 +81,6 @@ export function disableDelete<
             nullableColumns,
             explicitDefaultValueColumns,
             mutableColumns,
-
-            parents,
         },
         table.unaliasedAst
     );

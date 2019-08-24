@@ -23,8 +23,6 @@ export type FromTableAlias<
         nullableColumns : readonly [],
         explicitDefaultValueColumns : readonly [],
         mutableColumns : readonly [],
-
-        parents : readonly [],
     }>
 );
 /**
@@ -58,8 +56,6 @@ export function fromTableAlias<
             nullableColumns : [],
             explicitDefaultValueColumns : [],
             mutableColumns : [],
-
-            parents : [],
         } as const,
         escapeIdentifier(tableAlias)
     );

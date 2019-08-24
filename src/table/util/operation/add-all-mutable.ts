@@ -47,8 +47,6 @@ export type AddAllMutable<
          * All non-generated columns are now mutable.
          */
         mutableColumns : readonly AddAllMutableColumnAlias<TableT>[],
-
-        parents : TableT["parents"],
     }>
 );
 
@@ -98,8 +96,6 @@ export function addAllMutable<
         nullableColumns,
         explicitDefaultValueColumns,
         //mutableColumns,
-
-        parents,
     } = table;
 
 
@@ -122,8 +118,6 @@ export function addAllMutable<
             nullableColumns,
             explicitDefaultValueColumns,
             mutableColumns,
-
-            parents,
         },
         table.unaliasedAst
     );

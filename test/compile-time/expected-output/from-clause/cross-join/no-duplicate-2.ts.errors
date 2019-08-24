@@ -5,7 +5,7 @@
       "category": 1,
       "code": 2345,
       "next": {
-        "messageText": "Property '__compileError' is missing in type 'Table<{ isLateral: false; alias: \"otherTable\"; columns: { readonly createdAt: Column<{ tableAlias: \"otherTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }>; readonly otherTableId: Column<{ tableAlias: \"otherTable\"; columnAlias: \"otherTableId\"; mapper: Mapper<...>; }>; }; ... 11 more ...; parents: re...' but required in type 'CompileError<[\"Table alias\", \"otherTable\", \"already used in outer query JOINs\", \"otherTable\"]>'.",
+        "messageText": "Property '__compileError' is missing in type 'Table<{ isLateral: false; alias: \"otherTable\"; columns: { readonly createdAt: Column<{ tableAlias: \"otherTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }>; readonly otherTableId: Column<{ tableAlias: \"otherTable\"; columnAlias: \"otherTableId\"; mapper: Mapper<...>; }>; }; ... 10 more ...; mutableColu...' but required in type 'CompileError<[\"Table alias\", \"otherTable\", \"already used in outer query JOINs\", \"otherTable\"]>'.",
         "category": 1,
         "code": 2741
       }

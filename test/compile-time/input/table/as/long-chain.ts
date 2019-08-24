@@ -43,6 +43,15 @@ export const aliasedTable = myTable
  * The type of `columns.column0.columnAlias` is all messed up.
  * No max-depth error, though.
  *
- * https://github.com/microsoft/TypeScript/issues/32707
+ * https://github.com/microsoft/TypeScript/issues/32707 might be related.
+ *
+ * 1. Mouse over `aliasedTable`, resolves correctly
+ * 2. Mouse over `aliasedTable2`, resolves correctly
+ * 3. Type some random text
+ * 4. Mouse over `aliasedTable2`, resolve to `any` <-- Wtf?
+ * 5. Mouse over `aliasedTable`, resolve to `any` <-- Wtf?
+ * 6. Delete the random text
+ * 7. Mouse over `aliasedTable2`, resolve to `any` <-- Wtf?
+ * 8. Mouse over `aliasedTable`, resolve to `any` <-- Wtf?
  */
 export const aliasedTable2 = aliasedTable.as("22");

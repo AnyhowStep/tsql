@@ -177,8 +177,6 @@ export type SetAutoIncrement<
             TableT["mutableColumns"],
             AutoIncrementT["columnAlias"]
         >;
-
-        parents : TableT["parents"];
     }>
 );
 /**
@@ -276,8 +274,6 @@ export function setAutoIncrement<
         nullableColumns,
         //explicitDefaultValueColumns,
         //mutableColumns,
-
-        parents,
     } = table;
 
     const result : SetAutoIncrement<TableT, AutoIncrementT> = new Table(
@@ -299,8 +295,6 @@ export function setAutoIncrement<
             nullableColumns,
             explicitDefaultValueColumns,
             mutableColumns,
-
-            parents,
         },
         table.unaliasedAst
     );

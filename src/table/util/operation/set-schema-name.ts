@@ -21,8 +21,6 @@ export type SetSchemaName<TableT extends ITable> = (
         nullableColumns : TableT["nullableColumns"],
         explicitDefaultValueColumns : TableT["explicitDefaultValueColumns"],
         mutableColumns : TableT["mutableColumns"],
-
-        parents : TableT["parents"],
     }>
 );
 /**
@@ -67,8 +65,6 @@ export function setSchemaName<TableT extends ITable> (
         nullableColumns,
         explicitDefaultValueColumns,
         mutableColumns,
-
-        parents,
     } = table;
 
     return new Table(
@@ -90,8 +86,6 @@ export function setSchemaName<TableT extends ITable> (
             nullableColumns,
             explicitDefaultValueColumns,
             mutableColumns,
-
-            parents,
         },
         [
             escapeIdentifier(newSchemaName),

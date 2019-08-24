@@ -42,8 +42,6 @@ export class Table<DataT extends TableData> implements ITable {
     readonly explicitDefaultValueColumns : DataT["explicitDefaultValueColumns"];
     readonly mutableColumns : DataT["mutableColumns"];
 
-    readonly parents : DataT["parents"];
-
     /**
      * You should never need to explicitly instantiate a `Table`.
      * Use `table()` instead.
@@ -74,8 +72,6 @@ export class Table<DataT extends TableData> implements ITable {
         this.nullableColumns = data.nullableColumns;
         this.explicitDefaultValueColumns = data.explicitDefaultValueColumns;
         this.mutableColumns = data.mutableColumns;
-
-        this.parents = data.parents;
     }
 
     /**

@@ -25,8 +25,6 @@ export type SetTableAlias<TableT extends ITable, NewTableAliasT extends string> 
         nullableColumns : TableT["nullableColumns"],
         explicitDefaultValueColumns : TableT["explicitDefaultValueColumns"],
         mutableColumns : TableT["mutableColumns"],
-
-        parents : TableT["parents"],
     }>
 );
 /**
@@ -70,8 +68,6 @@ export function setTableAlias<TableT extends ITable, NewTableAliasT extends stri
         nullableColumns,
         explicitDefaultValueColumns,
         mutableColumns,
-
-        parents,
     } = table;
 
     return new Table(
@@ -96,8 +92,6 @@ export function setTableAlias<TableT extends ITable, NewTableAliasT extends stri
             nullableColumns,
             explicitDefaultValueColumns,
             mutableColumns,
-
-            parents,
         },
         escapeIdentifier(newTableAlias)
     );

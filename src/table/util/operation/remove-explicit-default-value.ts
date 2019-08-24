@@ -74,8 +74,6 @@ export type RemoveExplicitDefaultValue<
             KeyUtil.FromColumnArray<ColumnsT>
         >,
         mutableColumns : TableT["mutableColumns"],
-
-        parents : TableT["parents"],
     }>
 );
 /**
@@ -134,8 +132,6 @@ export function removeExplicitDefaultValue<
         nullableColumns,
         //explicitDefaultValueColumns,
         mutableColumns,
-
-        parents,
     } = table;
 
 
@@ -158,8 +154,6 @@ export function removeExplicitDefaultValue<
             nullableColumns,
             explicitDefaultValueColumns,
             mutableColumns,
-
-            parents,
         },
         table.unaliasedAst
     );
