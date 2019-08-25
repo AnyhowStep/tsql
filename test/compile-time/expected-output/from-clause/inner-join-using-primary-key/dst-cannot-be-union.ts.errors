@@ -1,0 +1,28 @@
+[
+  {
+    "messageText": {
+      "messageText": "Argument of type 'Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly userId: Column<{ tableAlias: \"myTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>; readonly computerId: Column<{ tableAlias: \"myTable\"; columnAlias: \"computerId\"; mapper: Mapper<...>; }>; readonly createdAt: Column<...>; }; ... 10 more ...' is not assignable to parameter of type '(Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly userId: Column<{ tableAlias: \"myTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>; readonly computerId: Column<{ tableAlias: \"myTable\"; columnAlias: \"computerId\"; mapper: Mapper<...>; }>; readonly createdAt: Column<...>; }; ... 10 more...'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Type 'Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly userId: Column<{ tableAlias: \"myTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>; readonly computerId: Column<{ tableAlias: \"myTable\"; columnAlias: \"computerId\"; mapper: Mapper<...>; }>; readonly createdAt: Column<...>; }; ... 10 more ...' is not assignable to type '(Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly userId: Column<{ tableAlias: \"myTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>; readonly computerId: Column<{ tableAlias: \"myTable\"; columnAlias: \"computerId\"; mapper: Mapper<...>; }>; readonly createdAt: Column<...>; }; ... 10 more...'.",
+        "category": 1,
+        "code": 2322,
+        "next": {
+          "messageText": "Type 'import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/table/table-impl\").Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly userId: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/column/column-impl\").Column<{ tableAlias: \"myTable\"; columnAlias: \"userId\"; mapper: import(\"/home/anyhowstep/node-proj...' is not assignable to type 'import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/table/table-impl\").Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly userId: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/column/column-impl\").Column<{ tableAlias: \"myTable\"; columnAlias: \"userId\"; mapper: import(\"/home/anyhowstep/node-proj...'. Two different types with this name exist, but they are unrelated.",
+          "category": 1,
+          "code": 2719,
+          "next": {
+            "messageText": "Property '__compileError' is missing in type 'Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly userId: Column<{ tableAlias: \"myTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>; readonly computerId: Column<{ tableAlias: \"myTable\"; columnAlias: \"computerId\"; mapper: Mapper<...>; }>; readonly createdAt: Column<...>; }; ... 10 more ...' but required in type 'CompileError<[\"Union type not allowed\"]>'.",
+            "category": 1,
+            "code": 2741
+          }
+        }
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 40,
+    "start": 1188
+  }
+]
