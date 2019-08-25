@@ -3,6 +3,7 @@ import {TableWithPrimaryKey} from "../../table";
 import {HasNullSafeComparablePrimaryKey, hasNullSafeComparablePrimaryKey as hasNullSafeComparablePrimaryKey} from "./has-null-safe-comparable-primary-key";
 import {CompileError} from "../../../compile-error";
 import {TypeMapUtil} from "../../../type-map";
+import {Writable, DistributePick} from "../../../type-util";
 
 /**
  * Returns `unknown` if all primary key columns of `TableT`
@@ -17,12 +18,16 @@ export type AssertHasNullSafeComparablePrimaryKey<
     HasNullSafeComparablePrimaryKey<TableT, ColumnMapT> extends true ?
     unknown :
     CompileError<[
-        TypeMapUtil.FromColumnMap<
-            Pick<TableT["columns"], TableT["primaryKey"][number]>
+        Writable<
+            TypeMapUtil.FromColumnMap<
+                DistributePick<TableT["columns"], TableT["primaryKey"][number]>
+            >
         >,
         "is not null-safe comparable to",
-        TypeMapUtil.FromColumnMap<
-            Pick<ColumnMapT, TableT["primaryKey"][number]>
+        Writable<
+            TypeMapUtil.FromColumnMap<
+                Pick<ColumnMapT, Extract<TableT["primaryKey"][number], keyof ColumnMapT>>
+            >
         >
     ]>
 );

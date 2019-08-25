@@ -29,7 +29,7 @@ import {NullSafeComparison} from "./make-null-safe-comparison";
  * @param src - A table that does not need keys
  * @param dst - The table with a primary key to compare against
  */
-export type EqPrimaryKeyOfTable = (
+export type EqPrimaryKeyOfTable =
     <
         SrcT extends Pick<ITable, "columns">,
         DstT extends Pick<TableWithPrimaryKey, "columns"|"primaryKey">
@@ -45,7 +45,7 @@ export type EqPrimaryKeyOfTable = (
             usedRef : UsedRefUtil.FromColumnMap<SrcT["columns"]|DstT["columns"]>
         }>
     )
-);
+;
 export function makeEqPrimaryKeyOfTable (
     nullSafeEq : NullSafeComparison
 ) : (

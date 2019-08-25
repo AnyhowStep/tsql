@@ -2,6 +2,8 @@ export * from "./aliased-table";
 export * from "./ast";
 export * from "./candidate-key";
 export * from "./column";
+export * from "./column-map";
+export * from "./compile-error";
 export * from "./derived-table";
 export * from "./expr";
 export * from "./expr-library";

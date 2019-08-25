@@ -10,3 +10,16 @@ export type PickMulti<
     Pick<T, KeyT[number]> :
     never
 );
+
+/**
+ * + Assumes `T` may be union
+ * + Assumes `KeyT` may not be key of all elements of `T`
+ */
+export type DistributePick<
+    T,
+    KeyT extends PropertyKey
+> =
+    T extends any ?
+    Pick<T, Extract<KeyT, keyof T>> :
+    never
+;

@@ -79,11 +79,13 @@ export declare const aliasedTable: tsql.Table<{
  * https://github.com/microsoft/TypeScript/issues/32707 might be related.
  *
  * 1. Mouse over `aliasedTable`, resolves correctly
- * 2. Mouse over `aliasedTable2`, resolves to any
- * 3. Mouse over `aliasedTable`, resolve to any <-- Wtf?
- * 4. Compile
- * 5. `aliasedTable` emits correctly
- * 6. `aliasedTable2` emits correctly <-- Wtf?
+ * 2. Mouse over `aliasedTable2`, resolves correctly
+ * 3. Type some random text
+ * 4. Mouse over `aliasedTable2`, resolve to `any` <-- Wtf?
+ * 5. Mouse over `aliasedTable`, resolve to `any` <-- Wtf?
+ * 6. Delete the random text
+ * 7. Mouse over `aliasedTable2`, resolve to `any` <-- Wtf?
+ * 8. Mouse over `aliasedTable`, resolve to `any` <-- Wtf?
  */
 export declare const aliasedTable2: tsql.Table<{
     isLateral: false;
