@@ -86,12 +86,12 @@ export class ExprImpl<
         return ExprUtil.sort(this, sortDirection);
     }
 }
-export type Expr<DataT extends ExprData> = (
+export type Expr<DataT extends ExprData> =
     ExprImpl<
         DataT["mapper"],
         DataT["usedRef"]
     >
-);
+;
 export function expr<DataT extends ExprData> (
     data : DataT,
     ast : Ast

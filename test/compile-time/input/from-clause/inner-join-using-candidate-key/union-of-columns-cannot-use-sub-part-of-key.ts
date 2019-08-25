@@ -1,16 +1,13 @@
 import * as tm from "type-mapping/fluent";
-import * as tsql from "../../../../../../../dist";
+import * as tsql from "../../../../../dist";
 
 const myTable = tsql.table("myTable")
     .addColumns({
         userId : tm.mysql.bigIntSigned(),
         computerId : tm.mysql.varChar(),
         createdAt : tm.mysql.dateTime(),
-        accessedAt : tm.mysql.dateTime(),
     })
-    .addCandidateKey(c => [c.userId, c.computerId])
-    .addCandidateKey(c => [c.userId, c.createdAt])
-    .addCandidateKey(c => [c.createdAt, c.accessedAt]);
+    .addCandidateKey(c => [c.userId, c.computerId]);
 
 const childTable = tsql.table("childTable")
     .addColumns({
@@ -23,32 +20,47 @@ const childTable = tsql.table("childTable")
 const eqCandidateKeyOfTable = tsql.makeEqCandidateKeyOfTable(
     tsql.makeNullSafeComparison("<=>")
 );
-eqCandidateKeyOfTable(
-    childTable,
+tsql.FromClauseUtil.innerJoinUsingCandidateKey(
+    tsql.FromClauseUtil.from(
+        tsql.FromClauseUtil.newInstance(),
+        childTable
+    ),
+    eqCandidateKeyOfTable,
+    tables => tables.childTable,
     myTable,
     c => (
         Math.random() > 0.5 ?
         [c.userId, c.computerId] :
-        [c.userId, c.computerId, c.createdAt]
+        [c.userId]
     )
 );
 
-eqCandidateKeyOfTable(
-    childTable,
+tsql.FromClauseUtil.innerJoinUsingCandidateKey(
+    tsql.FromClauseUtil.from(
+        tsql.FromClauseUtil.newInstance(),
+        childTable
+    ),
+    eqCandidateKeyOfTable,
+    tables => tables.childTable,
     myTable,
     c => (
         Math.random() > 0.5 ?
-        [c.userId, c.computerId, c.createdAt] :
+        [c.computerId] :
         [c.userId, c.computerId]
     )
 );
 
-eqCandidateKeyOfTable(
-    childTable,
+tsql.FromClauseUtil.innerJoinUsingCandidateKey(
+    tsql.FromClauseUtil.from(
+        tsql.FromClauseUtil.newInstance(),
+        childTable
+    ),
+    eqCandidateKeyOfTable,
+    tables => tables.childTable,
     myTable,
     c => (
         Math.random() > 0.5 ?
-        [c.userId, c.computerId, c.createdAt] :
-        [c.userId, c.computerId, c.accessedAt]
+        [c.computerId] :
+        [c.userId]
     )
 );

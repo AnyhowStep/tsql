@@ -1,5 +1,5 @@
 import * as tm from "type-mapping/fluent";
-import * as tsql from "../../../../../../../dist";
+import * as tsql from "../../../../../dist";
 
 const myTable = tsql.table("myTable")
     .addColumns({
@@ -23,8 +23,13 @@ const childTable = tsql.table("childTable")
 const eqCandidateKeyOfTable = tsql.makeEqCandidateKeyOfTable(
     tsql.makeNullSafeComparison("<=>")
 );
-eqCandidateKeyOfTable(
-    childTable,
+tsql.FromClauseUtil.innerJoinUsingCandidateKey(
+    tsql.FromClauseUtil.from(
+        tsql.FromClauseUtil.newInstance(),
+        childTable
+    ),
+    eqCandidateKeyOfTable,
+    tables => tables.childTable,
     myTable,
     c => (
         Math.random() > 0.5 ?
@@ -33,8 +38,13 @@ eqCandidateKeyOfTable(
     )
 );
 
-eqCandidateKeyOfTable(
-    childTable,
+tsql.FromClauseUtil.innerJoinUsingCandidateKey(
+    tsql.FromClauseUtil.from(
+        tsql.FromClauseUtil.newInstance(),
+        childTable
+    ),
+    eqCandidateKeyOfTable,
+    tables => tables.childTable,
     myTable,
     c => (
         Math.random() > 0.5 ?
@@ -43,8 +53,13 @@ eqCandidateKeyOfTable(
     )
 );
 
-eqCandidateKeyOfTable(
-    childTable,
+tsql.FromClauseUtil.innerJoinUsingCandidateKey(
+    tsql.FromClauseUtil.from(
+        tsql.FromClauseUtil.newInstance(),
+        childTable
+    ),
+    eqCandidateKeyOfTable,
+    tables => tables.childTable,
     myTable,
     c => (
         Math.random() > 0.5 ?
