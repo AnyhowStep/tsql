@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type 'ExprImpl<Mapper<unknown, boolean>, IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; readonly outerQueryTable: { readonly outerQueryTableId: bigint; }; }>>' is not assignable to type 'ExprImpl<Mapper<unknown, boolean>, IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; readonly outerQueryTable: { readonly outerQueryTableId: bigint; }; }>> & CompileError<[\"ON clause must not reference outer query tables\", \"outerQueryTable\"]>'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Property '__compileError' is missing in type 'ExprImpl<Mapper<unknown, boolean>, IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; readonly outerQueryTable: { readonly outerQueryTableId: bigint; }; }>>' but required in type 'CompileError<[\"ON clause must not reference outer query tables\", \"outerQueryTable\"]>'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 102,
+    "start": 2457
+  }
+]

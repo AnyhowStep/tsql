@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type '[Column<{ tableAlias: \"childTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint | null>; }>, Column<{ tableAlias: \"childTable\"; columnAlias: \"computerId\"; mapper: Mapper<unknown, string | boolean | null>; }>]' is not assignable to type '[Column<{ tableAlias: \"childTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint | null>; }>, Column<{ tableAlias: \"childTable\"; columnAlias: \"computerId\"; mapper: Mapper<unknown, string | boolean | null>; }>] & CompileError<...>'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Property '__compileError' is missing in type '[Column<{ tableAlias: \"childTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint | null>; }>, Column<{ tableAlias: \"childTable\"; columnAlias: \"computerId\"; mapper: Mapper<unknown, string | boolean | null>; }>]' but required in type 'CompileError<[{ userId: bigint | null; computerId: string | boolean | null; }, \"is not null-safe comparable to\", { userId: bigint | null; computerId: string | null; }]>'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 24,
+    "start": 943
+  }
+]

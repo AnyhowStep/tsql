@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Argument of type 'import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/table/table-impl\").Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly userId: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/column/column-impl\").Column<{ tableAlias: \"myTable\"; columnAlias: \"userId\"; mapper: import(\"/home/anyhowstep/node-proj...' is not assignable to parameter of type 'import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/table/table-impl\").Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly userId: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/column/column-impl\").Column<{ tableAlias: \"myTable\"; columnAlias: \"userId\"; mapper: import(\"/home/anyhowstep/node-proj...'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Property '__compileError' is missing in type 'Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly userId: Column<{ tableAlias: \"myTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>; readonly computerId: Column<{ tableAlias: \"myTable\"; columnAlias: \"computerId\"; mapper: Mapper<...>; }>; readonly createdAt: Column<...>; }; ... 10 more ...' but required in type 'CompileError<[{ userId: bigint; computerId: string; }, \"is not null-safe comparable to\", { userId: bigint | null; }]>'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 7,
+    "start": 824
+  }
+]

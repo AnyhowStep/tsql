@@ -1,0 +1,105 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type '[Column<{ tableAlias: \"childTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>, Column<{ tableAlias: \"childTable\"; columnAlias: \"computerId\"; mapper: Mapper<unknown, string>; }>] | [...]' is not assignable to type '(readonly (Column<{ tableAlias: \"childTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }> | Column<{ tableAlias: \"childTable\"; columnAlias: \"computerId\"; mapper: Mapper<unknown, string>; }>)[] & { ...; }) | (readonly (Column<...> | Column<...>)[] & { ...; }) | (readonly (Column<...> | Column<...>)[] &...'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Type '[Column<{ tableAlias: \"childTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>, Column<{ tableAlias: \"childTable\"; columnAlias: \"computerId\"; mapper: Mapper<unknown, string>; }>, Column<...>]' is not assignable to type '(readonly (Column<{ tableAlias: \"childTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }> | Column<{ tableAlias: \"childTable\"; columnAlias: \"computerId\"; mapper: Mapper<unknown, string>; }>)[] & { ...; }) | (readonly (Column<...> | Column<...>)[] & { ...; }) | (readonly (Column<...> | Column<...>)[] &...'.",
+        "category": 1,
+        "code": 2322,
+        "next": {
+          "messageText": "Type '[Column<{ tableAlias: \"childTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>, Column<{ tableAlias: \"childTable\"; columnAlias: \"computerId\"; mapper: Mapper<unknown, string>; }>, Column<...>]' is not assignable to type 'readonly (Column<{ tableAlias: \"childTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }> | Column<{ tableAlias: \"childTable\"; columnAlias: \"accessedAt\"; mapper: Mapper<unknown, Date>; }>)[] & { ...; }'.",
+          "category": 1,
+          "code": 2322,
+          "next": {
+            "messageText": "Type '[Column<{ tableAlias: \"childTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>, Column<{ tableAlias: \"childTable\"; columnAlias: \"computerId\"; mapper: Mapper<unknown, string>; }>, Column<...>]' is not assignable to type 'readonly (Column<{ tableAlias: \"childTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }> | Column<{ tableAlias: \"childTable\"; columnAlias: \"accessedAt\"; mapper: Mapper<unknown, Date>; }>)[]'.",
+            "category": 1,
+            "code": 2322,
+            "next": {
+              "messageText": "Type 'Column<{ tableAlias: \"childTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }> | Column<{ tableAlias: \"childTable\"; columnAlias: \"computerId\"; mapper: Mapper<unknown, string>; }> | Column<...>' is not assignable to type 'Column<{ tableAlias: \"childTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }> | Column<{ tableAlias: \"childTable\"; columnAlias: \"accessedAt\"; mapper: Mapper<unknown, Date>; }>'.",
+              "category": 1,
+              "code": 2322,
+              "next": {
+                "messageText": "Type 'Column<{ tableAlias: \"childTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>' is not assignable to type 'Column<{ tableAlias: \"childTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }> | Column<{ tableAlias: \"childTable\"; columnAlias: \"accessedAt\"; mapper: Mapper<unknown, Date>; }>'.",
+                "category": 1,
+                "code": 2322,
+                "next": {
+                  "messageText": "Type 'Column<{ tableAlias: \"childTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>' is not assignable to type 'Column<{ tableAlias: \"childTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }>'.",
+                  "category": 1,
+                  "code": 2322,
+                  "next": {
+                    "messageText": "Types of property 'columnAlias' are incompatible.",
+                    "category": 1,
+                    "code": 2326,
+                    "next": {
+                      "messageText": "Type '\"userId\"' is not assignable to type '\"createdAt\"'.",
+                      "category": 1,
+                      "code": 2322
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 118,
+    "start": 1047
+  },
+  {
+    "messageText": {
+      "messageText": "Type '[Column<{ tableAlias: \"childTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>, Column<{ tableAlias: \"childTable\"; columnAlias: \"computerId\"; mapper: Mapper<unknown, string>; }>] | [...]' is not assignable to type '(readonly (Column<{ tableAlias: \"childTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }> | Column<{ tableAlias: \"childTable\"; columnAlias: \"computerId\"; mapper: Mapper<unknown, string>; }>)[] & { ...; }) | (readonly (Column<...> | Column<...>)[] & { ...; }) | (readonly (Column<...> | Column<...>)[] &...'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Type '[Column<{ tableAlias: \"childTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>, Column<{ tableAlias: \"childTable\"; columnAlias: \"computerId\"; mapper: Mapper<unknown, string>; }>, Column<...>]' is not assignable to type '(readonly (Column<{ tableAlias: \"childTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }> | Column<{ tableAlias: \"childTable\"; columnAlias: \"computerId\"; mapper: Mapper<unknown, string>; }>)[] & { ...; }) | (readonly (Column<...> | Column<...>)[] & { ...; }) | (readonly (Column<...> | Column<...>)[] &...'.",
+        "category": 1,
+        "code": 2322,
+        "next": {
+          "messageText": "Type '[Column<{ tableAlias: \"childTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>, Column<{ tableAlias: \"childTable\"; columnAlias: \"computerId\"; mapper: Mapper<unknown, string>; }>, Column<...>]' is not assignable to type 'readonly (Column<{ tableAlias: \"childTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }> | Column<{ tableAlias: \"childTable\"; columnAlias: \"accessedAt\"; mapper: Mapper<unknown, Date>; }>)[] & { ...; }'.",
+          "category": 1,
+          "code": 2322,
+          "next": {
+            "messageText": "Type '[Column<{ tableAlias: \"childTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>, Column<{ tableAlias: \"childTable\"; columnAlias: \"computerId\"; mapper: Mapper<unknown, string>; }>, Column<...>]' is not assignable to type 'readonly (Column<{ tableAlias: \"childTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }> | Column<{ tableAlias: \"childTable\"; columnAlias: \"accessedAt\"; mapper: Mapper<unknown, Date>; }>)[]'.",
+            "category": 1,
+            "code": 2322
+          }
+        }
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 118,
+    "start": 1398
+  },
+  {
+    "messageText": {
+      "messageText": "Type '[Column<{ tableAlias: \"childTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>, Column<{ tableAlias: \"childTable\"; columnAlias: \"computerId\"; mapper: Mapper<unknown, string>; }>, Column<...>] | [...]' is not assignable to type '(readonly (Column<{ tableAlias: \"childTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }> | Column<{ tableAlias: \"childTable\"; columnAlias: \"computerId\"; mapper: Mapper<unknown, string>; }>)[] & { ...; }) | (readonly (Column<...> | Column<...>)[] & { ...; }) | (readonly (Column<...> | Column<...>)[] &...'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Type '[Column<{ tableAlias: \"childTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>, Column<{ tableAlias: \"childTable\"; columnAlias: \"computerId\"; mapper: Mapper<unknown, string>; }>, Column<...>]' is not assignable to type '(readonly (Column<{ tableAlias: \"childTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }> | Column<{ tableAlias: \"childTable\"; columnAlias: \"computerId\"; mapper: Mapper<unknown, string>; }>)[] & { ...; }) | (readonly (Column<...> | Column<...>)[] & { ...; }) | (readonly (Column<...> | Column<...>)[] &...'.",
+        "category": 1,
+        "code": 2322,
+        "next": {
+          "messageText": "Type '[Column<{ tableAlias: \"childTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>, Column<{ tableAlias: \"childTable\"; columnAlias: \"computerId\"; mapper: Mapper<unknown, string>; }>, Column<...>]' is not assignable to type 'readonly (Column<{ tableAlias: \"childTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }> | Column<{ tableAlias: \"childTable\"; columnAlias: \"accessedAt\"; mapper: Mapper<unknown, Date>; }>)[] & { ...; }'.",
+          "category": 1,
+          "code": 2322,
+          "next": {
+            "messageText": "Type '[Column<{ tableAlias: \"childTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>, Column<{ tableAlias: \"childTable\"; columnAlias: \"computerId\"; mapper: Mapper<unknown, string>; }>, Column<...>]' is not assignable to type 'readonly (Column<{ tableAlias: \"childTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }> | Column<{ tableAlias: \"childTable\"; columnAlias: \"accessedAt\"; mapper: Mapper<unknown, Date>; }>)[]'.",
+            "category": 1,
+            "code": 2322
+          }
+        }
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 132,
+    "start": 1749
+  }
+]

@@ -13,7 +13,7 @@ import {RawExpr} from "../../../raw-expr";
  * This hack should only really be reserved for types that are more likely
  * to trigger max depth/max count errors.
  */
-export type InnerJoinImpl<
+export type LeftJoinImpl<
     AliasedTableT extends IAliasedTable,
     OuterQueryJoinsT extends AfterFromClause["outerQueryJoins"],
     CurrentJoinsT extends AfterFromClause["currentJoins"]
@@ -22,15 +22,15 @@ export type InnerJoinImpl<
         outerQueryJoins : OuterQueryJoinsT,
         currentJoins : JoinArrayUtil.Append<
             CurrentJoinsT,
-            JoinUtil.FromAliasedTable<AliasedTableT, false>
+            JoinUtil.FromAliasedTable<AliasedTableT, true>
         >,
     }>
 ;
-export type InnerJoin<
+export type LeftJoin<
     FromClauseT extends AfterFromClause,
     AliasedTableT extends IAliasedTable
 > =
-    InnerJoinImpl<
+    LeftJoinImpl<
         AliasedTableT,
         FromClauseT["outerQueryJoins"],
         FromClauseT["currentJoins"]
@@ -39,13 +39,13 @@ export type InnerJoin<
 
 /**
  * ```sql
- *  INNER JOIN
+ *  LEFT JOIN
  *      myTable
  *  ON
  *      --condition
  * ```
  */
-export function innerJoin<
+export function leftJoin<
     FromClauseT extends AfterFromClause,
     AliasedTableT extends IAliasedTable,
     RawOnClauseT extends RawExpr<boolean>
@@ -58,19 +58,19 @@ export function innerJoin<
     ),
     onDelegate : OnDelegate<FromClauseT, AliasedTableT, RawOnClauseT>
 ) : (
-    InnerJoin<FromClauseT, AliasedTableT>
+    LeftJoin<FromClauseT, AliasedTableT>
 ) {
     assertAfterFromClause(fromClause);
     assertValidCurrentJoinBase(fromClause, aliasedTable);
 
-    const result : InnerJoin<FromClauseT, AliasedTableT> = {
+    const result : LeftJoin<FromClauseT, AliasedTableT> = {
         outerQueryJoins : fromClause.outerQueryJoins,
         currentJoins : JoinArrayUtil.append(
             fromClause.currentJoins,
-            JoinUtil.fromAliasedTable<AliasedTableT, false>(
+            JoinUtil.fromAliasedTable<AliasedTableT, true>(
                 aliasedTable,
-                false,
-                JoinType.INNER,
+                true,
+                JoinType.LEFT,
                 OnClauseUtil.on<
                     FromClauseT,
                     AliasedTableT,
