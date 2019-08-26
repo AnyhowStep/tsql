@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type '[{ readonly myTable: { readonly createdAt: Column<{ tableAlias: \"myTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }>; readonly myTableId: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<...>; }>; }; readonly otherTable: { ...; }; }]' is not assignable to type '[{ readonly myTable: { readonly createdAt: Column<{ tableAlias: \"myTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }>; readonly myTableId: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<...>; }>; }; readonly otherTable: { ...; }; }] & { ...; } & CompileError<...>'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Property '__compileError' is missing in type '[{ readonly myTable: { readonly createdAt: Column<{ tableAlias: \"myTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }>; readonly myTableId: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<...>; }>; }; readonly otherTable: { ...; }; }]' but required in type 'CompileError<[\"Identifiers already used in SELECT clause; consider aliasing\", [\"myTable\", \"myTableId\"] | [\"otherTable\", \"otherTableId\"]]>'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 23,
+    "start": 831
+  }
+]

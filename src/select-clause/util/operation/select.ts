@@ -57,7 +57,7 @@ export function select<
 > (
     fromClause : FromClauseT,
     selectClause : SelectClauseT,
-    selectDelegate : SelectDelegate<FromClauseT, SelectsT>
+    selectDelegate : SelectDelegate<FromClauseT, SelectClauseT, SelectsT>
 ) : (
     Select<
         SelectClauseT,

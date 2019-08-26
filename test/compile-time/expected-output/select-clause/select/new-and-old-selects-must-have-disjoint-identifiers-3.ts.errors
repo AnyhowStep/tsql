@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type '[{ readonly createdAt: Column<{ tableAlias: \"myTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }>; readonly myTableId: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>; }]' is not assignable to type '[{ readonly createdAt: Column<{ tableAlias: \"myTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }>; readonly myTableId: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<...>; }>; }] & { ...; } & CompileError<...>'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Property '__compileError' is missing in type '[{ readonly createdAt: Column<{ tableAlias: \"myTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }>; readonly myTableId: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>; }]' but required in type 'CompileError<[\"Identifiers already used in SELECT clause; consider aliasing\", [\"myTable\", \"myTableId\"]]>'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 31,
+    "start": 831
+  }
+]

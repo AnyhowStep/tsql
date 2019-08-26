@@ -7,8 +7,11 @@ import {IExprSelectItem} from "../expr-select-item";
 import {UsedRefUtil} from "../used-ref";
 import {IColumn} from "../column";
 import {ColumnMap} from "../column-map";
+import {SelectClause} from "./select-clause";
+import {ColumnIdentifierUtil} from "../column-identifier";
+import {CompileError} from "../compile-error";
 
-type AssertValidIExprSelectItemUsedRef<
+type AssertValidExprSelectItemUsedRef<
     FromClauseT extends IFromClause,
     SelectsT extends readonly SelectItem[]
 > =
@@ -84,8 +87,33 @@ type AssertValidColumnRefUsedRef<
     }>
 ;
 
+type AssertDisjointColumnIdentifier<
+    SelectClauseT extends SelectClause|undefined,
+    SelectsT extends SelectClause
+> =
+    SelectClauseT extends SelectClause ?
+    (
+        Extract<
+            ColumnIdentifierUtil.FromSelectItem<SelectsT[number]>,
+            ColumnIdentifierUtil.FromSelectItem<SelectClauseT[number]>
+        > extends never ?
+        unknown :
+        CompileError<[
+            "Identifiers already used in SELECT clause; consider aliasing",
+            ColumnIdentifierUtil.ToErrorMessageFriendlyType<
+                Extract<
+                    ColumnIdentifierUtil.FromSelectItem<SelectsT[number]>,
+                    ColumnIdentifierUtil.FromSelectItem<SelectClauseT[number]>
+                >
+            >
+        ]>
+    ) :
+    unknown
+;
+
 export type SelectDelegate<
     FromClauseT extends IFromClause,
+    SelectClauseT extends SelectClause|undefined,
     SelectsT extends readonly SelectItem[]
 > =
     (
@@ -99,9 +127,11 @@ export type SelectDelegate<
          */
         & { "0" : unknown }
         & AssertNonUnion<SelectsT>
-        & AssertValidIExprSelectItemUsedRef<FromClauseT, SelectsT>
+        & AssertValidExprSelectItemUsedRef<FromClauseT, SelectsT>
         & AssertValidColumnUsedRef<FromClauseT, SelectsT>
         & AssertValidColumnMapUsedRef<FromClauseT, SelectsT>
         & AssertValidColumnRefUsedRef<FromClauseT, SelectsT>
+
+        & AssertDisjointColumnIdentifier<SelectClauseT, SelectsT>
     )
 ;
