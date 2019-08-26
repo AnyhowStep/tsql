@@ -6,6 +6,7 @@ import {ToUnknownIfAllPropertiesNever, ToNeverIfUnknown, AssertNonUnion} from ".
 import {IExprSelectItem} from "../expr-select-item";
 import {UsedRefUtil} from "../used-ref";
 import {IColumn} from "../column";
+import {ColumnMap} from "../column-map";
 
 type AssertValidIExprSelectItemUsedRef<
     FromClauseT extends IFromClause,
@@ -45,6 +46,25 @@ type AssertValidColumnUsedRef<
     }>
 ;
 
+type AssertValidColumnMapUsedRef<
+    FromClauseT extends IFromClause,
+    SelectsT extends readonly SelectItem[]
+> =
+    ToUnknownIfAllPropertiesNever<{
+        [index in Extract<keyof SelectsT, string>] : (
+            SelectsT[index] extends ColumnMap ?
+            ToNeverIfUnknown<
+                & AssertNonUnion<SelectsT[index]>
+                & UsedRefUtil.AssertAllowed<
+                SelectClauseUtil.AllowedUsedRef<FromClauseT>,
+                    UsedRefUtil.FromColumnMap<SelectsT[index]>
+                >
+            > :
+            never
+        )
+    }>
+;
+
 export type SelectDelegate<
     FromClauseT extends IFromClause,
     SelectsT extends readonly SelectItem[]
@@ -59,7 +79,9 @@ export type SelectDelegate<
          * Hack to force TS to infer a non-empty tuple type, rather than array type.
          */
         & { "0" : unknown }
+        & AssertNonUnion<SelectsT>
         & AssertValidIExprSelectItemUsedRef<FromClauseT, SelectsT>
         & AssertValidColumnUsedRef<FromClauseT, SelectsT>
+        & AssertValidColumnMapUsedRef<FromClauseT, SelectsT>
     )
 ;
