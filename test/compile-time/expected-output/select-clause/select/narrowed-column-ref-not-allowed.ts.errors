@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type '[{ otherTable: { readonly otherTableId: Column<{ tableAlias: \"otherTable\"; columnAlias: \"otherTableId\"; mapper: Mapper<unknown, bigint | null>; }>; }; myTable: { readonly createdAt: Column<{ tableAlias: \"myTable\"; columnAlias: \"createdAt\"; mapper: Mapper<...>; }>; readonly myTableId: Column<...>; }; }]' is not assignable to type '[{ otherTable: { readonly otherTableId: Column<{ tableAlias: \"otherTable\"; columnAlias: \"otherTableId\"; mapper: Mapper<unknown, bigint | null>; }>; }; myTable: { readonly createdAt: Column<{ tableAlias: \"myTable\"; columnAlias: \"createdAt\"; mapper: Mapper<...>; }>; readonly myTableId: Column<...>; }; }] & { ...; } & ...'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Property '__compileError' is missing in type '[{ otherTable: { readonly otherTableId: Column<{ tableAlias: \"otherTable\"; columnAlias: \"otherTableId\"; mapper: Mapper<unknown, bigint | null>; }>; }; myTable: { readonly createdAt: Column<{ tableAlias: \"myTable\"; columnAlias: \"createdAt\"; mapper: Mapper<...>; }>; readonly myTableId: Column<...>; }; }]' but required in type 'CompileError<[\"expected to handle\", \"myTable\", \"createdAt\", Date | null, \"actually handles\", Date]>'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 127,
+    "start": 811
+  }
+]

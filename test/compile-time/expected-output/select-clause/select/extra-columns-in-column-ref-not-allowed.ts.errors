@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type '[{ otherTable: { readonly otherTableId: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/column/column-impl\").Column<{ tableAlias: \"otherTable\"; columnAlias: \"otherTableId\"; mapper: import(\"/home/anyhowstep/node-projects/tsql/tsql/node_modules/type-mapping/dist/mapper/mapper\").Mapper<unknown, bigint | null>; }>...' is not assignable to type '[{ otherTable: { readonly otherTableId: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/column/column-impl\").Column<{ tableAlias: \"otherTable\"; columnAlias: \"otherTableId\"; mapper: import(\"/home/anyhowstep/node-projects/tsql/tsql/node_modules/type-mapping/dist/mapper/mapper\").Mapper<unknown, bigint | null>; }>...'. Two different types with this name exist, but they are unrelated.",
+      "category": 1,
+      "code": 2719,
+      "next": {
+        "messageText": "Property '__compileError' is missing in type '[{ otherTable: { readonly otherTableId: Column<{ tableAlias: \"otherTable\"; columnAlias: \"otherTableId\"; mapper: Mapper<unknown, bigint | null>; }>; }; myTable: { readonly createdAt: Column<{ tableAlias: \"myTable\"; columnAlias: \"createdAt\"; mapper: Mapper<...>; }>; readonly myTableId: Column<...>; readonly extra: Col...' but required in type 'CompileError<[\"The following columns cannot be referenced\", [\"myTable\", \"extra\"]]>'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2719,
+    "category": 1,
+    "length": 127,
+    "start": 839
+  }
+]

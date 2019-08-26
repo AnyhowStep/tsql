@@ -1,5 +1,5 @@
 import {IFromClause} from "../from-clause";
-import {ColumnRefUtil} from "../column-ref";
+import {ColumnRefUtil, ColumnRef} from "../column-ref";
 import * as SelectClauseUtil from "./util";
 import {SelectItem} from "../select-item";
 import {ToUnknownIfAllPropertiesNever, ToNeverIfUnknown, AssertNonUnion} from "../type-util";
@@ -65,6 +65,25 @@ type AssertValidColumnMapUsedRef<
     }>
 ;
 
+type AssertValidColumnRefUsedRef<
+    FromClauseT extends IFromClause,
+    SelectsT extends readonly SelectItem[]
+> =
+    ToUnknownIfAllPropertiesNever<{
+        [index in Extract<keyof SelectsT, string>] : (
+            SelectsT[index] extends ColumnRef ?
+            ToNeverIfUnknown<
+                & AssertNonUnion<SelectsT[index]>
+                & UsedRefUtil.AssertAllowed<
+                SelectClauseUtil.AllowedUsedRef<FromClauseT>,
+                    UsedRefUtil.FromColumnRef<SelectsT[index]>
+                >
+            > :
+            never
+        )
+    }>
+;
+
 export type SelectDelegate<
     FromClauseT extends IFromClause,
     SelectsT extends readonly SelectItem[]
@@ -83,5 +102,6 @@ export type SelectDelegate<
         & AssertValidIExprSelectItemUsedRef<FromClauseT, SelectsT>
         & AssertValidColumnUsedRef<FromClauseT, SelectsT>
         & AssertValidColumnMapUsedRef<FromClauseT, SelectsT>
+        & AssertValidColumnRefUsedRef<FromClauseT, SelectsT>
     )
 ;
