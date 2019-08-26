@@ -1,0 +1,23 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type '[Column<{ tableAlias: \"otherTable\"; columnAlias: \"otherTableId\"; mapper: Mapper<unknown, bigint>; }>, Column<{ tableAlias: \"otherTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }>]' is not assignable to type '([Column<{ tableAlias: \"otherTable\"; columnAlias: \"otherTableId\"; mapper: Mapper<unknown, bigint>; }>, Column<{ tableAlias: \"otherTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }>] & { ...; } & CompileError<...>) | ([...] & ... 1 more ... & CompileError<...>)'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Type '[Column<{ tableAlias: \"otherTable\"; columnAlias: \"otherTableId\"; mapper: Mapper<unknown, bigint>; }>, Column<{ tableAlias: \"otherTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }>]' is not assignable to type '[Column<{ tableAlias: \"otherTable\"; columnAlias: \"otherTableId\"; mapper: Mapper<unknown, bigint>; }>, Column<{ tableAlias: \"otherTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }>] & { ...; } & CompileError<...>'.",
+        "category": 1,
+        "code": 2322,
+        "next": {
+          "messageText": "Property '__compileError' is missing in type '[Column<{ tableAlias: \"otherTable\"; columnAlias: \"otherTableId\"; mapper: Mapper<unknown, bigint>; }>, Column<{ tableAlias: \"otherTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }>]' but required in type 'CompileError<[\"expected to handle\", \"otherTable\", \"createdAt\", Date | null, \"actually handles\", Date]>'.",
+          "category": 1,
+          "code": 2741
+        }
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 118,
+    "start": 829
+  }
+]

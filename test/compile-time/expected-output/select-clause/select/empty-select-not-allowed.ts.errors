@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type '[]' is not assignable to type '[] & { \"0\": unknown; }'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Property '\"0\"' is missing in type '[]' but required in type '{ \"0\": unknown; }'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 2,
+    "start": 603
+  }
+]

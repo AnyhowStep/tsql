@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type '[Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>, Column<{ tableAlias: \"otherTable\"; columnAlias: \"otherTableId\"; mapper: Mapper<unknown, bigint>; }>]' is not assignable to type '[Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>, Column<{ tableAlias: \"otherTable\"; columnAlias: \"otherTableId\"; mapper: Mapper<unknown, bigint>; }>] & { ...; } & CompileError<...>'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Property '__compileError' is missing in type '[Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>, Column<{ tableAlias: \"otherTable\"; columnAlias: \"otherTableId\"; mapper: Mapper<unknown, bigint>; }>]' but required in type 'CompileError<[\"expected to handle\", \"otherTable\", \"otherTableId\", bigint | null, \"actually handles\", bigint]>'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 129,
+    "start": 738
+  }
+]

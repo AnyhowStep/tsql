@@ -18,6 +18,7 @@ export * from "./primitive-expr";
 export * from "./query-base";
 export * from "./raw-expr";
 export * from "./row";
+export * from "./select-clause";
 export * from "./super-key";
 export * from "./table";
 export * from "./type-map";
@@ -25,7 +26,9 @@ export * from "./type-ref";
 export * from "./used-ref";
 export * from "./where-clause";
 
+import * as TupleUtil from "./tuple-util";
 import * as TypeUtil from "./type-util";
 export {
+    TupleUtil,
     TypeUtil,
 };
