@@ -1,0 +1,23 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type '[Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>, { readonly createdAt: Column<{ tableAlias: \"myTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }>; readonly myTableId: Column<...>; }, Column<...>, Column<...>, { ...; }]' is not assignable to type '([Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>, { readonly createdAt: Column<{ tableAlias: \"myTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }>; readonly myTableId: Column<...>; }, Column<...>, Column<...>, { ...; }] & { ...; } & CompileError<...>) |...'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Type '[Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>, { readonly createdAt: Column<{ tableAlias: \"myTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }>; readonly myTableId: Column<...>; }, Column<...>, Column<...>, { ...; }]' is not assignable to type '[Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>, { readonly createdAt: Column<{ tableAlias: \"myTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }>; readonly myTableId: Column<...>; }, Column<...>, Column<...>, { ...; }] & { ...; } & CompileError<...>'.",
+        "category": 1,
+        "code": 2322,
+        "next": {
+          "messageText": "Property '__compileError' is missing in type '[Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>, { readonly createdAt: Column<{ tableAlias: \"myTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }>; readonly myTableId: Column<...>; }, Column<...>, Column<...>, { ...; }]' but required in type 'CompileError<[\"Duplicate identifiers in SELECT clause not allowed; consider aliasing\", [\"otherTable\", \"otherTableId\"]]>'.",
+          "category": 1,
+          "code": 2741
+        }
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 171,
+    "start": 608
+  }
+]

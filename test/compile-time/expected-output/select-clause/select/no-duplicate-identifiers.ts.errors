@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type '[AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"__aliased\"; alias: \"eq\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; }>, AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"__aliased\"; alias: \"eq\"; usedRef: IUsedRef<...>; }>]' is not assignable to type '[AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"__aliased\"; alias: \"eq\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; }>, AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"__aliased\"; alias: \"eq\"; usedRef: IUsedRef<...>; }>] & { ...; } & CompileError<...>'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Property '__compileError' is missing in type '[AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"__aliased\"; alias: \"eq\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; }>, AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"__aliased\"; alias: \"eq\"; usedRef: IUsedRef<...>; }>]' but required in type 'CompileError<[\"Duplicate identifiers in SELECT clause not allowed; consider aliasing\", [\"__aliased\", \"eq\"]]>'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 166,
+    "start": 608
+  }
+]
