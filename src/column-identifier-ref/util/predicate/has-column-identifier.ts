@@ -43,7 +43,7 @@ export function hasColumnIdentifier<
 > (ref : RefT, identifier : IdentifierT) : (
     HasColumnIdentifier<RefT, IdentifierT>
 ) {
-    if (!ref.hasOwnProperty(identifier.tableAlias)) {
+    if (!Object.prototype.hasOwnProperty.call(ref, identifier.tableAlias)) {
         return false as any;
     }
     const columnMap = ref[identifier.tableAlias];
