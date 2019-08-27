@@ -1,7 +1,7 @@
 import {IQueryBase} from "../../query-base";
 import {FromClauseUtil} from "../../../from-clause";
 import {SelectClause} from "../../../select-clause";
-import {LimitData} from "../../../limit";
+import {LimitClause} from "../../../limit";
 
 /**
  * To guarantee a query returns one row only,
@@ -12,9 +12,9 @@ export type OneRow = (
         fromClause : FromClauseUtil.BeforeFromClause,
         selectClause : SelectClause|undefined,
 
-        limitClause : LimitData|undefined,
+        limitClause : LimitClause|undefined,
 
         unionClause : undefined,
-        unionLimitClause : LimitData|undefined,
+        unionLimitClause : LimitClause|undefined,
     }>
 );

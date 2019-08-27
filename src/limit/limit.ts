@@ -4,7 +4,7 @@
  * @todo Consider forcing `bigint` only?
  * A `maxRowCount/offset` of `3.141` would be weird.
  */
-export interface LimitData {
+export interface LimitClause {
     /**
      * This is called `**max**RowCount` and not `rowCount` (like MySQL calls it)
      * because we can say we want a `maxRowCount` of `10` and only get `3` rows.

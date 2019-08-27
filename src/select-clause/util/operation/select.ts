@@ -49,6 +49,9 @@ export type Select<
  * @param fromClause
  * @param selectClause
  * @param selectDelegate
+ *
+ * @todo This should only be allowed **BEFORE** the `UNION` clause.
+ * If we `SELECT` after the `UNION` clause, it'll change the number of columns, leading to bugs.
  */
 export function select<
     FromClauseT extends IFromClause,

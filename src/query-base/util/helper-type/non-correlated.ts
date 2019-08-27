@@ -2,7 +2,7 @@ import {IQueryBase} from "../../query-base";
 import {FromClauseUtil} from "../../../from-clause";
 import {SelectClause} from "../../../select-clause";
 import {UnionClause} from "../../../union-clause";
-import {LimitData} from "../../../limit";
+import {LimitClause} from "../../../limit";
 
 /**
  * The opposite of a correlated subquery.
@@ -18,9 +18,9 @@ export type NonCorrelated = (
         fromClause : FromClauseUtil.NonCorrelated,
         selectClause : SelectClause|undefined,
 
-        limitClause : LimitData|undefined,
+        limitClause : LimitClause|undefined,
 
         unionClause : UnionClause|undefined,
-        unionLimitClause : LimitData|undefined,
+        unionLimitClause : LimitClause|undefined,
     }>
 );

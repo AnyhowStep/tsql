@@ -2,14 +2,14 @@ import {IQueryBase} from "../../query-base";
 import {IFromClause} from "../../../from-clause";
 import {SelectClause} from "../../../select-clause";
 import {UnionClause} from "../../../union-clause";
-import {LimitData} from "../../../limit";
+import {LimitClause} from "../../../limit";
 
 export type ZeroOrOneRowUsingUnionLimit = (
     IQueryBase<{
         fromClause : IFromClause,
         selectClause : SelectClause|undefined,
 
-        limitClause : LimitData|undefined,
+        limitClause : LimitClause|undefined,
 
         unionClause : UnionClause|undefined,
         /**

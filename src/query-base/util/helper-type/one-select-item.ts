@@ -1,7 +1,7 @@
 import {IQueryBase} from "../../query-base";
 import {IFromClause} from "../../../from-clause";
 import {UnionClause} from "../../../union-clause";
-import {LimitData} from "../../../limit";
+import {LimitClause} from "../../../limit";
 import {AnonymousSingleValueSelectItem} from "../../../select-item";
 
 export type OneSelectItem<TypeT> = (
@@ -12,9 +12,9 @@ export type OneSelectItem<TypeT> = (
          */
         selectClause : [AnonymousSingleValueSelectItem<TypeT>],
 
-        limitClause : LimitData|undefined,
+        limitClause : LimitClause|undefined,
 
         unionClause : UnionClause|undefined,
-        unionLimitClause : LimitData|undefined,
+        unionLimitClause : LimitClause|undefined,
     }>
 );

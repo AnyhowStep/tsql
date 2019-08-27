@@ -1,17 +1,17 @@
 import {IFromClause} from "../from-clause";
 import {SelectClause} from "../select-clause";
 import {UnionClause} from "../union-clause";
-import {LimitData} from "../limit";
+import {LimitClause} from "../limit";
 import {Ast} from "../ast";
 
 export interface QueryBaseData {
     readonly fromClause : IFromClause,
     readonly selectClause : SelectClause|undefined,
 
-    readonly limitClause : LimitData|undefined,
+    readonly limitClause : LimitClause|undefined,
 
     readonly unionClause : UnionClause|undefined,
-    readonly unionLimitClause : LimitData|undefined,
+    readonly unionLimitClause : LimitClause|undefined,
 
 }
 

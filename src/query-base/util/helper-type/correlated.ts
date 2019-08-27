@@ -2,7 +2,7 @@ import {IQueryBase} from "../../query-base";
 import {FromClauseUtil} from "../../../from-clause";
 import {SelectClause} from "../../../select-clause";
 import {UnionClause} from "../../../union-clause";
-import {LimitData} from "../../../limit";
+import {LimitClause} from "../../../limit";
 
 /**
  * A correlated subquery is a subquery that contains a reference to a table that also appears in the outer query.
@@ -14,9 +14,9 @@ export type Correlated = (
         fromClause : FromClauseUtil.Correlated,
         selectClause : SelectClause|undefined,
 
-        limitClause : LimitData|undefined,
+        limitClause : LimitClause|undefined,
 
         unionClause : UnionClause|undefined,
-        unionLimitClause : LimitData|undefined,
+        unionLimitClause : LimitClause|undefined,
     }>
 );
