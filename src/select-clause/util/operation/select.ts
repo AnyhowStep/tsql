@@ -3,7 +3,6 @@ import {SelectDelegate} from "../../select-delegate";
 import {SelectClause} from "../../select-clause";
 import {ColumnRefUtil} from "../../../column-ref";
 import {allowedColumnRef} from "../query";
-import {SelectItem} from "../../../select-item";
 import {Concat} from "../../../tuple-util";
 import {IExprSelectItem} from "../../../expr-select-item";
 import {IUsedRef} from "../../../used-ref";
