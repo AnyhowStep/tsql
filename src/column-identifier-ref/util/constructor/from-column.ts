@@ -2,6 +2,7 @@ import {IColumn} from "../../../column";
 import {ColumnIdentifierMapUtil} from "../../../column-identifier-map";
 import {ColumnIdentifierUtil} from "../../../column-identifier";
 import {WritableColumnIdentifierRef} from "../../column-identifier-ref";
+import {ColumnIdentifier} from "../../../column-identifier/column-identifier";
 
 export type FromColumn<ColumnT extends IColumn> = (
     ColumnT extends IColumn ?
@@ -14,7 +15,7 @@ export type FromColumn<ColumnT extends IColumn> = (
 );
 export function appendColumn (
     ref : WritableColumnIdentifierRef,
-    column : IColumn
+    column : ColumnIdentifier
 ) {
     let map = ref[column.tableAlias];
     if (map == undefined) {

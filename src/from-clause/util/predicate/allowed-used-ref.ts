@@ -3,6 +3,7 @@ import {IAliasedTable} from "../../../aliased-table";
 import {IJoin} from "../../../join";
 import {UsedRefUtil} from "../../../used-ref";
 import {ColumnRefUtil} from "../../../column-ref";
+import {ColumnIdentifierRefUtil} from "../../../column-identifier-ref";
 
 export type AllowedJoinArray<
     FromClauseT extends IFromClause,
@@ -39,6 +40,14 @@ export type AllowedColumnRef<
     AliasedTableT extends Pick<IAliasedTable, "isLateral">
 > = (
     ColumnRefUtil.FromJoinArray<
+        AllowedJoinArray<FromClauseT, AliasedTableT>
+    >
+);
+export type AllowedColumnIdentifierRef<
+    FromClauseT extends IFromClause,
+    AliasedTableT extends Pick<IAliasedTable, "isLateral">
+> = (
+    ColumnIdentifierRefUtil.FromJoinArray<
         AllowedJoinArray<FromClauseT, AliasedTableT>
     >
 );
@@ -85,7 +94,19 @@ export function allowedColumnRef<
         allowedJoinArray(fromClause, aliasedTable)
     );
 }
-
+export function allowedColumnIdentifierRef<
+    FromClauseT extends IFromClause,
+    AliasedTableT extends Pick<IAliasedTable, "isLateral">
+> (
+    fromClause : FromClauseT,
+    aliasedTable : AliasedTableT
+) : (
+    AllowedColumnIdentifierRef<FromClauseT, AliasedTableT>
+) {
+    return ColumnIdentifierRefUtil.fromJoinArray(
+        allowedJoinArray(fromClause, aliasedTable)
+    );
+}
 export function allowedUsedRef<
     FromClauseT extends IFromClause,
     AliasedTableT extends Pick<IAliasedTable, "isLateral">

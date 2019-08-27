@@ -1,5 +1,8 @@
 import {ColumnRef} from "../../column-ref";
 
+/**
+ * Move this to `predicate`
+ */
 export type HasOneTable<ColumnRefT extends ColumnRef> = (
     Extract<keyof ColumnRefT, string> extends never ?
     //Has zero tables

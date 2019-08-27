@@ -4,7 +4,7 @@ import {LeftIntersect, leftIntersect} from "./left-intersect";
 export type Intersect<
     RefA extends ColumnIdentifierRef,
     RefB extends ColumnIdentifierRef
-> = (
+> =
     Extract<
         LeftIntersect<RefA, RefB> &
         {
@@ -17,7 +17,7 @@ export type Intersect<
         },
         ColumnIdentifierRef
     >
-);
+;
 export function intersect<
     RefA extends ColumnIdentifierRef,
     RefB extends ColumnIdentifierRef
