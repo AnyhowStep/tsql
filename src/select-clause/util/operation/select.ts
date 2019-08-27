@@ -7,6 +7,7 @@ import {SelectItem} from "../../../select-item";
 import {Concat} from "../../../tuple-util";
 import {IExprSelectItem} from "../../../expr-select-item";
 import {IUsedRef} from "../../../used-ref";
+import {assertValidUsedRef, assertValidColumnIdentifier} from "../predicate";
 
 /**
  * This reduces the lines of code emitted for the resulting
@@ -68,18 +69,10 @@ export function select<
     const selects = selectDelegate(ColumnRefUtil.tryFlatten(
         columns
     ));
-    /**
-     * @todo
-     */
-    if (Math.random() < 9999) {
-        throw new Error(`Not implemented`)
-    }
-/*
-    UsedRefUtil.assertAllowed(
-        { columns },
-        selects.usedRef
-    );
-*/
+
+    assertValidUsedRef(fromClause, selects);
+    assertValidColumnIdentifier(selectClause, selects);
+
     return (
         selectClause == undefined ?
         selects as Select<SelectClauseT, SelectsT> :

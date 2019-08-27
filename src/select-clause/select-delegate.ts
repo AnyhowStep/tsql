@@ -1,160 +1,9 @@
 import {IFromClause} from "../from-clause";
-import {ColumnRefUtil, ColumnRef} from "../column-ref";
-import * as SelectClauseUtil from "./util";
+import {ColumnRefUtil} from "../column-ref";
 import {SelectItem} from "../select-item";
-import {ToUnknownIfAllPropertiesNever, ToNeverIfUnknown, AssertNonUnion} from "../type-util";
-import {IExprSelectItem} from "../expr-select-item";
-import {UsedRefUtil} from "../used-ref";
-import {IColumn} from "../column";
-import {ColumnMap} from "../column-map";
+import {AssertNonUnion} from "../type-util";
 import {SelectClause} from "./select-clause";
-import {ColumnIdentifierUtil} from "../column-identifier";
-import {CompileError} from "../compile-error";
-
-type AssertValidExprSelectItemUsedRef<
-    FromClauseT extends IFromClause,
-    SelectsT extends readonly SelectItem[]
-> =
-    ToUnknownIfAllPropertiesNever<{
-        [index in Extract<keyof SelectsT, string>] : (
-            SelectsT[index] extends IExprSelectItem ?
-            ToNeverIfUnknown<
-                & AssertNonUnion<SelectsT[index]>
-                & UsedRefUtil.AssertAllowed<
-                    SelectClauseUtil.AllowedUsedRef<FromClauseT>,
-                    SelectsT[index]["usedRef"]
-                >
-            > :
-            never
-        )
-    }>
-;
-
-type AssertValidColumnUsedRef<
-    FromClauseT extends IFromClause,
-    SelectsT extends readonly SelectItem[]
-> =
-    ToUnknownIfAllPropertiesNever<{
-        [index in Extract<keyof SelectsT, string>] : (
-            SelectsT[index] extends IColumn ?
-            ToNeverIfUnknown<
-                & AssertNonUnion<SelectsT[index]>
-                & UsedRefUtil.AssertAllowed<
-                SelectClauseUtil.AllowedUsedRef<FromClauseT>,
-                    UsedRefUtil.FromColumn<SelectsT[index]>
-                >
-            > :
-            never
-        )
-    }>
-;
-
-type AssertValidColumnMapUsedRef<
-    FromClauseT extends IFromClause,
-    SelectsT extends readonly SelectItem[]
-> =
-    ToUnknownIfAllPropertiesNever<{
-        [index in Extract<keyof SelectsT, string>] : (
-            SelectsT[index] extends ColumnMap ?
-            ToNeverIfUnknown<
-                & AssertNonUnion<SelectsT[index]>
-                & UsedRefUtil.AssertAllowed<
-                SelectClauseUtil.AllowedUsedRef<FromClauseT>,
-                    UsedRefUtil.FromColumnMap<SelectsT[index]>
-                >
-            > :
-            never
-        )
-    }>
-;
-
-type AssertValidColumnRefUsedRef<
-    FromClauseT extends IFromClause,
-    SelectsT extends readonly SelectItem[]
-> =
-    ToUnknownIfAllPropertiesNever<{
-        [index in Extract<keyof SelectsT, string>] : (
-            SelectsT[index] extends ColumnRef ?
-            ToNeverIfUnknown<
-                & AssertNonUnion<SelectsT[index]>
-                & UsedRefUtil.AssertAllowed<
-                SelectClauseUtil.AllowedUsedRef<FromClauseT>,
-                    UsedRefUtil.FromColumnRef<SelectsT[index]>
-                >
-            > :
-            never
-        )
-    }>
-;
-
-type AssertDisjointColumnIdentifier<
-    SelectClauseT extends SelectClause|undefined,
-    SelectsT extends SelectClause
-> =
-    SelectClauseT extends SelectClause ?
-    (
-        Extract<
-            ColumnIdentifierUtil.FromSelectItem<SelectsT[number]>,
-            ColumnIdentifierUtil.FromSelectItem<SelectClauseT[number]>
-        > extends never ?
-        unknown :
-        CompileError<[
-            "Identifiers already used in SELECT clause; consider aliasing",
-            ColumnIdentifierUtil.ToErrorMessageFriendlyType<
-                Extract<
-                    ColumnIdentifierUtil.FromSelectItem<SelectsT[number]>,
-                    ColumnIdentifierUtil.FromSelectItem<SelectClauseT[number]>
-                >
-            >
-        ]>
-    ) :
-    unknown
-;
-
-type ExtractSelectItemNotAtIndex<
-    SelectsT extends SelectClause,
-    IndexT extends keyof SelectsT
-> =
-    {
-        [index in Extract<keyof SelectsT, string>] : (
-            index extends IndexT ?
-            never :
-            SelectsT[index] extends SelectItem ?
-            SelectsT[index] :
-            never
-        )
-    }[Extract<keyof SelectsT, string>]
-;
-
-/**
- * + Assumes `SelectsT` is a non-empty tuple
- */
-type AssertNoDuplicateColumnIdentifier<
-    SelectsT extends SelectClause
-> =
-    ToUnknownIfAllPropertiesNever<{
-        [index in Extract<keyof SelectsT, string>] : (
-            SelectsT[index] extends SelectItem ?
-            (
-                Extract<
-                    ColumnIdentifierUtil.FromSelectItem<SelectsT[index]>,
-                    ColumnIdentifierUtil.FromSelectItem<ExtractSelectItemNotAtIndex<SelectsT, index>>
-                > extends never ?
-                never :
-                CompileError<[
-                    "Duplicate identifiers in SELECT clause not allowed; consider aliasing",
-                    ColumnIdentifierUtil.ToErrorMessageFriendlyType<
-                        Extract<
-                            ColumnIdentifierUtil.FromSelectItem<SelectsT[index]>,
-                            ColumnIdentifierUtil.FromSelectItem<ExtractSelectItemNotAtIndex<SelectsT, index>>
-                        >
-                    >
-                ]>
-            ) :
-            never
-        )
-    }>
-;
+import * as SelectClauseUtil from "./util";
 
 export type SelectDelegate<
     FromClauseT extends IFromClause,
@@ -169,30 +18,19 @@ export type SelectDelegate<
         SelectsT
         /**
          * Hack to force TS to infer a non-empty tuple type, rather than array type.
+         *
+         * ```ts
+         *  declare function foo<T extends any[]> (t : T) : T;
+         *  declare function foo2<T extends any[]> (t : T & { "0":unknown }) : T;
+         *  //const x: number[]
+         *  const x = foo([1,2,3]);
+         *  //const x2: [number, number, number]
+         *  const x2 = foo2([1,2,3]);
+         * ```
          */
         & { "0" : unknown }
         & AssertNonUnion<SelectsT>
-        & AssertValidExprSelectItemUsedRef<FromClauseT, SelectsT>
-        & AssertValidColumnUsedRef<FromClauseT, SelectsT>
-        & AssertValidColumnMapUsedRef<FromClauseT, SelectsT>
-        & AssertValidColumnRefUsedRef<FromClauseT, SelectsT>
-
-        /**
-         * @todo Assert that `IExprSelectItem` do not shadow/hide
-         * column identifiers from `FROM` clause?
-         *
-         * Not a priority at the moment because I'm assuming no one
-         * would reasonably have a `tableAlias` with a value of `typeof ALIASED`.
-         *
-         * If such a thing were to happen, we'd have to also check that
-         * `FROM/JOIN`s do not shadow `IExprSelectItem` identifiers in the
-         * `SELECT` clause.
-         *
-         * Or disallow `FROM/JOIN` after a `SELECT` with an `IExprSelectItem`.
-         *
-         * This would make life a pain.
-         */
-        & AssertDisjointColumnIdentifier<SelectClauseT, SelectsT>
-        & AssertNoDuplicateColumnIdentifier<SelectsT>
+        & SelectClauseUtil.AssertValidUsedRef<FromClauseT, SelectsT>
+        & SelectClauseUtil.AssertValidColumnIdentifier<SelectClauseT, SelectsT>
     )
 ;
