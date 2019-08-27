@@ -11,6 +11,7 @@ export * from "./expr-select-item";
 export * from "./from-clause";
 export * from "./join";
 export * from "./join-map";
+export * from "./limit-clause";
 export * from "./on-clause";
 export * from "./partial-row";
 export * from "./primary-key";

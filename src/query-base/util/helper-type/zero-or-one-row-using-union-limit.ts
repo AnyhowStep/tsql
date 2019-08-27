@@ -19,8 +19,8 @@ export type ZeroOrOneRowUsingUnionLimit = (
          * https://dev.mysql.com/doc/refman/8.0/en/select.html
          */
         unionLimitClause : {
-            readonly maxRowCount : 0|1|0n|1n,
-            readonly offset : number|bigint,
+            readonly maxRowCount : 0n|1n,
+            readonly offset : bigint,
         },
     }>
 );

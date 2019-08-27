@@ -38,6 +38,9 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
   https://github.com/microsoft/TypeScript/issues/32824
   + Remove all "unnecessary" parentheses from top-level type aliases
 + Read https://stackoverflow.com/questions/41312641/is-it-possible-to-have-a-datetime-mapper-for-every-underlaying-rdbms
++ Reduce `lib` and `target` until we reach `es2015`?
+  + What would be a good value for these things?
+  + Browser-compatibility?
 
 <!--
 > I'm just thinking about how...

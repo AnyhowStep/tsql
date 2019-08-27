@@ -8,8 +8,8 @@ export type ZeroOrOneRowUsingLimit = (
         selectClause : SelectClause|undefined,
 
         limitClause : {
-            readonly maxRowCount : 0|1|0n|1n,
-            readonly offset : number|bigint,
+            readonly maxRowCount : 0n|1n,
+            readonly offset : bigint,
         },
 
         /**
