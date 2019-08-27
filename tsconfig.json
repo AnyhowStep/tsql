@@ -44,6 +44,7 @@
         "./src/raw-expr/**/*",
         "./src/expr-library/**/*",
         "./src/where-clause/**/*",
+        "./src/limit-clause/**/*",
         "./src/index.ts"
     ]
 }

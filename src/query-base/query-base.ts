@@ -1,7 +1,7 @@
 import {IFromClause} from "../from-clause";
 import {SelectClause} from "../select-clause";
 import {UnionClause} from "../union-clause";
-import {LimitClause} from "../limit";
+import {LimitClause} from "../limit-clause";
 import {Ast} from "../ast";
 
 export interface QueryBaseData {

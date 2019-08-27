@@ -2,7 +2,7 @@ import {IQueryBase} from "../../query-base";
 import {IFromClause} from "../../../from-clause";
 import {SelectClause} from "../../../select-clause";
 import {UnionClause} from "../../../union-clause";
-import {LimitClause} from "../../../limit";
+import {LimitClause} from "../../../limit-clause";
 
 export type AfterUnionClause = (
     IQueryBase<{
