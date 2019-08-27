@@ -34,7 +34,7 @@ type EraseUsedRef<
 
 export type Select<
     SelectClauseT extends SelectClause|undefined,
-    SelectsT extends readonly SelectItem[]
+    SelectsT extends SelectClause
 > =
     SelectClauseT extends SelectClause ?
     Concat<
@@ -54,7 +54,7 @@ export type Select<
 export function select<
     FromClauseT extends IFromClause,
     SelectClauseT extends SelectClause|undefined,
-    SelectsT extends readonly SelectItem[]
+    SelectsT extends SelectClause
 > (
     fromClause : FromClauseT,
     selectClause : SelectClauseT,

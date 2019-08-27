@@ -19,6 +19,7 @@ export * from "./query-base";
 export * from "./raw-expr";
 export * from "./row";
 export * from "./select-clause";
+export * from "./select-item";
 export * from "./super-key";
 export * from "./table";
 export * from "./type-map";

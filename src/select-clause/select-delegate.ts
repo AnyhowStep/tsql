@@ -1,6 +1,5 @@
 import {IFromClause} from "../from-clause";
 import {ColumnRefUtil} from "../column-ref";
-import {SelectItem} from "../select-item";
 import {AssertNonUnion} from "../type-util";
 import {SelectClause} from "./select-clause";
 import * as SelectClauseUtil from "./util";
@@ -8,7 +7,7 @@ import * as SelectClauseUtil from "./util";
 export type SelectDelegate<
     FromClauseT extends IFromClause,
     SelectClauseT extends SelectClause|undefined,
-    SelectsT extends readonly SelectItem[]
+    SelectsT extends SelectClause
 > =
     (
         columns : ColumnRefUtil.TryFlatten<
