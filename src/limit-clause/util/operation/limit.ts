@@ -1,19 +1,6 @@
 import {LimitClause} from "../../limit-clause";
-
-export type Limit<
-    LimitClauseT extends LimitClause|undefined,
-    MaxRowCountT extends bigint
-> =
-    LimitClauseT extends LimitClause ?
-    {
-        readonly maxRowCount : MaxRowCountT,
-        readonly offset : LimitClauseT["offset"],
-    } :
-    {
-        readonly maxRowCount : MaxRowCountT,
-        readonly offset : 0n,
-    }
-;
+import {LimitBigInt, limitBigInt} from "./limit-bigint";
+import {LimitNumber0, LimitNumber1, LimitNumber0Or1, LimitNumber, limitNumber} from "./limit-number";
 
 export function limit<
     LimitClauseT extends LimitClause|undefined,
@@ -22,17 +9,57 @@ export function limit<
     limitClause : LimitClauseT,
     maxRowCount : MaxRowCountT
 ) : (
-    Limit<LimitClauseT, MaxRowCountT>
+    LimitBigInt<LimitClauseT, MaxRowCountT>
+);
+export function limit<
+    LimitClauseT extends LimitClause|undefined
+> (
+    limitClause : LimitClauseT,
+    maxRowCount : 0
+) : (
+    LimitNumber0<LimitClauseT>
+);
+export function limit<
+    LimitClauseT extends LimitClause|undefined
+> (
+    limitClause : LimitClauseT,
+    maxRowCount : 1
+) : (
+    LimitNumber1<LimitClauseT>
+);
+export function limit<
+    LimitClauseT extends LimitClause|undefined
+> (
+    limitClause : LimitClauseT,
+    maxRowCount : 0|1
+) : (
+    LimitNumber0Or1<LimitClauseT>
+);
+export function limit<
+    LimitClauseT extends LimitClause|undefined
+> (
+    limitClause : LimitClauseT,
+    maxRowCount : number
+) : (
+    LimitNumber<LimitClauseT>
+);
+export function limit<
+    LimitClauseT extends LimitClause|undefined
+> (
+    limitClause : LimitClauseT,
+    maxRowCount : number|bigint
+) : (
+    LimitNumber<LimitClauseT>
+);
+export function limit (
+    limitClause : LimitClause|undefined,
+    maxRowCount : number|bigint
+) : (
+    LimitClause
 ) {
-    if (limitClause == undefined) {
-        return {
-            maxRowCount,
-            offset : BigInt(0) as 0n,
-        } as Limit<LimitClauseT, MaxRowCountT>;
+    if (typeof maxRowCount == "number") {
+        return limitNumber(limitClause, maxRowCount);
     } else {
-        return {
-            maxRowCount,
-            offset : limitClause.offset,
-        } as Limit<LimitClauseT, MaxRowCountT>;
+        return limitBigInt(limitClause, maxRowCount);
     }
 }
