@@ -1,9 +1,27 @@
 import {FromClauseUtil} from "../../../from-clause";
-import {allowedColumnIdentifierRef} from "../query";
+import {allowedColumnIdentifierRef, AllowedColumnIdentifierRef} from "../query";
 import {SelectClause} from "../../../select-clause";
 import {GroupByClause} from "../../group-by-clause";
 import {GroupByDelegate} from "../../group-by-delegate";
 import {ColumnIdentifierRefUtil} from "../../../column-identifier-ref";
+import {ColumnIdentifierUtil} from "../../../column-identifier";
+import {Concat} from "../../../tuple-util";
+
+/**
+ * This will be more important when proper SQL `GROUP BY` behaviour
+ * is supported.
+ */
+export type GroupBy<
+    GroupByClauseT extends GroupByClause|undefined,
+    GroupByT extends GroupByClause
+> =
+    GroupByClauseT extends GroupByClause ?
+    Concat<
+        GroupByClauseT,
+        GroupByT
+    > :
+    GroupByT
+;
 
 /**
  * Returns the MySQL equivalent of `...groupByClause, ...groupByDelegate(columns)`
@@ -33,12 +51,16 @@ export function groupBy<
      * the constraint **must** be `FromClauseUtil.AfterFromClause`
      */
     FromClauseT extends FromClauseUtil.AfterFromClause,
-    SelectClauseT extends SelectClause|undefined
+    SelectClauseT extends SelectClause|undefined,
+    GroupByClauseT extends GroupByClause|undefined,
+    GroupByT extends ColumnIdentifierUtil.FromColumnRef<
+        AllowedColumnIdentifierRef<FromClauseT, SelectClauseT>
+    >[]
 > (
     fromClause : FromClauseT,
     selectClause : SelectClauseT,
-    groupByClause : GroupByClause|undefined,
-    groupByDelegate : GroupByDelegate<FromClauseT, SelectClauseT>
+    groupByClause : GroupByClauseT,
+    groupByDelegate : GroupByDelegate<FromClauseT, SelectClauseT, GroupByT>
 ) : (
     GroupByClause
 ) {
@@ -57,6 +79,6 @@ export function groupBy<
     return (
         groupByClause == undefined ?
         groupBy :
-        [...groupByClause, ...groupBy]
+        [...(groupByClause as Exclude<GroupByClauseT, undefined>), ...groupBy]
     );
 }
