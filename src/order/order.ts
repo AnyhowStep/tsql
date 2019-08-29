@@ -1,9 +1,8 @@
 import {IColumn} from "../column";
 import {IExpr} from "../expr";
 import {SortDirection} from "../sort-direction";
+import {IExprSelectItem} from "../expr-select-item";
 
-//TODO-DEBATE Consider letting IExprSelectItem be a SortExpr?
-//Then, we'd just use the `unaliasedAst`
 /**
  * These types are sortable.
  *
@@ -29,8 +28,14 @@ import {SortDirection} from "../sort-direction";
  * ORDER BY
  *  x --This is an `IColumn` with `__isFromExprSelectItem` set to true
  * ```
+ *
+ * -----
+ *
+ * We allow sorting by `IExprSelectItem` out of convenience.
+ * Internally, it just uses the `Expr` part of the `IExprSelectItem`
+ * and discards the `alias`.
  */
-export type SortExpr = IColumn|IExpr;
+export type SortExpr = IColumn|IExpr|IExprSelectItem;
 /**
  * A 2-tuple that describes a sort order in MySQL.
  */

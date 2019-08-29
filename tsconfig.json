@@ -34,6 +34,7 @@
         "./src/from-clause/**/*",
         "./src/expr/**/*",
         "./src/expr-select-item/**/*",
+        "./src/aliased-expr/**/*",
         "./src/tuple-util/**/*",
         "./src/select-item/**/*",
         "./src/select-clause/**/*",
@@ -46,6 +47,9 @@
         "./src/where-clause/**/*",
         "./src/limit-clause/**/*",
         "./src/group-by-clause/**/*",
+        "./src/sort-direction/**/*",
+        "./src/order/**/*",
+        "./src/order-by-clause/**/*",
         "./src/index.ts"
     ]
 }
