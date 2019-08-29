@@ -51,6 +51,40 @@ export function groupBy<
      * the constraint **must** be `FromClauseUtil.AfterFromClause`
      */
     FromClauseT extends FromClauseUtil.AfterFromClause,
+    SelectClauseT extends SelectClause|undefined
+> (
+    fromClause : FromClauseT,
+    selectClause : SelectClauseT,
+    groupByClause : GroupByClause|undefined,
+    groupByDelegate : GroupByDelegate<FromClauseT, SelectClauseT>
+) : (
+    GroupByClause
+);
+export function groupBy<
+    /**
+     * For MySQL 5.7,
+     * the constraint **must** be `FromClauseUtil.AfterFromClause`
+     */
+    FromClauseT extends FromClauseUtil.AfterFromClause,
+    SelectClauseT extends SelectClause|undefined,
+    GroupByClauseT extends GroupByClause|undefined,
+    GroupByT extends ColumnIdentifierUtil.FromColumnRef<
+        AllowedColumnIdentifierRef<FromClauseT, SelectClauseT>
+    >[]
+> (
+    fromClause : FromClauseT,
+    selectClause : SelectClauseT,
+    groupByClause : GroupByClauseT,
+    groupByDelegate : GroupByDelegate<FromClauseT, SelectClauseT, GroupByT>
+) : (
+    GroupByClause
+);
+export function groupBy<
+    /**
+     * For MySQL 5.7,
+     * the constraint **must** be `FromClauseUtil.AfterFromClause`
+     */
+    FromClauseT extends FromClauseUtil.AfterFromClause,
     SelectClauseT extends SelectClause|undefined,
     GroupByClauseT extends GroupByClause|undefined,
     GroupByT extends ColumnIdentifierUtil.FromColumnRef<

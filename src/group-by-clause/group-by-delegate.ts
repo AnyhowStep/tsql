@@ -9,6 +9,8 @@ export type GroupByDelegate<
     SelectClauseT extends SelectClause|undefined,
     GroupByT extends ColumnIdentifierUtil.FromColumnRef<
         GroupByClauseUtil.AllowedColumnIdentifierRef<FromClauseT, SelectClauseT>
+    >[] = ColumnIdentifierUtil.FromColumnRef<
+        GroupByClauseUtil.AllowedColumnIdentifierRef<FromClauseT, SelectClauseT>
     >[]
 > = (
     (
