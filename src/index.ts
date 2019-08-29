@@ -14,6 +14,7 @@ export * from "./expr-library";
 export * from "./expr-select-item";
 export * from "./from-clause";
 export * from "./group-by-clause";
+export * from "./having-clause";
 export * from "./join";
 export * from "./join-map";
 export * from "./limit-clause";
