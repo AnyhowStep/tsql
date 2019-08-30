@@ -50,6 +50,7 @@
         "./src/sort-direction/**/*",
         "./src/order/**/*",
         "./src/order-by-clause/**/*",
+        "./src/constants.ts",
         "./src/index.ts"
     ]
 }

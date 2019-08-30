@@ -210,6 +210,11 @@ export function runTest () {
 
     const allDiffResults : {
         relativePath : string,
+        inputPath : string,
+        actualDeclarationOutputPath : string,
+        expectedDeclarationOutputPath : string,
+        actualErrorOutputPath : string,
+        expectedErrorOutputPath : string,
         declarationDiffs : diff.Change[],
         errorDiffs : diff.Change[],
     }[] = [];
@@ -233,23 +238,38 @@ export function runTest () {
             d.added === true
         ));
     }
+    /**
+     * @todo Figure out why I called it `rootName`
+     */
     //Now, we look for differences between the actual and expected
     for (const rootName of rootNames) {
         const relativePath = rootName
             .substr(inputRoot.length)
             .replace(".ts", "");
 
+        const actualDeclarationOutputPath = actualOutputRoot + relativePath + ".d.ts";
+        const expectedDeclarationOutputPath = expectedOutputRoot + relativePath + ".d.ts";
+
         const declarationDiffs = diffFiles(
-            actualOutputRoot + relativePath + ".d.ts",
-            expectedOutputRoot + relativePath + ".d.ts"
+            actualDeclarationOutputPath,
+            expectedDeclarationOutputPath,
         );
+
+        const actualErrorOutputPath = actualOutputRoot + relativePath + ".ts.errors";
+        const expectedErrorOutputPath = expectedOutputRoot + relativePath + ".ts.errors";
+
         const errorDiffs = diffFiles(
-            actualOutputRoot + relativePath + ".ts.errors",
-            expectedOutputRoot + relativePath + ".ts.errors"
+            actualErrorOutputPath,
+            expectedErrorOutputPath
         );
         if (declarationDiffs.length > 0 || errorDiffs.length > 0) {
             allDiffResults.push({
                 relativePath,
+                inputPath : rootName,
+                actualDeclarationOutputPath,
+                expectedDeclarationOutputPath,
+                actualErrorOutputPath,
+                expectedErrorOutputPath,
                 declarationDiffs,
                 errorDiffs,
             });

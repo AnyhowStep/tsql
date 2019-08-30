@@ -21,6 +21,7 @@ export * from "./join-map";
 export * from "./limit-clause";
 export * from "./on-clause";
 export * from "./order";
+export * from "./order-by-clause";
 export * from "./partial-row";
 export * from "./primary-key";
 export * from "./primitive-expr";
@@ -36,6 +37,8 @@ export * from "./type-map";
 export * from "./type-ref";
 export * from "./used-ref";
 export * from "./where-clause";
+
+export * from "./constants";
 
 import * as TupleUtil from "./tuple-util";
 import * as TypeUtil from "./type-util";

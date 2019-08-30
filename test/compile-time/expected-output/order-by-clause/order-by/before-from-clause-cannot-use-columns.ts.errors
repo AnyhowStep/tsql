@@ -1,0 +1,33 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type 'ExprImpl<Mapper<unknown, boolean>, IUsedRef<{ readonly myTable: { readonly myColumn: boolean; }; }>>' is not assignable to type 'IExpr<{ mapper: Mapper<unknown, unknown>; usedRef: IUsedRef<{}>; }> | IExprSelectItem<{ mapper: Mapper<unknown, unknown>; usedRef: IUsedRef<{}>; tableAlias: string; alias: string; }> | readonly [ValidSortExpr<IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>>, \"ASC\" | \"DESC\"]'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Type 'ExprImpl<Mapper<unknown, boolean>, IUsedRef<{ readonly myTable: { readonly myColumn: boolean; }; }>>' is not assignable to type 'IExpr<{ mapper: Mapper<unknown, unknown>; usedRef: IUsedRef<{}>; }>'.",
+        "category": 1,
+        "code": 2322,
+        "next": {
+          "messageText": "Types of property 'usedRef' are incompatible.",
+          "category": 1,
+          "code": 2326,
+          "next": {
+            "messageText": "Type 'IUsedRef<{ readonly myTable: { readonly myColumn: boolean; }; }>' is not assignable to type 'IUsedRef<{}>'.",
+            "category": 1,
+            "code": 2322,
+            "next": {
+              "messageText": "Property 'myTable' is missing in type '{}' but required in type '{ readonly myTable: { readonly myColumn: boolean; }; }'.",
+              "category": 1,
+              "code": 2741
+            }
+          }
+        }
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 75,
+    "start": 346
+  }
+]

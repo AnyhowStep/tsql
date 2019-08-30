@@ -34,6 +34,23 @@ const CHARS_ESCAPE_MAP : (
  * ```
  *
  * @param rawIdentifier - The identifier to escape
+ *
+ * @todo Refactor this.
+ * + MySQL uses backticks.
+ * + PostgreSQL uses double quotes. (Following the same rules as MySQL)
+ * + MySQL can be made to use double quotes by enabling `ANSI_QUOTES` but this is disabled by default
+ *
+ * Each database adapter will need to create their own `escaoeIdentifier` function
+ * and pass it around.
+ *
+ * A pain in the butt. Necessary, however.
+ *
+ * -----
+ *
+ * Another option would be forcing the MySQL adapter to always run a SQL query
+ * to enable `ANSI_QUOTES`...
+ *
+ * Definitely less of a hassle there.
  */
 export function escapeIdentifier (rawIdentifier : string) : string {
     return (
