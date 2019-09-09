@@ -1,4 +1,4 @@
-import {makeComparison, Comparison} from "./make-comparison";
+import {makeComparison, Comparison} from "../../factory";
 import {OperatorType} from "../../../operator-type";
 
 /**

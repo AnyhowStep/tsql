@@ -1,13 +1,13 @@
 import * as tm from "type-mapping";
-import {Expr, expr} from "../../../expr";
-import {RawExpr} from "../../../raw-expr";
-import {NonNullPrimitiveExpr, PrimitiveExprUtil} from "../../../primitive-expr";
-import {RawExprUtil} from "../../../raw-expr";
-import {TryReuseExistingType} from "../../../type-util";
-import {IExpr} from "../../../expr/expr";
-import {IExprSelectItem} from "../../../expr-select-item";
-import {OperatorNodeUtil} from "../../../ast";
-import {OperatorType} from "../../../operator-type";
+import {Expr, expr} from "../../expr";
+import {RawExpr} from "../../raw-expr";
+import {NonNullPrimitiveExpr, PrimitiveExprUtil} from "../../primitive-expr";
+import {RawExprUtil} from "../../raw-expr";
+import {TryReuseExistingType} from "../../type-util";
+import {IExpr} from "../../expr";
+import {IExprSelectItem} from "../../expr-select-item";
+import {OperatorNodeUtil} from "../../ast";
+import {OperatorType} from "../../operator-type";
 
 export type ComparisonReturn<
     LeftT extends RawExpr<NonNullPrimitiveExpr>,
@@ -47,6 +47,8 @@ export type Comparison =
 
 /**
  * Factory for making comparison operators.
+ *
+ * These do not allow `null` to be used in comparisons.
  */
 export function makeComparison<OperatorTypeT extends OperatorType> (
     operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand2<OperatorTypeT>
@@ -74,39 +76,6 @@ export function makeComparison<OperatorTypeT extends OperatorType> (
                     RawExprUtil.buildAst(right),
                 ]
             )
-        ) as ComparisonReturn<LeftT, RightT>;
-    };
-    return result;
-}
-
-/**
- * Factory for making custom comparison operators.
- *
- * @param operatorAst - The AST representing the operator
- * @returns An `Expr` factory with AST `[LHS, operator, RHS]`
- */
-export function makeCustomComparison (operatorAst : string) : Comparison {
-    const result : Comparison = <
-        LeftT extends RawExpr<NonNullPrimitiveExpr>,
-        RightT extends RawExpr<PrimitiveExprUtil.NonNullPrimitiveType<RawExprUtil.TypeOf<LeftT>>>
-    >(left : LeftT, right : RightT) : (
-        ComparisonReturn<LeftT, RightT>
-    ) => {
-        RawExprUtil.assertNonNull("LHS", left);
-        RawExprUtil.assertNonNull("RHS", left);
-        return expr(
-            {
-                mapper : tm.mysql.boolean(),
-                usedRef : RawExprUtil.intersectUsedRef(
-                    left,
-                    right
-                ),
-            },
-            [
-                RawExprUtil.buildAst(left),
-                operatorAst,
-                RawExprUtil.buildAst(right),
-            ]
         ) as ComparisonReturn<LeftT, RightT>;
     };
     return result;
