@@ -1,6 +1,6 @@
-import {escapeIdentifier} from "../../../sqlstring";
 import {Table} from "../../table-impl";
 import {IUsedRef, UsedRefUtil} from "../../../used-ref";
+import {identifierNode} from "../../../ast";
 
 export type FromTableAlias<
     TableAliasT extends string
@@ -57,7 +57,7 @@ export function fromTableAlias<
             explicitDefaultValueColumns : [],
             mutableColumns : [],
         } as const,
-        escapeIdentifier(tableAlias)
+        identifierNode(tableAlias)
     );
     return result;
 }

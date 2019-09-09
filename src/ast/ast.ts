@@ -1,9 +1,11 @@
 import {Parentheses} from "./parentheses";
 import {FunctionCall} from "./function-call";
+import {OperatorNode} from "./operator-node";
+import {IdentifierNode} from "./identifier-node";
 
 export interface AstArray extends ReadonlyArray<Ast> {
 }
-export type Ast = (
+export type Ast =
     /**
      * A string literal that will not be escaped
      */
@@ -20,4 +22,12 @@ export type Ast = (
      * @todo Description
      */
     | FunctionCall
-);
+    /**
+     * @todo Description
+     */
+    | OperatorNode
+    /**
+     * @todo Description
+     */
+    | IdentifierNode
+;

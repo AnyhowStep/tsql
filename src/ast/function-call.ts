@@ -1,6 +1,7 @@
 import {Ast} from "./ast";
 import {Parentheses} from "./parentheses";
 import * as AstUtil from "./util";
+import {Sqlfier} from "./sqlfier";
 
 export class FunctionArg {
     readonly type = "FunctionArg";
@@ -17,9 +18,9 @@ export class FunctionArg {
     }
 
     private cachedSql : string|undefined = undefined;
-    toSql = () : string => {
+    toSql = (sqlfier : Sqlfier) : string => {
         if (this.cachedSql == undefined) {
-            this.cachedSql = AstUtil.toSql(this.ast);
+            this.cachedSql = AstUtil.toSql(this.ast, sqlfier);
         }
         return this.cachedSql;
     };
@@ -55,10 +56,10 @@ export class FunctionCall {
     }
 
     private cachedSql : string|undefined = undefined;
-    toSql = () : string => {
+    toSql = (sqlfier : Sqlfier) : string => {
         if (this.cachedSql == undefined) {
             const argsSql = this.args
-                .map(arg => arg.toSql())
+                .map(arg => arg.toSql(sqlfier))
                 .join(",");
             this.cachedSql = `${this.functionName}(${argsSql})`;
         }
@@ -87,9 +88,12 @@ export class FunctionCall {
     }
 
 }
-export function arg (ast : Ast) : FunctionArg {
+export function functionArg (ast : Ast) : FunctionArg {
+    if (FunctionArg.IsFunctionArg(ast)) {
+        return ast;
+    }
     return new FunctionArg(ast);
 }
-export function functionCall (functionName : string, args : readonly FunctionArg[]) : FunctionCall {
-    return new FunctionCall(functionName, args);
+export function functionCall (functionName : string, args : readonly Ast[]) : FunctionCall {
+    return new FunctionCall(functionName, args.map(functionArg));
 }

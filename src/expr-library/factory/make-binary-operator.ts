@@ -1,11 +1,12 @@
 import * as tm from "type-mapping";
 import {RawExpr, RawExprUtil} from "../../raw-expr";
 import {Expr, expr} from "../../expr";
+import {OperatorType, OperatorNodeUtil} from "../../ast";
 
 export type BinaryOperator<
     InputTypeT,
     OutputTypeT
-> = (
+> =
     <
         LeftT extends RawExpr<InputTypeT>,
         RightT extends RawExpr<InputTypeT>
@@ -21,12 +22,13 @@ export type BinaryOperator<
             >,
         }>
     )
-);
+;
 export function makeBinaryOperator<
+    OperatorTypeT extends OperatorType,
     InputTypeT,
     OutputTypeT
 > (
-    operatorAst : string,
+    operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand2<OperatorTypeT>,
     mapper : tm.SafeMapper<OutputTypeT>
 ) {
     const result : BinaryOperator<InputTypeT, OutputTypeT> = <
@@ -52,11 +54,13 @@ export function makeBinaryOperator<
                     right
                 ),
             },
-            [
-                RawExprUtil.buildAst(left),
-                operatorAst,
-                RawExprUtil.buildAst(right),
-            ]
+            OperatorNodeUtil.operatorNode2<OperatorTypeT>(
+                operatorType,
+                [
+                    RawExprUtil.buildAst(left),
+                    RawExprUtil.buildAst(right),
+                ]
+            )
         );
     };
 

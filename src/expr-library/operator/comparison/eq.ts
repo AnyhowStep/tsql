@@ -1,4 +1,5 @@
 import {makeComparison, Comparison} from "./make-comparison";
+import {OperatorType} from "../../../ast";
 
 /**
  * https://dev.mysql.com/doc/refman/8.0/en/comparison-operators.html#operator_equal
@@ -13,5 +14,5 @@ import {makeComparison, Comparison} from "./make-comparison";
  * TS takes **much** longer to compile.
  */
 export const eq : Comparison = makeComparison(
-    "="
+    OperatorType.EQUAL
 );

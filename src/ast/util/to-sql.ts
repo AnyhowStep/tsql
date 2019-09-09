@@ -1,6 +1,29 @@
-import {Ast} from "../ast";
+import {Ast, AstArray} from "../ast";
 import {Parentheses} from "../parentheses";
 import {FunctionCall} from "../function-call";
+import {OperatorNodeUtil, OperatorNode} from "../operator-node";
+import {isIdentifierNode} from "../identifier-node";
+import {Sqlfier} from "../sqlfier";
+
+export function toSqlAst (ast : Ast, sqlfier : Sqlfier) : string|AstArray|Parentheses|FunctionCall {
+    if (typeof ast == "string") {
+        return ast;
+    } else if (Parentheses.IsParentheses(ast)) {
+        return ast.toSql(sqlfier);
+    } else if (FunctionCall.IsFunctionCall(ast)) {
+        return ast.toSql(sqlfier);
+    } else if (OperatorNodeUtil.isOperatorNode(ast)) {
+        return sqlfier.operatorSqlfier[ast.operatorType](
+            ast as OperatorNode<never>,
+            (ast2 : Ast) => toSql(ast2, sqlfier),
+            sqlfier
+        );
+    } else if (isIdentifierNode(ast)) {
+        return sqlfier.identifierSqlfier(ast);
+    } else {
+        return ast.map(subAst => toSql(subAst, sqlfier)).join(" ");
+    }
+}
 
 /**
  * Converts an AST to a SQL string.
@@ -11,14 +34,11 @@ import {FunctionCall} from "../function-call";
  *
  * @param ast
  */
-export function toSql (ast : Ast) : string {
-    if (Parentheses.IsParentheses(ast)) {
-        return ast.toSql();
-    } else if (FunctionCall.IsFunctionCall(ast)) {
-        return ast.toSql();
-    } else if (typeof ast == "string") {
-        return ast;
+export function toSql (ast : Ast, sqlfier : Sqlfier) : string {
+    const result = toSqlAst(ast, sqlfier);
+    if (typeof result == "string") {
+        return result;
     } else {
-        return ast.map(toSql).join("\n");
+        return toSql(result, sqlfier);
     }
 }

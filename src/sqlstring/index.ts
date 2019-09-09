@@ -1,4 +1,5 @@
-const ID_GLOBAL_REGEXP    = /`/g;
+const ID_BACKTICK_GLOBAL_REGEXP     = /`/g;
+const ID_DOUBLE_QUOTE_GLOBAL_REGEXP = /"/g;
 const CHARS_GLOBAL_REGEXP = /[\0\b\t\n\r\x1a\"\'\\]/g; // eslint-disable-line no-control-regex
 const CHARS_ESCAPE_MAP : (
     {
@@ -51,12 +52,21 @@ const CHARS_ESCAPE_MAP : (
  * to enable `ANSI_QUOTES`...
  *
  * Definitely less of a hassle there.
+ *
+ * @deprecated Use the `Identifier` AST Node instead
  */
-export function escapeIdentifier (rawIdentifier : string) : string {
+export function escapeIdentifierWithBackticks (rawIdentifier : string) : string {
     return (
         "`" +
-        String(rawIdentifier).replace(ID_GLOBAL_REGEXP, "``") +
+        String(rawIdentifier).replace(ID_BACKTICK_GLOBAL_REGEXP, "``") +
         "`"
+    );
+}
+export function escapeIdentifierWithDoubleQuotes (rawIdentifier : string) : string {
+    return (
+        "\"" +
+        String(rawIdentifier).replace(ID_DOUBLE_QUOTE_GLOBAL_REGEXP, "\"\"") +
+        "\""
     );
 }
 

@@ -1,7 +1,7 @@
-import {escapeIdentifier} from "../../../sqlstring";
 import {ITable} from "../../table";
 import {Table} from "../../table-impl";
 import {ColumnMapUtil} from "../../../column-map";
+import {identifierNode} from "../../../ast";
 
 export type SetTableAlias<TableT extends ITable, NewTableAliasT extends string> = (
     Table<{
@@ -93,6 +93,6 @@ export function setTableAlias<TableT extends ITable, NewTableAliasT extends stri
             explicitDefaultValueColumns,
             mutableColumns,
         },
-        escapeIdentifier(newTableAlias)
+        identifierNode(newTableAlias)
     );
 }

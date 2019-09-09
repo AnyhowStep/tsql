@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {AnyRawExpr} from "../../raw-expr";
-import {Ast, Parentheses} from "../../../ast";
+import {Ast, parentheses} from "../../../ast";
 import {escapeValue} from "../../../sqlstring";
 import {ExprUtil} from "../../../expr";
 import {ColumnUtil} from "../../../column";
@@ -44,11 +44,21 @@ export function buildAst (rawExpr : AnyRawExpr) : Ast {
     }
 
     if (QueryBaseUtil.isOneSelectItem(rawExpr)) {
-        return rawExpr.buildExprAst();
+        /**
+         * @todo Check if this is desirable
+         */
+        //return rawExpr.buildExprAst();
+        return parentheses(rawExpr.buildExprAst(), false/*canUnwrap*/)
     }
 
     if (ExprSelectItemUtil.isExprSelectItem(rawExpr)) {
-        return Parentheses.Create(rawExpr.unaliasedAst, false/*canUnwrap*/);
+        /**
+         * @todo Check if this is desirable.
+         * If anything, the `query` ast, when used as a value query,
+         * should wrap an unwrappable parentheses around itself.
+         */
+        //return Parentheses.Create(rawExpr.unaliasedAst, false/*canUnwrap*/);
+        return parentheses(rawExpr.unaliasedAst);
     }
 
     throw new Error(`Unknown rawExpr ${tm.TypeUtil.toTypeStr(rawExpr)}`);

@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "ts-node -P ./test/run-time/tsconfig.json",
     "build-custom-eslint-rules": "tsc -p ./custom-typescript-eslint-rules/tsconfig.json",
     "lint": "eslint --ext .ts",
     "lint-all": "npm run lint -- ./src",
@@ -15,7 +15,8 @@
     "test-compile-time": "ts-node -P ./test/compile-time/tsconfig.json ./test/compile-time/runner.ts",
     "accept-compile-time": "ts-node -P ./test/compile-time/tsconfig.json ./test/compile-time/accept-actual.ts",
     "accept-one": "ts-node -P ./test/compile-time/tsconfig.json ./test/compile-time/accept-one.ts",
-    "test-compile-time-interactive": "ts-node -P ./test/compile-time/tsconfig.json ./test/compile-time/interactive.ts"
+    "test-compile-time-interactive": "ts-node -P ./test/compile-time/tsconfig.json ./test/compile-time/interactive.ts",
+    "test-run-time": "ts-node -P ./test/run-time/tsconfig.json ./test/run-time/runner.ts"
   },
   "author": "anyhowstep",
   "license": "MIT",

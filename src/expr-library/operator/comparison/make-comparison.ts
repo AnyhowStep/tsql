@@ -6,6 +6,7 @@ import {RawExprUtil} from "../../../raw-expr";
 import {TryReuseExistingType} from "../../../type-util";
 import {IExpr} from "../../../expr/expr";
 import {IExprSelectItem} from "../../../expr-select-item";
+import {OperatorType, OperatorNodeUtil} from "../../../ast";
 
 export type ComparisonReturn<
     LeftT extends RawExpr<NonNullPrimitiveExpr>,
@@ -42,10 +43,48 @@ export type Comparison =
         ComparisonReturn<LeftT, RightT>
     )
 ;
+
 /**
  * Factory for making comparison operators.
  */
-export function makeComparison (operator : string) : Comparison {
+export function makeComparison<OperatorTypeT extends OperatorType> (
+    operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand2<OperatorTypeT>
+) : Comparison {
+    const result : Comparison = <
+        LeftT extends RawExpr<NonNullPrimitiveExpr>,
+        RightT extends RawExpr<PrimitiveExprUtil.NonNullPrimitiveType<RawExprUtil.TypeOf<LeftT>>>
+    >(left : LeftT, right : RightT) : (
+        ComparisonReturn<LeftT, RightT>
+    ) => {
+        RawExprUtil.assertNonNull("LHS", left);
+        RawExprUtil.assertNonNull("RHS", left);
+        return expr(
+            {
+                mapper : tm.mysql.boolean(),
+                usedRef : RawExprUtil.intersectUsedRef(
+                    left,
+                    right
+                ),
+            },
+            OperatorNodeUtil.operatorNode2<OperatorTypeT>(
+                operatorType,
+                [
+                    RawExprUtil.buildAst(left),
+                    RawExprUtil.buildAst(right),
+                ]
+            )
+        ) as ComparisonReturn<LeftT, RightT>;
+    };
+    return result;
+}
+
+/**
+ * Factory for making custom comparison operators.
+ *
+ * @param operatorAst - The AST representing the operator
+ * @returns An `Expr` factory with AST `[LHS, operator, RHS]`
+ */
+export function makeCustomComparison (operatorAst : string) : Comparison {
     const result : Comparison = <
         LeftT extends RawExpr<NonNullPrimitiveExpr>,
         RightT extends RawExpr<PrimitiveExprUtil.NonNullPrimitiveType<RawExprUtil.TypeOf<LeftT>>>
@@ -64,7 +103,7 @@ export function makeComparison (operator : string) : Comparison {
             },
             [
                 RawExprUtil.buildAst(left),
-                operator,
+                operatorAst,
                 RawExprUtil.buildAst(right),
             ]
         ) as ComparisonReturn<LeftT, RightT>;

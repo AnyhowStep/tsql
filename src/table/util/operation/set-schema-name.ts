@@ -1,6 +1,6 @@
-import {escapeIdentifier} from "../../../sqlstring";
 import {ITable} from "../../table";
 import {Table} from "../../table-impl";
+import {identifierNode} from "../../../ast";
 
 export type SetSchemaName<TableT extends ITable> = (
     Table<{
@@ -87,10 +87,9 @@ export function setSchemaName<TableT extends ITable> (
             explicitDefaultValueColumns,
             mutableColumns,
         },
-        [
-            escapeIdentifier(newSchemaName),
-            ".",
-            escapeIdentifier(alias),
-        ]
+        identifierNode(
+            newSchemaName,
+            alias
+        )
     );
 }

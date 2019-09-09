@@ -1,6 +1,8 @@
 import {Ast} from "../ast";
 import {Parentheses} from "../parentheses";
 import {FunctionCall} from "../function-call";
+import {OperatorNodeUtil} from "../operator-node";
+import {isIdentifierNode} from "../identifier-node";
 
 /**
  * A type guard for the `Ast` type
@@ -15,6 +17,12 @@ export function isAst (raw : unknown) : raw is Ast {
         return true;
     }
     if (FunctionCall.IsFunctionCall(raw)) {
+        return true;
+    }
+    if (OperatorNodeUtil.isOperatorNode(raw)) {
+        return true;
+    }
+    if (isIdentifierNode(raw)) {
         return true;
     }
     if (Array.isArray(raw)) {

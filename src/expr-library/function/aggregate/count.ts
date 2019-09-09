@@ -2,7 +2,7 @@ import * as tm from "type-mapping";
 import {Expr} from "../../../expr";
 import {IUsedRef, UsedRefUtil} from "../../../used-ref";
 import {ExprImpl} from "../../../expr/expr-impl";
-import {functionCall, arg} from "../../../ast";
+import {functionCall} from "../../../ast";
 
 /**
  * https://dev.mysql.com/doc/refman/8.0/en/group-by-functions.html#function_count
@@ -21,7 +21,7 @@ export function count () : (
         functionCall(
             "COUNT",
             [
-                arg("*")
+                "*"
             ]
         )
     );

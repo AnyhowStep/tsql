@@ -1,5 +1,6 @@
 import * as tm from "type-mapping";
-import {ChainableOperator, makeChainableOperator} from "../make-chainable-operator";
+import {ChainableOperator, makeChainableOperator} from "../../factory";
+import {OperatorType} from "../../../ast";
 
 /**
  * https://dev.mysql.com/doc/refman/8.0/en/logical-operators.html#operator_and
@@ -8,8 +9,8 @@ import {ChainableOperator, makeChainableOperator} from "../make-chainable-operat
  *
  * For three-valued logic, @see {@link and3}
  */
-export const and : ChainableOperator<boolean> = makeChainableOperator<boolean>(
-    "AND",
+export const and : ChainableOperator<boolean> = makeChainableOperator<OperatorType.AND, boolean>(
+    OperatorType.AND,
     true,
     tm.mysql.boolean()
 );

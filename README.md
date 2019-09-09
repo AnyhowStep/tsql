@@ -41,6 +41,20 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
 + Reduce `lib` and `target` until we reach `es2015`?
   + What would be a good value for these things?
   + Browser-compatibility?
++ List of OIDs for built-in data types,
+  + https://github.com/brianc/node-pg-types/blob/master/index.d.ts#L1
+  + https://github.com/brianc/node-pg-types/blob/master/lib/builtins.js
++ https://github.com/gajus/eslint-plugin-sql
+
+  To be used with https://github.com/brianc/node-postgres
+
++ https://okbob.blogspot.com/2009/08/mysql-functions-for-postgresql.html
+
++ Consider forcing users of library to allow library to create a library-specific schema for stored procedures/functions
+  to unify behaviour of built-in functions/operators.
+
+  + Personal opinion is that this should only be a last resort.
+  + Should try to unify behaviour without it.
 
 <!--
 > I'm just thinking about how...

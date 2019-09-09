@@ -1,6 +1,42 @@
 import {Ast} from "./ast";
 import * as AstUtil from "./util";
 import {FunctionCall} from "./function-call";
+import {Sqlfier} from "./sqlfier";
+import {isIdentifierNode} from "./identifier-node";
+
+function shouldWrap (ast : Ast, canUnwrap : boolean) : boolean {
+    if (Parentheses.IsParentheses(ast)) {
+        if (!canUnwrap && ast.canUnwrap) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    if (FunctionCall.IsFunctionCall(ast)) {
+        return false;
+    }
+
+    if (isIdentifierNode(ast)) {
+        return false;
+    }
+
+    if (typeof ast == "string") {
+        return false;
+    }
+
+    if (Array.isArray(ast)) {
+        if (ast.length == 0) {
+            throw new Error(`Attempt to add parentheses around empty query tree`);
+        } else if (ast.length == 1) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    return true;
+}
 
 export class Parentheses {
     public readonly type = "Parentheses";
@@ -39,10 +75,14 @@ export class Parentheses {
         this.canUnwrap = canUnwrap;
     }
     private cachedSql : string|undefined = undefined;
-    public toSql = () : string => {
+    public toSql = (sqlfier : Sqlfier) : string => {
         if (this.cachedSql == undefined) {
-            const sql = AstUtil.toSql(this.ast);
-            this.cachedSql = `(${sql})`;
+            const sqlAst = AstUtil.toSqlAst(this.ast, sqlfier);
+            if (shouldWrap(sqlAst, this.canUnwrap)) {
+                this.cachedSql = `(${AstUtil.toSql(sqlAst, sqlfier)})`;
+            } else {
+                this.cachedSql = AstUtil.toSql(sqlAst, sqlfier);
+            }
         }
         return this.cachedSql;
     }
@@ -69,31 +109,14 @@ export class Parentheses {
     }
 
     public static Create (ast : Ast, canUnwrap : boolean = true) : Ast {
-        if (Parentheses.IsParentheses(ast)) {
-            //No need to wrap parentheses in parentheses...
-            //Unless...
-            if (!canUnwrap && ast.canUnwrap) {
-                //We don't want this unwrappable paren to be unwrapped...
+        if (shouldWrap(ast, canUnwrap)) {
+            if (Parentheses.IsParentheses(ast)) {
                 return new Parentheses(ast.ast, canUnwrap);
-            }
-            return ast;
-        } else if (FunctionCall.IsFunctionCall(ast)) {
-            //We don't need to have parentheses around function calls
-            return ast;
-        } else if (Array.isArray(ast)) {
-            if (ast.length == 0) {
-                throw new Error(`Attempt to add parentheses around empty query tree`);
-            } else if (ast.length == 1) {
-                //No need to wrap parentheses against unit expressions
-                return ast;
             } else {
                 return new Parentheses(ast, canUnwrap);
             }
-        } else if (typeof ast == "string") {
-            //No need to wrap parentheses against unit expressions
-            return ast;
         } else {
-            return new Parentheses(ast, canUnwrap);
+            return ast;
         }
     }
 }

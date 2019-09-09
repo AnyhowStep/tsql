@@ -1,6 +1,6 @@
-import {escapeIdentifier} from "../../../sqlstring";
 import {IColumn} from "../../column";
 import {ALIASED, SEPARATOR} from "../../../constants";
+import {identifierNode, IdentifierNode} from "../../../ast";
 
 export function buildAst (
     {
@@ -8,7 +8,7 @@ export function buildAst (
         columnAlias,
         unaliasedAst,
     } : IColumn
-) : string {
+) : IdentifierNode {
     if (tableAlias == ALIASED) {
         /**
          * When you want to write,
@@ -26,16 +26,15 @@ export function buildAst (
          * The table alias is the value of the variable `ALIASED`,
          * which should be `__aliased`
          */
-        return escapeIdentifier(`${tableAlias}${SEPARATOR}${columnAlias}`);
+        return identifierNode(`${tableAlias}${SEPARATOR}${columnAlias}`);
     } else {
         if (unaliasedAst == undefined) {
             /*
                 The most common case, I think.
             */
-            return (
-                escapeIdentifier(tableAlias) +
-                "." +
-                escapeIdentifier(columnAlias)
+            return identifierNode(
+                tableAlias,
+                columnAlias
             );
         } else {
             /**
@@ -44,7 +43,7 @@ export function buildAst (
              * Initial inspection says "No"
              */
             //throw new Error(`Should use unaliasedAst, tableAlias, columnAlias in SELECT clause, use tableAlias, columnAlias in ORDER BY clause`);
-            return escapeIdentifier(`${tableAlias}${SEPARATOR}${columnAlias}`);
+            return identifierNode(`${tableAlias}${SEPARATOR}${columnAlias}`);
         }
     }
 }
