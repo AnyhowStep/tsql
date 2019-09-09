@@ -2,7 +2,6 @@ import {IFromClause} from "../from-clause";
 import {SelectClause} from "../select-clause";
 import {UnionClause} from "../union-clause";
 import {LimitClause} from "../limit-clause";
-import {Ast} from "../ast";
 
 export interface QueryBaseData {
     readonly fromClause : IFromClause,
@@ -26,10 +25,4 @@ export interface IQueryBase<DataT extends QueryBaseData=QueryBaseData> {
 
     readonly unionClause : DataT["unionClause"],
     readonly unionLimitClause : DataT["unionLimitClause"],
-
-    /**
-     * Used to convert the query into an AST
-     * for use as an `IExpr`.
-     */
-    readonly buildExprAst : () => Ast;
 }

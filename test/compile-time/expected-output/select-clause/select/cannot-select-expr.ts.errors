@@ -1,15 +1,15 @@
 [
   {
     "messageText": {
-      "messageText": "Type '[ExprImpl<Mapper<unknown, boolean>, IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>>]' is not assignable to type 'readonly (IExprSelectItem<ExprSelectItemData> | ColumnMap | IColumn<ColumnData> | ColumnRef)[] & { \"0\": unknown; }'.",
+      "messageText": "Type '[ExprImpl<Mapper<unknown, boolean>, IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>>]' is not assignable to type 'readonly (ColumnMap | IColumn<ColumnData> | ColumnRef | IExprSelectItem<ExprSelectItemData>)[] & { \"0\": unknown; }'.",
       "category": 1,
       "code": 2322,
       "next": {
-        "messageText": "Type '[ExprImpl<Mapper<unknown, boolean>, IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>>]' is not assignable to type 'readonly (IExprSelectItem<ExprSelectItemData> | ColumnMap | IColumn<ColumnData> | ColumnRef)[]'.",
+        "messageText": "Type '[ExprImpl<Mapper<unknown, boolean>, IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>>]' is not assignable to type 'readonly (ColumnMap | IColumn<ColumnData> | ColumnRef | IExprSelectItem<ExprSelectItemData>)[]'.",
         "category": 1,
         "code": 2322,
         "next": {
-          "messageText": "Type 'ExprImpl<Mapper<unknown, boolean>, IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>>' is not assignable to type 'IExprSelectItem<ExprSelectItemData> | ColumnMap | IColumn<ColumnData> | ColumnRef'.",
+          "messageText": "Type 'ExprImpl<Mapper<unknown, boolean>, IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>>' is not assignable to type 'ColumnMap | IColumn<ColumnData> | ColumnRef | IExprSelectItem<ExprSelectItemData>'.",
           "category": 1,
           "code": 2322,
           "next": {

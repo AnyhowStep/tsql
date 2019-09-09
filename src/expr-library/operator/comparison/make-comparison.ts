@@ -6,7 +6,8 @@ import {RawExprUtil} from "../../../raw-expr";
 import {TryReuseExistingType} from "../../../type-util";
 import {IExpr} from "../../../expr/expr";
 import {IExprSelectItem} from "../../../expr-select-item";
-import {OperatorType, OperatorNodeUtil} from "../../../ast";
+import {OperatorNodeUtil} from "../../../ast";
+import {OperatorType} from "../../../operator-type";
 
 export type ComparisonReturn<
     LeftT extends RawExpr<NonNullPrimitiveExpr>,

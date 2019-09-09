@@ -1,8 +1,9 @@
-import {OperatorType, OperatorNode} from "../operator-node";
+import {OperatorNode} from "../operator-node";
 import {Sqlfier} from "./sqlfier";
 import {Ast, AstArray} from "../ast";
 import {Parentheses} from "../parentheses";
 import {FunctionCall} from "../function-call";
+import {OperatorType} from "../../operator-type";
 
 export type OperatorSqlfier = {
     readonly [operatorType in OperatorType] : (

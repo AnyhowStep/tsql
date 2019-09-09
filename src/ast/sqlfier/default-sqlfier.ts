@@ -1,6 +1,6 @@
 import {Sqlfier} from "./sqlfier";
 import {escapeIdentifierWithDoubleQuotes} from "../../sqlstring";
-import {OperatorType} from "../operator-node";
+import {OperatorType} from "../../operator-type";
 import {functionCall} from "../function-call";
 import {OperatorSqlfier} from "./operator-sqlfier";
 import {Writable} from "../../type-util";
@@ -32,6 +32,7 @@ export const notImplementedSqlfier : Sqlfier = {
             },
             {} as Writable<OperatorSqlfier>
         ),
+    queryBaseSqlfier : notImplemented,
 };
 export const defaultSqlfier : Sqlfier = {
     identifierSqlfier : (identifierNode) => identifierNode.identifiers
@@ -78,5 +79,6 @@ export const defaultSqlfier : Sqlfier = {
        [OperatorType.ARC_COSINE] : ({operands}) => {
            return functionCall("ACOS", operands);
        },
-    }
+    },
+    queryBaseSqlfier : notImplementedSqlfier.queryBaseSqlfier,
 }

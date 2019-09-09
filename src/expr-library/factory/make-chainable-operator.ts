@@ -4,13 +4,13 @@ import {IExpr, Expr, ExprUtil, expr} from "../../expr";
 import {
     Ast,
     AstArray,
-    OperatorType,
     OperatorNodeUtil,
     AstUtil,
 } from "../../ast";
 import {escapeValue} from "../../sqlstring";
 import {TryReuseExistingType} from "../../type-util";
 import {IExprSelectItem} from "../../expr-select-item";
+import {OperatorType} from "../../operator-type";
 
 function tryGetFlattenableElements (
     rawExpr : AnyRawExpr,

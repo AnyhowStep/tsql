@@ -1,4 +1,4 @@
-import {OperatorType} from "../../operator-type";
+import {OperatorType} from "../../../../operator-type";
 import {OperatorOperand} from "../../operator-operand";
 import {Operand1ToN} from "../../operand";
 import {IsStrictSameType} from "../../../../type-util";

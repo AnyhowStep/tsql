@@ -1,4 +1,4 @@
-import {OperatorType} from "./operator-type";
+import {OperatorType} from "../../operator-type";
 import {OperatorOperand} from "./operator-operand";
 
 export interface OperatorNode<OperatorTypeT extends OperatorType=OperatorType> {

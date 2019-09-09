@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {BinaryOperator, makeBinaryOperator} from "../../factory";
-import {OperatorType} from "../../../ast";
+import {OperatorType} from "../../../operator-type";
 
 /**
  * https://dev.mysql.com/doc/refman/8.0/en/logical-operators.html#operator_xor

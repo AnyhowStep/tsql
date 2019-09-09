@@ -1,4 +1,4 @@
-import {OperatorType} from "./operator-type";
+import {OperatorType} from "../../operator-type";
 import {
     Operand1,
     Operand2,

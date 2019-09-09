@@ -20,8 +20,6 @@ export function isQuery (x : unknown) : x is IQueryBase {
 
             "unionClause",
             "unionLimitClause",
-
-            "buildExprAst",
         ]
     )) {
         return false;

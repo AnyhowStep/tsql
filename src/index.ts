@@ -39,6 +39,7 @@ export * from "./used-ref";
 export * from "./where-clause";
 
 export * from "./constants";
+export * from "./operator-type";
 
 import * as TupleUtil from "./tuple-util";
 import * as TypeUtil from "./type-util";

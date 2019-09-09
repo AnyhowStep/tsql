@@ -5,7 +5,7 @@ import {JoinArrayUtil} from "../../../join";
 import {AfterFromClause} from "../helper-type";
 import {WhereClause, WhereClauseUtil} from "../../../where-clause";
 import {ColumnRefUtil} from "../../../column-ref";
-import {isNotNull} from "../../../expr-library";
+import * as ExprLib from "../../../expr-library";
 import {ColumnIdentifierRefUtil} from "../../../column-identifier-ref";
 
 /**
@@ -147,7 +147,7 @@ export function whereIsNotNull<
         whereClause : WhereClauseUtil.where(
             fromClause,
             whereClause,
-            () => isNotNull(column)
+            () => ExprLib.isNotNull(column)
         ),
     };
     return result;

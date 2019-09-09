@@ -8,6 +8,7 @@
         ]
     },
     "include" : [
+        "./src/operator-type.ts",
         "./src/type-util/**/*",
         "./src/type-map/**/*",
         "./src/type-ref/**/*",

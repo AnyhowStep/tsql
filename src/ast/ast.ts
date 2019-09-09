@@ -2,6 +2,7 @@ import {Parentheses} from "./parentheses";
 import {FunctionCall} from "./function-call";
 import {OperatorNode} from "./operator-node";
 import {IdentifierNode} from "./identifier-node";
+import {IQueryBase} from "../query-base";
 
 export interface AstArray extends ReadonlyArray<Ast> {
 }
@@ -30,4 +31,5 @@ export type Ast =
      * @todo Description
      */
     | IdentifierNode
+    | IQueryBase
 ;

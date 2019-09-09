@@ -8,7 +8,7 @@ import {ColumnRefUtil} from "../../../column-ref";
 import {ColumnIdentifierRefUtil} from "../../../column-identifier-ref";
 import {PrimitiveExprUtil, NonNullPrimitiveExpr} from "../../../primitive-expr";
 import {RawExprUtil} from "../../../raw-expr";
-import {eq} from "../../../expr-library";
+import * as ExprLib from "../../../expr-library";
 
 /**
  * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966
@@ -205,7 +205,7 @@ export function whereEq<
             /**
              * @todo Investigate assignability
              */
-            () => eq(
+            () => ExprLib.eq(
                 column,
                 value
             ) as any

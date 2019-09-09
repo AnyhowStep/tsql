@@ -1,9 +1,10 @@
 import * as tm from "type-mapping";
 import {RawExpr, RawExprUtil} from "../../raw-expr";
 import {Expr, expr} from "../../expr";
-import {OperatorType, OperatorNodeUtil} from "../../ast";
+import {OperatorNodeUtil} from "../../ast";
 import {UnaryOperator} from "./make-unary-operator";
 import {tryExtractAstOr} from "../../ast/util";
+import {OperatorType} from "../../operator-type";
 
 /**
  * Makes an idempotent unary operator.

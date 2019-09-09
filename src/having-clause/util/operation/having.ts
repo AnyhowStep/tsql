@@ -2,7 +2,7 @@ import {IFromClause} from "../../../from-clause";
 import {HavingDelegate} from "../../having-delegate";
 import {HavingClause} from "../../having-clause";
 import {ColumnRefUtil} from "../../../column-ref";
-import {and} from "../../../expr-library";
+import * as ExprLib from "../../../expr-library";
 import {allowedColumnRef} from "../query";
 import {UsedRefUtil} from "../../../used-ref";
 
@@ -44,6 +44,6 @@ export function having<
     return (
         havingClause == undefined ?
         operand :
-        and(havingClause, operand)
+        ExprLib.and(havingClause, operand)
     );
 }

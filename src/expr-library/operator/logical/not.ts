@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {OperatorType} from "../../../ast";
+import {OperatorType} from "../../../operator-type";
 import {makeDoubleEliminationUnaryOperator} from "../../factory";
 
 /**

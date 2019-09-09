@@ -2,7 +2,7 @@ import {IFromClause} from "../../../from-clause";
 import {WhereDelegate} from "../../where-delegate";
 import {WhereClause} from "../../where-clause";
 import {ColumnRefUtil} from "../../../column-ref";
-import {and} from "../../../expr-library";
+import * as ExprLib from "../../../expr-library";
 import {allowedColumnRef} from "../query";
 import {UsedRefUtil} from "../../../used-ref";
 
@@ -35,6 +35,6 @@ export function where<
     return (
         whereClause == undefined ?
         operand :
-        and(whereClause, operand)
+        ExprLib.and(whereClause, operand)
     );
 }

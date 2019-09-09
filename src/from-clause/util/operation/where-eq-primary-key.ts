@@ -2,7 +2,7 @@ import {IFromClause} from "../../from-clause";
 import {JoinArrayUtil} from "../../../join";
 import {AfterFromClause} from "../helper-type";
 import {WhereClause, WhereClauseUtil} from "../../../where-clause";
-import {eqPrimaryKey} from "../../../expr-library";
+import * as ExprLib from "../../../expr-library";
 import {PrimaryKey_NonUnion} from "../../../primary-key";
 import {JoinMapUtil} from "../../../join-map";
 
@@ -166,7 +166,7 @@ export function whereEqPrimaryKey<
             /**
              * @todo Investigate assignability
              */
-            () => eqPrimaryKey(
+            () => ExprLib.eqPrimaryKey(
                 table,
                 /**
                  * @todo Investigate assignability

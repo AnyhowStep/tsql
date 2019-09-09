@@ -1,4 +1,4 @@
-import {OperatorType} from "../../operator-type";
+import {OperatorType} from "../../../../operator-type";
 import {OperatorOperand} from "../../operator-operand";
 import {OperatorNode} from "../../operator-node";
 import {AssertNonUnion} from "../../../../type-util";

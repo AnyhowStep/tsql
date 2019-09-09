@@ -5,7 +5,7 @@ import {JoinArrayUtil} from "../../../join";
 import {AfterFromClause} from "../helper-type";
 import {WhereClause, WhereClauseUtil} from "../../../where-clause";
 import {ColumnRefUtil} from "../../../column-ref";
-import {isNull} from "../../../expr-library";
+import * as ExprLib from "../../../expr-library";
 import {ColumnIdentifierRefUtil} from "../../../column-identifier-ref";
 
 /**
@@ -147,7 +147,7 @@ export function whereIsNull<
         whereClause : WhereClauseUtil.where(
             fromClause,
             whereClause,
-            () => isNull(column)
+            () => ExprLib.isNull(column)
         ),
     };
     return result;

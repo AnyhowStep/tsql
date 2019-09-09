@@ -3,6 +3,7 @@ import {Parentheses} from "../parentheses";
 import {FunctionCall} from "../function-call";
 import {OperatorNodeUtil} from "../operator-node";
 import {isIdentifierNode} from "../identifier-node";
+import {QueryBaseUtil} from "../../query-base";
 
 /**
  * A type guard for the `Ast` type
@@ -31,6 +32,9 @@ export function isAst (raw : unknown) : raw is Ast {
                 return false;
             }
         }
+        return true;
+    }
+    if (QueryBaseUtil.isQuery(raw)) {
         return true;
     }
     return false;

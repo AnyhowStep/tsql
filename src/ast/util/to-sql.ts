@@ -4,6 +4,7 @@ import {FunctionCall} from "../function-call";
 import {OperatorNodeUtil, OperatorNode} from "../operator-node";
 import {isIdentifierNode} from "../identifier-node";
 import {Sqlfier} from "../sqlfier";
+import {QueryBaseUtil} from "../../query-base";
 
 export function toSqlAst (ast : Ast, sqlfier : Sqlfier) : string|AstArray|Parentheses|FunctionCall {
     if (typeof ast == "string") {
@@ -20,6 +21,12 @@ export function toSqlAst (ast : Ast, sqlfier : Sqlfier) : string|AstArray|Parent
         );
     } else if (isIdentifierNode(ast)) {
         return sqlfier.identifierSqlfier(ast);
+    } else if (QueryBaseUtil.isQuery(ast)) {
+        return sqlfier.queryBaseSqlfier(
+            ast,
+            (ast2 : Ast) => toSql(ast2, sqlfier),
+            sqlfier
+        );
     } else {
         return ast.map(subAst => toSql(subAst, sqlfier)).join(" ");
     }
