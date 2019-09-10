@@ -133,6 +133,11 @@ export function makeChainableOperator<
                  * By convention, applying the operator to zero operands gives you the identity element
                  */
                 identityAst :
+                (operands.length == 1) ?
+                /**
+                 * By convention, applying the operator on one operand does not do anything to the operand
+                 */
+                operands[0] :
                 OperatorNodeUtil.operatorNode1ToN<OperatorTypeT>(
                     operatorType,
                     operands
