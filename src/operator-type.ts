@@ -897,6 +897,18 @@ export enum OperatorType {
      */
     QUOTE = "QUOTE",
 
+    /*
+     * + https://dev.mysql.com/doc/refman/8.0/en/regexp.html#operator_regexp
+     *   + https://dev.mysql.com/doc/refman/8.0/en/regexp.html#operator_regexp
+     *   + https://dev.mysql.com/doc/refman/8.0/en/regexp.html#function_regexp-like
+     *   + https://dev.mysql.com/doc/refman/8.0/en/regexp.html#regexp-syntax
+     *   + http://userguide.icu-project.org/strings/regexp
+     * + `~`/`~*`/`!~`/`!~*`
+     *   + https://www.postgresql.org/docs/9.0/functions-matching.html#FUNCTIONS-POSIX-REGEXP
+     * + TODO: Find out difference between POSIX regex and ICU regex
+     */
+    //REGEXP = "REGEXP",
+
     /**
      * + https://dev.mysql.com/doc/refman/8.0/en/string-functions.html#function_repeat
      * + https://www.postgresql.org/docs/9.4/functions-string.html#FUNCTIONS-STRING-OTHER
@@ -968,6 +980,12 @@ export enum OperatorType {
      * + SQLite         : `RTRIM(x)/RTRIM(x, y)`
      */
     RTRIM = "RTRIM",
+
+    /*
+     * Appears to be PostgreSQL-specific,
+     * https://www.postgresql.org/docs/9.0/functions-matching.html#FUNCTIONS-SIMILARTO-REGEXP
+     */
+    //SIMILAR_TO = "SIMILAR_TO",
 
     /*
      * + https://dev.mysql.com/doc/refman/8.0/en/string-functions.html#function_soundex
@@ -1314,6 +1332,13 @@ export enum OperatorType {
      * + SQLite         : None, implement with user-defined function
      */
     NATURAL_EXPONENTIATION = "NATURAL_EXPONENTIATION",
+
+    /*
+     * Appears to be PostgreSQL-specific,
+     * + Factorial; `x !` / `!! x`
+     * + https://www.postgresql.org/docs/8.2/functions-math.html
+     */
+    //FACTORIAL = "FACTORIAL",
 
     /**
      * + https://dev.mysql.com/doc/refman/8.0/en/mathematical-functions.html#function_floor
