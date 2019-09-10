@@ -69,7 +69,7 @@ function fromClauseToSql (currentJoins : FromClauseUtil.AfterFromClause["current
         }
         if (join.onClause != undefined) {
             result.push("ON");
-            result.push(toSql(join.onClause.ast));
+            result.push(toSql(AstUtil.tryUnwrapParentheses(join.onClause.ast)));
         }
     }
     return result;
@@ -93,17 +93,22 @@ export const sqliteSqlfier : Sqlfier = {
             operands[2]
         ],
         [OperatorType.COALESCE] : ({operatorType, operands}) => functionCall(operatorType, operands),
+        [OperatorType.GREATER_THAN] : ({operands}) => insertBetween(operands, ">"),
+        [OperatorType.NULL_SAFE_EQUAL] : ({operands}) => insertBetween(operands, "IS"),
         [OperatorType.NOT_EQUAL] : ({operands}) => insertBetween(operands, "<>"),
 
         /*
             Logical Operators
             https://dev.mysql.com/doc/refman/8.0/en/logical-operators.html
         */
+        [OperatorType.AND] : ({operands}) => insertBetween(operands, "AND"),
         [OperatorType.NOT] : ({operands}) => [
             "NOT",
             operands[0]
         ],
         [OperatorType.XOR] : ({operands}) => insertBetween(operands, "<>"),
+
+        [OperatorType.CAST_AS_DOUBLE] : ({operands}, toSql) => functionCall("CAST", [`${toSql(operands)} AS DOUBLE`]),
 
         /*
             Arithmetic Operators

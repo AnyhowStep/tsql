@@ -133,7 +133,7 @@ export class Formatter {
 
     formatNewlineReservedWord(token : Token, query : string) {
         //Different from original implementation. I think this looks nicer.
-        if (query.length > 0 && query.endsWith(" ")) {
+        if (query.length > 0 && !query.endsWith(" ")) {
             query += " ";
         }
         return this.addNewline(query + this.equalizeWhitespace(token.value));

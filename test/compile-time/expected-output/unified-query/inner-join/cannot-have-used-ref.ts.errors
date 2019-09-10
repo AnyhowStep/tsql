@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Argument of type 'DerivedTable<{ isLateral: false; alias: \"myDerivedTable\"; columns: {}; usedRef: IUsedRef<{ myOtherTable: { myOtherTableId: bigint; }; }>; }>' is not assignable to parameter of type 'DerivedTable<{ isLateral: false; alias: \"myDerivedTable\"; columns: {}; usedRef: IUsedRef<{ myOtherTable: { myOtherTableId: bigint; }; }>; }> & { usedRef: IUsedRef<{ myOtherTable: { myOtherTableId: bigint; }; }>; } & CompileError<...>'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Property '__compileError' is missing in type 'DerivedTable<{ isLateral: false; alias: \"myDerivedTable\"; columns: {}; usedRef: IUsedRef<{ myOtherTable: { myOtherTableId: bigint; }; }>; }>' but required in type 'CompileError<[\"Derived table\", \"myDerivedTable\", \"must not reference outer query tables or tables in the same FROM/JOIN clause\", \"myOtherTable\"]>'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 14,
+    "start": 683
+  }
+]

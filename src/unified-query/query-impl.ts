@@ -6,6 +6,8 @@ import {OrderByClause} from "../order-by-clause";
 import {IAliasedTable} from "../aliased-table";
 import {FromClauseUtil} from "../from-clause";
 import {SelectClause, SelectDelegate} from "../select-clause";
+import {RawExpr} from "../raw-expr";
+import {OnDelegate, OnClauseUtil} from "../on-clause";
 /**
  * @todo Rename to `UnifiedQueryUtil` or something
  */
@@ -114,6 +116,38 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         >(
             this,
             aliasedTable
+        );
+    }
+
+    innerJoin<
+        AliasedTableT extends IAliasedTable,
+        RawOnClauseT extends RawExpr<boolean>
+    > (
+        this : Extract<this, QueryUtil.AfterFromClause>,
+        aliasedTable : (
+            & AliasedTableT
+            & TypeUtil.AssertNonUnion<AliasedTableT>
+            & QueryUtil.AssertValidCurrentJoin<Extract<this, QueryUtil.AfterFromClause>, AliasedTableT>
+        ),
+        onDelegate : OnDelegate<
+            Extract<this, QueryUtil.AfterFromClause>["fromClause"],
+            AliasedTableT,
+            (
+                & RawOnClauseT
+                & OnClauseUtil.AssertNoOuterQueryUsedRef<Extract<this, QueryUtil.AfterFromClause>["fromClause"], RawOnClauseT>
+            )
+        >
+    ) : (
+        QueryUtil.InnerJoin<Extract<this, QueryUtil.AfterFromClause>, AliasedTableT>
+    ) {
+        return QueryUtil.innerJoin<
+            Extract<this, QueryUtil.AfterFromClause>,
+            AliasedTableT,
+            RawOnClauseT
+        >(
+            this,
+            aliasedTable,
+            onDelegate
         );
     }
 
