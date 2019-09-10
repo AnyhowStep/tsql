@@ -1,6 +1,7 @@
 import * as tape from "tape";
 import * as tm from "type-mapping";
 import * as tsql from "../../../../../../dist";
+import {sqliteSqlfier} from "../../../../../sqlite-sqlfier";
 
 tape(__filename, t => {
     const myTable = tsql.table("myTable")
@@ -12,7 +13,7 @@ tape(__filename, t => {
         myTable.columns.myColumn
     ));
     t.deepEqual(
-        tsql.AstUtil.toSql(expr.ast, tsql.defaultSqlfier),
+        tsql.AstUtil.toSql(expr.ast, sqliteSqlfier),
         `ABS("myTable"."myColumn")`
     );
 

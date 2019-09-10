@@ -52,6 +52,7 @@
         "./src/order/**/*",
         "./src/order-by-clause/**/*",
         "./src/constants.ts",
+        "./src/unified-query/**/*",
         "./src/index.ts"
     ]
 }

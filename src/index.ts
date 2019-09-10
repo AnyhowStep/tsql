@@ -32,6 +32,7 @@ export * from "./select-clause";
 export * from "./select-item";
 export * from "./sort-direction";
 export * from "./super-key";
+export * from "./sqlstring";
 export * from "./table";
 export * from "./type-map";
 export * from "./type-ref";

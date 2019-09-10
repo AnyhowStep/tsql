@@ -1,40 +1,15 @@
-import {Sqlfier} from "./sqlfier";
-import {escapeIdentifierWithDoubleQuotes} from "../../sqlstring";
-import {OperatorType} from "../../operator-type";
-import {functionCall} from "../function-call";
-import {OperatorSqlfier} from "./operator-sqlfier";
-import {Writable} from "../../type-util";
-import {Ast} from "../ast";
+import {
+    Sqlfier,
+    OperatorType,
+    AstUtil,
+    functionCall,
+    escapeIdentifierWithDoubleQuotes,
+    notImplementedSqlfier,
+} from "../dist";
 
-const notImplemented = () => {
-    throw new Error(`Not implemented`);
-};
+const insertBetween = AstUtil.insertBetween;
 
-function insertBetween (operands : readonly Ast[], insertElement : string) : Ast[] {
-    const result : Ast[] = [];
-    for (const operand of operands) {
-        if (result.length > 0) {
-            result.push(insertElement);
-        }
-        result.push(operand);
-    }
-    return result;
-}
-
-export const notImplementedSqlfier : Sqlfier = {
-    identifierSqlfier : notImplemented,
-    operatorSqlfier : Object
-        .values<OperatorType>(OperatorType as unknown as { [k:string] : OperatorType })
-        .reduce<Writable<OperatorSqlfier>>(
-            (memo, operatorType) => {
-                memo[operatorType] = notImplemented;
-                return memo;
-            },
-            {} as Writable<OperatorSqlfier>
-        ),
-    queryBaseSqlfier : notImplemented,
-};
-export const defaultSqlfier : Sqlfier = {
+export const sqliteSqlfier : Sqlfier = {
     identifierSqlfier : (identifierNode) => identifierNode.identifiers
         .map(escapeIdentifierWithDoubleQuotes)
         .join("."),
@@ -52,16 +27,17 @@ export const defaultSqlfier : Sqlfier = {
             operands[2]
         ],
         [OperatorType.COALESCE] : ({operatorType, operands}) => functionCall(operatorType, operands),
-        [OperatorType.NOT] : ({operands}) => [
-            "NOT",
-            operands[0]
-        ],
+        [OperatorType.NOT_EQUAL] : ({operands}) => insertBetween(operands, "<>"),
 
         /*
             Logical Operators
             https://dev.mysql.com/doc/refman/8.0/en/logical-operators.html
         */
-        [OperatorType.XOR] : ({operands}) => insertBetween(operands, "XOR"),
+        [OperatorType.NOT] : ({operands}) => [
+            "NOT",
+            operands[0]
+        ],
+        [OperatorType.XOR] : ({operands}) => insertBetween(operands, "<>"),
 
         /*
             Arithmetic Operators
@@ -85,4 +61,4 @@ export const defaultSqlfier : Sqlfier = {
         },
     },
     queryBaseSqlfier : notImplementedSqlfier.queryBaseSqlfier,
-}
+};
