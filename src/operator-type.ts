@@ -771,7 +771,7 @@ export enum OperatorType {
      * -----
      *
      * TL;DR,
-     * We cannot provide `LENGTH` as a DB-agnostic operator because of the inconsistencies
+     * We cannot provide `LENGTH` as a DB-unified operator because of the inconsistencies
      *
      * -----
      *
@@ -3011,7 +3011,7 @@ export enum OperatorType {
      * -----
      *
      * Seems like `GROUP_CONCAT()` with `DISTINCT` cannot take a separator
-     * for the DB-agnostic implementation.
+     * for the DB-unified implementation.
      *
      * Unless we modify the SQLite implementation with a user-defined function?
      * @todo Investigate

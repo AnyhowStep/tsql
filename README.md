@@ -7,6 +7,7 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
 
 + As much as possible, compile-time type-safety!
   + Run-time checks should also be included, as much as possible (without impacting performance too much)
+  + Expressions, sub-queries, correlated sub-queries, etc. must be composable and should have compile-time checks
 
 + Provide unified query-building
   + Write query-building code **once**
@@ -111,6 +112,8 @@ This project will have multiple subprojects,
 + More goals and non-goals
 
 + Examples of compile-time type-safety you won't get from other libraries
+
++ Remove usages of "I" and replace with "we"?
 
 <!--
 > I'm just thinking about how...
