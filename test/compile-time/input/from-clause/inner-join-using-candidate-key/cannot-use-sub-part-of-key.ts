@@ -16,15 +16,11 @@ const childTable = tsql.table("childTable")
         accessedAt : tm.mysql.dateTime(),
     });
 
-const eqCandidateKeyOfTable = tsql.eqCandidateKeyOfTable;
-
-
 export const fromClause = tsql.FromClauseUtil.innerJoinUsingCandidateKey(
     tsql.FromClauseUtil.from(
         tsql.FromClauseUtil.newInstance(),
         childTable
     ),
-    eqCandidateKeyOfTable,
     tables => tables.childTable,
     myTable,
     c => [c.userId]
@@ -35,7 +31,6 @@ export const fromClause2 = tsql.FromClauseUtil.innerJoinUsingCandidateKey(
         tsql.FromClauseUtil.newInstance(),
         childTable
     ),
-    eqCandidateKeyOfTable,
     tables => tables.childTable,
     myTable,
     c => [c.computerId]

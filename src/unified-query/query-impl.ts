@@ -8,11 +8,13 @@ import {FromClauseUtil} from "../from-clause";
 import {SelectClause, SelectDelegate} from "../select-clause";
 import {RawExpr} from "../raw-expr";
 import {OnDelegate, OnClauseUtil} from "../on-clause";
+import {ITable, TableUtil} from "../table";
 /**
  * @todo Rename to `UnifiedQueryUtil` or something
  */
 import * as QueryUtil from "./util";
 import * as TypeUtil from "../type-util";
+import * as ExprLib from "../expr-library";
 
 export class Query<DataT extends QueryData> implements IQuery<DataT> {
     readonly fromClause : DataT["fromClause"];
@@ -116,6 +118,35 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         >(
             this,
             aliasedTable
+        );
+    }
+
+    innerJoinUsingCandidateKey<
+        SrcT extends Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"][number],
+        DstT extends ITable,
+        SrcColumnsT extends TableUtil.ColumnArraysFromCandidateKeys<SrcT, DstT>
+    > (
+        this : Extract<this, QueryUtil.AfterFromClause>,
+        srcDelegate : FromClauseUtil.InnerJoinUsingCandidateKeySrcDelegate<Extract<this, QueryUtil.AfterFromClause>["fromClause"], SrcT>,
+        aliasedTable : (
+            & DstT
+            & TypeUtil.AssertNonUnion<DstT>
+            & QueryUtil.AssertValidCurrentJoin<Extract<this, QueryUtil.AfterFromClause>, DstT>
+        ),
+        eqCandidateKeyofTableDelegate : ExprLib.EqCandidateKeyOfTableDelegate<SrcT, DstT, SrcColumnsT>
+    ) : (
+        QueryUtil.InnerJoinUsingCandidateKey<Extract<this, QueryUtil.AfterFromClause>, DstT>
+    ) {
+        return QueryUtil.innerJoinUsingCandidateKey<
+            Extract<this, QueryUtil.AfterFromClause>,
+            SrcT,
+            DstT,
+            SrcColumnsT
+        >(
+            this,
+            srcDelegate,
+            aliasedTable,
+            eqCandidateKeyofTableDelegate
         );
     }
 

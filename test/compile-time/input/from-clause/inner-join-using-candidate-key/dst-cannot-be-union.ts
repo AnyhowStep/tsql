@@ -24,15 +24,11 @@ const childTable = tsql.table("childTable")
         accessedAt : tm.mysql.dateTime(),
     });
 
-const eqCandidateKeyOfTable = tsql.eqCandidateKeyOfTable;
-
-
 export const fromClause = tsql.FromClauseUtil.innerJoinUsingCandidateKey(
     tsql.FromClauseUtil.from(
         tsql.FromClauseUtil.newInstance(),
         childTable
     ),
-    eqCandidateKeyOfTable,
     tables => tables.childTable,
     Math.random() > 0.5 ? myTable : myTable2,
     c => [c.userId, c.computerId]
