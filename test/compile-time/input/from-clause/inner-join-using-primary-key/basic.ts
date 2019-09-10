@@ -14,9 +14,9 @@ const otherTable = tsql.table("otherTable")
     })
     .setPrimaryKey(columns => [columns.otherTableId]);
 
-export const eqPrimaryKeyOfTable = tsql.makeEqPrimaryKeyOfTable(
-    tsql.makeNullSafeComparison("<=>")
-);
+export const eqPrimaryKeyOfTable = tsql.eqPrimaryKeyOfTable;
+
+
 export const fromClause = tsql.FromClauseUtil.innerJoinUsingPrimaryKey(
     tsql.FromClauseUtil.from(
         tsql.FromClauseUtil.newInstance(),

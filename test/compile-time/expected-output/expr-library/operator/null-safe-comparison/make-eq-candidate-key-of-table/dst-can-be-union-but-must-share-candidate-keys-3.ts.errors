@@ -4,83 +4,83 @@
     "code": 2322,
     "category": 1,
     "length": 8,
-    "start": 1014
+    "start": 968
   },
   {
     "messageText": "Property 'userId' does not exist on type '{}'.",
     "code": 2339,
     "category": 1,
     "length": 6,
-    "start": 1016
+    "start": 970
   },
   {
     "messageText": "Type 'any' is not assignable to type 'never'.",
     "code": 2322,
     "category": 1,
     "length": 12,
-    "start": 1024
+    "start": 978
   },
   {
     "messageText": "Property 'computerId' does not exist on type '{}'.",
     "code": 2339,
     "category": 1,
     "length": 10,
-    "start": 1026
+    "start": 980
   },
   {
     "messageText": "Type 'any' is not assignable to type 'never'.",
     "code": 2322,
     "category": 1,
     "length": 8,
-    "start": 1158
+    "start": 1112
   },
   {
     "messageText": "Property 'userId' does not exist on type '{}'.",
     "code": 2339,
     "category": 1,
     "length": 6,
-    "start": 1160
+    "start": 1114
   },
   {
     "messageText": "Type 'any' is not assignable to type 'never'.",
     "code": 2322,
     "category": 1,
     "length": 11,
-    "start": 1168
+    "start": 1122
   },
   {
     "messageText": "Property 'createdAt' does not exist on type '{}'.",
     "code": 2339,
     "category": 1,
     "length": 9,
-    "start": 1170
+    "start": 1124
   },
   {
     "messageText": "Type 'any' is not assignable to type 'never'.",
     "code": 2322,
     "category": 1,
     "length": 11,
-    "start": 1301
+    "start": 1255
   },
   {
     "messageText": "Property 'createdAt' does not exist on type '{}'.",
     "code": 2339,
     "category": 1,
     "length": 9,
-    "start": 1303
+    "start": 1257
   },
   {
     "messageText": "Type 'any' is not assignable to type 'never'.",
     "code": 2322,
     "category": 1,
     "length": 12,
-    "start": 1314
+    "start": 1268
   },
   {
     "messageText": "Property 'computerId' does not exist on type '{}'.",
     "code": 2339,
     "category": 1,
     "length": 10,
-    "start": 1316
+    "start": 1270
   }
 ]

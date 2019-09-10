@@ -4,13 +4,13 @@
     "code": 2339,
     "category": 1,
     "length": 9,
-    "start": 1263
+    "start": 1217
   },
   {
     "messageText": "Property 'createdAt' does not exist on type '{ readonly userId: Column<{ tableAlias: \"childTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>; readonly computerId: Column<{ tableAlias: \"childTable\"; columnAlias: \"computerId\"; mapper: Mapper<...>; }>; }'.",
     "code": 2339,
     "category": 1,
     "length": 9,
-    "start": 1396
+    "start": 1350
   }
 ]

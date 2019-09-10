@@ -3,7 +3,7 @@ import {TableWithPrimaryKey, ITable, TableUtil} from "../../../table";
 import {Expr} from "../../../expr";
 import {UsedRefUtil} from "../../../used-ref";
 import {and} from "../logical";
-import {NullSafeComparison} from "./make-null-safe-comparison";
+import {nullSafeEq} from "./null-safe-eq";
 
 /**
  * Convenience function for,
@@ -46,12 +46,8 @@ export type EqPrimaryKeyOfTable =
         }>
     )
 ;
-export function makeEqPrimaryKeyOfTable (
-    nullSafeEq : NullSafeComparison
-) : (
-    EqPrimaryKeyOfTable
-) {
-    const result : EqPrimaryKeyOfTable = <
+export const eqPrimaryKeyOfTable : EqPrimaryKeyOfTable = (
+    <
         SrcT extends Pick<ITable, "columns">,
         DstT extends Pick<TableWithPrimaryKey, "columns"|"primaryKey">
     > (
@@ -95,6 +91,5 @@ export function makeEqPrimaryKeyOfTable (
             mapper : tm.SafeMapper<boolean>,
             usedRef : UsedRefUtil.FromColumnMap<SrcT["columns"]|DstT["columns"]>
         }>;
-    };
-    return result;
-}
+    }
+);

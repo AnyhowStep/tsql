@@ -8,11 +8,11 @@ import {OperatorType} from "../../../operator-type";
  *
  * This operator performs an equality comparison like the `=` operator,
  * but returns
- * + `true` rather than `NULL` if both operands are `NULL`, and
- * + `false` rather than `NULL` if one operand is `NULL`.
+ * + `false` rather than `NULL` if both operands are `NULL`, and
+ * + `true` rather than `NULL` if one operand is `NULL`.
  *
  * For regular equality, @see {@link eq}
  */
-export const nullSafeEq : NullSafeComparison = makeNullSafeComparison(
-    OperatorType.NULL_SAFE_EQUAL
+export const notNullSafeEq : NullSafeComparison = makeNullSafeComparison(
+    OperatorType.NOT_NULL_SAFE_EQUAL
 );

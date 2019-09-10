@@ -14,9 +14,9 @@ const otherTable = tsql.table("otherTable")
     })
     .addCandidateKey(columns => [columns.otherTableId]);
 
-export const eqCandidateKeyOfTable = tsql.makeEqCandidateKeyOfTable(
-    tsql.makeNullSafeComparison("<=>")
-);
+export const eqCandidateKeyOfTable = tsql.eqCandidateKeyOfTable;
+
+
 export const fromClause = tsql.FromClauseUtil.innerJoinUsingCandidateKey(
     tsql.FromClauseUtil.from(
         tsql.FromClauseUtil.newInstance(),

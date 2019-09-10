@@ -15,9 +15,9 @@ const childTable = tsql.table("childTable")
         accessedAt : tm.mysql.dateTime(),
     });
 
-const eqPrimaryKeyOfTable = tsql.makeEqPrimaryKeyOfTable(
-    tsql.makeNullSafeComparison("<=>")
-);
+const eqPrimaryKeyOfTable = tsql.eqPrimaryKeyOfTable;
+
+
 export const expr = eqPrimaryKeyOfTable(
     childTable,
     myTable

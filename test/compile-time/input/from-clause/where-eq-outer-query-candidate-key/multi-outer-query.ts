@@ -25,9 +25,9 @@ const childTable = tsql.table("childTable")
         createdAt : tm.mysql.dateTime(),
     });
 
-const eqCandidateKeyOfTable = tsql.makeEqCandidateKeyOfTable(
-    tsql.makeNullSafeComparison("<=>")
-);
+const eqCandidateKeyOfTable = tsql.eqCandidateKeyOfTable;
+
+
 
 const fromClause = tsql.FromClauseUtil.from(
     tsql.FromClauseUtil.requireOuterQueryJoins(

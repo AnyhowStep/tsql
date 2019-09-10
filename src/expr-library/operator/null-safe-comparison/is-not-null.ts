@@ -1,4 +1,5 @@
-import {makeNullSafeUnaryComparison, NullSafeUnaryComparison} from "./make-null-safe-unary-comparison";
+import {makeNullSafeUnaryComparison, NullSafeUnaryComparison} from "../../factory";
+import {OperatorType} from "../../../operator-type";
 
 /**
  * https://dev.mysql.com/doc/refman/8.0/en/comparison-operators.html#operator_is-not-null
@@ -11,5 +12,5 @@ import {makeNullSafeUnaryComparison, NullSafeUnaryComparison} from "./make-null-
  * ```
  */
 export const isNotNull : NullSafeUnaryComparison = makeNullSafeUnaryComparison(
-    "IS NOT NULL"
+    OperatorType.IS_NOT_NULL
 );

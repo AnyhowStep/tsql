@@ -4,27 +4,27 @@
     "code": 2322,
     "category": 1,
     "length": 8,
-    "start": 1064
+    "start": 1018
   },
   {
     "messageText": "Property 'userId' does not exist on type '{}'.",
     "code": 2339,
     "category": 1,
     "length": 6,
-    "start": 1066
+    "start": 1020
   },
   {
     "messageText": "Type 'any' is not assignable to type 'never'.",
     "code": 2322,
     "category": 1,
     "length": 12,
-    "start": 1074
+    "start": 1028
   },
   {
     "messageText": "Property 'computerId' does not exist on type '{}'.",
     "code": 2339,
     "category": 1,
     "length": 10,
-    "start": 1076
+    "start": 1030
   }
 ]

@@ -17,9 +17,9 @@ const childTable = tsql.table("childTable")
         createdAt : tm.mysql.dateTime(),
     });
 
-const eqCandidateKeyOfTable = tsql.makeEqCandidateKeyOfTable(
-    tsql.makeNullSafeComparison("<=>")
-);
+const eqCandidateKeyOfTable = tsql.eqCandidateKeyOfTable;
+
+
 export const fromClause = tsql.FromClauseUtil.innerJoinUsingCandidateKey(
     tsql.FromClauseUtil.from(
         tsql.FromClauseUtil.newInstance(),

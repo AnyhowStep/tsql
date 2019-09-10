@@ -16,9 +16,7 @@ const childTable = tsql.table("childTable")
         accessedAt : tm.mysql.dateTime(),
     });
 
-export const eqCandidateKeyOfTable = tsql.makeEqCandidateKeyOfTable(
-    tsql.makeNullSafeComparison("<=>")
-);
+export const eqCandidateKeyOfTable = tsql.eqCandidateKeyOfTable;
 export const expr = eqCandidateKeyOfTable(
     childTable,
     myTable,

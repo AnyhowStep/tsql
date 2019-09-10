@@ -23,9 +23,9 @@ const childTable2 = tsql.table("childTable2")
         accessedAt2 : tm.mysql.dateTime(),
     });
 
-const eqPrimaryKeyOfTable = tsql.makeEqPrimaryKeyOfTable(
-    tsql.makeNullSafeComparison("<=>")
-);
+const eqPrimaryKeyOfTable = tsql.eqPrimaryKeyOfTable;
+
+
 export const expr = eqPrimaryKeyOfTable(
     Math.random() > 0.5 ? childTable : childTable2,
     myTable

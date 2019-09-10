@@ -3,18 +3,14 @@ import {ITable, TableUtil} from "../../../../table";
 import {Expr} from "../../../../expr";
 import {UsedRefUtil} from "../../../../used-ref";
 import {and} from "../../logical";
-import {NullSafeComparison} from "../make-null-safe-comparison";
 import {pickOwnEnumerable} from "../../../../type-util";
 import {assertNullSafeComparableToCandidateKeysOfTable} from "./assert-null-safe-comparable-to-candidate-keys-of-table";
 import {EqCandidateKeyOfTableDelegate} from "./eq-candidate-keys-of-table-delegate";
 import {EqCandidateKeyOfTable} from "./eq-candidate-keys-of-table";
+import {nullSafeEq} from "../null-safe-eq";
 
-export function makeEqCandidateKeyOfTable (
-    nullSafeEq : NullSafeComparison
-) : (
-    EqCandidateKeyOfTable
-) {
-    const result : EqCandidateKeyOfTable = <
+export const eqCandidateKeyOfTable : EqCandidateKeyOfTable = (
+    <
         SrcT extends Pick<ITable, "columns">,
         DstT extends Pick<ITable, "columns"|"candidateKeys">,
         SrcColumnsT extends TableUtil.ColumnArraysFromCandidateKeys<SrcT, DstT>
@@ -72,6 +68,5 @@ export function makeEqCandidateKeyOfTable (
             mapper : tm.SafeMapper<boolean>,
             usedRef : UsedRefUtil.FromColumnMap<SrcT["columns"]|DstT["columns"]>
         }>;
-    };
-    return result;
-}
+    }
+);

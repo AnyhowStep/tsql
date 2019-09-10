@@ -26,9 +26,9 @@ const childTable = tsql.table("childTable")
         accessedAt : tm.mysql.dateTime(),
     });
 
-const eqPrimaryKeyOfTable = tsql.makeEqPrimaryKeyOfTable(
-    tsql.makeNullSafeComparison("<=>")
-);
+const eqPrimaryKeyOfTable = tsql.eqPrimaryKeyOfTable;
+
+
 export const fromClause = tsql.FromClauseUtil.innerJoinUsingPrimaryKey(
     tsql.FromClauseUtil.from(
         tsql.FromClauseUtil.newInstance(),

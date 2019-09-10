@@ -19,7 +19,7 @@ const otherTable = tsql.table("otherTable")
         createdAt : tm.mysql.dateTime(),
     });
 
-    const nullSafeEq = tsql.makeNullSafeComparison("<=>");
+const nullSafeEq = tsql.nullSafeEq;
 
 export const fromClause = tsql.FromClauseUtil.innerJoin(
     tsql.FromClauseUtil.from(

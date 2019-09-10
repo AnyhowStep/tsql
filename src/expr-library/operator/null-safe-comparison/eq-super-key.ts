@@ -4,8 +4,8 @@ import {Expr} from "../../../expr";
 import {UsedRefUtil} from "../../../used-ref";
 import {and} from "../logical";
 import {SuperKey_Input, SuperKeyUtil, SuperKey_Output} from "../../../super-key";
-import {NullSafeComparison} from "./make-null-safe-comparison";
 import {ColumnMapUtil} from "../../../column-map";
+import {nullSafeEq} from "./null-safe-eq";
 
 /**
  * Convenience function for,
@@ -56,53 +56,46 @@ export type EqSuperKey = (
         }>
     )
 );
-export function makeEqSuperKey (
-    nullSafeEq : NullSafeComparison
-) : (
-    EqSuperKey
-) {
-    const result : EqSuperKey = (
-        <
-            TableT extends Pick<ITable, "columns"|"candidateKeys">
-        > (
-            table : TableT,
-            superKeyInput : SuperKey_Input<TableT>
-        ) : (
-            Expr<{
-                mapper : tm.SafeMapper<boolean>,
-                usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>
-            }>
-        ) => {
-            const superKey = SuperKeyUtil.mapper(table)(
-                `${ColumnMapUtil.tableAlias(table.columns)}.superKey`,
-                superKeyInput
-            );
+export const eqSuperKey : EqSuperKey = (
+    <
+        TableT extends Pick<ITable, "columns"|"candidateKeys">
+    > (
+        table : TableT,
+        superKeyInput : SuperKey_Input<TableT>
+    ) : (
+        Expr<{
+            mapper : tm.SafeMapper<boolean>,
+            usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>
+        }>
+    ) => {
+        const superKey = SuperKeyUtil.mapper(table)(
+            `${ColumnMapUtil.tableAlias(table.columns)}.superKey`,
+            superKeyInput
+        );
 
-            const arr = Object.keys(superKey)
-                .filter((columnAlias) => {
-                    return superKey[columnAlias as keyof SuperKey_Output<TableT>] !== undefined;
-                })
-                /**
-                 * We `.sort()` the keys so our resulting SQL is deterministic,
-                 * regardless of how `superKey` was constructed.
-                 */
-                .sort()
-                .map((columnAlias) => {
-                    const expr = nullSafeEq(
-                        table.columns[columnAlias],
-                        superKey[columnAlias as keyof SuperKey_Output<TableT>]
-                    );
-                    return expr as Expr<{
-                        mapper : tm.SafeMapper<boolean>,
-                        usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>
-                    }>;
-                });
-            const result = and(...arr);
-            return result as Expr<{
-                mapper : tm.SafeMapper<boolean>,
-                usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>
-            }>;
-        }
-    );
-    return result;
-}
+        const arr = Object.keys(superKey)
+            .filter((columnAlias) => {
+                return superKey[columnAlias as keyof SuperKey_Output<TableT>] !== undefined;
+            })
+            /**
+             * We `.sort()` the keys so our resulting SQL is deterministic,
+             * regardless of how `superKey` was constructed.
+             */
+            .sort()
+            .map((columnAlias) => {
+                const expr = nullSafeEq(
+                    table.columns[columnAlias],
+                    superKey[columnAlias as keyof SuperKey_Output<TableT>]
+                );
+                return expr as Expr<{
+                    mapper : tm.SafeMapper<boolean>,
+                    usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>
+                }>;
+            });
+        const result = and(...arr);
+        return result as Expr<{
+            mapper : tm.SafeMapper<boolean>,
+            usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>
+        }>;
+    }
+);

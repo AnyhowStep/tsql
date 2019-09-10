@@ -339,7 +339,7 @@ export enum OperatorType {
      *
      * -----
      *
-     * + MySQL        : `<NOT> x <NULL_SAFE_EQUAL>`
+     * + MySQL        : `<NOT> (x <NULL_SAFE_EQUAL>)`
      * + PostgreSQL   : `IS DISTINCT FROM`
      * + SQLite       : `IS NOT`
      */

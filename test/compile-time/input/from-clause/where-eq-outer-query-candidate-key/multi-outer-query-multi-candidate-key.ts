@@ -31,9 +31,9 @@ const childTable = tsql.table("childTable")
         myTable2Column : tm.mysql.boolean(),
     });
 
-const eqCandidateKeyOfTable = tsql.makeEqCandidateKeyOfTable(
-    tsql.makeNullSafeComparison("<=>")
-);
+const eqCandidateKeyOfTable = tsql.eqCandidateKeyOfTable;
+
+
 
 const fromClause = tsql.FromClauseUtil.from(
     tsql.FromClauseUtil.requireOuterQueryJoins(

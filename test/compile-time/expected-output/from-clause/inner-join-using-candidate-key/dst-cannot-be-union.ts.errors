@@ -23,13 +23,13 @@
     "code": 2345,
     "category": 1,
     "length": 40,
-    "start": 1110
+    "start": 1066
   },
   {
     "messageText": "Parameter 'c' implicitly has an 'any' type.",
     "code": 7006,
     "category": 1,
     "length": 1,
-    "start": 1156
+    "start": 1112
   }
 ]

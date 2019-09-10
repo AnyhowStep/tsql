@@ -43,34 +43,34 @@
     "code": 2322,
     "category": 1,
     "length": 43,
-    "start": 1606
+    "start": 1562
   },
   {
     "messageText": "Type 'any' is not assignable to type 'never'.",
     "code": 2322,
     "category": 1,
     "length": 17,
-    "start": 1873
+    "start": 1829
   },
   {
     "messageText": "Property 'createdAt' does not exist on type '{}'.",
     "code": 2339,
     "category": 1,
     "length": 9,
-    "start": 1881
+    "start": 1837
   },
   {
     "messageText": "Type 'any' is not assignable to type 'never'.",
     "code": 2322,
     "category": 1,
     "length": 22,
-    "start": 1892
+    "start": 1848
   },
   {
     "messageText": "Property 'myTable2Column' does not exist on type '{}'.",
     "code": 2339,
     "category": 1,
     "length": 14,
-    "start": 1900
+    "start": 1856
   }
 ]

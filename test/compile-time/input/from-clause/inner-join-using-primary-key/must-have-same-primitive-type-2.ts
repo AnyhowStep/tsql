@@ -16,9 +16,9 @@ const childTable = tsql.table("childTable")
         accessedAt : tm.mysql.dateTime(),
     });
 
-const eqPrimaryKeyOfTable = tsql.makeEqPrimaryKeyOfTable(
-    tsql.makeNullSafeComparison("<=>")
-);
+const eqPrimaryKeyOfTable = tsql.eqPrimaryKeyOfTable;
+
+
 /**
  * @todo Should this even be allowed?
  * `computerId` of both tables are disjoint types.
