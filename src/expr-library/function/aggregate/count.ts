@@ -6,6 +6,8 @@ import {functionCall} from "../../../ast";
 
 /**
  * https://dev.mysql.com/doc/refman/8.0/en/group-by-functions.html#function_count
+ *
+ * @todo Move this to `OperatorType.COUNT_ALL`
  */
 export function count () : (
     Expr<{

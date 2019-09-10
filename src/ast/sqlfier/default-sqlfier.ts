@@ -67,18 +67,22 @@ export const defaultSqlfier : Sqlfier = {
             Arithmetic Operators
             https://dev.mysql.com/doc/refman/8.0/en/arithmetic-functions.html
         */
-       [OperatorType.SUBTRACTION] : ({operands}) => insertBetween(operands, "-"),
-       [OperatorType.MODULO] : ({operands}) => insertBetween(operands, "%"),
-       [OperatorType.ADDITION] : ({operands}) => insertBetween(operands, "+"),
+        [OperatorType.SUBTRACTION] : ({operands}) => insertBetween(operands, "-"),
+        [OperatorType.MODULO] : ({operands}) => insertBetween(operands, "%"),
+        [OperatorType.ADDITION] : ({operands}) => insertBetween(operands, "+"),
 
         /*
             Mathematical Functions
             https://dev.mysql.com/doc/refman/8.0/en/mathematical-functions.html
         */
-       [OperatorType.ABSOLUTE_VALUE] : ({operands}) => functionCall("ABS", operands),
-       [OperatorType.ARC_COSINE] : ({operands}) => {
-           return functionCall("ACOS", operands);
-       },
+        [OperatorType.ABSOLUTE_VALUE] : ({operands}) => functionCall("ABS", operands),
+        [OperatorType.ARC_COSINE] : ({operands}) => {
+            return functionCall("ACOS", operands);
+        },
+
+        [OperatorType.PI] : () => {
+            return functionCall("PI", []);
+        },
     },
     queryBaseSqlfier : notImplementedSqlfier.queryBaseSqlfier,
 }
