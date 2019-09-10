@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Argument of type 'Table<{ isLateral: false; alias: \"myOtherTable\"; columns: { readonly myOtherTableId: Column<{ tableAlias: \"myOtherTable\"; columnAlias: \"myOtherTableId\"; mapper: Mapper<unknown, bigint>; }>; }; usedRef: IUsedRef<...>; ... 9 more ...; mutableColumns: readonly []; }>' is not assignable to parameter of type 'Table<{ isLateral: false; alias: \"myOtherTable\"; columns: { readonly myOtherTableId: Column<{ tableAlias: \"myOtherTable\"; columnAlias: \"myOtherTableId\"; mapper: Mapper<unknown, bigint>; }>; }; ... 10 more ...; mutableColumns: readonly []; }> & { ...; } & CompileError<...>'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Property '__compileError' is missing in type 'Table<{ isLateral: false; alias: \"myOtherTable\"; columns: { readonly myOtherTableId: Column<{ tableAlias: \"myOtherTable\"; columnAlias: \"myOtherTableId\"; mapper: Mapper<unknown, bigint>; }>; }; usedRef: IUsedRef<...>; ... 9 more ...; mutableColumns: readonly []; }>' but required in type 'CompileError<[\"Table alias\", \"myOtherTable\", \"already used in outer query JOINs\", \"myOtherTable\"]>'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 12,
+    "start": 433
+  }
+]

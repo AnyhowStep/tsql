@@ -1,0 +1,33 @@
+[
+  {
+    "messageText": {
+      "messageText": "Argument of type 'DerivedTable<{ isLateral: false; alias: \"myDerivedTable\"; columns: {}; usedRef: IUsedRef<{ outerQueryTable: { outerQueryColumn: string; }; }>; }>' is not assignable to parameter of type 'DerivedTable<{ isLateral: false; alias: \"myDerivedTable\"; columns: {}; usedRef: IUsedRef<{ outerQueryTable: { outerQueryColumn: string; }; }>; }> & { usedRef: IUsedRef<{}>; } & CompileError<[\"Derived table\", \"myDerivedTable\", \"must not reference outer query tables or tables in the same FROM/JOIN clause\", \"outerQuery...'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Type 'DerivedTable<{ isLateral: false; alias: \"myDerivedTable\"; columns: {}; usedRef: IUsedRef<{ outerQueryTable: { outerQueryColumn: string; }; }>; }>' is not assignable to type '{ usedRef: IUsedRef<{}>; }'.",
+        "category": 1,
+        "code": 2322,
+        "next": {
+          "messageText": "Types of property 'usedRef' are incompatible.",
+          "category": 1,
+          "code": 2326,
+          "next": {
+            "messageText": "Type 'IUsedRef<{ outerQueryTable: { outerQueryColumn: string; }; }>' is not assignable to type 'IUsedRef<{}>'.",
+            "category": 1,
+            "code": 2322,
+            "next": {
+              "messageText": "Property 'outerQueryTable' is missing in type '{}' but required in type '{ outerQueryTable: { outerQueryColumn: string; }; }'.",
+              "category": 1,
+              "code": 2741
+            }
+          }
+        }
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 14,
+    "start": 519
+  }
+]
