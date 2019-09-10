@@ -8,7 +8,7 @@ import {FromClauseUtil} from "../from-clause";
 import {SelectClause, SelectDelegate} from "../select-clause";
 import {RawExpr} from "../raw-expr";
 import {OnDelegate, OnClauseUtil} from "../on-clause";
-import {ITable, TableUtil} from "../table";
+import {ITable, TableUtil, TableWithPrimaryKey} from "../table";
 /**
  * @todo Rename to `UnifiedQueryUtil` or something
  */
@@ -147,6 +147,32 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
             srcDelegate,
             aliasedTable,
             eqCandidateKeyofTableDelegate
+        );
+    }
+
+    innerJoinUsingPrimaryKey<
+        SrcT extends Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"][number],
+        DstT extends TableWithPrimaryKey
+    > (
+        this : Extract<this, QueryUtil.AfterFromClause>,
+        srcDelegate : FromClauseUtil.InnerJoinUsingPrimaryKeySrcDelegate<Extract<this, QueryUtil.AfterFromClause>["fromClause"], SrcT>,
+        aliasedTable : (
+            & DstT
+            & TypeUtil.AssertNonUnion<DstT>
+            & QueryUtil.AssertValidCurrentJoin<Extract<this, QueryUtil.AfterFromClause>, DstT>
+            & TableUtil.AssertHasNullSafeComparablePrimaryKey<DstT, SrcT["columns"]>
+        )
+    ) : (
+        QueryUtil.InnerJoinUsingPrimaryKey<Extract<this, QueryUtil.AfterFromClause>, DstT>
+    ) {
+        return QueryUtil.innerJoinUsingPrimaryKey<
+            Extract<this, QueryUtil.AfterFromClause>,
+            SrcT,
+            DstT
+        >(
+            this,
+            srcDelegate,
+            aliasedTable
         );
     }
 

@@ -15,15 +15,11 @@ const childTable = tsql.table("childTable")
         accessedAt : tm.mysql.dateTime(),
     });
 
-const eqPrimaryKeyOfTable = tsql.eqPrimaryKeyOfTable;
-
-
 export const fromClause = tsql.FromClauseUtil.innerJoinUsingPrimaryKey(
     tsql.FromClauseUtil.from(
         tsql.FromClauseUtil.newInstance(),
         childTable
     ),
-    eqPrimaryKeyOfTable,
     tables => tables.childTable,
     myTable
 );

@@ -18,7 +18,7 @@ tape(__filename, t => {
             ck1 : tm.mysql.varChar(),
             ck2 : tm.mysql.dateTime(),
         })
-        .addCandidateKey(columns => [columns.ck0]);
+        .setPrimaryKey(columns => [columns.ck0]);
 
     const myTable3 = tsql.table("myTable3")
         .addColumns({
@@ -27,19 +27,17 @@ tape(__filename, t => {
             ck1 : tm.mysql.varChar(),
             ck2 : tm.mysql.dateTime(),
         })
-        .addCandidateKey(columns => [columns.ck1, columns.ck2]);
+        .setPrimaryKey(columns => [columns.ck1, columns.ck2]);
 
     const query = tsql.from(myTable)
         .select(c => [c.ck0])
-        .innerJoinUsingCandidateKey(
+        .innerJoinUsingPrimaryKey(
             t => t.myTable,
-            myTable2,
-            columns => [columns.ck0]
+            myTable2
         )
-        .innerJoinUsingCandidateKey(
+        .innerJoinUsingPrimaryKey(
             t => t.myTable,
-            myTable3,
-            columns => [columns.ck1, columns.ck2]
+            myTable3
         );
 
     compareSqlPretty(__filename, t, query);

@@ -16,9 +16,6 @@ const childTable = tsql.table("childTable")
         accessedAt : tm.mysql.dateTime(),
     });
 
-const eqPrimaryKeyOfTable = tsql.eqPrimaryKeyOfTable;
-
-
 /**
  * @todo Should this even be allowed?
  * `computerId` of both tables are disjoint types.
@@ -29,7 +26,6 @@ export const fromClause = tsql.FromClauseUtil.innerJoinUsingPrimaryKey(
         tsql.FromClauseUtil.newInstance(),
         childTable
     ),
-    eqPrimaryKeyOfTable,
     tables => tables.childTable,
     myTable
 );
