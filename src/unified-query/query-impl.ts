@@ -10,6 +10,7 @@ import {SelectClause, SelectDelegate} from "../select-clause";
  * @todo Rename to `UnifiedQueryUtil` or something
  */
 import * as QueryUtil from "./util";
+import * as TypeUtil from "../type-util";
 
 export class Query<DataT extends QueryData> implements IQuery<DataT> {
     readonly fromClause : DataT["fromClause"];
@@ -88,6 +89,27 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     ) {
         return QueryUtil.from<
             Extract<this, QueryUtil.BeforeFromClause>,
+            AliasedTableT
+        >(
+            this,
+            aliasedTable
+        );
+    }
+
+    crossJoin<
+        AliasedTableT extends IAliasedTable
+    > (
+        this : Extract<this, QueryUtil.AfterFromClause>,
+        aliasedTable : (
+            & AliasedTableT
+            & TypeUtil.AssertNonUnion<AliasedTableT>
+            & QueryUtil.AssertValidCurrentJoin<Extract<this, QueryUtil.AfterFromClause>, AliasedTableT>
+        )
+    ) : (
+        QueryUtil.CrossJoin<Extract<this, QueryUtil.AfterFromClause>, AliasedTableT>
+    ) {
+        return QueryUtil.crossJoin<
+            Extract<this, QueryUtil.AfterFromClause>,
             AliasedTableT
         >(
             this,
