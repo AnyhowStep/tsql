@@ -5,9 +5,75 @@ import {
     functionCall,
     escapeIdentifierWithDoubleQuotes,
     notImplementedSqlfier,
+    SelectClause,
+    Ast,
+    ColumnUtil,
+    SEPARATOR,
+    FromClauseUtil,
+    JoinType,
+    isIdentifierNode,
+    ExprSelectItemUtil,
 } from "../dist";
 
 const insertBetween = AstUtil.insertBetween;
+
+function selectClauseToSql (selectClause : SelectClause, toSql : (ast : Ast) => string) : string[] {
+    const result : string[] = [];
+    for (const selectItem of selectClause) {
+        if (result.length > 0) {
+            result.push(",");
+        }
+        if (ColumnUtil.isColumn(selectItem)) {
+            result.push(
+                [
+                    escapeIdentifierWithDoubleQuotes(selectItem.tableAlias),
+                    ".",
+                    escapeIdentifierWithDoubleQuotes(selectItem.columnAlias)
+                ].join(""),
+                "AS",
+                escapeIdentifierWithDoubleQuotes(
+                    `${selectItem.tableAlias}${SEPARATOR}${selectItem.columnAlias}`
+                )
+            );
+        } else if (ExprSelectItemUtil.isExprSelectItem(selectItem)) {
+            result.push(
+                toSql(selectItem.unaliasedAst),
+                "AS",
+                escapeIdentifierWithDoubleQuotes(
+                    `${selectItem.tableAlias}${SEPARATOR}${selectItem.alias}`
+                )
+            );
+            selectItem.unaliasedAst
+
+        } else {
+            throw new Error(`Not implemented`)
+        }
+    }
+    return ["SELECT", ...result];
+}
+
+function fromClauseToSql (currentJoins : FromClauseUtil.AfterFromClause["currentJoins"], toSql : (ast : Ast) => string) : string[] {
+    const result : string[] = [];
+    for (const join of currentJoins) {
+        if (join.joinType == JoinType.FROM) {
+            result.push("FROM");
+        } else {
+            result.push(join.joinType, "JOIN");
+        }
+        if (isIdentifierNode(join.tableAst)) {
+            result.push(toSql(join.tableAst));
+        } else {
+            result.push(toSql(join.tableAst));
+            result.push("AS");
+            result.push(escapeIdentifierWithDoubleQuotes(join.tableAlias));
+        }
+        if (join.onClause != undefined) {
+            result.push("ON");
+            result.push(toSql(join.onClause.ast));
+        }
+    }
+    return result;
+}
 
 export const sqliteSqlfier : Sqlfier = {
     identifierSqlfier : (identifierNode) => identifierNode.identifiers
@@ -60,5 +126,15 @@ export const sqliteSqlfier : Sqlfier = {
             return functionCall("PI", []);
         },
     },
-    queryBaseSqlfier : notImplementedSqlfier.queryBaseSqlfier,
+    queryBaseSqlfier : (query, toSql) => {
+        const result : string[] = [];
+        if (query.selectClause != undefined) {
+            result.push(selectClauseToSql(query.selectClause, toSql).join(" "));
+        }
+        if (query.fromClause != undefined && query.fromClause.currentJoins != undefined) {
+            result.push(fromClauseToSql(query.fromClause.currentJoins, toSql).join(" "));
+        }
+
+        return result.join(" ");
+    },
 };

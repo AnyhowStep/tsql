@@ -78,7 +78,8 @@ export function fromAliasedTable<
             mutableColumns : AliasedTableUtil.mutableColumns(aliasedTable),
         },
         joinType,
-        onClause
+        onClause,
+        aliasedTable.unaliasedAst
     );
     return result as FromAliasedTable<AliasedTableT, NullableT>;
 }

@@ -5,6 +5,7 @@ import {HavingClause} from "../having-clause";
 import {OrderByClause} from "../order-by-clause";
 import {IAliasedTable} from "../aliased-table";
 import {FromClauseUtil} from "../from-clause";
+import {SelectClause, SelectDelegate} from "../select-clause";
 /**
  * @todo Rename to `UnifiedQueryUtil` or something
  */
@@ -93,4 +94,16 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
             aliasedTable
         );
     }
+
+    select<
+        SelectsT extends SelectClause
+    > (
+        this : Extract<this, QueryUtil.BeforeUnionClause>,
+        selectDelegate : SelectDelegate<this["fromClause"], this["selectClause"], SelectsT>
+    ) : (
+        QueryUtil.Select<Extract<this, QueryUtil.BeforeUnionClause>, SelectsT>
+    ) {
+        return QueryUtil.select<Extract<this, QueryUtil.BeforeUnionClause>, SelectsT>(this, selectDelegate);
+    }
+
 }

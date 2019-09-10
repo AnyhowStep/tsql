@@ -16,7 +16,8 @@
     "accept-compile-time": "ts-node -P ./test/compile-time/tsconfig.json ./test/compile-time/accept-actual.ts",
     "accept-one": "ts-node -P ./test/compile-time/tsconfig.json ./test/compile-time/accept-one.ts",
     "test-compile-time-interactive": "ts-node -P ./test/compile-time/tsconfig.json ./test/compile-time/interactive.ts",
-    "test-run-time": "ts-node -P ./test/run-time/tsconfig.json ./test/run-time/runner.ts"
+    "test-run-time": "ts-node -P ./test/run-time/tsconfig.json ./test/run-time/runner.ts",
+    "count-loc": "find ./src -name '*.ts' | xargs wc -l"
   },
   "author": "anyhowstep",
   "license": "MIT",

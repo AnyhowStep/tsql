@@ -1,5 +1,6 @@
 import {JoinData, IJoin, JoinType} from "./join";
 import {OnClause} from "../on-clause";
+import {Ast} from "../ast";
 
 export class Join<DataT extends JoinData> implements IJoin<DataT> {
     readonly tableAlias : DataT["tableAlias"];
@@ -18,11 +19,13 @@ export class Join<DataT extends JoinData> implements IJoin<DataT> {
 
     readonly joinType : JoinType;
     readonly onClause : OnClause|undefined;
+    readonly tableAst : Ast;
 
     constructor (
         data : DataT,
         joinType : JoinType,
-        onClause : OnClause|undefined
+        onClause : OnClause|undefined,
+        tableAst : Ast
     ) {
         this.tableAlias = data.tableAlias;
         this.columns = data.columns;
@@ -40,5 +43,6 @@ export class Join<DataT extends JoinData> implements IJoin<DataT> {
 
         this.joinType = joinType;
         this.onClause = onClause;
+        this.tableAst = tableAst;
     }
 }

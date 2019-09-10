@@ -157,7 +157,8 @@ export function replaceColumn<
                 mutableColumns,
             },
             join.joinType,
-            join.onClause
+            join.onClause,
+            join.tableAst
         );
         return result as ReplaceColumn<
             JoinT,

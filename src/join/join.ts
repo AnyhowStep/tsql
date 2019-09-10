@@ -2,6 +2,7 @@ import * as tm from "type-mapping";
 import {ColumnMap} from "../column-map";
 import {Key} from "../key";
 import {OnClause} from "../on-clause";
+import {Ast} from "../ast";
 
 export enum JoinType {
     FROM  = "FROM",
@@ -121,4 +122,9 @@ export interface IJoin<DataT extends JoinData=JoinData> {
      * + All other `JOIN`s have `ON` clause.
      */
     readonly onClause : OnClause|undefined;
+    /**
+     * The AST for a joined table could be as simple as an identifier...
+     * Or as complex as a sub-query!
+     */
+    readonly tableAst : Ast;
 }
