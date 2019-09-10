@@ -208,6 +208,38 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         );
     }
 
+    leftJoin<
+        AliasedTableT extends IAliasedTable,
+        RawOnClauseT extends RawExpr<boolean>
+    > (
+        this : Extract<this, QueryUtil.AfterFromClause>,
+        aliasedTable : (
+            & AliasedTableT
+            & TypeUtil.AssertNonUnion<AliasedTableT>
+            & QueryUtil.AssertValidCurrentJoin<Extract<this, QueryUtil.AfterFromClause>, AliasedTableT>
+        ),
+        onDelegate : OnDelegate<
+            Extract<this, QueryUtil.AfterFromClause>["fromClause"],
+            AliasedTableT,
+            (
+                & RawOnClauseT
+                & OnClauseUtil.AssertNoOuterQueryUsedRef<Extract<this, QueryUtil.AfterFromClause>["fromClause"], RawOnClauseT>
+            )
+        >
+    ) : (
+        QueryUtil.LeftJoin<Extract<this, QueryUtil.AfterFromClause>, AliasedTableT>
+    ) {
+        return QueryUtil.leftJoin<
+            Extract<this, QueryUtil.AfterFromClause>,
+            AliasedTableT,
+            RawOnClauseT
+        >(
+            this,
+            aliasedTable,
+            onDelegate
+        );
+    }
+
     select<
         SelectsT extends SelectClause
     > (

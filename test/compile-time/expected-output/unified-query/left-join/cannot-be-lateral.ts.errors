@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Argument of type 'DerivedTable<{ isLateral: true; alias: \"myDerivedTable\"; columns: {}; usedRef: IUsedRef<{}>; }>' is not assignable to parameter of type 'DerivedTable<{ isLateral: true; alias: \"myDerivedTable\"; columns: {}; usedRef: IUsedRef<{}>; }> & { usedRef: IUsedRef<{ myTable: { myTableId: bigint; }; }>; } & CompileError<[\"myDerivedTable\", \"cannot be LATERAL; does your DBMS support it?\"]>'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Type 'DerivedTable<{ isLateral: true; alias: \"myDerivedTable\"; columns: {}; usedRef: IUsedRef<{}>; }>' is not assignable to type 'CompileError<[\"myDerivedTable\", \"cannot be LATERAL; does your DBMS support it?\"]>'.",
+        "category": 1,
+        "code": 2322
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 24,
+    "start": 437
+  }
+]
