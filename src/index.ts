@@ -40,6 +40,7 @@ export * from "./unified-query";
 export * from "./used-ref";
 export * from "./where-clause";
 
+export * from "./buffer";
 export * from "./constants";
 export * from "./operator-type";
 

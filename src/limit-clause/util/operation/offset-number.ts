@@ -1,3 +1,4 @@
+import * as tm from "type-mapping";
 import {LimitClause} from "../../limit-clause";
 import {OffsetBigInt, offsetBigInt} from "./offset-bigint";
 
@@ -15,6 +16,7 @@ export function offsetNumber<
 ) : (
     OffsetNumber<LimitClauseT>
 ) {
+    const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
     return offsetBigInt(
         limitClause,
         /**

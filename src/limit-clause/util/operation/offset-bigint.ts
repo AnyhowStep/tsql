@@ -12,7 +12,7 @@ import {LimitClause} from "../../limit-clause";
  * with `LIMIT ALL` if your database supports it.
  */
 export type ALL_ROW_COUNT = 18446744073709551615n;
-export const ALL_ROW_COUNT : ALL_ROW_COUNT = BigInt(18446744073709551615) as ALL_ROW_COUNT;
+export const ALL_ROW_COUNT : ALL_ROW_COUNT = tm.TypeUtil.getBigIntFactoryFunctionOrError()(18446744073709551615) as ALL_ROW_COUNT;
 
 export type OffsetBigInt<
     LimitClauseT extends LimitClause|undefined,
@@ -38,6 +38,7 @@ export function offsetBigInt<
 ) : (
     OffsetBigInt<LimitClauseT, OffsetT>
 ) {
+    const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
     if (tm.BigIntUtil.lessThan(offset, BigInt(0))) {
         throw new Error(`Cannot OFFSET fewer than zero rows`);
     }

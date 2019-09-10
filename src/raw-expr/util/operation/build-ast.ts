@@ -27,7 +27,7 @@ export function buildAst (rawExpr : AnyRawExpr) : Ast {
     if (rawExpr instanceof Date) {
         return DateTimeUtil.toSqlUtc(rawExpr, 3);
     }
-    if (rawExpr instanceof Buffer) {
+    if (Buffer.isBuffer(rawExpr)) {
         //escape(Buffer.from("hello")) == "X'68656c6c6f'"
         return escapeValue(rawExpr);
     }

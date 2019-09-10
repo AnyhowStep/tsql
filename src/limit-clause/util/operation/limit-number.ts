@@ -1,3 +1,4 @@
+import * as tm from "type-mapping";
 import {LimitClause} from "../../limit-clause";
 import {LimitBigInt, limitBigInt} from "./limit-bigint";
 
@@ -65,6 +66,7 @@ export function limitNumber<
 ) : (
     LimitNumber<LimitClauseT>
 ) {
+    const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
     return limitBigInt(
         limitClause,
         /**

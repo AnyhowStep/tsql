@@ -3,11 +3,10 @@
     "compilerOptions": {
         "outDir": "./dist",
         "rootDir": "./src",
-        "types": [
-            "@types/node"
-        ]
+        "types": []
     },
     "include" : [
+        "./src/buffer.ts",
         "./src/operator-type.ts",
         "./src/type-util/**/*",
         "./src/type-map/**/*",

@@ -58,6 +58,49 @@ This project will have multiple subprojects,
 
 -----
 
+### Running on Non-`node` Environments
+
+This library requires `BigInt` and `Buffer` support.
+
+If your environment does not have them, you must polyfill them before this library is loaded.
+
+-----
+
+The simplest `BigInt` polyfill that should work is,
+```ts
+(global as any).BigInt = ((value : string|number|bigint) => {
+  return {
+    toString : () => {
+      return String(value);
+    },
+  };
+}) as any;
+```
+
+-----
+
+The simplest `Buffer` polyfill that should work is,
+```ts
+(global as any).Buffer = {
+  isBuffer : (mixed : unknown) : mixed is Buffer => {
+    return /*snip implementation*/;
+  },
+} as any;
+```
+
+If the above returns `true`, then the `Buffer` must support,
+```ts
+interface Buffer {
+    equals : (other : Buffer) => boolean,
+    toString : (encoding : "hex") => string,
+}
+```
+
+See the internal `Buffer` declaration [here](src/buffer.ts)
+
+
+-----
+
 ### Documentation
 
 0. [Defining Tables](doc/00-getting-started/00-defining-tables.md)
