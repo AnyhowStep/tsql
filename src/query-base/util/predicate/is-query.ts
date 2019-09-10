@@ -20,6 +20,11 @@ export function isQuery (x : unknown) : x is IQueryBase {
 
             "unionClause",
             "unionLimitClause",
+
+            "whereClause",
+            "groupByClause",
+            "havingClause",
+            "orderByClause",
         ]
     )) {
         return false;

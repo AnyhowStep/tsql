@@ -2,6 +2,10 @@ import {IFromClause} from "../from-clause";
 import {SelectClause} from "../select-clause";
 import {UnionClause} from "../union-clause";
 import {LimitClause} from "../limit-clause";
+import {WhereClause} from "../where-clause";
+import {GroupByClause} from "../group-by-clause";
+import {HavingClause} from "../having-clause";
+import {OrderByClause} from "../order-by-clause";
 
 export interface QueryBaseData {
     readonly fromClause : IFromClause,
@@ -25,4 +29,9 @@ export interface IQueryBase<DataT extends QueryBaseData=QueryBaseData> {
 
     readonly unionClause : DataT["unionClause"],
     readonly unionLimitClause : DataT["unionLimitClause"],
+
+    readonly whereClause : WhereClause|undefined,
+    readonly groupByClause : GroupByClause|undefined,
+    readonly havingClause : HavingClause|undefined,
+    readonly orderByClause : OrderByClause|undefined,
 }
