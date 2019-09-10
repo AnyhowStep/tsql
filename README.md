@@ -1,7 +1,59 @@
-At the moment, written with MySQL 5.7.26 in mind.
-
 This library is unusable at the moment.
 It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyhowstep/typed-orm)
+
+-----
+
+### Goals
+
++ As much as possible, compile-time type-safety!
+  + Run-time checks should also be included, as much as possible (without impacting performance too much)
+
++ Provide unified query-building
+  + Write query-building code **once**
+  + Execute on server (MySQL/PostgreSQL) and browser client (using [`sql.js`](https://github.com/kripken/sql.js/))
+
++ Provide query-building specific to a database **and version**
+  + Unified query-building will have to sacrifice features not supported by some database systems
+  + Tailoring code to just one database and version means no need to sacrifice features (in general)
+
+### Non-Goals
+
++ Efficiency
+  + You won't catch me writing O(2<sup>n</sup>) algorithms but I won't lose sleep over wasted CPU cycles
+
+-----
+
+### Project Structure
+
+This project will have multiple subprojects,
+
++ Database-unifying subproject
+  + Provides all the composable components one needs to create a compile-time safe SQL query-building library
+  + Unifies query-building for,
+    + MySQL
+      + 5.7.26
+      + It's the version I use for work and personal projects at the moment
+    + SQLite
+      + https://github.com/kripken/sql.js/
+      + Specific version undecided
+      + One of the goals is to write a query once and execute it both on a server and browser client environment
+    + PostgreSQL
+      + Specific version undecided
+      + Must not be a version that has been released too recently
+      + An eye is kept on PostgreSQL to sanity-check the other two implementations
+  + **DOES NOT** produce SQL strings; only builds an abstract syntax tree
+  + **DOES NOT** execute SQL strings
+  + Major version bumps may change which databases and versions are unified
+    + A future version of this library may choose to unify MySQL 8.x, PostgreSQL 11.x
+
+  Because it must support multiple databases, it will only support features that all three databases support.
+  This means that many features will be excluded.
+
++ Subprojects specific to a database **and version**
+  + Uses composable components to implement features specific to a database **and version**
+    + This means we do not need to sacrifice features for the sake of compatibility
+  + Implements abstract syntax tree to SQL string converter
+  + Implements SQL execution
 
 -----
 
@@ -55,6 +107,10 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
 
   + Personal opinion is that this should only be a last resort.
   + Should try to unify behaviour without it.
+
++ More goals and non-goals
+
++ Examples of compile-time type-safety you won't get from other libraries
 
 <!--
 > I'm just thinking about how...
