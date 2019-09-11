@@ -8,7 +8,7 @@ import {AssertNonUnion} from "../../../type-util";
 import {TableWithPrimaryKey, TableUtil} from "../../../table";
 import {JoinMapUtil} from "../../../join-map";
 import {leftJoin} from "./left-join";
-import {EqPrimaryKeyOfTable} from "../../../expr-library";
+import * as ExprLib from "../../../expr-library";
 import {Expr} from "../../../expr";
 import {UsedRefUtil} from "../../../used-ref";
 
@@ -97,7 +97,6 @@ export function leftJoinUsingPrimaryKey<
     DstT extends TableWithPrimaryKey
 > (
     fromClause : FromClauseT,
-    eqPrimaryKeyOfTable : EqPrimaryKeyOfTable,
     srcDelegate : LeftJoinUsingPrimaryKeySrcDelegate<FromClauseT, SrcT>,
     aliasedTable : (
         & DstT
@@ -131,7 +130,7 @@ export function leftJoinUsingPrimaryKey<
             /**
              * @todo Investigate assignability
              */
-            return eqPrimaryKeyOfTable<
+            return ExprLib.eqPrimaryKeyOfTable<
                 SrcT,
                 DstT
             >(

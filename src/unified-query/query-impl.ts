@@ -237,6 +237,32 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         );
     }
 
+    leftJoinUsingPrimaryKey<
+        SrcT extends Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"][number],
+        DstT extends TableWithPrimaryKey
+    > (
+        this : Extract<this, QueryUtil.AfterFromClause>,
+        srcDelegate : FromClauseUtil.LeftJoinUsingPrimaryKeySrcDelegate<Extract<this, QueryUtil.AfterFromClause>["fromClause"], SrcT>,
+        aliasedTable : (
+            & DstT
+            & TypeUtil.AssertNonUnion<DstT>
+            & QueryUtil.AssertValidCurrentJoin<Extract<this, QueryUtil.AfterFromClause>, DstT>
+            & TableUtil.AssertHasNullSafeComparablePrimaryKey<DstT, SrcT["columns"]>
+        )
+    ) : (
+        QueryUtil.LeftJoinUsingPrimaryKey<Extract<this, QueryUtil.AfterFromClause>, DstT>
+    ) {
+        return QueryUtil.leftJoinUsingPrimaryKey<
+            Extract<this, QueryUtil.AfterFromClause>,
+            SrcT,
+            DstT
+        >(
+            this,
+            srcDelegate,
+            aliasedTable
+        );
+    }
+
     leftJoin<
         AliasedTableT extends IAliasedTable,
         RawOnClauseT extends RawExpr<boolean>

@@ -22,9 +22,6 @@ const childTable2 = tsql.table("childTable2")
         accessedAt2 : tm.mysql.dateTime(),
     });
 
-const eqPrimaryKeyOfTable = tsql.eqPrimaryKeyOfTable;
-
-
 export const fromClause = tsql.FromClauseUtil.leftJoinUsingPrimaryKey(
     tsql.FromClauseUtil.crossJoin(
         tsql.FromClauseUtil.from(
@@ -33,7 +30,6 @@ export const fromClause = tsql.FromClauseUtil.leftJoinUsingPrimaryKey(
         ),
         childTable2
     ),
-    eqPrimaryKeyOfTable,
     tables => Math.random() > 0.5 ? tables.childTable : tables.childTable2,
     myTable
 );
