@@ -21,9 +21,6 @@ import {RawExprUtil} from "../../../raw-expr";
  *
  * -----
  *
- * @todo `HAVING` clause should only  be allowed **AFTER** `GROUP BY` clause or
- * PostgreSQL and SQLite will always throw an error!
- *
  * @param fromClause
  * @param havingClause
  * @param havingDelegate

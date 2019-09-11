@@ -7,6 +7,5 @@ CROSS JOIN
 CROSS JOIN
   "myTable3"
 GROUP BY
-  NULL
-HAVING
-  TRUE
+  "myTable"."myBoolColumn",
+  "myTable2"."myDoubleColumn"

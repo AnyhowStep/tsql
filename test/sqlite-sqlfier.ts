@@ -23,11 +23,12 @@ import {
     OrderByClause,
     ExprUtil,
     HavingClause,
+    GroupByClause,
 } from "../dist";
 
 const insertBetween = AstUtil.insertBetween;
 
-function columnToSql (column : IColumn) : string[] {
+function selectClauseColumnToSql (column : IColumn) : string[] {
     return [
         [
             escapeIdentifierWithDoubleQuotes(column.tableAlias),
@@ -40,7 +41,7 @@ function columnToSql (column : IColumn) : string[] {
         )
     ];
 }
-function columnArrayToSql (columns : IColumn[]) : string[] {
+function selectClauseColumnArrayToSql (columns : IColumn[]) : string[] {
     columns.sort((a, b) => {
         const tableAliasCmp = a.tableAlias.localeCompare(b.tableAlias);
         if (tableAliasCmp != 0) {
@@ -54,18 +55,18 @@ function columnArrayToSql (columns : IColumn[]) : string[] {
             result.push(",");
         }
         result.push(
-            ...columnToSql(column)
+            ...selectClauseColumnToSql(column)
         );
     }
     return result;
 }
-function columnMapToSql (map : ColumnMap) : string[] {
+function selectClauseColumnMapToSql (map : ColumnMap) : string[] {
     const columns = ColumnUtil.fromColumnMap(map);
-    return columnArrayToSql(columns);
+    return selectClauseColumnArrayToSql(columns);
 }
-function columnRefToSql (ref : ColumnRef) : string[] {
+function selectClauseColumnRefToSql (ref : ColumnRef) : string[] {
     const columns = ColumnUtil.fromColumnRef(ref);
-    return columnArrayToSql(columns);
+    return selectClauseColumnArrayToSql(columns);
 }
 function selectClauseToSql (selectClause : SelectClause, toSql : (ast : Ast) => string) : string[] {
     const result : string[] = [];
@@ -75,7 +76,7 @@ function selectClauseToSql (selectClause : SelectClause, toSql : (ast : Ast) => 
         }
         if (ColumnUtil.isColumn(selectItem)) {
             result.push(
-                ...columnToSql(selectItem)
+                ...selectClauseColumnToSql(selectItem)
             );
         } else if (ExprSelectItemUtil.isExprSelectItem(selectItem)) {
             result.push(
@@ -88,9 +89,9 @@ function selectClauseToSql (selectClause : SelectClause, toSql : (ast : Ast) => 
             selectItem.unaliasedAst
 
         } else if (ColumnMapUtil.isColumnMap(selectItem)) {
-            result.push(...columnMapToSql(selectItem));
+            result.push(...selectClauseColumnMapToSql(selectItem));
         } else if (ColumnRefUtil.isColumnRef(selectItem)) {
-            result.push(...columnRefToSql(selectItem));
+            result.push(...selectClauseColumnRefToSql(selectItem));
         } else {
             throw new Error(`Not implemented`)
         }
@@ -151,6 +152,26 @@ function orderByClauseToSql (orderByClause : OrderByClause, toSql : (ast : Ast) 
     }
     return [
         "ORDER BY",
+        ...result
+    ];
+}
+
+function groupByClauseToSql (groupByClause : GroupByClause, _toSql : (ast : Ast) => string) : string[] {
+    const result : string[] = [];
+    for (const column of groupByClause) {
+        if (result.length > 0) {
+            result.push(",");
+        }
+        result.push(
+            [
+                escapeIdentifierWithDoubleQuotes(column.tableAlias),
+                ".",
+                escapeIdentifierWithDoubleQuotes(column.columnAlias)
+            ].join("")
+        );
+    }
+    return [
+        "GROUP BY",
         ...result
     ];
 }
@@ -248,8 +269,19 @@ export const sqliteSqlfier : Sqlfier = {
         if (query.orderByClause != undefined) {
             result.push(orderByClauseToSql(query.orderByClause, toSql).join(" "));
         }
-        if (query.havingClause != undefined) {
-            result.push(havingClauseToSql(query.havingClause, toSql).join(" "));
+        if (query.groupByClause == undefined) {
+            if (query.havingClause != undefined) {
+                /**
+                 * Workaround for `<empty grouping set>` not supported by SQLite
+                 */
+                result.push("GROUP BY NULL");
+                result.push(havingClauseToSql(query.havingClause, toSql).join(" "));
+            }
+        } else {
+            result.push(groupByClauseToSql(query.groupByClause, toSql).join(" "));
+            if (query.havingClause != undefined) {
+                result.push(havingClauseToSql(query.havingClause, toSql).join(" "));
+            }
         }
 
         return result.join(" ");

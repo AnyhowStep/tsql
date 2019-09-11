@@ -7,7 +7,8 @@ CROSS JOIN
 CROSS JOIN
   "myTable3"
 GROUP BY
-  NULL
+  "myTable"."myBoolColumn",
+  "myTable2"."myDoubleColumn"
 HAVING
   "myTable"."myBoolColumn" AND
   ("myTable2"."myDoubleColumn" > 3.141) AND

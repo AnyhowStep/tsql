@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {ExtraQueryData, QueryData, IQuery} from "./query";
 import {WhereClause, WhereDelegate} from "../where-clause";
-import {GroupByClause} from "../group-by-clause";
+import {GroupByClause, GroupByDelegate} from "../group-by-clause";
 import {HavingClause, HavingDelegate} from "../having-clause";
 import {OrderByClause, OrderByDelegate} from "../order-by-clause";
 import {IAliasedTable} from "../aliased-table";
@@ -126,6 +126,23 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         >(
             this,
             aliasedTable
+        );
+    }
+
+    groupBy (
+        this : Extract<this, QueryUtil.AfterFromClause>,
+        groupByDelegate : GroupByDelegate<
+            Extract<this, QueryUtil.AfterFromClause>["fromClause"],
+            Extract<this, QueryUtil.AfterFromClause>["selectClause"]
+        >
+    ) : (
+        QueryUtil.GroupBy<Extract<this, QueryUtil.AfterFromClause>>
+    ) {
+        return QueryUtil.groupBy<
+            Extract<this, QueryUtil.AfterFromClause>
+        >(
+            this,
+            groupByDelegate
         );
     }
 
