@@ -3,6 +3,7 @@ import {IFromClause} from "../from-clause";
 import {ColumnRefUtil} from "../column-ref";
 import {IExpr} from "../expr";
 import * as WhereClauseUtil from "./util";
+import {ColumnUtil} from "../column";
 
 export type WhereDelegate<
     FromClauseT extends IFromClause
@@ -11,8 +12,17 @@ export type WhereDelegate<
         columns : ColumnRefUtil.TryFlatten<
             WhereClauseUtil.AllowedColumnRef<FromClauseT>
         >
-    ) => IExpr<{
-        mapper : tm.SafeMapper<boolean>,
-        usedRef : WhereClauseUtil.AllowedUsedRef<FromClauseT>
-    }>
+    ) => (
+        | boolean
+        | IExpr<{
+            mapper : tm.SafeMapper<boolean>,
+            usedRef : WhereClauseUtil.AllowedUsedRef<FromClauseT>
+        }>
+        | ColumnUtil.ExtractWithType<
+            ColumnUtil.FromColumnRef<
+                WhereClauseUtil.AllowedColumnRef<FromClauseT>
+            >,
+            boolean
+        >
+    )
 );

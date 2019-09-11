@@ -13,6 +13,7 @@ import {
     JoinType,
     isIdentifierNode,
     ExprSelectItemUtil,
+    WhereClause,
 } from "../dist";
 
 const insertBetween = AstUtil.insertBetween;
@@ -73,6 +74,13 @@ function fromClauseToSql (currentJoins : FromClauseUtil.AfterFromClause["current
         }
     }
     return result;
+}
+
+function whereClauseToSql (whereClause : WhereClause, toSql : (ast : Ast) => string) : string[] {
+    return [
+        "WHERE",
+        toSql(AstUtil.tryUnwrapParentheses(whereClause.ast))
+    ];
 }
 
 export const sqliteSqlfier : Sqlfier = {
@@ -138,6 +146,9 @@ export const sqliteSqlfier : Sqlfier = {
         }
         if (query.fromClause != undefined && query.fromClause.currentJoins != undefined) {
             result.push(fromClauseToSql(query.fromClause.currentJoins, toSql).join(" "));
+        }
+        if (query.whereClause != undefined) {
+            result.push(whereClauseToSql(query.whereClause, toSql).join(" "));
         }
 
         return result.join(" ");

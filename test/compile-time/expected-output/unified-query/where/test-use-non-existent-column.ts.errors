@@ -1,0 +1,33 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type 'IExpr<{ mapper: () => boolean; usedRef: IUsedRef<{ myOtherTable: { myOtherTableId: bigint; }; }>; }>' is not assignable to type 'IExpr<{ mapper: () => boolean; usedRef: IUsedRef<{ myTable: { myTableId: bigint; }; }>; }>'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Type '{ mapper: () => boolean; usedRef: IUsedRef<{ myOtherTable: { myOtherTableId: bigint; }; }>; }' is not assignable to type '{ mapper: () => boolean; usedRef: IUsedRef<{ myTable: { myTableId: bigint; }; }>; }'.",
+        "category": 1,
+        "code": 2322,
+        "next": {
+          "messageText": "Types of property 'usedRef' are incompatible.",
+          "category": 1,
+          "code": 2326,
+          "next": {
+            "messageText": "Type 'IUsedRef<{ myOtherTable: { myOtherTableId: bigint; }; }>' is not assignable to type 'IUsedRef<{ myTable: { myTableId: bigint; }; }>'.",
+            "category": 1,
+            "code": 2322,
+            "next": {
+              "messageText": "Property 'myOtherTable' is missing in type '{ myTable: { myTableId: bigint; }; }' but required in type '{ myOtherTable: { myOtherTableId: bigint; }; }'.",
+              "category": 1,
+              "code": 2741
+            }
+          }
+        }
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 10,
+    "start": 925
+  }
+]

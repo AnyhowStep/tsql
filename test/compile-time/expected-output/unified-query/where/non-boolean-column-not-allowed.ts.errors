@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn\"; mapper: Mapper<unknown, number>; }>' is not assignable to type 'boolean | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{ myTable: { myColumn: number; }; }>; }>'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn\"; mapper: Mapper<unknown, number>; }>' is missing the following properties from type 'IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{ myTable: { myColumn: number; }; }>; }>': usedRef, ast",
+        "category": 1,
+        "code": 2739
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 16,
+    "start": 283
+  }
+]

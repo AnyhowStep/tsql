@@ -1,5 +1,5 @@
 import {ExtraQueryData, QueryData, IQuery} from "./query";
-import {WhereClause} from "../where-clause";
+import {WhereClause, WhereDelegate} from "../where-clause";
 import {GroupByClause} from "../group-by-clause";
 import {HavingClause} from "../having-clause";
 import {OrderByClause} from "../order-by-clause";
@@ -306,4 +306,18 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         return QueryUtil.select<Extract<this, QueryUtil.BeforeUnionClause>, SelectsT>(this, selectDelegate);
     }
 
+    where (
+        whereDelegate : WhereDelegate<
+            this["fromClause"]
+        >
+    ) : (
+        QueryUtil.Where<this>
+    ) {
+        return QueryUtil.where<
+            this
+        >(
+            this,
+            whereDelegate
+        );
+    }
 }
