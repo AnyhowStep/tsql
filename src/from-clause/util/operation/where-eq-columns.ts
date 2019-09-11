@@ -2,7 +2,7 @@ import {IFromClause} from "../../from-clause";
 import {AfterFromClause} from "../helper-type";
 import {WhereClause, WhereClauseUtil} from "../../../where-clause";
 import {JoinMapUtil} from "../../../join-map";
-import {EqColumns} from "../../../expr-library";
+import * as ExprLib from "../../../expr-library";
 import {PartialRow_NonUnion} from "../../../partial-row";
 
 /**
@@ -83,7 +83,6 @@ export function whereEqColumns<
 > (
     fromClause : FromClauseT,
     whereClause : WhereClause|undefined,
-    eqColumns : EqColumns,
     /**
      * This construction effectively makes it impossible for `WhereEqColumnsDelegate<>`
      * to return a union type.
@@ -132,7 +131,7 @@ export function whereEqColumns<
             /**
              * @todo Investigate assignability
              */
-            () => eqColumns<TableT>(
+            () => ExprLib.eqColumns<TableT>(
                 table,
                 /**
                  * @todo Investigate assignability

@@ -14,13 +14,14 @@ import {ColumnUtil} from "../column";
 import {PrimitiveExpr, NonNullPrimitiveExpr} from "../primitive-expr";
 import {JoinArrayUtil} from "../join";
 import {SuperKey_NonUnion} from "../super-key";
+import {PrimaryKey_NonUnion} from "../primary-key";
+import {PartialRow_NonUnion} from "../partial-row";
 /**
  * @todo Rename to `UnifiedQueryUtil` or something
  */
 import * as QueryUtil from "./util";
 import * as TypeUtil from "../type-util";
 import * as ExprLib from "../expr-library";
-import {PrimaryKey_NonUnion} from "../primary-key";
 
 export class Query<DataT extends QueryData> implements IQuery<DataT> {
     readonly fromClause : DataT["fromClause"];
@@ -310,6 +311,40 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         QueryUtil.Select<Extract<this, QueryUtil.BeforeUnionClause>, SelectsT>
     ) {
         return QueryUtil.select<Extract<this, QueryUtil.BeforeUnionClause>, SelectsT>(this, selectDelegate);
+    }
+
+    whereEqColumns<
+        TableT extends Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"][number]
+    > (
+        this : Extract<this, QueryUtil.AfterFromClause>,
+        /**
+         * This construction effectively makes it impossible for `WhereEqColumnsDelegate<>`
+         * to return a union type.
+         *
+         * This is unfortunate but a necessary compromise for now.
+         *
+         * https://github.com/microsoft/TypeScript/issues/32804#issuecomment-520199818
+         *
+         * https://github.com/microsoft/TypeScript/issues/32804#issuecomment-520201877
+         */
+        ...args : (
+            TableT extends Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"][number] ?
+            [
+                FromClauseUtil.WhereEqColumnsDelegate<Extract<this, QueryUtil.AfterFromClause>["fromClause"], TableT>,
+                PartialRow_NonUnion<TableT>
+            ] :
+            never
+        )
+    ) : (
+        QueryUtil.WhereEqColumns<Extract<this, QueryUtil.AfterFromClause>>
+    ) {
+        return QueryUtil.whereEqColumns<
+            Extract<this, QueryUtil.AfterFromClause>,
+            TableT
+        >(
+            this,
+            ...args
+        );
     }
 
     whereEqOuterQueryPrimaryKey<

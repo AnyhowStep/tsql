@@ -31,6 +31,9 @@ import {ColumnMapUtil} from "../../../column-map";
  * Uses `eq()` internally because the primary key of a table
  * cannot have nullable columns.
  *
+ * @todo Change this to use `nullSafeEq()` jusssst in case people start using
+ * nullable columns in PKs for whatever reason?
+ *
  * @param table - The table with a primary key
  * @param primaryKeyInput - The primary key values to compare against
  */
