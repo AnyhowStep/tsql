@@ -1,0 +1,30 @@
+[
+  {
+    "messageText": "Type instantiation is excessively deep and possibly infinite.",
+    "code": 2589,
+    "category": 1,
+    "length": 55,
+    "start": 4689
+  },
+  {
+    "messageText": {
+      "messageText": "Argument of type '(columns: { readonly column37: Column<{ tableAlias: \"myTable\"; columnAlias: \"column37\"; mapper: Mapper<unknown, bigint | null>; }>; }) => Column<{ tableAlias: \"myTable\"; columnAlias: \"column37\"; mapper: Mapper<...>; }>' is not assignable to parameter of type '(columns: { readonly [x: string]: { readonly [x: string]: any; }; }) => Column<{ tableAlias: \"myTable\"; columnAlias: \"column37\"; mapper: Mapper<unknown, bigint | null>; }>'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Types of parameters 'columns' and 'columns' are incompatible.",
+        "category": 1,
+        "code": 2328,
+        "next": {
+          "messageText": "Property 'column37' is missing in type '{ readonly [x: string]: { readonly [x: string]: any; }; }' but required in type '{ readonly column37: Column<{ tableAlias: \"myTable\"; columnAlias: \"column37\"; mapper: Mapper<unknown, bigint | null>; }>; }'.",
+          "category": 1,
+          "code": 2741
+        }
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 27,
+    "start": 4715
+  }
+]

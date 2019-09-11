@@ -336,6 +336,33 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         );
     }
 
+    whereIsNotNull<
+        ColumnT extends ColumnUtil.ExtractNullable<
+            ColumnUtil.FromJoinArray<
+                Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"]
+            >
+        >
+    > (
+        this : Extract<this, QueryUtil.AfterFromClause>,
+        whereIsNotNullDelegate : FromClauseUtil.WhereIsNotNullDelegate<
+            Extract<this, QueryUtil.AfterFromClause>["fromClause"],
+            ColumnT
+        >
+    ) : (
+        QueryUtil.WhereIsNotNull<
+            Extract<this, QueryUtil.AfterFromClause>,
+            ColumnT
+        >
+    ) {
+        return QueryUtil.whereIsNotNull<
+            Extract<this, QueryUtil.AfterFromClause>,
+            ColumnT
+        >(
+            this,
+            whereIsNotNullDelegate
+        );
+    }
+
     whereNullSafeEq<
         ColumnT extends ColumnUtil.ExtractWithType<
             ColumnUtil.FromJoinArray<

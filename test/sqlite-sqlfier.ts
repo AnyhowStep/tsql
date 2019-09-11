@@ -143,6 +143,7 @@ export const sqliteSqlfier : Sqlfier = {
         ],
         [OperatorType.COALESCE] : ({operatorType, operands}) => functionCall(operatorType, operands),
         [OperatorType.GREATER_THAN] : ({operands}) => insertBetween(operands, ">"),
+        [OperatorType.IS_NOT_NULL] : ({operands}) => [operands[0], "IS NOT NULL"],
         [OperatorType.IS_NULL] : ({operands}) => [operands[0], "IS NULL"],
         [OperatorType.NULL_SAFE_EQUAL] : ({operands}) => insertBetween(operands, "IS"),
         [OperatorType.NOT_EQUAL] : ({operands}) => insertBetween(operands, "<>"),
