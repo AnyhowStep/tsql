@@ -1,0 +1,48 @@
+[
+  {
+    "messageText": {
+      "messageText": "Argument of type '[(tables: { readonly myTable: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/join/join-impl\").Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly otherColumn: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/column/column-impl\").Column<{ tableAlias: \"myTable\"; columnAlias: \"otherColumn\"; m...' is not assignable to parameter of type '[(tables: { readonly myTable: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/join/join-impl\").Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly otherColumn: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/column/column-impl\").Column<{ tableAlias: \"myTable\"; columnAlias: \"otherColumn\"; m...'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Type '[(tables: { readonly myTable: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/join/join-impl\").Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly otherColumn: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/column/column-impl\").Column<{ tableAlias: \"myTable\"; columnAlias: \"otherColumn\"; m...' is not assignable to type '[(tables: { readonly myTable: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/join/join-impl\").Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly otherColumn: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/column/column-impl\").Column<{ tableAlias: \"myTable\"; columnAlias: \"otherColumn\"; m...'. Two different types with this name exist, but they are unrelated.",
+        "category": 1,
+        "code": 2719,
+        "next": {
+          "messageText": "Type '(tables: { readonly myTable: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/join/join-impl\").Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly otherColumn: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/column/column-impl\").Column<{ tableAlias: \"myTable\"; columnAlias: \"otherColumn\"; ma...' is not assignable to type '(tables: { readonly myTable: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/join/join-impl\").Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly otherColumn: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/column/column-impl\").Column<{ tableAlias: \"myTable\"; columnAlias: \"otherColumn\"; ma...'. Two different types with this name exist, but they are unrelated.",
+          "category": 1,
+          "code": 2719,
+          "next": {
+            "messageText": "Type 'import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/join/join-impl\").Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly otherColumn: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/column/column-impl\").Column<{ tableAlias: \"myTable\"; columnAlias: \"otherColumn\"; mapper: import(\"/home/anyhowste...' is not assignable to type 'import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/join/join-impl\").Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly otherColumn: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/column/column-impl\").Column<{ tableAlias: \"myTable\"; columnAlias: \"otherColumn\"; mapper: import(\"/home/anyhowste...'. Two different types with this name exist, but they are unrelated.",
+            "category": 1,
+            "code": 2719,
+            "next": {
+              "messageText": "Type 'Join<{ tableAlias: \"myOtherTable\"; nullable: false; columns: { readonly otherColumn: Column<{ tableAlias: \"myOtherTable\"; columnAlias: \"otherColumn\"; mapper: Mapper<unknown, string>; }>; readonly myOtherTableIdA: Column<...>; readonly myOtherTableIdB: Column<...>; }; ... 4 more ...; mutableColumns: readonly []; }>' is not assignable to type 'Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly otherColumn: Column<{ tableAlias: \"myTable\"; columnAlias: \"otherColumn\"; mapper: Mapper<unknown, string>; }>; readonly myTableIdA: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableIdA\"; mapper: Mapper<...>; }>; readonly myTableIdB: Column<...>; }...'.",
+              "category": 1,
+              "code": 2322,
+              "next": {
+                "messageText": "Type '{ tableAlias: \"myOtherTable\"; nullable: false; columns: { readonly otherColumn: Column<{ tableAlias: \"myOtherTable\"; columnAlias: \"otherColumn\"; mapper: Mapper<unknown, string>; }>; readonly myOtherTableIdA: Column<...>; readonly myOtherTableIdB: Column<...>; }; ... 4 more ...; mutableColumns: readonly []; }' is not assignable to type '{ tableAlias: \"myTable\"; nullable: false; columns: { readonly otherColumn: Column<{ tableAlias: \"myTable\"; columnAlias: \"otherColumn\"; mapper: Mapper<unknown, string>; }>; readonly myTableIdA: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableIdA\"; mapper: Mapper<...>; }>; readonly myTableIdB: Column<...>; }; ......'.",
+                "category": 1,
+                "code": 2322,
+                "next": {
+                  "messageText": "Types of property 'tableAlias' are incompatible.",
+                  "category": 1,
+                  "code": 2326,
+                  "next": {
+                    "messageText": "Type '\"myOtherTable\"' is not assignable to type '\"myTable\"'.",
+                    "category": 1,
+                    "code": 2322
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 68,
+    "start": 1264
+  }
+]

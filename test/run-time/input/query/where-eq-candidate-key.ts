@@ -9,30 +9,34 @@ tape(__filename, t => {
             myBoolColumn : tm.mysql.boolean(),
             myDoubleColumn : tm.mysql.double(),
             myDateTimeColumn : tm.mysql.dateTime(3),
-        });
+        })
+        .addCandidateKey(columns => [columns.myDoubleColumn, columns.myDateTimeColumn]);
 
     const query = tsql.from(myTable)
         .select(c => [c.myBoolColumn])
-        .whereEqColumns(
+        .whereEqCandidateKey(
             tables => tables.myTable,
             {
+                myDoubleColumn : 3.141,
                 myDateTimeColumn : new Date("2010-02-03T23:34:45.456Z"),
             }
         )
-        .whereEqColumns(
+        .whereEqCandidateKey(
             tables => tables.myTable,
             {
                 /**
                  * This column does not belong here!
                  * But it should get ignored.
                  */
-                DOES_NOT_EXIST : false,
+                myBoolColumn : false,
                 myDoubleColumn : 3.141,
+                myDateTimeColumn : new Date("2010-02-03T23:34:45.456Z"),
+                /**
+                 * This column does not belong here!
+                 * But it should get ignored.
+                 */
+                DOES_NOT_EXIST : false,
             } as any
-        )
-        .whereEqColumns(
-            tables => tables.myTable,
-            {}
         );
 
     compareSqlPretty(__filename, t, query);

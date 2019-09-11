@@ -4,7 +4,7 @@ import {AfterFromClause} from "../helper-type";
 import {WhereClause, WhereClauseUtil} from "../../../where-clause";
 import {JoinMapUtil} from "../../../join-map";
 import {CandidateKey_NonUnion} from "../../../candidate-key";
-import {EqCandidateKey} from "../../../expr-library";
+import * as ExprLib from "../../../expr-library";
 import {StrictUnion} from "../../../type-util";
 
 /**
@@ -133,7 +133,6 @@ export function whereEqCandidateKey<
 > (
     fromClause : FromClauseT,
     whereClause : WhereClause|undefined,
-    eqCandidateKey : EqCandidateKey,
     /**
      * This construction effectively makes it impossible for `WhereEqCandidateKeyDelegate<>`
      * to return a union type.
@@ -182,7 +181,7 @@ export function whereEqCandidateKey<
             /**
              * @todo Investigate assignability
              */
-            () => eqCandidateKey(
+            () => ExprLib.eqCandidateKey(
                 table,
                 candidateKey
             ) as any

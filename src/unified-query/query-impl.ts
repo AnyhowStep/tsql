@@ -22,6 +22,7 @@ import {PartialRow_NonUnion} from "../partial-row";
 import * as QueryUtil from "./util";
 import * as TypeUtil from "../type-util";
 import * as ExprLib from "../expr-library";
+import {CandidateKey_NonUnion} from "../candidate-key";
 
 export class Query<DataT extends QueryData> implements IQuery<DataT> {
     readonly fromClause : DataT["fromClause"];
@@ -311,6 +312,42 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         QueryUtil.Select<Extract<this, QueryUtil.BeforeUnionClause>, SelectsT>
     ) {
         return QueryUtil.select<Extract<this, QueryUtil.BeforeUnionClause>, SelectsT>(this, selectDelegate);
+    }
+
+    whereEqCandidateKey<
+        TableT extends JoinArrayUtil.ExtractWithCandidateKey<
+            Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"]
+        >
+    > (
+        this : Extract<this, QueryUtil.AfterFromClause>,
+        /**
+         * This construction effectively makes it impossible for `WhereEqCandidateKeyDelegate<>`
+         * to return a union type.
+         *
+         * This is unfortunate but a necessary compromise for now.
+         *
+         * https://github.com/microsoft/TypeScript/issues/32804#issuecomment-520199818
+         *
+         * https://github.com/microsoft/TypeScript/issues/32804#issuecomment-520201877
+         */
+        ...args : (
+            TableT extends JoinArrayUtil.ExtractWithCandidateKey<Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"]> ?
+            [
+                FromClauseUtil.WhereEqCandidateKeyDelegate<Extract<this, QueryUtil.AfterFromClause>["fromClause"], TableT>,
+                TypeUtil.StrictUnion<CandidateKey_NonUnion<TableT>>
+            ] :
+            never
+        )
+    ) : (
+        QueryUtil.WhereEqCandidateKey<Extract<this, QueryUtil.AfterFromClause>>
+    ) {
+        return QueryUtil.whereEqCandidateKey<
+            Extract<this, QueryUtil.AfterFromClause>,
+            TableT
+        >(
+            this,
+            ...args
+        );
     }
 
     whereEqColumns<
