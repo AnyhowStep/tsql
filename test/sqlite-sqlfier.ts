@@ -142,10 +142,11 @@ export const sqliteSqlfier : Sqlfier = {
             operands[2]
         ],
         [OperatorType.COALESCE] : ({operatorType, operands}) => functionCall(operatorType, operands),
+        [OperatorType.EQUAL] : ({operands}) => insertBetween(operands, "="),
+        [OperatorType.NULL_SAFE_EQUAL] : ({operands}) => insertBetween(operands, "IS"),
         [OperatorType.GREATER_THAN] : ({operands}) => insertBetween(operands, ">"),
         [OperatorType.IS_NOT_NULL] : ({operands}) => [operands[0], "IS NOT NULL"],
         [OperatorType.IS_NULL] : ({operands}) => [operands[0], "IS NULL"],
-        [OperatorType.NULL_SAFE_EQUAL] : ({operands}) => insertBetween(operands, "IS"),
         [OperatorType.NOT_EQUAL] : ({operands}) => insertBetween(operands, "<>"),
 
         /*

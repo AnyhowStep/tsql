@@ -1,0 +1,43 @@
+[
+  {
+    "messageText": {
+      "messageText": "Argument of type '[(columns: { readonly otherColumn: Column<{ tableAlias: \"myTable\"; columnAlias: \"otherColumn\"; mapper: Mapper<unknown, bigint>; }>; readonly myTableId: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<...>; }>; }) => Column<...> | Column<...>, 1n]' is not assignable to parameter of type '[(columns: { readonly otherColumn: Column<{ tableAlias: \"myTable\"; columnAlias: \"otherColumn\"; mapper: Mapper<unknown, bigint>; }>; readonly myTableId: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<...>; }>; }) => Column<...>, 1n] | [...]'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Type '[(columns: { readonly otherColumn: Column<{ tableAlias: \"myTable\"; columnAlias: \"otherColumn\"; mapper: Mapper<unknown, bigint>; }>; readonly myTableId: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<...>; }>; }) => Column<...> | Column<...>, 1n]' is not assignable to type '[(columns: { readonly otherColumn: Column<{ tableAlias: \"myTable\"; columnAlias: \"otherColumn\"; mapper: Mapper<unknown, bigint>; }>; readonly myTableId: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<...>; }>; }) => Column<...>, 1n]'.",
+        "category": 1,
+        "code": 2322,
+        "next": {
+          "messageText": "Type '(columns: { readonly otherColumn: Column<{ tableAlias: \"myTable\"; columnAlias: \"otherColumn\"; mapper: Mapper<unknown, bigint>; }>; readonly myTableId: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<...>; }>; }) => Column<...> | Column<...>' is not assignable to type '(columns: { readonly otherColumn: Column<{ tableAlias: \"myTable\"; columnAlias: \"otherColumn\"; mapper: Mapper<unknown, bigint>; }>; readonly myTableId: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<...>; }>; }) => Column<...>'.",
+          "category": 1,
+          "code": 2322,
+          "next": {
+            "messageText": "Type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"otherColumn\"; mapper: Mapper<unknown, bigint>; }> | Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>' is not assignable to type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"otherColumn\"; mapper: Mapper<unknown, bigint>; }>'.",
+            "category": 1,
+            "code": 2322,
+            "next": {
+              "messageText": "Type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>' is not assignable to type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"otherColumn\"; mapper: Mapper<unknown, bigint>; }>'.",
+              "category": 1,
+              "code": 2322,
+              "next": {
+                "messageText": "Types of property 'columnAlias' are incompatible.",
+                "category": 1,
+                "code": 2326,
+                "next": {
+                  "messageText": "Type '\"myTableId\"' is not assignable to type '\"otherColumn\"'.",
+                  "category": 1,
+                  "code": 2322
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 72,
+    "start": 723
+  }
+]

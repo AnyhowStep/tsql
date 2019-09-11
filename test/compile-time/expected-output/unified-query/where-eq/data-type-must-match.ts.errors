@@ -1,0 +1,16 @@
+[
+  {
+    "messageText": "Argument of type 'true' is not assignable to parameter of type 'bigint'.",
+    "code": 2345,
+    "category": 1,
+    "length": 4,
+    "start": 351
+  },
+  {
+    "messageText": "Argument of type '1337n' is not assignable to parameter of type 'boolean'.",
+    "code": 2345,
+    "category": 1,
+    "length": 5,
+    "start": 474
+  }
+]

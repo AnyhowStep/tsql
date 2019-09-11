@@ -1,0 +1,16 @@
+[
+  {
+    "messageText": "Argument of type '[(columns: {}) => any, bigint]' is not assignable to parameter of type 'never'.",
+    "code": 2345,
+    "category": 1,
+    "length": 28,
+    "start": 301
+  },
+  {
+    "messageText": "Property 'myTableId' does not exist on type '{}'.",
+    "code": 2339,
+    "category": 1,
+    "length": 9,
+    "start": 320
+  }
+]
