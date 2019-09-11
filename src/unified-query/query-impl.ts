@@ -309,6 +309,33 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         return QueryUtil.select<Extract<this, QueryUtil.BeforeUnionClause>, SelectsT>(this, selectDelegate);
     }
 
+    whereIsNull<
+        ColumnT extends ColumnUtil.ExtractNullable<
+            ColumnUtil.FromJoinArray<
+                Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"]
+            >
+        >
+    > (
+        this : Extract<this, QueryUtil.AfterFromClause>,
+        whereIsNullDelegate : FromClauseUtil.WhereIsNullDelegate<
+            Extract<this, QueryUtil.AfterFromClause>["fromClause"],
+            ColumnT
+        >
+    ) : (
+        QueryUtil.WhereIsNull<
+            Extract<this, QueryUtil.AfterFromClause>,
+            ColumnT
+        >
+    ) {
+        return QueryUtil.whereIsNull<
+            Extract<this, QueryUtil.AfterFromClause>,
+            ColumnT
+        >(
+            this,
+            whereIsNullDelegate
+        );
+    }
+
     whereNullSafeEq<
         ColumnT extends ColumnUtil.ExtractWithType<
             ColumnUtil.FromJoinArray<
