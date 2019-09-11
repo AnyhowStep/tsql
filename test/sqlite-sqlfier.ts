@@ -17,6 +17,8 @@ import {
     ColumnMapUtil,
     IColumn,
     ColumnMap,
+    ColumnRefUtil,
+    ColumnRef,
 } from "../dist";
 
 const insertBetween = AstUtil.insertBetween;
@@ -34,9 +36,12 @@ function columnToSql (column : IColumn) : string[] {
         )
     ];
 }
-function columnMapToSql (map : ColumnMap) : string[] {
-    const columns = ColumnUtil.fromColumnMap(map);
+function columnArrayToSql (columns : IColumn[]) : string[] {
     columns.sort((a, b) => {
+        const tableAliasCmp = a.tableAlias.localeCompare(b.tableAlias);
+        if (tableAliasCmp != 0) {
+            return tableAliasCmp;
+        }
         return a.columnAlias.localeCompare(b.columnAlias);
     });
     const result : string[] = [];
@@ -49,6 +54,14 @@ function columnMapToSql (map : ColumnMap) : string[] {
         );
     }
     return result;
+}
+function columnMapToSql (map : ColumnMap) : string[] {
+    const columns = ColumnUtil.fromColumnMap(map);
+    return columnArrayToSql(columns);
+}
+function columnRefToSql (ref : ColumnRef) : string[] {
+    const columns = ColumnUtil.fromColumnRef(ref);
+    return columnArrayToSql(columns);
 }
 function selectClauseToSql (selectClause : SelectClause, toSql : (ast : Ast) => string) : string[] {
     const result : string[] = [];
@@ -72,6 +85,8 @@ function selectClauseToSql (selectClause : SelectClause, toSql : (ast : Ast) => 
 
         } else if (ColumnMapUtil.isColumnMap(selectItem)) {
             result.push(...columnMapToSql(selectItem));
+        } else if (ColumnRefUtil.isColumnRef(selectItem)) {
+            result.push(...columnRefToSql(selectItem));
         } else {
             throw new Error(`Not implemented`)
         }
