@@ -5,7 +5,7 @@ import {JoinArrayUtil} from "../../../join";
 import {AfterFromClause} from "../helper-type";
 import {WhereClause, WhereClauseUtil} from "../../../where-clause";
 import {ColumnRefUtil} from "../../../column-ref";
-import {NullSafeComparison} from "../../../expr-library";
+import * as ExprLib from "../../../expr-library";
 import {ColumnIdentifierRefUtil} from "../../../column-identifier-ref";
 import {PrimitiveExprUtil, PrimitiveExpr} from "../../../primitive-expr";
 import {RawExprUtil} from "../../../raw-expr";
@@ -21,7 +21,7 @@ export type WhereNullSafeEqImpl<
         ColumnUtil.FromJoinArray<CurrentJoinsT>,
         PrimitiveExpr
     >,
-    ValueT extends tm.OutputOf<ColumnT["mapper"]>,
+    ValueT extends tm.OutputOf<ColumnT["mapper"]>|null,
     OuterQueryJoinsT extends AfterFromClause["outerQueryJoins"],
     CurrentJoinsT extends AfterFromClause["currentJoins"],
 > = (
@@ -44,7 +44,7 @@ export type WhereNullSafeEq<
         ColumnUtil.FromJoinArray<FromClauseT["currentJoins"]>,
         PrimitiveExpr
     >,
-    ValueT extends tm.OutputOf<ColumnT["mapper"]>
+    ValueT extends tm.OutputOf<ColumnT["mapper"]>|null
 > = (
     WhereNullSafeEqImpl<
         ColumnT,
@@ -114,23 +114,10 @@ export function whereNullSafeEq<
         ColumnUtil.FromJoinArray<FromClauseT["currentJoins"]>,
         PrimitiveExpr
     >,
-    ValueT extends tm.OutputOf<ColumnT["mapper"]>
+    ValueT extends tm.OutputOf<ColumnT["mapper"]>|null
 > (
     fromClause : FromClauseT,
     whereClause : WhereClause|undefined,
-    /**
-     * The database-specific `nullSafeEq` operator.
-     *
-     * Different databases have different operators that implement null-safe equality.
-     *
-     * + PostgreSQL uses `IS NOT DISTINCT FROM`
-     * + MySQL uses `<=>`
-     * + SQLite uses `IS`
-     * + etc.
-     *
-     * @see {@link null-safe-eq.ts} for more details
-     */
-    nullSafeEq : NullSafeComparison,
     /**
      * This construction effectively makes it impossible for `WhereNullSafeEqDelegate<>`
      * to return a union type.
@@ -218,7 +205,7 @@ export function whereNullSafeEq<
             /**
              * @todo Investigate assignability
              */
-            () => nullSafeEq(
+            () => ExprLib.nullSafeEq(
                 column,
                 value
             ) as any

@@ -1,3 +1,4 @@
+import * as tm from "type-mapping";
 import {ExtraQueryData, QueryData, IQuery} from "./query";
 import {WhereClause, WhereDelegate} from "../where-clause";
 import {GroupByClause} from "../group-by-clause";
@@ -9,6 +10,8 @@ import {SelectClause, SelectDelegate} from "../select-clause";
 import {RawExpr} from "../raw-expr";
 import {OnDelegate, OnClauseUtil} from "../on-clause";
 import {ITable, TableUtil, TableWithPrimaryKey} from "../table";
+import {ColumnUtil} from "../column";
+import {PrimitiveExpr} from "../primitive-expr";
 /**
  * @todo Rename to `UnifiedQueryUtil` or something
  */
@@ -304,6 +307,50 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         QueryUtil.Select<Extract<this, QueryUtil.BeforeUnionClause>, SelectsT>
     ) {
         return QueryUtil.select<Extract<this, QueryUtil.BeforeUnionClause>, SelectsT>(this, selectDelegate);
+    }
+
+    whereNullSafeEq<
+        ColumnT extends ColumnUtil.ExtractWithType<
+            ColumnUtil.FromJoinArray<
+                Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"]
+            >,
+            PrimitiveExpr
+        >,
+        ValueT extends tm.OutputOf<ColumnT["mapper"]>|null
+    > (
+        this : Extract<this, QueryUtil.AfterFromClause>,
+        /**
+         * This construction effectively makes it impossible for `WhereNullSafeEqDelegate<>`
+         * to return a union type.
+         *
+         * This is unfortunate but a necessary compromise for now.
+         *
+         * https://github.com/microsoft/TypeScript/issues/32804#issuecomment-520199818
+         *
+         * https://github.com/microsoft/TypeScript/issues/32804#issuecomment-520201877
+         */
+        ...args : (
+            ColumnT extends ColumnUtil.ExtractWithType<
+                ColumnUtil.FromJoinArray<Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"]>,
+                PrimitiveExpr
+            > ?
+            [
+                FromClauseUtil.WhereNullSafeEqDelegate<Extract<this, QueryUtil.AfterFromClause>["fromClause"], ColumnT>,
+                ValueT
+            ] :
+            never
+        )
+    ) : (
+        QueryUtil.WhereNullSafeEq<Extract<this, QueryUtil.AfterFromClause>, ColumnT, ValueT>
+    ) {
+        return QueryUtil.whereNullSafeEq<
+            Extract<this, QueryUtil.AfterFromClause>,
+            ColumnT,
+            ValueT
+        >(
+            this,
+            ...args
+        );
     }
 
     where (

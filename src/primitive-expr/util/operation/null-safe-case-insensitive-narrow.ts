@@ -19,7 +19,7 @@ import {PrimitiveType} from "../query";
  */
 export type NullSafeCaseInsensitiveNarrow<
     A extends PrimitiveExpr,
-    B extends A
+    B extends A|null
 > = (
     Extract<A, string|Buffer|Date> extends never ?
     B :
