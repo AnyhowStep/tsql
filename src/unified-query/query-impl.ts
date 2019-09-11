@@ -20,6 +20,7 @@ import {SuperKey_NonUnion} from "../super-key";
 import * as QueryUtil from "./util";
 import * as TypeUtil from "../type-util";
 import * as ExprLib from "../expr-library";
+import {PrimaryKey_NonUnion} from "../primary-key";
 
 export class Query<DataT extends QueryData> implements IQuery<DataT> {
     readonly fromClause : DataT["fromClause"];
@@ -311,30 +312,39 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         return QueryUtil.select<Extract<this, QueryUtil.BeforeUnionClause>, SelectsT>(this, selectDelegate);
     }
 
-    whereIsNull<
-        ColumnT extends ColumnUtil.ExtractNullable<
-            ColumnUtil.FromJoinArray<
-                Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"]
-            >
+    whereEqPrimaryKey<
+        TableT extends JoinArrayUtil.ExtractWithPrimaryKey<
+            Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"]
         >
     > (
         this : Extract<this, QueryUtil.AfterFromClause>,
-        whereIsNullDelegate : FromClauseUtil.WhereIsNullDelegate<
-            Extract<this, QueryUtil.AfterFromClause>["fromClause"],
-            ColumnT
-        >
+        /**
+         * This construction effectively makes it impossible for `WhereEqPrimaryKeyDelegate<>`
+         * to return a union type.
+         *
+         * This is unfortunate but a necessary compromise for now.
+         *
+         * https://github.com/microsoft/TypeScript/issues/32804#issuecomment-520199818
+         *
+         * https://github.com/microsoft/TypeScript/issues/32804#issuecomment-520201877
+         */
+        ...args : (
+            TableT extends JoinArrayUtil.ExtractWithPrimaryKey<Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"]> ?
+            [
+                FromClauseUtil.WhereEqPrimaryKeyDelegate<Extract<this, QueryUtil.AfterFromClause>["fromClause"], TableT>,
+                PrimaryKey_NonUnion<TableT>
+            ] :
+            never
+        )
     ) : (
-        QueryUtil.WhereIsNull<
-            Extract<this, QueryUtil.AfterFromClause>,
-            ColumnT
-        >
+        QueryUtil.WhereEqPrimaryKey<Extract<this, QueryUtil.AfterFromClause>>
     ) {
-        return QueryUtil.whereIsNull<
+        return QueryUtil.whereEqPrimaryKey<
             Extract<this, QueryUtil.AfterFromClause>,
-            ColumnT
+            TableT
         >(
             this,
-            whereIsNullDelegate
+            ...args
         );
     }
 
@@ -442,6 +452,33 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         >(
             this,
             whereIsNotNullDelegate
+        );
+    }
+
+    whereIsNull<
+        ColumnT extends ColumnUtil.ExtractNullable<
+            ColumnUtil.FromJoinArray<
+                Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"]
+            >
+        >
+    > (
+        this : Extract<this, QueryUtil.AfterFromClause>,
+        whereIsNullDelegate : FromClauseUtil.WhereIsNullDelegate<
+            Extract<this, QueryUtil.AfterFromClause>["fromClause"],
+            ColumnT
+        >
+    ) : (
+        QueryUtil.WhereIsNull<
+            Extract<this, QueryUtil.AfterFromClause>,
+            ColumnT
+        >
+    ) {
+        return QueryUtil.whereIsNull<
+            Extract<this, QueryUtil.AfterFromClause>,
+            ColumnT
+        >(
+            this,
+            whereIsNullDelegate
         );
     }
 

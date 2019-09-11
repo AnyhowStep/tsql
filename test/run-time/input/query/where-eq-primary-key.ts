@@ -10,28 +10,27 @@ tape(__filename, t => {
             myDoubleColumn : tm.mysql.double(),
             myDateTimeColumn : tm.mysql.dateTime(3),
         })
-        .addCandidateKey(columns => [columns.myDoubleColumn, columns.myDateTimeColumn]);
+        .setPrimaryKey(columns => [columns.myDoubleColumn, columns.myDateTimeColumn]);
 
     const query = tsql.from(myTable)
         .select(c => [c.myBoolColumn])
-        .whereEqSuperKey(
+        .whereEqPrimaryKey(
             tables => tables.myTable,
             {
                 myDoubleColumn : 3.141,
                 myDateTimeColumn : new Date("2010-02-03T23:34:45.456Z"),
             }
         )
-        .whereEqSuperKey(
+        .whereEqPrimaryKey(
             tables => tables.myTable,
             {
-                myBoolColumn : false,
-                myDoubleColumn : 3.141,
-                myDateTimeColumn : new Date("2010-02-03T23:34:45.456Z"),
                 /**
                  * This column does not belong here!
                  * But it should get ignored.
                  */
-                DOES_NOT_EXIST : false,
+                myBoolColumn : false,
+                myDoubleColumn : 3.141,
+                myDateTimeColumn : new Date("2010-02-03T23:34:45.456Z"),
             } as any
         );
 

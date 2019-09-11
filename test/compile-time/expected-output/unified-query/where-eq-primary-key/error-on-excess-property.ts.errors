@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Argument of type '{ myTableIdA: bigint; myTableIdB: false; otherColumn: string; }' is not assignable to parameter of type '{ readonly myTableIdA: bigint; readonly myTableIdB: boolean; }'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Object literal may only specify known properties, and 'otherColumn' does not exist in type '{ readonly myTableIdA: bigint; readonly myTableIdB: boolean; }'.",
+        "category": 1,
+        "code": 2353
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 18,
+    "start": 549
+  }
+]

@@ -42,6 +42,11 @@ This project will have multiple subprojects,
       + Specific version undecided
       + Must not be a version that has been released too recently
       + An eye is kept on PostgreSQL to sanity-check the other two implementations
+      + According to @webstrand ,
+        > 9.4 still receives updates, ubuntu 16.04 expires in 2021 and only has 9.5.
+        > So at least 9.5.
+
+        Preference is leaning towards 9.4 at the moment.
   + **DOES NOT** produce SQL strings; only builds an abstract syntax tree
   + **DOES NOT** execute SQL strings
   + Major version bumps may change which databases and versions are unified
