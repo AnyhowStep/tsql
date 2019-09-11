@@ -5,7 +5,7 @@
  *
  * @todo Investigate. If incompatible, fix.
  */
-import {escapeValue as escape} from "../sqlstring";
+import {escapeValue} from "../sqlstring";
 import * as StringUtil from "../string-util";
 
 //Uses UTC
@@ -33,11 +33,7 @@ export function toSqlUtc (d : Date, fractionalSecondPrecision : 0|1|2|3/*|4|5|6*
 
             (The MySQL TIMESTAMP year range is 1970 to 2038.)
         */
-        return [
-            "(TIMESTAMP ",
-            escape(`${year}-${month}-${day} ${hour}:${minute}:${second}`),
-            ")"
-        ].join("");
+        return escapeValue(`${year}-${month}-${day} ${hour}:${minute}:${second}`);
     } else {
         const ms = StringUtil.zeroPad(
             d.getUTCMilliseconds(),
@@ -56,11 +52,7 @@ export function toSqlUtc (d : Date, fractionalSecondPrecision : 0|1|2|3/*|4|5|6*
 
             (The MySQL TIMESTAMP year range is 1970 to 2038.)
         */
-        return [
-            "(TIMESTAMP ",
-            escape(`${year}-${month}-${day} ${hour}:${minute}:${second}.${ms}`),
-            ")"
-        ].join("");
+        return escapeValue(`${year}-${month}-${day} ${hour}:${minute}:${second}.${ms}`);
     }
 }
 

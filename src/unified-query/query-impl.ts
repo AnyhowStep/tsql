@@ -12,6 +12,8 @@ import {OnDelegate, OnClauseUtil} from "../on-clause";
 import {ITable, TableUtil, TableWithPrimaryKey} from "../table";
 import {ColumnUtil} from "../column";
 import {PrimitiveExpr, NonNullPrimitiveExpr} from "../primitive-expr";
+import {JoinArrayUtil} from "../join";
+import {SuperKey_NonUnion} from "../super-key";
 /**
  * @todo Rename to `UnifiedQueryUtil` or something
  */
@@ -333,6 +335,42 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         >(
             this,
             whereIsNullDelegate
+        );
+    }
+
+    whereEqSuperKey<
+        TableT extends JoinArrayUtil.ExtractWithCandidateKey<
+            Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"]
+        >
+    > (
+        this : Extract<this, QueryUtil.AfterFromClause>,
+        /**
+         * This construction effectively makes it impossible for `WhereEqSuperKeyDelegate<>`
+         * to return a union type.
+         *
+         * This is unfortunate but a necessary compromise for now.
+         *
+         * https://github.com/microsoft/TypeScript/issues/32804#issuecomment-520199818
+         *
+         * https://github.com/microsoft/TypeScript/issues/32804#issuecomment-520201877
+         */
+        ...args : (
+            TableT extends JoinArrayUtil.ExtractWithCandidateKey<Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"]> ?
+            [
+                FromClauseUtil.WhereEqSuperKeyDelegate<Extract<this, QueryUtil.AfterFromClause>["fromClause"], TableT>,
+                SuperKey_NonUnion<TableT>
+            ] :
+            never
+        )
+    ) : (
+        QueryUtil.WhereEqSuperKey<Extract<this, QueryUtil.AfterFromClause>>
+    ) {
+        return QueryUtil.whereEqSuperKey<
+            Extract<this, QueryUtil.AfterFromClause>,
+            TableT
+        >(
+            this,
+            ...args
         );
     }
 

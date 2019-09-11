@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Argument of type '{ myTableIdA: bigint; myTableIdB: false; doesNotExist: string; }' is not assignable to parameter of type '{ readonly myTableIdA: bigint; readonly myTableIdB: boolean; } & Partial<{ readonly otherColumn: string; }>'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Object literal may only specify known properties, and 'doesNotExist' does not exist in type '{ readonly myTableIdA: bigint; readonly myTableIdB: boolean; } & Partial<{ readonly otherColumn: string; }>'.",
+        "category": 1,
+        "code": 2353
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 19,
+    "start": 547
+  }
+]

@@ -19,6 +19,7 @@ import {
     ColumnMap,
     ColumnRefUtil,
     ColumnRef,
+    RawExprUtil,
 } from "../dist";
 
 const insertBetween = AstUtil.insertBetween;
@@ -182,6 +183,19 @@ export const sqliteSqlfier : Sqlfier = {
         [OperatorType.PI] : () => {
             return functionCall("PI", []);
         },
+
+        /*
+            Date and Time Functions
+            https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html
+        */
+
+        [OperatorType.UTC_STRING_TO_TIMESTAMP_CONSTRUCTOR] : ({operands}) => functionCall(
+            "strftime",
+            [
+                RawExprUtil.buildAst("%Y-%m-%d %H:%M:%f"),
+                operands[0]
+            ]
+        ),
     },
     queryBaseSqlfier : (query, toSql) => {
         const result : string[] = [];

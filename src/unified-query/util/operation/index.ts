@@ -9,6 +9,7 @@ export * from "./left-join";
 export * from "./require-nullable-outer-query-joins";
 export * from "./require-outer-query-joins";
 export * from "./select";
+export * from "./where-eq-super-key";
 export * from "./where-eq";
 export * from "./where-is-not-null";
 export * from "./where-is-null";

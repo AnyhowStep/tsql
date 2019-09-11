@@ -1,0 +1,9 @@
+[
+  {
+    "messageText": "The 'this' context of type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>; selectClause: undefined; limitClause: undefined; unionClause: undefined; unionLimitClause: undefined; }>' is not assignable to method's 'this' of type 'never'.",
+    "code": 2684,
+    "category": 1,
+    "length": 28,
+    "start": 362
+  }
+]

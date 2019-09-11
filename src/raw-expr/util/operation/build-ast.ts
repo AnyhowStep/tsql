@@ -7,6 +7,8 @@ import {ColumnUtil} from "../../../column";
 import {QueryBaseUtil} from "../../../query-base";
 import {ExprSelectItemUtil} from "../../../expr-select-item";
 import * as DateTimeUtil from "../../../date-time-util";
+import {operatorNode1} from "../../../ast/operator-node/util";
+import {OperatorType} from "../../../operator-type";
 
 export function buildAst (rawExpr : AnyRawExpr) : Ast {
     //Check primitive cases first
@@ -25,7 +27,10 @@ export function buildAst (rawExpr : AnyRawExpr) : Ast {
         return escapeValue(rawExpr);
     }
     if (rawExpr instanceof Date) {
-        return DateTimeUtil.toSqlUtc(rawExpr, 3);
+        return operatorNode1(
+            OperatorType.UTC_STRING_TO_TIMESTAMP_CONSTRUCTOR,
+            [DateTimeUtil.toSqlUtc(rawExpr, 3)]
+        );
     }
     if (Buffer.isBuffer(rawExpr)) {
         //escape(Buffer.from("hello")) == "X'68656c6c6f'"
