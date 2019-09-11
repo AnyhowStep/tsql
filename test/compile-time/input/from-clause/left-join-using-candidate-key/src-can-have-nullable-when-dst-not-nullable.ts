@@ -16,15 +16,11 @@ const childTable = tsql.table("childTable")
         accessedAt : tm.mysql.dateTime(),
     });
 
-const eqCandidateKeyOfTable = tsql.eqCandidateKeyOfTable;
-
-
 export const fromClause = tsql.FromClauseUtil.leftJoinUsingCandidateKey(
     tsql.FromClauseUtil.from(
         tsql.FromClauseUtil.newInstance(),
         childTable
     ),
-    eqCandidateKeyOfTable,
     tables => tables.childTable,
     myTable,
     c => [c.userId, c.computerId]

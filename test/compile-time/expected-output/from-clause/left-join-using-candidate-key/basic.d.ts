@@ -1,6 +1,5 @@
 import * as tm from "type-mapping/fluent";
 import * as tsql from "../../../../../dist";
-export declare const eqCandidateKeyOfTable: tsql.EqCandidateKeyOfTable;
 export declare const fromClause: tsql.IFromClause<{
     outerQueryJoins: undefined;
     currentJoins: readonly (tsql.Join<{

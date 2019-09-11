@@ -14,15 +14,11 @@ const otherTable = tsql.table("otherTable")
     })
     .addCandidateKey(columns => [columns.otherTableId]);
 
-export const eqCandidateKeyOfTable = tsql.eqCandidateKeyOfTable;
-
-
 export const fromClause = tsql.FromClauseUtil.leftJoinUsingCandidateKey(
     tsql.FromClauseUtil.from(
         tsql.FromClauseUtil.newInstance(),
         myTable
     ),
-    eqCandidateKeyOfTable,
     tables => tables.myTable,
     otherTable,
     columns => [columns.otherTableId]

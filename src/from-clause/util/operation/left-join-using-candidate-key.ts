@@ -8,7 +8,7 @@ import {AssertNonUnion} from "../../../type-util";
 import {TableUtil, ITable} from "../../../table";
 import {JoinMapUtil} from "../../../join-map";
 import {leftJoin} from "./left-join";
-import {EqCandidateKeyOfTable, EqCandidateKeyOfTableDelegate} from "../../../expr-library";
+import * as ExprLib from "../../../expr-library";
 import {Expr} from "../../../expr";
 import {UsedRefUtil} from "../../../used-ref";
 
@@ -103,14 +103,13 @@ export function leftJoinUsingCandidateKey<
     SrcColumnsT extends TableUtil.ColumnArraysFromCandidateKeys<SrcT, DstT>
 > (
     fromClause : FromClauseT,
-    eqCandidateKeyOfTable : EqCandidateKeyOfTable,
     srcDelegate : LeftJoinUsingCandidateKeySrcDelegate<FromClauseT, SrcT>,
     aliasedTable : (
         & DstT
         & AssertNonUnion<DstT>
         & AssertValidCurrentJoinBase<FromClauseT, DstT>
     ),
-    eqCandidateKeyofTableDelegate : EqCandidateKeyOfTableDelegate<SrcT, DstT, SrcColumnsT>
+    eqCandidateKeyofTableDelegate : ExprLib.EqCandidateKeyOfTableDelegate<SrcT, DstT, SrcColumnsT>
 ) : (
     LeftJoinUsingCandidateKey<FromClauseT, DstT>
 ) {
@@ -137,7 +136,7 @@ export function leftJoinUsingCandidateKey<
             /**
              * @todo Investigate assignability
              */
-            return eqCandidateKeyOfTable<
+            return ExprLib.eqCandidateKeyOfTable<
                 SrcT,
                 DstT,
                 SrcColumnsT
