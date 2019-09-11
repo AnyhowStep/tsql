@@ -20,6 +20,8 @@ import {
     ColumnRefUtil,
     ColumnRef,
     RawExprUtil,
+    OrderByClause,
+    ExprUtil,
 } from "../dist";
 
 const insertBetween = AstUtil.insertBetween;
@@ -125,6 +127,33 @@ function whereClauseToSql (whereClause : WhereClause, toSql : (ast : Ast) => str
     ];
 }
 
+function orderByClauseToSql (orderByClause : OrderByClause, toSql : (ast : Ast) => string) : string[] {
+    const result : string[] = [];
+    for (const [sortExpr, sortDirection] of orderByClause) {
+        if (result.length > 0) {
+            result.push(",");
+        }
+        if (ColumnUtil.isColumn(sortExpr)) {
+            result.push(
+                [
+                    escapeIdentifierWithDoubleQuotes(sortExpr.tableAlias),
+                    ".",
+                    escapeIdentifierWithDoubleQuotes(sortExpr.columnAlias)
+                ].join("")
+            );
+        } else if (ExprUtil.isExpr(sortExpr)) {
+            result.push(toSql(sortExpr.ast));
+        } else {
+            result.push(toSql(sortExpr.unaliasedAst));
+        }
+        result.push(sortDirection);
+    }
+    return [
+        "ORDER BY",
+        ...result
+    ];
+}
+
 export const sqliteSqlfier : Sqlfier = {
     identifierSqlfier : (identifierNode) => identifierNode.identifiers
         .map(escapeIdentifierWithDoubleQuotes)
@@ -207,6 +236,9 @@ export const sqliteSqlfier : Sqlfier = {
         }
         if (query.whereClause != undefined) {
             result.push(whereClauseToSql(query.whereClause, toSql).join(" "));
+        }
+        if (query.orderByClause != undefined) {
+            result.push(orderByClauseToSql(query.orderByClause, toSql).join(" "));
         }
 
         return result.join(" ");

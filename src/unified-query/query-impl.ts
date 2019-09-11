@@ -3,7 +3,7 @@ import {ExtraQueryData, QueryData, IQuery} from "./query";
 import {WhereClause, WhereDelegate} from "../where-clause";
 import {GroupByClause} from "../group-by-clause";
 import {HavingClause} from "../having-clause";
-import {OrderByClause} from "../order-by-clause";
+import {OrderByClause, OrderByDelegate} from "../order-by-clause";
 import {IAliasedTable} from "../aliased-table";
 import {FromClauseUtil} from "../from-clause";
 import {SelectClause, SelectDelegate} from "../select-clause";
@@ -300,6 +300,21 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
             this,
             aliasedTable,
             onDelegate
+        );
+    }
+
+    orderBy (
+        orderByDelegate : OrderByDelegate<
+            this["fromClause"]
+        >
+    ) : (
+        QueryUtil.OrderBy<this>
+    ) {
+        return QueryUtil.orderBy<
+            this
+        >(
+            this,
+            orderByDelegate
         );
     }
 
