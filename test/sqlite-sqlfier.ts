@@ -14,10 +14,42 @@ import {
     isIdentifierNode,
     ExprSelectItemUtil,
     WhereClause,
+    ColumnMapUtil,
+    IColumn,
+    ColumnMap,
 } from "../dist";
 
 const insertBetween = AstUtil.insertBetween;
 
+function columnToSql (column : IColumn) : string[] {
+    return [
+        [
+            escapeIdentifierWithDoubleQuotes(column.tableAlias),
+            ".",
+            escapeIdentifierWithDoubleQuotes(column.columnAlias)
+        ].join(""),
+        "AS",
+        escapeIdentifierWithDoubleQuotes(
+            `${column.tableAlias}${SEPARATOR}${column.columnAlias}`
+        )
+    ];
+}
+function columnMapToSql (map : ColumnMap) : string[] {
+    const columns = ColumnUtil.fromColumnMap(map);
+    columns.sort((a, b) => {
+        return a.columnAlias.localeCompare(b.columnAlias);
+    });
+    const result : string[] = [];
+    for (const column of columns) {
+        if (result.length > 0) {
+            result.push(",");
+        }
+        result.push(
+            ...columnToSql(column)
+        );
+    }
+    return result;
+}
 function selectClauseToSql (selectClause : SelectClause, toSql : (ast : Ast) => string) : string[] {
     const result : string[] = [];
     for (const selectItem of selectClause) {
@@ -26,15 +58,7 @@ function selectClauseToSql (selectClause : SelectClause, toSql : (ast : Ast) => 
         }
         if (ColumnUtil.isColumn(selectItem)) {
             result.push(
-                [
-                    escapeIdentifierWithDoubleQuotes(selectItem.tableAlias),
-                    ".",
-                    escapeIdentifierWithDoubleQuotes(selectItem.columnAlias)
-                ].join(""),
-                "AS",
-                escapeIdentifierWithDoubleQuotes(
-                    `${selectItem.tableAlias}${SEPARATOR}${selectItem.columnAlias}`
-                )
+                ...columnToSql(selectItem)
             );
         } else if (ExprSelectItemUtil.isExprSelectItem(selectItem)) {
             result.push(
@@ -46,6 +70,8 @@ function selectClauseToSql (selectClause : SelectClause, toSql : (ast : Ast) => 
             );
             selectItem.unaliasedAst
 
+        } else if (ColumnMapUtil.isColumnMap(selectItem)) {
+            result.push(...columnMapToSql(selectItem));
         } else {
             throw new Error(`Not implemented`)
         }
