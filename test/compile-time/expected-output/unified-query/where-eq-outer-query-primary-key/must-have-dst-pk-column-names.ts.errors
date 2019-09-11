@@ -1,0 +1,16 @@
+[
+  {
+    "messageText": "Type 'any' is not assignable to type 'never'.",
+    "code": 2322,
+    "category": 1,
+    "length": 16,
+    "start": 950
+  },
+  {
+    "messageText": "Property 'outerTable' does not exist on type '{}'.",
+    "code": 2339,
+    "category": 1,
+    "length": 10,
+    "start": 956
+  }
+]

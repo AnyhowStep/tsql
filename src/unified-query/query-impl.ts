@@ -312,6 +312,56 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         return QueryUtil.select<Extract<this, QueryUtil.BeforeUnionClause>, SelectsT>(this, selectDelegate);
     }
 
+    whereEqOuterQueryPrimaryKey<
+        SrcT extends Extract<this, QueryUtil.Correlated & QueryUtil.AfterFromClause>["fromClause"]["currentJoins"][number],
+        DstT extends JoinArrayUtil.ExtractWithNullSafeComparablePrimaryKey<
+            Extract<this, QueryUtil.Correlated & QueryUtil.AfterFromClause>["fromClause"]["outerQueryJoins"],
+            SrcT["columns"]
+        >
+    > (
+        this : Extract<this, QueryUtil.Correlated & QueryUtil.AfterFromClause>,
+        /**
+         * This construction effectively makes it impossible for
+         * `WhereEqOuterQueryPrimaryKeySrcDelegate<>`
+         * to return a union type.
+         *
+         * This is unfortunate but a necessary compromise for now.
+         *
+         * https://github.com/microsoft/TypeScript/issues/32804#issuecomment-520199818
+         *
+         * https://github.com/microsoft/TypeScript/issues/32804#issuecomment-520201877
+         */
+        srcDelegate : (
+            SrcT extends Extract<this, QueryUtil.Correlated & QueryUtil.AfterFromClause>["fromClause"]["currentJoins"][number] ?
+            (
+                FromClauseUtil.WhereEqOuterQueryPrimaryKeySrcDelegate<
+                    Extract<this, QueryUtil.Correlated & QueryUtil.AfterFromClause>["fromClause"],
+                    SrcT
+                >
+            ) :
+            never
+        ),
+        dstDelegate : (
+            FromClauseUtil.WhereEqOuterQueryPrimaryKeyDstDelegate<
+                Extract<this, QueryUtil.Correlated & QueryUtil.AfterFromClause>["fromClause"],
+                SrcT,
+                DstT
+            >
+        )
+    ) : (
+        QueryUtil.WhereEqOuterQueryPrimaryKey<Extract<this, QueryUtil.Correlated & QueryUtil.AfterFromClause>>
+    ) {
+        return QueryUtil.whereEqOuterQueryPrimaryKey<
+            Extract<this, QueryUtil.Correlated & QueryUtil.AfterFromClause>,
+            SrcT,
+            DstT
+        >(
+            this,
+            srcDelegate,
+            dstDelegate
+        );
+    }
+
     whereEqPrimaryKey<
         TableT extends JoinArrayUtil.ExtractWithPrimaryKey<
             Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"]

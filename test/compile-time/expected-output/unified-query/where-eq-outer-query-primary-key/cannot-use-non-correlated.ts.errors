@@ -1,0 +1,16 @@
+[
+  {
+    "messageText": "The 'this' context of type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: readonly Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly outerTableIdA: Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<...>; }>; readonly outerTableIdB: Column<...>; readonly otherColumn: Colu...' is not assignable to method's 'this' of type 'never'.",
+    "code": 2684,
+    "category": 1,
+    "length": 89,
+    "start": 580
+  },
+  {
+    "messageText": "Parameter 'tables' implicitly has an 'any' type.",
+    "code": 7006,
+    "category": 1,
+    "length": 6,
+    "start": 712
+  }
+]

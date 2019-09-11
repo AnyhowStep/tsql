@@ -2,7 +2,7 @@ import {IFromClause} from "../../from-clause";
 import {JoinArrayUtil} from "../../../join";
 import {AfterFromClause, Correlated} from "../helper-type";
 import {WhereClause, WhereClauseUtil} from "../../../where-clause";
-import {EqPrimaryKeyOfTable} from "../../../expr-library";
+import * as ExprLib from "../../../expr-library";
 import {JoinMapUtil} from "../../../join-map";
 import {TableUtil} from "../../../table";
 
@@ -110,7 +110,6 @@ export function whereEqOuterQueryPrimaryKey<
 > (
     fromClause : FromClauseT,
     whereClause : WhereClause|undefined,
-    eqPrimaryKeyOfTable : EqPrimaryKeyOfTable,
     /**
      * This construction effectively makes it impossible for
      * `WhereEqOuterQueryPrimaryKeySrcDelegate<>`
@@ -167,7 +166,7 @@ export function whereEqOuterQueryPrimaryKey<
             /**
              * @todo Investigate assignability
              */
-            () => eqPrimaryKeyOfTable<SrcT, DstT>(
+            () => ExprLib.eqPrimaryKeyOfTable<SrcT, DstT>(
                 src,
                 dst as (
                     & DstT

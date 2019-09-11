@@ -1,0 +1,43 @@
+[
+  {
+    "messageText": {
+      "messageText": "Argument of type '(tables: { readonly myTable: Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly outerTableIdA: Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }>; readonly outerTableIdB: Column<...>; readonly otherColumn: Column<...>; }; ... 4 more ...; mutableColumns: ...' is not assignable to parameter of type '((tables: { readonly myTable: Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly outerTableIdA: Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }>; readonly outerTableIdB: Column<...>; readonly otherColumn: Column<...>; }; ... 4 more ...; mutableColumns:...'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Type '(tables: { readonly myTable: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/join/join-impl\").Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly outerTableIdA: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/column/column-impl\").Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdA\"...' is not assignable to type '(tables: { readonly myTable: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/join/join-impl\").Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly outerTableIdA: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/column/column-impl\").Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdA\"...'. Two different types with this name exist, but they are unrelated.",
+        "category": 1,
+        "code": 2719,
+        "next": {
+          "messageText": "Type 'Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly outerTableIdA: Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }>; readonly outerTableIdB: Column<...>; readonly otherColumn: Column<...>; }; ... 4 more ...; mutableColumns: readonly []; }> | Join<...>' is not assignable to type 'Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly outerTableIdA: Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }>; readonly outerTableIdB: Column<...>; readonly otherColumn: Column<...>; }; ... 4 more ...; mutableColumns: readonly []; }>'.",
+          "category": 1,
+          "code": 2322,
+          "next": {
+            "messageText": "Type 'Join<{ tableAlias: \"otherTable\"; nullable: false; columns: { readonly outerTableIdA: Column<{ tableAlias: \"otherTable\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }>; readonly outerTableIdB: Column<...>; readonly otherColumn: Column<...>; }; ... 4 more ...; mutableColumns: readonly []; }>' is not assignable to type 'Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly outerTableIdA: Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }>; readonly outerTableIdB: Column<...>; readonly otherColumn: Column<...>; }; ... 4 more ...; mutableColumns: readonly []; }>'.",
+            "category": 1,
+            "code": 2322,
+            "next": {
+              "messageText": "Type '{ tableAlias: \"otherTable\"; nullable: false; columns: { readonly outerTableIdA: Column<{ tableAlias: \"otherTable\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }>; readonly outerTableIdB: Column<...>; readonly otherColumn: Column<...>; }; ... 4 more ...; mutableColumns: readonly []; }' is not assignable to type '{ tableAlias: \"myTable\"; nullable: false; columns: { readonly outerTableIdA: Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }>; readonly outerTableIdB: Column<...>; readonly otherColumn: Column<...>; }; ... 4 more ...; mutableColumns: readonly []; }'.",
+              "category": 1,
+              "code": 2322,
+              "next": {
+                "messageText": "Types of property 'tableAlias' are incompatible.",
+                "category": 1,
+                "code": 2326,
+                "next": {
+                  "messageText": "Type '\"otherTable\"' is not assignable to type '\"myTable\"'.",
+                  "category": 1,
+                  "code": 2322
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 66,
+    "start": 945
+  }
+]
