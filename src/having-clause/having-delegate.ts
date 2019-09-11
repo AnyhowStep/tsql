@@ -3,6 +3,7 @@ import {IFromClause} from "../from-clause";
 import {ColumnRefUtil} from "../column-ref";
 import {IExpr} from "../expr";
 import * as HavingClauseUtil from "./util";
+import {ColumnUtil} from "../column";
 
 /**
  * For now, this is basically the same as `WhereDelegate<>`.
@@ -18,8 +19,17 @@ export type HavingDelegate<
         columns : ColumnRefUtil.TryFlatten<
             HavingClauseUtil.AllowedColumnRef<FromClauseT>
         >
-    ) => IExpr<{
-        mapper : tm.SafeMapper<boolean>,
-        usedRef : HavingClauseUtil.AllowedUsedRef<FromClauseT>
-    }>
+    ) => (
+        | boolean
+        | IExpr<{
+            mapper : tm.SafeMapper<boolean>,
+            usedRef : HavingClauseUtil.AllowedUsedRef<FromClauseT>
+        }>
+        | ColumnUtil.ExtractWithType<
+            ColumnUtil.FromColumnRef<
+                HavingClauseUtil.AllowedColumnRef<FromClauseT>
+            >,
+            boolean
+        >
+    )
 );

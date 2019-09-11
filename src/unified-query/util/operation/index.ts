@@ -1,5 +1,6 @@
 export * from "./cross-join";
 export * from "./from";
+export * from "./having";
 export * from "./inner-join-using-candidate-key";
 export * from "./inner-join-using-primary-key";
 export * from "./inner-join";

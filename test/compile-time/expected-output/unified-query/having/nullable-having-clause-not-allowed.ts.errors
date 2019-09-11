@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type 'ExprImpl<Mapper<unknown, boolean | null>, IUsedRef<{}>>' is not assignable to type 'boolean | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{}>; }>'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Type 'ExprImpl<Mapper<unknown, boolean | null>, IUsedRef<{}>>' is not assignable to type 'IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{}>; }>'.",
+        "category": 1,
+        "code": 2322
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 44,
+    "start": 266
+  }
+]

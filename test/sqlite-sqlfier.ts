@@ -22,6 +22,7 @@ import {
     RawExprUtil,
     OrderByClause,
     ExprUtil,
+    HavingClause,
 } from "../dist";
 
 const insertBetween = AstUtil.insertBetween;
@@ -154,6 +155,13 @@ function orderByClauseToSql (orderByClause : OrderByClause, toSql : (ast : Ast) 
     ];
 }
 
+function havingClauseToSql (havingClause : HavingClause, toSql : (ast : Ast) => string) : string[] {
+    return [
+        "HAVING",
+        toSql(AstUtil.tryUnwrapParentheses(havingClause.ast))
+    ];
+}
+
 export const sqliteSqlfier : Sqlfier = {
     identifierSqlfier : (identifierNode) => identifierNode.identifiers
         .map(escapeIdentifierWithDoubleQuotes)
@@ -239,6 +247,9 @@ export const sqliteSqlfier : Sqlfier = {
         }
         if (query.orderByClause != undefined) {
             result.push(orderByClauseToSql(query.orderByClause, toSql).join(" "));
+        }
+        if (query.havingClause != undefined) {
+            result.push(havingClauseToSql(query.havingClause, toSql).join(" "));
         }
 
         return result.join(" ");

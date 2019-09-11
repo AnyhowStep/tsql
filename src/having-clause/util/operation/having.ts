@@ -5,6 +5,9 @@ import {ColumnRefUtil} from "../../../column-ref";
 import * as ExprLib from "../../../expr-library";
 import {allowedColumnRef} from "../query";
 import {UsedRefUtil} from "../../../used-ref";
+import {IAnonymousColumn} from "../../../column";
+import {IAnonymousExpr, ExprUtil} from "../../../expr";
+import {RawExprUtil} from "../../../raw-expr";
 
 /**
  * Returns the MySQL equivalent of `havingClause AND havingDelegate(columns)`
@@ -17,6 +20,9 @@ import {UsedRefUtil} from "../../../used-ref";
  * + The `HAVING` clause enforces proper `GROUP BY` interactions.
  *
  * -----
+ *
+ * @todo `HAVING` clause should only  be allowed **AFTER** `GROUP BY` clause or
+ * PostgreSQL and SQLite will always throw an error!
  *
  * @param fromClause
  * @param havingClause
@@ -32,18 +38,20 @@ export function having<
     HavingClause
 ) {
     const columns = allowedColumnRef(fromClause);
-    const operand = havingDelegate(ColumnRefUtil.tryFlatten(
+    const operand : (
+        boolean|IAnonymousColumn<boolean>|IAnonymousExpr<boolean>
+    ) = havingDelegate(ColumnRefUtil.tryFlatten(
         columns
     ));
 
     UsedRefUtil.assertAllowed(
         { columns },
-        operand.usedRef
+        RawExprUtil.usedRef(operand)
     );
 
     return (
         havingClause == undefined ?
-        operand :
+        ExprUtil.fromRawExpr(operand) :
         ExprLib.and(havingClause, operand)
     );
 }

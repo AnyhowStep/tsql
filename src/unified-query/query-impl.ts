@@ -2,7 +2,7 @@ import * as tm from "type-mapping";
 import {ExtraQueryData, QueryData, IQuery} from "./query";
 import {WhereClause, WhereDelegate} from "../where-clause";
 import {GroupByClause} from "../group-by-clause";
-import {HavingClause} from "../having-clause";
+import {HavingClause, HavingDelegate} from "../having-clause";
 import {OrderByClause, OrderByDelegate} from "../order-by-clause";
 import {IAliasedTable} from "../aliased-table";
 import {FromClauseUtil} from "../from-clause";
@@ -16,13 +16,13 @@ import {JoinArrayUtil} from "../join";
 import {SuperKey_NonUnion} from "../super-key";
 import {PrimaryKey_NonUnion} from "../primary-key";
 import {PartialRow_NonUnion} from "../partial-row";
+import {CandidateKey_NonUnion} from "../candidate-key";
 /**
  * @todo Rename to `UnifiedQueryUtil` or something
  */
 import * as QueryUtil from "./util";
 import * as TypeUtil from "../type-util";
 import * as ExprLib from "../expr-library";
-import {CandidateKey_NonUnion} from "../candidate-key";
 
 export class Query<DataT extends QueryData> implements IQuery<DataT> {
     readonly fromClause : DataT["fromClause"];
@@ -126,6 +126,21 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         >(
             this,
             aliasedTable
+        );
+    }
+
+    having (
+        havingDelegate : HavingDelegate<
+            this["fromClause"]
+        >
+    ) : (
+        QueryUtil.Having<this>
+    ) {
+        return QueryUtil.having<
+            this
+        >(
+            this,
+            havingDelegate
         );
     }
 
