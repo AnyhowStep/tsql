@@ -23,7 +23,7 @@ export type WhereEqImpl<
     SelectClauseT extends AfterFromClause["selectClause"],
     LimitClauseT extends AfterFromClause["limitClause"],
     UnionClauseT extends AfterFromClause["compoundQueryClause"],
-    UnionLimitClauseT extends AfterFromClause["compoundQueryLimitClause"],
+    CompoundQueryLimitClauseT extends AfterFromClause["compoundQueryLimitClause"],
 > = (
     Query<{
         fromClause : FromClauseUtil.WhereEq<FromClauseT, ColumnT, ValueT>,
@@ -32,7 +32,7 @@ export type WhereEqImpl<
         limitClause : LimitClauseT,
 
         compoundQueryClause : UnionClauseT,
-        compoundQueryLimitClause : UnionLimitClauseT,
+        compoundQueryLimitClause : CompoundQueryLimitClauseT,
     }>
 );
 export type WhereEq<

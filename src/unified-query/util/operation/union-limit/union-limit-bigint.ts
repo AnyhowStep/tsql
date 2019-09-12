@@ -8,13 +8,13 @@ import {IQuery} from "../../../query";
  * This hack should only really be reserved for types that are more likely
  * to trigger max depth/max count errors.
  */
-export type UnionLimitBigIntImpl<
+export type CompoundQueryLimitBigIntImpl<
     MaxRowCountT extends bigint,
     FromClauseT extends IQuery["fromClause"],
     SelectClauseT extends IQuery["selectClause"],
     LimitClauseT extends IQuery["limitClause"],
     UnionClauseT extends IQuery["compoundQueryClause"],
-    UnionLimitClauseT extends IQuery["compoundQueryLimitClause"],
+    CompoundQueryLimitClauseT extends IQuery["compoundQueryLimitClause"],
 > =
     Query<{
         fromClause : FromClauseT,
@@ -24,16 +24,16 @@ export type UnionLimitBigIntImpl<
 
         compoundQueryClause : UnionClauseT,
         compoundQueryLimitClause : LimitClauseUtil.LimitBigInt<
-            UnionLimitClauseT,
+            CompoundQueryLimitClauseT,
             MaxRowCountT
         >,
     }>
 ;
-export type UnionLimitBigInt<
+export type CompoundQueryLimitBigInt<
     QueryT extends IQuery,
     MaxRowCountT extends bigint
 > =
-    UnionLimitBigIntImpl<
+    CompoundQueryLimitBigIntImpl<
         MaxRowCountT,
         QueryT["fromClause"],
         QueryT["selectClause"],

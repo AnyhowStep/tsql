@@ -117,35 +117,35 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     > (
         maxRowCount : MaxRowCountT
     ) : (
-        QueryUtil.UnionLimitBigInt<this, MaxRowCountT>
+        QueryUtil.CompoundQueryLimitBigInt<this, MaxRowCountT>
     );
     compoundQueryLimit (
         maxRowCount : 0
     ) : (
-        QueryUtil.UnionLimitNumber0<this>
+        QueryUtil.CompoundQueryLimitNumber0<this>
     );
     compoundQueryLimit (
         maxRowCount : 1
     ) : (
-        QueryUtil.UnionLimitNumber1<this>
+        QueryUtil.CompoundQueryLimitNumber1<this>
     );
     compoundQueryLimit (
         maxRowCount : 0|1
     ) : (
-        QueryUtil.UnionLimitNumber0Or1<this>
+        QueryUtil.CompoundQueryLimitNumber0Or1<this>
     );
     compoundQueryLimit (
         maxRowCount : number|bigint
     ) : (
-        QueryUtil.UnionLimitNumber<this>
+        QueryUtil.CompoundQueryLimitNumber<this>
     );
     compoundQueryLimit (
         maxRowCount : number|bigint
     ) : (
-        | QueryUtil.UnionLimitNumber0<this>
-        | QueryUtil.UnionLimitNumber1<this>
-        | QueryUtil.UnionLimitNumber0Or1<this>
-        | QueryUtil.UnionLimitNumber<this>
+        | QueryUtil.CompoundQueryLimitNumber0<this>
+        | QueryUtil.CompoundQueryLimitNumber1<this>
+        | QueryUtil.CompoundQueryLimitNumber0Or1<this>
+        | QueryUtil.CompoundQueryLimitNumber<this>
     ) {
         return QueryUtil.compoundQueryLimit<this>(this, maxRowCount);
     }

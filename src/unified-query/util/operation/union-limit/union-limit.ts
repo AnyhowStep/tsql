@@ -1,11 +1,11 @@
 import {LimitClauseUtil} from "../../../../limit-clause";
 import {Query} from "../../../query-impl";
 import {IQuery} from "../../../query";
-import {UnionLimitBigInt} from "./union-limit-bigint";
-import {UnionLimitNumber} from "./union-limit-number";
-import {UnionLimitNumber0} from "./union-limit-number-0";
-import {UnionLimitNumber1} from "./union-limit-number-1";
-import {UnionLimitNumber0Or1} from "./union-limit-number-0-or-1";
+import {CompoundQueryLimitBigInt} from "./union-limit-bigint";
+import {CompoundQueryLimitNumber} from "./union-limit-number";
+import {CompoundQueryLimitNumber0} from "./union-limit-number-0";
+import {CompoundQueryLimitNumber1} from "./union-limit-number-1";
+import {CompoundQueryLimitNumber0Or1} from "./union-limit-number-0-or-1";
 
 export function compoundQueryLimit<
     QueryT extends IQuery,
@@ -14,7 +14,7 @@ export function compoundQueryLimit<
     query : QueryT,
     maxRowCount : MaxRowCountT
 ) : (
-    UnionLimitBigInt<QueryT, MaxRowCountT>
+    CompoundQueryLimitBigInt<QueryT, MaxRowCountT>
 );
 export function compoundQueryLimit<
     QueryT extends IQuery
@@ -22,7 +22,7 @@ export function compoundQueryLimit<
     query : QueryT,
     maxRowCount : 0
 ) : (
-    UnionLimitNumber0<QueryT>
+    CompoundQueryLimitNumber0<QueryT>
 );
 export function compoundQueryLimit<
     QueryT extends IQuery
@@ -30,7 +30,7 @@ export function compoundQueryLimit<
     query : QueryT,
     maxRowCount : 1
 ) : (
-    UnionLimitNumber1<QueryT>
+    CompoundQueryLimitNumber1<QueryT>
 );
 export function compoundQueryLimit<
     QueryT extends IQuery
@@ -38,7 +38,7 @@ export function compoundQueryLimit<
     query : QueryT,
     maxRowCount : 0|1
 ) : (
-    UnionLimitNumber0Or1<QueryT>
+    CompoundQueryLimitNumber0Or1<QueryT>
 );
 export function compoundQueryLimit<
     QueryT extends IQuery
@@ -46,7 +46,7 @@ export function compoundQueryLimit<
     query : QueryT,
     maxRowCount : number|bigint
 ) : (
-    UnionLimitNumber<QueryT>
+    CompoundQueryLimitNumber<QueryT>
 );
 export function compoundQueryLimit<
     QueryT extends IQuery
@@ -54,10 +54,10 @@ export function compoundQueryLimit<
     query : QueryT,
     maxRowCount : number|bigint
 ) : (
-    | UnionLimitNumber0<QueryT>
-    | UnionLimitNumber1<QueryT>
-    | UnionLimitNumber0Or1<QueryT>
-    | UnionLimitNumber<QueryT>
+    | CompoundQueryLimitNumber0<QueryT>
+    | CompoundQueryLimitNumber1<QueryT>
+    | CompoundQueryLimitNumber0Or1<QueryT>
+    | CompoundQueryLimitNumber<QueryT>
 ) {
     const compoundQueryLimitClause = LimitClauseUtil.limit<
         QueryT["compoundQueryLimitClause"]
@@ -76,7 +76,7 @@ export function compoundQueryLimit<
         //compoundQueryLimitClause,
     } = query;
 
-    const result : UnionLimitNumber<QueryT> = new Query(
+    const result : CompoundQueryLimitNumber<QueryT> = new Query(
         {
             fromClause,
             selectClause,

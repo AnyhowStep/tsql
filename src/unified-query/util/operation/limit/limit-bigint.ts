@@ -14,7 +14,7 @@ export type LimitBigIntImpl<
     SelectClauseT extends IQuery["selectClause"],
     LimitClauseT extends IQuery["limitClause"],
     UnionClauseT extends IQuery["compoundQueryClause"],
-    UnionLimitClauseT extends IQuery["compoundQueryLimitClause"],
+    CompoundQueryLimitClauseT extends IQuery["compoundQueryLimitClause"],
 > = (
     Query<{
         fromClause : FromClauseT,
@@ -26,7 +26,7 @@ export type LimitBigIntImpl<
         >,
 
         compoundQueryClause : UnionClauseT,
-        compoundQueryLimitClause : UnionLimitClauseT,
+        compoundQueryLimitClause : CompoundQueryLimitClauseT,
     }>
 );
 export type LimitBigInt<

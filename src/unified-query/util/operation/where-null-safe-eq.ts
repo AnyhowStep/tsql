@@ -23,7 +23,7 @@ export type WhereNullSafeEqImpl<
     SelectClauseT extends AfterFromClause["selectClause"],
     LimitClauseT extends AfterFromClause["limitClause"],
     UnionClauseT extends AfterFromClause["compoundQueryClause"],
-    UnionLimitClauseT extends AfterFromClause["compoundQueryLimitClause"],
+    CompoundQueryLimitClauseT extends AfterFromClause["compoundQueryLimitClause"],
 > = (
     Query<{
         fromClause : FromClauseUtil.WhereNullSafeEq<FromClauseT, ColumnT, ValueT>,
@@ -32,7 +32,7 @@ export type WhereNullSafeEqImpl<
         limitClause : LimitClauseT,
 
         compoundQueryClause : UnionClauseT,
-        compoundQueryLimitClause : UnionLimitClauseT,
+        compoundQueryLimitClause : CompoundQueryLimitClauseT,
     }>
 );
 export type WhereNullSafeEq<

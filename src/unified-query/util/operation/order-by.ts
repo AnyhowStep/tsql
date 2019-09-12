@@ -13,7 +13,7 @@ export type OrderByImpl<
     SelectClauseT extends IQuery["selectClause"],
     LimitClauseT extends IQuery["limitClause"],
     UnionClauseT extends IQuery["compoundQueryClause"],
-    UnionLimitClauseT extends IQuery["compoundQueryLimitClause"],
+    CompoundQueryLimitClauseT extends IQuery["compoundQueryLimitClause"],
 > = (
     Query<{
         fromClause : FromClauseT,
@@ -22,7 +22,7 @@ export type OrderByImpl<
         limitClause : LimitClauseT,
 
         compoundQueryClause : UnionClauseT,
-        compoundQueryLimitClause : UnionLimitClauseT,
+        compoundQueryLimitClause : CompoundQueryLimitClauseT,
     }>
 );
 export type OrderBy<

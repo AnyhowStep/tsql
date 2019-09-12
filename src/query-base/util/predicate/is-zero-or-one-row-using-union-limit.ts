@@ -1,8 +1,8 @@
 import * as tm from "type-mapping";
-import {ZeroOrOneRowUsingUnionLimit} from "../helper-type";
+import {ZeroOrOneRowUsingCompoundQueryLimit} from "../helper-type";
 import {isQuery} from "./is-query";
 
-export function isZeroOrOneRowUsingUnionLimit (x : unknown) : x is ZeroOrOneRowUsingUnionLimit {
+export function isZeroOrOneRowUsingCompoundQueryLimit (x : unknown) : x is ZeroOrOneRowUsingCompoundQueryLimit {
     const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
     return (
         isQuery(x) &&
