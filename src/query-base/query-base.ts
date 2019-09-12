@@ -1,6 +1,6 @@
 import {IFromClause} from "../from-clause";
 import {SelectClause} from "../select-clause";
-import {UnionClause} from "../union-clause";
+import {CompoundQueryClause} from "../compound-query-clause";
 import {LimitClause} from "../limit-clause";
 import {WhereClause} from "../where-clause";
 import {GroupByClause} from "../group-by-clause";
@@ -14,7 +14,7 @@ export interface QueryBaseData {
 
     readonly limitClause : LimitClause|undefined,
 
-    readonly unionClause : UnionClause|undefined,
+    readonly unionClause : CompoundQueryClause|undefined,
     readonly unionLimitClause : LimitClause|undefined,
 
 }

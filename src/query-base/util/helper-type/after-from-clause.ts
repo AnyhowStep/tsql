@@ -1,7 +1,7 @@
 import {IQueryBase} from "../../query-base";
 import {FromClauseUtil} from "../../../from-clause";
 import {SelectClause} from "../../../select-clause";
-import {UnionClause} from "../../../union-clause";
+import {CompoundQueryClause} from "../../../compound-query-clause";
 import {LimitClause} from "../../../limit-clause";
 
 export type AfterFromClause = (
@@ -11,7 +11,7 @@ export type AfterFromClause = (
 
         limitClause : LimitClause|undefined,
 
-        unionClause : UnionClause|undefined,
+        unionClause : CompoundQueryClause|undefined,
         unionLimitClause : LimitClause|undefined,
     }>
 );

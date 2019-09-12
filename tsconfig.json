@@ -38,7 +38,7 @@
         "./src/tuple-util/**/*",
         "./src/select-item/**/*",
         "./src/select-clause/**/*",
-        "./src/union/**/*",
+        "./src/compound-query/**/*",
         "./src/query/**/*",
         "./src/query-base/**/*",
         "./src/primitive-expr/**/*",
@@ -53,6 +53,7 @@
         "./src/constants.ts",
         "./src/unified-query/**/*",
         "./src/union-order-by-clause/**/*",
+        "./src/compound-query-clause/**/*",
         "./src/index.ts"
     ]
 }

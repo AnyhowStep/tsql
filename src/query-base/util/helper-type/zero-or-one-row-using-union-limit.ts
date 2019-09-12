@@ -1,7 +1,7 @@
 import {IQueryBase} from "../../query-base";
 import {IFromClause} from "../../../from-clause";
 import {SelectClause} from "../../../select-clause";
-import {UnionClause} from "../../../union-clause";
+import {CompoundQueryClause} from "../../../compound-query-clause";
 import {LimitClause} from "../../../limit-clause";
 
 export type ZeroOrOneRowUsingUnionLimit = (
@@ -11,7 +11,7 @@ export type ZeroOrOneRowUsingUnionLimit = (
 
         limitClause : LimitClause|undefined,
 
-        unionClause : UnionClause|undefined,
+        unionClause : CompoundQueryClause|undefined,
         /**
          * If `LIMIT` occurs within a subquery and also is applied in the outer query,
          * the outermost `LIMIT` takes precedence.

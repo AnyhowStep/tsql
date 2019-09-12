@@ -9,6 +9,8 @@ export * from "./column-identifier-ref";
 export * from "./column-map";
 export * from "./column-ref";
 export * from "./compile-error";
+export * from "./compound-query";
+export * from "./compound-query-clause";
 export * from "./derived-table";
 export * from "./expr";
 export * from "./expr-library";
