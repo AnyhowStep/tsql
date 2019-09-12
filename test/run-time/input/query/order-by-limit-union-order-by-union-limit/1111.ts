@@ -19,7 +19,7 @@ tape(__filename, t => {
         .unionOrderBy(columns => [
             columns.pi.desc()
         ])
-        .unionLimit(2);
+        .compoundQueryLimit(2);
 
     compareSqlPretty(__filename, t, query);
 

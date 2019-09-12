@@ -19,7 +19,7 @@ export type LeftJoinUsingCandidateKeyImpl<
     SelectClauseT extends AfterFromClause["selectClause"],
     LimitClauseT extends AfterFromClause["limitClause"],
     UnionClauseT extends AfterFromClause["compoundQueryClause"],
-    UnionLimitClauseT extends AfterFromClause["unionLimitClause"],
+    UnionLimitClauseT extends AfterFromClause["compoundQueryLimitClause"],
 > =
     Query<{
         fromClause : FromClauseUtil.LeftJoin<FromClauseT, AliasedTableT>,
@@ -28,7 +28,7 @@ export type LeftJoinUsingCandidateKeyImpl<
         limitClause : LimitClauseT,
 
         compoundQueryClause : UnionClauseT,
-        unionLimitClause : UnionLimitClauseT,
+        compoundQueryLimitClause : UnionLimitClauseT,
     }>
 ;
 export type LeftJoinUsingCandidateKey<QueryT extends AfterFromClause, AliasedTableT extends IAliasedTable> =
@@ -38,7 +38,7 @@ export type LeftJoinUsingCandidateKey<QueryT extends AfterFromClause, AliasedTab
         QueryT["selectClause"],
         QueryT["limitClause"],
         QueryT["compoundQueryClause"],
-        QueryT["unionLimitClause"]
+        QueryT["compoundQueryLimitClause"]
     >
 ;
 export function leftJoinUsingCandidateKey<
@@ -67,7 +67,7 @@ export function leftJoinUsingCandidateKey<
         limitClause,
 
         compoundQueryClause,
-        unionLimitClause,
+        compoundQueryLimitClause,
     } = query;
 
     const result : LeftJoinUsingCandidateKey<QueryT, DstT> = new Query(
@@ -88,7 +88,7 @@ export function leftJoinUsingCandidateKey<
             limitClause,
 
             compoundQueryClause,
-            unionLimitClause,
+            compoundQueryLimitClause,
         },
         query
     );

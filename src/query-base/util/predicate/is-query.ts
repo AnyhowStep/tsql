@@ -19,7 +19,7 @@ export function isQuery (x : unknown) : x is IQueryBase {
             "limitClause",
 
             "compoundQueryClause",
-            "unionLimitClause",
+            "compoundQueryLimitClause",
 
             "whereClause",
             "groupByClause",

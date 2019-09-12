@@ -16,7 +16,7 @@ export type WhereEqSuperKeyImpl<
     SelectClauseT extends AfterFromClause["selectClause"],
     LimitClauseT extends AfterFromClause["limitClause"],
     UnionClauseT extends AfterFromClause["compoundQueryClause"],
-    UnionLimitClauseT extends AfterFromClause["unionLimitClause"],
+    UnionLimitClauseT extends AfterFromClause["compoundQueryLimitClause"],
 > = (
     Query<{
         fromClause : FromClauseT,
@@ -25,7 +25,7 @@ export type WhereEqSuperKeyImpl<
         limitClause : LimitClauseT,
 
         compoundQueryClause : UnionClauseT,
-        unionLimitClause : UnionLimitClauseT,
+        compoundQueryLimitClause : UnionLimitClauseT,
     }>
 );
 export type WhereEqSuperKey<
@@ -36,7 +36,7 @@ export type WhereEqSuperKey<
         QueryT["selectClause"],
         QueryT["limitClause"],
         QueryT["compoundQueryClause"],
-        QueryT["unionLimitClause"]
+        QueryT["compoundQueryLimitClause"]
     >
 );
 export function whereEqSuperKey<
@@ -85,7 +85,7 @@ export function whereEqSuperKey<
         limitClause,
 
         compoundQueryClause,
-        unionLimitClause,
+        compoundQueryLimitClause,
 
         groupByClause,
         havingClause,
@@ -101,7 +101,7 @@ export function whereEqSuperKey<
             limitClause,
 
             compoundQueryClause,
-            unionLimitClause,
+            compoundQueryLimitClause,
         },
         {
             whereClause,

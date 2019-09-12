@@ -16,6 +16,6 @@ export type ZeroOrOneRowUsingLimit = (
          * `UNION` clause not allowed
          */
         compoundQueryClause : undefined,
-        unionLimitClause : undefined,
+        compoundQueryLimitClause : undefined,
     }>
 );

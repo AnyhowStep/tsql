@@ -13,7 +13,7 @@ export type HavingImpl<
     SelectClauseT extends IQuery["selectClause"],
     LimitClauseT extends IQuery["limitClause"],
     UnionClauseT extends IQuery["compoundQueryClause"],
-    UnionLimitClauseT extends IQuery["unionLimitClause"],
+    UnionLimitClauseT extends IQuery["compoundQueryLimitClause"],
 > = (
     Query<{
         fromClause : FromClauseT,
@@ -22,7 +22,7 @@ export type HavingImpl<
         limitClause : LimitClauseT,
 
         compoundQueryClause : UnionClauseT,
-        unionLimitClause : UnionLimitClauseT,
+        compoundQueryLimitClause : UnionLimitClauseT,
     }>
 );
 export type Having<
@@ -33,7 +33,7 @@ export type Having<
         QueryT["selectClause"],
         QueryT["limitClause"],
         QueryT["compoundQueryClause"],
-        QueryT["unionLimitClause"]
+        QueryT["compoundQueryLimitClause"]
     >
 );
 export function having<
@@ -59,7 +59,7 @@ export function having<
         limitClause,
 
         compoundQueryClause,
-        unionLimitClause,
+        compoundQueryLimitClause,
 
         whereClause,
         groupByClause,
@@ -75,7 +75,7 @@ export function having<
             limitClause,
 
             compoundQueryClause,
-            unionLimitClause,
+            compoundQueryLimitClause,
         },
         {
             whereClause,

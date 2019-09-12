@@ -32,7 +32,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     readonly limitClause : DataT["limitClause"];
 
     readonly compoundQueryClause : DataT["compoundQueryClause"];
-    readonly unionLimitClause : DataT["unionLimitClause"];
+    readonly compoundQueryLimitClause : DataT["compoundQueryLimitClause"];
 
     readonly whereClause : WhereClause|undefined;
     readonly groupByClause : GroupByClause|undefined;
@@ -45,7 +45,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         this.selectClause = data.selectClause;
         this.limitClause = data.limitClause;
         this.compoundQueryClause = data.compoundQueryClause;
-        this.unionLimitClause = data.unionLimitClause;
+        this.compoundQueryLimitClause = data.compoundQueryLimitClause;
 
         this.whereClause = extraData.whereClause;
         this.groupByClause = extraData.groupByClause;
@@ -112,34 +112,34 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         return QueryUtil.offset<this>(this, offset);
     }
 
-    unionLimit<
+    compoundQueryLimit<
         MaxRowCountT extends bigint
     > (
         maxRowCount : MaxRowCountT
     ) : (
         QueryUtil.UnionLimitBigInt<this, MaxRowCountT>
     );
-    unionLimit (
+    compoundQueryLimit (
         maxRowCount : 0
     ) : (
         QueryUtil.UnionLimitNumber0<this>
     );
-    unionLimit (
+    compoundQueryLimit (
         maxRowCount : 1
     ) : (
         QueryUtil.UnionLimitNumber1<this>
     );
-    unionLimit (
+    compoundQueryLimit (
         maxRowCount : 0|1
     ) : (
         QueryUtil.UnionLimitNumber0Or1<this>
     );
-    unionLimit (
+    compoundQueryLimit (
         maxRowCount : number|bigint
     ) : (
         QueryUtil.UnionLimitNumber<this>
     );
-    unionLimit (
+    compoundQueryLimit (
         maxRowCount : number|bigint
     ) : (
         | QueryUtil.UnionLimitNumber0<this>
@@ -147,7 +147,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         | QueryUtil.UnionLimitNumber0Or1<this>
         | QueryUtil.UnionLimitNumber<this>
     ) {
-        return QueryUtil.unionLimit<this>(this, maxRowCount);
+        return QueryUtil.compoundQueryLimit<this>(this, maxRowCount);
     }
 
     unionOffset<

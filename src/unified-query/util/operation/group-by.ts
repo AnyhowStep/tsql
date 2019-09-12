@@ -14,7 +14,7 @@ export type GroupByImpl<
     SelectClauseT extends IQuery["selectClause"],
     LimitClauseT extends IQuery["limitClause"],
     UnionClauseT extends IQuery["compoundQueryClause"],
-    UnionLimitClauseT extends IQuery["unionLimitClause"],
+    UnionLimitClauseT extends IQuery["compoundQueryLimitClause"],
 > = (
     Query<{
         fromClause : FromClauseT,
@@ -23,7 +23,7 @@ export type GroupByImpl<
         limitClause : LimitClauseT,
 
         compoundQueryClause : UnionClauseT,
-        unionLimitClause : UnionLimitClauseT,
+        compoundQueryLimitClause : UnionLimitClauseT,
     }>
 );
 export type GroupBy<
@@ -34,7 +34,7 @@ export type GroupBy<
         QueryT["selectClause"],
         QueryT["limitClause"],
         QueryT["compoundQueryClause"],
-        QueryT["unionLimitClause"]
+        QueryT["compoundQueryLimitClause"]
     >
 );
 export function groupBy<
@@ -62,7 +62,7 @@ export function groupBy<
         limitClause,
 
         compoundQueryClause,
-        unionLimitClause,
+        compoundQueryLimitClause,
 
         whereClause,
         havingClause,
@@ -78,7 +78,7 @@ export function groupBy<
             limitClause,
 
             compoundQueryClause,
-            unionLimitClause,
+            compoundQueryLimitClause,
         },
         {
             whereClause,

@@ -7,7 +7,7 @@ import {UnionLimitNumber0} from "./union-limit-number-0";
 import {UnionLimitNumber1} from "./union-limit-number-1";
 import {UnionLimitNumber0Or1} from "./union-limit-number-0-or-1";
 
-export function unionLimit<
+export function compoundQueryLimit<
     QueryT extends IQuery,
     MaxRowCountT extends bigint
 > (
@@ -16,7 +16,7 @@ export function unionLimit<
 ) : (
     UnionLimitBigInt<QueryT, MaxRowCountT>
 );
-export function unionLimit<
+export function compoundQueryLimit<
     QueryT extends IQuery
 > (
     query : QueryT,
@@ -24,7 +24,7 @@ export function unionLimit<
 ) : (
     UnionLimitNumber0<QueryT>
 );
-export function unionLimit<
+export function compoundQueryLimit<
     QueryT extends IQuery
 > (
     query : QueryT,
@@ -32,7 +32,7 @@ export function unionLimit<
 ) : (
     UnionLimitNumber1<QueryT>
 );
-export function unionLimit<
+export function compoundQueryLimit<
     QueryT extends IQuery
 > (
     query : QueryT,
@@ -40,7 +40,7 @@ export function unionLimit<
 ) : (
     UnionLimitNumber0Or1<QueryT>
 );
-export function unionLimit<
+export function compoundQueryLimit<
     QueryT extends IQuery
 > (
     query : QueryT,
@@ -48,7 +48,7 @@ export function unionLimit<
 ) : (
     UnionLimitNumber<QueryT>
 );
-export function unionLimit<
+export function compoundQueryLimit<
     QueryT extends IQuery
 > (
     query : QueryT,
@@ -59,10 +59,10 @@ export function unionLimit<
     | UnionLimitNumber0Or1<QueryT>
     | UnionLimitNumber<QueryT>
 ) {
-    const unionLimitClause = LimitClauseUtil.limit<
-        QueryT["unionLimitClause"]
+    const compoundQueryLimitClause = LimitClauseUtil.limit<
+        QueryT["compoundQueryLimitClause"]
     >(
-        query.unionLimitClause,
+        query.compoundQueryLimitClause,
         maxRowCount
     );
 
@@ -73,7 +73,7 @@ export function unionLimit<
         limitClause,
 
         compoundQueryClause,
-        //unionLimitClause,
+        //compoundQueryLimitClause,
     } = query;
 
     const result : UnionLimitNumber<QueryT> = new Query(
@@ -84,7 +84,7 @@ export function unionLimit<
             limitClause,
 
             compoundQueryClause,
-            unionLimitClause,
+            compoundQueryLimitClause,
         },
         query
     );

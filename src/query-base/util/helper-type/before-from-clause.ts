@@ -12,6 +12,6 @@ export type BeforeFromClause = (
         limitClause : LimitClause|undefined,
 
         compoundQueryClause : CompoundQueryClause|undefined,
-        unionLimitClause : LimitClause|undefined,
+        compoundQueryLimitClause : LimitClause|undefined,
     }>
 );

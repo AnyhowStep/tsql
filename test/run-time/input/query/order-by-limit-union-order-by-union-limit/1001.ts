@@ -15,7 +15,7 @@ tape(__filename, t => {
             columns.myTable.myBoolColumn,
             columns.__aliased.pi,
         ])
-        .unionLimit(2);
+        .compoundQueryLimit(2);
 
     compareSqlPretty(__filename, t, query);
 

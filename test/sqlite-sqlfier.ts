@@ -331,14 +331,14 @@ export const sqliteSqlfier : Sqlfier = {
         );
         const limitClause = (
             (
-                query.unionLimitClause != undefined &&
+                query.compoundQueryLimitClause != undefined &&
                 query.compoundQueryClause == undefined &&
                 (
                     query.limitClause == undefined ||
                     query.unionOrderByClause == undefined
                 )
             ) ?
-            query.unionLimitClause :
+            query.compoundQueryLimitClause :
             query.limitClause
         );
 
@@ -347,13 +347,13 @@ export const sqliteSqlfier : Sqlfier = {
             undefined :
             query.unionOrderByClause
         );
-        const unionLimitClause = (
-            limitClause == query.unionLimitClause ?
+        const compoundQueryLimitClause = (
+            limitClause == query.compoundQueryLimitClause ?
             undefined :
-            query.unionLimitClause
+            query.compoundQueryLimitClause
         );
 
-        if (unionOrderByClause != undefined || unionLimitClause != undefined) {
+        if (unionOrderByClause != undefined || compoundQueryLimitClause != undefined) {
             /**
              * We have to apply some hackery to get the same behaviour as MySQL.
              */
@@ -362,7 +362,7 @@ export const sqliteSqlfier : Sqlfier = {
                 orderByClause,
                 limitClause,
                 unionOrderByClause : undefined,
-                unionLimitClause : undefined,
+                compoundQueryLimitClause : undefined,
             };
             const result : string[] = [
                 "SELECT * FROM (",
@@ -373,8 +373,8 @@ export const sqliteSqlfier : Sqlfier = {
                 result.push(orderByClauseToSql(unionOrderByClause, toSql).join(" "));
             }
 
-            if (unionLimitClause != undefined) {
-                result.push(limitClauseToSql(unionLimitClause, toSql).join(" "));
+            if (compoundQueryLimitClause != undefined) {
+                result.push(limitClauseToSql(compoundQueryLimitClause, toSql).join(" "));
             }
 
             return result.join(" ");

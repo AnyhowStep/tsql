@@ -29,10 +29,10 @@ export function unionOffset<
 ) : (
     UnionOffsetNumber<QueryT>
 ) {
-    const unionLimitClause = LimitClauseUtil.offset<
-        QueryT["unionLimitClause"]
+    const compoundQueryLimitClause = LimitClauseUtil.offset<
+        QueryT["compoundQueryLimitClause"]
     >(
-        query.unionLimitClause,
+        query.compoundQueryLimitClause,
         offset
     );
 
@@ -43,7 +43,7 @@ export function unionOffset<
         limitClause,
 
         compoundQueryClause,
-        //unionLimitClause,
+        //compoundQueryLimitClause,
     } = query;
 
     const result : UnionOffsetNumber<QueryT> = new Query(
@@ -54,7 +54,7 @@ export function unionOffset<
             limitClause,
 
             compoundQueryClause,
-            unionLimitClause,
+            compoundQueryLimitClause,
         },
         query
     );

@@ -14,7 +14,7 @@ export type RequireOuterQueryJoins<
         limitClause : QueryT["limitClause"],
 
         compoundQueryClause : QueryT["compoundQueryClause"],
-        unionLimitClause : QueryT["unionLimitClause"],
+        compoundQueryLimitClause : QueryT["compoundQueryLimitClause"],
     }>
 );
 export function requireOuterQueryJoins<
@@ -36,7 +36,7 @@ export function requireOuterQueryJoins<
         limitClause,
 
         compoundQueryClause,
-        unionLimitClause,
+        compoundQueryLimitClause,
     } = query;
 
     const result : RequireOuterQueryJoins<QueryT, AliasedTablesT> = new Query(
@@ -53,7 +53,7 @@ export function requireOuterQueryJoins<
             limitClause,
 
             compoundQueryClause,
-            unionLimitClause,
+            compoundQueryLimitClause,
         },
         query
     );

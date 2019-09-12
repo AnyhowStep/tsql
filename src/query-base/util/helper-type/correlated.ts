@@ -17,6 +17,6 @@ export type Correlated = (
         limitClause : LimitClause|undefined,
 
         compoundQueryClause : CompoundQueryClause|undefined,
-        unionLimitClause : LimitClause|undefined,
+        compoundQueryLimitClause : LimitClause|undefined,
     }>
 );

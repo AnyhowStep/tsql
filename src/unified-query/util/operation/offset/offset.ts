@@ -43,7 +43,7 @@ export function offset<
         //limitClause,
 
         compoundQueryClause,
-        unionLimitClause,
+        compoundQueryLimitClause,
     } = query;
 
     const result : OffsetNumber<QueryT> = new Query(
@@ -54,7 +54,7 @@ export function offset<
             limitClause,
 
             compoundQueryClause,
-            unionLimitClause,
+            compoundQueryLimitClause,
         },
         query
     );

@@ -33,7 +33,7 @@ export declare const query: tsql.Query<{
      * We make this `WHERE` clause handle `myTableId`, even if it is `null`.
      * So, `bigint|null`.
      */
-    unionLimitClause: undefined;
+    compoundQueryLimitClause: undefined;
 }>;
 declare type AllowedUsedRef = tsql.FromClauseUtil.AllowedUsedRef<typeof query["fromClause"], {
     isLateral: true;

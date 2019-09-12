@@ -14,7 +14,7 @@ export type RequireNullableOuterQueryJoins<
         limitClause : QueryT["limitClause"],
 
         compoundQueryClause : QueryT["compoundQueryClause"],
-        unionLimitClause : QueryT["unionLimitClause"],
+        compoundQueryLimitClause : QueryT["compoundQueryLimitClause"],
     }>
 );
 export function requireNullableOuterQueryJoins<
@@ -36,7 +36,7 @@ export function requireNullableOuterQueryJoins<
         limitClause,
 
         compoundQueryClause,
-        unionLimitClause,
+        compoundQueryLimitClause,
     } = query;
 
     const result : RequireNullableOuterQueryJoins<QueryT, AliasedTablesT> = new Query(
@@ -53,7 +53,7 @@ export function requireNullableOuterQueryJoins<
             limitClause,
 
             compoundQueryClause,
-            unionLimitClause,
+            compoundQueryLimitClause,
         },
         query
     );

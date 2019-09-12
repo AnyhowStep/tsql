@@ -15,7 +15,7 @@ export interface QueryBaseData {
     readonly limitClause : LimitClause|undefined,
 
     readonly compoundQueryClause : CompoundQueryClause|undefined,
-    readonly unionLimitClause : LimitClause|undefined,
+    readonly compoundQueryLimitClause : LimitClause|undefined,
 
 }
 
@@ -40,7 +40,7 @@ export interface IQueryBase<DataT extends QueryBaseData=QueryBaseData> {
      * However, for this library, the generated SQL
      * for PostgreSQL and SQLite will emulate MySQL's behaviour.
      */
-    readonly unionLimitClause : DataT["unionLimitClause"],
+    readonly compoundQueryLimitClause : DataT["compoundQueryLimitClause"],
 
     readonly whereClause : WhereClause|undefined,
     /**

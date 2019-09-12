@@ -6,10 +6,10 @@ export function isZeroOrOneRowUsingUnionLimit (x : unknown) : x is ZeroOrOneRowU
     const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
     return (
         isQuery(x) &&
-        x.unionLimitClause != undefined &&
+        x.compoundQueryLimitClause != undefined &&
         (
-            tm.BigIntUtil.equal(x.unionLimitClause.maxRowCount, BigInt(0)) ||
-            tm.BigIntUtil.equal(x.unionLimitClause.maxRowCount, BigInt(1))
+            tm.BigIntUtil.equal(x.compoundQueryLimitClause.maxRowCount, BigInt(0)) ||
+            tm.BigIntUtil.equal(x.compoundQueryLimitClause.maxRowCount, BigInt(1))
         )
     );
 }

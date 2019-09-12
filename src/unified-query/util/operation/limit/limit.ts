@@ -73,7 +73,7 @@ export function limit<
         //limitClause,
 
         compoundQueryClause,
-        unionLimitClause,
+        compoundQueryLimitClause,
     } = query;
 
     const result : LimitNumber<QueryT> = new Query(
@@ -84,7 +84,7 @@ export function limit<
             limitClause,
 
             compoundQueryClause,
-            unionLimitClause,
+            compoundQueryLimitClause,
         },
         query
     );

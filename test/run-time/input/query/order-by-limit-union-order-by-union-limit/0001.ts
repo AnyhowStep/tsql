@@ -11,7 +11,7 @@ tape(__filename, t => {
 
     const query = tsql.from(myTable)
         .select(() => [tsql.pi().as("pi")])
-        .unionLimit(2);
+        .compoundQueryLimit(2);
 
     compareSqlPretty(__filename, t, query);
 

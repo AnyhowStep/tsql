@@ -15,6 +15,6 @@ export type OneSelectItem<TypeT> = (
         limitClause : LimitClause|undefined,
 
         compoundQueryClause : CompoundQueryClause|undefined,
-        unionLimitClause : LimitClause|undefined,
+        compoundQueryLimitClause : LimitClause|undefined,
     }>
 );

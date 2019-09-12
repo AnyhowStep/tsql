@@ -8,7 +8,7 @@ export type NewInstance = Query<{
     limitClause : undefined,
 
     compoundQueryClause : undefined,
-    unionLimitClause : undefined,
+    compoundQueryLimitClause : undefined,
 }>;
 export function newInstance () : NewInstance {
     const result : NewInstance = new Query(
@@ -19,7 +19,7 @@ export function newInstance () : NewInstance {
             limitClause : undefined,
 
             compoundQueryClause : undefined,
-            unionLimitClause : undefined,
+            compoundQueryLimitClause : undefined,
         },
         {
             whereClause : undefined,

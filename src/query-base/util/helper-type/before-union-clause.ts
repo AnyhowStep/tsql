@@ -11,6 +11,6 @@ export type BeforeUnionClause = (
         limitClause : LimitClause|undefined,
 
         compoundQueryClause : undefined,
-        unionLimitClause : LimitClause|undefined,
+        compoundQueryLimitClause : LimitClause|undefined,
     }>
 );

@@ -18,7 +18,7 @@ export type ZeroOrOneRowUsingUnionLimit = (
          *
          * https://dev.mysql.com/doc/refman/8.0/en/select.html
          */
-        unionLimitClause : {
+        compoundQueryLimitClause : {
             readonly maxRowCount : 0n|1n,
             readonly offset : bigint,
         },

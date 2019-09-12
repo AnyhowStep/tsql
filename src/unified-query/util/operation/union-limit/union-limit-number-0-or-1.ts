@@ -13,7 +13,7 @@ export type UnionLimitNumber0Or1Impl<
     SelectClauseT extends IQuery["selectClause"],
     LimitClauseT extends IQuery["limitClause"],
     UnionClauseT extends IQuery["compoundQueryClause"],
-    UnionLimitClauseT extends IQuery["unionLimitClause"],
+    UnionLimitClauseT extends IQuery["compoundQueryLimitClause"],
 > =
     Query<{
         fromClause : FromClauseT,
@@ -22,7 +22,7 @@ export type UnionLimitNumber0Or1Impl<
         limitClause : LimitClauseT,
 
         compoundQueryClause : UnionClauseT,
-        unionLimitClause : LimitClauseUtil.LimitNumber0Or1<
+        compoundQueryLimitClause : LimitClauseUtil.LimitNumber0Or1<
             UnionLimitClauseT
         >,
     }>
@@ -35,6 +35,6 @@ export type UnionLimitNumber0Or1<
         QueryT["selectClause"],
         QueryT["limitClause"],
         QueryT["compoundQueryClause"],
-        QueryT["unionLimitClause"]
+        QueryT["compoundQueryLimitClause"]
     >
 ;

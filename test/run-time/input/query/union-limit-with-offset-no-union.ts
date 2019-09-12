@@ -13,7 +13,7 @@ tape(__filename, t => {
         .select(c => [c.myBoolColumn])
         .limit(1)
         .offset(2)
-        .unionLimit(3)
+        .compoundQueryLimit(3)
         .unionOffset(4);
 
     compareSqlPretty(__filename, t, query);

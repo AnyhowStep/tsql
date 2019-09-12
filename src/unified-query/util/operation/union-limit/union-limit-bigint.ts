@@ -14,7 +14,7 @@ export type UnionLimitBigIntImpl<
     SelectClauseT extends IQuery["selectClause"],
     LimitClauseT extends IQuery["limitClause"],
     UnionClauseT extends IQuery["compoundQueryClause"],
-    UnionLimitClauseT extends IQuery["unionLimitClause"],
+    UnionLimitClauseT extends IQuery["compoundQueryLimitClause"],
 > =
     Query<{
         fromClause : FromClauseT,
@@ -23,7 +23,7 @@ export type UnionLimitBigIntImpl<
         limitClause : LimitClauseT,
 
         compoundQueryClause : UnionClauseT,
-        unionLimitClause : LimitClauseUtil.LimitBigInt<
+        compoundQueryLimitClause : LimitClauseUtil.LimitBigInt<
             UnionLimitClauseT,
             MaxRowCountT
         >,
@@ -39,6 +39,6 @@ export type UnionLimitBigInt<
         QueryT["selectClause"],
         QueryT["limitClause"],
         QueryT["compoundQueryClause"],
-        QueryT["unionLimitClause"]
+        QueryT["compoundQueryLimitClause"]
     >
 ;

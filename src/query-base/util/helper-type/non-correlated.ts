@@ -21,6 +21,6 @@ export type NonCorrelated = (
         limitClause : LimitClause|undefined,
 
         compoundQueryClause : CompoundQueryClause|undefined,
-        unionLimitClause : LimitClause|undefined,
+        compoundQueryLimitClause : LimitClause|undefined,
     }>
 );

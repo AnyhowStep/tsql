@@ -10,5 +10,5 @@ export declare const query: tsql.Query<{
         readonly offset: 44n;
     };
     compoundQueryClause: undefined;
-    unionLimitClause: undefined;
+    compoundQueryLimitClause: undefined;
 }>;

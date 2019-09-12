@@ -7,7 +7,7 @@ export declare const query: tsql.Query<{
     selectClause: undefined;
     limitClause: undefined;
     compoundQueryClause: undefined;
-    unionLimitClause: {
+    compoundQueryLimitClause: {
         readonly maxRowCount: 90010n;
         readonly offset: 0n;
     };
