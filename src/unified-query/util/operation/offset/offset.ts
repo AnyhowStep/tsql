@@ -42,7 +42,7 @@ export function offset<
 
         //limitClause,
 
-        unionClause,
+        compoundQueryClause,
         unionLimitClause,
     } = query;
 
@@ -53,7 +53,7 @@ export function offset<
 
             limitClause,
 
-            unionClause,
+            compoundQueryClause,
             unionLimitClause,
         },
         query

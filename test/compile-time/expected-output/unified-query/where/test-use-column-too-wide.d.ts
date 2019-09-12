@@ -28,7 +28,11 @@ export declare const query: tsql.Query<{
     }>;
     selectClause: undefined;
     limitClause: undefined;
-    unionClause: undefined;
+    compoundQueryClause: undefined;
+    /**
+     * We make this `WHERE` clause handle `myTableId`, even if it is `null`.
+     * So, `bigint|null`.
+     */
     unionLimitClause: undefined;
 }>;
 declare type AllowedUsedRef = tsql.FromClauseUtil.AllowedUsedRef<typeof query["fromClause"], {

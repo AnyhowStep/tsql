@@ -11,7 +11,7 @@ export type From<QueryT extends BeforeFromClause, AliasedTableT extends IAliased
 
         limitClause : QueryT["limitClause"],
 
-        unionClause : QueryT["unionClause"],
+        compoundQueryClause : QueryT["compoundQueryClause"],
         unionLimitClause : QueryT["unionLimitClause"],
     }>
 );
@@ -35,7 +35,7 @@ export function from<
 
         limitClause,
 
-        unionClause,
+        compoundQueryClause,
         unionLimitClause,
     } = query;
 
@@ -45,7 +45,7 @@ export function from<
 
         limitClause : QueryT["limitClause"],
 
-        unionClause : QueryT["unionClause"],
+        compoundQueryClause : QueryT["compoundQueryClause"],
         unionLimitClause : QueryT["unionLimitClause"],
     }>(
         {
@@ -60,7 +60,7 @@ export function from<
 
             limitClause,
 
-            unionClause,
+            compoundQueryClause,
             unionLimitClause,
         },
         query

@@ -13,7 +13,7 @@ export type WhereEqOuterQueryPrimaryKeyImpl<
     FromClauseT extends AfterFromClause["fromClause"],
     SelectClauseT extends AfterFromClause["selectClause"],
     LimitClauseT extends AfterFromClause["limitClause"],
-    UnionClauseT extends AfterFromClause["unionClause"],
+    UnionClauseT extends AfterFromClause["compoundQueryClause"],
     UnionLimitClauseT extends AfterFromClause["unionLimitClause"],
 > = (
     Query<{
@@ -22,7 +22,7 @@ export type WhereEqOuterQueryPrimaryKeyImpl<
 
         limitClause : LimitClauseT,
 
-        unionClause : UnionClauseT,
+        compoundQueryClause : UnionClauseT,
         unionLimitClause : UnionLimitClauseT,
     }>
 );
@@ -33,7 +33,7 @@ export type WhereEqOuterQueryPrimaryKey<
         QueryT["fromClause"],
         QueryT["selectClause"],
         QueryT["limitClause"],
-        QueryT["unionClause"],
+        QueryT["compoundQueryClause"],
         QueryT["unionLimitClause"]
     >
 );
@@ -89,7 +89,7 @@ export function whereEqOuterQueryPrimaryKey<
 
         limitClause,
 
-        unionClause,
+        compoundQueryClause,
         unionLimitClause,
 
         groupByClause,
@@ -105,7 +105,7 @@ export function whereEqOuterQueryPrimaryKey<
 
             limitClause,
 
-            unionClause,
+            compoundQueryClause,
             unionLimitClause,
         },
         {

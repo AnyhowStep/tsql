@@ -14,7 +14,7 @@ export interface QueryBaseData {
 
     readonly limitClause : LimitClause|undefined,
 
-    readonly unionClause : CompoundQueryClause|undefined,
+    readonly compoundQueryClause : CompoundQueryClause|undefined,
     readonly unionLimitClause : LimitClause|undefined,
 
 }
@@ -28,7 +28,7 @@ export interface IQueryBase<DataT extends QueryBaseData=QueryBaseData> {
 
     readonly limitClause : DataT["limitClause"],
 
-    readonly unionClause : DataT["unionClause"],
+    readonly compoundQueryClause : DataT["compoundQueryClause"],
     /**
      * In MySQL 5.7, a `UNION LIMIT` clause without a `UNION` clause
      * **overwrites** the `LIMIT` clause.

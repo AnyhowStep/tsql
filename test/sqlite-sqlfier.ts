@@ -323,7 +323,7 @@ export const sqliteSqlfier : Sqlfier = {
         const orderByClause = (
             (
                 query.unionOrderByClause != undefined &&
-                query.unionClause == undefined &&
+                query.compoundQueryClause == undefined &&
                 query.limitClause == undefined
             ) ?
             query.unionOrderByClause :
@@ -332,7 +332,7 @@ export const sqliteSqlfier : Sqlfier = {
         const limitClause = (
             (
                 query.unionLimitClause != undefined &&
-                query.unionClause == undefined &&
+                query.compoundQueryClause == undefined &&
                 (
                     query.limitClause == undefined ||
                     query.unionOrderByClause == undefined

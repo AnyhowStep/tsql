@@ -18,7 +18,7 @@ export type InnerJoinUsingCandidateKeyImpl<
     FromClauseT extends AfterFromClause["fromClause"],
     SelectClauseT extends AfterFromClause["selectClause"],
     LimitClauseT extends AfterFromClause["limitClause"],
-    UnionClauseT extends AfterFromClause["unionClause"],
+    UnionClauseT extends AfterFromClause["compoundQueryClause"],
     UnionLimitClauseT extends AfterFromClause["unionLimitClause"],
 > =
     Query<{
@@ -27,7 +27,7 @@ export type InnerJoinUsingCandidateKeyImpl<
 
         limitClause : LimitClauseT,
 
-        unionClause : UnionClauseT,
+        compoundQueryClause : UnionClauseT,
         unionLimitClause : UnionLimitClauseT,
     }>
 ;
@@ -37,7 +37,7 @@ export type InnerJoinUsingCandidateKey<QueryT extends AfterFromClause, AliasedTa
         QueryT["fromClause"],
         QueryT["selectClause"],
         QueryT["limitClause"],
-        QueryT["unionClause"],
+        QueryT["compoundQueryClause"],
         QueryT["unionLimitClause"]
     >
 ;
@@ -66,7 +66,7 @@ export function innerJoinUsingCandidateKey<
 
         limitClause,
 
-        unionClause,
+        compoundQueryClause,
         unionLimitClause,
     } = query;
 
@@ -87,7 +87,7 @@ export function innerJoinUsingCandidateKey<
 
             limitClause,
 
-            unionClause,
+            compoundQueryClause,
             unionLimitClause,
         },
         query

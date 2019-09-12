@@ -13,7 +13,7 @@ export type RequireOuterQueryJoins<
 
         limitClause : QueryT["limitClause"],
 
-        unionClause : QueryT["unionClause"],
+        compoundQueryClause : QueryT["compoundQueryClause"],
         unionLimitClause : QueryT["unionLimitClause"],
     }>
 );
@@ -35,7 +35,7 @@ export function requireOuterQueryJoins<
 
         limitClause,
 
-        unionClause,
+        compoundQueryClause,
         unionLimitClause,
     } = query;
 
@@ -52,7 +52,7 @@ export function requireOuterQueryJoins<
 
             limitClause,
 
-            unionClause,
+            compoundQueryClause,
             unionLimitClause,
         },
         query

@@ -13,7 +13,7 @@ export type UnionOffsetBigIntImpl<
     FromClauseT extends IQuery["fromClause"],
     SelectClauseT extends IQuery["selectClause"],
     LimitClauseT extends IQuery["limitClause"],
-    UnionClauseT extends IQuery["unionClause"],
+    UnionClauseT extends IQuery["compoundQueryClause"],
     UnionLimitClauseT extends IQuery["unionLimitClause"],
 > =
     Query<{
@@ -22,7 +22,7 @@ export type UnionOffsetBigIntImpl<
 
         limitClause : LimitClauseT,
 
-        unionClause : UnionClauseT,
+        compoundQueryClause : UnionClauseT,
         unionLimitClause : LimitClauseUtil.OffsetBigInt<
             UnionLimitClauseT,
             OffsetT
@@ -38,7 +38,7 @@ export type UnionOffsetBigInt<
         QueryT["fromClause"],
         QueryT["selectClause"],
         QueryT["limitClause"],
-        QueryT["unionClause"],
+        QueryT["compoundQueryClause"],
         QueryT["unionLimitClause"]
     >
 ;

@@ -14,7 +14,7 @@ export type OneRow = (
 
         limitClause : LimitClause|undefined,
 
-        unionClause : undefined,
+        compoundQueryClause : undefined,
         unionLimitClause : LimitClause|undefined,
     }>
 );

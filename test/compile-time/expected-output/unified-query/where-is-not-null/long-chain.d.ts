@@ -398,6 +398,6 @@ export declare const query: tsql.Query<{
     }>;
     selectClause: undefined;
     limitClause: undefined;
-    unionClause: undefined;
+    compoundQueryClause: undefined;
     unionLimitClause: undefined;
 }>;

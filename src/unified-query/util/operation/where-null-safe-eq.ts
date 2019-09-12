@@ -22,7 +22,7 @@ export type WhereNullSafeEqImpl<
     FromClauseT extends AfterFromClause["fromClause"],
     SelectClauseT extends AfterFromClause["selectClause"],
     LimitClauseT extends AfterFromClause["limitClause"],
-    UnionClauseT extends AfterFromClause["unionClause"],
+    UnionClauseT extends AfterFromClause["compoundQueryClause"],
     UnionLimitClauseT extends AfterFromClause["unionLimitClause"],
 > = (
     Query<{
@@ -31,7 +31,7 @@ export type WhereNullSafeEqImpl<
 
         limitClause : LimitClauseT,
 
-        unionClause : UnionClauseT,
+        compoundQueryClause : UnionClauseT,
         unionLimitClause : UnionLimitClauseT,
     }>
 );
@@ -51,7 +51,7 @@ export type WhereNullSafeEq<
         QueryT["fromClause"],
         QueryT["selectClause"],
         QueryT["limitClause"],
-        QueryT["unionClause"],
+        QueryT["compoundQueryClause"],
         QueryT["unionLimitClause"]
     >
 );
@@ -109,7 +109,7 @@ export function whereNullSafeEq<
 
         limitClause,
 
-        unionClause,
+        compoundQueryClause,
         unionLimitClause,
 
         groupByClause,
@@ -125,7 +125,7 @@ export function whereNullSafeEq<
 
             limitClause,
 
-            unionClause,
+            compoundQueryClause,
             unionLimitClause,
         },
         {

@@ -12,7 +12,7 @@ export type OrderByImpl<
     FromClauseT extends IQuery["fromClause"],
     SelectClauseT extends IQuery["selectClause"],
     LimitClauseT extends IQuery["limitClause"],
-    UnionClauseT extends IQuery["unionClause"],
+    UnionClauseT extends IQuery["compoundQueryClause"],
     UnionLimitClauseT extends IQuery["unionLimitClause"],
 > = (
     Query<{
@@ -21,7 +21,7 @@ export type OrderByImpl<
 
         limitClause : LimitClauseT,
 
-        unionClause : UnionClauseT,
+        compoundQueryClause : UnionClauseT,
         unionLimitClause : UnionLimitClauseT,
     }>
 );
@@ -32,7 +32,7 @@ export type OrderBy<
         QueryT["fromClause"],
         QueryT["selectClause"],
         QueryT["limitClause"],
-        QueryT["unionClause"],
+        QueryT["compoundQueryClause"],
         QueryT["unionLimitClause"]
     >
 );
@@ -60,7 +60,7 @@ export function orderBy<
 
         limitClause,
 
-        unionClause,
+        compoundQueryClause,
         unionLimitClause,
 
         whereClause,
@@ -76,7 +76,7 @@ export function orderBy<
 
             limitClause,
 
-            unionClause,
+            compoundQueryClause,
             unionLimitClause,
         },
         {

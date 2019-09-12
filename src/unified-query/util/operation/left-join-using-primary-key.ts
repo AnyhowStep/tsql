@@ -17,7 +17,7 @@ export type LeftJoinUsingPrimaryKeyImpl<
     FromClauseT extends AfterFromClause["fromClause"],
     SelectClauseT extends AfterFromClause["selectClause"],
     LimitClauseT extends AfterFromClause["limitClause"],
-    UnionClauseT extends AfterFromClause["unionClause"],
+    UnionClauseT extends AfterFromClause["compoundQueryClause"],
     UnionLimitClauseT extends AfterFromClause["unionLimitClause"],
 > =
     Query<{
@@ -26,7 +26,7 @@ export type LeftJoinUsingPrimaryKeyImpl<
 
         limitClause : LimitClauseT,
 
-        unionClause : UnionClauseT,
+        compoundQueryClause : UnionClauseT,
         unionLimitClause : UnionLimitClauseT,
     }>
 ;
@@ -36,7 +36,7 @@ export type LeftJoinUsingPrimaryKey<QueryT extends AfterFromClause, AliasedTable
         QueryT["fromClause"],
         QueryT["selectClause"],
         QueryT["limitClause"],
-        QueryT["unionClause"],
+        QueryT["compoundQueryClause"],
         QueryT["unionLimitClause"]
     >
 ;
@@ -64,7 +64,7 @@ export function leftJoinUsingPrimaryKey<
 
         limitClause,
 
-        unionClause,
+        compoundQueryClause,
         unionLimitClause,
     } = query;
 
@@ -83,7 +83,7 @@ export function leftJoinUsingPrimaryKey<
 
             limitClause,
 
-            unionClause,
+            compoundQueryClause,
             unionLimitClause,
         },
         query

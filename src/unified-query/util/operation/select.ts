@@ -14,7 +14,7 @@ export type SelectImpl<
     FromClauseT extends BeforeUnionClause["fromClause"],
     SelectClauseT extends BeforeUnionClause["selectClause"],
     LimitClauseT extends BeforeUnionClause["limitClause"],
-    UnionClauseT extends BeforeUnionClause["unionClause"],
+    UnionClauseT extends BeforeUnionClause["compoundQueryClause"],
     UnionLimitClauseT extends BeforeUnionClause["unionLimitClause"],
 > = (
     Query<{
@@ -23,7 +23,7 @@ export type SelectImpl<
 
         limitClause : LimitClauseT,
 
-        unionClause : UnionClauseT,
+        compoundQueryClause : UnionClauseT,
         unionLimitClause : UnionLimitClauseT,
     }>
 );
@@ -36,7 +36,7 @@ export type Select<
         QueryT["fromClause"],
         QueryT["selectClause"],
         QueryT["limitClause"],
-        QueryT["unionClause"],
+        QueryT["compoundQueryClause"],
         QueryT["unionLimitClause"]
     >
 );
@@ -68,7 +68,7 @@ export function select<
 
         limitClause,
 
-        unionClause,
+        compoundQueryClause,
         unionLimitClause,
     } = query;
 
@@ -79,7 +79,7 @@ export function select<
 
             limitClause,
 
-            unionClause,
+            compoundQueryClause,
             unionLimitClause,
         },
         query

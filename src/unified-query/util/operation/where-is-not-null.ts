@@ -18,7 +18,7 @@ export type WhereIsNotNullImpl<
     FromClauseT extends AfterFromClause["fromClause"],
     SelectClauseT extends AfterFromClause["selectClause"],
     LimitClauseT extends AfterFromClause["limitClause"],
-    UnionClauseT extends AfterFromClause["unionClause"],
+    UnionClauseT extends AfterFromClause["compoundQueryClause"],
     UnionLimitClauseT extends AfterFromClause["unionLimitClause"],
 > = (
     Query<{
@@ -27,7 +27,7 @@ export type WhereIsNotNullImpl<
 
         limitClause : LimitClauseT,
 
-        unionClause : UnionClauseT,
+        compoundQueryClause : UnionClauseT,
         unionLimitClause : UnionLimitClauseT,
     }>
 );
@@ -44,7 +44,7 @@ export type WhereIsNotNull<
         QueryT["fromClause"],
         QueryT["selectClause"],
         QueryT["limitClause"],
-        QueryT["unionClause"],
+        QueryT["compoundQueryClause"],
         QueryT["unionLimitClause"]
     >
 );
@@ -82,7 +82,7 @@ export function whereIsNotNull<
 
         limitClause,
 
-        unionClause,
+        compoundQueryClause,
         unionLimitClause,
 
         groupByClause,
@@ -98,7 +98,7 @@ export function whereIsNotNull<
 
             limitClause,
 
-            unionClause,
+            compoundQueryClause,
             unionLimitClause,
         },
         {

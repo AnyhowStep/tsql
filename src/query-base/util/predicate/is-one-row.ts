@@ -6,6 +6,6 @@ export function isOneRow (x : unknown) : x is OneRow {
     return (
         isQuery(x) &&
         FromClauseUtil.isBeforeFromClause(x.fromClause) &&
-        x.unionClause == undefined
+        x.compoundQueryClause == undefined
     );
 }

@@ -11,7 +11,7 @@ export function isZeroOrOneRowUsingLimit (x : unknown) : x is ZeroOrOneRowUsingL
             tm.BigIntUtil.equal(x.limitClause.maxRowCount, BigInt(0)) ||
             tm.BigIntUtil.equal(x.limitClause.maxRowCount, BigInt(1))
         ) &&
-        x.unionClause == undefined &&
+        x.compoundQueryClause == undefined &&
         x.unionLimitClause == undefined
     );
 }

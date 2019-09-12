@@ -72,7 +72,7 @@ export function unionLimit<
 
         limitClause,
 
-        unionClause,
+        compoundQueryClause,
         //unionLimitClause,
     } = query;
 
@@ -83,7 +83,7 @@ export function unionLimit<
 
             limitClause,
 
-            unionClause,
+            compoundQueryClause,
             unionLimitClause,
         },
         query

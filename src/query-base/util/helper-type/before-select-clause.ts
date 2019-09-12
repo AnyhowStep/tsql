@@ -10,7 +10,7 @@ export type BeforeSelectClause = (
 
         limitClause : LimitClause|undefined,
 
-        unionClause : CompoundQueryClause|undefined,
+        compoundQueryClause : CompoundQueryClause|undefined,
         unionLimitClause : LimitClause|undefined,
     }>
 );

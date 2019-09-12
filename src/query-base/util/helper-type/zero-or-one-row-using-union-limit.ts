@@ -11,7 +11,7 @@ export type ZeroOrOneRowUsingUnionLimit = (
 
         limitClause : LimitClause|undefined,
 
-        unionClause : CompoundQueryClause|undefined,
+        compoundQueryClause : CompoundQueryClause|undefined,
         /**
          * If `LIMIT` occurs within a subquery and also is applied in the outer query,
          * the outermost `LIMIT` takes precedence.

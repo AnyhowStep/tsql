@@ -28,7 +28,7 @@ export declare const query: tsql.Query<{
     }>;
     selectClause: undefined;
     limitClause: undefined;
-    unionClause: undefined;
+    compoundQueryClause: undefined;
     unionLimitClause: undefined;
 }>;
 export declare const query2: tsql.Query<{
@@ -59,6 +59,6 @@ export declare const query2: tsql.Query<{
     }>;
     selectClause: undefined;
     limitClause: undefined;
-    unionClause: undefined;
+    compoundQueryClause: undefined;
     unionLimitClause: undefined;
 }>;

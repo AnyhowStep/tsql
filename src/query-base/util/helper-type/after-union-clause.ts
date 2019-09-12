@@ -11,7 +11,7 @@ export type AfterUnionClause = (
 
         limitClause : LimitClause|undefined,
 
-        unionClause : CompoundQueryClause,
+        compoundQueryClause : CompoundQueryClause,
         unionLimitClause : LimitClause|undefined,
     }>
 );

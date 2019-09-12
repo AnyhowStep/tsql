@@ -328,6 +328,6 @@ export declare const query: tsql.Query<{
         usedRef: tsql.IUsedRef<never>;
     }>];
     limitClause: undefined;
-    unionClause: undefined;
+    compoundQueryClause: undefined;
     unionLimitClause: undefined;
 }>;
