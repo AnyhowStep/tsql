@@ -5,6 +5,22 @@ import {IFromClause, FromClauseUtil} from "../../../from-clause";
  *
  * They will diverge when,
  * + The `HAVING` clause enforces proper `GROUP BY` interactions.
+ *
+ * -----
+ *
+ * The following is valid for MySQL and SQLite,
+ * but not for PostgreSQL,
+ *
+ * ```sql
+ *  SELECT
+ *      myTable.myColumn+2 AS someAlias
+ *  FROM
+ *      myTable
+ *  GROUP BY
+ *      someAlias
+ *  HAVING
+ *      someAlias > 0
+ * ```
  */
 export type AllowedColumnRef<
     FromClauseT extends IFromClause

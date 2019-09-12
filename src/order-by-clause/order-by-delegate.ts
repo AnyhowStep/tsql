@@ -6,6 +6,7 @@ import {ColumnUtil} from "../column";
 import {IExprSelectItem} from "../expr-select-item";
 import {SortDirection} from "../sort-direction";
 import * as OrderByClauseUtil from "./util";
+import {SelectClause} from "../select-clause";
 
 /**
  * This will change when,
@@ -14,16 +15,17 @@ import * as OrderByClauseUtil from "./util";
  * @todo Move this to `util`
  */
 type ValidSortExpr<
-    FromClauseT extends IFromClause
+    FromClauseT extends IFromClause,
+    SelectClauseT extends SelectClause|undefined
 > =
-    | ColumnUtil.FromColumnRef<OrderByClauseUtil.AllowedColumnRef<FromClauseT>>
+    | ColumnUtil.FromColumnRef<OrderByClauseUtil.AllowedColumnRef<FromClauseT, SelectClauseT>>
     | IExpr<{
         mapper : tm.SafeMapper<unknown>,
-        usedRef : OrderByClauseUtil.AllowedUsedRef<FromClauseT>
+        usedRef : OrderByClauseUtil.AllowedUsedRef<FromClauseT, SelectClauseT>
     }>
     | IExprSelectItem<{
         mapper : tm.SafeMapper<unknown>,
-        usedRef : OrderByClauseUtil.AllowedUsedRef<FromClauseT>,
+        usedRef : OrderByClauseUtil.AllowedUsedRef<FromClauseT, SelectClauseT>,
         /**
          * @todo Determine if passing an aliased column is OK
          */
@@ -42,11 +44,12 @@ export type OrderByDelegate<
      * It doesn't make much sense to use `ORDER BY` without a `FROM` clause.
      * Are you going to order one row?
      */
-    FromClauseT extends IFromClause
+    FromClauseT extends IFromClause,
+    SelectClauseT extends SelectClause|undefined
 > = (
     (
         columns : ColumnRefUtil.TryFlatten<
-            OrderByClauseUtil.AllowedColumnRef<FromClauseT>
+            OrderByClauseUtil.AllowedColumnRef<FromClauseT, SelectClauseT>
         >
     ) => (
         /**
@@ -55,8 +58,8 @@ export type OrderByDelegate<
          * It can be an array.
          */
         (
-            | ValidSortExpr<FromClauseT>
-            | readonly [ValidSortExpr<FromClauseT>, SortDirection]
+            | ValidSortExpr<FromClauseT, SelectClauseT>
+            | readonly [ValidSortExpr<FromClauseT, SelectClauseT>, SortDirection]
         )[]
     )
 );

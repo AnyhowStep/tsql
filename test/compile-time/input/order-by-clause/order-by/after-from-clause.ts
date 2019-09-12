@@ -15,6 +15,7 @@ const fromClause = tsql.FromClauseUtil.from(
 export const orderByClause = tsql.OrderByClauseUtil.orderBy(
     fromClause,
     undefined,
+    undefined,
     columns => [
         /**
          * Should default to `ASC`
@@ -25,6 +26,7 @@ export const orderByClause = tsql.OrderByClauseUtil.orderBy(
 
 export const orderByClause2 = tsql.OrderByClauseUtil.orderBy(
     fromClause,
+    undefined,
     undefined,
     columns => [
         /**
@@ -37,6 +39,7 @@ export const orderByClause2 = tsql.OrderByClauseUtil.orderBy(
 export const orderByClause3 = tsql.OrderByClauseUtil.orderBy(
     fromClause,
     undefined,
+    undefined,
     columns => [
         /**
          * Explicit `DESC`
@@ -47,6 +50,7 @@ export const orderByClause3 = tsql.OrderByClauseUtil.orderBy(
 
 export const orderByClause4 = tsql.OrderByClauseUtil.orderBy(
     fromClause,
+    undefined,
     undefined,
     columns => [
         /**
@@ -63,6 +67,7 @@ export const orderByClause4 = tsql.OrderByClauseUtil.orderBy(
 export const orderByClause5 = tsql.OrderByClauseUtil.orderBy(
     fromClause,
     undefined,
+    undefined,
     columns => [
         /**
          * Should default to `ASC`
@@ -73,6 +78,7 @@ export const orderByClause5 = tsql.OrderByClauseUtil.orderBy(
 
 export const orderByClause6 = tsql.OrderByClauseUtil.orderBy(
     fromClause,
+    undefined,
     undefined,
     columns => [
         /**
@@ -85,6 +91,7 @@ export const orderByClause6 = tsql.OrderByClauseUtil.orderBy(
 export const orderByClause7 = tsql.OrderByClauseUtil.orderBy(
     fromClause,
     undefined,
+    undefined,
     columns => [
         /**
          * Explicit `DESC`
@@ -95,6 +102,7 @@ export const orderByClause7 = tsql.OrderByClauseUtil.orderBy(
 
 export const orderByClause8 = tsql.OrderByClauseUtil.orderBy(
     fromClause,
+    undefined,
     undefined,
     columns => [
         /**
@@ -110,6 +118,7 @@ export const orderByClause8 = tsql.OrderByClauseUtil.orderBy(
 
 export const orderByClause9 = tsql.OrderByClauseUtil.orderBy(
     fromClause,
+    undefined,
     undefined,
     columns => [
         /**
@@ -147,6 +156,7 @@ export const orderByClause9 = tsql.OrderByClauseUtil.orderBy(
 
 export const orderByClause10 = tsql.OrderByClauseUtil.orderBy(
     fromClause,
+    undefined,
     undefined,
     columns => [
         /**

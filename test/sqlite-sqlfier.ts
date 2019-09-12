@@ -139,13 +139,21 @@ function orderByClauseToSql (orderByClause : OrderByClause, toSql : (ast : Ast) 
             result.push(",");
         }
         if (ColumnUtil.isColumn(sortExpr)) {
-            result.push(
-                [
-                    escapeIdentifierWithDoubleQuotes(sortExpr.tableAlias),
-                    ".",
-                    escapeIdentifierWithDoubleQuotes(sortExpr.columnAlias)
-                ].join("")
-            );
+            if (sortExpr.unaliasedAst == undefined) {
+                result.push(
+                    [
+                        escapeIdentifierWithDoubleQuotes(sortExpr.tableAlias),
+                        ".",
+                        escapeIdentifierWithDoubleQuotes(sortExpr.columnAlias)
+                    ].join("")
+                );
+            } else {
+                result.push(
+                    escapeIdentifierWithDoubleQuotes(
+                        `${sortExpr.tableAlias}${SEPARATOR}${sortExpr.columnAlias}`
+                    )
+                );
+            }
         } else if (ExprUtil.isExpr(sortExpr)) {
             result.push(toSql(sortExpr.ast));
         } else {

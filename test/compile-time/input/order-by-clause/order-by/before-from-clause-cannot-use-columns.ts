@@ -10,6 +10,7 @@ const myTable = tsql.table("myTable")
 tsql.OrderByClauseUtil.orderBy(
     FromClauseUtil.newInstance(),
     undefined,
+    undefined,
     () => [
         tsql.and(
             myTable.columns.myColumn,

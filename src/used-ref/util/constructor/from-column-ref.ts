@@ -3,7 +3,7 @@ import {IUsedRef} from "../../used-ref";
 import {TypeRefUtil} from "../../../type-ref";
 
 export type FromColumnRef<RefT extends ColumnRef> = (
-    IUsedRef<TypeRefUtil.FromColumnRef<RefT>>
+    IUsedRef<TypeRefUtil.WritableFromColumnRef<RefT>>
 );
 
 export function fromColumnRef<RefT extends ColumnRef> (

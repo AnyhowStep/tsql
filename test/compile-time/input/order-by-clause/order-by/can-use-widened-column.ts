@@ -18,6 +18,7 @@ export const orderByClause = tsql.OrderByClauseUtil.orderBy(
         myTable
     ),
     undefined,
+    undefined,
     () => [
         tsql.and3(
             myTableCopy.columns.myColumn,

@@ -10,7 +10,6 @@ tape(__filename, t => {
         });
 
     const query = tsql.from(myTable)
-        .select(c => [c.myBoolColumn, tsql.pi().as("pi")])
         .orderBy(c => [
             c.myBoolColumn,
             c.myBoolColumn.asc(),
@@ -21,7 +20,8 @@ tape(__filename, t => {
             tsql.isNotNull(c.myBoolColumn).as("someName"),
             tsql.isNotNull(c.myBoolColumn).as("someName").asc(),
             tsql.isNotNull(c.myBoolColumn).as("someName").desc(),
-        ]);
+        ])
+        .select(c => [c.myBoolColumn, tsql.pi().as("pi")]);
 
     compareSqlPretty(__filename, t, query);
 

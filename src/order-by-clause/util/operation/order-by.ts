@@ -7,6 +7,7 @@ import {UsedRefUtil} from "../../../used-ref";
 import {OrderUtil} from "../../../order";
 import {ColumnUtil} from "../../../column";
 import {ColumnIdentifierRefUtil} from "../../../column-identifier-ref";
+import {SelectClause} from "../../../select-clause";
 
 /**
  * Returns the MySQL equivalent of `...orderBy, orderByDelegate(columns)`
@@ -21,15 +22,17 @@ import {ColumnIdentifierRefUtil} from "../../../column-identifier-ref";
  * @param orderByDelegate
  */
 export function orderBy<
-    FromClauseT extends IFromClause
+    FromClauseT extends IFromClause,
+    SelectClauseT extends SelectClause|undefined
 > (
     fromClause : FromClauseT,
+    selectClause : SelectClauseT,
     orderByClause : OrderByClause|undefined,
-    orderByDelegate : OrderByDelegate<FromClauseT>
+    orderByDelegate : OrderByDelegate<FromClauseT, SelectClauseT>
 ) : (
     OrderByClause
 ) {
-    const columns = allowedColumnRef(fromClause);
+    const columns = allowedColumnRef(fromClause, selectClause);
     const orderBy = orderByDelegate(ColumnRefUtil.tryFlatten(
         columns
     ));

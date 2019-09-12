@@ -18,6 +18,7 @@ tsql.OrderByClauseUtil.orderBy(
         myTable
     ),
     undefined,
+    undefined,
     () => [
         tsql.and(
             myTableCopy.columns.myColumn,

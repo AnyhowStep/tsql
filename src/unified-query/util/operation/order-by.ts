@@ -40,14 +40,16 @@ export function orderBy<
     QueryT extends IQuery
 > (
     query : QueryT,
-    orderByDelegate : OrderByDelegate<QueryT["fromClause"]>
+    orderByDelegate : OrderByDelegate<QueryT["fromClause"], QueryT["selectClause"]>
 ) : (
     OrderBy<QueryT>
 ) {
     const orderByClause = OrderByClauseUtil.orderBy<
-        QueryT["fromClause"]
+        QueryT["fromClause"],
+        QueryT["selectClause"]
     >(
         query.fromClause,
+        query.selectClause,
         query.orderByClause,
         orderByDelegate
     );

@@ -1,7 +1,7 @@
 [
   {
     "messageText": {
-      "messageText": "Type 'ExprImpl<Mapper<unknown, boolean>, IUsedRef<{ readonly myTable: { readonly myColumn: boolean; }; }>>' is not assignable to type 'IExpr<{ mapper: Mapper<unknown, unknown>; usedRef: IUsedRef<{}>; }> | IExprSelectItem<{ mapper: Mapper<unknown, unknown>; usedRef: IUsedRef<{}>; tableAlias: string; alias: string; }> | readonly [ValidSortExpr<IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>>, \"ASC\" | \"DESC\"]'.",
+      "messageText": "Type 'ExprImpl<Mapper<unknown, boolean>, IUsedRef<{ readonly myTable: { readonly myColumn: boolean; }; }>>' is not assignable to type 'IExpr<{ mapper: Mapper<unknown, unknown>; usedRef: IUsedRef<{}>; }> | IExprSelectItem<{ mapper: Mapper<unknown, unknown>; usedRef: IUsedRef<{}>; tableAlias: string; alias: string; }> | readonly [ValidSortExpr<IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>, undefined>, \"ASC\" | \"DESC\"]'.",
       "category": 1,
       "code": 2322,
       "next": {
@@ -28,6 +28,6 @@
     "code": 2322,
     "category": 1,
     "length": 75,
-    "start": 346
+    "start": 361
   }
 ]

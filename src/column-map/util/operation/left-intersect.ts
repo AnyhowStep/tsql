@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {ColumnMap, WritableColumnMap} from "../../column-map";
-import {IColumn, Column, ColumnUtil} from "../../../column";
+import {Column, ColumnUtil} from "../../../column";
 
 //Take the intersection and the "left" columnMap
 export type LeftIntersect<
@@ -10,7 +10,7 @@ export type LeftIntersect<
     {
         readonly [columnAlias in Extract<keyof MapA, string>] : (
             columnAlias extends keyof MapB ?
-            IColumn<{
+            Column<{
                 tableAlias : MapA[columnAlias]["tableAlias"],
                 columnAlias : MapA[columnAlias]["columnAlias"],
                 mapper : tm.SafeMapper<

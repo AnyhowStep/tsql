@@ -10,3 +10,13 @@ export type FromColumnMap<MapT extends ColumnMap> = (
     } :
     never
 );
+
+export type WritableFromColumnMap<MapT extends ColumnMap> = (
+    MapT extends ColumnMap ?
+    {
+        [columnAlias in Extract<keyof MapT, string>] : (
+            tm.OutputOf<MapT[columnAlias]["mapper"]>
+        )
+    } :
+    never
+);

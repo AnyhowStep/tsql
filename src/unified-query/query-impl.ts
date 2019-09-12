@@ -453,7 +453,8 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
 
     orderBy (
         orderByDelegate : OrderByDelegate<
-            this["fromClause"]
+            this["fromClause"],
+            this["selectClause"]
         >
     ) : (
         QueryUtil.OrderBy<this>

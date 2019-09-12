@@ -10,3 +10,13 @@ export type FromColumnRef<RefT extends ColumnRef> = (
     } :
     never
 );
+
+export type WritableFromColumnRef<RefT extends ColumnRef> = (
+    RefT extends ColumnRef ?
+    {
+        [tableAlias in Extract<keyof RefT, string>] : (
+            TypeMapUtil.WritableFromColumnMap<RefT[tableAlias]>
+        )
+    } :
+    never
+);
