@@ -9,5 +9,5 @@ export * from "./non-correlated";
 export * from "./one-row";
 export * from "./one-select-item";
 export * from "./zero-or-one-row-using-limit";
-export * from "./zero-or-one-row-using-union-limit";
+export * from "./zero-or-one-row-using-compound-query-limit";
 export * from "./zero-or-one-row";

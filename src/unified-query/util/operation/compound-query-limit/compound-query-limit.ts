@@ -1,11 +1,11 @@
 import {LimitClauseUtil} from "../../../../limit-clause";
 import {Query} from "../../../query-impl";
 import {IQuery} from "../../../query";
-import {CompoundQueryLimitBigInt} from "./union-limit-bigint";
-import {CompoundQueryLimitNumber} from "./union-limit-number";
-import {CompoundQueryLimitNumber0} from "./union-limit-number-0";
-import {CompoundQueryLimitNumber1} from "./union-limit-number-1";
-import {CompoundQueryLimitNumber0Or1} from "./union-limit-number-0-or-1";
+import {CompoundQueryLimitBigInt} from "./compound-query-limit-bigint";
+import {CompoundQueryLimitNumber} from "./compound-query-limit-number";
+import {CompoundQueryLimitNumber0} from "./compound-query-limit-number-0";
+import {CompoundQueryLimitNumber1} from "./compound-query-limit-number-1";
+import {CompoundQueryLimitNumber0Or1} from "./compound-query-limit-number-0-or-1";
 
 export function compoundQueryLimit<
     QueryT extends IQuery,

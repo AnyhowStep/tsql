@@ -4,5 +4,5 @@ export * from "./is-one-row";
 export * from "./is-one-select-item";
 export * from "./is-query";
 export * from "./is-zero-or-one-row-using-limit";
-export * from "./is-zero-or-one-row-using-union-limit";
+export * from "./is-zero-or-one-row-using-compound-query-limit";
 export * from "./is-zero-or-one-row";
