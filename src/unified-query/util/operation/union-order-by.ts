@@ -1,4 +1,4 @@
-import {UnionOrderByDelegate, UnionOrderByClauseUtil} from "../../../union-order-by-clause";
+import {CompoundQueryOrderByDelegate, CompoundQueryOrderByClauseUtil} from "../../../union-order-by-clause";
 import {Query} from "../../query-impl";
 import {IQuery} from "../../query";
 import {QueryUtil} from "../..";
@@ -9,7 +9,7 @@ import {QueryUtil} from "../..";
  * This hack should only really be reserved for types that are more likely
  * to trigger max depth/max count errors.
  */
-export type UnionOrderByImpl<
+export type CompoundQueryOrderByImpl<
     FromClauseT extends IQuery["fromClause"],
     SelectClauseT extends IQuery["selectClause"],
     LimitClauseT extends IQuery["limitClause"],
@@ -26,10 +26,10 @@ export type UnionOrderByImpl<
         compoundQueryLimitClause : UnionLimitClauseT,
     }>
 );
-export type UnionOrderBy<
+export type CompoundQueryOrderBy<
     QueryT extends IQuery
 > = (
-    UnionOrderByImpl<
+    CompoundQueryOrderByImpl<
         QueryT["fromClause"],
         QueryT["selectClause"],
         QueryT["limitClause"],
@@ -41,11 +41,11 @@ export function compoundQueryOrderBy<
     QueryT extends QueryUtil.AfterSelectClause
 > (
     query : QueryT,
-    compoundQueryOrderByDelegate : UnionOrderByDelegate<QueryT["selectClause"]>
+    compoundQueryOrderByDelegate : CompoundQueryOrderByDelegate<QueryT["selectClause"]>
 ) : (
-    UnionOrderBy<QueryT>
+    CompoundQueryOrderBy<QueryT>
 ) {
-    const compoundQueryOrderByClause = UnionOrderByClauseUtil.compoundQueryOrderBy<
+    const compoundQueryOrderByClause = CompoundQueryOrderByClauseUtil.compoundQueryOrderBy<
         QueryT["selectClause"]
     >(
         query.selectClause,
@@ -69,7 +69,7 @@ export function compoundQueryOrderBy<
         //compoundQueryOrderByClause,
     } = query;
 
-    const result : UnionOrderBy<QueryT> = new Query(
+    const result : CompoundQueryOrderBy<QueryT> = new Query(
         {
             fromClause,
             selectClause,

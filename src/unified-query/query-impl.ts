@@ -23,7 +23,7 @@ import {CandidateKey_NonUnion} from "../candidate-key";
 import * as QueryUtil from "./util";
 import * as TypeUtil from "../type-util";
 import * as ExprLib from "../expr-library";
-import {UnionOrderByClause, UnionOrderByDelegate} from "../union-order-by-clause";
+import {CompoundQueryOrderByClause, CompoundQueryOrderByDelegate} from "../union-order-by-clause";
 
 export class Query<DataT extends QueryData> implements IQuery<DataT> {
     readonly fromClause : DataT["fromClause"];
@@ -38,7 +38,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     readonly groupByClause : GroupByClause|undefined;
     readonly havingClause : HavingClause|undefined;
     readonly orderByClause : OrderByClause|undefined;
-    readonly compoundQueryOrderByClause : UnionOrderByClause|undefined;
+    readonly compoundQueryOrderByClause : CompoundQueryOrderByClause|undefined;
 
     constructor (data : DataT, extraData : ExtraQueryData) {
         this.fromClause = data.fromClause;
@@ -483,11 +483,11 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
 
     compoundQueryOrderBy (
         this : Extract<this, QueryUtil.AfterSelectClause>,
-        compoundQueryOrderByDelegate : UnionOrderByDelegate<
+        compoundQueryOrderByDelegate : CompoundQueryOrderByDelegate<
             Extract<this, QueryUtil.AfterSelectClause>["selectClause"]
         >
     ) : (
-        QueryUtil.UnionOrderBy<Extract<this, QueryUtil.AfterSelectClause>>
+        QueryUtil.CompoundQueryOrderBy<Extract<this, QueryUtil.AfterSelectClause>>
     ) {
         return QueryUtil.compoundQueryOrderBy<
             Extract<this, QueryUtil.AfterSelectClause>

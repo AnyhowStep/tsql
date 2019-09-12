@@ -1,7 +1,7 @@
 import {allowedColumnRef} from "../query";
 import {SelectClause} from "../../../select-clause";
-import {UnionOrderByClause} from "../../union-order-by-clause";
-import {UnionOrderByDelegate} from "../../union-order-by-delegate";
+import {CompoundQueryOrderByClause} from "../../union-order-by-clause";
+import {CompoundQueryOrderByDelegate} from "../../union-order-by-delegate";
 import {ColumnRefUtil} from "../../../column-ref";
 import {Concat} from "../../../tuple-util";
 import {ColumnIdentifierRefUtil} from "../../../column-identifier-ref";
@@ -10,16 +10,16 @@ import {OrderUtil} from "../../../order";
 /**
  * This will probably never be used...
  */
-export type UnionOrderBy<
-    UnionOrderByClauseT extends UnionOrderByClause|undefined,
-    UnionOrderByT extends UnionOrderByClause
+export type CompoundQueryOrderBy<
+    CompoundQueryOrderByClauseT extends CompoundQueryOrderByClause|undefined,
+    CompoundQueryOrderByT extends CompoundQueryOrderByClause
 > =
-    UnionOrderByClauseT extends UnionOrderByClause ?
+    CompoundQueryOrderByClauseT extends CompoundQueryOrderByClause ?
     Concat<
-        UnionOrderByClauseT,
-        UnionOrderByT
+        CompoundQueryOrderByClauseT,
+        CompoundQueryOrderByT
     > :
-    UnionOrderByT
+    CompoundQueryOrderByT
 ;
 
 /**
@@ -37,10 +37,10 @@ export function compoundQueryOrderBy<
     SelectClauseT extends SelectClause
 > (
     selectClause : SelectClauseT,
-    compoundQueryOrderByClause : UnionOrderByClause|undefined,
-    compoundQueryOrderByDelegate : UnionOrderByDelegate<SelectClauseT>
+    compoundQueryOrderByClause : CompoundQueryOrderByClause|undefined,
+    compoundQueryOrderByDelegate : CompoundQueryOrderByDelegate<SelectClauseT>
 ) : (
-    UnionOrderByClause
+    CompoundQueryOrderByClause
 ) {
     const columns = allowedColumnRef(selectClause);
     const compoundQueryOrderBy = compoundQueryOrderByDelegate(ColumnRefUtil.tryFlatten(

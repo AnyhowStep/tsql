@@ -3,7 +3,7 @@ import {WhereClause} from "../where-clause";
 import {GroupByClause} from "../group-by-clause";
 import {HavingClause} from "../having-clause";
 import {OrderByClause} from "../order-by-clause";
-import {UnionOrderByClause} from "../union-order-by-clause";
+import {CompoundQueryOrderByClause} from "../union-order-by-clause";
 
 /**
  * @todo Rename to `UnifiedQueryData` or something
@@ -18,7 +18,7 @@ export interface ExtraQueryData {
     readonly groupByClause : GroupByClause|undefined,
     readonly havingClause : HavingClause|undefined,
     readonly orderByClause : OrderByClause|undefined,
-    readonly compoundQueryOrderByClause : UnionOrderByClause|undefined,
+    readonly compoundQueryOrderByClause : CompoundQueryOrderByClause|undefined,
 }
 
 /**

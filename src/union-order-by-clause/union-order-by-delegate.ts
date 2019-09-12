@@ -1,7 +1,7 @@
 import {SelectClause} from "../select-clause";
 import {ColumnRefUtil} from "../column-ref";
 import {ColumnUtil} from "../column";
-import * as UnionOrderByClauseUtil from "./util";
+import * as CompoundQueryOrderByClauseUtil from "./util";
 import {SortDirection} from "../sort-direction";
 
 /**
@@ -10,15 +10,15 @@ import {SortDirection} from "../sort-direction";
 type ValidUnionSortExpr<
     SelectClauseT extends SelectClause
 > =
-    | ColumnUtil.FromColumnRef<UnionOrderByClauseUtil.AllowedColumnRef<SelectClauseT>>
+    | ColumnUtil.FromColumnRef<CompoundQueryOrderByClauseUtil.AllowedColumnRef<SelectClauseT>>
 ;
 
-export type UnionOrderByDelegate<
+export type CompoundQueryOrderByDelegate<
     SelectClauseT extends SelectClause
 > = (
     (
         columns : ColumnRefUtil.TryFlatten<
-            UnionOrderByClauseUtil.AllowedColumnRef<SelectClauseT>
+            CompoundQueryOrderByClauseUtil.AllowedColumnRef<SelectClauseT>
         >
     ) => (
         readonly (
