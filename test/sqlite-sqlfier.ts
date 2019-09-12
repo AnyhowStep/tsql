@@ -133,6 +133,9 @@ function whereClauseToSql (whereClause : WhereClause, toSql : (ast : Ast) => str
 }
 
 function orderByClauseToSql (orderByClause : OrderByClause, toSql : (ast : Ast) => string) : string[] {
+    if (orderByClause.length == 0) {
+        return [];
+    }
     const result : string[] = [];
     for (const [sortExpr, sortDirection] of orderByClause) {
         if (result.length > 0) {
@@ -284,6 +287,99 @@ export const sqliteSqlfier : Sqlfier = {
         ),
     },
     queryBaseSqlfier : (query, toSql) => {
+        /**
+         * MySQL behaviour,
+         * No `UNION` clause.
+         *
+         * | `ORDER BY` | `LIMIT` | `UNION ORDER BY` | `UNION LIMIT` | Result
+         * |------------|---------|------------------|---------------|-------------------------------------------------
+         * | Y          | Y       | Y                | Y             | `ORDER BY ... LIMIT ...) ORDER BY ... LIMIT ...`
+         * | Y          | Y       | Y                | N             | `ORDER BY ... LIMIT ...) ORDER BY ...`
+         * | Y          | Y       | N                | Y             | `ORDER BY ...) LIMIT ...`
+         * | Y          | Y       | N                | N             | `ORDER BY ... LIMIT ...)`
+         * | Y          | N       | Y                | Y             | `) ORDER BY ... LIMIT ...`
+         * | Y          | N       | Y                | N             | `) ORDER BY ...`
+         * | Y          | N       | N                | Y             | `ORDER BY ...) LIMIT ...`
+         * | Y          | N       | N                | N             | `ORDER BY ...)`
+         * |------------|---------|------------------|---------------|-------------------------------------------------
+         * | N          | Y       | Y                | Y             | `LIMIT ...) ORDER BY ... LIMIT ...`
+         * | N          | Y       | Y                | N             | `LIMIT ...) ORDER BY ...`
+         * | N          | Y       | N                | Y             | `) LIMIT ...`
+         * | N          | Y       | N                | N             | `LIMIT ...)`
+         * | N          | N       | Y                | Y             | `) ORDER BY ... LIMIT ...`
+         * | N          | N       | Y                | N             | `) ORDER BY ...`
+         * | N          | N       | N                | Y             | `) LIMIT ...`
+         * | N          | N       | N                | N             | `)`
+         *
+         * Observations:
+         * + With no `LIMIT` clause, the `UNION ORDER BY` and `UNION LIMIT` take over, regardless of `ORDER BY`
+         * + With the `LIMIT` clause, the `UNION ORDER BY` never takes over
+         * + With the `LIMIT` clause, the `UNION LIMIT` takes over when there is no `UNION ORDER BY`
+         *
+         * + `UNION LIMIT` takes over when, !`LIMIT` || !`UNION ORDER BY`
+         * + `UNION ORDER BY` takes over when, !`LIMIT`
+         */
+
+        const orderByClause = (
+            (
+                query.unionOrderByClause != undefined &&
+                query.unionClause == undefined &&
+                query.limitClause == undefined
+            ) ?
+            query.unionOrderByClause :
+            query.orderByClause
+        );
+        const limitClause = (
+            (
+                query.unionLimitClause != undefined &&
+                query.unionClause == undefined &&
+                (
+                    query.limitClause == undefined ||
+                    query.unionOrderByClause == undefined
+                )
+            ) ?
+            query.unionLimitClause :
+            query.limitClause
+        );
+
+        const unionOrderByClause = (
+            orderByClause == query.unionOrderByClause ?
+            undefined :
+            query.unionOrderByClause
+        );
+        const unionLimitClause = (
+            limitClause == query.unionLimitClause ?
+            undefined :
+            query.unionLimitClause
+        );
+
+        if (unionOrderByClause != undefined || unionLimitClause != undefined) {
+            /**
+             * We have to apply some hackery to get the same behaviour as MySQL.
+             */
+            const innerQuery = {
+                ...query,
+                orderByClause,
+                limitClause,
+                unionOrderByClause : undefined,
+                unionLimitClause : undefined,
+            };
+            const result : string[] = [
+                "SELECT * FROM (",
+                toSql(innerQuery),
+                ")"
+            ];
+            if (unionOrderByClause != undefined) {
+                result.push(orderByClauseToSql(unionOrderByClause, toSql).join(" "));
+            }
+
+            if (unionLimitClause != undefined) {
+                result.push(limitClauseToSql(unionLimitClause, toSql).join(" "));
+            }
+
+            return result.join(" ");
+        }
+
         const result : string[] = [];
         if (query.selectClause != undefined) {
             result.push(selectClauseToSql(query.selectClause, toSql).join(" "));
@@ -308,21 +404,11 @@ export const sqliteSqlfier : Sqlfier = {
                 result.push(havingClauseToSql(query.havingClause, toSql).join(" "));
             }
         }
-        if (query.orderByClause != undefined) {
-            result.push(orderByClauseToSql(query.orderByClause, toSql).join(" "));
+
+        if (orderByClause != undefined) {
+            result.push(orderByClauseToSql(orderByClause, toSql).join(" "));
         }
 
-        /**
-         * `LIMIT` clause.
-         */
-        const limitClause = (
-            (
-                query.unionLimitClause != undefined &&
-                query.unionClause == undefined
-            ) ?
-            query.unionLimitClause :
-            query.limitClause
-        );
         if (limitClause != undefined) {
             result.push(limitClauseToSql(limitClause, toSql).join(" "));
         }

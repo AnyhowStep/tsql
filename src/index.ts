@@ -37,6 +37,7 @@ export * from "./table";
 export * from "./type-map";
 export * from "./type-ref";
 export * from "./unified-query";
+export * from "./union-order-by-clause";
 export * from "./used-ref";
 export * from "./where-clause";
 

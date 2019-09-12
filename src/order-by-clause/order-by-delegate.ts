@@ -57,7 +57,7 @@ export type OrderByDelegate<
          *
          * It can be an array.
          */
-        (
+        readonly (
             | ValidSortExpr<FromClauseT, SelectClauseT>
             | readonly [ValidSortExpr<FromClauseT, SelectClauseT>, SortDirection]
         )[]

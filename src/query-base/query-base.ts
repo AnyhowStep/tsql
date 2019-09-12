@@ -6,6 +6,7 @@ import {WhereClause} from "../where-clause";
 import {GroupByClause} from "../group-by-clause";
 import {HavingClause} from "../having-clause";
 import {OrderByClause} from "../order-by-clause";
+import {UnionOrderByClause} from "../union-order-by-clause";
 
 export interface QueryBaseData {
     readonly fromClause : IFromClause,
@@ -61,4 +62,5 @@ export interface IQueryBase<DataT extends QueryBaseData=QueryBaseData> {
     readonly groupByClause : GroupByClause|undefined,
     readonly havingClause : HavingClause|undefined,
     readonly orderByClause : OrderByClause|undefined,
+    readonly unionOrderByClause : UnionOrderByClause|undefined,
 }

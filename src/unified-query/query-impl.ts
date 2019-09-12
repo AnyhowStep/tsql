@@ -23,6 +23,7 @@ import {CandidateKey_NonUnion} from "../candidate-key";
 import * as QueryUtil from "./util";
 import * as TypeUtil from "../type-util";
 import * as ExprLib from "../expr-library";
+import {UnionOrderByClause, UnionOrderByDelegate} from "../union-order-by-clause";
 
 export class Query<DataT extends QueryData> implements IQuery<DataT> {
     readonly fromClause : DataT["fromClause"];
@@ -37,6 +38,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     readonly groupByClause : GroupByClause|undefined;
     readonly havingClause : HavingClause|undefined;
     readonly orderByClause : OrderByClause|undefined;
+    readonly unionOrderByClause : UnionOrderByClause|undefined;
 
     constructor (data : DataT, extraData : ExtraQueryData) {
         this.fromClause = data.fromClause;
@@ -49,6 +51,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         this.groupByClause = extraData.groupByClause;
         this.havingClause = extraData.havingClause;
         this.orderByClause = extraData.orderByClause;
+        this.unionOrderByClause = extraData.unionOrderByClause;
     }
 
     limit<
@@ -476,6 +479,22 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         QueryUtil.Select<Extract<this, QueryUtil.BeforeUnionClause>, SelectsT>
     ) {
         return QueryUtil.select<Extract<this, QueryUtil.BeforeUnionClause>, SelectsT>(this, selectDelegate);
+    }
+
+    unionOrderBy (
+        this : Extract<this, QueryUtil.AfterSelectClause>,
+        unionOrderByDelegate : UnionOrderByDelegate<
+            Extract<this, QueryUtil.AfterSelectClause>["selectClause"]
+        >
+    ) : (
+        QueryUtil.UnionOrderBy<Extract<this, QueryUtil.AfterSelectClause>>
+    ) {
+        return QueryUtil.unionOrderBy<
+            Extract<this, QueryUtil.AfterSelectClause>
+        >(
+            this,
+            unionOrderByDelegate
+        );
     }
 
     whereEqCandidateKey<

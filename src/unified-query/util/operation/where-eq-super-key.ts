@@ -90,6 +90,7 @@ export function whereEqSuperKey<
         groupByClause,
         havingClause,
         orderByClause,
+        unionOrderByClause,
     } = query;
 
     const result : WhereEqSuperKey<QueryT> = new Query(
@@ -107,6 +108,7 @@ export function whereEqSuperKey<
             groupByClause,
             havingClause,
             orderByClause,
+            unionOrderByClause,
         }
     );
     return result;

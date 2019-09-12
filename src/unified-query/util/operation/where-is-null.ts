@@ -88,6 +88,7 @@ export function whereIsNull<
         groupByClause,
         havingClause,
         orderByClause,
+        unionOrderByClause,
     } = query;
 
     const result : WhereIsNull<QueryT, ColumnT> = new Query(
@@ -105,6 +106,7 @@ export function whereIsNull<
             groupByClause,
             havingClause,
             orderByClause,
+            unionOrderByClause,
         }
     );
     return result;

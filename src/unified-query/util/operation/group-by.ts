@@ -67,6 +67,7 @@ export function groupBy<
         whereClause,
         havingClause,
         orderByClause,
+        unionOrderByClause,
     } = query;
 
     const result : GroupBy<QueryT> = new Query(
@@ -84,6 +85,7 @@ export function groupBy<
             groupByClause,
             havingClause,
             orderByClause,
+            unionOrderByClause,
         }
     );
     return result;

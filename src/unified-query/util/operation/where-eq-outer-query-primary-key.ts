@@ -95,6 +95,7 @@ export function whereEqOuterQueryPrimaryKey<
         groupByClause,
         havingClause,
         orderByClause,
+        unionOrderByClause,
     } = query;
 
     const result : WhereEqOuterQueryPrimaryKey<QueryT> = new Query(
@@ -112,6 +113,7 @@ export function whereEqOuterQueryPrimaryKey<
             groupByClause,
             havingClause,
             orderByClause,
+            unionOrderByClause,
         }
     );
     return result;
