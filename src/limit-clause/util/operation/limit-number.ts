@@ -64,7 +64,10 @@ export function limitNumber<
     limitClause : LimitClauseT,
     maxRowCount : number
 ) : (
-    LimitNumber<LimitClauseT>
+    | LimitNumber0<LimitClauseT>
+    | LimitNumber1<LimitClauseT>
+    | LimitNumber0Or1<LimitClauseT>
+    | LimitNumber<LimitClauseT>
 ) {
     const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
     return limitBigInt(

@@ -294,8 +294,20 @@ export const sqliteSqlfier : Sqlfier = {
         if (query.orderByClause != undefined) {
             result.push(orderByClauseToSql(query.orderByClause, toSql).join(" "));
         }
-        if (query.limitClause != undefined) {
-            result.push(limitClauseToSql(query.limitClause, toSql).join(" "));
+
+        /**
+         * `LIMIT` clause.
+         */
+        const limitClause = (
+            (
+                query.unionLimitClause != undefined &&
+                query.unionClause == undefined
+            ) ?
+            query.unionLimitClause :
+            query.limitClause
+        );
+        if (limitClause != undefined) {
+            result.push(limitClauseToSql(limitClause, toSql).join(" "));
         }
 
         return result.join(" ");

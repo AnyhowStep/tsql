@@ -1,68 +1,68 @@
 import {LimitClauseUtil} from "../../../../limit-clause";
 import {Query} from "../../../query-impl";
 import {IQuery} from "../../../query";
-import {LimitBigInt} from "./limit-bigint";
-import {LimitNumber} from "./limit-number";
-import {LimitNumber0} from "./limit-number-0";
-import {LimitNumber1} from "./limit-number-1";
-import {LimitNumber0Or1} from "./limit-number-0-or-1";
+import {UnionLimitBigInt} from "./union-limit-bigint";
+import {UnionLimitNumber} from "./union-limit-number";
+import {UnionLimitNumber0} from "./union-limit-number-0";
+import {UnionLimitNumber1} from "./union-limit-number-1";
+import {UnionLimitNumber0Or1} from "./union-limit-number-0-or-1";
 
-export function limit<
+export function unionLimit<
     QueryT extends IQuery,
     MaxRowCountT extends bigint
 > (
     query : QueryT,
     maxRowCount : MaxRowCountT
 ) : (
-    LimitBigInt<QueryT, MaxRowCountT>
+    UnionLimitBigInt<QueryT, MaxRowCountT>
 );
-export function limit<
+export function unionLimit<
     QueryT extends IQuery
 > (
     query : QueryT,
     maxRowCount : 0
 ) : (
-    LimitNumber0<QueryT>
+    UnionLimitNumber0<QueryT>
 );
-export function limit<
+export function unionLimit<
     QueryT extends IQuery
 > (
     query : QueryT,
     maxRowCount : 1
 ) : (
-    LimitNumber1<QueryT>
+    UnionLimitNumber1<QueryT>
 );
-export function limit<
+export function unionLimit<
     QueryT extends IQuery
 > (
     query : QueryT,
     maxRowCount : 0|1
 ) : (
-    LimitNumber0Or1<QueryT>
+    UnionLimitNumber0Or1<QueryT>
 );
-export function limit<
+export function unionLimit<
     QueryT extends IQuery
 > (
     query : QueryT,
     maxRowCount : number|bigint
 ) : (
-    LimitNumber<QueryT>
+    UnionLimitNumber<QueryT>
 );
-export function limit<
+export function unionLimit<
     QueryT extends IQuery
 > (
     query : QueryT,
     maxRowCount : number|bigint
 ) : (
-    | LimitNumber0<QueryT>
-    | LimitNumber1<QueryT>
-    | LimitNumber0Or1<QueryT>
-    | LimitNumber<QueryT>
+    | UnionLimitNumber0<QueryT>
+    | UnionLimitNumber1<QueryT>
+    | UnionLimitNumber0Or1<QueryT>
+    | UnionLimitNumber<QueryT>
 ) {
-    const limitClause = LimitClauseUtil.limit<
-        QueryT["limitClause"]
+    const unionLimitClause = LimitClauseUtil.limit<
+        QueryT["unionLimitClause"]
     >(
-        query.limitClause,
+        query.unionLimitClause,
         maxRowCount
     );
 
@@ -70,13 +70,13 @@ export function limit<
         fromClause,
         selectClause,
 
-        //limitClause,
+        limitClause,
 
         unionClause,
-        unionLimitClause,
+        //unionLimitClause,
     } = query;
 
-    const result : LimitNumber<QueryT> = new Query(
+    const result : UnionLimitNumber<QueryT> = new Query(
         {
             fromClause,
             selectClause,

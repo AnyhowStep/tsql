@@ -5,10 +5,10 @@ export declare const query: tsql.Query<{
         currentJoins: undefined;
     }>;
     selectClause: undefined;
-    limitClause: {
-        readonly maxRowCount: 9223372036854775807n;
-        readonly offset: 44n;
-    };
+    limitClause: undefined;
     unionClause: undefined;
-    unionLimitClause: undefined;
+    unionLimitClause: {
+        readonly maxRowCount: 420n;
+        readonly offset: 13370n;
+    };
 }>;

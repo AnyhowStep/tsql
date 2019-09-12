@@ -1,4 +1,4 @@
 export declare const limitClause: {
-    readonly maxRowCount: 18446744073709551615n;
+    readonly maxRowCount: 9223372036854775807n;
     readonly offset: bigint;
 };

@@ -1,5 +1,7 @@
 export * from "./limit";
 export * from "./offset";
+export * from "./union-limit";
+export * from "./union-offset";
 
 export * from "./cross-join";
 export * from "./from";
