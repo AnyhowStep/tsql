@@ -1,7 +1,7 @@
 import {SelectClause, SelectClauseUtil, SelectDelegate} from "../../../select-clause";
 import {QueryBaseUtil} from "../../../query-base";
 import {Query} from "../../query-impl";
-import {BeforeUnionClause} from "../helper-type";
+import {BeforeCompoundQueryClause} from "../helper-type";
 
 /**
  * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966
@@ -11,11 +11,11 @@ import {BeforeUnionClause} from "../helper-type";
  */
 export type SelectImpl<
     SelectsT extends SelectClause,
-    FromClauseT extends BeforeUnionClause["fromClause"],
-    SelectClauseT extends BeforeUnionClause["selectClause"],
-    LimitClauseT extends BeforeUnionClause["limitClause"],
-    UnionClauseT extends BeforeUnionClause["compoundQueryClause"],
-    CompoundQueryLimitClauseT extends BeforeUnionClause["compoundQueryLimitClause"],
+    FromClauseT extends BeforeCompoundQueryClause["fromClause"],
+    SelectClauseT extends BeforeCompoundQueryClause["selectClause"],
+    LimitClauseT extends BeforeCompoundQueryClause["limitClause"],
+    CompoundQueryClauseT extends BeforeCompoundQueryClause["compoundQueryClause"],
+    CompoundQueryLimitClauseT extends BeforeCompoundQueryClause["compoundQueryLimitClause"],
 > = (
     Query<{
         fromClause : FromClauseT,
@@ -23,12 +23,12 @@ export type SelectImpl<
 
         limitClause : LimitClauseT,
 
-        compoundQueryClause : UnionClauseT,
+        compoundQueryClause : CompoundQueryClauseT,
         compoundQueryLimitClause : CompoundQueryLimitClauseT,
     }>
 );
 export type Select<
-    QueryT extends BeforeUnionClause,
+    QueryT extends BeforeCompoundQueryClause,
     SelectsT extends SelectClause
 > = (
     SelectImpl<
@@ -41,7 +41,7 @@ export type Select<
     >
 );
 export function select<
-    QueryT extends BeforeUnionClause,
+    QueryT extends BeforeCompoundQueryClause,
     SelectsT extends SelectClause
 > (
     query : QueryT,
@@ -49,7 +49,7 @@ export function select<
 ) : (
     Select<QueryT, SelectsT>
 ) {
-    if (!QueryBaseUtil.isBeforeUnionClause(query)) {
+    if (!QueryBaseUtil.isBeforeCompoundQueryClause(query)) {
         throw new Error(`Cannot SELECT after UNION clause; this will change the number of columns`)
     }
     const selectClause = SelectClauseUtil.select<

@@ -12,7 +12,7 @@ export type CompoundQueryOffsetNumberImpl<
     FromClauseT extends IQuery["fromClause"],
     SelectClauseT extends IQuery["selectClause"],
     LimitClauseT extends IQuery["limitClause"],
-    UnionClauseT extends IQuery["compoundQueryClause"],
+    CompoundQueryClauseT extends IQuery["compoundQueryClause"],
     CompoundQueryLimitClauseT extends IQuery["compoundQueryLimitClause"],
 > =
     Query<{
@@ -21,7 +21,7 @@ export type CompoundQueryOffsetNumberImpl<
 
         limitClause : LimitClauseT,
 
-        compoundQueryClause : UnionClauseT,
+        compoundQueryClause : CompoundQueryClauseT,
         compoundQueryLimitClause : LimitClauseUtil.OffsetNumber<
             CompoundQueryLimitClauseT
         >,

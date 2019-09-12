@@ -4,7 +4,7 @@ import {SelectClause} from "../../../select-clause";
 import {CompoundQueryClause} from "../../../compound-query-clause";
 import {LimitClause} from "../../../limit-clause";
 
-export type AfterUnionClause = (
+export type AfterCompoundQueryClause = (
     IQueryBase<{
         fromClause : IFromClause,
         selectClause : SelectClause|undefined,

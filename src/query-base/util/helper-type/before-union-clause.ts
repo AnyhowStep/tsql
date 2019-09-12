@@ -3,7 +3,7 @@ import {IFromClause} from "../../../from-clause";
 import {SelectClause} from "../../../select-clause";
 import {LimitClause} from "../../../limit-clause";
 
-export type BeforeUnionClause = (
+export type BeforeCompoundQueryClause = (
     IQueryBase<{
         fromClause : IFromClause,
         selectClause : SelectClause|undefined,

@@ -18,7 +18,7 @@ export type LeftJoinUsingCandidateKeyImpl<
     FromClauseT extends AfterFromClause["fromClause"],
     SelectClauseT extends AfterFromClause["selectClause"],
     LimitClauseT extends AfterFromClause["limitClause"],
-    UnionClauseT extends AfterFromClause["compoundQueryClause"],
+    CompoundQueryClauseT extends AfterFromClause["compoundQueryClause"],
     CompoundQueryLimitClauseT extends AfterFromClause["compoundQueryLimitClause"],
 > =
     Query<{
@@ -27,7 +27,7 @@ export type LeftJoinUsingCandidateKeyImpl<
 
         limitClause : LimitClauseT,
 
-        compoundQueryClause : UnionClauseT,
+        compoundQueryClause : CompoundQueryClauseT,
         compoundQueryLimitClause : CompoundQueryLimitClauseT,
     }>
 ;

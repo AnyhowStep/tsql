@@ -13,7 +13,7 @@ export type OffsetBigIntImpl<
     FromClauseT extends IQuery["fromClause"],
     SelectClauseT extends IQuery["selectClause"],
     LimitClauseT extends IQuery["limitClause"],
-    UnionClauseT extends IQuery["compoundQueryClause"],
+    CompoundQueryClauseT extends IQuery["compoundQueryClause"],
     CompoundQueryLimitClauseT extends IQuery["compoundQueryLimitClause"],
 > = (
     Query<{
@@ -25,7 +25,7 @@ export type OffsetBigIntImpl<
             OffsetT
         >,
 
-        compoundQueryClause : UnionClauseT,
+        compoundQueryClause : CompoundQueryClauseT,
         compoundQueryLimitClause : CompoundQueryLimitClauseT,
     }>
 );

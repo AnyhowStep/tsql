@@ -473,12 +473,12 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     select<
         SelectsT extends SelectClause
     > (
-        this : Extract<this, QueryUtil.BeforeUnionClause>,
+        this : Extract<this, QueryUtil.BeforeCompoundQueryClause>,
         selectDelegate : SelectDelegate<this["fromClause"], this["selectClause"], SelectsT>
     ) : (
-        QueryUtil.Select<Extract<this, QueryUtil.BeforeUnionClause>, SelectsT>
+        QueryUtil.Select<Extract<this, QueryUtil.BeforeCompoundQueryClause>, SelectsT>
     ) {
-        return QueryUtil.select<Extract<this, QueryUtil.BeforeUnionClause>, SelectsT>(this, selectDelegate);
+        return QueryUtil.select<Extract<this, QueryUtil.BeforeCompoundQueryClause>, SelectsT>(this, selectDelegate);
     }
 
     compoundQueryOrderBy (
