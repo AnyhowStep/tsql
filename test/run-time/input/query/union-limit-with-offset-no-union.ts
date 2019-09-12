@@ -14,7 +14,7 @@ tape(__filename, t => {
         .limit(1)
         .offset(2)
         .compoundQueryLimit(3)
-        .unionOffset(4);
+        .compoundQueryOffset(4);
 
     compareSqlPretty(__filename, t, query);
 

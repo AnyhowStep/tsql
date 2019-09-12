@@ -8,7 +8,7 @@ import {IQuery} from "../../../query";
  * This hack should only really be reserved for types that are more likely
  * to trigger max depth/max count errors.
  */
-export type UnionOffsetBigIntImpl<
+export type CompoundQueryOffsetBigIntImpl<
     OffsetT extends bigint,
     FromClauseT extends IQuery["fromClause"],
     SelectClauseT extends IQuery["selectClause"],
@@ -29,11 +29,11 @@ export type UnionOffsetBigIntImpl<
         >,
     }>
 ;
-export type UnionOffsetBigInt<
+export type CompoundQueryOffsetBigInt<
     QueryT extends IQuery,
     OffsetT extends bigint
 > =
-    UnionOffsetBigIntImpl<
+    CompoundQueryOffsetBigIntImpl<
         OffsetT,
         QueryT["fromClause"],
         QueryT["selectClause"],

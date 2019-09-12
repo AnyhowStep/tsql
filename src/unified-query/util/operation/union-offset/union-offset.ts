@@ -1,33 +1,33 @@
 import {LimitClauseUtil} from "../../../../limit-clause";
 import {Query} from "../../../query-impl";
 import {IQuery} from "../../../query";
-import {UnionOffsetBigInt} from "./union-offset-bigint";
-import {UnionOffsetNumber} from "./union-offset-number";
+import {CompoundQueryOffsetBigInt} from "./union-offset-bigint";
+import {CompoundQueryOffsetNumber} from "./union-offset-number";
 
-export function unionOffset<
+export function compoundQueryOffset<
     QueryT extends IQuery,
     OffsetT extends bigint
 > (
     query : QueryT,
     offset : OffsetT
 ) : (
-    UnionOffsetBigInt<QueryT, OffsetT>
+    CompoundQueryOffsetBigInt<QueryT, OffsetT>
 );
-export function unionOffset<
+export function compoundQueryOffset<
     QueryT extends IQuery
 > (
     query : QueryT,
     offset : number|bigint
 ) : (
-    UnionOffsetNumber<QueryT>
+    CompoundQueryOffsetNumber<QueryT>
 );
-export function unionOffset<
+export function compoundQueryOffset<
     QueryT extends IQuery
 > (
     query : QueryT,
     offset : number|bigint
 ) : (
-    UnionOffsetNumber<QueryT>
+    CompoundQueryOffsetNumber<QueryT>
 ) {
     const compoundQueryLimitClause = LimitClauseUtil.offset<
         QueryT["compoundQueryLimitClause"]
@@ -46,7 +46,7 @@ export function unionOffset<
         //compoundQueryLimitClause,
     } = query;
 
-    const result : UnionOffsetNumber<QueryT> = new Query(
+    const result : CompoundQueryOffsetNumber<QueryT> = new Query(
         {
             fromClause,
             selectClause,

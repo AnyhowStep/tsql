@@ -150,24 +150,24 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         return QueryUtil.compoundQueryLimit<this>(this, maxRowCount);
     }
 
-    unionOffset<
+    compoundQueryOffset<
         OffsetT extends bigint
     > (
         offset : OffsetT
     ) : (
-        QueryUtil.UnionOffsetBigInt<this, OffsetT>
+        QueryUtil.CompoundQueryOffsetBigInt<this, OffsetT>
     );
-    unionOffset (
+    compoundQueryOffset (
         offset : number|bigint
     ) : (
-        QueryUtil.UnionOffsetNumber<this>
+        QueryUtil.CompoundQueryOffsetNumber<this>
     );
-    unionOffset (
+    compoundQueryOffset (
         offset : number|bigint
     ) : (
-        QueryUtil.UnionOffsetNumber<this>
+        QueryUtil.CompoundQueryOffsetNumber<this>
     ) {
-        return QueryUtil.unionOffset<this>(this, offset);
+        return QueryUtil.compoundQueryOffset<this>(this, offset);
     }
 
     requireOuterQueryJoins<
