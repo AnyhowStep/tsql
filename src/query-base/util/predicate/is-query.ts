@@ -25,7 +25,7 @@ export function isQuery (x : unknown) : x is IQueryBase {
             "groupByClause",
             "havingClause",
             "orderByClause",
-            "unionOrderByClause",
+            "compoundQueryOrderByClause",
         ]
     )) {
         return false;

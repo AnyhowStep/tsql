@@ -26,7 +26,7 @@ export function newInstance () : NewInstance {
             groupByClause : undefined,
             havingClause : undefined,
             orderByClause : undefined,
-            unionOrderByClause : undefined,
+            compoundQueryOrderByClause : undefined,
         }
     );
     return result;

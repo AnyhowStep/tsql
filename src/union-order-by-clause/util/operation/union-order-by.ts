@@ -23,13 +23,13 @@ export type UnionOrderBy<
 ;
 
 /**
- * Returns the MySQL equivalent of `...unionOrderByClause, ...unionOrderByDelegate(columns)`
+ * Returns the MySQL equivalent of `...compoundQueryOrderByClause, ...compoundQueryOrderByDelegate(columns)`
  *
  * @param selectClause
- * @param unionOrderByClause
- * @param unionOrderByDelegate
+ * @param compoundQueryOrderByClause
+ * @param compoundQueryOrderByDelegate
  */
-export function unionOrderBy<
+export function compoundQueryOrderBy<
     /**
      * You can only `UNION ORDER BY` names in the `SELECT` clause.
      * So, it only makes sense to use this after the `SELECT` clause.
@@ -37,17 +37,17 @@ export function unionOrderBy<
     SelectClauseT extends SelectClause
 > (
     selectClause : SelectClauseT,
-    unionOrderByClause : UnionOrderByClause|undefined,
-    unionOrderByDelegate : UnionOrderByDelegate<SelectClauseT>
+    compoundQueryOrderByClause : UnionOrderByClause|undefined,
+    compoundQueryOrderByDelegate : UnionOrderByDelegate<SelectClauseT>
 ) : (
     UnionOrderByClause
 ) {
     const columns = allowedColumnRef(selectClause);
-    const unionOrderBy = unionOrderByDelegate(ColumnRefUtil.tryFlatten(
+    const compoundQueryOrderBy = compoundQueryOrderByDelegate(ColumnRefUtil.tryFlatten(
         columns
     ));
 
-    for (const rawOrder of unionOrderBy) {
+    for (const rawOrder of compoundQueryOrderBy) {
         const sortExpr = OrderUtil.extractSortExpr(rawOrder);
         ColumnIdentifierRefUtil.assertHasColumnIdentifier(
             columns,
@@ -56,8 +56,8 @@ export function unionOrderBy<
     }
 
     return (
-        unionOrderByClause == undefined ?
-        unionOrderBy.map(OrderUtil.fromRawOrder) :
-        [...unionOrderByClause, ...unionOrderBy.map(OrderUtil.fromRawOrder)]
+        compoundQueryOrderByClause == undefined ?
+        compoundQueryOrderBy.map(OrderUtil.fromRawOrder) :
+        [...compoundQueryOrderByClause, ...compoundQueryOrderBy.map(OrderUtil.fromRawOrder)]
     );
 }

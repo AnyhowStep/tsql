@@ -12,7 +12,7 @@ tape(__filename, t => {
     const query = tsql.from(myTable)
         .select(() => [tsql.pi().as("pi")])
         .limit(1)
-        .unionOrderBy(columns => [
+        .compoundQueryOrderBy(columns => [
             columns.pi.desc()
         ])
         .compoundQueryLimit(2);

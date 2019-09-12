@@ -62,5 +62,5 @@ export interface IQueryBase<DataT extends QueryBaseData=QueryBaseData> {
     readonly groupByClause : GroupByClause|undefined,
     readonly havingClause : HavingClause|undefined,
     readonly orderByClause : OrderByClause|undefined,
-    readonly unionOrderByClause : UnionOrderByClause|undefined,
+    readonly compoundQueryOrderByClause : UnionOrderByClause|undefined,
 }

@@ -37,20 +37,20 @@ export type UnionOrderBy<
         QueryT["compoundQueryLimitClause"]
     >
 );
-export function unionOrderBy<
+export function compoundQueryOrderBy<
     QueryT extends QueryUtil.AfterSelectClause
 > (
     query : QueryT,
-    unionOrderByDelegate : UnionOrderByDelegate<QueryT["selectClause"]>
+    compoundQueryOrderByDelegate : UnionOrderByDelegate<QueryT["selectClause"]>
 ) : (
     UnionOrderBy<QueryT>
 ) {
-    const unionOrderByClause = UnionOrderByClauseUtil.unionOrderBy<
+    const compoundQueryOrderByClause = UnionOrderByClauseUtil.compoundQueryOrderBy<
         QueryT["selectClause"]
     >(
         query.selectClause,
-        query.unionOrderByClause,
-        unionOrderByDelegate
+        query.compoundQueryOrderByClause,
+        compoundQueryOrderByDelegate
     );
 
     const {
@@ -66,7 +66,7 @@ export function unionOrderBy<
         groupByClause,
         havingClause,
         orderByClause,
-        //unionOrderByClause,
+        //compoundQueryOrderByClause,
     } = query;
 
     const result : UnionOrderBy<QueryT> = new Query(
@@ -84,7 +84,7 @@ export function unionOrderBy<
             groupByClause,
             havingClause,
             orderByClause,
-            unionOrderByClause,
+            compoundQueryOrderByClause,
         }
     );
     return result;

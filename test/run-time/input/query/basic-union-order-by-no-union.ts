@@ -11,7 +11,7 @@ tape(__filename, t => {
 
     const query = tsql.from(myTable)
         .select(c => [c.myBoolColumn, tsql.pi().as("pi")])
-        .unionOrderBy(c => [
+        .compoundQueryOrderBy(c => [
             c.myTable.myBoolColumn,
             c.myTable.myBoolColumn.asc(),
             c.myTable.myBoolColumn.desc(),

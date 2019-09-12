@@ -64,7 +64,7 @@ export function having<
         whereClause,
         groupByClause,
         orderByClause,
-        unionOrderByClause,
+        compoundQueryOrderByClause,
     } = query;
 
     const result : Having<QueryT> = new Query(
@@ -82,7 +82,7 @@ export function having<
             groupByClause,
             havingClause,
             orderByClause,
-            unionOrderByClause,
+            compoundQueryOrderByClause,
         }
     );
     return result;

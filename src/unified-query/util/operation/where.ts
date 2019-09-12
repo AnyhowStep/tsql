@@ -64,7 +64,7 @@ export function where<
         groupByClause,
         havingClause,
         orderByClause,
-        unionOrderByClause,
+        compoundQueryOrderByClause,
     } = query;
 
     const result : Where<QueryT> = new Query(
@@ -82,7 +82,7 @@ export function where<
             groupByClause,
             havingClause,
             orderByClause,
-            unionOrderByClause,
+            compoundQueryOrderByClause,
         }
     );
     return result;

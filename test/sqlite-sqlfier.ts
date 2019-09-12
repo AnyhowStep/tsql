@@ -322,11 +322,11 @@ export const sqliteSqlfier : Sqlfier = {
 
         const orderByClause = (
             (
-                query.unionOrderByClause != undefined &&
+                query.compoundQueryOrderByClause != undefined &&
                 query.compoundQueryClause == undefined &&
                 query.limitClause == undefined
             ) ?
-            query.unionOrderByClause :
+            query.compoundQueryOrderByClause :
             query.orderByClause
         );
         const limitClause = (
@@ -335,17 +335,17 @@ export const sqliteSqlfier : Sqlfier = {
                 query.compoundQueryClause == undefined &&
                 (
                     query.limitClause == undefined ||
-                    query.unionOrderByClause == undefined
+                    query.compoundQueryOrderByClause == undefined
                 )
             ) ?
             query.compoundQueryLimitClause :
             query.limitClause
         );
 
-        const unionOrderByClause = (
-            orderByClause == query.unionOrderByClause ?
+        const compoundQueryOrderByClause = (
+            orderByClause == query.compoundQueryOrderByClause ?
             undefined :
-            query.unionOrderByClause
+            query.compoundQueryOrderByClause
         );
         const compoundQueryLimitClause = (
             limitClause == query.compoundQueryLimitClause ?
@@ -353,7 +353,7 @@ export const sqliteSqlfier : Sqlfier = {
             query.compoundQueryLimitClause
         );
 
-        if (unionOrderByClause != undefined || compoundQueryLimitClause != undefined) {
+        if (compoundQueryOrderByClause != undefined || compoundQueryLimitClause != undefined) {
             /**
              * We have to apply some hackery to get the same behaviour as MySQL.
              */
@@ -361,7 +361,7 @@ export const sqliteSqlfier : Sqlfier = {
                 ...query,
                 orderByClause,
                 limitClause,
-                unionOrderByClause : undefined,
+                compoundQueryOrderByClause : undefined,
                 compoundQueryLimitClause : undefined,
             };
             const result : string[] = [
@@ -369,8 +369,8 @@ export const sqliteSqlfier : Sqlfier = {
                 toSql(innerQuery),
                 ")"
             ];
-            if (unionOrderByClause != undefined) {
-                result.push(orderByClauseToSql(unionOrderByClause, toSql).join(" "));
+            if (compoundQueryOrderByClause != undefined) {
+                result.push(orderByClauseToSql(compoundQueryOrderByClause, toSql).join(" "));
             }
 
             if (compoundQueryLimitClause != undefined) {

@@ -18,7 +18,7 @@ export interface ExtraQueryData {
     readonly groupByClause : GroupByClause|undefined,
     readonly havingClause : HavingClause|undefined,
     readonly orderByClause : OrderByClause|undefined,
-    readonly unionOrderByClause : UnionOrderByClause|undefined,
+    readonly compoundQueryOrderByClause : UnionOrderByClause|undefined,
 }
 
 /**

@@ -15,7 +15,7 @@ tape(__filename, t => {
             columns.myTable.myBoolColumn,
             columns.__aliased.pi,
         ])
-        .unionOrderBy(columns => [
+        .compoundQueryOrderBy(columns => [
             columns.pi.desc()
         ]);
 

@@ -38,7 +38,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     readonly groupByClause : GroupByClause|undefined;
     readonly havingClause : HavingClause|undefined;
     readonly orderByClause : OrderByClause|undefined;
-    readonly unionOrderByClause : UnionOrderByClause|undefined;
+    readonly compoundQueryOrderByClause : UnionOrderByClause|undefined;
 
     constructor (data : DataT, extraData : ExtraQueryData) {
         this.fromClause = data.fromClause;
@@ -51,7 +51,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         this.groupByClause = extraData.groupByClause;
         this.havingClause = extraData.havingClause;
         this.orderByClause = extraData.orderByClause;
-        this.unionOrderByClause = extraData.unionOrderByClause;
+        this.compoundQueryOrderByClause = extraData.compoundQueryOrderByClause;
     }
 
     limit<
@@ -481,19 +481,19 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         return QueryUtil.select<Extract<this, QueryUtil.BeforeUnionClause>, SelectsT>(this, selectDelegate);
     }
 
-    unionOrderBy (
+    compoundQueryOrderBy (
         this : Extract<this, QueryUtil.AfterSelectClause>,
-        unionOrderByDelegate : UnionOrderByDelegate<
+        compoundQueryOrderByDelegate : UnionOrderByDelegate<
             Extract<this, QueryUtil.AfterSelectClause>["selectClause"]
         >
     ) : (
         QueryUtil.UnionOrderBy<Extract<this, QueryUtil.AfterSelectClause>>
     ) {
-        return QueryUtil.unionOrderBy<
+        return QueryUtil.compoundQueryOrderBy<
             Extract<this, QueryUtil.AfterSelectClause>
         >(
             this,
-            unionOrderByDelegate
+            compoundQueryOrderByDelegate
         );
     }
 
