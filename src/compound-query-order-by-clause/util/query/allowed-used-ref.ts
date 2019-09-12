@@ -9,7 +9,7 @@ import {SelectClause} from "../../../select-clause";
  *
  * -----
  *
- * PostgreSQL does not allow ordering by expressions in the `UNION ORDER BY` clause.
+ * PostgreSQL does not allow ordering by expressions in the `COMPOUND QUERY ORDER BY` clause.
  * However, MySQL does.
  *
  * -----

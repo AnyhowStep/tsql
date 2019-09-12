@@ -30,7 +30,7 @@ export interface IQueryBase<DataT extends QueryBaseData=QueryBaseData> {
 
     readonly compoundQueryClause : DataT["compoundQueryClause"],
     /**
-     * In MySQL 5.7, a `UNION LIMIT` clause without a `UNION` clause
+     * In MySQL 5.7, a `COMPOUND QUERY LIMIT` clause without a `COMPOUND QUERY` clause
      * **overwrites** the `LIMIT` clause.
      *
      * In PostgreSQL 9.4, it is an error.

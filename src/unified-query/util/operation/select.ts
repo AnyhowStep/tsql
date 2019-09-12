@@ -50,7 +50,7 @@ export function select<
     Select<QueryT, SelectsT>
 ) {
     if (!QueryBaseUtil.isBeforeCompoundQueryClause(query)) {
-        throw new Error(`Cannot SELECT after UNION clause; this will change the number of columns`)
+        throw new Error(`Cannot SELECT after COMPOUND QUERY clause; this will change the number of columns`)
     }
     const selectClause = SelectClauseUtil.select<
         QueryT["fromClause"],

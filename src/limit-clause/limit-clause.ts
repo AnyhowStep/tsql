@@ -1,5 +1,5 @@
 /**
- * May be used for the `LIMIT` clause or `UNION`'s `LIMIT` clause.
+ * May be used for the `LIMIT` clause or `COMPOUND QUERY`'s `LIMIT` clause.
  *
  * The values are `bigint` because having a `maxRowCount/offset` of
  * `3.141` would be weird.

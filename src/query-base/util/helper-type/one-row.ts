@@ -5,7 +5,7 @@ import {LimitClause} from "../../../limit-clause";
 
 /**
  * To guarantee a query returns one row only,
- * you cannot have a `FROM` clause or `UNION` clause.
+ * you cannot have a `FROM` clause or `COMPOUND QUERY` clause.
  */
 export type OneRow = (
     IQueryBase<{

@@ -31,7 +31,7 @@ export type CompoundQueryOrderBy<
  */
 export function compoundQueryOrderBy<
     /**
-     * You can only `UNION ORDER BY` names in the `SELECT` clause.
+     * You can only `COMPOUND QUERY ORDER BY` names in the `SELECT` clause.
      * So, it only makes sense to use this after the `SELECT` clause.
      */
     SelectClauseT extends SelectClause
