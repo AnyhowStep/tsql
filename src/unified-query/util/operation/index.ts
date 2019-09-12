@@ -17,7 +17,7 @@ export * from "./order-by";
 export * from "./require-nullable-outer-query-joins";
 export * from "./require-outer-query-joins";
 export * from "./select";
-export * from "./union-order-by";
+export * from "./compound-query-order-by";
 export * from "./where-eq-candidate-key";
 export * from "./where-eq-columns";
 export * from "./where-eq-outer-query-primary-key";

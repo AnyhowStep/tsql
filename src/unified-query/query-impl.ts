@@ -23,7 +23,7 @@ import {CandidateKey_NonUnion} from "../candidate-key";
 import * as QueryUtil from "./util";
 import * as TypeUtil from "../type-util";
 import * as ExprLib from "../expr-library";
-import {CompoundQueryOrderByClause, CompoundQueryOrderByDelegate} from "../union-order-by-clause";
+import {CompoundQueryOrderByClause, CompoundQueryOrderByDelegate} from "../compound-query-order-by-clause";
 
 export class Query<DataT extends QueryData> implements IQuery<DataT> {
     readonly fromClause : DataT["fromClause"];

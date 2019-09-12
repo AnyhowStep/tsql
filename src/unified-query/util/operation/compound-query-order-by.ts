@@ -1,4 +1,4 @@
-import {CompoundQueryOrderByDelegate, CompoundQueryOrderByClauseUtil} from "../../../union-order-by-clause";
+import {CompoundQueryOrderByDelegate, CompoundQueryOrderByClauseUtil} from "../../../compound-query-order-by-clause";
 import {Query} from "../../query-impl";
 import {IQuery} from "../../query";
 import {QueryUtil} from "../..";

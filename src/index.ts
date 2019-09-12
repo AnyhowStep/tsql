@@ -11,6 +11,7 @@ export * from "./column-ref";
 export * from "./compile-error";
 export * from "./compound-query";
 export * from "./compound-query-clause";
+export * from "./compound-query-order-by-clause";
 export * from "./derived-table";
 export * from "./expr";
 export * from "./expr-library";
@@ -39,7 +40,6 @@ export * from "./table";
 export * from "./type-map";
 export * from "./type-ref";
 export * from "./unified-query";
-export * from "./union-order-by-clause";
 export * from "./used-ref";
 export * from "./where-clause";
 

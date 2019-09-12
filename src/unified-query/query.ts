@@ -3,7 +3,7 @@ import {WhereClause} from "../where-clause";
 import {GroupByClause} from "../group-by-clause";
 import {HavingClause} from "../having-clause";
 import {OrderByClause} from "../order-by-clause";
-import {CompoundQueryOrderByClause} from "../union-order-by-clause";
+import {CompoundQueryOrderByClause} from "../compound-query-order-by-clause";
 
 /**
  * @todo Rename to `UnifiedQueryData` or something
