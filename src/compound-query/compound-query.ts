@@ -38,6 +38,11 @@ export interface CompoundQuery {
      * + `UNION ALL`
      * + `INTERSECT` (distinct implied)
      * + `EXCEPT` (distinct implied)
+     *
+     * -----
+     *
+     * Mixed `UNION` types are treated such that a `DISTINCT` union overrides
+     * any `ALL` union to its left.
      */
     readonly isDistinct : boolean;
     readonly query : QueryBaseUtil.AfterSelectClause;
