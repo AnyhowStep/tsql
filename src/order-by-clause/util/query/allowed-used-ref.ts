@@ -5,6 +5,17 @@ import {IFromClause, FromClauseUtil} from "../../../from-clause";
  *
  * They will diverge when,
  * + The `ORDER BY` clause enforces proper `GROUP BY` interactions.
+ *
+ * @todo You should be able to `ORDER BY` columns in the `SELECT` clause
+ * ```sql
+ *  SELECT
+ *      *,
+ *      RAND() AS r
+ *  FROM
+ *      myTable
+ *  ORDER BY
+ *      r --This is valid
+ * ```
  */
 export type AllowedColumnRef<
     FromClauseT extends IFromClause

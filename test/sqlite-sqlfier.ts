@@ -26,6 +26,7 @@ import {
     GroupByClause,
     LimitClause,
     escapeValue,
+    ALIASED,
 } from "../dist";
 
 const insertBetween = AstUtil.insertBetween;
@@ -164,13 +165,21 @@ function groupByClauseToSql (groupByClause : GroupByClause, _toSql : (ast : Ast)
         if (result.length > 0) {
             result.push(",");
         }
-        result.push(
-            [
-                escapeIdentifierWithDoubleQuotes(column.tableAlias),
-                ".",
-                escapeIdentifierWithDoubleQuotes(column.columnAlias)
-            ].join("")
-        );
+        if (column.tableAlias == ALIASED) {
+            result.push(
+                escapeIdentifierWithDoubleQuotes(
+                    `${column.tableAlias}${SEPARATOR}${column.columnAlias}`
+                )
+            );
+        } else {
+            result.push(
+                [
+                    escapeIdentifierWithDoubleQuotes(column.tableAlias),
+                    ".",
+                    escapeIdentifierWithDoubleQuotes(column.columnAlias)
+                ].join("")
+            );
+        }
     }
     return [
         "GROUP BY",

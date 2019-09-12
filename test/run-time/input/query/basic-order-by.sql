@@ -1,5 +1,6 @@
 SELECT
-  "myTable"."myBoolColumn" AS "myTable--myBoolColumn"
+  "myTable"."myBoolColumn" AS "myTable--myBoolColumn",
+  PI() AS "__aliased--pi"
 FROM
   "myTable"
 ORDER BY

@@ -18,12 +18,13 @@ tape(__filename, t => {
         .addColumns({});
 
     const query = tsql.from(myTable)
-        .select(c => [c.myBoolColumn])
+        .select(c => [c.myBoolColumn, tsql.pi().as("pi")])
         .crossJoin(myTable2)
         .crossJoin(myTable3)
         .groupBy(columns => [
             columns.myTable.myBoolColumn,
-            columns.myTable2.myDoubleColumn
+            columns.myTable2.myDoubleColumn,
+            columns.__aliased.pi,
         ]);
 
     compareSqlPretty(__filename, t, query);
