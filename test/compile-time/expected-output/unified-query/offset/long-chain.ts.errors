@@ -1,0 +1,9 @@
+[
+  {
+    "messageText": "Type instantiation is excessively deep and possibly infinite.",
+    "code": 2589,
+    "category": 1,
+    "length": 17,
+    "start": 837
+  }
+]

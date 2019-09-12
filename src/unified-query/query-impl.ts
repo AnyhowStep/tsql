@@ -51,6 +51,64 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         this.orderByClause = extraData.orderByClause;
     }
 
+    limit<
+        MaxRowCountT extends bigint
+    > (
+        maxRowCount : MaxRowCountT
+    ) : (
+        QueryUtil.LimitBigInt<this, MaxRowCountT>
+    );
+    limit (
+        maxRowCount : 0
+    ) : (
+        QueryUtil.LimitNumber0<this>
+    );
+    limit (
+        maxRowCount : 1
+    ) : (
+        QueryUtil.LimitNumber1<this>
+    );
+    limit (
+        maxRowCount : 0|1
+    ) : (
+        QueryUtil.LimitNumber0Or1<this>
+    );
+    limit (
+        maxRowCount : number|bigint
+    ) : (
+        QueryUtil.LimitNumber<this>
+    );
+    limit (
+        maxRowCount : number|bigint
+    ) : (
+        | QueryUtil.LimitNumber<this>
+        | QueryUtil.LimitNumber0<this>
+        | QueryUtil.LimitNumber1<this>
+        | QueryUtil.LimitNumber0Or1<this>
+    ) {
+        return QueryUtil.limit<this>(this, maxRowCount);
+    }
+
+    offset<
+        OffsetT extends bigint
+    > (
+        offset : OffsetT
+    ) : (
+        QueryUtil.OffsetBigInt<this, OffsetT>
+    );
+    offset (
+        offset : number|bigint
+    ) : (
+        QueryUtil.OffsetNumber<this>
+    );
+    offset (
+        offset : number|bigint
+    ) : (
+        QueryUtil.OffsetNumber<this>
+    ) {
+        return QueryUtil.offset<this>(this, offset);
+    }
+
     requireOuterQueryJoins<
         AliasedTablesT extends readonly IAliasedTable[]
     > (

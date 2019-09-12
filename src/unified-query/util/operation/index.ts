@@ -1,3 +1,6 @@
+export * from "./limit";
+export * from "./offset";
+
 export * from "./cross-join";
 export * from "./from";
 export * from "./group-by";

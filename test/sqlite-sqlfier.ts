@@ -24,6 +24,8 @@ import {
     ExprUtil,
     HavingClause,
     GroupByClause,
+    LimitClause,
+    escapeValue,
 } from "../dist";
 
 const insertBetween = AstUtil.insertBetween;
@@ -183,6 +185,15 @@ function havingClauseToSql (havingClause : HavingClause, toSql : (ast : Ast) => 
     ];
 }
 
+function limitClauseToSql (limitClause : LimitClause, _toSql : (ast : Ast) => string) : string[] {
+    return [
+        "LIMIT",
+        escapeValue(limitClause.maxRowCount),
+        "OFFSET",
+        escapeValue(limitClause.offset),
+    ];
+}
+
 export const sqliteSqlfier : Sqlfier = {
     identifierSqlfier : (identifierNode) => identifierNode.identifiers
         .map(escapeIdentifierWithDoubleQuotes)
@@ -266,9 +277,6 @@ export const sqliteSqlfier : Sqlfier = {
         if (query.whereClause != undefined) {
             result.push(whereClauseToSql(query.whereClause, toSql).join(" "));
         }
-        if (query.orderByClause != undefined) {
-            result.push(orderByClauseToSql(query.orderByClause, toSql).join(" "));
-        }
         if (query.groupByClause == undefined) {
             if (query.havingClause != undefined) {
                 /**
@@ -282,6 +290,12 @@ export const sqliteSqlfier : Sqlfier = {
             if (query.havingClause != undefined) {
                 result.push(havingClauseToSql(query.havingClause, toSql).join(" "));
             }
+        }
+        if (query.orderByClause != undefined) {
+            result.push(orderByClauseToSql(query.orderByClause, toSql).join(" "));
+        }
+        if (query.limitClause != undefined) {
+            result.push(limitClauseToSql(query.limitClause, toSql).join(" "));
         }
 
         return result.join(" ");
