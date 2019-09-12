@@ -1,7 +1,7 @@
 export * from "./limit";
 export * from "./offset";
 export * from "./compound-query-limit";
-export * from "./union-offset";
+export * from "./compound-query-offset";
 
 export * from "./cross-join";
 export * from "./from";

@@ -1,8 +1,8 @@
 import {LimitClauseUtil} from "../../../../limit-clause";
 import {Query} from "../../../query-impl";
 import {IQuery} from "../../../query";
-import {CompoundQueryOffsetBigInt} from "./union-offset-bigint";
-import {CompoundQueryOffsetNumber} from "./union-offset-number";
+import {CompoundQueryOffsetBigInt} from "./compound-query-offset-bigint";
+import {CompoundQueryOffsetNumber} from "./compound-query-offset-number";
 
 export function compoundQueryOffset<
     QueryT extends IQuery,
