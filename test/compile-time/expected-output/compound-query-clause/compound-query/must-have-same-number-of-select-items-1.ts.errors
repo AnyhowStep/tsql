@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Argument of type 'import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/unified-query/query-impl\").Query<{ fromClause: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/from-clause/from-clause\").IFromClause<{ outerQueryJoins: undefined; currentJoins: readonly import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/join/join-impl\")....' is not assignable to parameter of type 'import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/unified-query/query-impl\").Query<{ fromClause: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/from-clause/from-clause\").IFromClause<{ outerQueryJoins: undefined; currentJoins: readonly import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/join/join-impl\")....'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Property '__compileError' is missing in type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: readonly Join<{ tableAlias: \"myOtherTable\"; nullable: false; columns: { readonly cqcOtherTableId: Column<{ tableAlias: \"myOtherTable\"; columnAlias: \"cqcOtherTableId\"; mapper: Mapper<...>; }>; }; ... 4 more ...; mutableColumns: readonly []; }...' but required in type 'CompileError<[\"SELECT clause length mismatch; expected\", 1, \"received\", 2]>'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 10,
+    "start": 868
+  }
+]

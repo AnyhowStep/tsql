@@ -1,0 +1,23 @@
+[
+  {
+    "messageText": {
+      "messageText": "Argument of type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: readonly (Join<{ tableAlias: \"tableA\"; nullable: false; columns: { readonly cqcTableAId: Column<{ tableAlias: \"tableA\"; columnAlias: \"cqcTableAId\"; mapper: Mapper<...>; }>; }; ... 4 more ...; mutableColumns: readonly []; }> | Join<...>)[]; }...' is not assignable to parameter of type '(Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: readonly (Join<{ tableAlias: \"tableA\"; nullable: false; columns: { readonly cqcTableAId: Column<{ tableAlias: \"tableA\"; columnAlias: \"cqcTableAId\"; mapper: Mapper<...>; }>; }; ... 4 more ...; mutableColumns: readonly []; }> | Join<...>)[]; ...'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Type 'import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/unified-query/query-impl\").Query<{ fromClause: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/from-clause/from-clause\").IFromClause<{ outerQueryJoins: undefined; currentJoins: readonly (import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/join/join-impl\")...' is not assignable to type 'import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/unified-query/query-impl\").Query<{ fromClause: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/from-clause/from-clause\").IFromClause<{ outerQueryJoins: undefined; currentJoins: readonly (import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/join/join-impl\")...'. Two different types with this name exist, but they are unrelated.",
+        "category": 1,
+        "code": 2719,
+        "next": {
+          "messageText": "Property '__compileError' is missing in type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: readonly (Join<{ tableAlias: \"tableA\"; nullable: false; columns: { readonly cqcTableAId: Column<{ tableAlias: \"tableA\"; columnAlias: \"cqcTableAId\"; mapper: Mapper<...>; }>; }; ... 4 more ...; mutableColumns: readonly []; }> | Join<...>)[]; }...' but required in type 'CompileError<[\"Expected\", { index: \"0\"; }, \"to have tables\", \"tableC\"]>'.",
+          "category": 1,
+          "code": 2741
+        }
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 10,
+    "start": 825
+  }
+]

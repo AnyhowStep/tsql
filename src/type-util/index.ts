@@ -8,6 +8,7 @@ export * from "./merge";
 export * from "./no-infer";
 export * from "./non-optional-partial";
 export * from "./omit-own-enumerable";
+export * from "./outersect";
 export * from "./pick-multi";
 export * from "./pick-own-enumerable";
 export * from "./replace-property";
