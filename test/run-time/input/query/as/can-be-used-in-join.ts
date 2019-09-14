@@ -39,7 +39,17 @@ tape(__filename, t => {
                     }
                 ])
                 .as("myAlias")
-        );
+        )
+        .where(c => tsql.and(
+            tsql.gt(
+                c.myAlias.myTable2Id,
+                c.myTable.myTableId
+            ),
+            c.myAlias.isNotNull
+        ))
+        .select(c => [
+            c
+        ]);
 
     compareSqlPretty(__filename, t, query);
 
