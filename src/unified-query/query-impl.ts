@@ -24,6 +24,9 @@ import * as QueryUtil from "./util";
 import * as TypeUtil from "../type-util";
 import * as ExprLib from "../expr-library";
 import {CompoundQueryOrderByClause, CompoundQueryOrderByDelegate} from "../compound-query-order-by-clause";
+import {QueryBaseUtil} from "../query-base";
+import {CompoundQueryType} from "../compound-query";
+import {CompoundQueryClauseUtil} from "../compound-query-clause";
 
 export class Query<DataT extends QueryData> implements IQuery<DataT> {
     readonly fromClause : DataT["fromClause"];
@@ -495,6 +498,31 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
             this,
             compoundQueryOrderByDelegate
         );
+    }
+
+    unionDistinct<
+        TargetQueryT extends QueryBaseUtil.AfterSelectClause
+    > (
+        this : Extract<this, QueryUtil.AfterSelectClause>,
+        targetQuery : (
+            & TargetQueryT
+            & CompoundQueryClauseUtil.AssertCompoundQueryCompatible<
+                Extract<this, QueryUtil.AfterSelectClause>["selectClause"],
+                TargetQueryT["selectClause"]
+            >
+        )
+    ) : (
+        QueryUtil.CompoundQuery<Extract<this, QueryUtil.AfterSelectClause>, TargetQueryT>
+    ) {
+        return QueryUtil.compoundQuery<
+            Extract<this, QueryUtil.AfterSelectClause>,
+            TargetQueryT
+        >(
+            this,
+            CompoundQueryType.UNION,
+            true,
+            targetQuery
+        )
     }
 
     whereEqCandidateKey<

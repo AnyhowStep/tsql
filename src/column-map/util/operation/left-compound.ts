@@ -2,8 +2,15 @@ import * as tm from "type-mapping";
 import {ColumnMap, WritableColumnMap} from "../../column-map";
 import {Column, ColumnUtil} from "../../../column";
 
-//Take the intersection and the "left" columnMap
-export type LeftIntersect<
+/**
+ * Like `LeftIntersect`, but the type of columns is unioned,
+ * not intersected.
+ *
+ * This is used to implement `CompoundQueryClauseUtil.compoundQuery()`
+ *
+ * @todo Better name?
+ */
+export type LeftCompound<
     MapA extends ColumnMap,
     MapB extends ColumnMap,
 > = (
@@ -14,22 +21,22 @@ export type LeftIntersect<
                 tableAlias : MapA[columnAlias]["tableAlias"],
                 columnAlias : MapA[columnAlias]["columnAlias"],
                 mapper : tm.SafeMapper<
-                    & tm.OutputOf<MapA[columnAlias]["mapper"]>
-                    & tm.OutputOf<MapB[columnAlias]["mapper"]>
+                    | tm.OutputOf<MapA[columnAlias]["mapper"]>
+                    | tm.OutputOf<MapB[columnAlias]["mapper"]>
                 >
             }> :
             MapA[columnAlias]
         )
     }
 );
-export function leftIntersect<
+export function leftCompound<
     MapA extends ColumnMap,
     MapB extends ColumnMap,
 > (
     mapA : MapA,
     mapB : MapB
 ) : (
-    LeftIntersect<MapA, MapB>
+    LeftCompound<MapA, MapB>
 ) {
     const result : WritableColumnMap = {};
     for (const columnAlias of Object.keys(mapA)) {
@@ -40,7 +47,7 @@ export function leftIntersect<
                 {
                     tableAlias : columnA.tableAlias,
                     columnAlias : columnA.columnAlias,
-                    mapper : tm.deepMerge(
+                    mapper : tm.or(
                         columnA.mapper,
                         mapB[columnAlias].mapper
                     ),
@@ -51,5 +58,5 @@ export function leftIntersect<
             result[columnAlias] = columnA;
         }
     }
-    return result as LeftIntersect<MapA, MapB>;
+    return result as LeftCompound<MapA, MapB>;
 };

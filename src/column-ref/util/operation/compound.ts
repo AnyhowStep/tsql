@@ -1,37 +1,41 @@
 import {ColumnRef, WritableColumnRef} from "../../column-ref";
-import {LeftIntersect, leftIntersect} from "./left-intersect";
+import {LeftCompound, leftCompound} from "./left-compound";
+import {Merge} from "../../../type-util";
 
-export type Intersect<
+/**
+ * Like `Intersect`, but the type of columns is unioned,
+ * not intersected.
+ *
+ * This is used to implement `CompoundQueryClauseUtil.compoundQuery()`
+ *
+ * @todo Better name?
+ */
+export type Compound<
     RefA extends ColumnRef,
     RefB extends ColumnRef
 > = (
-    /**
-     * @todo Use `Merge<>` like in `ColumnMapUtil.Intersect<>`?
-     * Is there a reason to not do it?
-     */
-    Extract<
-        LeftIntersect<RefA, RefB> &
-        {
+    Merge<
+        & LeftCompound<RefA, RefB>
+        & {
             readonly [tableAlias in Exclude<
                 Extract<keyof RefB, string>,
                 keyof RefA
             >] : (
                 RefB[tableAlias]
             )
-        },
-        ColumnRef
+        }
     >
 );
-export function intersect<
+export function compound<
     RefA extends ColumnRef,
     RefB extends ColumnRef
 > (
     refA : RefA,
     refB : RefB
-) : Intersect<RefA, RefB> {
-    const left : LeftIntersect<
+) : Compound<RefA, RefB> {
+    const left : LeftCompound<
         RefA, RefB
-    > = leftIntersect(refA, refB);
+    > = leftCompound(refA, refB);
 
     const right : WritableColumnRef = {};
     for (const tableAlias of Object.keys(refB)) {
@@ -46,5 +50,5 @@ export function intersect<
     return {
         ...left,
         ...right,
-    } as Intersect<RefA, RefB>;
+    } as ColumnRef as Compound<RefA, RefB>;
 }

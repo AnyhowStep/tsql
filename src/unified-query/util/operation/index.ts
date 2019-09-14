@@ -3,6 +3,8 @@ export * from "./offset";
 export * from "./compound-query-limit";
 export * from "./compound-query-offset";
 
+export * from "./compound-query-order-by";
+export * from "./compound-query";
 export * from "./cross-join";
 export * from "./from";
 export * from "./group-by";
@@ -17,7 +19,6 @@ export * from "./order-by";
 export * from "./require-nullable-outer-query-joins";
 export * from "./require-outer-query-joins";
 export * from "./select";
-export * from "./compound-query-order-by";
 export * from "./where-eq-candidate-key";
 export * from "./where-eq-columns";
 export * from "./where-eq-outer-query-primary-key";

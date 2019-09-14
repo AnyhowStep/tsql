@@ -1,12 +1,12 @@
 import * as tm from "type-mapping";
-import {SelectClause} from "../../../select-clause";
+import {SelectClause, SelectClauseUtil} from "../../../select-clause";
 import {CompoundQueryType} from "../../../compound-query";
 import {CompoundQueryClause} from "../../compound-query-clause";
-import {IColumn} from "../../../column";
-import {IExprSelectItem} from "../../../expr-select-item";
-import {ColumnMap} from "../../../column-map";
-import {ColumnRef} from "../../../column-ref";
-import {QueryUtil} from "../../../unified-query";
+import {IColumn, ColumnUtil} from "../../../column";
+import {IExprSelectItem, ExprSelectItemUtil} from "../../../expr-select-item";
+import {ColumnMap, ColumnMapUtil} from "../../../column-map";
+import {ColumnRef, ColumnRefUtil} from "../../../column-ref";
+import {QueryBaseUtil} from "../../../query-base";
 import {CompileError} from "../../../compile-error";
 import {AssertNonUnion, IsStrictSameType, ToUnknownIfAllPropertiesNever, Merge} from "../../../type-util";
 
@@ -90,7 +90,7 @@ export type FindRefCompatibilityError<
  * @todo Consider allowing nullable columns to be compounded with non-nullable columns.
  * This will require modifying the type of the original `SELECT` clause.
  */
-type AssertCompoundQueryCompatible<
+export type AssertCompoundQueryCompatible<
     A extends SelectClause,
     B extends SelectClause
 > =
@@ -123,28 +123,140 @@ type AssertCompoundQueryCompatible<
     }>
 ;
 
+function assertMapCompatibilityError (identifier : (string|number)[], a : ColumnMap, b : ColumnMap) {
+    const aColumnAliases = Object.keys(a);
+    const bColumnAliases = Object.keys(b);
+
+    const missingColumnAliases = aColumnAliases.filter(columnAlias => !bColumnAliases.includes(columnAlias));
+    if (missingColumnAliases.length > 0) {
+        throw new Error(`Expected ${identifier.join(" ")} to have columns ${missingColumnAliases.join(", ")}`);
+    }
+
+    const extraColumnAliases = bColumnAliases.filter(columnAlias => !aColumnAliases.includes(columnAlias));
+    if (extraColumnAliases.length > 0) {
+        throw new Error(`${identifier.join(" ")} has extra columns ${extraColumnAliases.join(", ")}`);
+    }
+
+    /**
+     * Can't check subtype requirement during run-time
+     */
+}
+
+function assertRefCompatibilityError (identifier : (string|number)[], a : ColumnRef, b : ColumnRef) {
+    const aTableAliases = Object.keys(a);
+    const bTableAliases = Object.keys(b);
+
+    const missingTableAliases = aTableAliases.filter(tableAlias => !bTableAliases.includes(tableAlias));
+    if (missingTableAliases.length > 0) {
+        throw new Error(`Expected ${identifier.join(" ")} to have tables ${missingTableAliases.join(", ")}`);
+    }
+
+    const extraTableAliases = bTableAliases.filter(tableAlias => !aTableAliases.includes(tableAlias));
+    if (extraTableAliases.length > 0) {
+        throw new Error(`${identifier.join(" ")} has extra tables ${extraTableAliases.join(", ")}`);
+    }
+
+    for (const tableAlias of aTableAliases) {
+        assertMapCompatibilityError(
+            [...identifier, "table", tableAlias],
+            a[tableAlias],
+            b[tableAlias]
+        );
+    }
+}
+
+export function assertCompoundQueryCompatible (
+    a : SelectClause,
+    b : SelectClause
+) {
+    if (a.length != b.length) {
+        throw new Error(`SELECT clause length mismatch; expected ${a.length} received ${b.length}`);
+    }
+    for (let index=0; index<a.length; ++index) {
+        const itemA = a[index];
+        const itemB = b[index];
+        if (ColumnUtil.isColumn(itemA) || ExprSelectItemUtil.isExprSelectItem(itemA)) {
+            if (ColumnUtil.isColumn(itemB) || ExprSelectItemUtil.isExprSelectItem(itemB)) {
+                /**
+                 * Can't check subtype requirement during run-time
+                 */
+            } else {
+                throw new Error(`Expected index ${index} to be Column or ExprSelectItem`);
+            }
+        } else if (ColumnMapUtil.isColumnMap(itemA)) {
+            if (ColumnMapUtil.isColumnMap(itemB)) {
+                assertMapCompatibilityError(
+                    ["index", index],
+                    itemA,
+                    itemB
+                );
+            } else {
+                throw new Error(`Expected index ${index} to be ColumnMap`);
+            }
+        } else if (ColumnRefUtil.isColumnRef(itemA)) {
+            if (ColumnRefUtil.isColumnRef(itemB)) {
+                assertRefCompatibilityError(
+                    ["index", index],
+                    itemA,
+                    itemB
+                );
+            } else {
+                throw new Error(`Expected index ${index} to be ColumnRef`);
+            }
+        } else {
+            throw new Error(`Unknown SELECT item at index ${index}`);
+        }
+    }
+}
+
+
+/**
+ *
+ * @todo `targetQuery` must contain subset of outer query joins
+ */
 export function compoundQuery<
     SelectClauseT extends SelectClause,
-    QueryT extends QueryUtil.AfterSelectClause
+    TargetQueryT extends QueryBaseUtil.AfterSelectClause
 > (
     selectClause : SelectClauseT & AssertNonUnion<SelectClauseT>,
     compoundQueryClause : CompoundQueryClause|undefined,
     compoundQueryType : CompoundQueryType,
     isDistinct : boolean,
-    query : (
-        & QueryT
-        & AssertCompoundQueryCompatible<SelectClauseT, QueryT["selectClause"]>
+    targetQuery : (
+        & TargetQueryT
+        & AssertCompoundQueryCompatible<SelectClauseT, TargetQueryT["selectClause"]>
     )
 ) : (
     {
-        selectClause : SelectClauseT,
+        /**
+         * We only need to `LeftCompound` because we already asserted
+         * that both `SELECT` clauses have the same length.
+         */
+        selectClause : SelectClauseUtil.LeftCompound<
+            SelectClauseT,
+            TargetQueryT["selectClause"]
+        >,
         compoundQueryClause : CompoundQueryClause,
     }
 ) {
-    selectClause;
-    compoundQueryClause;
-    compoundQueryType;
-    isDistinct;
-    query;
-    return null as any;
+    assertCompoundQueryCompatible(selectClause, targetQuery.selectClause);
+
+    return {
+        selectClause : SelectClauseUtil.leftCompound(
+            selectClause,
+            targetQuery.selectClause
+        ),
+        compoundQueryClause : [
+            ...(
+                compoundQueryClause == undefined ?
+                [] :
+                compoundQueryClause
+            ),
+            {
+                compoundQueryType,
+                isDistinct,
+                query : targetQuery,
+            }
+        ]
+    };
 }

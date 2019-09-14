@@ -27,9 +27,94 @@ import {
     LimitClause,
     escapeValue,
     ALIASED,
+    CompoundQueryClause,
+    IQueryBase,
 } from "../dist";
 
 const insertBetween = AstUtil.insertBetween;
+
+function normalizeOrderByAndLimitClauses (query : IQueryBase) : IQueryBase {
+    /**
+     * MySQL behaviour,
+     * No `UNION` clause.
+     *
+     * | `ORDER BY` | `LIMIT` | `UNION ORDER BY` | `UNION LIMIT` | Result
+     * |------------|---------|------------------|---------------|-------------------------------------------------
+     * | Y          | Y       | Y                | Y             | `ORDER BY ... LIMIT ...) ORDER BY ... LIMIT ...`
+     * | Y          | Y       | Y                | N             | `ORDER BY ... LIMIT ...) ORDER BY ...`
+     * | Y          | Y       | N                | Y             | `ORDER BY ...) LIMIT ...`
+     * | Y          | Y       | N                | N             | `ORDER BY ... LIMIT ...)`
+     * | Y          | N       | Y                | Y             | `) ORDER BY ... LIMIT ...`
+     * | Y          | N       | Y                | N             | `) ORDER BY ...`
+     * | Y          | N       | N                | Y             | `ORDER BY ...) LIMIT ...`
+     * | Y          | N       | N                | N             | `ORDER BY ...)`
+     * |------------|---------|------------------|---------------|-------------------------------------------------
+     * | N          | Y       | Y                | Y             | `LIMIT ...) ORDER BY ... LIMIT ...`
+     * | N          | Y       | Y                | N             | `LIMIT ...) ORDER BY ...`
+     * | N          | Y       | N                | Y             | `) LIMIT ...`
+     * | N          | Y       | N                | N             | `LIMIT ...)`
+     * | N          | N       | Y                | Y             | `) ORDER BY ... LIMIT ...`
+     * | N          | N       | Y                | N             | `) ORDER BY ...`
+     * | N          | N       | N                | Y             | `) LIMIT ...`
+     * | N          | N       | N                | N             | `)`
+     *
+     * Observations:
+     * + With no `LIMIT` clause, the `UNION ORDER BY` and `UNION LIMIT` take over, regardless of `ORDER BY`
+     * + With the `LIMIT` clause, the `UNION ORDER BY` never takes over
+     * + With the `LIMIT` clause, the `UNION LIMIT` takes over when there is no `UNION ORDER BY`
+     *
+     * + `UNION LIMIT` takes over when, !`LIMIT` || !`UNION ORDER BY`
+     * + `UNION ORDER BY` takes over when, !`LIMIT`
+     */
+    /**
+     *
+     * MySQL behaviour,
+     * With `UNION` clause.
+     *
+     * Nothing is taken over.
+     */
+
+    const orderByClause = (
+        (
+            query.compoundQueryOrderByClause != undefined &&
+            query.compoundQueryClause == undefined &&
+            query.limitClause == undefined
+        ) ?
+        query.compoundQueryOrderByClause :
+        query.orderByClause
+    );
+    const limitClause = (
+        (
+            query.compoundQueryLimitClause != undefined &&
+            query.compoundQueryClause == undefined &&
+            (
+                query.limitClause == undefined ||
+                query.compoundQueryOrderByClause == undefined
+            )
+        ) ?
+        query.compoundQueryLimitClause :
+        query.limitClause
+    );
+
+    const compoundQueryOrderByClause = (
+        orderByClause == query.compoundQueryOrderByClause ?
+        undefined :
+        query.compoundQueryOrderByClause
+    );
+    const compoundQueryLimitClause = (
+        limitClause == query.compoundQueryLimitClause ?
+        undefined :
+        query.compoundQueryLimitClause
+    );
+
+    return {
+        ...query,
+        orderByClause,
+        limitClause,
+        compoundQueryOrderByClause,
+        compoundQueryLimitClause,
+    };
+}
 
 function selectClauseColumnToSql (column : IColumn) : string[] {
     return [
@@ -214,6 +299,34 @@ function limitClauseToSql (limitClause : LimitClause, _toSql : (ast : Ast) => st
     ];
 }
 
+function compoundQueryClauseToSql (compoundQueryClause : CompoundQueryClause, toSql : (ast : Ast) => string) : string[] {
+    const result : string[] = [];
+    for (const rawCompoundQuery of compoundQueryClause) {
+        result.push(rawCompoundQuery.compoundQueryType);
+        if (!rawCompoundQuery.isDistinct) {
+            result.push("ALL");
+        }
+
+        const query = rawCompoundQuery.query;
+        if (
+            query.orderByClause != undefined ||
+            query.limitClause != undefined ||
+            query.compoundQueryClause != undefined ||
+            query.compoundQueryOrderByClause != undefined ||
+            query.compoundQueryLimitClause != undefined
+        ) {
+            result.push(
+                "SELECT * FROM (",
+                toSql(query),
+                ")"
+            )
+        } else {
+            result.push(toSql(query));
+        }
+    }
+    return result;
+}
+
 export const sqliteSqlfier : Sqlfier = {
     identifierSqlfier : (identifierNode) => identifierNode.identifiers
         .map(escapeIdentifierWithDoubleQuotes)
@@ -286,81 +399,31 @@ export const sqliteSqlfier : Sqlfier = {
             ]
         ),
     },
-    queryBaseSqlfier : (query, toSql) => {
-        /**
-         * MySQL behaviour,
-         * No `UNION` clause.
-         *
-         * | `ORDER BY` | `LIMIT` | `UNION ORDER BY` | `UNION LIMIT` | Result
-         * |------------|---------|------------------|---------------|-------------------------------------------------
-         * | Y          | Y       | Y                | Y             | `ORDER BY ... LIMIT ...) ORDER BY ... LIMIT ...`
-         * | Y          | Y       | Y                | N             | `ORDER BY ... LIMIT ...) ORDER BY ...`
-         * | Y          | Y       | N                | Y             | `ORDER BY ...) LIMIT ...`
-         * | Y          | Y       | N                | N             | `ORDER BY ... LIMIT ...)`
-         * | Y          | N       | Y                | Y             | `) ORDER BY ... LIMIT ...`
-         * | Y          | N       | Y                | N             | `) ORDER BY ...`
-         * | Y          | N       | N                | Y             | `ORDER BY ...) LIMIT ...`
-         * | Y          | N       | N                | N             | `ORDER BY ...)`
-         * |------------|---------|------------------|---------------|-------------------------------------------------
-         * | N          | Y       | Y                | Y             | `LIMIT ...) ORDER BY ... LIMIT ...`
-         * | N          | Y       | Y                | N             | `LIMIT ...) ORDER BY ...`
-         * | N          | Y       | N                | Y             | `) LIMIT ...`
-         * | N          | Y       | N                | N             | `LIMIT ...)`
-         * | N          | N       | Y                | Y             | `) ORDER BY ... LIMIT ...`
-         * | N          | N       | Y                | N             | `) ORDER BY ...`
-         * | N          | N       | N                | Y             | `) LIMIT ...`
-         * | N          | N       | N                | N             | `)`
-         *
-         * Observations:
-         * + With no `LIMIT` clause, the `UNION ORDER BY` and `UNION LIMIT` take over, regardless of `ORDER BY`
-         * + With the `LIMIT` clause, the `UNION ORDER BY` never takes over
-         * + With the `LIMIT` clause, the `UNION LIMIT` takes over when there is no `UNION ORDER BY`
-         *
-         * + `UNION LIMIT` takes over when, !`LIMIT` || !`UNION ORDER BY`
-         * + `UNION ORDER BY` takes over when, !`LIMIT`
-         */
+    queryBaseSqlfier : (rawQuery, toSql) => {
+        const query = normalizeOrderByAndLimitClauses(rawQuery);
 
-        const orderByClause = (
+        if (
+            query.compoundQueryOrderByClause != undefined ||
+            query.compoundQueryLimitClause != undefined ||
+            /**
+             * If we have a compound query and an `ORDER BY` or `LIMIT` clause,
+             * we will need to make the query a derived table because
+             * SQLite only supports on `ORDER BY` and `LIMIT` clause for the entire query.
+             */
             (
-                query.compoundQueryOrderByClause != undefined &&
-                query.compoundQueryClause == undefined &&
-                query.limitClause == undefined
-            ) ?
-            query.compoundQueryOrderByClause :
-            query.orderByClause
-        );
-        const limitClause = (
-            (
-                query.compoundQueryLimitClause != undefined &&
-                query.compoundQueryClause == undefined &&
+                query.compoundQueryClause != undefined &&
                 (
-                    query.limitClause == undefined ||
-                    query.compoundQueryOrderByClause == undefined
+                    query.orderByClause != undefined ||
+                    query.limitClause != undefined
                 )
-            ) ?
-            query.compoundQueryLimitClause :
-            query.limitClause
-        );
-
-        const compoundQueryOrderByClause = (
-            orderByClause == query.compoundQueryOrderByClause ?
-            undefined :
-            query.compoundQueryOrderByClause
-        );
-        const compoundQueryLimitClause = (
-            limitClause == query.compoundQueryLimitClause ?
-            undefined :
-            query.compoundQueryLimitClause
-        );
-
-        if (compoundQueryOrderByClause != undefined || compoundQueryLimitClause != undefined) {
+            )
+        ) {
             /**
              * We have to apply some hackery to get the same behaviour as MySQL.
              */
             const innerQuery = {
                 ...query,
-                orderByClause,
-                limitClause,
+                compoundQueryClause : undefined,
                 compoundQueryOrderByClause : undefined,
                 compoundQueryLimitClause : undefined,
             };
@@ -369,12 +432,17 @@ export const sqliteSqlfier : Sqlfier = {
                 toSql(innerQuery),
                 ")"
             ];
-            if (compoundQueryOrderByClause != undefined) {
-                result.push(orderByClauseToSql(compoundQueryOrderByClause, toSql).join(" "));
+
+            if (query.compoundQueryClause != undefined) {
+                result.push(compoundQueryClauseToSql(query.compoundQueryClause, toSql).join(" "));
             }
 
-            if (compoundQueryLimitClause != undefined) {
-                result.push(limitClauseToSql(compoundQueryLimitClause, toSql).join(" "));
+            if (query.compoundQueryOrderByClause != undefined) {
+                result.push(orderByClauseToSql(query.compoundQueryOrderByClause, toSql).join(" "));
+            }
+
+            if (query.compoundQueryLimitClause != undefined) {
+                result.push(limitClauseToSql(query.compoundQueryLimitClause, toSql).join(" "));
             }
 
             return result.join(" ");
@@ -405,12 +473,16 @@ export const sqliteSqlfier : Sqlfier = {
             }
         }
 
-        if (orderByClause != undefined) {
-            result.push(orderByClauseToSql(orderByClause, toSql).join(" "));
+        if (query.orderByClause != undefined) {
+            result.push(orderByClauseToSql(query.orderByClause, toSql).join(" "));
         }
 
-        if (limitClause != undefined) {
-            result.push(limitClauseToSql(limitClause, toSql).join(" "));
+        if (query.limitClause != undefined) {
+            result.push(limitClauseToSql(query.limitClause, toSql).join(" "));
+        }
+
+        if (query.compoundQueryClause != undefined) {
+            result.push(compoundQueryClauseToSql(query.compoundQueryClause, toSql).join(" "));
         }
 
         return result.join(" ");
