@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Argument of type 'import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/unified-query/query-impl\").Query<{ fromClause: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/from-clause/from-clause\").IFromClause<{ outerQueryJoins: readonly import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/join/join-impl\").Join<{ tableAlias: \"cqcOu...' is not assignable to parameter of type 'import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/unified-query/query-impl\").Query<{ fromClause: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/from-clause/from-clause\").IFromClause<{ outerQueryJoins: readonly import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/join/join-impl\").Join<{ tableAlias: \"cqcOu...'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Property '__compileError' is missing in type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: readonly Join<{ tableAlias: \"cqcOuterTable\"; nullable: false; columns: { readonly cqcTableId: Column<{ tableAlias: \"cqcOuterTable\"; columnAlias: \"cqcTableId\"; mapper: Mapper<unknown, bigint | null>; }>; readonly cqcOtherTableId: Column<...>; }; ... 4 more ...; mutab...' but required in type 'CompileError<[\"expected to handle\", \"cqcOuterTable\", \"cqcOtherTableId\", bigint | null, \"actually handles\", bigint]>'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 10,
+    "start": 1531
+  }
+]

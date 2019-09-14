@@ -9,6 +9,9 @@ import {ColumnRef, ColumnRefUtil} from "../../../column-ref";
 import {QueryBaseUtil} from "../../../query-base";
 import {CompileError} from "../../../compile-error";
 import {AssertNonUnion, IsStrictSameType, ToUnknownIfAllPropertiesNever, Merge} from "../../../type-util";
+import {IFromClause} from "../../../from-clause";
+import {UsedRefUtil} from "../../../used-ref";
+import {IJoin} from "../../../join";
 
 export type FindItemCompatibilityError<
     IdentifierT extends Record<PropertyKey, PropertyKey>,
@@ -90,7 +93,7 @@ export type FindRefCompatibilityError<
  * @todo Consider allowing nullable columns to be compounded with non-nullable columns.
  * This will require modifying the type of the original `SELECT` clause.
  */
-export type AssertCompoundQueryCompatible<
+export type AssertSelectClauseCompatible<
     A extends SelectClause,
     B extends SelectClause
 > =
@@ -165,7 +168,7 @@ function assertRefCompatibilityError (identifier : (string|number)[], a : Column
     }
 }
 
-export function assertCompoundQueryCompatible (
+export function assertSelectClauseCompatible (
     a : SelectClause,
     b : SelectClause
 ) {
@@ -209,22 +212,50 @@ export function assertCompoundQueryCompatible (
     }
 }
 
+export type AssertOuterQueryJoinsCompatible<
+    FromClauseT extends Pick<IFromClause, "outerQueryJoins">,
+    TargetFromClauseT extends Pick<IFromClause, "outerQueryJoins">
+> =
+    UsedRefUtil.AssertAllowed<
+        UsedRefUtil.FromJoinArray<
+            FromClauseT["outerQueryJoins"] extends readonly IJoin[] ?
+            FromClauseT["outerQueryJoins"] :
+            []
+        >,
+        UsedRefUtil.FromJoinArray<
+            TargetFromClauseT["outerQueryJoins"] extends readonly IJoin[] ?
+            TargetFromClauseT["outerQueryJoins"] :
+            []
+        >
+    >
+;
+
+export type AssertCompatible<
+    FromClauseT extends Pick<IFromClause, "outerQueryJoins">,
+    SelectClauseT extends SelectClause,
+    TargetQueryT extends QueryBaseUtil.AfterSelectClause
+> =
+    & AssertSelectClauseCompatible<SelectClauseT, TargetQueryT["selectClause"]>
+    & AssertOuterQueryJoinsCompatible<FromClauseT, TargetQueryT["fromClause"]>
+;
 
 /**
  *
  * @todo `targetQuery` must contain subset of outer query joins
  */
 export function compoundQuery<
+    FromClauseT extends Pick<IFromClause, "outerQueryJoins">,
     SelectClauseT extends SelectClause,
     TargetQueryT extends QueryBaseUtil.AfterSelectClause
 > (
+    fromClause : FromClauseT,
     selectClause : SelectClauseT & AssertNonUnion<SelectClauseT>,
     compoundQueryClause : CompoundQueryClause|undefined,
     compoundQueryType : CompoundQueryType,
     isDistinct : boolean,
     targetQuery : (
         & TargetQueryT
-        & AssertCompoundQueryCompatible<SelectClauseT, TargetQueryT["selectClause"]>
+        & AssertCompatible<FromClauseT, SelectClauseT, TargetQueryT>
     )
 ) : (
     {
@@ -239,7 +270,20 @@ export function compoundQuery<
         compoundQueryClause : CompoundQueryClause,
     }
 ) {
-    assertCompoundQueryCompatible(selectClause, targetQuery.selectClause);
+    assertSelectClauseCompatible(selectClause, targetQuery.selectClause);
+
+    UsedRefUtil.assertAllowed(
+        UsedRefUtil.fromJoinArray(
+            fromClause.outerQueryJoins == undefined ?
+            [] :
+            fromClause.outerQueryJoins
+        ),
+        UsedRefUtil.fromJoinArray(
+            targetQuery.fromClause.outerQueryJoins == undefined ?
+            [] :
+            targetQuery.fromClause.outerQueryJoins
+        )
+    );
 
     return {
         selectClause : SelectClauseUtil.leftCompound(

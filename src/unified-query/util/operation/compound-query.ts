@@ -58,9 +58,10 @@ export function compoundQuery<
     isDistinct : boolean,
     targetQuery : (
         & TargetQueryT
-        & CompoundQueryClauseUtil.AssertCompoundQueryCompatible<
+        & CompoundQueryClauseUtil.AssertCompatible<
+            QueryT["fromClause"],
             QueryT["selectClause"],
-            TargetQueryT["selectClause"]
+            TargetQueryT
         >
     )
 ) : (
@@ -70,9 +71,11 @@ export function compoundQuery<
         selectClause,
         compoundQueryClause,
     } = CompoundQueryClauseUtil.compoundQuery<
+        QueryT["fromClause"],
         QueryT["selectClause"],
         TargetQueryT
     >(
+        query.fromClause,
         query.selectClause as (QueryT["selectClause"] & AssertNonUnion<QueryT["selectClause"]>),
         query.compoundQueryClause,
         compoundQueryType,

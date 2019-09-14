@@ -19,33 +19,43 @@ const cqcOuterTable = tsql.table("cqcOuterTable")
         cqcOtherTableId : tm.mysql.bigIntUnsigned(),
     });
 
-/**
- * This does not require any outer query joins
- */
 const query = tsql
-    .from(myTable)
-    .select(columns => [columns]);
-
-const otherQuery = tsql
     /**
      * This requires `cqcOuterTable` to be an outer query join
      */
     .requireOuterQueryJoins(cqcOuterTable)
+    .from(myTable)
+    .select(columns => [columns.myTable]);
+
+const otherQuery = tsql
+    /**
+     * This requires `cqcOuterTable` to be an outer query join
+     * but all columns are nullable
+     */
+    .requireNullableOuterQueryJoins(cqcOuterTable)
     .from(myOtherTable)
     .select(columns => [columns.myOtherTable]);
 
+/**
+ * This should not produce an error.
+ * The `otherQuery` handles `bigint|null` but will only
+ * ever encounter `bigint`.
+ *
+ * It is safe.
+ */
 export const compound = tsql.CompoundQueryClauseUtil
     .compoundQuery(
-        query.fromClause,
         /**
-         * This does not require any outer query joins
+         * This requires `cqcOuterTable` to be an outer query join
          */
+        query.fromClause,
         query.selectClause,
         undefined,
         tsql.CompoundQueryType.UNION,
         true,
         /**
          * This requires `cqcOuterTable` to be an outer query join
+         * but all columns are nullable
          */
         otherQuery
     );

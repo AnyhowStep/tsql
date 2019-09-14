@@ -506,9 +506,10 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         this : Extract<this, QueryUtil.AfterSelectClause>,
         targetQuery : (
             & TargetQueryT
-            & CompoundQueryClauseUtil.AssertCompoundQueryCompatible<
+            & CompoundQueryClauseUtil.AssertCompatible<
+                Extract<this, QueryUtil.AfterSelectClause>["fromClause"],
                 Extract<this, QueryUtil.AfterSelectClause>["selectClause"],
-                TargetQueryT["selectClause"]
+                TargetQueryT
             >
         )
     ) : (

@@ -19,33 +19,45 @@ const cqcOuterTable = tsql.table("cqcOuterTable")
         cqcOtherTableId : tm.mysql.bigIntUnsigned(),
     });
 
-/**
- * This does not require any outer query joins
- */
+const cqcOuterTable2 = tsql.table("cqcOuterTable2")
+    .addColumns({
+        cqcTableId : tm.mysql.bigIntUnsigned().orNull(),
+        cqcOtherTableId : tm.mysql.bigIntUnsigned(),
+    });
+
 const query = tsql
+    /**
+     * This requires 2 tables
+     */
+    .requireOuterQueryJoins(cqcOuterTable, cqcOuterTable2)
     .from(myTable)
-    .select(columns => [columns]);
+    .select(columns => [columns.myTable]);
 
 const otherQuery = tsql
     /**
-     * This requires `cqcOuterTable` to be an outer query join
+     * This requires 1 table
      */
-    .requireOuterQueryJoins(cqcOuterTable)
+    .requireNullableOuterQueryJoins(cqcOuterTable)
     .from(myOtherTable)
     .select(columns => [columns.myOtherTable]);
 
+/**
+ * This should not produce an error.
+ * Every outer query table `otherQuery` requires
+ * exists in the main `query`
+ */
 export const compound = tsql.CompoundQueryClauseUtil
     .compoundQuery(
-        query.fromClause,
         /**
-         * This does not require any outer query joins
+         * This requires 2 tables
          */
+        query.fromClause,
         query.selectClause,
         undefined,
         tsql.CompoundQueryType.UNION,
         true,
         /**
-         * This requires `cqcOuterTable` to be an outer query join
+         * This requires 1 table
          */
         otherQuery
     );

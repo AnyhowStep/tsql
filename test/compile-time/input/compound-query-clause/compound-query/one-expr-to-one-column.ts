@@ -25,6 +25,7 @@ const otherQuery = tsql
 
 export const compound = tsql.CompoundQueryClauseUtil
     .compoundQuery(
+        query.fromClause,
         query.selectClause,
         undefined,
         tsql.CompoundQueryType.UNION,
