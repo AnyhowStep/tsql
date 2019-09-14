@@ -9,6 +9,7 @@ import {DerivedTableSelectItem} from "../../../derived-table-select-item";
 import {SelectClauseUtil} from "../../../select-clause";
 import {CompileError} from "../../../compile-error";
 import {isOneSelectItem, isZeroOrOneRow} from "../predicate";
+import {parentheses} from "../../../ast";
 
 export type As<QueryT extends AfterSelectClause, AliasT extends string> =
     QueryT extends (OneSelectItem<any> & ZeroOrOneRow) ?
@@ -88,7 +89,7 @@ export function as<
                     query.fromClause.outerQueryJoins
                 ),
             },
-            query
+            parentheses(query, false)
         );
         /**
          * @todo Investigate why we can't cast to `As<>` directly

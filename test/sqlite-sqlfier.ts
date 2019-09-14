@@ -29,6 +29,7 @@ import {
     ALIASED,
     CompoundQueryClause,
     IQueryBase,
+    QueryBaseUtil,
 } from "../dist";
 
 const insertBetween = AstUtil.insertBetween;
@@ -116,7 +117,7 @@ function normalizeOrderByAndLimitClauses (query : IQueryBase) : IQueryBase {
     };
 }
 
-function selectClauseColumnToSql (column : IColumn) : string[] {
+function selectClauseColumnToSql (column : IColumn, isDerivedTable : boolean) : string[] {
     return [
         [
             escapeIdentifierWithDoubleQuotes(column.tableAlias),
@@ -125,11 +126,13 @@ function selectClauseColumnToSql (column : IColumn) : string[] {
         ].join(""),
         "AS",
         escapeIdentifierWithDoubleQuotes(
+            isDerivedTable ?
+            column.columnAlias :
             `${column.tableAlias}${SEPARATOR}${column.columnAlias}`
         )
     ];
 }
-function selectClauseColumnArrayToSql (columns : IColumn[]) : string[] {
+function selectClauseColumnArrayToSql (columns : IColumn[], isDerivedTable : boolean) : string[] {
     columns.sort((a, b) => {
         const tableAliasCmp = a.tableAlias.localeCompare(b.tableAlias);
         if (tableAliasCmp != 0) {
@@ -143,20 +146,24 @@ function selectClauseColumnArrayToSql (columns : IColumn[]) : string[] {
             result.push(",");
         }
         result.push(
-            ...selectClauseColumnToSql(column)
+            ...selectClauseColumnToSql(column, isDerivedTable)
         );
     }
     return result;
 }
-function selectClauseColumnMapToSql (map : ColumnMap) : string[] {
+function selectClauseColumnMapToSql (map : ColumnMap, isDerivedTable : boolean) : string[] {
     const columns = ColumnUtil.fromColumnMap(map);
-    return selectClauseColumnArrayToSql(columns);
+    return selectClauseColumnArrayToSql(columns, isDerivedTable);
 }
-function selectClauseColumnRefToSql (ref : ColumnRef) : string[] {
+function selectClauseColumnRefToSql (ref : ColumnRef, isDerivedTable : boolean) : string[] {
     const columns = ColumnUtil.fromColumnRef(ref);
-    return selectClauseColumnArrayToSql(columns);
+    return selectClauseColumnArrayToSql(columns, isDerivedTable);
 }
-function selectClauseToSql (selectClause : SelectClause, toSql : (ast : Ast) => string) : string[] {
+function selectClauseToSql (
+    selectClause : SelectClause,
+    toSql : (ast : Ast) => string,
+    isDerivedTable : boolean
+) : string[] {
     const result : string[] = [];
     for (const selectItem of selectClause) {
         if (result.length > 0) {
@@ -164,22 +171,22 @@ function selectClauseToSql (selectClause : SelectClause, toSql : (ast : Ast) => 
         }
         if (ColumnUtil.isColumn(selectItem)) {
             result.push(
-                ...selectClauseColumnToSql(selectItem)
+                ...selectClauseColumnToSql(selectItem, isDerivedTable)
             );
         } else if (ExprSelectItemUtil.isExprSelectItem(selectItem)) {
             result.push(
                 toSql(selectItem.unaliasedAst),
                 "AS",
                 escapeIdentifierWithDoubleQuotes(
+                    isDerivedTable ?
+                    selectItem.alias :
                     `${selectItem.tableAlias}${SEPARATOR}${selectItem.alias}`
                 )
             );
-            selectItem.unaliasedAst
-
         } else if (ColumnMapUtil.isColumnMap(selectItem)) {
-            result.push(...selectClauseColumnMapToSql(selectItem));
+            result.push(...selectClauseColumnMapToSql(selectItem, isDerivedTable));
         } else if (ColumnRefUtil.isColumnRef(selectItem)) {
-            result.push(...selectClauseColumnRefToSql(selectItem));
+            result.push(...selectClauseColumnRefToSql(selectItem, isDerivedTable));
         } else {
             throw new Error(`Not implemented`)
         }
@@ -187,7 +194,10 @@ function selectClauseToSql (selectClause : SelectClause, toSql : (ast : Ast) => 
     return ["SELECT", ...result];
 }
 
-function fromClauseToSql (currentJoins : FromClauseUtil.AfterFromClause["currentJoins"], toSql : (ast : Ast) => string) : string[] {
+function fromClauseToSql (
+    currentJoins : FromClauseUtil.AfterFromClause["currentJoins"],
+    toSql : (ast : Ast) => string
+) : string[] {
     const result : string[] = [];
     for (const join of currentJoins) {
         if (join.joinType == JoinType.FROM) {
@@ -197,8 +207,12 @@ function fromClauseToSql (currentJoins : FromClauseUtil.AfterFromClause["current
         }
         if (isIdentifierNode(join.tableAst)) {
             result.push(toSql(join.tableAst));
+        } else if (QueryBaseUtil.isQuery(join.tableAst)) {
+            result.push("(", queryToSql(join.tableAst, toSql, true), ")");
+            result.push("AS");
+            result.push(escapeIdentifierWithDoubleQuotes(join.tableAlias));
         } else {
-            result.push(toSql(join.tableAst));
+            result.push("(", toSql(join.tableAst), ")");
             result.push("AS");
             result.push(escapeIdentifierWithDoubleQuotes(join.tableAlias));
         }
@@ -327,6 +341,99 @@ function compoundQueryClauseToSql (compoundQueryClause : CompoundQueryClause, to
     return result;
 }
 
+function queryToSql (
+    rawQuery : IQueryBase,
+    toSql : (ast : Ast) => string,
+    isDerivedTable : boolean
+) {
+    const query = normalizeOrderByAndLimitClauses(rawQuery);
+
+    if (
+        query.compoundQueryOrderByClause != undefined ||
+        query.compoundQueryLimitClause != undefined ||
+        /**
+         * If we have a compound query and an `ORDER BY` or `LIMIT` clause,
+         * we will need to make the query a derived table because
+         * SQLite only supports on `ORDER BY` and `LIMIT` clause for the entire query.
+         */
+        (
+            query.compoundQueryClause != undefined &&
+            (
+                query.orderByClause != undefined ||
+                query.limitClause != undefined
+            )
+        )
+    ) {
+        /**
+         * We have to apply some hackery to get the same behaviour as MySQL.
+         */
+        const innerQuery = {
+            ...query,
+            compoundQueryClause : undefined,
+            compoundQueryOrderByClause : undefined,
+            compoundQueryLimitClause : undefined,
+        };
+        const result : string[] = [
+            "SELECT * FROM (",
+            toSql(innerQuery),
+            ")"
+        ];
+
+        if (query.compoundQueryClause != undefined) {
+            result.push(compoundQueryClauseToSql(query.compoundQueryClause, toSql).join(" "));
+        }
+
+        if (query.compoundQueryOrderByClause != undefined) {
+            result.push(orderByClauseToSql(query.compoundQueryOrderByClause, toSql).join(" "));
+        }
+
+        if (query.compoundQueryLimitClause != undefined) {
+            result.push(limitClauseToSql(query.compoundQueryLimitClause, toSql).join(" "));
+        }
+
+        return result.join(" ");
+    }
+
+    const result : string[] = [];
+    if (query.selectClause != undefined) {
+        result.push(selectClauseToSql(query.selectClause, toSql, isDerivedTable).join(" "));
+    }
+    if (query.fromClause != undefined && query.fromClause.currentJoins != undefined) {
+        result.push(fromClauseToSql(query.fromClause.currentJoins, toSql).join(" "));
+    }
+    if (query.whereClause != undefined) {
+        result.push(whereClauseToSql(query.whereClause, toSql).join(" "));
+    }
+    if (query.groupByClause == undefined) {
+        if (query.havingClause != undefined) {
+            /**
+             * Workaround for `<empty grouping set>` not supported by SQLite
+             */
+            result.push("GROUP BY NULL");
+            result.push(havingClauseToSql(query.havingClause, toSql).join(" "));
+        }
+    } else {
+        result.push(groupByClauseToSql(query.groupByClause, toSql).join(" "));
+        if (query.havingClause != undefined) {
+            result.push(havingClauseToSql(query.havingClause, toSql).join(" "));
+        }
+    }
+
+    if (query.orderByClause != undefined) {
+        result.push(orderByClauseToSql(query.orderByClause, toSql).join(" "));
+    }
+
+    if (query.limitClause != undefined) {
+        result.push(limitClauseToSql(query.limitClause, toSql).join(" "));
+    }
+
+    if (query.compoundQueryClause != undefined) {
+        result.push(compoundQueryClauseToSql(query.compoundQueryClause, toSql).join(" "));
+    }
+
+    return result.join(" ");
+}
+
 export const sqliteSqlfier : Sqlfier = {
     identifierSqlfier : (identifierNode) => identifierNode.identifiers
         .map(escapeIdentifierWithDoubleQuotes)
@@ -400,91 +507,6 @@ export const sqliteSqlfier : Sqlfier = {
         ),
     },
     queryBaseSqlfier : (rawQuery, toSql) => {
-        const query = normalizeOrderByAndLimitClauses(rawQuery);
-
-        if (
-            query.compoundQueryOrderByClause != undefined ||
-            query.compoundQueryLimitClause != undefined ||
-            /**
-             * If we have a compound query and an `ORDER BY` or `LIMIT` clause,
-             * we will need to make the query a derived table because
-             * SQLite only supports on `ORDER BY` and `LIMIT` clause for the entire query.
-             */
-            (
-                query.compoundQueryClause != undefined &&
-                (
-                    query.orderByClause != undefined ||
-                    query.limitClause != undefined
-                )
-            )
-        ) {
-            /**
-             * We have to apply some hackery to get the same behaviour as MySQL.
-             */
-            const innerQuery = {
-                ...query,
-                compoundQueryClause : undefined,
-                compoundQueryOrderByClause : undefined,
-                compoundQueryLimitClause : undefined,
-            };
-            const result : string[] = [
-                "SELECT * FROM (",
-                toSql(innerQuery),
-                ")"
-            ];
-
-            if (query.compoundQueryClause != undefined) {
-                result.push(compoundQueryClauseToSql(query.compoundQueryClause, toSql).join(" "));
-            }
-
-            if (query.compoundQueryOrderByClause != undefined) {
-                result.push(orderByClauseToSql(query.compoundQueryOrderByClause, toSql).join(" "));
-            }
-
-            if (query.compoundQueryLimitClause != undefined) {
-                result.push(limitClauseToSql(query.compoundQueryLimitClause, toSql).join(" "));
-            }
-
-            return result.join(" ");
-        }
-
-        const result : string[] = [];
-        if (query.selectClause != undefined) {
-            result.push(selectClauseToSql(query.selectClause, toSql).join(" "));
-        }
-        if (query.fromClause != undefined && query.fromClause.currentJoins != undefined) {
-            result.push(fromClauseToSql(query.fromClause.currentJoins, toSql).join(" "));
-        }
-        if (query.whereClause != undefined) {
-            result.push(whereClauseToSql(query.whereClause, toSql).join(" "));
-        }
-        if (query.groupByClause == undefined) {
-            if (query.havingClause != undefined) {
-                /**
-                 * Workaround for `<empty grouping set>` not supported by SQLite
-                 */
-                result.push("GROUP BY NULL");
-                result.push(havingClauseToSql(query.havingClause, toSql).join(" "));
-            }
-        } else {
-            result.push(groupByClauseToSql(query.groupByClause, toSql).join(" "));
-            if (query.havingClause != undefined) {
-                result.push(havingClauseToSql(query.havingClause, toSql).join(" "));
-            }
-        }
-
-        if (query.orderByClause != undefined) {
-            result.push(orderByClauseToSql(query.orderByClause, toSql).join(" "));
-        }
-
-        if (query.limitClause != undefined) {
-            result.push(limitClauseToSql(query.limitClause, toSql).join(" "));
-        }
-
-        if (query.compoundQueryClause != undefined) {
-            result.push(compoundQueryClauseToSql(query.compoundQueryClause, toSql).join(" "));
-        }
-
-        return result.join(" ");
+        return queryToSql(rawQuery, toSql, false);
     },
 };

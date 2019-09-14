@@ -77,8 +77,11 @@ export class Parentheses {
     private cachedSql : string|undefined = undefined;
     public toSql = (sqlfier : Sqlfier) : string => {
         if (this.cachedSql == undefined) {
+            /**
+             * @todo Investigate this logic
+             */
             const sqlAst = AstUtil.toSqlAst(this.ast, sqlfier);
-            if (shouldWrap(sqlAst, this.canUnwrap)) {
+            if (!this.canUnwrap || shouldWrap(sqlAst, this.canUnwrap)) {
                 this.cachedSql = `(${AstUtil.toSql(sqlAst, sqlfier)})`;
             } else {
                 this.cachedSql = AstUtil.toSql(sqlAst, sqlfier);
