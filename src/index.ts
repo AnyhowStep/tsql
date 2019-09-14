@@ -13,6 +13,7 @@ export * from "./compound-query";
 export * from "./compound-query-clause";
 export * from "./compound-query-order-by-clause";
 export * from "./derived-table";
+export * from "./derived-table-select-item";
 export * from "./expr";
 export * from "./expr-library";
 export * from "./expr-select-item";

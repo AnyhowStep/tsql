@@ -874,4 +874,21 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
             whereDelegate
         );
     }
+
+    as<
+        AliasT extends string
+    > (
+        this : Extract<this, QueryUtil.AfterSelectClause>,
+        alias : AliasT & QueryBaseUtil.AssertAliasable<Extract<this, QueryUtil.AfterSelectClause>>
+    ) : (
+        QueryBaseUtil.As<Extract<this, QueryUtil.AfterSelectClause>, AliasT>
+    ) {
+        return QueryBaseUtil.as<
+            Extract<this, QueryUtil.AfterSelectClause>,
+            AliasT
+        >(
+            this,
+            alias
+        );
+    }
 }

@@ -6,10 +6,6 @@ import {AssertNonUnion} from "../../../type-util";
 import {AssertCompatible, assertCompatible} from "../predicate";
 import {IFromClause} from "../../../from-clause";
 
-/**
- *
- * @todo `targetQuery` must contain subset of outer query joins
- */
 export function compoundQuery<
     FromClauseT extends Pick<IFromClause, "outerQueryJoins">,
     SelectClauseT extends SelectClause,

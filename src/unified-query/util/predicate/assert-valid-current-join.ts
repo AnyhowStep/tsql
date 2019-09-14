@@ -10,6 +10,9 @@ export type AssertValidCurrentJoin<
     /**
      * In MySQL 5.7, derived tables cannot reference parent query tables.
      * This is not a SQL limitation. It is a MySQL limitation.
+     *
+     * SQLite 3.28 and PostgreSQL 9.4 have no problems with it.
+     * Gdi MySQL.
      */
     & FromClauseUtil.AssertNoUsedRef<AliasedTableT>
     /**

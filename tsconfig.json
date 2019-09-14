@@ -21,6 +21,7 @@
         "./src/used-ref/**/*",
         "./src/aliased-table/**/*",
         "./src/derived-table/**/*",
+        "./src/derived-table-select-item/**/*",
         "./src/key/**/*",
         "./src/table/**/*.ts",
         "./src/row/**/*.ts",

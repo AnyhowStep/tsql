@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Argument of type '\"myAlias\"' is not assignable to parameter of type '\"myAlias\" & CompileError<[\"Cannot alias query with duplicate names in SELECT clause\", \"myTableId\"]>'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Type '\"myAlias\"' is not assignable to type 'CompileError<[\"Cannot alias query with duplicate names in SELECT clause\", \"myTableId\"]>'.",
+        "category": 1,
+        "code": 2322
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 9,
+    "start": 583
+  }
+]
