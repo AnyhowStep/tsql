@@ -20,6 +20,7 @@ export * from "./left-join";
 export * from "./order-by";
 export * from "./require-nullable-outer-query-joins";
 export * from "./require-outer-query-joins";
+export * from "./select-value";
 export * from "./select";
 export * from "./where-eq-candidate-key";
 export * from "./where-eq-columns";

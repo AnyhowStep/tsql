@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type 'import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/unified-query/query-impl\").Query<{ fromClause: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/from-clause/from-clause\").IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>; selectClause: [...]; limitClause: undefined; compoundQueryClause:...' is not assignable to type 'import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/unified-query/query-impl\").Query<{ fromClause: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/from-clause/from-clause\").IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>; selectClause: [...]; limitClause: undefined; compoundQueryClause:...'. Two different types with this name exist, but they are unrelated.",
+      "category": 1,
+      "code": 2719,
+      "next": {
+        "messageText": "Property '__compileError' is missing in type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>; selectClause: [IExprSelectItem<{ mapper: Mapper<unknown, boolean>; tableAlias: \"__aliased\"; alias: \"x\"; usedRef: IUsedRef<never>; }>]; limitClause: undefined; compoundQueryClause: undefined; compoundQueryLimitClause: undefined...' but required in type 'CompileError<[\"Identifiers already used in SELECT clause; consider aliasing\", [\"__aliased\", \"value\"]]>'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2719,
+    "category": 1,
+    "length": 43,
+    "start": 350
+  }
+]

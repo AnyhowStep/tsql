@@ -20,10 +20,11 @@ export type RawExpr<TypeT> = (
     | IAnonymousExprSelectItem<TypeT>
 );
 
+export type AnySubqueryExpr = (QueryBaseUtil.OneSelectItem<any> & QueryBaseUtil.ZeroOrOneRow);
 export type AnyRawExpr = (
     | PrimitiveExpr
     | IExpr
     | IColumn
-    | (QueryBaseUtil.OneSelectItem<any> & QueryBaseUtil.ZeroOrOneRow)
+    | AnySubqueryExpr
     | IExprSelectItem
 );

@@ -6,8 +6,8 @@ import {HavingClause, HavingDelegate} from "../having-clause";
 import {OrderByClause, OrderByDelegate} from "../order-by-clause";
 import {IAliasedTable} from "../aliased-table";
 import {FromClauseUtil} from "../from-clause";
-import {SelectClause, SelectDelegate} from "../select-clause";
-import {RawExpr} from "../raw-expr";
+import {SelectClause, SelectDelegate, SelectValueDelegate} from "../select-clause";
+import {RawExpr, AnyRawExpr} from "../raw-expr";
 import {OnDelegate, OnClauseUtil} from "../on-clause";
 import {ITable, TableUtil, TableWithPrimaryKey} from "../table";
 import {ColumnUtil} from "../column";
@@ -475,15 +475,41 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         );
     }
 
+    selectValue<
+        RawExprT extends AnyRawExpr
+    > (
+        this : Extract<this, QueryUtil.BeforeCompoundQueryClause>,
+        selectValueDelegate : SelectValueDelegate<this["fromClause"], this["selectClause"], RawExprT>
+    ) : (
+        QueryUtil.SelectValue<
+            Extract<this, QueryUtil.BeforeCompoundQueryClause>,
+            RawExprT
+        >
+    ) {
+        return QueryUtil.selectValue<
+            Extract<this, QueryUtil.BeforeCompoundQueryClause>,
+            RawExprT
+        >(
+            this,
+            selectValueDelegate
+        );
+    }
+
     select<
         SelectsT extends SelectClause
     > (
         this : Extract<this, QueryUtil.BeforeCompoundQueryClause>,
         selectDelegate : SelectDelegate<this["fromClause"], this["selectClause"], SelectsT>
     ) : (
-        QueryUtil.Select<Extract<this, QueryUtil.BeforeCompoundQueryClause>, SelectsT>
+        QueryUtil.Select<
+            Extract<this, QueryUtil.BeforeCompoundQueryClause>,
+            SelectsT
+        >
     ) {
-        return QueryUtil.select<Extract<this, QueryUtil.BeforeCompoundQueryClause>, SelectsT>(this, selectDelegate);
+        return QueryUtil.select<
+            Extract<this, QueryUtil.BeforeCompoundQueryClause>,
+            SelectsT
+        >(this, selectDelegate);
     }
 
     compoundQueryOrderBy (

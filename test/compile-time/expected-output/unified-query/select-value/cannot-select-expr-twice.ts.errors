@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type 'ExprImpl<Mapper<unknown, boolean>, IUsedRef<{}>>' is not assignable to type 'ExprImpl<Mapper<unknown, boolean>, IUsedRef<{}>> & CompileError<[\"Identifiers already used in SELECT clause; consider aliasing\", [\"__aliased\", \"value\"]]>'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Property '__compileError' is missing in type 'ExprImpl<Mapper<unknown, boolean>, IUsedRef<{}>>' but required in type 'CompileError<[\"Identifiers already used in SELECT clause; consider aliasing\", [\"__aliased\", \"value\"]]>'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 14,
+    "start": 300
+  }
+]

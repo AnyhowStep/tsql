@@ -1,7 +1,8 @@
 import * as QueryUtil from "./util";
 import {IAliasedTable} from "../aliased-table";
 import {FromClauseUtil} from "../from-clause";
-import {SelectClause, SelectDelegate} from "../select-clause";
+import {SelectClause, SelectDelegate, SelectValueDelegate} from "../select-clause";
+import {AnyRawExpr} from "../raw-expr";
 
 export function from<
     AliasedTableT extends IAliasedTable
@@ -48,10 +49,29 @@ export function requireNullableOuterQueryJoins<
 export function select<
     SelectsT extends SelectClause
 > (
-    selectDelegate : SelectDelegate<QueryUtil.NewInstance["fromClause"], QueryUtil.NewInstance["selectClause"], SelectsT>
+    selectDelegate : SelectDelegate<
+        QueryUtil.NewInstance["fromClause"],
+        QueryUtil.NewInstance["selectClause"],
+        SelectsT
+    >
 ) : (
     QueryUtil.Select<QueryUtil.NewInstance, SelectsT>
 ) {
     return QueryUtil.newInstance()
         .select<SelectsT>(selectDelegate);
+}
+
+export function selectValue<
+    RawExprT extends AnyRawExpr
+> (
+    selectValueDelegate : SelectValueDelegate<
+        QueryUtil.NewInstance["fromClause"],
+        QueryUtil.NewInstance["selectClause"],
+        RawExprT
+    >
+) : (
+    QueryUtil.SelectValue<QueryUtil.NewInstance, RawExprT>
+) {
+    return QueryUtil.newInstance()
+        .selectValue<RawExprT>(selectValueDelegate);
 }
