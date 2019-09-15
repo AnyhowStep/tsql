@@ -17,7 +17,7 @@ export type OperatorOperand = {
         https://dev.mysql.com/doc/refman/8.0/en/comparison-operators.html
     */
     [OperatorType.BETWEEN_AND]              : Operand3,
-    [OperatorType.COALESCE]                 : Operand1ToN,
+    [OperatorType.COALESCE]                 : Operand2ToN,
     [OperatorType.EQUAL]                    : Operand2,
     [OperatorType.NULL_SAFE_EQUAL]          : Operand2,
     [OperatorType.GREATER_THAN]             : Operand2,

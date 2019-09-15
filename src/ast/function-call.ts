@@ -60,7 +60,7 @@ export class FunctionCall {
         if (this.cachedSql == undefined) {
             const argsSql = this.args
                 .map(arg => arg.toSql(sqlfier))
-                .join(",");
+                .join(", ");
             this.cachedSql = `${this.functionName}(${argsSql})`;
         }
         return this.cachedSql;
