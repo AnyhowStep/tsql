@@ -42,6 +42,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     readonly havingClause : HavingClause|undefined;
     readonly orderByClause : OrderByClause|undefined;
     readonly compoundQueryOrderByClause : CompoundQueryOrderByClause|undefined;
+    readonly distinct : boolean;
 
     constructor (data : DataT, extraData : ExtraQueryData) {
         this.fromClause = data.fromClause;
@@ -55,6 +56,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         this.havingClause = extraData.havingClause;
         this.orderByClause = extraData.orderByClause;
         this.compoundQueryOrderByClause = extraData.compoundQueryOrderByClause;
+        this.distinct = extraData.distinct;
     }
 
     limit<

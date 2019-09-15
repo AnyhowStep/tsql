@@ -89,6 +89,7 @@ export function whereEqPrimaryKey<
         havingClause,
         orderByClause,
         compoundQueryOrderByClause,
+        distinct,
     } = query;
 
     const result : WhereEqPrimaryKey<QueryT> = new Query(
@@ -107,6 +108,7 @@ export function whereEqPrimaryKey<
             havingClause,
             orderByClause,
             compoundQueryOrderByClause,
+            distinct,
         }
     );
     return result;

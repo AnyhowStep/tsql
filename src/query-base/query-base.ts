@@ -63,4 +63,21 @@ export interface IQueryBase<DataT extends QueryBaseData=QueryBaseData> {
     readonly havingClause : HavingClause|undefined,
     readonly orderByClause : OrderByClause|undefined,
     readonly compoundQueryOrderByClause : CompoundQueryOrderByClause|undefined,
+    /**
+     * Should default to `false`.
+     *
+     * Affects the `SELECT` clause.
+     * ```sql
+     * -- distinct : false
+     * SELECT ...
+     * ```
+     *
+     * ```sql
+     * -- distinct : true
+     * SELECT DISTINCT ...
+     * ```
+     *
+     * @todo Should this be part of the `SelectClause` type instead?
+     */
+    readonly distinct : boolean,
 }

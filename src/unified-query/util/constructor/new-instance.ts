@@ -27,6 +27,7 @@ export function newInstance () : NewInstance {
             havingClause : undefined,
             orderByClause : undefined,
             compoundQueryOrderByClause : undefined,
+            distinct : false,
         }
     );
     return result;

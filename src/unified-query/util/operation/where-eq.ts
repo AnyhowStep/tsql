@@ -116,6 +116,7 @@ export function whereEq<
         havingClause,
         orderByClause,
         compoundQueryOrderByClause,
+        distinct,
     } = query;
 
     const result : WhereEq<QueryT, ColumnT, ValueT> = new Query(
@@ -134,6 +135,7 @@ export function whereEq<
             havingClause,
             orderByClause,
             compoundQueryOrderByClause,
+            distinct,
         }
     );
     return result;
