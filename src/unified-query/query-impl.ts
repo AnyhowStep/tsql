@@ -891,4 +891,8 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
             alias
         );
     }
+
+    correlate () : QueryUtil.Correlate<this> {
+        return QueryUtil.correlate<this>(this);
+    }
 }

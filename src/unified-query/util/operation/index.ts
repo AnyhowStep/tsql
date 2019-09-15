@@ -5,6 +5,7 @@ export * from "./compound-query-offset";
 
 export * from "./compound-query-order-by";
 export * from "./compound-query";
+export * from "./correlate";
 export * from "./cross-join";
 export * from "./from";
 export * from "./group-by";

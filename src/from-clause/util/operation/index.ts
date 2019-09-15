@@ -1,3 +1,4 @@
+export * from "./correlate";
 export * from "./cross-join";
 export * from "./from";
 export * from "./inner-join-using-candidate-key";

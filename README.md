@@ -163,6 +163,12 @@ See the internal `Buffer` declaration [here](src/buffer.ts)
 
 + Remove usages of "I" and replace with "we"?
 
++ WTF, Postgres!?
+  + https://stackoverflow.com/questions/43111996/why-postgresql-does-not-like-uppercase-table-names
+  + https://www.postgresql.org/docs/current/sql-syntax-lexical.html#SQL-SYNTAX-IDENTIFIERS
+
+> Quoting an identifier also makes it case-sensitive, whereas unquoted names are always folded to lower case. For example, the identifiers FOO, foo, and "foo" are considered the same by PostgreSQL, but "Foo" and "FOO" are different from these three and each other. (The folding of unquoted names to lower case in PostgreSQL is incompatible with the SQL standard, which says that unquoted names should be folded to upper case. Thus, foo should be equivalent to "FOO" not "foo" according to the standard. If you want to write portable applications you are advised to always quote a particular name or never quote it.)
+
 <!--
 > I'm just thinking about how...
 yeah the nicity of being able to call like find, and have the code manage going like
