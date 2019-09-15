@@ -7,7 +7,7 @@ import {OrderByClause, OrderByDelegate} from "../order-by-clause";
 import {IAliasedTable} from "../aliased-table";
 import {FromClauseUtil} from "../from-clause";
 import {SelectClause, SelectDelegate, SelectValueDelegate} from "../select-clause";
-import {RawExpr, AnyRawExpr} from "../raw-expr";
+import {RawExpr, AnyRawExpr, AnySubqueryExpr} from "../raw-expr";
 import {OnDelegate, OnClauseUtil} from "../on-clause";
 import {ITable, TableUtil, TableWithPrimaryKey} from "../table";
 import {ColumnUtil} from "../column";
@@ -929,5 +929,36 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
      */
     distinct () : QueryUtil.Distinct<this> {
         return QueryUtil.distinct<this>(this);
+    }
+
+    /**
+     * Convenience method for,
+     * ```ts
+     *  tsql.coalesce(myQuery.limit(1), myDefaultValue);
+     * ```
+     *
+     * Usage,
+     * ```ts
+     *  myQuery.limit(1).coalesce(myDefaultValue);
+     * ```
+     */
+    coalesce<
+        DefaultValueT extends AnyRawExpr
+    > (
+        this : Extract<this, AnySubqueryExpr>,
+        defaultValue : DefaultValueT
+    ) : (
+        QueryBaseUtil.Coalesce<
+            Extract<this, AnySubqueryExpr>,
+            DefaultValueT
+        >
+    ) {
+        return QueryBaseUtil.coalesce<
+            Extract<this, AnySubqueryExpr>,
+            DefaultValueT
+        >(
+            this,
+            defaultValue
+        );
     }
 }
