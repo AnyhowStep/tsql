@@ -1,7 +1,5 @@
-import {GroupByDelegate, GroupByClauseUtil} from "../../../group-by-clause";
 import {Query} from "../../query-impl";
 import {IQuery} from "../../query";
-import {AfterFromClause} from "../helper-type";
 
 /**
  * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966
@@ -9,7 +7,7 @@ import {AfterFromClause} from "../helper-type";
  * This hack should only really be reserved for types that are more likely
  * to trigger max depth/max count errors.
  */
-export type GroupByImpl<
+export type DistinctImpl<
     FromClauseT extends IQuery["fromClause"],
     SelectClauseT extends IQuery["selectClause"],
     LimitClauseT extends IQuery["limitClause"],
@@ -26,10 +24,10 @@ export type GroupByImpl<
         compoundQueryLimitClause : CompoundQueryLimitClauseT,
     }>
 );
-export type GroupBy<
+export type Distinct<
     QueryT extends IQuery
 > = (
-    GroupByImpl<
+    DistinctImpl<
         QueryT["fromClause"],
         QueryT["selectClause"],
         QueryT["limitClause"],
@@ -37,24 +35,13 @@ export type GroupBy<
         QueryT["compoundQueryLimitClause"]
     >
 );
-export function groupBy<
-    QueryT extends AfterFromClause
+export function distinct<
+    QueryT extends IQuery
 > (
-    query : QueryT,
-    groupByDelegate : GroupByDelegate<QueryT["fromClause"], QueryT["selectClause"]>
+    query : QueryT
 ) : (
-    GroupBy<QueryT>
+    Distinct<QueryT>
 ) {
-    const groupByClause = GroupByClauseUtil.groupBy<
-        QueryT["fromClause"],
-        QueryT["selectClause"]
-    >(
-        query.fromClause,
-        query.selectClause,
-        query.groupByClause,
-        groupByDelegate
-    );
-
     const {
         fromClause,
         selectClause,
@@ -65,13 +52,19 @@ export function groupBy<
         compoundQueryLimitClause,
 
         whereClause,
+        groupByClause,
         havingClause,
         orderByClause,
         compoundQueryOrderByClause,
-        isDistinct,
     } = query;
 
-    const result : GroupBy<QueryT> = new Query(
+    const result : Distinct<QueryT> = new Query(
+        /**
+         * If you replace the below object literal with
+         * just the variable `query`, you will cause `tsc`
+         * to OOM.
+         */
+        //query
         {
             fromClause,
             selectClause,
@@ -87,7 +80,7 @@ export function groupBy<
             havingClause,
             orderByClause,
             compoundQueryOrderByClause,
-            isDistinct,
+            isDistinct : true,
         }
     );
     return result;

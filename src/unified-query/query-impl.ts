@@ -42,7 +42,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     readonly havingClause : HavingClause|undefined;
     readonly orderByClause : OrderByClause|undefined;
     readonly compoundQueryOrderByClause : CompoundQueryOrderByClause|undefined;
-    readonly distinct : boolean;
+    readonly isDistinct : boolean;
 
     constructor (data : DataT, extraData : ExtraQueryData) {
         this.fromClause = data.fromClause;
@@ -56,7 +56,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         this.havingClause = extraData.havingClause;
         this.orderByClause = extraData.orderByClause;
         this.compoundQueryOrderByClause = extraData.compoundQueryOrderByClause;
-        this.distinct = extraData.distinct;
+        this.isDistinct = extraData.isDistinct;
     }
 
     limit<
@@ -896,5 +896,12 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
 
     correlate () : QueryUtil.Correlate<this> {
         return QueryUtil.correlate<this>(this);
+    }
+
+    /**
+     * @todo Maybe implement `selectDistinct()` as a convenience method?
+     */
+    distinct () : QueryUtil.Distinct<this> {
+        return QueryUtil.distinct<this>(this);
     }
 }

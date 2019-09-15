@@ -116,7 +116,7 @@ export function whereNullSafeEq<
         havingClause,
         orderByClause,
         compoundQueryOrderByClause,
-        distinct,
+        isDistinct,
     } = query;
 
     const result : WhereNullSafeEq<QueryT, ColumnT, ValueT> = new Query(
@@ -135,7 +135,7 @@ export function whereNullSafeEq<
             havingClause,
             orderByClause,
             compoundQueryOrderByClause,
-            distinct,
+            isDistinct,
         }
     );
     return result;

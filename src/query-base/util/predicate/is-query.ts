@@ -26,7 +26,7 @@ export function isQuery (x : unknown) : x is IQueryBase {
             "havingClause",
             "orderByClause",
             "compoundQueryOrderByClause",
-            "distinct",
+            "isDistinct",
         ]
     )) {
         return false;

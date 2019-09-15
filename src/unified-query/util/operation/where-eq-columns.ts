@@ -88,7 +88,7 @@ export function whereEqColumns<
         havingClause,
         orderByClause,
         compoundQueryOrderByClause,
-        distinct,
+        isDistinct,
     } = query;
 
     const result : WhereEqColumns<QueryT> = new Query(
@@ -107,7 +107,7 @@ export function whereEqColumns<
             havingClause,
             orderByClause,
             compoundQueryOrderByClause,
-            distinct,
+            isDistinct,
         }
     );
     return result;

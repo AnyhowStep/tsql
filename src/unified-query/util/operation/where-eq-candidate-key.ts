@@ -90,7 +90,7 @@ export function whereEqCandidateKey<
         havingClause,
         orderByClause,
         compoundQueryOrderByClause,
-        distinct,
+        isDistinct,
     } = query;
 
     const result : WhereEqCandidateKey<QueryT> = new Query(
@@ -109,7 +109,7 @@ export function whereEqCandidateKey<
             havingClause,
             orderByClause,
             compoundQueryOrderByClause,
-            distinct,
+            isDistinct,
         }
     );
     return result;

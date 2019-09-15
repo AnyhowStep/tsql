@@ -68,16 +68,16 @@ export interface IQueryBase<DataT extends QueryBaseData=QueryBaseData> {
      *
      * Affects the `SELECT` clause.
      * ```sql
-     * -- distinct : false
+     * -- isDistinct : false
      * SELECT ...
      * ```
      *
      * ```sql
-     * -- distinct : true
+     * -- isDistinct : true
      * SELECT DISTINCT ...
      * ```
      *
      * @todo Should this be part of the `SelectClause` type instead?
      */
-    readonly distinct : boolean,
+    readonly isDistinct : boolean,
 }

@@ -162,7 +162,8 @@ function selectClauseColumnRefToSql (ref : ColumnRef, isDerivedTable : boolean) 
 function selectClauseToSql (
     selectClause : SelectClause,
     toSql : (ast : Ast) => string,
-    isDerivedTable : boolean
+    isDerivedTable : boolean,
+    isDistinct : boolean
 ) : string[] {
     const result : string[] = [];
     for (const selectItem of selectClause) {
@@ -191,7 +192,9 @@ function selectClauseToSql (
             throw new Error(`Not implemented`)
         }
     }
-    return ["SELECT", ...result];
+    return isDistinct ?
+        ["SELECT DISTINCT", ...result] :
+        ["SELECT", ...result];
 }
 
 function fromClauseToSql (
@@ -396,7 +399,7 @@ function queryToSql (
 
     const result : string[] = [];
     if (query.selectClause != undefined) {
-        result.push(selectClauseToSql(query.selectClause, toSql, isDerivedTable).join(" "));
+        result.push(selectClauseToSql(query.selectClause, toSql, isDerivedTable, query.isDistinct).join(" "));
     }
     if (query.fromClause != undefined && query.fromClause.currentJoins != undefined) {
         result.push(fromClauseToSql(query.fromClause.currentJoins, toSql).join(" "));

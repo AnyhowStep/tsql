@@ -67,7 +67,7 @@ export function orderBy<
         groupByClause,
         havingClause,
         compoundQueryOrderByClause,
-        distinct,
+        isDistinct,
     } = query;
 
     const result : OrderBy<QueryT> = new Query(
@@ -86,7 +86,7 @@ export function orderBy<
             havingClause,
             orderByClause,
             compoundQueryOrderByClause,
-            distinct,
+            isDistinct,
         }
     );
     return result;

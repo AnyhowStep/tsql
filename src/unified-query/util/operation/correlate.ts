@@ -45,7 +45,7 @@ export function correlate<QueryT extends Pick<IQuery, "fromClause">> (
             havingClause : undefined,
             orderByClause : undefined,
             compoundQueryOrderByClause : undefined,
-            distinct : false,
+            isDistinct : false,
         }
     );
     return result;

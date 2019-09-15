@@ -19,7 +19,7 @@ export interface ExtraQueryData {
     readonly havingClause : HavingClause|undefined,
     readonly orderByClause : OrderByClause|undefined,
     readonly compoundQueryOrderByClause : CompoundQueryOrderByClause|undefined,
-    readonly distinct : boolean,
+    readonly isDistinct : boolean,
 }
 
 /**
