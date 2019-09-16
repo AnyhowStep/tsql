@@ -1,6 +1,7 @@
 import * as tsql from "../../../../dist";
 import {ISqliteWorker, SqliteAction, FromSqliteMessage, ToSqliteMessage} from "./worker.sql";
 import {AsyncQueue} from "./async-queue";
+import {sqliteSqlfier} from "../../../sqlite-sqlfier";
 
 export class IdAllocator {
     private nextId = 0;
@@ -163,7 +164,8 @@ export class Connection {
         });
     }
 
-    select (sql : string) : Promise<tsql.SelectResult> {
+    select (query : tsql.IQueryBase) : Promise<tsql.SelectResult> {
+        const sql = tsql.AstUtil.toSql(query, sqliteSqlfier);
         return this.exec(sql)
             .then((result) => {
                 if (result.execResult.length != 1) {

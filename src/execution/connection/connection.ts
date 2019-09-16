@@ -1,4 +1,5 @@
 import {TransactionCallback} from "../pool";
+import {IQueryBase} from "../../query-base";
 
 export interface RawQueryResult {
     query   : { sql : string },
@@ -127,7 +128,7 @@ export interface IConnection {
     ) : Promise<ResultT>;
 
     rawQuery (sql : string) : Promise<RawQueryResult>;
-    select (sql : string) : Promise<SelectResult>;
+    select (query : IQueryBase) : Promise<SelectResult>;
     insert (sql : string) : Promise<InsertResult>;
     update (sql : string) : Promise<RawUpdateResult>;
     delete (sql : string) : Promise<RawDeleteResult>;
