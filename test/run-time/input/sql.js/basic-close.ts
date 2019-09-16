@@ -18,7 +18,7 @@ tape(__filename, async (t) => {
     t.deepEqual(insertResult2, []);
 
     const closeResult = db.close();
-    t.deepEqual(closeResult, undefined);
+    t.deepEqual(closeResult, null);
 
     t.throws(() => {
         /**

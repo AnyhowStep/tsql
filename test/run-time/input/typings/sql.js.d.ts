@@ -109,10 +109,7 @@ declare module "sql.js" {
     /**
      * http://kripken.github.io/sql.js/documentation/#http://kripken.github.io/sql.js/documentation/class/Database.html
      */
-    class Database {
-        constructor (
-            dbFile? : Uint8Array
-        );
+    export interface Database {
         /**
          * Execute an SQL query, ignoring the rows it returns.
          */
@@ -169,7 +166,7 @@ declare module "sql.js" {
 
     }
     export interface Sqlite {
-        Database : typeof Database;
+        Database : new (dbFile? : Uint8Array) => Database;
     }
     const initSqlJs : () => Promise<Sqlite>;
     export default initSqlJs;

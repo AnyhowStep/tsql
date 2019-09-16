@@ -15,7 +15,7 @@ export function getAllTsFiles (rootDir : string, result : string[] = [], relativ
                     path :
                     relativeDir + "/" + path
             );
-        } else if (path.endsWith(".ts")) {
+        } else if (path.endsWith(".ts") && !path.endsWith(".d.ts")) {
             if (relativeDir == undefined) {
                 continue;
             }
