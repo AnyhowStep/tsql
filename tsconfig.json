@@ -55,6 +55,7 @@
         "./src/unified-query/**/*",
         "./src/compound-query-order-by-clause/**/*",
         "./src/compound-query-clause/**/*",
+        "./src/execution/**/*",
         "./src/index.ts"
     ]
 }

@@ -7,7 +7,7 @@ export type TransactionCallback<ResultT> = (
     (connection : ITransactionConnection) => Promise<ResultT>
 );
 /*
-    All connections must set @@SESSION.time_zone to "+00:00"
+    All connections **should** set @@SESSION.time_zone to "+00:00"
 */
 export interface IPool {
     acquire<ResultT> (
