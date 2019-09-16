@@ -15,6 +15,8 @@ export * from "./pick-own-enumerable";
 export * from "./replace-property";
 export * from "./replace";
 export * from "./strict-union";
+export * from "./to-promise";
 export * from "./to-unknown-if-all-properties-never";
 export * from "./union-to-intersection";
+export * from "./type-of-await";
 export * from "./writable";

@@ -1,7 +1,8 @@
-export * from "./limit";
-export * from "./offset";
 export * from "./compound-query-limit";
 export * from "./compound-query-offset";
+export * from "./limit";
+export * from "./map";
+export * from "./offset";
 
 export * from "./compound-query-order-by";
 export * from "./compound-query";

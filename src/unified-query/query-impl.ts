@@ -27,6 +27,7 @@ import {CompoundQueryOrderByClause, CompoundQueryOrderByDelegate} from "../compo
 import {QueryBaseUtil} from "../query-base";
 import {CompoundQueryType} from "../compound-query";
 import {CompoundQueryClauseUtil} from "../compound-query-clause";
+import {MapDelegate} from "../map-delegate";
 
 export class Query<DataT extends QueryData> implements IQuery<DataT> {
     readonly fromClause : DataT["fromClause"];
@@ -963,5 +964,53 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
             this,
             defaultValue
         );
+    }
+
+    map<
+        NxtReturnT
+    > (
+        this : Extract<this, QueryUtil.AfterSelectClause & QueryUtil.NonCorrelated & QueryUtil.Unmapped>,
+        mapDelegate : QueryUtil.InitialMapDelegate<
+            Extract<this, QueryUtil.AfterSelectClause & QueryUtil.NonCorrelated & QueryUtil.Unmapped>,
+            NxtReturnT
+        >
+    ) : (
+        QueryUtil.MapInitial<
+            Extract<this, QueryUtil.AfterSelectClause & QueryUtil.NonCorrelated & QueryUtil.Unmapped>,
+            NxtReturnT
+        >
+    );
+    map<
+        NxtReturnT
+    > (
+        this : Extract<this, QueryUtil.AfterSelectClause & QueryUtil.NonCorrelated & QueryUtil.Mapped>,
+        mapDelegate : QueryUtil.ComposedMapDelegate<
+            Extract<this, QueryUtil.AfterSelectClause & QueryUtil.NonCorrelated & QueryUtil.Mapped>,
+            NxtReturnT
+        >
+    ) : (
+        QueryUtil.MapCompose<
+            Extract<this, QueryUtil.AfterSelectClause & QueryUtil.NonCorrelated & QueryUtil.Mapped>,
+            NxtReturnT
+        >
+    );
+    map (mapDelegate : MapDelegate<any, any, any>) : any {
+        if (this.mapDelegate == undefined) {
+            return QueryUtil.mapInitial<
+                Extract<this, QueryUtil.AfterSelectClause & QueryUtil.NonCorrelated & QueryUtil.Unmapped>,
+                any
+            >(
+                this as any,
+                mapDelegate
+            );
+        } else {
+            return QueryUtil.mapCompose<
+                Extract<this, QueryUtil.AfterSelectClause & QueryUtil.NonCorrelated & QueryUtil.Mapped>,
+                any
+            >(
+                this as any,
+                mapDelegate
+            );
+        }
     }
 }

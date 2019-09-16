@@ -78,7 +78,7 @@ type ApplyNullableJoins<
     }
 >;
 export type UnmappedRow<
-    QueryT extends QueryBaseUtil.AfterSelectClause & QueryBaseUtil.NonCorrelated
+    QueryT extends Pick<QueryBaseUtil.AfterSelectClause, "selectClause"|"fromClause">
 > =
     ApplyNullableJoins<
         TypeRefUtil.FromColumnRef<
