@@ -30,6 +30,7 @@ export declare const query: tsql.Query<{
     limitClause: undefined;
     compoundQueryClause: undefined;
     compoundQueryLimitClause: undefined;
+    mapDelegate: undefined;
 }>;
 export declare const query2: tsql.Query<{
     fromClause: tsql.IFromClause<{
@@ -61,4 +62,5 @@ export declare const query2: tsql.Query<{
     limitClause: undefined;
     compoundQueryClause: undefined;
     compoundQueryLimitClause: undefined;
+    mapDelegate: undefined;
 }>;

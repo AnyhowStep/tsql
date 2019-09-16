@@ -3,6 +3,7 @@ import {IFromClause} from "../../../from-clause";
 import {SelectClause} from "../../../select-clause";
 import {CompoundQueryClause} from "../../../compound-query-clause";
 import {LimitClause} from "../../../limit-clause";
+import {MapDelegate} from "../../../map-delegate";
 
 export type AfterCompoundQueryClause = (
     IQueryBase<{
@@ -13,5 +14,7 @@ export type AfterCompoundQueryClause = (
 
         compoundQueryClause : CompoundQueryClause,
         compoundQueryLimitClause : LimitClause|undefined,
+
+        mapDelegate : MapDelegate|undefined,
     }>
 );

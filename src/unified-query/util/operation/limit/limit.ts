@@ -74,6 +74,7 @@ export function limit<
 
         compoundQueryClause,
         compoundQueryLimitClause,
+        mapDelegate,
     } = query;
 
     const result : LimitNumber<QueryT> = new Query(
@@ -85,6 +86,7 @@ export function limit<
 
             compoundQueryClause,
             compoundQueryLimitClause,
+            mapDelegate,
         },
         query
     );

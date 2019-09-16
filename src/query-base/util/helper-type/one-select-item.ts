@@ -3,6 +3,7 @@ import {IFromClause} from "../../../from-clause";
 import {CompoundQueryClause} from "../../../compound-query-clause";
 import {LimitClause} from "../../../limit-clause";
 import {AnonymousSingleValueSelectItem} from "../../../select-item";
+import {MapDelegate} from "../../../map-delegate";
 
 /**
  * @todo Rename to `ScalarQuery`?
@@ -23,5 +24,7 @@ export type OneSelectItem<TypeT> = (
 
         compoundQueryClause : CompoundQueryClause|undefined,
         compoundQueryLimitClause : LimitClause|undefined,
+
+        mapDelegate : MapDelegate|undefined,
     }>
 );

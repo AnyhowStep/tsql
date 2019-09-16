@@ -20,6 +20,7 @@ export type LeftJoinUsingCandidateKeyImpl<
     LimitClauseT extends AfterFromClause["limitClause"],
     CompoundQueryClauseT extends AfterFromClause["compoundQueryClause"],
     CompoundQueryLimitClauseT extends AfterFromClause["compoundQueryLimitClause"],
+    MapDelegateT extends AfterFromClause["mapDelegate"],
 > =
     Query<{
         fromClause : FromClauseUtil.LeftJoin<FromClauseT, AliasedTableT>,
@@ -29,6 +30,7 @@ export type LeftJoinUsingCandidateKeyImpl<
 
         compoundQueryClause : CompoundQueryClauseT,
         compoundQueryLimitClause : CompoundQueryLimitClauseT,
+        mapDelegate : MapDelegateT,
     }>
 ;
 export type LeftJoinUsingCandidateKey<QueryT extends AfterFromClause, AliasedTableT extends IAliasedTable> =
@@ -38,7 +40,8 @@ export type LeftJoinUsingCandidateKey<QueryT extends AfterFromClause, AliasedTab
         QueryT["selectClause"],
         QueryT["limitClause"],
         QueryT["compoundQueryClause"],
-        QueryT["compoundQueryLimitClause"]
+        QueryT["compoundQueryLimitClause"],
+        QueryT["mapDelegate"]
     >
 ;
 export function leftJoinUsingCandidateKey<
@@ -68,6 +71,7 @@ export function leftJoinUsingCandidateKey<
 
         compoundQueryClause,
         compoundQueryLimitClause,
+        mapDelegate,
     } = query;
 
     const result : LeftJoinUsingCandidateKey<QueryT, DstT> = new Query(
@@ -89,6 +93,7 @@ export function leftJoinUsingCandidateKey<
 
             compoundQueryClause,
             compoundQueryLimitClause,
+            mapDelegate,
         },
         query
     );

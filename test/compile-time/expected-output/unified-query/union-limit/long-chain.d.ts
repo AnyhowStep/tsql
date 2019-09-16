@@ -11,4 +11,5 @@ export declare const query: tsql.Query<{
         readonly maxRowCount: 44n;
         readonly offset: 0n;
     };
+    mapDelegate: undefined;
 }>;

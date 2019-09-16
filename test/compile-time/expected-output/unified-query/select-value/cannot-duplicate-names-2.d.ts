@@ -39,4 +39,5 @@ export declare const query: tsql.Query<{
     limitClause: undefined;
     compoundQueryClause: undefined;
     compoundQueryLimitClause: undefined;
+    mapDelegate: undefined;
 }>;

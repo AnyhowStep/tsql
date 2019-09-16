@@ -11,6 +11,6 @@ import {IConnection} from "../execution";
  * @param connection - The connection to the SQL server
  * @param originalRow - The original row fetched
  */
-export type MapDelegate<RowT=any, OriginalRowT=any, ReturnT=any> = (
+export type MapDelegate<RowT=never, OriginalRowT=never, ReturnT=unknown> =
     (row : RowT, connection : IConnection, originalRow : OriginalRowT) => ReturnT
-);
+;

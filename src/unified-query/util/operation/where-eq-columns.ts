@@ -15,6 +15,7 @@ export type WhereEqColumnsImpl<
     LimitClauseT extends AfterFromClause["limitClause"],
     CompoundQueryClauseT extends AfterFromClause["compoundQueryClause"],
     CompoundQueryLimitClauseT extends AfterFromClause["compoundQueryLimitClause"],
+    MapDelegateT extends AfterFromClause["mapDelegate"],
 > = (
     Query<{
         fromClause : FromClauseT,
@@ -24,6 +25,7 @@ export type WhereEqColumnsImpl<
 
         compoundQueryClause : CompoundQueryClauseT,
         compoundQueryLimitClause : CompoundQueryLimitClauseT,
+        mapDelegate : MapDelegateT,
     }>
 );
 export type WhereEqColumns<
@@ -34,7 +36,8 @@ export type WhereEqColumns<
         QueryT["selectClause"],
         QueryT["limitClause"],
         QueryT["compoundQueryClause"],
-        QueryT["compoundQueryLimitClause"]
+        QueryT["compoundQueryLimitClause"],
+        QueryT["mapDelegate"]
     >
 );
 export function whereEqColumns<
@@ -83,6 +86,7 @@ export function whereEqColumns<
 
         compoundQueryClause,
         compoundQueryLimitClause,
+        mapDelegate,
 
         groupByClause,
         havingClause,
@@ -100,6 +104,7 @@ export function whereEqColumns<
 
             compoundQueryClause,
             compoundQueryLimitClause,
+            mapDelegate,
         },
         {
             whereClause,

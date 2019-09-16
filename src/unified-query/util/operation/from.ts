@@ -13,6 +13,8 @@ export type From<QueryT extends BeforeFromClause, AliasedTableT extends IAliased
 
         compoundQueryClause : QueryT["compoundQueryClause"],
         compoundQueryLimitClause : QueryT["compoundQueryLimitClause"],
+
+        mapDelegate : QueryT["mapDelegate"],
     }>
 );
 export function from<
@@ -37,6 +39,7 @@ export function from<
 
         compoundQueryClause,
         compoundQueryLimitClause,
+        mapDelegate,
     } = query;
 
     const result : From<QueryT, AliasedTableT> = new Query<{
@@ -47,6 +50,8 @@ export function from<
 
         compoundQueryClause : QueryT["compoundQueryClause"],
         compoundQueryLimitClause : QueryT["compoundQueryLimitClause"],
+
+        mapDelegate : QueryT["mapDelegate"],
     }>(
         {
             fromClause : FromClauseUtil.from<
@@ -62,6 +67,7 @@ export function from<
 
             compoundQueryClause,
             compoundQueryLimitClause,
+            mapDelegate,
         },
         query
     );

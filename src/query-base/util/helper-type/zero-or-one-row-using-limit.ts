@@ -1,6 +1,7 @@
 import {IQueryBase} from "../../query-base";
 import {IFromClause} from "../../../from-clause";
 import {SelectClause} from "../../../select-clause";
+import {MapDelegate} from "../../../map-delegate";
 
 export type ZeroOrOneRowUsingLimit = (
     IQueryBase<{
@@ -17,5 +18,7 @@ export type ZeroOrOneRowUsingLimit = (
          */
         compoundQueryClause : undefined,
         compoundQueryLimitClause : undefined,
+
+        mapDelegate : MapDelegate|undefined,
     }>
 );

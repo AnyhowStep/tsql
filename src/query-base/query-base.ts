@@ -7,6 +7,7 @@ import {GroupByClause} from "../group-by-clause";
 import {HavingClause} from "../having-clause";
 import {OrderByClause} from "../order-by-clause";
 import {CompoundQueryOrderByClause} from "../compound-query-order-by-clause";
+import {MapDelegate} from "../map-delegate";
 
 export interface QueryBaseData {
     readonly fromClause : IFromClause,
@@ -17,6 +18,7 @@ export interface QueryBaseData {
     readonly compoundQueryClause : CompoundQueryClause|undefined,
     readonly compoundQueryLimitClause : LimitClause|undefined,
 
+    readonly mapDelegate : MapDelegate|undefined,
 }
 
 /**
@@ -41,6 +43,31 @@ export interface IQueryBase<DataT extends QueryBaseData=QueryBaseData> {
      * for PostgreSQL and SQLite will emulate MySQL's behaviour.
      */
     readonly compoundQueryLimitClause : DataT["compoundQueryLimitClause"],
+
+    /**
+     * A `MapDelegate` lets you transform each row of the result set
+     * before it is returned.
+     *
+     * ```ts
+     *  const resultSet : (
+     *      {
+     *          x : number
+     *      }[]
+     *  ) = await myQuery
+     *      .select(columns => [
+     *          columns.myTable.myColumn0,
+     *          columns.myTable.myColumn1,
+     *          columns.myTable.myColumn2,
+     *      ])
+     *      .map((row) => {
+     *          return {
+     *              x : row.myTable.myColumn0 + row.myTable.myColumn1 + row.myTable.myColumn2,
+     *          };
+     *      })
+     *      .fetchAll(connection);
+     * ```
+     */
+    readonly mapDelegate : DataT["mapDelegate"],
 
     readonly whereClause : WhereClause|undefined,
     /**

@@ -2,6 +2,7 @@ import {IQueryBase} from "../../query-base";
 import {FromClauseUtil} from "../../../from-clause";
 import {SelectClause} from "../../../select-clause";
 import {LimitClause} from "../../../limit-clause";
+import {MapDelegate} from "../../../map-delegate";
 
 /**
  * To guarantee a query returns one row only,
@@ -16,5 +17,7 @@ export type OneRow = (
 
         compoundQueryClause : undefined,
         compoundQueryLimitClause : LimitClause|undefined,
+
+        mapDelegate : MapDelegate|undefined,
     }>
 );

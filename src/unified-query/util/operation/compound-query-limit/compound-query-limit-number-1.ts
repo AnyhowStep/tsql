@@ -14,6 +14,7 @@ export type CompoundQueryLimitNumber1Impl<
     LimitClauseT extends IQuery["limitClause"],
     CompoundQueryClauseT extends IQuery["compoundQueryClause"],
     CompoundQueryLimitClauseT extends IQuery["compoundQueryLimitClause"],
+    MapDelegateT extends IQuery["mapDelegate"],
 > =
     Query<{
         fromClause : FromClauseT,
@@ -25,6 +26,8 @@ export type CompoundQueryLimitNumber1Impl<
         compoundQueryLimitClause : LimitClauseUtil.LimitNumber1<
             CompoundQueryLimitClauseT
         >,
+
+        mapDelegate : MapDelegateT,
     }>
 ;
 export type CompoundQueryLimitNumber1<
@@ -35,6 +38,7 @@ export type CompoundQueryLimitNumber1<
         QueryT["selectClause"],
         QueryT["limitClause"],
         QueryT["compoundQueryClause"],
-        QueryT["compoundQueryLimitClause"]
+        QueryT["compoundQueryLimitClause"],
+        QueryT["mapDelegate"]
     >
 ;

@@ -11,6 +11,8 @@ export type Correlate<QueryT extends Pick<IQuery, "fromClause">> =
 
         compoundQueryClause : undefined,
         compoundQueryLimitClause : undefined,
+
+        mapDelegate : undefined,
     }>
 ;
 
@@ -38,6 +40,8 @@ export function correlate<QueryT extends Pick<IQuery, "fromClause">> (
 
             compoundQueryClause : undefined,
             compoundQueryLimitClause : undefined,
+
+            mapDelegate : undefined,
         },
         {
             whereClause : undefined,

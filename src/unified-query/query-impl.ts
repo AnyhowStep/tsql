@@ -37,6 +37,8 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     readonly compoundQueryClause : DataT["compoundQueryClause"];
     readonly compoundQueryLimitClause : DataT["compoundQueryLimitClause"];
 
+    readonly mapDelegate : DataT["mapDelegate"];
+
     readonly whereClause : WhereClause|undefined;
     readonly groupByClause : GroupByClause|undefined;
     readonly havingClause : HavingClause|undefined;
@@ -50,6 +52,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         this.limitClause = data.limitClause;
         this.compoundQueryClause = data.compoundQueryClause;
         this.compoundQueryLimitClause = data.compoundQueryLimitClause;
+        this.mapDelegate = data.mapDelegate;
 
         this.whereClause = extraData.whereClause;
         this.groupByClause = extraData.groupByClause;

@@ -13,6 +13,7 @@ export type DistinctImpl<
     LimitClauseT extends IQuery["limitClause"],
     CompoundQueryClauseT extends IQuery["compoundQueryClause"],
     CompoundQueryLimitClauseT extends IQuery["compoundQueryLimitClause"],
+    MapDelegateT extends IQuery["mapDelegate"],
 > = (
     Query<{
         fromClause : FromClauseT,
@@ -22,6 +23,7 @@ export type DistinctImpl<
 
         compoundQueryClause : CompoundQueryClauseT,
         compoundQueryLimitClause : CompoundQueryLimitClauseT,
+        mapDelegate : MapDelegateT,
     }>
 );
 export type Distinct<
@@ -32,7 +34,8 @@ export type Distinct<
         QueryT["selectClause"],
         QueryT["limitClause"],
         QueryT["compoundQueryClause"],
-        QueryT["compoundQueryLimitClause"]
+        QueryT["compoundQueryLimitClause"],
+        QueryT["mapDelegate"]
     >
 );
 export function distinct<
@@ -50,6 +53,7 @@ export function distinct<
 
         compoundQueryClause,
         compoundQueryLimitClause,
+        mapDelegate,
 
         whereClause,
         groupByClause,
@@ -73,6 +77,7 @@ export function distinct<
 
             compoundQueryClause,
             compoundQueryLimitClause,
+            mapDelegate,
         },
         {
             whereClause,

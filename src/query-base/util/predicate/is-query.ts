@@ -21,6 +21,8 @@ export function isQuery (x : unknown) : x is IQueryBase {
             "compoundQueryClause",
             "compoundQueryLimitClause",
 
+            "mapDelegate",
+
             "whereClause",
             "groupByClause",
             "havingClause",

@@ -3,6 +3,7 @@ import {IFromClause} from "../../../from-clause";
 import {SelectClause} from "../../../select-clause";
 import {CompoundQueryClause} from "../../../compound-query-clause";
 import {LimitClause} from "../../../limit-clause";
+import {MapDelegate} from "../../../map-delegate";
 
 export type ZeroOrOneRowUsingCompoundQueryLimit = (
     IQueryBase<{
@@ -22,5 +23,7 @@ export type ZeroOrOneRowUsingCompoundQueryLimit = (
             readonly maxRowCount : 0n|1n,
             readonly offset : bigint,
         },
+
+        mapDelegate : MapDelegate|undefined,
     }>
 );

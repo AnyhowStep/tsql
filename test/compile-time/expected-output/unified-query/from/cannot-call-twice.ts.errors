@@ -1,6 +1,6 @@
 [
   {
-    "messageText": "The 'this' context of type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: readonly Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly myTableId: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>; }; ... 4 more ...; mutableColumns: readonly []; }>[]; }>; s...' is not assignable to method's 'this' of type 'never'.",
+    "messageText": "The 'this' context of type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: readonly Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly myTableId: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>; }; ... 4 more ...; mutableColumns: readonly []; }>[]; }>; ....' is not assignable to method's 'this' of type 'never'.",
     "code": 2684,
     "category": 1,
     "length": 47,

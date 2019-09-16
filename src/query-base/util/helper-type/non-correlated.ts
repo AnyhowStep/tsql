@@ -3,6 +3,7 @@ import {FromClauseUtil} from "../../../from-clause";
 import {SelectClause} from "../../../select-clause";
 import {CompoundQueryClause} from "../../../compound-query-clause";
 import {LimitClause} from "../../../limit-clause";
+import {MapDelegate} from "../../../map-delegate";
 
 /**
  * The opposite of a correlated subquery.
@@ -22,5 +23,7 @@ export type NonCorrelated = (
 
         compoundQueryClause : CompoundQueryClause|undefined,
         compoundQueryLimitClause : LimitClause|undefined,
+
+        mapDelegate : MapDelegate|undefined,
     }>
 );

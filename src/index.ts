@@ -24,6 +24,7 @@ export * from "./having-clause";
 export * from "./join";
 export * from "./join-map";
 export * from "./limit-clause";
+export * from "./map-delegate";
 export * from "./on-clause";
 export * from "./order";
 export * from "./order-by-clause";

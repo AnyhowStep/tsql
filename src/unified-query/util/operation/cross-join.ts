@@ -18,6 +18,7 @@ export type CrossJoinImpl<
     LimitClauseT extends AfterFromClause["limitClause"],
     CompoundQueryClauseT extends AfterFromClause["compoundQueryClause"],
     CompoundQueryLimitClauseT extends AfterFromClause["compoundQueryLimitClause"],
+    MapDelegateT extends AfterFromClause["mapDelegate"],
 > = (
     Query<{
         fromClause : FromClauseUtil.CrossJoin<FromClauseT, AliasedTableT>,
@@ -27,6 +28,7 @@ export type CrossJoinImpl<
 
         compoundQueryClause : CompoundQueryClauseT,
         compoundQueryLimitClause : CompoundQueryLimitClauseT,
+        mapDelegate : MapDelegateT,
     }>
 );
 export type CrossJoin<QueryT extends AfterFromClause, AliasedTableT extends IAliasedTable> = (
@@ -36,7 +38,8 @@ export type CrossJoin<QueryT extends AfterFromClause, AliasedTableT extends IAli
         QueryT["selectClause"],
         QueryT["limitClause"],
         QueryT["compoundQueryClause"],
-        QueryT["compoundQueryLimitClause"]
+        QueryT["compoundQueryLimitClause"],
+        QueryT["mapDelegate"]
     >
 );
 export function crossJoin<
@@ -62,6 +65,7 @@ export function crossJoin<
 
         compoundQueryClause,
         compoundQueryLimitClause,
+        mapDelegate,
     } = query;
 
     const result : CrossJoin<QueryT, AliasedTableT> = new Query(
@@ -79,6 +83,7 @@ export function crossJoin<
 
             compoundQueryClause,
             compoundQueryLimitClause,
+            mapDelegate,
         },
         query
     );

@@ -15,6 +15,7 @@ export type GroupByImpl<
     LimitClauseT extends IQuery["limitClause"],
     CompoundQueryClauseT extends IQuery["compoundQueryClause"],
     CompoundQueryLimitClauseT extends IQuery["compoundQueryLimitClause"],
+    MapDelegateT extends IQuery["mapDelegate"],
 > = (
     Query<{
         fromClause : FromClauseT,
@@ -24,6 +25,7 @@ export type GroupByImpl<
 
         compoundQueryClause : CompoundQueryClauseT,
         compoundQueryLimitClause : CompoundQueryLimitClauseT,
+        mapDelegate : MapDelegateT,
     }>
 );
 export type GroupBy<
@@ -34,7 +36,8 @@ export type GroupBy<
         QueryT["selectClause"],
         QueryT["limitClause"],
         QueryT["compoundQueryClause"],
-        QueryT["compoundQueryLimitClause"]
+        QueryT["compoundQueryLimitClause"],
+        QueryT["mapDelegate"]
     >
 );
 export function groupBy<
@@ -63,6 +66,7 @@ export function groupBy<
 
         compoundQueryClause,
         compoundQueryLimitClause,
+        mapDelegate,
 
         whereClause,
         havingClause,
@@ -80,6 +84,7 @@ export function groupBy<
 
             compoundQueryClause,
             compoundQueryLimitClause,
+            mapDelegate,
         },
         {
             whereClause,

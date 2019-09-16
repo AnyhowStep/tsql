@@ -3,6 +3,7 @@ import {FromClauseUtil} from "../../../from-clause";
 import {SelectClause} from "../../../select-clause";
 import {CompoundQueryClause} from "../../../compound-query-clause";
 import {LimitClause} from "../../../limit-clause";
+import {MapDelegate} from "../../../map-delegate";
 
 /**
  * A correlated subquery is a subquery that contains a reference to a table that also appears in the outer query.
@@ -18,5 +19,7 @@ export type Correlated = (
 
         compoundQueryClause : CompoundQueryClause|undefined,
         compoundQueryLimitClause : LimitClause|undefined,
+
+        mapDelegate : MapDelegate|undefined,
     }>
 );

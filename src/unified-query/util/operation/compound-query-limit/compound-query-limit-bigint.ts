@@ -15,6 +15,7 @@ export type CompoundQueryLimitBigIntImpl<
     LimitClauseT extends IQuery["limitClause"],
     CompoundQueryClauseT extends IQuery["compoundQueryClause"],
     CompoundQueryLimitClauseT extends IQuery["compoundQueryLimitClause"],
+    MapDelegateT extends IQuery["mapDelegate"],
 > =
     Query<{
         fromClause : FromClauseT,
@@ -27,6 +28,8 @@ export type CompoundQueryLimitBigIntImpl<
             CompoundQueryLimitClauseT,
             MaxRowCountT
         >,
+
+        mapDelegate : MapDelegateT,
     }>
 ;
 export type CompoundQueryLimitBigInt<
@@ -39,6 +42,7 @@ export type CompoundQueryLimitBigInt<
         QueryT["selectClause"],
         QueryT["limitClause"],
         QueryT["compoundQueryClause"],
-        QueryT["compoundQueryLimitClause"]
+        QueryT["compoundQueryLimitClause"],
+        QueryT["mapDelegate"]
     >
 ;

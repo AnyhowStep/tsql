@@ -30,6 +30,10 @@ export declare const query: tsql.Query<{
     limitClause: undefined;
     compoundQueryClause: undefined;
     compoundQueryLimitClause: undefined;
+    mapDelegate: undefined; /**
+     * We make this `WHERE` clause require that `myTableId` is **NON-NULLABLE**.
+     * So, `bigint` only.
+     */
 }>;
 declare type AllowedUsedRef = tsql.FromClauseUtil.AllowedUsedRef<typeof query["fromClause"], {
     isLateral: true;
