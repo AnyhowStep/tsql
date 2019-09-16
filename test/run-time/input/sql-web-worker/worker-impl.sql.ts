@@ -96,6 +96,25 @@ export function initWorker (
                      * > In case it wasn't clear the `0` can be anything you want
                      * >
                      * > But `0` is most concise
+                     *
+                     * ```js
+                     *  function bar () {
+                     *      const x = 4
+                     *      eval("console.log(x)") //prints 4
+                     *      (0, eval)("console.log(x)") //Uncaught TypeError: eval(...) is not a function
+                     *  }
+                     *  bar()
+                     * ```
+                     *
+                     * ```js
+                     *  function bar () {
+                     *      const x = 4
+                     *      eval("console.log(x)") //prints 4
+                     *      const indirectEval = eval;
+                     *      indirectEval("console.log(x)") //Uncaught TypeError: eval(...) is not a function
+                     *  }
+                     *  bar()
+                     * ```
                      */
                     (0, eval)("(" + data.impl + ")")
                 );
