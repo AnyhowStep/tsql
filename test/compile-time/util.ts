@@ -92,7 +92,7 @@ export function copyFileSync (fromRootDir : string, toRootDir : string, relative
     }
 }
 export function copyAllFilesAndDirectoriesSync (fromRootDir : string, toRootDir : string) {
-    const paths = getAllTsFiles(fromRootDir);
+    const paths = getAllTsFiles(fromRootDir, true);
     for (const path of paths) {
         const relativePath = path.substr(fromRootDir.length);
         makeDirectorySync(toRootDir, relativePath, true);
@@ -117,7 +117,7 @@ export function copyAllFilesAndDirectoriesSync (fromRootDir : string, toRootDir 
 export function runTest () {
     removeAllFilesAndDirectoriesSync(actualOutputRoot);
 
-    const rootNames = getAllTsFiles(inputRoot);
+    const rootNames = getAllTsFiles(inputRoot, false);
     const compilerOptions : ts.CompilerOptions = {
         strict : true,
         target : ts.ScriptTarget.ESNext,

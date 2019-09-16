@@ -17,7 +17,7 @@ tape.createStream({ objectMode : true }).on("data", (row) => {
 });
 
 const start = new Date().getTime();
-const paths = getAllTsFiles(__dirname + "/input");
+const paths = getAllTsFiles(__dirname + "/input", false);
 for (let i=0; i<paths.length; ++i) {
     const path = paths[i];
     console.log("path", i, "/", paths.length, path);
