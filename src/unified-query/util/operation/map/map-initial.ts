@@ -45,7 +45,10 @@ export type MapInitial<
     NxtReturnT
 > = (
     MapInitialImpl<
-        InitialMapDelegate<QueryT, NxtReturnT>,
+        /**
+         * Erase some compile-time data, we are only interested in the return type.
+         */
+        MapDelegate<never, never, NxtReturnT>,
         QueryT["fromClause"],
         QueryT["selectClause"],
         QueryT["limitClause"],
@@ -82,7 +85,7 @@ export function mapInitial<
 
             compoundQueryClause,
             compoundQueryLimitClause,
-            mapDelegate,
+            mapDelegate : mapDelegate as MapDelegate<never, never, NxtReturnT>,
         },
         query
     );

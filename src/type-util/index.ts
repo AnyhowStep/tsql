@@ -1,4 +1,5 @@
 export * from "./assert-same-own-enumerable-keys";
+export * from "./better-return-type";
 export * from "./identity";
 export * from "./is-comparable";
 export * from "./is-null-safe-comparable";

@@ -3,7 +3,7 @@ import {IQuery} from "../../../query";
 import {MapDelegate, MapDelegateUtil} from "../../../../map-delegate";
 import {ExecutionUtil} from "../../../../execution";
 import {AfterSelectClause, NonCorrelated, Mapped} from "../../helper-type";
-import {TypeOfAwait} from "../../../../type-util";
+import {TypeOfAwait, BetterReturnType} from "../../../../type-util";
 
 /**
  * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966
@@ -35,10 +35,7 @@ export type MapCompose<
     NxtReturnT
 > = (
     MapComposeImpl<
-        MapDelegateUtil.Compose<
-            ExecutionUtil.UnmappedRow<QueryT>,
-            NxtReturnT
-        >,
+        MapDelegate<never, never, Promise<TypeOfAwait<NxtReturnT>>>,
         QueryT["fromClause"],
         QueryT["selectClause"],
         QueryT["limitClause"],
@@ -51,7 +48,7 @@ export type ComposedMapDelegate<
     NxtReturnT
 > =
     MapDelegate<
-        TypeOfAwait<ReturnType<QueryT["mapDelegate"]>>,
+        TypeOfAwait<BetterReturnType<QueryT["mapDelegate"]>>,
         ExecutionUtil.UnmappedRow<QueryT>,
         NxtReturnT
     >
@@ -88,7 +85,7 @@ export function mapCompose<
             mapDelegate : (
                 MapDelegateUtil.compose<
                     ExecutionUtil.UnmappedRow<QueryT>,
-                    ReturnType<QueryT["mapDelegate"]>,
+                    BetterReturnType<QueryT["mapDelegate"]>,
                     NxtReturnT
                 >(
                     /**
@@ -98,12 +95,12 @@ export function mapCompose<
                         MapDelegate<
                             ExecutionUtil.UnmappedRow<QueryT>,
                             ExecutionUtil.UnmappedRow<QueryT>,
-                            ReturnType<QueryT["mapDelegate"]>
+                            BetterReturnType<QueryT["mapDelegate"]>
                         >
                     ),
                     mapDelegate
                 )
-            ),
+            ) as MapDelegate<never, never, Promise<TypeOfAwait<NxtReturnT>>>,
         },
         query
     );
