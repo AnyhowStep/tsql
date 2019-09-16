@@ -41,6 +41,7 @@
     "eslint": "^5.16.0",
     "eslint-plugin-local": "^1.0.0",
     "eslint-utils": "^1.4.1",
+    "sql.js": "^1.0.0",
     "tape": "^4.11.0",
     "ts-node": "^8.3.0",
     "ts-simple-type": "^0.3.5",

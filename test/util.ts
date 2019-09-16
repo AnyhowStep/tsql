@@ -1,4 +1,5 @@
 import * as fs from "fs";
+import * as util from "util";
 
 export function getAllTsFiles (rootDir : string, result : string[] = [], relativeDir : string|undefined = undefined) : string[] {
     const currentDir = (relativeDir == undefined) ?
@@ -22,4 +23,19 @@ export function getAllTsFiles (rootDir : string, result : string[] = [], relativ
         }
     }
     return result;
+}
+
+export function log (...args : any[]) {
+    const result : string[] = [];
+    for (const arg of args) {
+        result.push(util.inspect(
+            arg,
+            {
+                depth : 10,
+                colors : true,
+                maxArrayLength : 100,
+            }
+        ));
+    }
+    console.log(result.join(", "));
 }
