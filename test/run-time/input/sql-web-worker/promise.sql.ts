@@ -1,3 +1,4 @@
+import * as tsql from "../../../../dist";
 import {ISqliteWorker, SqliteAction, FromSqliteMessage, ToSqliteMessage} from "./worker.sql";
 import {AsyncQueue} from "./async-queue";
 
@@ -160,6 +161,29 @@ export class Connection {
                 () => {},
             );
         });
+    }
+
+    select (sql : string) : Promise<tsql.SelectResult> {
+        return this.exec(sql)
+            .then((result) => {
+                if (result.execResult.length != 1) {
+                    throw new Error(`Expected to run 1 SELECT statement; found ${result.execResult.length}`);
+                }
+                const resultSet = result.execResult[0];
+                return {
+                    query : { sql, },
+                    rows : resultSet.values.map((row) => {
+                        const obj : Record<string, unknown> = {};
+                        for (let i=0; i<resultSet.columns.length; ++i) {
+                            const k = resultSet.columns[i];
+                            const v = row[i];
+                            obj[k] = v;
+                        }
+                        return obj;
+                    }),
+                    columns : resultSet.columns,
+                };
+            });
     }
 }
 

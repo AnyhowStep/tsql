@@ -6,7 +6,7 @@ import {ColumnRefUtil, ColumnRef} from "../../../column-ref";
 import {TypeRefUtil, TypeRef} from "../../../type-ref";
 import {IConnection} from "../../../execution";
 import {AstUtil, Sqlfier} from "../../../ast";
-import {SelectClauseUtil} from "../../../select-clause";
+//import {SelectClauseUtil} from "../../../select-clause";
 import {SEPARATOR} from "../../../constants";
 import {IJoin, JoinArrayUtil} from "../../../join";
 import {Merge} from "../../../type-util";
@@ -110,7 +110,7 @@ export async function fetchAllUnmapped<
     const sql = AstUtil.toSql(query, sqlfier);
     const rawResult = await connection.select(sql);
 
-    const hasDuplicateColumnName = SelectClauseUtil.duplicateColumnAlias(query.selectClause).length > 0;
+    //const hasDuplicateColumnName = SelectClauseUtil.duplicateColumnAlias(query.selectClause).length > 0;
     const hasNullableJoins = (query.fromClause.currentJoins == undefined) ?
         false :
         query.fromClause.currentJoins.some(j => j.nullable);
@@ -141,16 +141,12 @@ export async function fetchAllUnmapped<
                 `${tableAlias}.${columnAlias}`,
                 rawRow[k]
             );
-            if (hasDuplicateColumnName || hasNullableJoins) {
-                let table = row[tableAlias];
-                if (table == undefined) {
-                    table = {};
-                    row[tableAlias] = table;
-                }
-                table[columnAlias] = value;
-            } else {
-                row[columnAlias] = value;
+            let table = row[tableAlias];
+            if (table == undefined) {
+                table = {};
+                row[tableAlias] = table;
             }
+            table[columnAlias] = value;
         }
         if (hasNullableJoins) {
             for (const tableAlias of Object.keys(row)) {
