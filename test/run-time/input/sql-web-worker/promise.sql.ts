@@ -168,10 +168,22 @@ export class Connection {
         const sql = tsql.AstUtil.toSql(query, sqliteSqlfier);
         return this.exec(sql)
             .then((result) => {
-                if (result.execResult.length != 1) {
+                if (result.execResult.length > 1) {
                     throw new Error(`Expected to run 1 SELECT statement; found ${result.execResult.length}`);
                 }
-                const resultSet = result.execResult[0];
+
+                /**
+                 * When SQLite fetches zero rows, we get zero execResults...
+                 * Which is frustrating.
+                 */
+                const resultSet = (
+                    (result.execResult.length == 0) ?
+                    {
+                        values : [],
+                        columns : [],
+                    } :
+                    result.execResult[0]
+                );
                 return {
                     query : { sql, },
                     rows : resultSet.values.map((row) => {
