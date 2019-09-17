@@ -1,19 +1,17 @@
 import {ColumnRefUtil, ColumnRef} from "../../../column-ref";
-import {IConnection} from "../../../execution";
-//import {SelectClauseUtil} from "../../../select-clause";
 import {SEPARATOR} from "../../../constants";
 import {QueryBaseUtil} from "../../../query-base";
 import {UnmappedResultSet, RawRow} from "../helper-type";
+import {SelectConnection} from "../../connection";
 
 export async function fetchAllUnmapped<
     QueryT extends QueryBaseUtil.AfterSelectClause & QueryBaseUtil.NonCorrelated
 >(
     query : QueryT,
-    connection : IConnection
+    connection : SelectConnection
 ) : Promise<UnmappedResultSet<QueryT>> {
     const rawResult = await connection.select(query);
 
-    //const hasDuplicateColumnName = SelectClauseUtil.duplicateColumnAlias(query.selectClause).length > 0;
     const hasNullableJoins = (query.fromClause.currentJoins == undefined) ?
         false :
         query.fromClause.currentJoins.some(j => j.nullable);

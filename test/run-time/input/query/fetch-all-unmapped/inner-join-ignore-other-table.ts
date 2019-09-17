@@ -53,10 +53,7 @@ tape(__filename, async (t) => {
                 columns.test.testId.desc(),
             ])
             .fetchAllUnmapped(
-                /**
-                 * @todo Make `connection` implement `IConnection` properly
-                 */
-                connection as unknown as tsql.IConnection
+                connection
             );
     });
     t.deepEqual(

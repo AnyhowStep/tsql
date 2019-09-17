@@ -28,7 +28,7 @@ import {QueryBaseUtil} from "../query-base";
 import {CompoundQueryType} from "../compound-query";
 import {CompoundQueryClauseUtil} from "../compound-query-clause";
 import {MapDelegate} from "../map-delegate";
-import {IConnection, ExecutionUtil} from "../execution";
+import {ExecutionUtil, SelectConnection, IsolableSelectConnection} from "../execution";
 
 export class Query<DataT extends QueryData> implements IQuery<DataT> {
     readonly fromClause : DataT["fromClause"];
@@ -1024,7 +1024,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
                 & QueryBaseUtil.Mapped
             )
         >,
-        connection : IConnection
+        connection : IsolableSelectConnection
     ) : (
         Promise<ExecutionUtil.MappedResultSet<
             Extract<
@@ -1048,7 +1048,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
                 & QueryBaseUtil.NonCorrelated
             )
         >,
-        connection : IConnection
+        connection : SelectConnection
     ) : (
         Promise<ExecutionUtil.UnmappedFlattenedResultSet<
             Extract<
@@ -1071,7 +1071,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
                 & QueryBaseUtil.NonCorrelated
             )
         >,
-        connection : IConnection
+        connection : SelectConnection
     ) : (
         Promise<ExecutionUtil.UnmappedResultSet<
             Extract<
@@ -1095,7 +1095,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
                 & QueryBaseUtil.Mapped
             )
         >,
-        connection : IConnection
+        connection : IsolableSelectConnection
     ) : (
         Promise<ExecutionUtil.MappedResultSet<
             Extract<
@@ -1117,7 +1117,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
                 & QueryBaseUtil.Unmapped
             )
         >,
-        connection : IConnection
+        connection : SelectConnection
     ) : (
         Promise<ExecutionUtil.UnmappedFlattenedResultSet<
             Extract<
@@ -1149,7 +1149,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
                 )
             >
         ),
-        connection : IConnection
+        connection : IsolableSelectConnection
     ) : Promise<unknown[]> {
         return ExecutionUtil.fetchAll(this, connection);
     }

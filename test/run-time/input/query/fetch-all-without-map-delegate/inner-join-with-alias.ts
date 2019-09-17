@@ -56,10 +56,7 @@ tape(__filename, async (t) => {
                 columns.test.testId.desc(),
             ])
             .fetchAll(
-                /**
-                 * @todo Make `connection` implement `IConnection` properly
-                 */
-                connection as unknown as tsql.IConnection
+                connection
             );
     });
     t.deepEqual(

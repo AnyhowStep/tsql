@@ -129,11 +129,25 @@ export interface IConnection {
 
     rawQuery (sql : string) : Promise<RawQueryResult>;
     select (query : IQueryBase) : Promise<SelectResult>;
+    /**
+     * @todo
+     */
     insert (sql : string) : Promise<InsertResult>;
+    /**
+     * @todo
+     */
     update (sql : string) : Promise<RawUpdateResult>;
+    /**
+     * @todo
+     */
     delete (sql : string) : Promise<RawDeleteResult>;
 }
 export interface ITransactionConnection extends IConnection {
     rollback () : Promise<void>;
     commit () : Promise<void>;
 }
+
+/**
+ * Only `SELECT` statements can be executed by this connection.
+ */
+export type SelectConnection = Pick<IConnection, "select">;

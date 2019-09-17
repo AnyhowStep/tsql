@@ -1,4 +1,4 @@
-import {IConnection} from "../execution";
+import {IsolableSelectConnection} from "../execution";
 
 /**
  * Maps fetched rows from one shape to another
@@ -12,5 +12,5 @@ import {IConnection} from "../execution";
  * @param originalRow - The original row fetched
  */
 export type MapDelegate<RowT=never, OriginalRowT=never, ReturnT=unknown> =
-    (row : RowT, connection : IConnection, originalRow : OriginalRowT) => ReturnT
+    (row : RowT, connection : IsolableSelectConnection, originalRow : OriginalRowT) => ReturnT
 ;

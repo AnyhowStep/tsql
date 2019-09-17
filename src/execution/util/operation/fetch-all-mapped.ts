@@ -1,13 +1,17 @@
-import {IConnection} from "../../../execution";
 import {QueryBaseUtil} from "../../../query-base";
 import {UnmappedResultSet, MappedResultSet, MappedRow} from "../helper-type";
 import {fetchAllUnmapped} from "./fetch-all-unmapped";
+import {IsolableSelectConnection} from "../../connection";
 
 export async function fetchAllMapped<
     QueryT extends QueryBaseUtil.AfterSelectClause & QueryBaseUtil.NonCorrelated & QueryBaseUtil.Mapped
 >(
     query : QueryT,
-    connection : IConnection
+    /**
+     * We need a full `IConnection` to pass to the `MapDelegate`.
+     * However, ideally, it would only need to use transaction and `SELECT` statements...
+     */
+    connection : IsolableSelectConnection
 ) : Promise<MappedResultSet<QueryT>> {
     const unmappedResultSet : (
         UnmappedResultSet<QueryT>

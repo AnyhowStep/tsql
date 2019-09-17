@@ -10,10 +10,7 @@ tape(__filename, async (t) => {
         return tsql.selectValue(() => 42)
             .map(() => undefined)
             .fetchAllUnmapped(
-                /**
-                 * @todo Make `connection` implement `IConnection` properly
-                 */
-                connection as unknown as tsql.IConnection
+                connection
             );
     });
     t.deepEqual(

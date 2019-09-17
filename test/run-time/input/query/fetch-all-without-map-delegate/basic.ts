@@ -9,10 +9,7 @@ tape(__filename, async (t) => {
     const resultSet = await pool.acquire((connection) => {
         return tsql.selectValue(() => 42)
             .fetchAll(
-                /**
-                 * @todo Make `connection` implement `IConnection` properly
-                 */
-                connection as unknown as tsql.IConnection
+                connection
             );
     });
     t.deepEqual(

@@ -1,14 +1,14 @@
-import {IConnection} from "../../../execution";
 import {QueryBaseUtil} from "../../../query-base";
 import {RawRow, UnmappedFlattenedResultSet} from "../helper-type";
 import {fetchAllUnmapped} from "./fetch-all-unmapped";
 import {canFlattenUnmappedRow} from "../predicate";
+import {SelectConnection} from "../../connection";
 
 export async function fetchAllUnmappedFlattened<
     QueryT extends QueryBaseUtil.AfterSelectClause & QueryBaseUtil.NonCorrelated
 >(
     query : QueryT,
-    connection : IConnection
+    connection : SelectConnection
 ) : Promise<UnmappedFlattenedResultSet<QueryT>> {
     const unmappedResultSet : (
         RawRow[]

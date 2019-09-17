@@ -1,6 +1,6 @@
 import {MapDelegate} from "../../map-delegate";
 import {TypeOfAwait} from "../../../type-util";
-import {IConnection} from "../../../execution";
+import {IsolableSelectConnection} from "../../../execution";
 
 export type Compose<
     OriginalRowT,
@@ -19,7 +19,7 @@ export function compose<
 ) : (
     Compose<OriginalRowT, NxtReturnT>
 ) {
-    return async (row : OriginalRowT, connection : IConnection, originalRow : OriginalRowT) : Promise<TypeOfAwait<NxtReturnT>> => {
+    return async (row : OriginalRowT, connection : IsolableSelectConnection, originalRow : OriginalRowT) : Promise<TypeOfAwait<NxtReturnT>> => {
         const tmp = await cur(row, connection, originalRow) as TypeOfAwait<ReturnT>;
         const result = await nxt(tmp, connection, originalRow) as TypeOfAwait<NxtReturnT>;
         return result;
