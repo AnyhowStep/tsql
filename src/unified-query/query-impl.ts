@@ -28,6 +28,7 @@ import {QueryBaseUtil} from "../query-base";
 import {CompoundQueryType} from "../compound-query";
 import {CompoundQueryClauseUtil} from "../compound-query-clause";
 import {MapDelegate} from "../map-delegate";
+import {IConnection, ExecutionUtil} from "../execution";
 
 export class Query<DataT extends QueryData> implements IQuery<DataT> {
     readonly fromClause : DataT["fromClause"];
@@ -1012,5 +1013,144 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
                 mapDelegate
             );
         }
+    }
+
+    fetchAllMapped(
+        this : Extract<
+            this,
+            (
+                & QueryBaseUtil.AfterSelectClause
+                & QueryBaseUtil.NonCorrelated
+                & QueryBaseUtil.Mapped
+            )
+        >,
+        connection : IConnection
+    ) : (
+        Promise<ExecutionUtil.MappedResultSet<
+            Extract<
+                this,
+                (
+                    & QueryBaseUtil.AfterSelectClause
+                    & QueryBaseUtil.NonCorrelated
+                    & QueryBaseUtil.Mapped
+                )
+            >
+        >>
+    ) {
+        return ExecutionUtil.fetchAllMapped(this, connection);
+    }
+
+    fetchAllUnmappedFlattened(
+        this : Extract<
+            this,
+            (
+                & QueryBaseUtil.AfterSelectClause
+                & QueryBaseUtil.NonCorrelated
+            )
+        >,
+        connection : IConnection
+    ) : (
+        Promise<ExecutionUtil.UnmappedFlattenedResultSet<
+            Extract<
+                this,
+                (
+                    & QueryBaseUtil.AfterSelectClause
+                    & QueryBaseUtil.NonCorrelated
+                )
+            >
+        >>
+    ) {
+        return ExecutionUtil.fetchAllUnmappedFlattened(this, connection);
+    }
+
+    fetchAllUnmapped(
+        this : Extract<
+            this,
+            (
+                & QueryBaseUtil.AfterSelectClause
+                & QueryBaseUtil.NonCorrelated
+            )
+        >,
+        connection : IConnection
+    ) : (
+        Promise<ExecutionUtil.UnmappedResultSet<
+            Extract<
+                this,
+                (
+                    & QueryBaseUtil.AfterSelectClause
+                    & QueryBaseUtil.NonCorrelated
+                )
+            >
+        >>
+    ) {
+        return ExecutionUtil.fetchAllUnmapped(this, connection);
+    }
+
+    fetchAll(
+        this : Extract<
+            this,
+            (
+                & QueryBaseUtil.AfterSelectClause
+                & QueryBaseUtil.NonCorrelated
+                & QueryBaseUtil.Mapped
+            )
+        >,
+        connection : IConnection
+    ) : (
+        Promise<ExecutionUtil.MappedResultSet<
+            Extract<
+                this,
+                (
+                    & QueryBaseUtil.AfterSelectClause
+                    & QueryBaseUtil.NonCorrelated
+                    & QueryBaseUtil.Mapped
+                )
+            >
+        >>
+    );
+    fetchAll(
+        this : Extract<
+            this,
+            (
+                & QueryBaseUtil.AfterSelectClause
+                & QueryBaseUtil.NonCorrelated
+                & QueryBaseUtil.Unmapped
+            )
+        >,
+        connection : IConnection
+    ) : (
+        Promise<ExecutionUtil.UnmappedFlattenedResultSet<
+            Extract<
+                this,
+                (
+                    & QueryBaseUtil.AfterSelectClause
+                    & QueryBaseUtil.NonCorrelated
+                    & QueryBaseUtil.Unmapped
+                )
+            >
+        >>
+    );
+    fetchAll (
+        this : (
+            | Extract<
+                this,
+                (
+                    & QueryBaseUtil.AfterSelectClause
+                    & QueryBaseUtil.NonCorrelated
+                    & QueryBaseUtil.Mapped
+                )
+            >
+            | Extract<
+                this,
+                (
+                    & QueryBaseUtil.AfterSelectClause
+                    & QueryBaseUtil.NonCorrelated
+                    & QueryBaseUtil.Unmapped
+                )
+            >
+        ),
+        connection : IConnection
+    ) : Promise<unknown[]> {
+        return ExecutionUtil.fetchAll(this, connection);
     }
 }
