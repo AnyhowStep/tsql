@@ -7,19 +7,14 @@ tape(__filename, async (t) => {
     const pool = new Pool(new SqliteWorker());
 
     await pool.acquire((connection) => {
-        return tsql.selectValue(() => 42 as number)
-            .unionDistinct(
-                tsql.selectValue(() => 99)
-            )
-            .compoundQueryOrderBy(columns => [
-                columns.value.desc(),
-            ])
+        return tsql.selectValue(() => 42)
             .map((row) => {
                 return {
                     x : row.__aliased.value + 58,
                 };
             })
-            .fetchOneOrUndefined(
+            .limit(0)
+            .fetchOne(
                 /**
                  * @todo Make `connection` implement `IConnection` properly
                  */
@@ -28,9 +23,9 @@ tape(__filename, async (t) => {
     }).then(() => {
         t.fail("Expected to fail");
     }).catch((err) => {
-        t.true(err instanceof tsql.TooManyRowsFoundError);
-        t.deepEqual(err.name, "TooManyRowsFoundError");
-        t.deepEqual(err.sql, `SELECT 42 AS "__aliased--value" UNION SELECT 99 AS "__aliased--value" ORDER BY "__aliased--value" DESC LIMIT 2 OFFSET 0`);
+        t.true(err instanceof tsql.RowNotFoundError);
+        t.deepEqual(err.name, "RowNotFoundError");
+        t.deepEqual(err.sql, `SELECT 42 AS "__aliased--value" LIMIT 0 OFFSET 0`);
     });
 
     t.end();

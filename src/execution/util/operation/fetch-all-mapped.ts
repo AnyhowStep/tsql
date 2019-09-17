@@ -1,7 +1,7 @@
 import {QueryBaseUtil} from "../../../query-base";
-import {UnmappedResultSet, MappedResultSet, MappedRow} from "../helper-type";
-import {fetchAllUnmapped} from "./fetch-all-unmapped";
+import {MappedResultSet} from "../helper-type";
 import {IsolableSelectConnection} from "../../connection";
+import {fetchAllMappedImpl} from "./fetch-all-mapped-impl";
 
 export async function fetchAllMapped<
     QueryT extends QueryBaseUtil.AfterSelectClause & QueryBaseUtil.NonCorrelated & QueryBaseUtil.Mapped
@@ -13,24 +13,6 @@ export async function fetchAllMapped<
      */
     connection : IsolableSelectConnection
 ) : Promise<MappedResultSet<QueryT>> {
-    const unmappedResultSet : (
-        UnmappedResultSet<QueryT>
-    ) = await fetchAllUnmapped<QueryT>(
-        query, connection
-    );
-    if (unmappedResultSet.length == 0) {
-        return [];
-    }
-
-    const mappedResultSet : MappedResultSet<QueryT> = [];
-    for (const unmappedRow of unmappedResultSet) {
-        mappedResultSet.push(
-            await query.mapDelegate(
-                unmappedRow as never,
-                connection,
-                unmappedRow as never
-            ) as MappedRow<QueryT>
-        );
-    }
-    return mappedResultSet;
+    return fetchAllMappedImpl(query, connection)
+        .then(({resultSet}) => resultSet);
 }

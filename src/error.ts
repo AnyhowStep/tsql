@@ -1,16 +1,42 @@
 export class RowNotFoundError extends Error {
-    constructor (message : string) {
+    /**
+     * The SQL string that caused this error.
+     *
+     * + We assign to it using `defineProperty`.
+     * + It is non-enumerable.
+     */
+    readonly sql! : string;
+    constructor (message : string, sql : string) {
         super(message);
         Object.setPrototypeOf(this, RowNotFoundError.prototype);
+        Object.defineProperty(this, "sql", {
+            value : sql,
+            enumerable : false,
+            writable : true,
+        });
     }
 }
+RowNotFoundError.prototype.name = "RowNotFoundError";
 
 export class TooManyRowsFoundError extends Error {
-    constructor (message : string) {
+    /**
+     * The SQL string that caused this error.
+     *
+     * + We assign to it using `defineProperty`.
+     * + It is non-enumerable.
+     */
+    readonly sql! : string;
+    constructor (message : string, sql : string) {
         super(message);
         Object.setPrototypeOf(this, TooManyRowsFoundError.prototype);
+        Object.defineProperty(this, "sql", {
+            value : sql,
+            enumerable : false,
+            writable : true,
+        });
     }
 }
+TooManyRowsFoundError.prototype.name = "TooManyRowsFoundError";
 
 export class NoColumnsSelectedError extends Error {
     constructor (message : string) {
@@ -18,6 +44,7 @@ export class NoColumnsSelectedError extends Error {
         Object.setPrototypeOf(this, RowNotFoundError.prototype);
     }
 }
+NoColumnsSelectedError.prototype.name = "NoColumnsSelectedError";
 
 export class TooManyColumnsSelectedError extends Error {
     constructor (message : string) {
@@ -25,6 +52,7 @@ export class TooManyColumnsSelectedError extends Error {
         Object.setPrototypeOf(this, RowNotFoundError.prototype);
     }
 }
+TooManyColumnsSelectedError.prototype.name = "TooManyColumnsSelectedError";
 
 export class TooManyRowsUpdatedError extends Error {
     constructor (message : string) {
@@ -32,3 +60,4 @@ export class TooManyRowsUpdatedError extends Error {
         Object.setPrototypeOf(this, TooManyRowsUpdatedError.prototype);
     }
 }
+TooManyRowsUpdatedError.prototype.name = "TooManyRowsUpdatedError";

@@ -61,7 +61,8 @@ tape(__filename, async (t) => {
     }).then(() => {
         t.fail("Expected to fail");
     }).catch((err) => {
-        t.pass(err.message);
+        t.true(err instanceof tsql.TooManyRowsFoundError);
+        t.deepEqual(err.name, "TooManyRowsFoundError");
     });
 
     t.end();

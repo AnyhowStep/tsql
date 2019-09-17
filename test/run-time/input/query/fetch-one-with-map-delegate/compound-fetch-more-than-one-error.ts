@@ -19,7 +19,7 @@ tape(__filename, async (t) => {
                     x : row.__aliased.value + 58,
                 };
             })
-            .fetchOneOrUndefined(
+            .fetchOne(
                 /**
                  * @todo Make `connection` implement `IConnection` properly
                  */

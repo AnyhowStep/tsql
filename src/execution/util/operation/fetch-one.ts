@@ -1,13 +1,13 @@
 import {FetchAllConnection, FetchedRow} from "../helper-type";
 import {QueryBaseUtil} from "../../../query-base";
-import {fetchOneOrUndefinedImpl} from "./fetch-one-or-undefined-impl";
+import {fetchOneImpl} from "./fetch-one-impl";
 
-export async function fetchOneOrUndefined<
+export async function fetchOne<
     QueryT extends QueryBaseUtil.AfterSelectClause & QueryBaseUtil.NonCorrelated
 >(
     query : QueryT,
     connection : FetchAllConnection<QueryT>
-) : Promise<FetchedRow<QueryT>|undefined> {
-    return fetchOneOrUndefinedImpl(query, connection)
+) : Promise<FetchedRow<QueryT>> {
+    return fetchOneImpl(query, connection)
         .then(({row}) => row);
 }

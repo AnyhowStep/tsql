@@ -352,8 +352,22 @@ function queryToSql (
     const query = normalizeOrderByAndLimitClauses(rawQuery);
 
     if (
-        query.compoundQueryOrderByClause != undefined ||
-        query.compoundQueryLimitClause != undefined ||
+        (
+            /**
+             * If we have both a compound `ORDER BY/LIMIT` clause
+             * and regular `ORDER BY/LIMIT` clause,
+             * we will need a derived table because
+             * SQLite only supports on `ORDER BY` and `LIMIT` clause for the entire query.
+             */
+            (
+                query.compoundQueryOrderByClause != undefined ||
+                query.compoundQueryLimitClause != undefined
+            ) &&
+            (
+                query.orderByClause != undefined ||
+                query.limitClause != undefined
+            )
+        ) ||
         /**
          * If we have a compound query and an `ORDER BY` or `LIMIT` clause,
          * we will need to make the query a derived table because
@@ -432,6 +446,14 @@ function queryToSql (
 
     if (query.compoundQueryClause != undefined) {
         result.push(compoundQueryClauseToSql(query.compoundQueryClause, toSql).join(" "));
+    }
+
+    if (query.compoundQueryOrderByClause != undefined) {
+        result.push(orderByClauseToSql(query.compoundQueryOrderByClause, toSql).join(" "));
+    }
+
+    if (query.compoundQueryLimitClause != undefined) {
+        result.push(limitClauseToSql(query.compoundQueryLimitClause, toSql).join(" "));
     }
 
     return result.join(" ");

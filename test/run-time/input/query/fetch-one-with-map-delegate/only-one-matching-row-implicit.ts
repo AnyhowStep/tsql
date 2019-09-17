@@ -7,7 +7,7 @@ import {SqliteWorker} from "../../sql-web-worker/worker.sql";
 tape(__filename, async (t) => {
     const pool = new Pool(new SqliteWorker());
 
-    await pool.acquire(async (connection) => {
+    const resultSet = await pool.acquire(async (connection) => {
         await connection.exec(`
             CREATE TABLE test (
                 testId INT PRIMARY KEY,
@@ -49,9 +49,10 @@ tape(__filename, async (t) => {
                 other
             )
             .select(columns => [columns])
-            .orderBy(columns => [
-                columns.test.testId.desc(),
-            ])
+            .whereEq(
+                columns => columns.test.testId,
+                1n
+            )
             .map((row) => {
                 return {
                     test : row.test,
@@ -65,23 +66,22 @@ tape(__filename, async (t) => {
                     hello : "hi",
                 };
             })
-            .map((row) => {
-                return {
-                    root : row,
-                };
-            })
-            .fetchOneOrUndefined(
+            .fetchOne(
                 /**
                  * @todo Make `connection` implement `IConnection` properly
                  */
                 connection as unknown as tsql.IConnection
             );
-    }).then(() => {
-        t.fail("Expected to fail");
-    }).catch((err) => {
-        t.true(err instanceof tsql.TooManyRowsFoundError);
-        t.deepEqual(err.name, "TooManyRowsFoundError");
     });
+    t.deepEqual(
+        resultSet,
+        {
+            test: { testId: 1n, testVal: 100n },
+            other2: { testId: 1n, otherVal: 111n },
+            total: 211n,
+            hello: "hi",
+        }
+    );
 
     t.end();
 });

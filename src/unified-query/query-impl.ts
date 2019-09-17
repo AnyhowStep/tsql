@@ -1150,4 +1150,37 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     ) {
         return ExecutionUtil.fetchOneOrUndefined(this, connection);
     }
+
+    fetchOne (
+        this : Extract<
+            this,
+            (
+                & QueryBaseUtil.AfterSelectClause
+                & QueryBaseUtil.NonCorrelated
+            )
+        >,
+        connection : ExecutionUtil.FetchAllConnection<
+            Extract<
+                this,
+                (
+                    & QueryBaseUtil.AfterSelectClause
+                    & QueryBaseUtil.NonCorrelated
+                )
+            >
+        >
+    ) : (
+        Promise<
+            ExecutionUtil.FetchedRow<
+                Extract<
+                    this,
+                    (
+                        & QueryBaseUtil.AfterSelectClause
+                        & QueryBaseUtil.NonCorrelated
+                    )
+                >
+            >
+        >
+    ) {
+        return ExecutionUtil.fetchOne(this, connection);
+    }
 }

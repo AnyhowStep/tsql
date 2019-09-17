@@ -34,6 +34,7 @@
     "compileOnSave": false,
 
     "include": [
+        "./bluebird-promise.ts",
         "./runner.ts",
         "./input/**/*"
     ]

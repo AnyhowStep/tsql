@@ -70,7 +70,7 @@ tape(__filename, async (t) => {
                     root : row,
                 };
             })
-            .fetchOneOrUndefined(
+            .fetchOne(
                 /**
                  * @todo Make `connection` implement `IConnection` properly
                  */

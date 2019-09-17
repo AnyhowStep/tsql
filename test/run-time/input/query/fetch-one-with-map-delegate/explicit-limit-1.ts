@@ -7,7 +7,7 @@ import {SqliteWorker} from "../../sql-web-worker/worker.sql";
 tape(__filename, async (t) => {
     const pool = new Pool(new SqliteWorker());
 
-    await pool.acquire(async (connection) => {
+    const resultSet = await pool.acquire(async (connection) => {
         await connection.exec(`
             CREATE TABLE test (
                 testId INT PRIMARY KEY,
@@ -52,6 +52,7 @@ tape(__filename, async (t) => {
             .orderBy(columns => [
                 columns.test.testId.desc(),
             ])
+            .limit(1)
             .map((row) => {
                 return {
                     test : row.test,
@@ -70,18 +71,24 @@ tape(__filename, async (t) => {
                     root : row,
                 };
             })
-            .fetchOneOrUndefined(
+            .fetchOne(
                 /**
                  * @todo Make `connection` implement `IConnection` properly
                  */
                 connection as unknown as tsql.IConnection
             );
-    }).then(() => {
-        t.fail("Expected to fail");
-    }).catch((err) => {
-        t.true(err instanceof tsql.TooManyRowsFoundError);
-        t.deepEqual(err.name, "TooManyRowsFoundError");
     });
+    t.deepEqual(
+        resultSet,
+        {
+            root : {
+                test: { testId: 3n, testVal: 300n },
+                other2: { testId: 3n, otherVal: 333n },
+                total: 633n,
+                hello: "hi",
+            }
+        }
+    );
 
     t.end();
 });
