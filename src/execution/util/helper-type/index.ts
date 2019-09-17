@@ -1,3 +1,6 @@
+export * from "./fetch-all-connection";
+export * from "./fetched-result-set";
+export * from "./fetched-row";
 export * from "./raw-row";
 export * from "./mapped-result-set";
 export * from "./mapped-row";

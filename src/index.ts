@@ -48,6 +48,7 @@ export * from "./where-clause";
 
 export * from "./buffer";
 export * from "./constants";
+export * from "./error";
 export * from "./operator-type";
 
 import * as TupleUtil from "./tuple-util";

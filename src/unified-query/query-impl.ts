@@ -1086,71 +1086,32 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         return ExecutionUtil.fetchAllUnmapped(this, connection);
     }
 
-    fetchAll(
-        this : Extract<
-            this,
-            (
-                & QueryBaseUtil.AfterSelectClause
-                & QueryBaseUtil.NonCorrelated
-                & QueryBaseUtil.Mapped
-            )
-        >,
-        connection : IsolableSelectConnection
-    ) : (
-        Promise<ExecutionUtil.MappedResultSet<
-            Extract<
-                this,
-                (
-                    & QueryBaseUtil.AfterSelectClause
-                    & QueryBaseUtil.NonCorrelated
-                    & QueryBaseUtil.Mapped
-                )
-            >
-        >>
-    );
-    fetchAll(
-        this : Extract<
-            this,
-            (
-                & QueryBaseUtil.AfterSelectClause
-                & QueryBaseUtil.NonCorrelated
-                & QueryBaseUtil.Unmapped
-            )
-        >,
-        connection : SelectConnection
-    ) : (
-        Promise<ExecutionUtil.UnmappedFlattenedResultSet<
-            Extract<
-                this,
-                (
-                    & QueryBaseUtil.AfterSelectClause
-                    & QueryBaseUtil.NonCorrelated
-                    & QueryBaseUtil.Unmapped
-                )
-            >
-        >>
-    );
     fetchAll (
-        this : (
-            | Extract<
+        this : Extract<
+            this,
+            (
+                & QueryBaseUtil.AfterSelectClause
+                & QueryBaseUtil.NonCorrelated
+            )
+        >,
+        connection : ExecutionUtil.FetchAllConnection<Extract<
+            this,
+            (
+                & QueryBaseUtil.AfterSelectClause
+                & QueryBaseUtil.NonCorrelated
+            )
+        >>
+    ) : (
+        Promise<ExecutionUtil.FetchedResultSet<
+            Extract<
                 this,
                 (
                     & QueryBaseUtil.AfterSelectClause
                     & QueryBaseUtil.NonCorrelated
-                    & QueryBaseUtil.Mapped
                 )
             >
-            | Extract<
-                this,
-                (
-                    & QueryBaseUtil.AfterSelectClause
-                    & QueryBaseUtil.NonCorrelated
-                    & QueryBaseUtil.Unmapped
-                )
-            >
-        ),
-        connection : IsolableSelectConnection
-    ) : Promise<unknown[]> {
+        >>
+    ) {
         return ExecutionUtil.fetchAll(this, connection);
     }
 }
