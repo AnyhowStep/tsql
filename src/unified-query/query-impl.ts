@@ -1094,13 +1094,15 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
                 & QueryBaseUtil.NonCorrelated
             )
         >,
-        connection : ExecutionUtil.FetchAllConnection<Extract<
-            this,
-            (
-                & QueryBaseUtil.AfterSelectClause
-                & QueryBaseUtil.NonCorrelated
-            )
-        >>
+        connection : ExecutionUtil.FetchAllConnection<
+            Extract<
+                this,
+                (
+                    & QueryBaseUtil.AfterSelectClause
+                    & QueryBaseUtil.NonCorrelated
+                )
+            >
+        >
     ) : (
         Promise<ExecutionUtil.FetchedResultSet<
             Extract<
@@ -1113,5 +1115,39 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         >>
     ) {
         return ExecutionUtil.fetchAll(this, connection);
+    }
+
+    fetchOneOrUndefined (
+        this : Extract<
+            this,
+            (
+                & QueryBaseUtil.AfterSelectClause
+                & QueryBaseUtil.NonCorrelated
+            )
+        >,
+        connection : ExecutionUtil.FetchAllConnection<
+            Extract<
+                this,
+                (
+                    & QueryBaseUtil.AfterSelectClause
+                    & QueryBaseUtil.NonCorrelated
+                )
+            >
+        >
+    ) : (
+        Promise<
+            | undefined
+            | ExecutionUtil.FetchedRow<
+                Extract<
+                    this,
+                    (
+                        & QueryBaseUtil.AfterSelectClause
+                        & QueryBaseUtil.NonCorrelated
+                    )
+                >
+            >
+        >
+    ) {
+        return ExecutionUtil.fetchOneOrUndefined(this, connection);
     }
 }
