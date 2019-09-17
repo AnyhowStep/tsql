@@ -9,9 +9,11 @@ export async function fetchAllMapped<
     query : QueryT,
     connection : IConnection
 ) : Promise<MappedResultSet<QueryT>> {
-    const unmappedResultSet : UnmappedResultSet<QueryT> = await fetchAllUnmapped<
-        QueryT
-    >(query, connection);
+    const unmappedResultSet : (
+        UnmappedResultSet<QueryT>
+    ) = await fetchAllUnmapped<QueryT>(
+        query, connection
+    );
     if (unmappedResultSet.length == 0) {
         return [];
     }
