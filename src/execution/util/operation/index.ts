@@ -4,3 +4,4 @@ export * from "./fetch-all-unmapped";
 export * from "./fetch-all";
 export * from "./fetch-one-or-undefined";
 export * from "./fetch-one";
+export * from "./fetch-value-array";

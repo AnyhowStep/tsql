@@ -1183,4 +1183,30 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     ) {
         return ExecutionUtil.fetchOne(this, connection);
     }
+
+    fetchValueArray(
+        this : Extract<
+            this,
+            (
+                & QueryBaseUtil.OneSelectItem<any>
+                & QueryBaseUtil.NonCorrelated
+            )
+        >,
+        connection : SelectConnection
+    ) : (
+        Promise<
+            QueryBaseUtil.TypeOfSelectItem<
+                Extract<
+                    this,
+                    (
+                        & QueryBaseUtil.OneSelectItem<any>
+                        & QueryBaseUtil.NonCorrelated
+                    )
+                >
+            >[]
+        >
+    ) {
+        return ExecutionUtil.fetchValueArray(this, connection);
+    }
+
 }
