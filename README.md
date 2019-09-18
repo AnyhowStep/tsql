@@ -169,6 +169,12 @@ See the internal `Buffer` declaration [here](src/buffer.ts)
 
 > Quoting an identifier also makes it case-sensitive, whereas unquoted names are always folded to lower case. For example, the identifiers FOO, foo, and "foo" are considered the same by PostgreSQL, but "Foo" and "FOO" are different from these three and each other. (The folding of unquoted names to lower case in PostgreSQL is incompatible with the SQL standard, which says that unquoted names should be folded to upper case. Thus, foo should be equivalent to "FOO" not "foo" according to the standard. If you want to write portable applications you are advised to always quote a particular name or never quote it.)
 
++ Investigate cursors
+  + https://github.com/sidorares/node-mysql2/issues/1014
+  + https://github.com/sidorares/node-mysql2/pull/822#issuecomment-409415308
+  + https://github.com/sidorares/node-mysql2/blob/9404163b0dc4bdc24f6dddd18144532f41115842/lib/commands/query.js#L239
+  + https://github.com/mysqljs/mysql/issues/274
+
 <!--
 > I'm just thinking about how...
 yeah the nicity of being able to call like find, and have the code manage going like

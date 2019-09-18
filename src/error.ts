@@ -61,3 +61,11 @@ export class TooManyRowsUpdatedError extends Error {
     }
 }
 TooManyRowsUpdatedError.prototype.name = "TooManyRowsUpdatedError";
+
+export class CannotCountError extends Error {
+    constructor (message : string) {
+        super(message);
+        Object.setPrototypeOf(this, CannotCountError.prototype);
+    }
+}
+CannotCountError.prototype.name = "CannotCountError";

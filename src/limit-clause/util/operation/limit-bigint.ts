@@ -26,7 +26,7 @@ export function limitBigInt<
     LimitBigInt<LimitClauseT, MaxRowCountT>
 ) {
     const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
-    if (tm.BigIntUtil.lessThan(maxRowCount, BigInt(0))) {
+    if (maxRowCount < 0) {
         throw new Error(`Cannot LIMIT fewer than zero rows`);
     }
 

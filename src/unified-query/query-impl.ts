@@ -1322,4 +1322,44 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         return ExecutionUtil.fetchValue(this, connection);
     }
 
+    count (
+        this : Extract<this, QueryBaseUtil.NonCorrelated>,
+        connection : SelectConnection
+    ) : Promise<bigint> {
+        return ExecutionUtil.count(this, connection);
+    }
+
+    paginate(
+        this : Extract<
+            this,
+            (
+                & QueryBaseUtil.AfterSelectClause
+                & QueryBaseUtil.NonCorrelated
+            )
+        >,
+        connection : ExecutionUtil.FetchAllConnection<
+            Extract<
+                this,
+                (
+                    & QueryBaseUtil.AfterSelectClause
+                    & QueryBaseUtil.NonCorrelated
+                )
+            >
+        >,
+        rawArgs : ExecutionUtil.RawPaginateArgs
+    ) : (
+        Promise<
+            ExecutionUtil.Paginate<
+                Extract<
+                    this,
+                    (
+                        & QueryBaseUtil.AfterSelectClause
+                        & QueryBaseUtil.NonCorrelated
+                    )
+                >
+            >
+        >
+    ) {
+        return ExecutionUtil.paginate(this, connection, rawArgs);
+    }
 }

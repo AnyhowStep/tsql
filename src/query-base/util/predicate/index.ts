@@ -1,5 +1,6 @@
 export * from "./is-after-select-clause";
 export * from "./is-before-compound-query-clause";
+export * from "./is-before-select-clause";
 export * from "./is-one-row";
 export * from "./is-one-select-item";
 export * from "./is-query";

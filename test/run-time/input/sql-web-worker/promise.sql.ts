@@ -197,6 +197,10 @@ export class Connection {
                     }),
                     columns : resultSet.columns,
                 };
+            })
+            .catch((err) => {
+                console.error(sql);
+                throw err;
             });
     }
 }
