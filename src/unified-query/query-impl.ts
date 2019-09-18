@@ -1151,6 +1151,41 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         return ExecutionUtil.fetchOneOrUndefined(this, connection);
     }
 
+    fetchOneOr<DefaultValueT> (
+        this : Extract<
+            this,
+            (
+                & QueryBaseUtil.AfterSelectClause
+                & QueryBaseUtil.NonCorrelated
+            )
+        >,
+        connection : ExecutionUtil.FetchAllConnection<
+            Extract<
+                this,
+                (
+                    & QueryBaseUtil.AfterSelectClause
+                    & QueryBaseUtil.NonCorrelated
+                )
+            >
+        >,
+        defaultValue : DefaultValueT
+    ) : (
+        Promise<
+            | DefaultValueT
+            | ExecutionUtil.FetchedRow<
+                Extract<
+                    this,
+                    (
+                        & QueryBaseUtil.AfterSelectClause
+                        & QueryBaseUtil.NonCorrelated
+                    )
+                >
+            >
+        >
+    ) {
+        return ExecutionUtil.fetchOneOr(this, connection, defaultValue);
+    }
+
     fetchOne (
         this : Extract<
             this,
@@ -1207,6 +1242,84 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         >
     ) {
         return ExecutionUtil.fetchValueArray(this, connection);
+    }
+
+    fetchValueOrUndefined (
+        this : Extract<
+            this,
+            (
+                & QueryBaseUtil.OneSelectItem<any>
+                & QueryBaseUtil.NonCorrelated
+            )
+        >,
+        connection : SelectConnection
+    ) : (
+        Promise<
+            | undefined
+            | QueryBaseUtil.TypeOfSelectItem<
+                Extract<
+                    this,
+                    (
+                        & QueryBaseUtil.OneSelectItem<any>
+                        & QueryBaseUtil.NonCorrelated
+                    )
+                >
+            >
+        >
+    ) {
+        return ExecutionUtil.fetchValueOrUndefined(this, connection);
+    }
+
+    fetchValueOr<DefaultValueT> (
+        this : Extract<
+            this,
+            (
+                & QueryBaseUtil.OneSelectItem<any>
+                & QueryBaseUtil.NonCorrelated
+            )
+        >,
+        connection : SelectConnection,
+        defaultValue : DefaultValueT
+    ) : (
+        Promise<
+            | DefaultValueT
+            | QueryBaseUtil.TypeOfSelectItem<
+                Extract<
+                    this,
+                    (
+                        & QueryBaseUtil.OneSelectItem<any>
+                        & QueryBaseUtil.NonCorrelated
+                    )
+                >
+            >
+        >
+    ) {
+        return ExecutionUtil.fetchValueOr(this, connection, defaultValue);
+    }
+
+    fetchValue (
+        this : Extract<
+            this,
+            (
+                & QueryBaseUtil.OneSelectItem<any>
+                & QueryBaseUtil.NonCorrelated
+            )
+        >,
+        connection : SelectConnection
+    ) : (
+        Promise<
+            QueryBaseUtil.TypeOfSelectItem<
+                Extract<
+                    this,
+                    (
+                        & QueryBaseUtil.OneSelectItem<any>
+                        & QueryBaseUtil.NonCorrelated
+                    )
+                >
+            >
+        >
+    ) {
+        return ExecutionUtil.fetchValue(this, connection);
     }
 
 }

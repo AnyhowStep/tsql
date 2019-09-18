@@ -1,6 +1,6 @@
 import {QueryBaseUtil} from "../../../query-base";
 import {SelectConnection} from "../../connection";
-import {fetchValueArrayImpl} from "./fetch-value-array-impl";
+import {fetchValueArrayImpl} from "./impl";
 
 export async function fetchValueArray<
     QueryT extends QueryBaseUtil.OneSelectItem<any> & QueryBaseUtil.NonCorrelated

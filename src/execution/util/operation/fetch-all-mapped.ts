@@ -1,7 +1,7 @@
 import {QueryBaseUtil} from "../../../query-base";
 import {MappedResultSet} from "../helper-type";
 import {IsolableSelectConnection} from "../../connection";
-import {fetchAllMappedImpl} from "./fetch-all-mapped-impl";
+import {fetchAllMappedImpl} from "./impl";
 
 export async function fetchAllMapped<
     QueryT extends QueryBaseUtil.AfterSelectClause & QueryBaseUtil.NonCorrelated & QueryBaseUtil.Mapped

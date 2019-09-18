@@ -1,6 +1,6 @@
 import {FetchAllConnection, FetchedRow} from "../helper-type";
 import {QueryBaseUtil} from "../../../query-base";
-import {fetchOneImpl} from "./fetch-one-impl";
+import {fetchOneImpl} from "./impl";
 
 export async function fetchOne<
     QueryT extends QueryBaseUtil.AfterSelectClause & QueryBaseUtil.NonCorrelated

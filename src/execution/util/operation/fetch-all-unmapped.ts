@@ -1,7 +1,7 @@
 import {QueryBaseUtil} from "../../../query-base";
 import {UnmappedResultSet} from "../helper-type";
 import {SelectConnection} from "../../connection";
-import {fetchAllUnmappedImpl} from "./fetch-all-unmapped-impl";
+import {fetchAllUnmappedImpl} from "./impl";
 
 export async function fetchAllUnmapped<
     QueryT extends QueryBaseUtil.AfterSelectClause & QueryBaseUtil.NonCorrelated

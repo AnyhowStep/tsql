@@ -1,0 +1,9 @@
+[
+  {
+    "messageText": "The 'this' context of type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: readonly (Join<{ tableAlias: \"test\"; nullable: false; columns: { readonly testId: Column<{ tableAlias: \"test\"; columnAlias: \"testId\"; mapper: Mapper<unknown, bigint>; }>; readonly testVal: Column<...>; }; ... 4 more ...; mutableColumns: read...' is not assignable to method's 'this' of type 'never'.",
+    "code": 2684,
+    "category": 1,
+    "length": 136,
+    "start": 438
+  }
+]

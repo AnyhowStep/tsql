@@ -1,6 +1,6 @@
 import {QueryBaseUtil} from "../../../query-base";
 import {FetchAllConnection, FetchedResultSet} from "../helper-type";
-import {fetchAllImpl} from "./fetch-all-impl";
+import {fetchAllImpl} from "./impl";
 
 /**
  * Combines `fetchAllUnmappedFlattened()` and `fetchAllMapped()` for convenience.
