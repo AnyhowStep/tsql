@@ -1,5 +1,6 @@
 export * from "./paginate";
 
+export * from "./assert-exists";
 export * from "./count";
 export * from "./exists";
 export * from "./fetch-all-mapped";

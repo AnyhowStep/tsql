@@ -1369,4 +1369,11 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     ) : Promise<boolean> {
         return ExecutionUtil.exists(this, connection);
     }
+
+    assertExists (
+        this : Extract<this, QueryUtil.NonCorrelated & (QueryUtil.AfterFromClause|QueryUtil.AfterSelectClause)>,
+        connection : SelectConnection
+    ) : Promise<void> {
+        return ExecutionUtil.assertExists(this, connection);
+    }
 }
