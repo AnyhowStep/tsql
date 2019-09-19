@@ -29,5 +29,5 @@ export function isObjectWithOwnEnumerableKeys<T> () {
             }
         }
         return true;
-    }
+    };
 }

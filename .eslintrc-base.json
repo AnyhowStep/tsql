@@ -51,6 +51,7 @@
         "@typescript-eslint/unbound-method": ["error"],
 
         "prefer-const": ["error"],
-        "no-prototype-builtins": ["error"]
+        "no-prototype-builtins": ["error"],
+        "semi": ["error"]
     }
   }

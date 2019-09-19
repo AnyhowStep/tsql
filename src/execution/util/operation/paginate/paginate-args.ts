@@ -62,5 +62,5 @@ export function calculatePagesFound (args : PaginateArgs, rowsFound : bigint) : 
                 BigInt(0) :
                 BigInt(1)
         )
-    )
+    );
 }

@@ -6,3 +6,4 @@ export * from "./logical";
 export * from "./logical-3";
 export * from "./null-safe-comparison";
 export * from "./number-mathematical";
+export * from "./subquery";

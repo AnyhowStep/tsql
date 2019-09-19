@@ -1,3 +1,4 @@
+export * from "./is-after-from-clause";
 export * from "./is-after-select-clause";
 export * from "./is-before-compound-query-clause";
 export * from "./is-before-select-clause";

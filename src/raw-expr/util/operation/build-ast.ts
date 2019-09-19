@@ -53,7 +53,7 @@ export function buildAst (rawExpr : AnyRawExpr) : Ast {
          * @todo Check if this is desirable
          */
         //return rawExpr.buildExprAst();
-        return parentheses(rawExpr, false/*canUnwrap*/)
+        return parentheses(rawExpr, false/*canUnwrap*/);
     }
 
     if (ExprSelectItemUtil.isExprSelectItem(rawExpr)) {

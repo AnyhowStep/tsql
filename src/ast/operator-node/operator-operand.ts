@@ -218,7 +218,7 @@ export type OperatorOperand = {
     [OperatorType.AGGREGATE_BITWISE_AND]    : Operand2|Operand3,
     [OperatorType.AGGREGATE_BITWISE_OR]     : Operand2|Operand3,
     [OperatorType.AGGREGATE_COUNT_EXPR]     : Operand2|Operand3,
-    [OperatorType.AGGREGATE_COUNT_ALL]      : Operand1|Operand2,
+    [OperatorType.AGGREGATE_COUNT_ALL]      : Operand0|Operand1,
     [OperatorType.AGGREGATE_GROUP_CONCAT]   : Operand2|Operand3,
     [OperatorType.AGGREGATE_MAX]            : Operand2|Operand3,
     [OperatorType.AGGREGATE_MIN]            : Operand2|Operand3,
@@ -227,6 +227,13 @@ export type OperatorOperand = {
     [OperatorType.AGGREGATE_SUM]            : Operand2|Operand3,
     [OperatorType.AGGREGATE_POPULATION_VARIANCE]    : Operand1|Operand2,
     [OperatorType.AGGREGATE_SAMPLE_VARIANCE]        : Operand1|Operand2,
+
+    /*
+        https://dev.mysql.com/doc/refman/5.5/en/exists-and-not-exists-subqueries.html
+
+        Subqueries with `EXISTS` or `NOT EXISTS`
+    */
+    [OperatorType.EXISTS]   : Operand1,
 };
 
 type AssertAssignable<ExpectedT, _ActualT extends ExpectedT> = never;

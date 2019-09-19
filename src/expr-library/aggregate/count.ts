@@ -2,12 +2,13 @@ import * as tm from "type-mapping";
 import {Expr} from "../../expr";
 import {IUsedRef, UsedRefUtil} from "../../used-ref";
 import {ExprImpl} from "../../expr/expr-impl";
-import {functionCall} from "../../ast";
+import {operatorNode0} from "../../ast/operator-node/util";
+import {OperatorType} from "../../operator-type";
 
 /**
  * https://dev.mysql.com/doc/refman/8.0/en/group-by-functions.html#function_count
  *
- * @todo Move this to `OperatorType.COUNT_ALL`
+ * @todo Implement support for `OVER()` clause
  */
 export function count () : (
     Expr<{
@@ -20,12 +21,7 @@ export function count () : (
             mapper : tm.mysql.bigIntUnsigned(),
             usedRef : UsedRefUtil.fromColumnRef({}),
         },
-        functionCall(
-            "COUNT",
-            [
-                "*"
-            ]
-        )
+        operatorNode0(OperatorType.AGGREGATE_COUNT_ALL)
     );
     return result;
 }

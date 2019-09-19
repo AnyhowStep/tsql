@@ -556,7 +556,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
             CompoundQueryType.UNION,
             true,
             targetQuery
-        )
+        );
     }
 
     whereEqCandidateKey<
@@ -1361,5 +1361,12 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         >
     ) {
         return ExecutionUtil.paginate(this, connection, rawArgs);
+    }
+
+    exists (
+        this : Extract<this, QueryUtil.NonCorrelated & (QueryUtil.AfterFromClause|QueryUtil.AfterSelectClause)>,
+        connection : SelectConnection
+    ) : Promise<boolean> {
+        return ExecutionUtil.exists(this, connection);
     }
 }

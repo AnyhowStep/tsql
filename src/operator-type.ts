@@ -3121,4 +3121,23 @@ export enum OperatorType {
      * + SQLite     : None. Implement with user-defined function.
      */
     AGGREGATE_SAMPLE_VARIANCE = "AGGREGATE_SAMPLE_VARIANCE",
+
+    /*
+        https://dev.mysql.com/doc/refman/5.5/en/exists-and-not-exists-subqueries.html
+
+        Subqueries with `EXISTS` or `NOT EXISTS`
+    */
+
+    /**
+     * + https://dev.mysql.com/doc/refman/5.5/en/exists-and-not-exists-subqueries.html
+     * + https://www.postgresql.org/docs/8.1/functions-subquery.html#AEN13171
+     * + https://www.sqlite.org/lang_expr.html#exists_op
+     *
+     * -----
+     *
+     * + MySQL      : `EXISTS(query)`
+     * + PostgreSQL : `EXISTS(query)`
+     * + SQLite     : `EXISTS(query)`
+     */
+    EXISTS = "EXISTS",
 }

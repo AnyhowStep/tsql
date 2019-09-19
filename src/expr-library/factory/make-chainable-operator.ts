@@ -144,7 +144,7 @@ export function makeChainableOperator<
                 )
             )
         ) as ChainableOperatorReturn<TypeT, ArrT>;
-    }
+    };
 
     return result;
 }

@@ -39,6 +39,6 @@ export function as<ExprT extends IExpr, AliasT extends string> (
             usedRef : expr.usedRef,
         },
         expr.ast
-    )
+    );
     return result;
 }

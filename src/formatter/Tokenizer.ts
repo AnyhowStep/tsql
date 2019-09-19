@@ -15,9 +15,9 @@ function escapeRegExp (str : string) {
 
 /* eslint-disable local/no-method */
 export class Tokenizer {
-    private readonly WHITESPACE_REGEX = /^(\s+)/;
-    private readonly NUMBER_REGEX = /^((-\s*)?[0-9]+(\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)\b/;
-    private readonly OPERATOR_REGEX = /^(!=|<>|==|<=|>=|!<|!>|\|\||::|->>|->|~~\*|~~|!~~\*|!~~|~\*|!~\*|!~|.)/;
+    private readonly WHITESPACE_REGEX : RegExp;
+    private readonly NUMBER_REGEX : RegExp;
+    private readonly OPERATOR_REGEX : RegExp;
 
     private readonly BLOCK_COMMENT_REGEX = /^(\/\*[^]*?(?:\*\/|$))/;
     private readonly LINE_COMMENT_REGEX : RegExp;

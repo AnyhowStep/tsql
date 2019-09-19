@@ -189,7 +189,7 @@ function selectClauseToSql (
         } else if (ColumnRefUtil.isColumnRef(selectItem)) {
             result.push(...selectClauseColumnRefToSql(selectItem, isDerivedTable));
         } else {
-            throw new Error(`Not implemented`)
+            throw new Error(`Not implemented`);
         }
     }
     return isDistinct ?
@@ -336,7 +336,7 @@ function compoundQueryClauseToSql (compoundQueryClause : CompoundQueryClause, to
                 "SELECT * FROM (",
                 toSql(query),
                 ")"
-            )
+            );
         } else {
             result.push(toSql(query));
         }
@@ -530,6 +530,35 @@ export const sqliteSqlfier : Sqlfier = {
                 operands[0]
             ]
         ),
+
+        /*
+            Aggregate (GROUP BY) Function Descriptions
+            https://dev.mysql.com/doc/refman/8.0/en/group-by-functions.html
+        */
+
+        [OperatorType.AGGREGATE_COUNT_ALL] : () => functionCall("COUNT", ["*"]),
+
+        [OperatorType.EXISTS] : ({operands : [query]}, toSql) => {
+            if (QueryBaseUtil.isAfterFromClause(query)) {
+                //EXISTS(... FROM table)
+                if (QueryBaseUtil.isAfterSelectClause(query)) {
+                    //EXISTS(SELECT x FROM table)
+                    return functionCall("EXISTS", [query]);
+                } else {
+                    //EXISTS(FROM table)
+                    return functionCall("EXISTS", [
+                        "SELECT *" + toSql(query)
+                    ]);
+                }
+            } else {
+                if (QueryBaseUtil.isAfterSelectClause(query)) {
+                    //EXISTS(SELECT x)
+                    return functionCall("EXISTS", [query]);
+                } else {
+                    throw new Error(`Query should have either FROM or SELECT clause`);
+                }
+            }
+        },
     },
     queryBaseSqlfier : (rawQuery, toSql) => {
         return queryToSql(rawQuery, toSql, false);
