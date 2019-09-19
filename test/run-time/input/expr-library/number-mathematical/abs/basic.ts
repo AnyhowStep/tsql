@@ -9,7 +9,7 @@ tape(__filename, t => {
             myColumn : tm.mysql.double(),
         });
 
-    const expr = tsql.abs(
+    const expr = tsql.double.abs(
         myTable.columns.myColumn
     );
     t.deepEqual(

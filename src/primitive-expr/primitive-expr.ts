@@ -1,5 +1,3 @@
-//
-//
 /**
  * In particular,
  * + `BLOB` data should be sent as a `Buffer`
@@ -7,6 +5,8 @@
  * + `undefined` IS NOT ALLOWED
  * + `DECIMAL` data is sent as `string` for now because
  *   there is no native arbitrary-precision-floting-point or fixed-point type in JS
+ *
+ * We do not consider `DECIMAL` as a primitive because JS does not support it natively.
  *
  */
 export type PrimitiveExpr = bigint|number|string|boolean|Date|Buffer|null;

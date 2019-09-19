@@ -48,7 +48,7 @@ tape(__filename, async (t) => {
                 tables => tables.test,
                 other
             )
-            .selectValue(columns => tsql.add(
+            .selectValue(columns => tsql.double.add(
                 columns.test.testVal,
                 columns.other.otherVal
             ))

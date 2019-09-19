@@ -19,7 +19,7 @@ export const resultSet = tsql.from(test)
         tables => tables.test,
         other
     )
-    .selectValue(columns => tsql.add(
+    .selectValue(columns => tsql.double.add(
         columns.test.testVal,
         columns.other.otherVal
     ))

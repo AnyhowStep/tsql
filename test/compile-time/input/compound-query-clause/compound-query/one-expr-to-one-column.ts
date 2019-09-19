@@ -14,7 +14,7 @@ const myOtherTable = tsql.table("myOtherTable")
 const query = tsql
     .from(myTable)
     .select(columns => [
-        tsql.acos(columns.cqcTableId).as("y")
+        tsql.double.acos(columns.cqcTableId).as("y")
     ]);
 
 const otherQuery = tsql

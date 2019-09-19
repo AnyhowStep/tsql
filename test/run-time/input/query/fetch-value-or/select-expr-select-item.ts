@@ -49,7 +49,7 @@ tape(__filename, async (t) => {
                 other
             )
             .select(columns => [
-                tsql.add(
+                tsql.double.add(
                     columns.test.testVal,
                     columns.other.otherVal
                 ).as("sum")

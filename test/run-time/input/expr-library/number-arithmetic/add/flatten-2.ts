@@ -9,22 +9,22 @@ tape(__filename, t => {
             myColumn : tm.mysql.double(),
         });
 
-    const expr = tsql.add(
+    const expr = tsql.double.add(
         myTable.columns.myColumn,
         0,
-        tsql.add(
+        tsql.double.add(
             myTable.columns.myColumn,
             0,
             myTable.columns.myColumn,
-            tsql.add(
+            tsql.double.add(
                 myTable.columns.myColumn,
                 0,
-                tsql.add(myTable.columns.myColumn),
+                tsql.double.add(myTable.columns.myColumn),
                 myTable.columns.myColumn,
-                tsql.add()
+                tsql.double.add()
             ),
-            tsql.add(myTable.columns.myColumn),
-            tsql.add()
+            tsql.double.add(myTable.columns.myColumn),
+            tsql.double.add()
         ),
         myTable.columns.myColumn
     );

@@ -20,7 +20,7 @@ export const resultSet = tsql.from(test)
         other
     )
     .select(columns => [
-        tsql.add(
+        tsql.double.add(
             columns.test.testVal,
             columns.other.otherVal
         ).as("sum")

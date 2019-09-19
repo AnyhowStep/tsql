@@ -18,7 +18,7 @@ const query = tsql
 const otherQuery = tsql
     .from(myOtherTable)
     .select(columns => [
-        tsql.add(columns.cqcOtherTableId, 32).as("x")
+        tsql.double.add(columns.cqcOtherTableId, 32).as("x")
     ]);
 
 export const compound = tsql.CompoundQueryClauseUtil

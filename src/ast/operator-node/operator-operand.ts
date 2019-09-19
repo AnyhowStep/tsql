@@ -191,11 +191,11 @@ export type OperatorOperand = {
         https://dev.mysql.com/doc/refman/8.0/en/cast-functions.html
     */
     [OperatorType.CAST_AS_BYTE_ARRAY]       : Operand1,
-    [OperatorType.CAST_AS_VARCHAR]          : Operand1,
-    [OperatorType.CAST_AS_DECIMAL]          : Operand1,
+    [OperatorType.CAST_AS_VARCHAR]          : Operand1|Operand2,
+    [OperatorType.CAST_AS_DECIMAL]          : Operand3,
     [OperatorType.CAST_AS_DOUBLE]           : Operand1,
     [OperatorType.CAST_AS_JSON]             : Operand1,
-    [OperatorType.CAST_AS_NCHAR]            : Operand1,
+    [OperatorType.CAST_AS_N_CHAR]            : Operand1,
     [OperatorType.CAST_AS_SIGNED_BIG_INTEGER]   : Operand1,
     [OperatorType.CAST_AS_UNSIGNED_BIG_INTEGER] : Operand1,
 

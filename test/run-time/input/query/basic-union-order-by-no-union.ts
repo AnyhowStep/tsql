@@ -10,7 +10,7 @@ tape(__filename, t => {
         });
 
     const query = tsql.from(myTable)
-        .select(c => [c.myBoolColumn, tsql.pi().as("pi")])
+        .select(c => [c.myBoolColumn, tsql.double.pi().as("pi")])
         .compoundQueryOrderBy(c => [
             c.myTable.myBoolColumn,
             c.myTable.myBoolColumn.asc(),

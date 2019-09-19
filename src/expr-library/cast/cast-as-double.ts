@@ -2,8 +2,9 @@ import * as tm from "type-mapping";
 import {makeIdempotentUnaryOperator} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {PrimitiveExpr} from "../../primitive-expr";
+import {Decimal} from "../../decimal";
 
-export const castAsDouble = makeIdempotentUnaryOperator<OperatorType.CAST_AS_DOUBLE, PrimitiveExpr, number|null>(
+export const castAsDouble = makeIdempotentUnaryOperator<OperatorType.CAST_AS_DOUBLE, PrimitiveExpr|Decimal, number|null>(
     OperatorType.CAST_AS_DOUBLE,
     tm.mysql.double().orNull()
 );

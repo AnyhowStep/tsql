@@ -21,7 +21,7 @@ tape(__filename, t => {
             tsql.isNotNull(c.myBoolColumn).as("someName").asc(),
             tsql.isNotNull(c.myBoolColumn).as("someName").desc(),
         ])
-        .select(c => [c.myBoolColumn, tsql.pi().as("pi")]);
+        .select(c => [c.myBoolColumn, tsql.double.pi().as("pi")]);
 
     compareSqlPretty(__filename, t, query);
 

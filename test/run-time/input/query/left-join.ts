@@ -27,7 +27,7 @@ tape(__filename, t => {
                 columns.myTable.myBoolColumn,
                 tsql.gt(
                     columns.myTable2.column2,
-                    tsql.acos(columns.myTable2.column2)
+                    tsql.double.acos(columns.myTable2.column2)
                 )
             )
         )

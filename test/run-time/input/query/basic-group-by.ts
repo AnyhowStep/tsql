@@ -18,7 +18,7 @@ tape(__filename, t => {
         .addColumns({});
 
     const query = tsql.from(myTable)
-        .select(c => [c.myBoolColumn, tsql.pi().as("pi")])
+        .select(c => [c.myBoolColumn, tsql.double.pi().as("pi")])
         .crossJoin(myTable2)
         .crossJoin(myTable3)
         .groupBy(columns => [

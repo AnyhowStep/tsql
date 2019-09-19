@@ -9,9 +9,9 @@ tape(__filename, t => {
             myColumn : tm.mysql.double(),
         });
 
-    const expr = tsql.sub(
+    const expr = tsql.double.sub(
         myTable.columns.myColumn,
-        tsql.add(myTable.columns.myColumn, myTable.columns.myColumn),
+        tsql.double.add(myTable.columns.myColumn, myTable.columns.myColumn),
         myTable.columns.myColumn
     );
     t.deepEqual(

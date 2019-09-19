@@ -10,7 +10,7 @@ tape(__filename, t => {
         });
 
     const query = tsql.from(myTable)
-        .select(() => [tsql.pi().as("pi")]);
+        .select(() => [tsql.double.pi().as("pi")]);
 
     compareSqlPretty(__filename, t, query);
 

@@ -2714,7 +2714,7 @@ export enum OperatorType {
      * + SQLite         : `CAST(x AS TEXT)`
      *   + SQLite does not have character sets
      */
-    CAST_AS_NCHAR = "CAST_AS_NCHAR",
+    CAST_AS_N_CHAR = "CAST_AS_N_CHAR",
 
     /*
      * The behaviour is too unpredictable on MySQL.

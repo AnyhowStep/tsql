@@ -9,14 +9,14 @@ tape(__filename, t => {
             myColumn : tm.mysql.double(),
         });
 
-    const expr = tsql.add(
+    const expr = tsql.double.add(
         myTable.columns.myColumn,
         0,
-        tsql.add(
+        tsql.double.add(
             myTable.columns.myColumn,
             0,
             myTable.columns.myColumn,
-            tsql.add(
+            tsql.double.add(
                 myTable.columns.myColumn,
                 0,
                 myTable.columns.myColumn

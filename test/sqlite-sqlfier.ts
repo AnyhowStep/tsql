@@ -532,6 +532,18 @@ export const sqliteSqlfier : Sqlfier = {
         ),
 
         /*
+            Cast Functions and Operators
+            https://dev.mysql.com/doc/refman/8.0/en/cast-functions.html
+        */
+
+        [OperatorType.CAST_AS_DECIMAL] : ({operands : [arg, precision, scale]}, toSql) => functionCall(
+            "CAST",
+            [
+                toSql(arg) + `AS DECIMAL(${toSql(precision)}, ${toSql(scale)})`
+            ]
+        ),
+
+        /*
             Aggregate (GROUP BY) Function Descriptions
             https://dev.mysql.com/doc/refman/8.0/en/group-by-functions.html
         */
