@@ -64,6 +64,19 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         this.isDistinct = extraData.isDistinct;
     }
 
+    /*
+        One should be careful about using LIMIT, OFFSET
+        without an ORDER BY clause.
+
+        In general, if your WHERE condition uniquely identifies
+        the row, then LIMIT and OFFSET are not required
+        and can be safely used without an ORDER BY.
+
+        The problem is when the WHERE condition *does not*
+        uniquely identify a row.
+
+        Then, LIMIT and OFFSET can return inconsistent results.
+    */
     limit<
         MaxRowCountT extends bigint
     > (
@@ -555,6 +568,32 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
             this,
             CompoundQueryType.UNION,
             true,
+            targetQuery
+        );
+    }
+
+    unionAll<
+        TargetQueryT extends QueryBaseUtil.AfterSelectClause
+    > (
+        this : Extract<this, QueryUtil.AfterSelectClause>,
+        targetQuery : (
+            & TargetQueryT
+            & CompoundQueryClauseUtil.AssertCompatible<
+                Extract<this, QueryUtil.AfterSelectClause>["fromClause"],
+                Extract<this, QueryUtil.AfterSelectClause>["selectClause"],
+                TargetQueryT
+            >
+        )
+    ) : (
+        QueryUtil.CompoundQuery<Extract<this, QueryUtil.AfterSelectClause>, TargetQueryT>
+    ) {
+        return QueryUtil.compoundQuery<
+            Extract<this, QueryUtil.AfterSelectClause>,
+            TargetQueryT
+        >(
+            this,
+            CompoundQueryType.UNION,
+            false,
             targetQuery
         );
     }
