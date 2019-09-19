@@ -1,14 +1,14 @@
 import {OperatorType} from "../../../../operator-type";
 import {OperatorOperand} from "../../operator-operand";
 import {Operand1} from "../../operand";
-import {IsStrictSameType} from "../../../../type-util";
+import {ExtractStrictSameType} from "../../../../type-util";
 import {CompileError} from "../../../../compile-error";
 
 export type AssertHasOperand1<OperatorTypeT extends OperatorType> =
-    IsStrictSameType<OperatorOperand[OperatorTypeT], Operand1> extends true ?
-    unknown :
+    ExtractStrictSameType<OperatorOperand[OperatorTypeT], Operand1> extends never ?
     CompileError<[
         "Expected unary operator, received",
         OperatorTypeT
-    ]>
+    ]> :
+    unknown
 ;
