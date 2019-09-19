@@ -1,0 +1,12 @@
+extraction:
+  javascript:
+    index:
+      include: "src"
+      exclude:
+      - "thirdparty/lib"
+      - "node_modules"
+      filters:
+      - exclude: "**/node_modules/*"
+      - exclude: "**/*.ts"
+      - include: "src/**/*.ts"
+      typescript: "full"
