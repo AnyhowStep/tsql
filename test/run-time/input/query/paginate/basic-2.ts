@@ -59,12 +59,13 @@ tape(__filename, async (t) => {
                             rowsPerPage : BigInt(rowsPerPage),
                             rowsFound : 10n,
                             pagesFound : 4n,
+                            rowOffset : 0n,
                         },
                         rows : [
                             { testId : BigInt(i), testVal : BigInt(i*100) },
                         ]
                     }
-                )
+                );
             } else {
                 t.deepEqual(
                     p,
@@ -74,6 +75,7 @@ tape(__filename, async (t) => {
                             rowsPerPage : BigInt(rowsPerPage),
                             rowsFound : 10n,
                             pagesFound : 4n,
+                            rowOffset : 0n,
                         },
                         rows : [
                             { testId : BigInt(i), testVal : BigInt(i*100) },
@@ -81,7 +83,7 @@ tape(__filename, async (t) => {
                             { testId : BigInt(i+2), testVal : BigInt((i+2)*100) }
                         ]
                     }
-                )
+                );
             }
 
             ++page;

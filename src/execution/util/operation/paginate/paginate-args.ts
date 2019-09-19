@@ -1,6 +1,11 @@
 import * as tm from "type-mapping";
-const maybePage = tm.mysql.bigIntUnsigned().orUndefined();
-const maybeRowsPerPage = tm.mysql.bigIntUnsigned().orUndefined();
+/**
+ * We use `BIGINT SIGNED` because PostgreSQL and SQLite do not support
+ * `BIGINT UNSIGNED`.
+ */
+const maybePage = tm.mysql.bigIntSigned().orUndefined();
+const maybeRowsPerPage = tm.mysql.bigIntSigned().orUndefined();
+const maybeRowOffset = tm.mysql.bigIntSigned().orUndefined();
 
 /**
  * Better to use `bigint`.
@@ -12,19 +17,26 @@ const maybeRowsPerPage = tm.mysql.bigIntUnsigned().orUndefined();
 export interface RawPaginateArgs {
     page? : number|bigint,
     rowsPerPage? : number|bigint,
+    /**
+     * When positive, lets you skip the first `rowOffset` rows.
+     * Has no effect when negative or zero.
+     */
+    rowOffset? : number|bigint,
 }
 export interface PaginateArgs {
     page : bigint,
     rowsPerPage : bigint,
+    rowOffset : bigint,
 }
 
 export function toPaginateArgs (rawArgs : RawPaginateArgs) : PaginateArgs {
     const page = maybePage.mapMappable("page", rawArgs.page);
     const rowsPerPage = maybeRowsPerPage.mapMappable("rowsPerPage", rawArgs.rowsPerPage);
+    const rowOffset = maybeRowOffset.mapMappable("rowOffset", rawArgs.rowOffset);
 
     const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
 
-    return {
+    const args = {
         page : (page == undefined || page <  0) ?
             //Default
             BigInt(0) :
@@ -33,11 +45,27 @@ export function toPaginateArgs (rawArgs : RawPaginateArgs) : PaginateArgs {
             //Default
             BigInt(20) :
             rowsPerPage,
+        rowOffset : (rowOffset == undefined || rowOffset <  0) ?
+            //Default
+            BigInt(0) :
+            rowOffset,
     };
+    const paginationStart = getPaginationStart(args);
+    if (paginationStart > BigInt("9223372036854775807")) {
+        throw new Error(`Cannot have OFFSET greater than 9223372036854775807`);
+    }
+
+    return args;
 }
 
+/**
+ * It is possible for this value to be greater than
+ * `9223372036854775807n`.
+ *
+ * When this happens, you will get an error from the RDBMS
+ */
 export function getPaginationStart (args : PaginateArgs) : bigint {
-    return args.page * args.rowsPerPage;
+    return args.page * args.rowsPerPage + args.rowOffset;
 }
 
 export function calculatePagesFound (args : PaginateArgs, rowsFound : bigint) : bigint {

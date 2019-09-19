@@ -33,42 +33,24 @@ tape(__filename, async (t) => {
                 testVal : tm.mysql.bigIntUnsigned(),
             });
 
-        let page = 0;
-        const rowsPerPage = 3;
-        for (let i=1; i<10; i+=rowsPerPage) {
-            const p = await tsql.from(test)
-                .orderBy(columns => [
-                    columns.testId.asc(),
-                ])
-                .select(c => [c])
-                .paginate(
-                    connection,
-                    {
-                        page,
-                        rowsPerPage,
-                    }
-                );
-
-            t.deepEqual(
-                p,
+        const cursor = tsql.from(test)
+            .orderBy(columns => [
+                columns.testId.asc(),
+            ])
+            .select(c => [c])
+            .emulatedCursor(
+                connection,
                 {
-                    info : {
-                        page : BigInt(page),
-                        rowsPerPage : BigInt(rowsPerPage),
-                        rowsFound : 9n,
-                        pagesFound : 3n,
-                        rowOffset : 0n,
-                    },
-                    rows : [
-                        { testId : BigInt(i), testVal : BigInt(i*100) },
-                        { testId : BigInt(i+1), testVal : BigInt((i+1)*100) },
-                        { testId : BigInt(i+2), testVal : BigInt((i+2)*100) }
-                    ]
+                    rowsPerPage : 3,
+                    rowOffset : 200,
                 }
             );
-
-            ++page;
+        let i = 0;
+        for await (const row of cursor) {
+            t.fail("Should not have anything to iterate over; " + JSON.stringify(row));
+            ++i;
         }
+        t.deepEqual(i, 0);
     });
 
     t.end();

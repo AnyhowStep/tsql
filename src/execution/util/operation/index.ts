@@ -1,3 +1,4 @@
+export * from "./emulated-cursor";
 export * from "./paginate";
 
 export * from "./assert-exists";

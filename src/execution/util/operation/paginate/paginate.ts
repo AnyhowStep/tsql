@@ -11,6 +11,7 @@ export interface PaginateInfo {
     pagesFound : bigint,
     page : bigint,
     rowsPerPage : bigint,
+    rowOffset : bigint,
 }
 export interface PaginateResult<T> {
     info : PaginateInfo,
@@ -44,6 +45,7 @@ export async function paginate<
         pagesFound,
         page : args.page,
         rowsPerPage : args.rowsPerPage,
+        rowOffset : args.rowOffset,
     };
     return {
         info,

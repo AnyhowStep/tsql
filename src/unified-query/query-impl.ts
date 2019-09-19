@@ -1415,4 +1415,40 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     ) : Promise<void> {
         return ExecutionUtil.assertExists(this, connection);
     }
+
+    emulatedCursor (
+        this : Extract<
+            this,
+            (
+                & QueryBaseUtil.AfterSelectClause
+                & QueryBaseUtil.NonCorrelated
+            )
+        >,
+        connection : ExecutionUtil.FetchAllConnection<
+            Extract<
+                this,
+                (
+                    & QueryBaseUtil.AfterSelectClause
+                    & QueryBaseUtil.NonCorrelated
+                )
+            >
+        >,
+        /**
+         * If set, determines the starting `page` of the cursor.
+         * The `rowsPerPage` setting determines how many rows are buffered into memory at a time.
+         */
+        rawArgs : ExecutionUtil.RawPaginateArgs = {}
+    ) : (
+        ExecutionUtil.EmulatedCursor<
+            Extract<
+                this,
+                (
+                    & QueryBaseUtil.AfterSelectClause
+                    & QueryBaseUtil.NonCorrelated
+                )
+            >
+        >
+    ) {
+        return ExecutionUtil.emulatedCursor(this, connection, rawArgs);
+    }
 }

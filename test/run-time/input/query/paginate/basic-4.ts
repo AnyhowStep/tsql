@@ -43,6 +43,7 @@ tape(__filename, async (t) => {
                     rowsPerPage : BigInt(rowsPerPage),
                     rowsFound : 0n,
                     pagesFound : 0n,
+                    rowOffset : 0n,
                 },
                 rows : [
                 ]
