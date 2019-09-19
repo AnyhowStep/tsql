@@ -58,6 +58,7 @@
         "./src/error/**/*",
         "./src/execution/**/*",
         "./src/map-delegate/**/*",
+        "./src/decimal/**/*",
         "./src/index.ts"
     ]
 }

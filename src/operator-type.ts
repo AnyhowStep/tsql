@@ -1255,8 +1255,8 @@ export enum OperatorType {
      *
      * -----
      *
-     * + MySQL        : `CEIL(x)`
-     * + PostgreSQL   : `CEIL(x)`
+     * + MySQL        : `CEIL(x)/CEILING(x)`
+     * + PostgreSQL   : `CEIL(x)/CEILING(x)`
      * + SQLite       : None, use the following instead,
      *   + https://stackoverflow.com/questions/14969067/getting-the-ceil-value-of-a-number-in-sqlite
      * ```sql
