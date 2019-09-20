@@ -51,7 +51,7 @@ export function offsetBigInt<
 ) : (
     OffsetBigInt<LimitClauseT, OffsetT>
 ) {
-    if (offset < 0) {
+    if (tm.BigIntUtil.lessThan(offset, 0)) {
         throw new Error(`Cannot OFFSET fewer than zero rows`);
     }
 

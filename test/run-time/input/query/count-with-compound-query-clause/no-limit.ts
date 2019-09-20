@@ -55,7 +55,7 @@ tape(__filename, async (t) => {
     });
     t.deepEqual(
         resultSet,
-        5n
+        BigInt(5)
     );
 
     t.end();

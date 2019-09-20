@@ -18,7 +18,7 @@ export function mapper<RawExprT extends AnyRawExpr> (
     if (typeof rawExpr == "number") {
         return tm.mysql.double() as tm.AnySafeMapper as Mapper<RawExprT>;
     }
-    if (typeof rawExpr == "bigint") {
+    if (tm.TypeUtil.isBigInt(rawExpr)) {
         return tm.toBigInt() as tm.AnySafeMapper as Mapper<RawExprT>;
     }
     if (typeof rawExpr == "string") {

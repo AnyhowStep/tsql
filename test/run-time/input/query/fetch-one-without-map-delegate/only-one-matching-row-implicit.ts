@@ -51,7 +51,7 @@ tape(__filename, async (t) => {
             .select(columns => [columns])
             .whereEq(
                 columns => columns.test.testId,
-                1n
+                BigInt(1)
             )
             .fetchOne(
                 /**
@@ -63,8 +63,8 @@ tape(__filename, async (t) => {
     t.deepEqual(
         resultSet,
         {
-            test: { testId: 1n, testVal: 100n },
-            other: { testId: 1n, otherVal: 111n },
+            test: { testId: BigInt(1), testVal: BigInt(100) },
+            other: { testId: BigInt(1), otherVal: BigInt(111) },
         }
     );
 

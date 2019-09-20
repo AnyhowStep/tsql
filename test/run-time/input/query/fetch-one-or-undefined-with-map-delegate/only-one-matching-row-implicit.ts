@@ -51,13 +51,13 @@ tape(__filename, async (t) => {
             .select(columns => [columns])
             .whereEq(
                 columns => columns.test.testId,
-                1n
+                BigInt(1)
             )
             .map((row) => {
                 return {
                     test : row.test,
                     other2 : row.other,
-                    total : row.test.testVal + row.other.otherVal,
+                    total : tm.BigIntUtil.add(row.test.testVal, row.other.otherVal),
                 };
             })
             .map((row) => {
@@ -76,9 +76,9 @@ tape(__filename, async (t) => {
     t.deepEqual(
         resultSet,
         {
-            test: { testId: 1n, testVal: 100n },
-            other2: { testId: 1n, otherVal: 111n },
-            total: 211n,
+            test: { testId: BigInt(1), testVal: BigInt(100) },
+            other2: { testId: BigInt(1), otherVal: BigInt(111) },
+            total: BigInt(211),
             hello: "hi",
         }
     );

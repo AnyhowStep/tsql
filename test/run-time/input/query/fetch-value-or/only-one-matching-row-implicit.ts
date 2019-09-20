@@ -51,7 +51,7 @@ tape(__filename, async (t) => {
             .select(columns => [columns.other.otherVal])
             .whereEq(
                 columns => columns.test.testId,
-                1n
+                BigInt(1)
             )
             .fetchValueOr(
                 connection,
@@ -60,7 +60,7 @@ tape(__filename, async (t) => {
     });
     t.deepEqual(
         resultSet,
-        111n
+        BigInt(111)
     );
 
     t.end();

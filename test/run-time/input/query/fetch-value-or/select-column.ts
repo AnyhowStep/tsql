@@ -42,7 +42,7 @@ tape(__filename, async (t) => {
     });
     t.deepEqual(
         resultSet,
-        300n
+        BigInt(300)
     );
 
     t.end();

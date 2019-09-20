@@ -66,12 +66,12 @@ tape(__filename, async (t) => {
         resultSet,
         [
             {
-                test: { testId: 3n, testVal: 300n },
-                other: { otherVal: 333n },
+                test: { testId: BigInt(3), testVal: BigInt(300) },
+                other: { otherVal: BigInt(333) },
             },
             {
-                test: { testId: 1n, testVal: 100n },
-                other: { otherVal: 111n },
+                test: { testId: BigInt(1), testVal: BigInt(100) },
+                other: { otherVal: BigInt(111) },
             },
         ]
     );

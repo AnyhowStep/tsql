@@ -41,9 +41,9 @@ tape(__filename, async (t) => {
     t.deepEqual(
         resultSet,
         [
-            300n,
-            200n,
-            100n,
+            BigInt(300),
+            BigInt(200),
+            BigInt(100),
         ]
     );
 

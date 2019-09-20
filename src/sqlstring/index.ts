@@ -1,3 +1,4 @@
+import * as tm from "type-mapping";
 const ID_BACKTICK_GLOBAL_REGEXP     = /`/g;
 const ID_DOUBLE_QUOTE_GLOBAL_REGEXP = /"/g;
 const CHARS_GLOBAL_REGEXP = /[\0\b\t\n\r\x1a\"\'\\]/g; // eslint-disable-line no-control-regex
@@ -82,6 +83,30 @@ export function escapeValue (rawValue : null|boolean|number|bigint|string|Buffer
         return "NULL";
     }
 
+    if (tm.TypeUtil.isBigInt(rawValue)) {
+        /**
+         * Max `BIGINT SIGNED` value: `SELECT 9223372036854775807+9223372036854775807`
+         *
+         * + MySQL      : `SELECT 9223372036854775807+9223372036854775807`; Error, out of range of bigint signed value
+         * + PostgreSQL : `SELECT 9223372036854775807+9223372036854775807`; Error, out of range of bigint signed value
+         * + SQLite     : `SELECT 9223372036854775807+9223372036854775807`; `18446744073709552000` (incorrect value)
+         * + Expected   : `18446744073709551614`
+         *
+         * -----
+         *
+         * + MySQL      : `SELECT 18446744073709551615+18446744073709551615`; Error, out of range of bigint unsigned value
+         * + PostgreSQL : `SELECT 18446744073709551615+18446744073709551615`; `36893488147419103230` (DECIMAL, not bigint unsigned)
+         * + SQLite     : `SELECT 18446744073709551615+18446744073709551615`; `36893488147419103000` (incorrect value)
+         * + Expected   : `36893488147419103230`
+         *
+         * PostgreSQL and SQLite do not support `BIGINT UNSIGNED`.
+         * Selecting an integer larger than bigint signed in PostgreSQL will give you a `DECIMAL` value.
+         *
+         * @todo Fix this
+         */
+        return String(rawValue);
+    }
+
     switch (typeof rawValue) {
         case "boolean": {
             return rawValue ?
@@ -99,34 +124,29 @@ export function escapeValue (rawValue : null|boolean|number|bigint|string|Buffer
                  * + MySQL      : `SELECT 1e300`; `1e300`
                  * + PostgreSQL : `SELECT 1e300`; `1000000000...` (total 300 zeroes) (DECIMAL)
                  * + SQLite     : `SELECT 1e300`; `1e300`
+                 *
+                 * -----
+                 *
+                 * PostgreSQL:
+                 * ```sql
+                 *  SELECT
+                 *      pg_typeof(1e19), -- numeric
+                 *      pg_typeof(1e1),  -- numeric
+                 *      pg_typeof(10)    -- integer
+                 * ```
+                 *
+                 * SQLite:
+                 * ```sql
+                 *  SELECT
+                 *      typeof(1e19), -- real
+                 *      typeof(1e1),  -- real
+                 *      typeof(10)    -- integer
+                 * ```
                  */
                 return result + "e0";
             } else {
                 return result;
             }
-        }
-        case "bigint": {
-            /**
-             * Max `BIGINT SIGNED` value: `SELECT 9223372036854775807+9223372036854775807`
-             *
-             * + MySQL      : `SELECT 9223372036854775807+9223372036854775807`; Error, out of range of bigint signed value
-             * + PostgreSQL : `SELECT 9223372036854775807+9223372036854775807`; Error, out of range of bigint signed value
-             * + SQLite     : `SELECT 9223372036854775807+9223372036854775807`; `18446744073709552000` (incorrect value)
-             * + Expected   : `18446744073709551614`
-             *
-             * -----
-             *
-             * + MySQL      : `SELECT 18446744073709551615+18446744073709551615`; Error, out of range of bigint unsigned value
-             * + PostgreSQL : `SELECT 18446744073709551615+18446744073709551615`; `36893488147419103230` (DECIMAL, not bigint unsigned)
-             * + SQLite     : `SELECT 18446744073709551615+18446744073709551615`; `36893488147419103000` (incorrect value)
-             * + Expected   : `36893488147419103230`
-             *
-             * PostgreSQL and SQLite do not support `BIGINT UNSIGNED`.
-             * Selecting an integer larger than bigint signed in PostgreSQL will give you a `DECIMAL` value.
-             *
-             * @todo Fix this
-             */
-            return String(rawValue);
         }
         case "string": {
             return escapeString(rawValue);

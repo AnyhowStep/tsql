@@ -62,7 +62,7 @@ tape(__filename, async (t) => {
     });
     t.deepEqual(
         resultSet,
-        333n
+        BigInt(333)
     );
 
     t.end();

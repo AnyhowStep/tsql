@@ -37,21 +37,21 @@ export function toPaginateArgs (rawArgs : RawPaginateArgs) : PaginateArgs {
     const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
 
     const args = {
-        page : (page == undefined || page <  0) ?
+        page : (page == undefined || tm.BigIntUtil.lessThan(page,  0)) ?
             //Default
             BigInt(0) :
             page,
-        rowsPerPage : (rowsPerPage == undefined || rowsPerPage < 1) ?
+        rowsPerPage : (rowsPerPage == undefined || tm.BigIntUtil.lessThan(rowsPerPage, 1)) ?
             //Default
             BigInt(20) :
             rowsPerPage,
-        rowOffset : (rowOffset == undefined || rowOffset <  0) ?
+        rowOffset : (rowOffset == undefined || tm.BigIntUtil.lessThan(rowOffset, 0)) ?
             //Default
             BigInt(0) :
             rowOffset,
     };
     const paginationStart = getPaginationStart(args);
-    if (paginationStart > BigInt("9223372036854775807")) {
+    if (tm.BigIntUtil.greaterThan(paginationStart, BigInt("9223372036854775807"))) {
         throw new Error(`Cannot have OFFSET greater than 9223372036854775807`);
     }
 
@@ -65,30 +65,38 @@ export function toPaginateArgs (rawArgs : RawPaginateArgs) : PaginateArgs {
  * When this happens, you will get an error from the RDBMS
  */
 export function getPaginationStart (args : PaginateArgs) : bigint {
-    return args.page * args.rowsPerPage + args.rowOffset;
+    return tm.BigIntUtil.add(
+        tm.BigIntUtil.mul(
+            args.page,
+            args.rowsPerPage
+        ),
+        args.rowOffset
+    );
 }
 
 export function calculatePagesFound (args : PaginateArgs, rowsFound : bigint) : bigint {
     const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
 
-    if (rowsFound < 0) {
+    if (tm.BigIntUtil.lessThan(rowsFound, 0)) {
         /**
          * Should not have negative rows found
          */
         return BigInt(0);
     }
-    if (args.rowsPerPage <= 0) {
+    if (tm.BigIntUtil.lessThanOrEqual(args.rowsPerPage, 0)) {
         /**
          * Avoid divide by zero errors
          */
         return BigInt(0);
     }
     return (
-        rowsFound/args.rowsPerPage +
-        (
-            (rowsFound%args.rowsPerPage == BigInt(0)) ?
-                BigInt(0) :
-                BigInt(1)
+        tm.BigIntUtil.add(
+            tm.BigIntUtil.div(rowsFound, args.rowsPerPage),
+            (
+                tm.BigIntUtil.equal(tm.BigIntUtil.mod(rowsFound, args.rowsPerPage), BigInt(0)) ?
+                    BigInt(0) :
+                    BigInt(1)
+            )
         )
     );
 }

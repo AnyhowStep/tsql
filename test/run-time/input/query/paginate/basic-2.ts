@@ -57,9 +57,9 @@ tape(__filename, async (t) => {
                         info : {
                             page : BigInt(page),
                             rowsPerPage : BigInt(rowsPerPage),
-                            rowsFound : 10n,
-                            pagesFound : 4n,
-                            rowOffset : 0n,
+                            rowsFound : BigInt(10),
+                            pagesFound : BigInt(4),
+                            rowOffset : BigInt(0),
                         },
                         rows : [
                             { testId : BigInt(i), testVal : BigInt(i*100) },
@@ -73,9 +73,9 @@ tape(__filename, async (t) => {
                         info : {
                             page : BigInt(page),
                             rowsPerPage : BigInt(rowsPerPage),
-                            rowsFound : 10n,
-                            pagesFound : 4n,
-                            rowOffset : 0n,
+                            rowsFound : BigInt(10),
+                            pagesFound : BigInt(4),
+                            rowOffset : BigInt(0),
                         },
                         rows : [
                             { testId : BigInt(i), testVal : BigInt(i*100) },

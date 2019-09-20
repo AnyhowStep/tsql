@@ -47,7 +47,7 @@ export class EmulatedCursorImpl<
         this.BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
         this.rowIndex = 0;
 
-        if (this.rowsPerPage > Number.MAX_SAFE_INTEGER) {
+        if (tm.BigIntUtil.greaterThan(this.rowsPerPage, Number.MAX_SAFE_INTEGER)) {
             throw new Error(`Cannot safely emulate cursor when buffer size is greater than ${Number.MAX_SAFE_INTEGER}`);
         }
     }
@@ -79,8 +79,8 @@ export class EmulatedCursorImpl<
     }
     private async tryFetchNextPage () : Promise<Paginate<QueryT>|undefined> {
         const buffer = await this.getOrFetchBuffer();
-        const nextPage =  buffer.info.page + this.BigInt(1);
-        if (nextPage < buffer.info.pagesFound) {
+        const nextPage =  tm.BigIntUtil.add(buffer.info.page, this.BigInt(1));
+        if (tm.BigIntUtil.lessThan(nextPage, buffer.info.pagesFound)) {
             this.rowIndex = 0;
             this.buffer = await paginate(
                 this.query,

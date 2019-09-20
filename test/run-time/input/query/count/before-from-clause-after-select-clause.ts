@@ -14,7 +14,7 @@ tape(__filename, async (t) => {
     });
     t.deepEqual(
         resultSet,
-        1n
+        BigInt(1)
     );
 
     t.end();

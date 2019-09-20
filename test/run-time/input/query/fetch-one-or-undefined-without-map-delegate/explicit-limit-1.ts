@@ -63,8 +63,8 @@ tape(__filename, async (t) => {
     t.deepEqual(
         resultSet,
         {
-            test: { testId: 3n, testVal: 300n },
-            other: { testId: 3n, otherVal: 333n },
+            test: { testId: BigInt(3), testVal: BigInt(300) },
+            other: { testId: BigInt(3), otherVal: BigInt(333) },
         }
     );
 

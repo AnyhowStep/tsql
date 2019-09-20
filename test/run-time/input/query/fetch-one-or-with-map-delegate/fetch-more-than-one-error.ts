@@ -56,7 +56,7 @@ tape(__filename, async (t) => {
                 return {
                     test : row.test,
                     other2 : row.other,
-                    total : row.test.testVal + row.other.otherVal,
+                    total : tm.BigIntUtil.add(row.test.testVal, row.other.otherVal),
                 };
             })
             .map((row) => {

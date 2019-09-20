@@ -57,7 +57,7 @@ tape(__filename, async (t) => {
                     return {
                         test : row.test,
                         other2 : row.other,
-                        total : row.test.testVal + row.other.otherVal,
+                        total : tm.BigIntUtil.add(row.test.testVal, row.other.otherVal),
                     };
                 })
                 .map(async (row) => {
@@ -76,15 +76,15 @@ tape(__filename, async (t) => {
         resultSet,
         [
             {
-                test: { testId: 3n, testVal: 300n },
-                other2: { testId: 3n, otherVal: 333n },
-                total: 633n,
+                test: { testId: BigInt(3), testVal: BigInt(300) },
+                other2: { testId: BigInt(3), otherVal: BigInt(333) },
+                total: BigInt(633),
                 hello: "hi",
             },
             {
-                test: { testId: 1n, testVal: 100n },
-                other2: { testId: 1n, otherVal: 111n },
-                total: 211n,
+                test: { testId: BigInt(1), testVal: BigInt(100) },
+                other2: { testId: BigInt(1), otherVal: BigInt(111) },
+                total: BigInt(211),
                 hello: "hi",
             },
         ]

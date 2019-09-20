@@ -59,7 +59,7 @@ tape(__filename, async (t) => {
     });
     t.deepEqual(
         resultSet,
-        2n
+        BigInt(2)
     );
 
     t.end();

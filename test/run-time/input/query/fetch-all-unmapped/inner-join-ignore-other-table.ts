@@ -60,10 +60,10 @@ tape(__filename, async (t) => {
         resultSet,
         [
             {
-                test: { testId: 3n, testVal: 300n },
+                test: { testId: BigInt(3), testVal: BigInt(300) },
             },
             {
-                test: { testId: 1n, testVal: 100n },
+                test: { testId: BigInt(1), testVal: BigInt(100) },
             },
         ]
     );

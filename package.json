@@ -5,7 +5,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "test": "ts-node -P ./test/run-time/tsconfig.json -r ./test/run-time/bluebird-promise.ts",
+    "test": "ts-node -P ./test/run-time/tsconfig.json -r ./test/run-time/tape-stream.ts -r ./test/run-time/bluebird-promise.ts",
+    "test-bigint-polyfill": "ts-node -P ./test/run-time/tsconfig.json -r ./test/run-time/tape-stream.ts -r ./test/run-time/bigint-polyfill.ts -r ./test/run-time/bluebird-promise.ts",
     "build-custom-eslint-rules": "tsc -p ./custom-typescript-eslint-rules/tsconfig.json",
     "lint": "eslint --ext .ts",
     "lint-all": "npm run lint -- ./src",
@@ -16,7 +17,9 @@
     "accept-compile-time": "ts-node -P ./test/compile-time/tsconfig.json ./test/compile-time/accept-actual.ts",
     "accept-one": "ts-node -P ./test/compile-time/tsconfig.json ./test/compile-time/accept-one.ts",
     "test-compile-time-interactive": "ts-node -P ./test/compile-time/tsconfig.json ./test/compile-time/interactive.ts",
-    "test-run-time": "ts-node -P ./test/run-time/tsconfig.json -r ./test/run-time/bluebird-promise.ts ./test/run-time/runner.ts",
+    "test-run-time": "ts-node -P ./test/run-time/tsconfig.json -r ./test/run-time/tape-stream.ts -r ./test/run-time/bluebird-promise.ts ./test/run-time/runner.ts",
+    "test-run-time-bigint-polyfill": "ts-node -P ./test/run-time/tsconfig.json -r ./test/run-time/tape-stream.ts -r ./test/run-time/bigint-polyfill.ts -r ./test/run-time/bluebird-promise.ts ./test/run-time/runner.ts",
+    "sanity-check": "(npm run rebuild) && (npm run test-run-time) && (npm run test-run-time-bigint-polyfill) && (npm run test-compile-time)",
     "count-loc": "find ./src -name '*.ts' | xargs wc -l"
   },
   "author": "anyhowstep",
@@ -50,6 +53,6 @@
     "typescript": "^3.5.1"
   },
   "dependencies": {
-    "type-mapping": "^1.21.0"
+    "type-mapping": "^1.23.2"
   }
 }

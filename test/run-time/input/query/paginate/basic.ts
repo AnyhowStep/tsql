@@ -49,15 +49,16 @@ tape(__filename, async (t) => {
                     }
                 );
 
+            t.deepEqual(p.info.rowOffset, BigInt(BigInt(0)));
             t.deepEqual(
                 p,
                 {
                     info : {
                         page : BigInt(page),
                         rowsPerPage : BigInt(rowsPerPage),
-                        rowsFound : 9n,
-                        pagesFound : 3n,
-                        rowOffset : 0n,
+                        rowsFound : BigInt(BigInt(9)),
+                        pagesFound : BigInt(BigInt(3)),
+                        rowOffset : BigInt(BigInt(0)),
                     },
                     rows : [
                         { testId : BigInt(i), testVal : BigInt(i*100) },

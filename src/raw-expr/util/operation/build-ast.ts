@@ -13,11 +13,9 @@ import {OperatorType} from "../../../operator-type";
 export function buildAst (rawExpr : AnyRawExpr) : Ast {
     //Check primitive cases first
     if (typeof rawExpr == "number") {
-        //This technically gives us DECIMAL in MySQL,
-        //Not double
         return escapeValue(rawExpr);
     }
-    if (typeof rawExpr == "bigint") {
+    if (tm.TypeUtil.isBigInt(rawExpr)) {
         return escapeValue(rawExpr);
     }
     if (typeof rawExpr == "string") {
