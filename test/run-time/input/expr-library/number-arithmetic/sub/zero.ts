@@ -6,7 +6,7 @@ tape(__filename, t => {
     const expr = tsql.double.sub();
     t.deepEqual(
         tsql.AstUtil.toSql(expr.ast, sqliteSqlfier),
-        `0`
+        `0e0`
     );
 
     t.end();

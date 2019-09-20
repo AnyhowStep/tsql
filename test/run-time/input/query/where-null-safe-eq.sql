@@ -7,5 +7,5 @@ CROSS JOIN
 CROSS JOIN
   "myTable3"
 WHERE
-  ("myTable2"."myDoubleColumn" IS 42) AND
+  ("myTable2"."myDoubleColumn" IS 42e0) AND
   ("myTable"."myBoolColumn" IS NULL)

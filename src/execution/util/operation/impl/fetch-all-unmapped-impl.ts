@@ -26,9 +26,9 @@ export async function fetchAllUnmappedImpl<
     for (const rawRow of rawResult.rows) {
         const row : RawRow = {};
         for (const k of Object.keys(rawRow)) {
-            const parts = k.split(SEPARATOR);
-            const tableAlias = parts[0];
-            const columnAlias = parts[1];
+            const separatorIndex = k.indexOf(SEPARATOR);
+            const tableAlias = k.substr(0, separatorIndex);
+            const columnAlias = k.substr(separatorIndex+SEPARATOR.length);
 
             const value = ref[tableAlias][columnAlias].mapper(
                 `${tableAlias}.${columnAlias}`,

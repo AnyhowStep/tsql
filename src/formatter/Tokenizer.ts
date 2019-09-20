@@ -63,7 +63,8 @@ export class Tokenizer {
         specialWordChars : string[]|undefined,
     }) {
         this.WHITESPACE_REGEX = /^(\s+)/;
-        this.NUMBER_REGEX = /^((-\s*)?[0-9]+(\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)\b/;
+        //The original NUMBER_REGEX was this -> /^((-\s*)?[0-9]+(\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)\b/;
+        this.NUMBER_REGEX = /^(([-+])?([0-9]*\.?[0-9]+)([eE]([-+])?([0-9]+))?)\b/;
         //Added <=> as the NULL-safe equality operator
         this.OPERATOR_REGEX = /^(<=>|!=|<>|==|<=|>=|!<|!>|\|\||::|->>|->|~~\*|~~|!~~\*|!~~|~\*|!~\*|!~|.)/;
 

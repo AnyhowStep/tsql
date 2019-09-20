@@ -18,7 +18,7 @@ tape(__filename, t => {
     );
     t.deepEqual(
         tsql.AstUtil.toSql(expr.ast, sqliteSqlfier),
-        `("myTable"."myColumn" + 1 + -1 + 32)`
+        `("myTable"."myColumn" + 1e0 + -1e0 + 32e0)`
     );
 
     t.end();

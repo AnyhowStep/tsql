@@ -30,7 +30,7 @@ tape(__filename, async (t) => {
     }).catch((err) => {
         t.true(err instanceof tsql.TooManyRowsFoundError);
         t.deepEqual(err.name, "TooManyRowsFoundError");
-        t.deepEqual(err.sql, `SELECT 42 AS "__aliased--value" UNION SELECT 99 AS "__aliased--value" ORDER BY "__aliased--value" DESC LIMIT 2 OFFSET 0`);
+        t.deepEqual(err.sql, `SELECT 42e0 AS "__aliased--value" UNION SELECT 99e0 AS "__aliased--value" ORDER BY "__aliased--value" DESC LIMIT 2 OFFSET 0`);
     });
 
     t.end();

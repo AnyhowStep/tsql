@@ -89,9 +89,43 @@ export function escapeValue (rawValue : null|boolean|number|bigint|string|Buffer
                 "FALSE";
         }
         case "number": {
-            return String(rawValue);
+            const result = String(rawValue);
+            if (result.indexOf("e") < 0) {
+                /**
+                 * We add `e0` at the end to signal to the DBMS that this is a double value.
+                 * Not a `DECIMAL` value.
+                 */
+                /**
+                 * + MySQL      : `SELECT 1e300`; `1e300`
+                 * + PostgreSQL : `SELECT 1e300`; `1000000000...` (total 300 zeroes) (DECIMAL)
+                 * + SQLite     : `SELECT 1e300`; `1e300`
+                 */
+                return result + "e0";
+            } else {
+                return result;
+            }
         }
         case "bigint": {
+            /**
+             * Max `BIGINT SIGNED` value: `SELECT 9223372036854775807+9223372036854775807`
+             *
+             * + MySQL      : `SELECT 9223372036854775807+9223372036854775807`; Error, out of range of bigint signed value
+             * + PostgreSQL : `SELECT 9223372036854775807+9223372036854775807`; Error, out of range of bigint signed value
+             * + SQLite     : `SELECT 9223372036854775807+9223372036854775807`; `18446744073709552000` (incorrect value)
+             * + Expected   : `18446744073709551614`
+             *
+             * -----
+             *
+             * + MySQL      : `SELECT 18446744073709551615+18446744073709551615`; Error, out of range of bigint unsigned value
+             * + PostgreSQL : `SELECT 18446744073709551615+18446744073709551615`; `36893488147419103230` (DECIMAL, not bigint unsigned)
+             * + SQLite     : `SELECT 18446744073709551615+18446744073709551615`; `36893488147419103000` (incorrect value)
+             * + Expected   : `36893488147419103230`
+             *
+             * PostgreSQL and SQLite do not support `BIGINT UNSIGNED`.
+             * Selecting an integer larger than bigint signed in PostgreSQL will give you a `DECIMAL` value.
+             *
+             * @todo Fix this
+             */
             return String(rawValue);
         }
         case "string": {

@@ -10,5 +10,5 @@ GROUP BY
   NULL
 HAVING
   "myTable"."myBoolColumn" AND
-  ("myTable2"."myDoubleColumn" > 3.141) AND
+  ("myTable2"."myDoubleColumn" > 3.141e0) AND
   (TRUE <> "myTable"."myBoolColumn")
