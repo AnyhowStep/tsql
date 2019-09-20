@@ -6,6 +6,9 @@ import {RawExpr, RawExprUtil} from "../../raw-expr";
 import {Expr, expr} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
 
+/**
+ * @todo Move this elsewhere?
+ */
 export function assertValidDecimalPrecisionAndScale (
     /**
      * + PostgreSQL's min precision is `1`

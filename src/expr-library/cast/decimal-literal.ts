@@ -1,8 +1,9 @@
 import * as tm from "type-mapping";
 import {Decimal} from "../../decimal";
-import {IUsedRef} from "../../used-ref";
+import {IUsedRef, UsedRefUtil} from "../../used-ref";
 import {Expr} from "../../expr";
-import {castAsDecimal} from "./cast-as-decimal";
+import {LiteralValueNodeUtil} from "../../ast/literal-value-node";
+import {expr} from "../../expr/expr-impl";
 
 export function decimalLiteral (
     rawDecimalLiteral : string|number|bigint|Decimal,
@@ -23,10 +24,15 @@ export function decimalLiteral (
         usedRef : IUsedRef<{}>,
     }>
 ) {
-    const mapper = tm.mysql.decimal();
-    return castAsDecimal(
-        mapper("rawDecimalLiteral", rawDecimalLiteral).toString(),
-        precision,
-        scale
+    return expr(
+        {
+            mapper : tm.mysql.decimal(),
+            usedRef : UsedRefUtil.fromColumnRef({}),
+        },
+        LiteralValueNodeUtil.decimalLiteralNode(
+            rawDecimalLiteral,
+            precision,
+            scale
+        )
     );
 }
