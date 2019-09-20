@@ -4,6 +4,7 @@ import {FunctionCall} from "../function-call";
 import {OperatorNodeUtil} from "../operator-node";
 import {isIdentifierNode} from "../identifier-node";
 import {QueryBaseUtil} from "../../query-base";
+import {LiteralValueNodeUtil} from "../literal-value-node";
 
 /**
  * A type guard for the `Ast` type
@@ -24,6 +25,9 @@ export function isAst (raw : unknown) : raw is Ast {
         return true;
     }
     if (isIdentifierNode(raw)) {
+        return true;
+    }
+    if (LiteralValueNodeUtil.isLiteralValueNode(raw)) {
         return true;
     }
     if (Array.isArray(raw)) {

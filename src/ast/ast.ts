@@ -3,6 +3,7 @@ import {FunctionCall} from "./function-call";
 import {OperatorNode} from "./operator-node";
 import {IdentifierNode} from "./identifier-node";
 import {IQueryBase} from "../query-base";
+import {LiteralValueNode} from "./literal-value-node";
 
 export interface AstArray extends ReadonlyArray<Ast> {
 }
@@ -31,5 +32,12 @@ export type Ast =
      * @todo Description
      */
     | IdentifierNode
+    /**
+     * A literal value, it **MUST** have its value **ESCAPED** before being passed to the DBMS!
+     */
+    | LiteralValueNode
+    /**
+     * A query
+     */
     | IQueryBase
 ;

@@ -52,9 +52,12 @@ export * from "./constants";
 export * from "./error";
 export * from "./operator-type";
 
+
+import * as DateTimeUtil from "./date-time-util";
 import * as TupleUtil from "./tuple-util";
 import * as TypeUtil from "./type-util";
 export {
+    DateTimeUtil,
     TupleUtil,
     TypeUtil,
 };

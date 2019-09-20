@@ -19,7 +19,6 @@ import {
     ColumnMap,
     ColumnRefUtil,
     ColumnRef,
-    RawExprUtil,
     OrderByClause,
     ExprUtil,
     HavingClause,
@@ -30,7 +29,11 @@ import {
     CompoundQueryClause,
     IQueryBase,
     QueryBaseUtil,
+    DateTimeUtil,
+    castAsDecimal,
+    utcStringToTimestamp,
 } from "../dist";
+import {LiteralValueType} from "../dist/ast/literal-value-node";
 
 const insertBetween = AstUtil.insertBetween;
 
@@ -463,6 +466,31 @@ export const sqliteSqlfier : Sqlfier = {
     identifierSqlfier : (identifierNode) => identifierNode.identifiers
         .map(escapeIdentifierWithDoubleQuotes)
         .join("."),
+    literalValueSqlfier : {
+        [LiteralValueType.DECIMAL] : ({literalValue, precision, scale}, toSql) => toSql(
+            castAsDecimal(
+                literalValue,
+                precision,
+                scale
+            ).ast
+        ),
+        [LiteralValueType.STRING] : ({literalValue}) => escapeValue(literalValue),
+        [LiteralValueType.DOUBLE] : ({literalValue}) => escapeValue(literalValue),
+        [LiteralValueType.BIGINT_SIGNED] : ({literalValue}) => escapeValue(literalValue),
+        /**
+         * @todo
+         * SQLite doesn't support `BIGINT UNSIGNED` values
+         */
+        [LiteralValueType.BIGINT_UNSIGNED] : ({literalValue}) => escapeValue(literalValue),
+        [LiteralValueType.BOOLEAN] : ({literalValue}) => escapeValue(literalValue),
+        [LiteralValueType.BUFFER] : ({literalValue}) => escapeValue(literalValue),
+        [LiteralValueType.NULL] : ({literalValue}) => escapeValue(literalValue),
+        [LiteralValueType.DATE_TIME] : ({literalValue}, toSql) => toSql(
+            utcStringToTimestamp(
+                DateTimeUtil.toSqlUtc(literalValue, 3)
+            ).ast
+        ),
+    },
     operatorSqlfier : {
         ...notImplementedSqlfier.operatorSqlfier,
         /*
@@ -526,7 +554,7 @@ export const sqliteSqlfier : Sqlfier = {
         [OperatorType.UTC_STRING_TO_TIMESTAMP_CONSTRUCTOR] : ({operands}) => functionCall(
             "strftime",
             [
-                RawExprUtil.buildAst("%Y-%m-%d %H:%M:%f"),
+                escapeValue("%Y-%m-%d %H:%M:%f"),
                 operands[0]
             ]
         ),

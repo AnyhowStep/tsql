@@ -1,6 +1,7 @@
 export * from "./aggregate";
 export * from "./cast";
 export * from "./comparison";
+export * from "./date-time";
 export * from "./factory";
 export * from "./logical";
 export * from "./logical-3";

@@ -5,8 +5,9 @@ import {OperatorNodeUtil, OperatorNode} from "../operator-node";
 import {isIdentifierNode} from "../identifier-node";
 import {Sqlfier} from "../sqlfier";
 import {QueryBaseUtil} from "../../query-base";
+import {LiteralValueNodeUtil, LiteralValueNode} from "../literal-value-node";
 
-export function toSqlAst (ast : Ast, sqlfier : Sqlfier) : string|AstArray|Parentheses|FunctionCall {
+export function toSqlAst (ast : Ast, sqlfier : Sqlfier) : string|AstArray|Parentheses|FunctionCall|LiteralValueNode {
     if (typeof ast == "string") {
         return ast;
     } else if (Parentheses.IsParentheses(ast)) {
@@ -24,6 +25,12 @@ export function toSqlAst (ast : Ast, sqlfier : Sqlfier) : string|AstArray|Parent
     } else if (QueryBaseUtil.isQuery(ast)) {
         return sqlfier.queryBaseSqlfier(
             ast,
+            (ast2 : Ast) => toSql(ast2, sqlfier),
+            sqlfier
+        );
+    } else if (LiteralValueNodeUtil.isLiteralValueNode(ast)) {
+        return sqlfier.literalValueSqlfier[ast.literalValueType](
+            ast as never,
             (ast2 : Ast) => toSql(ast2, sqlfier),
             sqlfier
         );
