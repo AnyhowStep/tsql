@@ -530,7 +530,10 @@ export const sqliteSqlfier : Sqlfier = {
             https://dev.mysql.com/doc/refman/8.0/en/arithmetic-functions.html
         */
         [OperatorType.SUBTRACTION] : ({operands}) => insertBetween(operands, "-"),
-        [OperatorType.MODULO] : ({operands}) => insertBetween(operands, "%"),
+        /**
+         * In SQLite, `%` ONLY does integer modulo
+         */
+        [OperatorType.INTEGER_MODULO] : ({operands}) => insertBetween(operands, "%"),
         [OperatorType.ADDITION] : ({operands}) => insertBetween(operands, "+"),
 
         /*

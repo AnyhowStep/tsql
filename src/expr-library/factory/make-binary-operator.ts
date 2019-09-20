@@ -24,6 +24,27 @@ export type BinaryOperator<
         }>
     )
 ;
+export type BinaryOperator2<
+    LeftTypeT,
+    RightTypeT,
+    OutputTypeT
+> =
+    <
+        LeftT extends RawExpr<LeftTypeT>,
+        RightT extends RawExpr<RightTypeT>
+    > (
+        left : LeftT,
+        right : RightT
+    ) => (
+        Expr<{
+            mapper : tm.SafeMapper<OutputTypeT>,
+            usedRef : RawExprUtil.IntersectUsedRef<
+                | LeftT
+                | RightT
+            >,
+        }>
+    )
+;
 export function makeBinaryOperator<
     OperatorTypeT extends OperatorType,
     InputTypeT,
@@ -31,10 +52,35 @@ export function makeBinaryOperator<
 > (
     operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand2<OperatorTypeT>,
     mapper : tm.SafeMapper<OutputTypeT>
+) : (
+    BinaryOperator<InputTypeT, OutputTypeT>
+);
+export function makeBinaryOperator<
+    OperatorTypeT extends OperatorType,
+    LeftTypeT,
+    RightTypeT,
+    OutputTypeT
+> (
+    operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand2<OperatorTypeT>,
+    mapper : tm.SafeMapper<OutputTypeT>
+) : (
+    BinaryOperator2<LeftTypeT, RightTypeT, OutputTypeT>
+);
+export function makeBinaryOperator<
+    OperatorTypeT extends OperatorType,
+    LeftTypeT,
+    RightTypeT,
+    OutputTypeT
+> (
+    operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand2<OperatorTypeT>,
+    mapper : tm.SafeMapper<OutputTypeT>
+) : (
+    | BinaryOperator<any, OutputTypeT>
+    | BinaryOperator2<any, any, OutputTypeT>
 ) {
-    const result : BinaryOperator<InputTypeT, OutputTypeT> = <
-        LeftT extends RawExpr<InputTypeT>,
-        RightT extends RawExpr<InputTypeT>
+    const result : BinaryOperator2<LeftTypeT, RightTypeT, OutputTypeT> = <
+        LeftT extends RawExpr<LeftTypeT>,
+        RightT extends RawExpr<RightTypeT>
     > (
         left : LeftT,
         right : RightT
