@@ -5,6 +5,7 @@ import {ExprUtil} from "../../../expr";
 import {ColumnUtil} from "../../../column";
 import {ExprSelectItemUtil} from "../../../expr-select-item";
 import {QueryBaseUtil} from "../../../query-base";
+import {isDate} from "../../../date-util";
 
 export type Mapper<RawExprT extends AnyRawExpr> = (
     tm.SafeMapper<TypeOf<RawExprT>>
@@ -32,7 +33,7 @@ export function mapper<RawExprT extends AnyRawExpr> (
                 tm.mysql.false()
         ) as tm.AnySafeMapper as Mapper<RawExprT>;
     }
-    if (rawExpr instanceof Date) {
+    if (isDate(rawExpr)) {
         return tm.mysql.dateTime(3) as tm.AnySafeMapper as Mapper<RawExprT>;
     }
     if (Buffer.isBuffer(rawExpr)) {

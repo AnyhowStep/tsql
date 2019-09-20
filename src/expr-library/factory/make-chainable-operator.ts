@@ -7,22 +7,23 @@ import {
     OperatorNodeUtil,
     AstUtil,
 } from "../../ast";
-import {escapeValue} from "../../sqlstring";
 import {TryReuseExistingType} from "../../type-util";
 import {IExprSelectItem} from "../../expr-select-item";
 import {OperatorType} from "../../operator-type";
+import {LiteralValueNodeUtil, LiteralValueNode} from "../../ast/literal-value-node";
+import {PrimitiveExprUtil} from "../../primitive-expr";
 
 function tryGetFlattenableElements (
     rawExpr : AnyRawExpr,
     operatorType : OperatorType,
     identityElement : null|boolean|number|bigint|string|Buffer,
-    identityAst : string
+    identityAst : LiteralValueNode
 ) : AstArray|undefined {
     if (ExprUtil.isExpr(rawExpr)) {
         return AstUtil.tryExtractAst(
             rawExpr.ast,
             ast => {
-                if (ast === identityAst) {
+                if (LiteralValueNodeUtil.isLiteralValueNode(ast) && PrimitiveExprUtil.isEqual(ast.literalValue, identityAst.literalValue)) {
                     /**
                      * Eliminate all identity elements
                      */
@@ -86,13 +87,20 @@ export function makeChainableOperator<
 ) : (
     ChainableOperator<TypeT>
 ) {
-    const identityAst = escapeValue(identityElement);
+    let identityAst : LiteralValueNode|undefined = undefined;
 
     const result : ChainableOperator<TypeT> = <ArrT extends RawExpr<TypeT>[]> (
         ...arr : ArrT
     ) : (
         ChainableOperatorReturn<TypeT, ArrT>
     ) => {
+        if (identityAst == undefined) {
+            const newIdentityAst = RawExprUtil.buildAst(identityElement);
+            if (!LiteralValueNodeUtil.isLiteralValueNode(newIdentityAst)) {
+                throw new Error(`Invalid identity element`);
+            }
+            identityAst = newIdentityAst;
+        }
         const usedRef = RawExprUtil.intersectUsedRef(...arr);
         let operands : [Ast, ...Ast[]]|undefined = undefined;
 

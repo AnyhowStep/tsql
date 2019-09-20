@@ -1,41 +1,36 @@
 import * as tm from "type-mapping";
 import {AnyRawExpr} from "../../raw-expr";
 import {Ast, parentheses} from "../../../ast";
-import {escapeValue} from "../../../sqlstring";
 import {ExprUtil} from "../../../expr";
 import {ColumnUtil} from "../../../column";
 import {QueryBaseUtil} from "../../../query-base";
 import {ExprSelectItemUtil} from "../../../expr-select-item";
-import * as DateTimeUtil from "../../../date-time-util";
-import {operatorNode1} from "../../../ast/operator-node/util";
-import {OperatorType} from "../../../operator-type";
+import {LiteralValueNodeUtil} from "../../../ast/literal-value-node";
+import {isDate} from "../../../date-util";
 
 export function buildAst (rawExpr : AnyRawExpr) : Ast {
     //Check primitive cases first
     if (typeof rawExpr == "number") {
-        return escapeValue(rawExpr);
+        return LiteralValueNodeUtil.doubleLiteralNode(rawExpr);
     }
     if (tm.TypeUtil.isBigInt(rawExpr)) {
-        return escapeValue(rawExpr);
+        return LiteralValueNodeUtil.bigIntLiteralNode(rawExpr);
     }
     if (typeof rawExpr == "string") {
-        return escapeValue(rawExpr);
+        return LiteralValueNodeUtil.stringLiteralNode(rawExpr);
     }
     if (typeof rawExpr == "boolean") {
-        return escapeValue(rawExpr);
+        return LiteralValueNodeUtil.booleanLiteralNode(rawExpr);
     }
-    if (rawExpr instanceof Date) {
-        return operatorNode1(
-            OperatorType.UTC_STRING_TO_TIMESTAMP_CONSTRUCTOR,
-            [DateTimeUtil.toSqlUtc(rawExpr, 3)]
-        );
+    if (isDate(rawExpr)) {
+        return LiteralValueNodeUtil.dateTimeLiteralNode(rawExpr);
     }
     if (Buffer.isBuffer(rawExpr)) {
         //escape(Buffer.from("hello")) == "X'68656c6c6f'"
-        return escapeValue(rawExpr);
+        return LiteralValueNodeUtil.bufferLiteralNode(rawExpr);
     }
     if (rawExpr === null) {
-        return escapeValue(rawExpr);
+        return LiteralValueNodeUtil.nullLiteralNode(rawExpr);
     }
 
     if (ExprUtil.isExpr(rawExpr)) {
