@@ -3,8 +3,12 @@ import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 import {makeUnaryOperator} from "../factory";
 
-export const cot = makeUnaryOperator<OperatorType.COTANGENT, number, number>(
+/**
+ * + MySQL      : `COT(0)` throws error
+ * + PostgreSQL : `COT(0)` === `NULL`
+ */
+export const cot = makeUnaryOperator<OperatorType.COTANGENT, number, number|null>(
     OperatorType.COTANGENT,
-    tm.mysql.double(),
+    tm.mysql.double().orNull(),
     TypeHint.DOUBLE
 );

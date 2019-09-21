@@ -32,6 +32,7 @@ import {
     DateTimeUtil,
     castAsDecimal,
     utcStringToTimestamp,
+    TypeHint,
 } from "../dist";
 import {LiteralValueType} from "../dist/ast/literal-value-node";
 
@@ -530,10 +531,56 @@ export const sqliteSqlfier : Sqlfier = {
             https://dev.mysql.com/doc/refman/8.0/en/arithmetic-functions.html
         */
         [OperatorType.SUBTRACTION] : ({operands}) => insertBetween(operands, "-"),
+        [OperatorType.FRACTIONAL_DIVISION] : ({operands}) => insertBetween(operands, "/"),
+        [OperatorType.INTEGER_DIVISION] : ({operands, typeHint}, toSql) => {
+            if (typeHint == TypeHint.DOUBLE) {
+                return functionCall(
+                    "CAST",
+                    [
+                        toSql(
+                            insertBetween(
+                                operands.map(op => functionCall(
+                                    "CAST",
+                                    [
+                                        toSql(op) + " AS INTEGER"
+                                    ]
+                                )),
+                                "/"
+                            )
+                        ) + " AS DOUBLE"
+                    ]
+                );
+            } else {
+                throw new Error(`INTEGER_DIVISION not implemented for ${typeHint}`);
+            }
+        },
         /**
          * In SQLite, `%` ONLY does integer remainder
          */
-        [OperatorType.INTEGER_REMAINDER] : ({operands}) => insertBetween(operands, "%"),
+        [OperatorType.INTEGER_REMAINDER] : ({operands, typeHint}, toSql) => {
+            if (typeHint == TypeHint.DOUBLE) {
+                return functionCall(
+                    "CAST",
+                    [
+                        toSql(
+                            insertBetween(
+                                operands.map(op => functionCall(
+                                    "CAST",
+                                    [
+                                        toSql(op) + " AS INTEGER"
+                                    ]
+                                )),
+                                "%"
+                            )
+                        ) + " AS DOUBLE"
+                    ]
+                );
+            } else if (typeHint == TypeHint.BIGINT) {
+                return insertBetween(operands, "%");
+            } else {
+                throw new Error(`INTEGER_REMAINDER not implemented for ${typeHint}`);
+            }
+        },
         [OperatorType.ADDITION] : ({operands}) => insertBetween(operands, "+"),
 
         /*
@@ -541,9 +588,19 @@ export const sqliteSqlfier : Sqlfier = {
             https://dev.mysql.com/doc/refman/8.0/en/mathematical-functions.html
         */
         [OperatorType.ABSOLUTE_VALUE] : ({operands}) => functionCall("ABS", operands),
-        [OperatorType.ARC_COSINE] : ({operands}) => {
-            return functionCall("ACOS", operands);
-        },
+        [OperatorType.ARC_COSINE] : ({operands}) => functionCall("ACOS", operands),
+        [OperatorType.ARC_SINE] : ({operands}) => functionCall("ASIN", operands),
+        [OperatorType.ARC_TANGENT] : ({operands}) => functionCall("ATAN", operands),
+        [OperatorType.ARC_TANGENT_2] : ({operands}) => functionCall("ATAN2", operands),
+        [OperatorType.CUBE_ROOT] : ({operands}) => functionCall("CBRT", operands),
+        [OperatorType.CEILING] : ({operands}) => functionCall("CEILING", operands),
+        [OperatorType.COSINE] : ({operands}) => functionCall("COS", operands),
+        [OperatorType.COTANGENT] : ({operands}) => functionCall("COT", operands),
+        [OperatorType.DEGREES] : ({operands}) => functionCall("DEGREES", operands),
+        [OperatorType.NATURAL_EXPONENTIATION] : ({operands}) => functionCall("EXP", operands),
+        [OperatorType.FLOOR] : ({operands}) => functionCall("FLOOR", operands),
+        [OperatorType.LN] : ({operands}) => functionCall("LN", operands),
+        [OperatorType.LOG] : ({operands}) => functionCall("LOG", operands),
 
         [OperatorType.PI] : () => {
             return functionCall("PI", []);

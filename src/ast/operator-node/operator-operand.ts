@@ -103,7 +103,7 @@ export type OperatorOperand = {
         https://dev.mysql.com/doc/refman/8.0/en/arithmetic-functions.html
     */
     [OperatorType.INTEGER_DIVISION]         : Operand2,
-    [OperatorType.DECIMAL_DIVISION]         : Operand2,
+    [OperatorType.FRACTIONAL_DIVISION]      : Operand2,
     [OperatorType.SUBTRACTION]              : Operand1ToN,
     [OperatorType.INTEGER_REMAINDER]        : Operand2,
     [OperatorType.ADDITION]                 : Operand1ToN,

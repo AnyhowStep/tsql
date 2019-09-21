@@ -6,8 +6,8 @@ import {makeBinaryOperator} from "../factory";
 /**
  * Performs regular floating-point division
  */
-export const fractionalDiv = makeBinaryOperator<OperatorType.DECIMAL_DIVISION, number, number>(
-    OperatorType.DECIMAL_DIVISION,
+export const fractionalDiv = makeBinaryOperator<OperatorType.FRACTIONAL_DIVISION, number, number>(
+    OperatorType.FRACTIONAL_DIVISION,
     tm.mysql.double(),
     TypeHint.DOUBLE
 );

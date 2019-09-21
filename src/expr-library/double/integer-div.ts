@@ -6,8 +6,8 @@ import {makeBinaryOperator} from "../factory";
 /**
  * Treats both arguments as integers and performs integer division
  */
-export const integerDiv = makeBinaryOperator<OperatorType.INTEGER_DIVISION, number, number>(
+export const integerDiv = makeBinaryOperator<OperatorType.INTEGER_DIVISION, number, number|null>(
     OperatorType.INTEGER_DIVISION,
-    tm.mysql.double(),
+    tm.mysql.double().orNull(),
     TypeHint.DOUBLE
 );

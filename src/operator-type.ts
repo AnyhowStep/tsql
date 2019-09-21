@@ -1125,7 +1125,7 @@ export enum OperatorType {
      * + PostgreSQL   : `/`
      * + SQLite       : `/`
      */
-    DECIMAL_DIVISION = "DECIMAL_DIVISION",
+    FRACTIONAL_DIVISION = "FRACTIONAL_DIVISION",
 
     /**
      * + https://dev.mysql.com/doc/refman/8.0/en/arithmetic-functions.html#operator_minus
@@ -1163,7 +1163,7 @@ export enum OperatorType {
      * + PostgreSQL   : Not supported
      * + SQLite       : Not supported
      */
-    //DECIMAL_MODULO = "DECIMAL_MODULO",
+    //FRACTIONAL_REMAINDER = "FRACTIONAL_REMAINDER",
 
     /**
      * + https://dev.mysql.com/doc/refman/8.0/en/arithmetic-functions.html#operator_plus

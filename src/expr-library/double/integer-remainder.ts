@@ -23,8 +23,8 @@ import {makeBinaryOperator} from "../factory";
  * integerRemainder(-5, -3); //-2
  * ```
  */
-export const integerRemainder = makeBinaryOperator<OperatorType.INTEGER_REMAINDER, number, number>(
+export const integerRemainder = makeBinaryOperator<OperatorType.INTEGER_REMAINDER, number, number|null>(
     OperatorType.INTEGER_REMAINDER,
-    tm.mysql.double(),
+    tm.mysql.double().orNull(),
     TypeHint.DOUBLE
 );
