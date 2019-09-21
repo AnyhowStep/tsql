@@ -1,5 +1,6 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
+import {TypeHint} from "../../type-hint";
 import {makeDoubleEliminationUnaryOperator} from "../factory";
 
 /**
@@ -8,5 +9,6 @@ import {makeDoubleEliminationUnaryOperator} from "../factory";
  */
 export const neg = makeDoubleEliminationUnaryOperator<OperatorType.UNARY_MINUS, number, number>(
     OperatorType.UNARY_MINUS,
-    tm.mysql.double()
+    tm.mysql.double(),
+    TypeHint.DOUBLE
 );

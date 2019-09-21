@@ -51,6 +51,7 @@ export * from "./buffer";
 export * from "./constants";
 export * from "./error";
 export * from "./operator-type";
+export * from "./type-hint";
 
 
 import * as DateTimeUtil from "./date-time-util";

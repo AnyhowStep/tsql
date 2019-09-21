@@ -92,7 +92,8 @@ export function coalesce<ArgsT extends readonly AnyRawExpr[]> (
                     RawExprUtil.buildAst(arg0),
                     RawExprUtil.buildAst(arg1),
                     ...argRest.map(RawExprUtil.buildAst)
-                ]
+                ],
+                undefined
             )
         );
     }

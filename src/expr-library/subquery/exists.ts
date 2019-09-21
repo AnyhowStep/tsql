@@ -23,6 +23,6 @@ export function exists<
             mapper : tm.mysql.boolean(),
             usedRef : UsedRefUtil.fromFromClause(query.fromClause),
         },
-        operatorNode1(OperatorType.EXISTS, [query])
+        operatorNode1(OperatorType.EXISTS, [query], undefined)
     );
 }

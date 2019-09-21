@@ -1,5 +1,6 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
+import {TypeHint} from "../../type-hint";
 import {makeBinaryOperator} from "../factory";
 
 /**
@@ -7,5 +8,6 @@ import {makeBinaryOperator} from "../factory";
  */
 export const integerDiv = makeBinaryOperator<OperatorType.INTEGER_DIVISION, number, number>(
     OperatorType.INTEGER_DIVISION,
-    tm.mysql.double()
+    tm.mysql.double(),
+    TypeHint.DOUBLE
 );

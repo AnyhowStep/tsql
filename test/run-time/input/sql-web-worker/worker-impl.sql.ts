@@ -4,7 +4,21 @@
  */
 import * as sql from "../sql.js/sql";
 import {FromSqliteMessage, ToSqliteMessage, SqliteAction} from "./worker.sql";
+/*function getAllProperties (obj : any) : string[] {
+    const allProps : string[] = [];
+    let curr = obj;
 
+    while (curr != undefined) {
+        const props = Object.getOwnPropertyNames(curr);
+        props.forEach((prop) => {
+            if (allProps.indexOf(prop) === -1) {
+                allProps.push(prop);
+            }
+        });
+        curr = Object.getPrototypeOf(curr);
+    };
+    return allProps;
+}*/
 export function initWorker (
     postMessage : (data : FromSqliteMessage) => void
 ) {
@@ -117,9 +131,10 @@ export function initWorker (
                  * https://tc39.es/ecma262/#sec-function-calls-runtime-semantics-evaluation
                  */
                 const indirectEval = eval;
+                const impl = indirectEval("(" + data.impl + ")");
                 db.create_function(
                     data.functionName,
-                    indirectEval("(" + data.impl + ")")
+                    impl
                 );
                 postMessage({
                     id : data.id,
@@ -152,10 +167,10 @@ export function initWorker (
                         error == undefined ?
                         "An unknown error occurred" :
                         typeof error.message == "string" ?
-                        error.message :
+                        error.message + "\n" + error.stack :
                         "An unexpected error occurred"
                     ),
                 });
             });
-    }
+    };
 }

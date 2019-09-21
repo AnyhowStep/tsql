@@ -3,6 +3,7 @@ import {Expr, expr} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
 import {IUsedRef, UsedRefUtil} from "../../used-ref";
+import {TypeHint} from "../../type-hint";
 
 export type NullaryOperator<
     OutputTypeT
@@ -19,7 +20,8 @@ export function makeNullaryOperator<
     OutputTypeT
 > (
     operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand0<OperatorTypeT>,
-    mapper : tm.SafeMapper<OutputTypeT>
+    mapper : tm.SafeMapper<OutputTypeT>,
+    typeHint? : TypeHint
 ) {
     const result : NullaryOperator<OutputTypeT> = () : (
         Expr<{
@@ -33,7 +35,8 @@ export function makeNullaryOperator<
                 usedRef : UsedRefUtil.fromColumnRef({}),
             },
             OperatorNodeUtil.operatorNode0<OperatorTypeT>(
-                operatorType
+                operatorType,
+                typeHint
             )
         );
     };

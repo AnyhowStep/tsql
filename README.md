@@ -175,6 +175,9 @@ See the internal `Buffer` declaration [here](src/buffer.ts)
   + https://github.com/sidorares/node-mysql2/blob/9404163b0dc4bdc24f6dddd18144532f41115842/lib/commands/query.js#L239
   + https://github.com/mysqljs/mysql/issues/274
 
++ https://stackoverflow.com/questions/41936403/mysql-ieee-floating-point-nan-positiveinfinity-negativeinfinity
+  + `NaN`, `+Infinity`, `-Infinity` are not valid `DOUBLE` values according to the SQL standard
+
 <!--
 > I'm just thinking about how...
 yeah the nicity of being able to call like find, and have the code manage going like

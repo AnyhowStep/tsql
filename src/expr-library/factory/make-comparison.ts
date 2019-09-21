@@ -8,6 +8,7 @@ import {IExpr} from "../../expr";
 import {IExprSelectItem} from "../../expr-select-item";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
+import {TypeHint} from "../../type-hint";
 
 export type ComparisonReturn<
     LeftT extends RawExpr<NonNullPrimitiveExpr>,
@@ -51,7 +52,8 @@ export type Comparison =
  * These do not allow `null` to be used in comparisons.
  */
 export function makeComparison<OperatorTypeT extends OperatorType> (
-    operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand2<OperatorTypeT>
+    operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand2<OperatorTypeT>,
+    typeHint? : TypeHint
 ) : Comparison {
     const result : Comparison = <
         LeftT extends RawExpr<NonNullPrimitiveExpr>,
@@ -74,7 +76,8 @@ export function makeComparison<OperatorTypeT extends OperatorType> (
                 [
                     RawExprUtil.buildAst(left),
                     RawExprUtil.buildAst(right),
-                ]
+                ],
+                typeHint
             )
         ) as ComparisonReturn<LeftT, RightT>;
     };

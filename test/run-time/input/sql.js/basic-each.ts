@@ -1,8 +1,11 @@
+import * as tm from "type-mapping";
 import * as sql from "./sql";
 import * as tape from "tape";
 //import {log} from "../../../util";
 
 tape(__filename, async (t) => {
+    const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
+
     const sqlite = await sql.initSqlJs();
     const db = new sqlite.Database();
     let callCount = 0;
@@ -21,7 +24,7 @@ tape(__filename, async (t) => {
             $arg1 : 8,
         },
         (row) => {
-            t.deepEqual(Number(row.x)+1, row.y);
+            t.deepEqual(BigInt(Number(row.x)+1), row.y);
             ++callCount;
         },
         () => {

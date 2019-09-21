@@ -5,6 +5,7 @@ import {PrimitiveExpr} from "../../primitive-expr";
 import {RawExprUtil} from "../../raw-expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
+import {TypeHint} from "../../type-hint";
 
 export type NullSafeComparison = (
     <
@@ -29,7 +30,8 @@ export type NullSafeComparison = (
  * These allow `null` in comparisons.
  */
 export function makeNullSafeComparison<OperatorTypeT extends OperatorType> (
-    operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand2<OperatorTypeT>
+    operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand2<OperatorTypeT>,
+    typeHint? : TypeHint
 ) : NullSafeComparison {
     const result : NullSafeComparison = (left, right) => {
         return expr(
@@ -45,7 +47,8 @@ export function makeNullSafeComparison<OperatorTypeT extends OperatorType> (
                 [
                     RawExprUtil.buildAst(left),
                     RawExprUtil.buildAst(right),
-                ]
+                ],
+                typeHint
             )
         );
     };

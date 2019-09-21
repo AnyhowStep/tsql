@@ -3,6 +3,7 @@ import {RawExpr, RawExprUtil} from "../../raw-expr";
 import {Expr, expr} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
+import {TypeHint} from "../../type-hint";
 
 export type BinaryOperator<
     InputTypeT,
@@ -51,7 +52,8 @@ export function makeBinaryOperator<
     OutputTypeT
 > (
     operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand2<OperatorTypeT>,
-    mapper : tm.SafeMapper<OutputTypeT>
+    mapper : tm.SafeMapper<OutputTypeT>,
+    typeHint? : TypeHint
 ) : (
     BinaryOperator<InputTypeT, OutputTypeT>
 );
@@ -62,7 +64,8 @@ export function makeBinaryOperator<
     OutputTypeT
 > (
     operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand2<OperatorTypeT>,
-    mapper : tm.SafeMapper<OutputTypeT>
+    mapper : tm.SafeMapper<OutputTypeT>,
+    typeHint? : TypeHint
 ) : (
     BinaryOperator2<LeftTypeT, RightTypeT, OutputTypeT>
 );
@@ -73,7 +76,8 @@ export function makeBinaryOperator<
     OutputTypeT
 > (
     operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand2<OperatorTypeT>,
-    mapper : tm.SafeMapper<OutputTypeT>
+    mapper : tm.SafeMapper<OutputTypeT>,
+    typeHint? : TypeHint
 ) : (
     | BinaryOperator<any, OutputTypeT>
     | BinaryOperator2<any, any, OutputTypeT>
@@ -106,7 +110,8 @@ export function makeBinaryOperator<
                 [
                     RawExprUtil.buildAst(left),
                     RawExprUtil.buildAst(right),
-                ]
+                ],
+                typeHint
             )
         );
     };

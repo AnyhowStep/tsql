@@ -1147,25 +1147,23 @@ export enum OperatorType {
      *
      * + MySQL        : `%`
      *   + `1%0` === `NULL`
-     * + PostgreSQL   : `%`
-     *   + `1%0` throws error
+     * + PostgreSQL   : `mod(x, y)` (The `%` operator does not handle negative values)
+     *   + `mod(1, 0)` throws error
      * + SQLite       : `%`
      *   + `1%0` === `NULL`
      */
-    INTEGER_MODULO = "INTEGER_MODULO",
+    INTEGER_REMAINDER = "INTEGER_REMAINDER",
 
-    /**
+    /*
      * + https://dev.mysql.com/doc/refman/8.0/en/arithmetic-functions.html#operator_mod
      * + https://www.postgresql.org/docs/9.0/functions-math.html
      * + https://www.sqlite.org/lang_expr.html#binaryops
      *
-     * @todo Find out if they behave the same
-     *
      * + MySQL        : `%`
-     * + PostgreSQL   : `%`
-     * + SQLite       : `%`
+     * + PostgreSQL   : Not supported
+     * + SQLite       : Not supported
      */
-    DECIMAL_MODULO = "DECIMAL_MODULO",
+    //DECIMAL_MODULO = "DECIMAL_MODULO",
 
     /**
      * + https://dev.mysql.com/doc/refman/8.0/en/arithmetic-functions.html#operator_plus

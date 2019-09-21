@@ -3,7 +3,9 @@ import * as tape from "tape";
 
 const start = new Date().getTime();
 const paths = getAllTsFiles(__dirname + "/input", false);
-for (let i=0; i<paths.length; ++i) {
+const startIndex = 0;
+const endIndex = paths.length;
+for (let i=startIndex; i<endIndex; ++i) {
     const path = paths[i];
     console.log("path", i, "/", paths.length, path);
     require(path);

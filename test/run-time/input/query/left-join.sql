@@ -8,7 +8,7 @@ LEFT JOIN
 ON
   "myTable"."myBoolColumn" AND
   (
-    "myTable2"."column2" > ACOS("myTable2"."column2")
+    "myTable2"."column2" > COALESCE(ACOS("myTable2"."column2"), 0e0)
   )
 LEFT JOIN
   "myTable3"

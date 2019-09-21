@@ -1,5 +1,6 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
+import {TypeHint} from "../../type-hint";
 import {makeBinaryOperator} from "../factory";
 
 /**
@@ -7,5 +8,6 @@ import {makeBinaryOperator} from "../factory";
  */
 export const truncate = makeBinaryOperator<OperatorType.TRUNCATE, number, bigint, number>(
     OperatorType.TRUNCATE,
-    tm.mysql.double()
+    tm.mysql.double(),
+    TypeHint.DOUBLE
 );

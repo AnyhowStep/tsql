@@ -1,6 +1,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {makeIdempotentUnaryOperator} from "../factory";
+import {TypeHint} from "../../type-hint";
 
 /**
  * This function is idempotent.
@@ -8,5 +9,6 @@ import {makeIdempotentUnaryOperator} from "../factory";
  */
 export const abs = makeIdempotentUnaryOperator<OperatorType.ABSOLUTE_VALUE, number, number>(
     OperatorType.ABSOLUTE_VALUE,
-    tm.mysql.double()
+    tm.mysql.double(),
+    TypeHint.DOUBLE
 );

@@ -531,9 +531,9 @@ export const sqliteSqlfier : Sqlfier = {
         */
         [OperatorType.SUBTRACTION] : ({operands}) => insertBetween(operands, "-"),
         /**
-         * In SQLite, `%` ONLY does integer modulo
+         * In SQLite, `%` ONLY does integer remainder
          */
-        [OperatorType.INTEGER_MODULO] : ({operands}) => insertBetween(operands, "%"),
+        [OperatorType.INTEGER_REMAINDER] : ({operands}) => insertBetween(operands, "%"),
         [OperatorType.ADDITION] : ({operands}) => insertBetween(operands, "+"),
 
         /*

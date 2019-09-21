@@ -21,7 +21,7 @@ export function count () : (
             mapper : tm.mysql.bigIntUnsigned(),
             usedRef : UsedRefUtil.fromColumnRef({}),
         },
-        operatorNode0(OperatorType.AGGREGATE_COUNT_ALL)
+        operatorNode0(OperatorType.AGGREGATE_COUNT_ALL, undefined)
     );
     return result;
 }

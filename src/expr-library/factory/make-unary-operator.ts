@@ -3,6 +3,7 @@ import {RawExpr, RawExprUtil} from "../../raw-expr";
 import {Expr, expr} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
+import {TypeHint} from "../../type-hint";
 
 export type UnaryOperator<
     InputTypeT,
@@ -28,7 +29,8 @@ export function makeUnaryOperator<
     OutputTypeT
 > (
     operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand1<OperatorTypeT>,
-    mapper : tm.SafeMapper<OutputTypeT>
+    mapper : tm.SafeMapper<OutputTypeT>,
+    typeHint? : TypeHint
 ) {
     const result : UnaryOperator<InputTypeT, OutputTypeT> = <
         ArgT extends RawExpr<InputTypeT>
@@ -49,7 +51,8 @@ export function makeUnaryOperator<
                 operatorType,
                 [
                     RawExprUtil.buildAst(arg),
-                ]
+                ],
+                typeHint
             )
         );
     };

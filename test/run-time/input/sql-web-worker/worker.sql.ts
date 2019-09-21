@@ -110,7 +110,7 @@ export class SqliteWorker implements ISqliteWorker {
         if (this.onmessage == undefined) {
             return;
         }
-        this.onmessage({ data })
+        this.onmessage({ data });
     };
     postMessage (message : ToSqliteMessage) : void {
         this.processMessage(message);

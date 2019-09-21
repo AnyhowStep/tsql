@@ -1,3 +1,4 @@
+import * as tm from "type-mapping";
 import * as sql from "./sql";
 import * as tape from "tape";
 //import {log} from "../../../util";
@@ -23,10 +24,12 @@ tape(__filename, async (t) => {
         $v : 1000
     });
 
+    const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
+
     let invokeCount = 0;
     while (stmt.step()) {
         const obj = stmt.getAsObject();
-        t.deepEqual(obj, { a : 1337, b : 9001 });
+        t.deepEqual(obj, { a : BigInt(1337), b : BigInt(9001) });
         ++invokeCount;
     }
     t.deepEqual(invokeCount, 2);
@@ -42,9 +45,9 @@ tape(__filename, async (t) => {
     while (stmt.step()) {
         const obj = stmt.getAsObject();
         if (obj.a == 1337) {
-            t.deepEqual(obj, { a : 1337, b : 9001 });
+            t.deepEqual(obj, { a : BigInt(1337), b : BigInt(9001) });
         } else {
-            t.deepEqual(obj, { a : 42, b : 24 });
+            t.deepEqual(obj, { a : BigInt(42), b : BigInt(24) });
         }
         ++invokeCount;
     }

@@ -30,16 +30,25 @@ export async function fetchAllUnmappedImpl<
             const tableAlias = k.substr(0, separatorIndex);
             const columnAlias = k.substr(separatorIndex+SEPARATOR.length);
 
-            const value = ref[tableAlias][columnAlias].mapper(
-                `${tableAlias}.${columnAlias}`,
-                rawRow[k]
-            );
-            let table = row[tableAlias];
-            if (table == undefined) {
-                table = {};
-                row[tableAlias] = table;
+            try {
+                const value = ref[tableAlias][columnAlias].mapper(
+                    `${tableAlias}.${columnAlias}`,
+                    rawRow[k]
+                );
+                let table = row[tableAlias];
+                if (table == undefined) {
+                    table = {};
+                    row[tableAlias] = table;
+                }
+                table[columnAlias] = value;
+            } catch (err) {
+                Object.defineProperty(err, "sql", {
+                    value : rawResult.query.sql,
+                    enumerable : false,
+                    writable : true,
+                });
+                throw err;
             }
-            table[columnAlias] = value;
         }
         if (hasNullableJoins) {
             for (const tableAlias of Object.keys(row)) {

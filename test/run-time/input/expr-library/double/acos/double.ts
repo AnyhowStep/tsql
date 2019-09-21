@@ -9,12 +9,12 @@ tape(__filename, t => {
             myColumn : tm.mysql.double(),
         });
 
-    const expr = tsql.double.acos(tsql.double.acos(tsql.double.acos(
+    const expr = tsql.double.acos(tsql.coalesce(tsql.double.acos(
         myTable.columns.myColumn
-    )));
+    ), 0));
     t.deepEqual(
         tsql.AstUtil.toSql(expr.ast, sqliteSqlfier),
-        `ACOS(ACOS(ACOS("myTable"."myColumn")))`
+        `ACOS(COALESCE(ACOS("myTable"."myColumn"), 0e0))`
     );
 
     t.end();

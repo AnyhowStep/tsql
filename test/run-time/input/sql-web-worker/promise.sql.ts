@@ -66,7 +66,7 @@ function postMessage<ActionT extends SqliteAction, ResultT> (
                 ...data,
             } as ToSqliteMessage
         );
-    })
+    });
 }
 
 /**
@@ -199,7 +199,7 @@ export class Connection {
                 };
             })
             .catch((err) => {
-                console.error(sql);
+                //console.error("error encountered", sql);
                 throw err;
             });
     }

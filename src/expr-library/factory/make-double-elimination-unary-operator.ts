@@ -5,6 +5,7 @@ import {OperatorNodeUtil} from "../../ast";
 import {UnaryOperator} from "./make-unary-operator";
 import {tryExtractAstOr} from "../../ast/util";
 import {OperatorType} from "../../operator-type";
+import {TypeHint} from "../../type-hint";
 
 /**
  * Makes a double elimination unary operator.
@@ -18,7 +19,8 @@ export function makeDoubleEliminationUnaryOperator<
     OutputTypeT
 > (
     operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand1<OperatorTypeT>,
-    mapper : tm.SafeMapper<OutputTypeT>
+    mapper : tm.SafeMapper<OutputTypeT>,
+    typeHint? : TypeHint
 ) {
     const result : UnaryOperator<InputTypeT, OutputTypeT> = <
         ArgT extends RawExpr<InputTypeT>
@@ -44,7 +46,8 @@ export function makeDoubleEliminationUnaryOperator<
                 ),
                 operand => OperatorNodeUtil.operatorNode1<OperatorTypeT>(
                     operatorType,
-                    [ operand ]
+                    [ operand ],
+                    typeHint
                 )
             )
         );

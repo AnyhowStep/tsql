@@ -27,7 +27,7 @@ export declare const aliasedTable: tsql.Table<{
         readonly column3: tsql.Column<{
             tableAlias: "21";
             columnAlias: "column3";
-            mapper: tm.Mapper<unknown, number>;
+            mapper: tm.Mapper<unknown, bigint>;
         }>;
         readonly column4: tsql.Column<{
             tableAlias: "21";
@@ -114,7 +114,7 @@ export declare const aliasedTable2: tsql.Table<{
         readonly column3: tsql.Column<{
             tableAlias: "22";
             columnAlias: "column3";
-            mapper: tm.Mapper<unknown, number>;
+            mapper: tm.Mapper<unknown, bigint>;
         }>;
         readonly column4: tsql.Column<{
             tableAlias: "22";

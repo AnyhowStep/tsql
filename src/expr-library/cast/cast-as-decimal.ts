@@ -112,7 +112,8 @@ export function castAsDecimal<
                 RawExprUtil.buildAst(arg),
                 RawExprUtil.buildAst(decimalDefinition.precision),
                 RawExprUtil.buildAst(decimalDefinition.scale),
-            ]
+            ],
+            undefined
         )
     );
 }

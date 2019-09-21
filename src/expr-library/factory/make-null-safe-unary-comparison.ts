@@ -5,6 +5,7 @@ import {PrimitiveExpr} from "../../primitive-expr";
 import {RawExprUtil} from "../../raw-expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
+import {TypeHint} from "../../type-hint";
 
 export type NullSafeUnaryComparison = (
     <
@@ -22,7 +23,8 @@ export type NullSafeUnaryComparison = (
  * Factory for making null-safe unary comparison operators.
  */
 export function makeNullSafeUnaryComparison<OperatorTypeT extends OperatorType> (
-    operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand1<OperatorTypeT>
+    operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand1<OperatorTypeT>,
+    typeHint? : TypeHint
 ) : NullSafeUnaryComparison {
     const result : NullSafeUnaryComparison = (rawExpr) => {
         return expr(
@@ -34,7 +36,8 @@ export function makeNullSafeUnaryComparison<OperatorTypeT extends OperatorType> 
                 operatorType,
                 [
                     RawExprUtil.buildAst(rawExpr),
-                ]
+                ],
+                typeHint
             )
         );
     };

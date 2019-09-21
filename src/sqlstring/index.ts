@@ -114,6 +114,9 @@ export function escapeValue (rawValue : null|boolean|number|bigint|string|Buffer
                 "FALSE";
         }
         case "number": {
+            if (!isFinite(rawValue)) {
+                return "NULL";
+            }
             const result = String(rawValue);
             if (result.indexOf("e") < 0) {
                 /**

@@ -1,3 +1,4 @@
+import * as tm from "type-mapping";
 import * as tape from "tape";
 import {Pool} from "./promise.sql";
 import {SqliteWorker} from "./worker.sql";
@@ -12,14 +13,16 @@ tape(__filename, async (t) => {
     t.deepEqual(acquireResult.rowsModified, 0);
     const selectResults = acquireResult.execResult;
 
+    const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
+
     t.deepEqual(selectResults.length, 1);
     const selectResult = selectResults[0];
     t.deepEqual(selectResult.columns, ["x", "y"]);
     t.deepEqual(selectResult.values.length, 2);
-    t.deepEqual(selectResult.values[0][0], 1);
-    t.deepEqual(selectResult.values[0][1], 2);
-    t.deepEqual(selectResult.values[1][0], 3);
-    t.deepEqual(selectResult.values[1][1], 4);
+    t.deepEqual(selectResult.values[0][0], BigInt(1));
+    t.deepEqual(selectResult.values[0][1], BigInt(2));
+    t.deepEqual(selectResult.values[1][0], BigInt(3));
+    t.deepEqual(selectResult.values[1][1], BigInt(4));
 
     t.end();
 });

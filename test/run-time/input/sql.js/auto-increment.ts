@@ -1,3 +1,4 @@
+import * as tm from "type-mapping";
 import * as sql from "./sql";
 import * as tape from "tape";
 //import {log} from "../../../util";
@@ -19,6 +20,8 @@ tape(__filename, async (t) => {
     `);
     t.deepEqual(insertResult2, []);
 
+    const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
+
     const selectResults = db.exec("SELECT testTableId, val FROM testTable ORDER BY testTableId ASC");
     t.deepEqual(
         selectResults,
@@ -26,9 +29,9 @@ tape(__filename, async (t) => {
             {
                 columns: [ 'testTableId', 'val' ],
                 values: [
-                    [ 1, 888 ],
-                    [ 2, 999 ],
-                    [ 3, 101010 ]
+                    [ BigInt(1), BigInt(888) ],
+                    [ BigInt(2), BigInt(999) ],
+                    [ BigInt(3), BigInt(101010) ]
                 ]
             }
         ]

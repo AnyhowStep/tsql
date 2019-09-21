@@ -8,6 +8,7 @@ export function isOperatorNode (mixed : unknown) : mixed is OperatorNode {
             "type",
             "operatorType",
             "operands",
+            "typeHint"
         ]
     )) {
         return false;

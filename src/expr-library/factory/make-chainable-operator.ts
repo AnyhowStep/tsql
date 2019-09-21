@@ -12,6 +12,7 @@ import {IExprSelectItem} from "../../expr-select-item";
 import {OperatorType} from "../../operator-type";
 import {LiteralValueNodeUtil, LiteralValueNode} from "../../ast/literal-value-node";
 import {PrimitiveExprUtil} from "../../primitive-expr";
+import {TypeHint} from "../../type-hint";
 
 function tryGetFlattenableElements (
     rawExpr : AnyRawExpr,
@@ -83,7 +84,8 @@ export function makeChainableOperator<
 > (
     operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand1ToN<OperatorTypeT>,
     identityElement : TypeT,
-    mapper : tm.SafeMapper<TypeT>
+    mapper : tm.SafeMapper<TypeT>,
+    typeHint? : TypeHint
 ) : (
     ChainableOperator<TypeT>
 ) {
@@ -148,7 +150,8 @@ export function makeChainableOperator<
                 operands[0] :
                 OperatorNodeUtil.operatorNode1ToN<OperatorTypeT>(
                     operatorType,
-                    operands
+                    operands,
+                    typeHint
                 )
             )
         ) as ChainableOperatorReturn<TypeT, ArrT>;

@@ -1,3 +1,4 @@
+import * as tm from "type-mapping";
 import * as sql from "./sql";
 import * as tape from "tape";
 //import {log} from "../../../util";
@@ -29,6 +30,8 @@ tape(__filename, async (t) => {
         INSERT INTO testTable (a, b) VALUES (42, 24);
     `);
 
+    const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
+
     const selectResults = db2.exec("SELECT a, b FROM testTable ORDER BY a ASC");
     t.deepEqual(
         selectResults,
@@ -36,9 +39,9 @@ tape(__filename, async (t) => {
             {
                 columns: [ 'a', 'b' ],
                 values: [
-                    [ 42, 24 ],
-                    [ 1337, 9001 ],
-                    [ 1337, 9001 ]
+                    [ BigInt(42), BigInt(24) ],
+                    [ BigInt(1337), BigInt(9001) ],
+                    [ BigInt(1337), BigInt(9001) ]
                 ]
             }
         ]
