@@ -582,6 +582,8 @@ export const sqliteSqlfier : Sqlfier = {
             }
         },
         [OperatorType.ADDITION] : ({operands}) => insertBetween(operands, "+"),
+        [OperatorType.MULTIPLICATION] : ({operands}) => insertBetween(operands, "*"),
+        [OperatorType.UNARY_MINUS] : ({operands}) => ["-", operands[0]],
 
         /*
             Mathematical Functions
@@ -601,10 +603,19 @@ export const sqliteSqlfier : Sqlfier = {
         [OperatorType.FLOOR] : ({operands}) => functionCall("FLOOR", operands),
         [OperatorType.LN] : ({operands}) => functionCall("LN", operands),
         [OperatorType.LOG] : ({operands}) => functionCall("LOG", operands),
-
-        [OperatorType.PI] : () => {
-            return functionCall("PI", []);
+        [OperatorType.LOG2] : ({operands}) => functionCall("LOG2", operands),
+        [OperatorType.LOG10] : ({operands}) => functionCall("LOG10", operands),
+        [OperatorType.PI] : () => functionCall("PI", []),
+        [OperatorType.POWER] : ({operands}) => functionCall("POWER", operands),
+        [OperatorType.RADIANS] : ({operands}) => functionCall("RADIANS", operands),
+        [OperatorType.RANDOM] : ({operands, typeHint}) => {
+            if (typeHint == TypeHint.DOUBLE) {
+                return functionCall("FRANDOM", operands);
+            } else {
+                throw new Error(`RANDOM not implemented for ${typeHint}`);
+            }
         },
+        [OperatorType.ROUND] : ({operands}) => functionCall("ROUND", operands),
 
         /*
             Date and Time Functions
