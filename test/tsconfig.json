@@ -5,6 +5,8 @@
     },
     "include" : [
         "./compare-sql-pretty.ts",
+        "./compare-sql.ts",
+        "./loop-test.ts",
         "./sqlite-sqlfier.ts"
     ]
 }

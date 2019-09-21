@@ -20,7 +20,7 @@ export function decimalLiteral (
     scale : number|bigint
 ) : (
     Expr<{
-        mapper : tm.SafeMapper<Decimal|null>,
+        mapper : tm.SafeMapper<Decimal>,
         usedRef : IUsedRef<{}>,
     }>
 ) {

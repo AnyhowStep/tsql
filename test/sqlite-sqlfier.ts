@@ -616,6 +616,11 @@ export const sqliteSqlfier : Sqlfier = {
             }
         },
         [OperatorType.ROUND] : ({operands}) => functionCall("ROUND", operands),
+        [OperatorType.SIGN] : ({operands}) => functionCall("SIGN", operands),
+        [OperatorType.SINE] : ({operands}) => functionCall("SIN", operands),
+        [OperatorType.SQUARE_ROOT] : ({operands}) => functionCall("SQRT", operands),
+        [OperatorType.TANGENT] : ({operands}) => functionCall("TAN", operands),
+        [OperatorType.TRUNCATE] : ({operands}) => functionCall("TRUNCATE", operands),
 
         /*
             Date and Time Functions

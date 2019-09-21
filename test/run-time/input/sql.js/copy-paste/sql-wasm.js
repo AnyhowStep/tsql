@@ -1,5 +1,5 @@
 const tm = require("type-mapping");
-
+global.tm = tm;
 // We are modularizing this manually because the current modularize setting in Emscripten has some issues:
 // https://github.com/kripken/emscripten/issues/5820
 // In addition, When you use emcc's modularization, it still expects to export a global object called `Module`,
@@ -824,7 +824,8 @@ Database = (function() {
         result = func.apply(null, args);
       } catch (error1) {
         error = error1;
-        sqlite3_result_error(cx, error, -1);
+        //console.error("user-defined function error", error);
+        sqlite3_result_error(cx, (typeof error == "string") ? error : String(error), -1);
         return;
       }
 
