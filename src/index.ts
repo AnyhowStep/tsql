@@ -8,6 +8,7 @@ export * from "./column-identifier-map";
 export * from "./column-identifier-ref";
 export * from "./column-map";
 export * from "./column-ref";
+export * from "./comparable-expr";
 export * from "./compile-error";
 export * from "./compound-query";
 export * from "./compound-query-clause";

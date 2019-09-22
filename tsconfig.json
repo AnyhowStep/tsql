@@ -59,6 +59,7 @@
         "./src/execution/**/*",
         "./src/map-delegate/**/*",
         "./src/decimal/**/*",
+        "./src/comparable-expr/**/*",
         "./src/index.ts"
     ]
 }
