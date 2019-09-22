@@ -6,6 +6,12 @@ export type AllowedColumnIdentifierRef<
     FromClauseT extends IFromClause,
     SelectClauseT extends SelectClause|undefined
 > =
+    /**
+     * This `infer X` business is because TS 3.7 thinks this is not assignable to `ColumnIdentifierRef`
+     * when it clearly is...
+     *
+     * @todo Investigate
+     */
     ColumnIdentifierRefUtil.Intersect<
         FromClauseUtil.AllowedColumnIdentifierRef<FromClauseT, { isLateral : true }>,
         (
@@ -13,7 +19,9 @@ export type AllowedColumnIdentifierRef<
             ColumnIdentifierRefUtil.FromSelectClause<SelectClauseT> :
             {}
         )
-    >
+    > extends infer X ?
+    Extract<X, ColumnIdentifierRef> :
+    never
 ;
 export function allowedColumnIdentifierRef<
     FromClauseT extends IFromClause,
