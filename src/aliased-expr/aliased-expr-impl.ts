@@ -119,7 +119,7 @@ import {Ast} from "../ast";
 export class AliasedExpr<
     DataT extends ExprSelectItemData
 > extends ExprImpl<
-    DataT["mapper"],
+    ReturnType<DataT["mapper"]>,
     DataT["usedRef"]
 > implements IExprSelectItem<
     DataT

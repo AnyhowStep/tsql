@@ -1,11 +1,11 @@
 [
   {
     "messageText": {
-      "messageText": "Type 'ExprImpl<Mapper<unknown, boolean>, IUsedRef<{ readonly myTable: { readonly myColumn: boolean; }; }>>' is not assignable to type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn\"; mapper: Mapper<unknown, boolean | null>; }> | IExpr<{ mapper: Mapper<unknown, unknown>; usedRef: IUsedRef<{ myTable: { myColumn: boolean | null; }; }>; }> | IExprSelectItem<...> | readonly [...]'.",
+      "messageText": "Type 'ExprImpl<boolean, IUsedRef<{ readonly myTable: { readonly myColumn: boolean; }; }>>' is not assignable to type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn\"; mapper: Mapper<unknown, boolean | null>; }> | IExpr<{ mapper: Mapper<unknown, unknown>; usedRef: IUsedRef<{ myTable: { myColumn: boolean | null; }; }>; }> | IExprSelectItem<...> | readonly [...]'.",
       "category": 1,
       "code": 2322,
       "next": {
-        "messageText": "Type 'ExprImpl<Mapper<unknown, boolean>, IUsedRef<{ readonly myTable: { readonly myColumn: boolean; }; }>>' is missing the following properties from type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn\"; mapper: Mapper<unknown, boolean | null>; }>': tableAlias, columnAlias, unaliasedAst",
+        "messageText": "Type 'ExprImpl<boolean, IUsedRef<{ readonly myTable: { readonly myColumn: boolean; }; }>>' is missing the following properties from type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn\"; mapper: Mapper<unknown, boolean | null>; }>': tableAlias, columnAlias, unaliasedAst",
         "category": 1,
         "code": 2739
       }

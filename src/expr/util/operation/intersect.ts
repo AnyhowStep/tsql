@@ -43,7 +43,7 @@ export function intersect<
     ArgsT extends AnyRawExpr
 > (
     mapper : tm.SafeMapper<OutputTypeT>,
-    args : ArgsT[],
+    args : readonly ArgsT[],
     ast : Ast
 ) : Intersect<OutputTypeT, ArgsT> {
     return expr(

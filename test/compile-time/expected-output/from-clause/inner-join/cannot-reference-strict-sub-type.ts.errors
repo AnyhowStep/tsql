@@ -1,11 +1,11 @@
 [
   {
     "messageText": {
-      "messageText": "Type 'ExprImpl<Mapper<unknown, boolean>, IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; readonly otherTable: { readonly otherTableId: bigint; }; }>>' is not assignable to type 'ExprImpl<Mapper<unknown, boolean>, IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; readonly otherTable: { readonly otherTableId: bigint; }; }>> & CompileError<[\"expected to handle\", ... 4 more ..., bigint]>'.",
+      "messageText": "Type 'ExprImpl<boolean, IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; readonly otherTable: { readonly otherTableId: bigint; }; }>>' is not assignable to type 'ExprImpl<boolean, IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; readonly otherTable: { readonly otherTableId: bigint; }; }>> & CompileError<[\"expected to handle\", \"myTable\", \"myTableId\", bigint | null, \"actually handles\", bigint]>'.",
       "category": 1,
       "code": 2322,
       "next": {
-        "messageText": "Property '__compileError' is missing in type 'ExprImpl<Mapper<unknown, boolean>, IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; readonly otherTable: { readonly otherTableId: bigint; }; }>>' but required in type 'CompileError<[\"expected to handle\", \"myTable\", \"myTableId\", bigint | null, \"actually handles\", bigint]>'.",
+        "messageText": "Property '__compileError' is missing in type 'ExprImpl<boolean, IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; readonly otherTable: { readonly otherTableId: bigint; }; }>>' but required in type 'CompileError<[\"expected to handle\", \"myTable\", \"myTableId\", bigint | null, \"actually handles\", bigint]>'.",
         "category": 1,
         "code": 2741
       }

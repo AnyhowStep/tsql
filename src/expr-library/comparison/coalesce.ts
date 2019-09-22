@@ -1,7 +1,6 @@
 import * as tm from "type-mapping";
 import {AnyRawExpr, RawExprUtil} from "../../raw-expr";
 import {PopFront} from "../../tuple-util";
-import {Expr, expr} from "../../expr/expr-impl";
 import {ExprUtil} from "../../expr";
 import {IExpr} from "../../expr/expr";
 import {operatorNode2ToN} from "../../ast/operator-node/util";
@@ -54,10 +53,16 @@ export type TypeOfCoalesce<ArgsT extends readonly AnyRawExpr[], ResultT extends 
     ]
 ;
 export type CoalesceExpr<ArgsT extends readonly AnyRawExpr[]> =
+    ExprUtil.Intersect<
+        TypeOfCoalesce<ArgsT>,
+        ArgsT[number]
+    >
+    /*
     Expr<{
         mapper : tm.SafeMapper<TypeOfCoalesce<ArgsT>>,
         usedRef : RawExprUtil.IntersectUsedRef<ArgsT[number]>,
     }>
+    */
 ;
 /**
  * https://dev.mysql.com/doc/refman/8.0/en/comparison-operators.html#function_coalesce
@@ -81,11 +86,9 @@ export function coalesce<ArgsT extends readonly AnyRawExpr[]> (
          */
         return ExprUtil.fromRawExpr(arg0) as IExpr as CoalesceExpr<ArgsT>;
     } else {
-        return expr(
-            {
-                mapper : tm.unsafeOr(...args.map(RawExprUtil.mapper)),
-                usedRef : RawExprUtil.intersectUsedRef(...args),
-            },
+        return ExprUtil.intersect<TypeOfCoalesce<ArgsT>, ArgsT[number]>(
+            tm.unsafeOr(...args.map(RawExprUtil.mapper)) as tm.SafeMapper<any>,
+            args,
             operatorNode2ToN(
                 OperatorType.COALESCE,
                 [

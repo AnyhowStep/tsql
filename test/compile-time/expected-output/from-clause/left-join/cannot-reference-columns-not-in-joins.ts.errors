@@ -1,11 +1,11 @@
 [
   {
     "messageText": {
-      "messageText": "Type 'ExprImpl<Mapper<unknown, boolean>, IUsedRef<{ readonly otherTable: { readonly otherTableId: bigint; }; readonly notInJoins: { readonly column: bigint; }; }>>' is not assignable to type 'ExprImpl<Mapper<unknown, boolean>, IUsedRef<{ readonly otherTable: { readonly otherTableId: bigint; }; readonly notInJoins: { readonly column: bigint; }; }>> & CompileError<[\"The following columns cannot be referenced\", [...]]>'.",
+      "messageText": "Type 'ExprImpl<boolean, IUsedRef<{ readonly otherTable: { readonly otherTableId: bigint; }; readonly notInJoins: { readonly column: bigint; }; }>>' is not assignable to type 'ExprImpl<boolean, IUsedRef<{ readonly otherTable: { readonly otherTableId: bigint; }; readonly notInJoins: { readonly column: bigint; }; }>> & CompileError<[\"The following columns cannot be referenced\", [...]]>'.",
       "category": 1,
       "code": 2322,
       "next": {
-        "messageText": "Property '__compileError' is missing in type 'ExprImpl<Mapper<unknown, boolean>, IUsedRef<{ readonly otherTable: { readonly otherTableId: bigint; }; readonly notInJoins: { readonly column: bigint; }; }>>' but required in type 'CompileError<[\"The following columns cannot be referenced\", [\"notInJoins\", \"column\"]]>'.",
+        "messageText": "Property '__compileError' is missing in type 'ExprImpl<boolean, IUsedRef<{ readonly otherTable: { readonly otherTableId: bigint; }; readonly notInJoins: { readonly column: bigint; }; }>>' but required in type 'CompileError<[\"The following columns cannot be referenced\", [\"notInJoins\", \"column\"]]>'.",
         "category": 1,
         "code": 2741
       }

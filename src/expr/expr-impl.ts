@@ -13,20 +13,21 @@ import {IUsedRef} from "../used-ref";
  * to trigger max depth/max count errors.
  */
 export class ExprImpl<
-    MapperT extends ExprData["mapper"],
+    TypeT,
+    //MapperT extends ExprData["mapper"],
     UsedRefT extends ExprData["usedRef"]
 > implements IExpr<{
-    mapper : MapperT,
+    mapper : tm.SafeMapper<TypeT>,
     usedRef : UsedRefT,
 }> {
-    readonly mapper : MapperT;
+    readonly mapper : tm.SafeMapper<TypeT>;
     readonly usedRef : UsedRefT;
 
     readonly ast : Ast;
 
     public constructor (
         data : {
-            mapper : MapperT,
+            mapper : tm.SafeMapper<TypeT>,
             usedRef : UsedRefT,
         },
         ast : Ast
@@ -88,7 +89,7 @@ export class ExprImpl<
 }
 export type Expr<DataT extends ExprData> =
     ExprImpl<
-        DataT["mapper"],
+        ReturnType<DataT["mapper"]>,
         DataT["usedRef"]
     >
 ;
