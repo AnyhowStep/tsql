@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {RawExpr, RawExprUtil} from "../../raw-expr";
-import {Expr, expr} from "../../expr";
+import {ExprUtil} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
@@ -14,13 +14,7 @@ export type UnaryOperator<
     > (
         arg : ArgT
     ) => (
-        Expr<{
-            mapper : tm.SafeMapper<OutputTypeT>,
-            /**
-             * @todo Use `TryReuseExistingType<>` hack to fight off depth limit
-             */
-            usedRef : RawExprUtil.UsedRef<ArgT>,
-        }>
+        ExprUtil.Intersect<OutputTypeT, ArgT>
     )
 ;
 export function makeUnaryOperator<
@@ -37,16 +31,11 @@ export function makeUnaryOperator<
     > (
         arg : ArgT
     ) : (
-        Expr<{
-            mapper : tm.SafeMapper<OutputTypeT>,
-            usedRef : RawExprUtil.UsedRef<ArgT>,
-        }>
+        ExprUtil.Intersect<OutputTypeT, ArgT>
     ) => {
-        return expr(
-            {
-                mapper,
-                usedRef : RawExprUtil.usedRef(arg),
-            },
+        return ExprUtil.intersect<OutputTypeT, ArgT>(
+            mapper,
+            [arg],
             OperatorNodeUtil.operatorNode1<OperatorTypeT>(
                 operatorType,
                 [

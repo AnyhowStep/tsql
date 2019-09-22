@@ -1,14 +1,12 @@
 import * as tm from "type-mapping";
 import {RawExpr, RawExprUtil, AnyRawExpr} from "../../raw-expr";
-import {IExpr, Expr, ExprUtil, expr} from "../../expr";
+import {ExprUtil} from "../../expr";
 import {
     Ast,
     AstArray,
     OperatorNodeUtil,
     AstUtil,
 } from "../../ast";
-import {TryReuseExistingType} from "../../type-util";
-import {IExprSelectItem} from "../../expr-select-item";
 import {OperatorType} from "../../operator-type";
 import {LiteralValueNodeUtil, LiteralValueNode} from "../../ast/literal-value-node";
 import {PrimitiveExprUtil} from "../../primitive-expr";
@@ -60,6 +58,7 @@ export type ChainableOperatorReturn<
         usedRef : RawExprUtil.IntersectUsedRef<ArrT[number]>,
     }>
     */
+    /*
     TryReuseExistingType<
         ArrT[number],
         Expr<{
@@ -69,6 +68,11 @@ export type ChainableOperatorReturn<
                 RawExprUtil.IntersectUsedRef<ArrT[number]>
             >,
         }>
+    >
+    */
+    ExprUtil.Intersect<
+        TypeT,
+        ArrT[number]
     >
 ;
 export type ChainableOperator<TypeT extends null|boolean|number|bigint|string|Buffer> =
@@ -94,7 +98,10 @@ export function makeChainableOperator<
     const result : ChainableOperator<TypeT> = <ArrT extends RawExpr<TypeT>[]> (
         ...arr : ArrT
     ) : (
-        ChainableOperatorReturn<TypeT, ArrT>
+        ExprUtil.Intersect<
+            TypeT,
+            ArrT[number]
+        >
     ) => {
         if (identityAst == undefined) {
             const newIdentityAst = RawExprUtil.buildAst(identityElement);
@@ -103,7 +110,6 @@ export function makeChainableOperator<
             }
             identityAst = newIdentityAst;
         }
-        const usedRef = RawExprUtil.intersectUsedRef(...arr);
         let operands : [Ast, ...Ast[]]|undefined = undefined;
 
         for (const rawExpr of arr) {
@@ -132,11 +138,9 @@ export function makeChainableOperator<
                 }
             }
         }
-        return expr(
-            {
-                mapper,
-                usedRef,
-            },
+        return ExprUtil.intersect<TypeT, ArrT[number]>(
+            mapper,
+            arr,
             (
                 (operands == undefined) ?
                 /**
@@ -154,7 +158,7 @@ export function makeChainableOperator<
                     typeHint
                 )
             )
-        ) as ChainableOperatorReturn<TypeT, ArrT>;
+        ) as any;
     };
 
     return result;

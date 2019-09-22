@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {RawExpr, RawExprUtil} from "../../raw-expr";
-import {Expr, expr} from "../../expr";
+import {ExprUtil} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
@@ -16,13 +16,7 @@ export type BinaryOperator<
         left : LeftT,
         right : RightT
     ) => (
-        Expr<{
-            mapper : tm.SafeMapper<OutputTypeT>,
-            usedRef : RawExprUtil.IntersectUsedRef<
-                | LeftT
-                | RightT
-            >,
-        }>
+        ExprUtil.Intersect<OutputTypeT, LeftT|RightT>
     )
 ;
 export type BinaryOperator2<
@@ -37,13 +31,7 @@ export type BinaryOperator2<
         left : LeftT,
         right : RightT
     ) => (
-        Expr<{
-            mapper : tm.SafeMapper<OutputTypeT>,
-            usedRef : RawExprUtil.IntersectUsedRef<
-                | LeftT
-                | RightT
-            >,
-        }>
+        ExprUtil.Intersect<OutputTypeT, LeftT|RightT>
     )
 ;
 export function makeBinaryOperator<
@@ -89,22 +77,11 @@ export function makeBinaryOperator<
         left : LeftT,
         right : RightT
     ) : (
-        Expr<{
-            mapper : tm.SafeMapper<OutputTypeT>,
-            usedRef : RawExprUtil.IntersectUsedRef<
-                | LeftT
-                | RightT
-            >,
-        }>
+        ExprUtil.Intersect<OutputTypeT, LeftT|RightT>
     ) => {
-        return expr(
-            {
-                mapper,
-                usedRef : RawExprUtil.intersectUsedRef(
-                    left,
-                    right
-                ),
-            },
+        return ExprUtil.intersect<OutputTypeT, LeftT|RightT>(
+            mapper,
+            [left, right],
             OperatorNodeUtil.operatorNode2<OperatorTypeT>(
                 operatorType,
                 [

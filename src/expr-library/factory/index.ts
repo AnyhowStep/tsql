@@ -7,4 +7,5 @@ export * from "./make-idempotent-unary-operator";
 export * from "./make-null-safe-comparison";
 export * from "./make-null-safe-unary-comparison";
 export * from "./make-nullary-operator";
+export * from "./make-ternary-comparison";
 export * from "./make-unary-operator";

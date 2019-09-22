@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {Expr, expr} from "../../expr";
+import {ExprUtil} from "../../expr";
 import {RawExpr} from "../../raw-expr";
 import {PrimitiveExpr} from "../../primitive-expr";
 import {RawExprUtil} from "../../raw-expr";
@@ -15,13 +15,7 @@ export type NullSafeComparison = (
         left : LeftT,
         right : RightT
     ) => (
-        Expr<{
-            mapper : tm.SafeMapper<boolean>,
-            usedRef : RawExprUtil.IntersectUsedRef<
-                | LeftT
-                | RightT
-            >,
-        }>
+        ExprUtil.Intersect<boolean, LeftT|RightT>
     )
 );
 /**
@@ -33,15 +27,18 @@ export function makeNullSafeComparison<OperatorTypeT extends OperatorType> (
     operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand2<OperatorTypeT>,
     typeHint? : TypeHint
 ) : NullSafeComparison {
-    const result : NullSafeComparison = (left, right) => {
-        return expr(
-            {
-                mapper : tm.mysql.boolean(),
-                usedRef : RawExprUtil.intersectUsedRef(
-                    left,
-                    right
-                ),
-            },
+    const result : NullSafeComparison = <
+        LeftT extends RawExpr<PrimitiveExpr>,
+        RightT extends RawExpr<RawExprUtil.TypeOf<LeftT>|null>
+    >(
+        left : LeftT,
+        right : RightT
+    ) : (
+        ExprUtil.Intersect<boolean, LeftT|RightT>
+    ) => {
+        return ExprUtil.intersect<boolean, LeftT|RightT>(
+            tm.mysql.boolean(),
+            [left, right],
             OperatorNodeUtil.operatorNode2<OperatorTypeT>(
                 operatorType,
                 [
