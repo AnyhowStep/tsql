@@ -1,33 +1,33 @@
 import * as tm from "type-mapping/fluent";
-import * as tsql from "../../../../../../../dist";
+import * as tsql from "../../../../../../dist";
 
 const myTable = tsql.table("myTable")
     .addColumns({
-        someColumnA : tm.mysql.boolean(),
-        someColumnB : tm.mysql.boolean(),
-        someColumnC : tm.mysql.boolean(),
+        someColumnA : tm.mysql.double(),
+        someColumnB : tm.mysql.double(),
+        someColumnC : tm.mysql.double(),
     });
 
-export const expr = tsql.eq(
-    tsql.eq(
-        tsql.eq(
-            tsql.eq(
-                tsql.eq(
-                    tsql.eq(
-                        tsql.eq(
-                            tsql.eq(
-                                tsql.eq(
-                                    tsql.eq(
-                                        tsql.eq(
-                                            tsql.eq(
-                                                tsql.eq(
-                                                    tsql.eq(
-                                                        tsql.eq(
-                                                            tsql.eq(
-                                                                tsql.eq(
-                                                                    tsql.eq(
-                                                                        tsql.eq(
-                                                                            tsql.eq(
+export const expr = tsql.double.power(
+    tsql.double.power(
+        tsql.double.power(
+            tsql.double.power(
+                tsql.double.power(
+                    tsql.double.power(
+                        tsql.double.power(
+                            tsql.double.power(
+                                tsql.double.power(
+                                    tsql.double.power(
+                                        tsql.double.power(
+                                            tsql.double.power(
+                                                tsql.double.power(
+                                                    tsql.double.power(
+                                                        tsql.double.power(
+                                                            tsql.double.power(
+                                                                tsql.double.power(
+                                                                    tsql.double.power(
+                                                                        tsql.double.power(
+                                                                            tsql.double.power(
                                                                                 myTable.columns.someColumnA,
                                                                                 myTable.columns.someColumnB,
                                                                             ),
@@ -70,26 +70,26 @@ export const expr = tsql.eq(
     myTable.columns.someColumnC
 );
 
-export const expr2 = tsql.eq(
-    tsql.eq(
-        tsql.eq(
-            tsql.eq(
-                tsql.eq(
-                    tsql.eq(
-                        tsql.eq(
-                            tsql.eq(
-                                tsql.eq(
-                                    tsql.eq(
-                                        tsql.eq(
-                                            tsql.eq(
-                                                tsql.eq(
-                                                    tsql.eq(
-                                                        tsql.eq(
-                                                            tsql.eq(
-                                                                tsql.eq(
-                                                                    tsql.eq(
-                                                                        tsql.eq(
-                                                                            tsql.eq(
+export const expr2 = tsql.double.power(
+    tsql.double.power(
+        tsql.double.power(
+            tsql.double.power(
+                tsql.double.power(
+                    tsql.double.power(
+                        tsql.double.power(
+                            tsql.double.power(
+                                tsql.double.power(
+                                    tsql.double.power(
+                                        tsql.double.power(
+                                            tsql.double.power(
+                                                tsql.double.power(
+                                                    tsql.double.power(
+                                                        tsql.double.power(
+                                                            tsql.double.power(
+                                                                tsql.double.power(
+                                                                    tsql.double.power(
+                                                                        tsql.double.power(
+                                                                            tsql.double.power(
                                                                                 expr,
                                                                                 myTable.columns.someColumnA,
                                                                             ),
@@ -132,26 +132,26 @@ export const expr2 = tsql.eq(
     myTable.columns.someColumnB
 );
 
-export const expr3 = tsql.eq(
-    tsql.eq(
-        tsql.eq(
-            tsql.eq(
-                tsql.eq(
-                    tsql.eq(
-                        tsql.eq(
-                            tsql.eq(
-                                tsql.eq(
-                                    tsql.eq(
-                                        tsql.eq(
-                                            tsql.eq(
-                                                tsql.eq(
-                                                    tsql.eq(
-                                                        tsql.eq(
-                                                            tsql.eq(
-                                                                tsql.eq(
-                                                                    tsql.eq(
-                                                                        tsql.eq(
-                                                                            tsql.eq(
+export const expr3 = tsql.double.power(
+    tsql.double.power(
+        tsql.double.power(
+            tsql.double.power(
+                tsql.double.power(
+                    tsql.double.power(
+                        tsql.double.power(
+                            tsql.double.power(
+                                tsql.double.power(
+                                    tsql.double.power(
+                                        tsql.double.power(
+                                            tsql.double.power(
+                                                tsql.double.power(
+                                                    tsql.double.power(
+                                                        tsql.double.power(
+                                                            tsql.double.power(
+                                                                tsql.double.power(
+                                                                    tsql.double.power(
+                                                                        tsql.double.power(
+                                                                            tsql.double.power(
                                                                                 expr2,
                                                                                 myTable.columns.someColumnA,
                                                                             ),
@@ -194,26 +194,26 @@ export const expr3 = tsql.eq(
     myTable.columns.someColumnB
 );
 
-export const expr4 = tsql.eq(
-    tsql.eq(
-        tsql.eq(
-            tsql.eq(
-                tsql.eq(
-                    tsql.eq(
-                        tsql.eq(
-                            tsql.eq(
-                                tsql.eq(
-                                    tsql.eq(
-                                        tsql.eq(
-                                            tsql.eq(
-                                                tsql.eq(
-                                                    tsql.eq(
-                                                        tsql.eq(
-                                                            tsql.eq(
-                                                                tsql.eq(
-                                                                    tsql.eq(
-                                                                        tsql.eq(
-                                                                            tsql.eq(
+export const expr4 = tsql.double.power(
+    tsql.double.power(
+        tsql.double.power(
+            tsql.double.power(
+                tsql.double.power(
+                    tsql.double.power(
+                        tsql.double.power(
+                            tsql.double.power(
+                                tsql.double.power(
+                                    tsql.double.power(
+                                        tsql.double.power(
+                                            tsql.double.power(
+                                                tsql.double.power(
+                                                    tsql.double.power(
+                                                        tsql.double.power(
+                                                            tsql.double.power(
+                                                                tsql.double.power(
+                                                                    tsql.double.power(
+                                                                        tsql.double.power(
+                                                                            tsql.double.power(
                                                                                 expr3,
                                                                                 myTable.columns.someColumnA,
                                                                             ),
@@ -256,26 +256,26 @@ export const expr4 = tsql.eq(
     myTable.columns.someColumnB
 );
 
-export const expr5 = tsql.eq(
-    tsql.eq(
-        tsql.eq(
-            tsql.eq(
-                tsql.eq(
-                    tsql.eq(
-                        tsql.eq(
-                            tsql.eq(
-                                tsql.eq(
-                                    tsql.eq(
-                                        tsql.eq(
-                                            tsql.eq(
-                                                tsql.eq(
-                                                    tsql.eq(
-                                                        tsql.eq(
-                                                            tsql.eq(
-                                                                tsql.eq(
-                                                                    tsql.eq(
-                                                                        tsql.eq(
-                                                                            tsql.eq(
+export const expr5 = tsql.double.power(
+    tsql.double.power(
+        tsql.double.power(
+            tsql.double.power(
+                tsql.double.power(
+                    tsql.double.power(
+                        tsql.double.power(
+                            tsql.double.power(
+                                tsql.double.power(
+                                    tsql.double.power(
+                                        tsql.double.power(
+                                            tsql.double.power(
+                                                tsql.double.power(
+                                                    tsql.double.power(
+                                                        tsql.double.power(
+                                                            tsql.double.power(
+                                                                tsql.double.power(
+                                                                    tsql.double.power(
+                                                                        tsql.double.power(
+                                                                            tsql.double.power(
                                                                                 expr4,
                                                                                 myTable.columns.someColumnA,
                                                                             ),

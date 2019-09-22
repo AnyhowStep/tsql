@@ -29,7 +29,7 @@ export function makeIdempotentUnaryOperator<
     ) : (
         ExprUtil.Intersect<OutputTypeT, ArgT>
     ) => {
-        return ExprUtil.intersect(
+        return ExprUtil.intersect<OutputTypeT, ArgT>(
             mapper,
             [arg],
             tryExtractAstOr(

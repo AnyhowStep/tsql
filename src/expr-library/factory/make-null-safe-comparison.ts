@@ -27,8 +27,16 @@ export function makeNullSafeComparison<OperatorTypeT extends OperatorType> (
     operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand2<OperatorTypeT>,
     typeHint? : TypeHint
 ) : NullSafeComparison {
-    const result : NullSafeComparison = (left, right) => {
-        return ExprUtil.intersect(
+    const result : NullSafeComparison = <
+        LeftT extends RawExpr<PrimitiveExpr>,
+        RightT extends RawExpr<RawExprUtil.TypeOf<LeftT>|null>
+    >(
+        left : LeftT,
+        right : RightT
+    ) : (
+        ExprUtil.Intersect<boolean, LeftT|RightT>
+    ) => {
+        return ExprUtil.intersect<boolean, LeftT|RightT>(
             tm.mysql.boolean(),
             [left, right],
             OperatorNodeUtil.operatorNode2<OperatorTypeT>(

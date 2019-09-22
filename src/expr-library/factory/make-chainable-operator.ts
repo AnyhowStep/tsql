@@ -138,7 +138,7 @@ export function makeChainableOperator<
                 }
             }
         }
-        return ExprUtil.intersect(
+        return ExprUtil.intersect<TypeT, ArrT[number]>(
             mapper,
             arr,
             (

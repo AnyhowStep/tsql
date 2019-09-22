@@ -79,7 +79,7 @@ export function makeBinaryOperator<
     ) : (
         ExprUtil.Intersect<OutputTypeT, LeftT|RightT>
     ) => {
-        return ExprUtil.intersect(
+        return ExprUtil.intersect<OutputTypeT, LeftT|RightT>(
             mapper,
             [left, right],
             OperatorNodeUtil.operatorNode2<OperatorTypeT>(

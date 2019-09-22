@@ -51,7 +51,7 @@ export function makeComparison<OperatorTypeT extends OperatorType> (
     ) => {
         RawExprUtil.assertNonNull("LHS", left);
         RawExprUtil.assertNonNull("RHS", left);
-        return ExprUtil.intersect(
+        return ExprUtil.intersect<boolean, LeftT|RightT>(
             tm.mysql.boolean(),
             [left, right],
             OperatorNodeUtil.operatorNode2<OperatorTypeT>(

@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {RawExpr, RawExprUtil, AnyRawExpr} from "../../raw-expr";
-import {ExprUtil, expr} from "../../expr";
+import {ExprUtil} from "../../expr";
 import {
     Ast,
     AstArray,
@@ -89,7 +89,7 @@ export function makeChainableDecimalOperator<
     const result : ChainableDecimalOperator = <ArrT extends RawExpr<Decimal>[]> (
         ...arr : ArrT
     ) : (
-        ChainableDecimalOperatorReturn<ArrT>
+        ExprUtil.Intersect<Decimal, ArrT[number]>
     ) => {
         if (identityAst == undefined) {
             const newIdentityAst = LiteralValueNodeUtil.decimalLiteralNode(identityElement, 65, 30);
@@ -98,7 +98,6 @@ export function makeChainableDecimalOperator<
             }
             identityAst = newIdentityAst;
         }
-        const usedRef = RawExprUtil.intersectUsedRef(...arr);
         let operands : [Ast, ...Ast[]]|undefined = undefined;
 
         for (const rawExpr of arr) {
@@ -127,11 +126,9 @@ export function makeChainableDecimalOperator<
                 }
             }
         }
-        return expr(
-            {
-                mapper,
-                usedRef,
-            },
+        return ExprUtil.intersect<Decimal, ArrT[number]>(
+            mapper,
+            arr,
             (
                 (operands == undefined) ?
                 /**
@@ -149,7 +146,7 @@ export function makeChainableDecimalOperator<
                     typeHint
                 )
             )
-        ) as ChainableDecimalOperatorReturn<ArrT>;
+        );
     };
 
     return result;

@@ -40,7 +40,13 @@ export function makeNullSafeUnaryComparison<OperatorTypeT extends OperatorType> 
     operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand1<OperatorTypeT>,
     typeHint? : TypeHint
 ) : NullSafeUnaryComparison {
-    const result : NullSafeUnaryComparison = (rawExpr) => {
+    const result : NullSafeUnaryComparison = <
+        RawExprT extends RawExpr<PrimitiveExpr>
+    >(
+        rawExpr : RawExprT
+    ) : (
+        ExprUtil.Intersect<boolean, RawExprT>
+    ) => {
         return ExprUtil.intersect(
             tm.mysql.boolean(),
             [rawExpr],
