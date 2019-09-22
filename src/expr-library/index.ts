@@ -8,11 +8,11 @@ export * from "./logical-3";
 export * from "./null-safe-comparison";
 export * from "./subquery";
 
-//import * as decimal from "./decimal";
+import * as decimal from "./decimal";
 import * as double from "./double";
-//import * as integer from "./integer";
+import * as integer from "./integer";
 export {
-    //decimal,
+    decimal,
     double,
-    //integer,
+    integer,
 };

@@ -178,6 +178,18 @@ See the internal `Buffer` declaration [here](src/buffer.ts)
 + https://stackoverflow.com/questions/41936403/mysql-ieee-floating-point-nan-positiveinfinity-negativeinfinity
   + `NaN`, `+Infinity`, `-Infinity` are not valid `DOUBLE` values according to the SQL standard
 
++ Investigate and compare against,
+  + https://github.com/prisma/photonjs
+  + https://github.com/jawj/mostly-ormless/blob/master/README.md
+  + https://news.ycombinator.com/item?id=21031187
+  + https://github.com/vincit/objection.js
+  + https://github.com/typeorm/typeorm
+  + https://github.com/sequelize/sequelize
+  + https://github.com/hediet/ts-typed-sql
+
++ Remove static use of potentially polyfilled functions like `BigInt`, `Buffer`, etc.
+  + Stick to lazy initialization
+
 <!--
 > I'm just thinking about how...
 yeah the nicity of being able to call like find, and have the code manage going like
