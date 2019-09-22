@@ -1,14 +1,12 @@
 import * as tm from "type-mapping";
 import {RawExpr, RawExprUtil, AnyRawExpr} from "../../raw-expr";
-import {IExpr, Expr, ExprUtil, expr} from "../../expr";
+import {ExprUtil, expr} from "../../expr";
 import {
     Ast,
     AstArray,
     OperatorNodeUtil,
     AstUtil,
 } from "../../ast";
-import {TryReuseExistingType} from "../../type-util";
-import {IExprSelectItem} from "../../expr-select-item";
 import {OperatorType} from "../../operator-type";
 import {LiteralValueNodeUtil, LiteralValueNode} from "../../ast/literal-value-node";
 import {PrimitiveExprUtil} from "../../primitive-expr";
@@ -63,16 +61,7 @@ export type ChainableDecimalOperatorReturn<
         usedRef : RawExprUtil.IntersectUsedRef<ArrT[number]>,
     }>
     */
-    TryReuseExistingType<
-        ArrT[number],
-        Expr<{
-            mapper : tm.SafeMapper<Decimal>,
-            usedRef : TryReuseExistingType<
-                Extract<ArrT[number], IExpr|IExprSelectItem>["usedRef"],
-                RawExprUtil.IntersectUsedRef<ArrT[number]>
-            >,
-        }>
-    >
+    ExprUtil.Intersect<Decimal, ArrT[number]>
 ;
 export type ChainableDecimalOperator =
     <ArrT extends RawExpr<Decimal>[]> (

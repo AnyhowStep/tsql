@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {RawExpr, RawExprUtil} from "../../raw-expr";
-import {Expr, expr} from "../../expr";
+import {ExprUtil} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
 import {UnaryOperator} from "./make-unary-operator";
 import {tryExtractAstOr} from "../../ast/util";
@@ -27,16 +27,11 @@ export function makeDoubleEliminationUnaryOperator<
     > (
         arg : ArgT
     ) : (
-        Expr<{
-            mapper : tm.SafeMapper<OutputTypeT>,
-            usedRef : RawExprUtil.UsedRef<ArgT>,
-        }>
+        ExprUtil.Intersect<OutputTypeT, ArgT>
     ) => {
-        return expr(
-            {
-                mapper,
-                usedRef : RawExprUtil.usedRef(arg),
-            },
+        return ExprUtil.intersect(
+            mapper,
+            [arg],
             tryExtractAstOr(
                 RawExprUtil.buildAst(arg),
                 operand => (

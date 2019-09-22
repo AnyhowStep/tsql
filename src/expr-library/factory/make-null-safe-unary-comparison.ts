@@ -1,13 +1,27 @@
 import * as tm from "type-mapping";
-import {Expr, expr} from "../../expr";
+import {ExprUtil} from "../../expr";
 import {RawExpr} from "../../raw-expr";
 import {PrimitiveExpr} from "../../primitive-expr";
 import {RawExprUtil} from "../../raw-expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
+import {Expr} from "../../expr/expr-impl";
 
 export type NullSafeUnaryComparison = (
+    <
+        RawExprT extends RawExpr<PrimitiveExpr>
+    >(
+        rawExpr : RawExprT
+    ) => (
+        ExprUtil.Intersect<boolean, RawExprT>
+    )
+);
+/**
+ * Called wasteful because it does not attempt to reuse existing types,
+ * wasting our depth limit.
+ */
+export type __WastefulNullSafeUnaryComparison = (
     <
         RawExprT extends RawExpr<PrimitiveExpr>
     >(
@@ -27,11 +41,9 @@ export function makeNullSafeUnaryComparison<OperatorTypeT extends OperatorType> 
     typeHint? : TypeHint
 ) : NullSafeUnaryComparison {
     const result : NullSafeUnaryComparison = (rawExpr) => {
-        return expr(
-            {
-                mapper : tm.mysql.boolean(),
-                usedRef : RawExprUtil.usedRef(rawExpr),
-            },
+        return ExprUtil.intersect(
+            tm.mysql.boolean(),
+            [rawExpr],
             OperatorNodeUtil.operatorNode1<OperatorTypeT>(
                 operatorType,
                 [

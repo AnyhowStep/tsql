@@ -99,8 +99,11 @@ export enum OperatorType {
      * -----
      *
      * + MySQL        : `GREATEST(x, y, ...)` //Requires 2 args
+     *   + `NULL` values cause return value of `NULL`
      * + PostgreSQL   : `GREATEST(x, ...)`    //Requires 1 arg
+     *   + Ignores `NULL` values
      * + SQLite       : `MAX(x, ...)`         //Requires 1 arg
+     *   + `NULL` values cause return value of `NULL`
      */
     GREATEST = "GREATEST",
 
@@ -395,7 +398,7 @@ export enum OperatorType {
         https://dev.mysql.com/doc/refman/8.0/en/logical-operators.html
     */
 
-   /**
+    /**
      * + https://dev.mysql.com/doc/refman/8.0/en/logical-operators.html#operator_and
      * + https://www.postgresql.org/docs/9.1/functions-logical.html
      * + https://www.sqlite.org/lang_expr.html#binaryops

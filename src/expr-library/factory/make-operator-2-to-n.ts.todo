@@ -1,0 +1,102 @@
+import * as tm from "type-mapping";
+import {RawExpr, RawExprUtil, AnyRawExpr} from "../../raw-expr";
+import {Expr, expr} from "../../expr";
+import {OperatorNodeUtil} from "../../ast";
+import {OperatorType} from "../../operator-type";
+import {TypeHint} from "../../type-hint";
+import {TryReuseExistingType} from "../../type-util";
+import {IExpr} from "../../expr/expr";
+import {IExprSelectItem} from "../../expr-select-item";
+
+export type Operator2ToNReturn<
+    InputTypeT,
+    OutputTypeT,
+    Arg0T extends RawExpr<InputTypeT>,
+    Arg1T extends RawExpr<InputTypeT>,
+    ArgsT extends readonly RawExpr<InputTypeT>[]
+> =
+    TryReuseExistingType<
+        Arg0T|Arg1T|ArgsT[number],
+        Expr<{
+            mapper : tm.SafeMapper<OutputTypeT>,
+            usedRef : TryReuseExistingType<
+                Extract<Arg0T|Arg1T|ArgsT[number], IExpr|IExprSelectItem>["usedRef"],
+                RawExprUtil.IntersectUsedRef<
+                    | Arg0T
+                    | Arg1T
+                    | ArgsT[number]
+                >
+            >,
+        }>
+    >
+;
+export type Operator2ToN<
+    InputTypeT,
+    OutputTypeT
+> =
+    <
+        Arg0T extends RawExpr<InputTypeT>,
+        Arg1T extends RawExpr<InputTypeT>,
+        ArgsT extends readonly RawExpr<InputTypeT>[]
+    > (
+        arg0 : Arg0T,
+        arg1 : Arg1T,
+        ...args : ArgsT
+    ) => (
+        Expr<{
+            mapper : tm.SafeMapper<OutputTypeT>,
+            usedRef : RawExprUtil.IntersectUsedRef<
+                | Arg0T
+                | Arg1T
+                | ArgsT[number]
+            >,
+        }>
+    )
+;
+export function makeBinaryOperator<
+    OperatorTypeT extends OperatorType,
+    InputTypeT,
+    OutputTypeT
+> (
+    operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand2<OperatorTypeT>,
+    mapper : tm.SafeMapper<OutputTypeT>,
+    typeHint? : TypeHint
+) : (
+    BinaryOperator<InputTypeT, OutputTypeT>
+) {
+    const result : BinaryOperator2<LeftTypeT, RightTypeT, OutputTypeT> = <
+        LeftT extends RawExpr<LeftTypeT>,
+        RightT extends RawExpr<RightTypeT>
+    > (
+        left : LeftT,
+        right : RightT
+    ) : (
+        Expr<{
+            mapper : tm.SafeMapper<OutputTypeT>,
+            usedRef : RawExprUtil.IntersectUsedRef<
+                | LeftT
+                | RightT
+            >,
+        }>
+    ) => {
+        return expr(
+            {
+                mapper,
+                usedRef : RawExprUtil.intersectUsedRef(
+                    left,
+                    right
+                ),
+            },
+            OperatorNodeUtil.operatorNode2<OperatorTypeT>(
+                operatorType,
+                [
+                    RawExprUtil.buildAst(left),
+                    RawExprUtil.buildAst(right),
+                ],
+                typeHint
+            )
+        );
+    };
+
+    return result;
+}
