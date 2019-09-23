@@ -5,7 +5,7 @@ import {OperatorType} from "../../operator-type";
 import {IUsedRef, UsedRefUtil} from "../../used-ref";
 import {TypeHint} from "../../type-hint";
 
-export type NullaryOperator<
+export type Operator0<
     OutputTypeT
 > =
     () => (
@@ -15,15 +15,17 @@ export type NullaryOperator<
         }>
     )
 ;
-export function makeNullaryOperator<
+export function makeOperator0<
     OperatorTypeT extends OperatorType,
     OutputTypeT
 > (
     operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand0<OperatorTypeT>,
     mapper : tm.SafeMapper<OutputTypeT>,
     typeHint? : TypeHint
+) : (
+    Operator0<OutputTypeT>
 ) {
-    const result : NullaryOperator<OutputTypeT> = () : (
+    const result : Operator0<OutputTypeT> = () : (
         Expr<{
             mapper : tm.SafeMapper<OutputTypeT>,
             usedRef : IUsedRef<{}>,

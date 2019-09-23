@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeNullaryOperator} from "../factory";
+import {makeOperator0} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -30,7 +30,7 @@ import {TypeHint} from "../../type-hint";
  *  RANDOM()
  * ```
  */
-export const randomSignedBigInt = makeNullaryOperator<OperatorType.RANDOM, bigint>(
+export const randomSignedBigInt = makeOperator0<OperatorType.RANDOM, bigint>(
     OperatorType.RANDOM,
     tm.mysql.bigIntSigned(),
     TypeHint.BIGINT
