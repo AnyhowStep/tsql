@@ -39,8 +39,8 @@ export type BinaryOperator2<
  */
 export function makeBinaryOperator<
     OperatorTypeT extends OperatorType,
-    InputTypeT,
-    OutputTypeT
+    InputTypeT=never,
+    OutputTypeT=never
 > (
     operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand2<OperatorTypeT>,
     mapper : tm.SafeMapper<OutputTypeT>,

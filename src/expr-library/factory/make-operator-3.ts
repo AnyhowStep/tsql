@@ -26,10 +26,10 @@ export type Operator3<
 
 export function makeOperator3<
     OperatorTypeT extends OperatorType,
-    LeftTypeT,
-    MidTypeT,
-    RightTypeT,
-    OutputTypeT
+    LeftTypeT=never,
+    MidTypeT=never,
+    RightTypeT=never,
+    OutputTypeT=never
 > (
     operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand3<OperatorTypeT>,
     mapper : tm.SafeMapper<OutputTypeT>,

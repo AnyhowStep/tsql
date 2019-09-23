@@ -5,7 +5,7 @@ import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
-export type UnaryOperator<
+export type Operator1<
     InputTypeT,
     OutputTypeT
 > =
@@ -17,18 +17,18 @@ export type UnaryOperator<
         ExprUtil.Intersect<OutputTypeT, ArgT>
     )
 ;
-export function makeUnaryOperator<
+export function makeOperator1<
     OperatorTypeT extends OperatorType,
-    InputTypeT,
-    OutputTypeT
+    InputTypeT=never,
+    OutputTypeT=never
 > (
     operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand1<OperatorTypeT>,
     mapper : tm.SafeMapper<OutputTypeT>,
     typeHint? : TypeHint
 ) : (
-    UnaryOperator<InputTypeT, OutputTypeT>
+    Operator1<InputTypeT, OutputTypeT>
 ) {
-    const result : UnaryOperator<InputTypeT, OutputTypeT> = <
+    const result : Operator1<InputTypeT, OutputTypeT> = <
         ArgT extends RawExpr<InputTypeT>
     > (
         arg : ArgT

@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeUnaryOperator, UnaryOperator} from "../factory";
+import {makeOperator1} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -23,7 +23,7 @@ import {TypeHint} from "../../type-hint";
  * @todo Monitor this PR,
  * https://github.com/microsoft/TypeScript/issues/33561
  */
-export const isNotUnknown : UnaryOperator<boolean|null, boolean> = makeUnaryOperator<OperatorType.IS_NOT_UNKNOWN, boolean|null, boolean>(
+export const isNotUnknown = makeOperator1<OperatorType.IS_NOT_UNKNOWN, boolean|null, boolean>(
     OperatorType.IS_NOT_UNKNOWN,
     tm.mysql.boolean(),
     TypeHint.BOOLEAN

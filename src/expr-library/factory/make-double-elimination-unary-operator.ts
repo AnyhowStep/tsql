@@ -2,7 +2,7 @@ import * as tm from "type-mapping";
 import {RawExpr, RawExprUtil} from "../../raw-expr";
 import {ExprUtil} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
-import {UnaryOperator} from "./make-unary-operator";
+import {Operator1} from "./make-operator-1";
 import {tryExtractAstOr} from "../../ast/util";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
@@ -15,14 +15,16 @@ import {TypeHint} from "../../type-hint";
  */
 export function makeDoubleEliminationUnaryOperator<
     OperatorTypeT extends OperatorType,
-    InputTypeT,
-    OutputTypeT
+    InputTypeT=never,
+    OutputTypeT=never
 > (
     operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand1<OperatorTypeT>,
     mapper : tm.SafeMapper<OutputTypeT>,
     typeHint? : TypeHint
+) : (
+    Operator1<InputTypeT, OutputTypeT>
 ) {
-    const result : UnaryOperator<InputTypeT, OutputTypeT> = <
+    const result : Operator1<InputTypeT, OutputTypeT> = <
         ArgT extends RawExpr<InputTypeT>
     > (
         arg : ArgT

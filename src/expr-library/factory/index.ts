@@ -10,7 +10,7 @@ export * from "./make-null-safe-comparison";
 export * from "./make-null-safe-unary-comparison";
 export * from "./make-nullary-operator";
 export * from "./make-operator-1-to-n";
+export * from "./make-operator-1";
 export * from "./make-operator-2-to-n";
 export * from "./make-projection-2-to-n";
 export * from "./make-ternary-comparison";
-export * from "./make-unary-operator";

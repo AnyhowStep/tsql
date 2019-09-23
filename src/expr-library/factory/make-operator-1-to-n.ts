@@ -32,8 +32,8 @@ export type Operator1ToN<
 ;
 export function makeOperator1ToN<
     OperatorTypeT extends OperatorType,
-    InputTypeT,
-    OutputTypeT
+    InputTypeT=never,
+    OutputTypeT=never
 > (
     operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand1ToN<OperatorTypeT>,
     mapper : tm.SafeMapper<OutputTypeT>,
