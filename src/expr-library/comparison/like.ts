@@ -7,6 +7,13 @@ import {RawExpr, RawExprUtil} from "../../raw-expr";
 import {ExprImpl} from "../../expr/expr-impl";
 import {IUsedRef} from "../../used-ref";
 
+/**
+ * SQLite requires the `escapeChar` be exactly of length `1`
+ */
+export function assertValidEscapeChar (escapeChar : string) {
+    tm.stringExactLength(1)("escapeChar", escapeChar);
+}
+
 export const likeImpl : BinaryOperator<string, boolean> = makeBinaryOperator<OperatorType.LIKE, string, boolean>(
     OperatorType.LIKE,
     tm.mysql.boolean(),
@@ -45,7 +52,7 @@ export function like<
         /**
          * SQLite requires the `escapeChar` be exactly of length `1`
          */
-        escapeChar = tm.stringExactLength(1)("escapeChar", escapeChar);
+        assertValidEscapeChar(escapeChar);
         const escapedExpr = likeEscapeImpl<ExprT, PatternT, string>(rawExpr, pattern, escapeChar);
         /**
          * @todo Investigate assignability

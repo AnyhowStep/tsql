@@ -8,7 +8,15 @@ export function compareSqlPretty (
     t : tape.Test,
     ast : tsql.Ast
 ) {
-    const actual = tsql.AstUtil.toSqlPretty(ast, sqliteSqlfier);
+    const actual = tsql.AstUtil.toSqlPretty(ast, sqliteSqlfier, {
+        stringTypes : [/*`""`,*/ "N''", /*"''",*/ "``", "[]", "X''", "pascal-single", "pascal-double"],
+        /**
+         * These `undefined` values should be ignored,
+         * and should not overwrite.
+         */
+        openParens : undefined,
+        closeParens : undefined,
+    });
     const expected = fs
         .readFileSync(fileName.replace(/\.ts$/, ".sql"))
         .toString("ascii")

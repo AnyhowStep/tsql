@@ -13,6 +13,20 @@ function escapeRegExp (str : string) {
         : str;
 }
 
+export interface TokenizerConfig {
+    reservedWords : string[],
+    reservedToplevelWords : string[],
+    reservedNewlineWords : string[],
+    reservedPreNewlineWords : string[],
+    stringTypes : ("``"|"[]"|"\"\""|"''"|"N''"|"X''"|"pascal-single"|"pascal-double")[],
+    openParens : string[],
+    closeParens : string[],
+    indexedPlaceholderTypes : string[],
+    namedPlaceholderTypes : string[],
+    lineCommentTypes : string[],
+    specialWordChars : string[]|undefined,
+}
+
 /* eslint-disable local/no-method */
 export class Tokenizer {
     private readonly WHITESPACE_REGEX : RegExp;
@@ -49,19 +63,7 @@ export class Tokenizer {
      *  @param {String[]} cfg.lineCommentTypes Line comments to enable, like # and --
      *  @param {String[]} cfg.specialWordChars Special chars that can be found inside of words, like @ and #
      */
-    constructor(cfg : {
-        reservedWords : string[],
-        reservedToplevelWords : string[],
-        reservedNewlineWords : string[],
-        reservedPreNewlineWords : string[],
-        stringTypes : ("``"|"[]"|"\"\""|"''"|"N''"|"X''")[],
-        openParens : string[],
-        closeParens : string[],
-        indexedPlaceholderTypes : string[],
-        namedPlaceholderTypes : string[],
-        lineCommentTypes : string[],
-        specialWordChars : string[]|undefined,
-    }) {
+    constructor(cfg : TokenizerConfig) {
         this.WHITESPACE_REGEX = /^(\s+)/;
         //The original NUMBER_REGEX was this -> /^((-\s*)?[0-9]+(\.[0-9]+)?|0x[0-9a-fA-F]+|0b[01]+)\b/;
         this.NUMBER_REGEX = /^(([-+])?([0-9]*\.?[0-9]+)([eE]([-+])?([0-9]+))?)\b/;
@@ -103,7 +105,7 @@ export class Tokenizer {
         return new RegExp(`^([\\w${specialChars.join("")}]+)`);
     }
 
-    createStringRegex(stringTypes : ("``"|"[]"|"\"\""|"''"|"N''"|"X''")[]) {
+    createStringRegex(stringTypes : TokenizerConfig["stringTypes"]) {
         return new RegExp(
             "^(" + this.createStringPattern(stringTypes) + ")"
         );
@@ -115,7 +117,9 @@ export class Tokenizer {
     // 3. double quoted string using "" or \" to escape
     // 4. single quoted string using '' or \' to escape
     // 5. national character quoted string using N'' or N\' to escape
-    createStringPattern(stringTypes : ("``"|"[]"|"\"\""|"''"|"N''"|"X''")[]) {
+    // 6. double quoted string using "" to escape (should not be used with number 3)
+    // 7. single quoted string using '' to escape (should not be used with number 4)
+    createStringPattern(stringTypes : TokenizerConfig["stringTypes"]) {
         const patterns = {
             "``": "((`[^`]*($|`))+)",
             "[]": "((\\[[^\\]]*($|\\]))(\\][^\\]]*($|\\]))*)",
@@ -123,6 +127,8 @@ export class Tokenizer {
             "''": "(('[^'\\\\]*(?:\\\\.[^'\\\\]*)*('|$))+)",
             "N''": "((N'[^N'\\\\]*(?:\\\\.[^N'\\\\]*)*('|$))+)",
             "X''": "((X'[^X'\\\\]*(?:\\\\.[^X'\\\\]*)*('|$))+)",
+            "pascal-double": `(("[^"]*($|"))+)`,
+            "pascal-single": "(('[^']*($|'))+)",
         };
 
         return stringTypes.map(t => patterns[t]).join("|");

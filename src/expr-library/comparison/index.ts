@@ -2,6 +2,7 @@ export * from "./between";
 export * from "./coalesce";
 export * from "./eq-primary-key";
 export * from "./eq";
+export * from "./escape-like-pattern";
 export * from "./greatest";
 export * from "./gt-eq";
 export * from "./gt";

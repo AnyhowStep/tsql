@@ -1,5 +1,5 @@
 import {Formatter, FormatterConfig} from "./Formatter";
-import {Tokenizer} from "./Tokenizer";
+import {Tokenizer, TokenizerConfig} from "./Tokenizer";
 
 const reservedWords = [
     "ACCESSIBLE", "ACTION", "AGAINST", "AGGREGATE", "ALGORITHM", "ALL", "ALTER", "ANALYSE", "ANALYZE", "AS", "ASC", "AUTOCOMMIT",
@@ -86,16 +86,41 @@ const reservedPreNewlineWords = [
     "ELSE",
 ];
 
-let tokenizer : Tokenizer|undefined;
+export const defaultTokenizerConfig : TokenizerConfig = {
+    reservedWords,
+    reservedToplevelWords,
+    reservedNewlineWords,
+    reservedPreNewlineWords,
+    stringTypes: [/*`""`,*/ "N''", /*"''",*/ "``", "[]", "X''", "pascal-double", "pascal-single"] as TokenizerConfig["stringTypes"],
+    openParens: ["(", "CASE"],
+    closeParens: [")", "END"],
+    indexedPlaceholderTypes: ["?"],
+    namedPlaceholderTypes: ["@", ":"],
+    lineCommentTypes: ["#", "--"],
+    specialWordChars : undefined,
+};
 
 /* eslint-disable local/no-method */
 export class SqlFormatter {
     private readonly cfg : FormatterConfig|undefined;
+    private readonly tokenizerConfig : Partial<TokenizerConfig>|undefined;
+    private tokenizer : Tokenizer|undefined;
+
     /**
      * @param {Object} cfg Different set of configurations
      */
-    constructor(cfg? : FormatterConfig|undefined) {
+    constructor(cfg? : FormatterConfig|undefined, tokenizerConfig? : Partial<TokenizerConfig>|undefined) {
         this.cfg = cfg;
+        /**
+         * @todo Not use this hack.
+         * We want to ignore properties set to `undefined`.
+         */
+        this.tokenizerConfig = {...tokenizerConfig};
+        for (const key of Object.keys(this.tokenizerConfig)) {
+            if (this.tokenizerConfig[key as keyof TokenizerConfig] === undefined) {
+                delete this.tokenizerConfig[key as keyof TokenizerConfig];
+            }
+        }
     }
 
     /**
@@ -105,21 +130,12 @@ export class SqlFormatter {
      * @return {String} formatted string
      */
     format(query : string) {
-        if (tokenizer == undefined) {
-            tokenizer = new Tokenizer({
-                reservedWords,
-                reservedToplevelWords,
-                reservedNewlineWords,
-                reservedPreNewlineWords,
-                stringTypes: [`""`, "N''", "''", "``", "[]", "X''"],
-                openParens: ["(", "CASE"],
-                closeParens: [")", "END"],
-                indexedPlaceholderTypes: ["?"],
-                namedPlaceholderTypes: ["@", ":"],
-                lineCommentTypes: ["#", "--"],
-                specialWordChars : undefined,
+        if (this.tokenizer == undefined) {
+            this.tokenizer = new Tokenizer({
+                ...defaultTokenizerConfig,
+                ...this.tokenizerConfig,
             });
         }
-        return new Formatter(this.cfg, tokenizer).format(query);
+        return new Formatter(this.cfg, this.tokenizer).format(query);
     }
 }
