@@ -35,6 +35,7 @@ import {
     utcStringToTimestamp,
     TypeHint,
     Parentheses,
+    pascalStyleEscapeString,
 } from "../dist";
 import {LiteralValueType} from "../dist/ast/literal-value-node";
 
@@ -527,7 +528,7 @@ export const sqliteSqlfier : Sqlfier = {
                 scale
             ).ast
         ),
-        [LiteralValueType.STRING] : ({literalValue}) => escapeValue(literalValue),
+        [LiteralValueType.STRING] : ({literalValue}) => pascalStyleEscapeString(literalValue),
         [LiteralValueType.DOUBLE] : ({literalValue}) => escapeValue(literalValue),
         [LiteralValueType.BIGINT_SIGNED] : ({literalValue}) => escapeValue(literalValue),
         /**
@@ -576,6 +577,10 @@ export const sqliteSqlfier : Sqlfier = {
         },
         [OperatorType.IS_NOT_NULL] : ({operands}) => [operands[0], "IS NOT NULL"],
         [OperatorType.IS_NULL] : ({operands}) => [operands[0], "IS NULL"],
+        [OperatorType.LIKE] : ({operands}) => insertBetween(operands, "LIKE"),
+        [OperatorType.LIKE_ESCAPE] : ({operands : [expr, pattern, escapeChar]}) => [
+            expr, "LIKE", pattern, "ESCAPE", escapeChar
+        ],
         [OperatorType.NOT_EQUAL] : ({operands}) => insertBetween(operands, "<>"),
 
         /*
@@ -695,7 +700,7 @@ export const sqliteSqlfier : Sqlfier = {
         [OperatorType.UTC_STRING_TO_TIMESTAMP_CONSTRUCTOR] : ({operands}) => functionCall(
             "strftime",
             [
-                escapeValue("%Y-%m-%d %H:%M:%f"),
+                pascalStyleEscapeString("%Y-%m-%d %H:%M:%f"),
                 operands[0]
             ]
         ),

@@ -8,6 +8,7 @@ export * from "./gt";
 export * from "./in-array";
 export * from "./in-query";
 export * from "./least";
+export * from "./like";
 export * from "./lt-eq";
 export * from "./lt";
 export * from "./not-between";

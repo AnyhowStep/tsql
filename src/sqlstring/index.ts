@@ -78,7 +78,7 @@ export function escapeIdentifierWithDoubleQuotes (rawIdentifier : string) : stri
  *
  * @param rawValue - The value to escape
  */
-export function escapeValue (rawValue : null|boolean|number|bigint|string|Buffer) : string {
+export function escapeValue (rawValue : null|boolean|number|bigint|Buffer) : string {
     if (rawValue === null) {
         return "NULL";
     }
@@ -151,9 +151,6 @@ export function escapeValue (rawValue : null|boolean|number|bigint|string|Buffer
                 return result;
             }
         }
-        case "string": {
-            return escapeString(rawValue);
-        }
         case "object": {
             if (Buffer.isBuffer(rawValue)) {
                 return bufferToString(rawValue);
@@ -168,10 +165,13 @@ export function escapeValue (rawValue : null|boolean|number|bigint|string|Buffer
 };
 
 function bufferToString (buffer : Buffer) : string {
-  return "X" + escapeString(buffer.toString("hex"));
+  return "X" + cStyleEscapeString(buffer.toString("hex"));
 };
 
-function escapeString (rawString : string) : string {
+/**
+ * Only MySQL supports C-style escapes (using the backslash character).
+ */
+export function cStyleEscapeString (rawString : string) : string {
     let result = "";
     let chunkIndex = CHARS_GLOBAL_REGEXP.lastIndex = 0;
     let match : RegExpExecArray | null = CHARS_GLOBAL_REGEXP.exec(rawString);
@@ -195,6 +195,15 @@ function escapeString (rawString : string) : string {
     if (chunkIndex < rawString.length) {
         return "'" + result + rawString.slice(chunkIndex) + "'";
     }
+
+    return "'" + result + "'";
+}
+
+/**
+ * PostgreSQL and SQLite use Pascal-style escapes
+ */
+export function pascalStyleEscapeString (rawString : string) : string {
+    const result = rawString.replace(/\'/g, `''`);
 
     return "'" + result + "'";
 }

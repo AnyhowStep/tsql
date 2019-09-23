@@ -191,6 +191,11 @@ See the internal `Buffer` declaration [here](src/buffer.ts)
 + Remove static use of potentially polyfilled functions like `BigInt`, `Buffer`, etc.
   + Stick to lazy initialization
 
++ Investigate https://www.postgresql.org/docs/9.2/sql-syntax-lexical.html#SQL-SYNTAX-STRINGS-ESCAPE
+  + The escaping rules seem to have changed a lot over the different versions
+  + An escape string constant is specified by writing the letter `E` (upper or lower case) just before the opening single quote, e.g., `E'foo'`.
+  + If the configuration parameter `standard_conforming_strings` is `off`, then PostgreSQL recognizes backslash escapes in both regular and escape string constants. However, as of PostgreSQL 9.1, the default is `on`
+
 <!--
 > I'm just thinking about how...
 yeah the nicity of being able to call like find, and have the code manage going like
