@@ -1,6 +1,7 @@
 import {AnyRawExpr} from "../../raw-expr";
 import {usedRef, UsedRef} from "../query";
 import {UsedRefUtil} from "../../../used-ref";
+import {IQueryBase} from "../../../query-base";
 
 
 
@@ -12,7 +13,7 @@ import {UsedRefUtil} from "../../../used-ref";
  * Seems impossible.
  */
 export type IntersectUsedRef<
-    U extends AnyRawExpr
+    U extends AnyRawExpr|IQueryBase
 > =
     UsedRefUtil.Intersect<
         UsedRef<U>
@@ -20,7 +21,7 @@ export type IntersectUsedRef<
 ;
 
 export function intersectUsedRef<
-    ArrT extends readonly AnyRawExpr[]
+    ArrT extends readonly (AnyRawExpr|IQueryBase)[]
 > (
     ...arr : ArrT
 ) : (

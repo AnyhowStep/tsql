@@ -25,7 +25,7 @@ tape(__filename, async (t) => {
     }).catch((err) => {
         t.true(err instanceof tsql.RowNotFoundError);
         t.deepEqual(err.name, "RowNotFoundError");
-        t.deepEqual(err.sql, `SELECT 42e0 AS "__aliased--value" LIMIT 0 OFFSET 0`);
+        t.deepEqual(err.sql, `SELECT 42e0 AS "__aliased--value" WHERE FALSE LIMIT 0 OFFSET 0`);
     });
 
     t.end();

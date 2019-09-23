@@ -1,3 +1,4 @@
+import * as tm from "type-mapping";
 import {
     Sqlfier,
     OperatorType,
@@ -33,6 +34,7 @@ import {
     castAsDecimal,
     utcStringToTimestamp,
     TypeHint,
+    Parentheses,
 } from "../dist";
 import {LiteralValueType} from "../dist/ast/literal-value-node";
 
@@ -422,8 +424,58 @@ function queryToSql (
     if (query.fromClause != undefined && query.fromClause.currentJoins != undefined) {
         result.push(fromClauseToSql(query.fromClause.currentJoins, toSql).join(" "));
     }
-    if (query.whereClause != undefined) {
-        result.push(whereClauseToSql(query.whereClause, toSql).join(" "));
+    if (query.limitClause != undefined && tm.BigIntUtil.equal(query.limitClause.maxRowCount, 0)) {
+        /**
+         * ```sql
+         *  CREATE TABLE "myTable" ("myColumn" INT PRIMARY KEY);
+         *  INSERT INTO "myTable"("myColumn") VALUES (4);
+         *  SELECT
+         *      COALESCE(
+         *          (
+         *              SELECT
+         *                  "myTable"."myColumn" AS "myTable--myColumn"
+         *              FROM
+         *                  "myTable"
+         *              LIMIT
+         *                  0
+         *              OFFSET
+         *                  0
+         *          ),
+         *          3
+         *      );
+         * ```
+         * The above gives `4` on SQLite.
+         * Gives `3` on MySQL and PostgreSQL.
+         * SQLite is bugged.
+         *
+         * The fix is to use `WHERE FALSE` when `LIMIT 0` is detected.
+         *
+         * ```sql
+         *  CREATE TABLE "myTable" ("myColumn" INT PRIMARY KEY);
+         *  INSERT INTO "myTable"("myColumn") VALUES (4);
+         *  SELECT
+         *      COALESCE(
+         *          (
+         *              SELECT
+         *                  "myTable"."myColumn" AS "myTable--myColumn"
+         *              FROM
+         *                  "myTable"
+         *              WHERE
+         *                  FALSE
+         *              LIMIT
+         *                  0
+         *              OFFSET
+         *                  0
+         *          ),
+         *          3
+         *      );
+         * ```
+         */
+        result.push("WHERE FALSE");
+    } else {
+        if (query.whereClause != undefined) {
+            result.push(whereClauseToSql(query.whereClause, toSql).join(" "));
+        }
     }
     if (query.groupByClause == undefined) {
         if (query.havingClause != undefined) {
@@ -509,6 +561,19 @@ export const sqliteSqlfier : Sqlfier = {
         [OperatorType.EQUAL] : ({operands}) => insertBetween(operands, "="),
         [OperatorType.NULL_SAFE_EQUAL] : ({operands}) => insertBetween(operands, "IS"),
         [OperatorType.GREATER_THAN] : ({operands}) => insertBetween(operands, ">"),
+        [OperatorType.IN] : ({operands : [x, y, ...rest]}) => {
+            if (rest.length == 0 && Parentheses.IsParentheses(y) && QueryBaseUtil.isQuery(y.ast)) {
+                return [
+                    x,
+                    functionCall("IN", [y.ast])
+                ];
+            } else {
+                return [
+                    x,
+                    functionCall("IN", [y, ...rest])
+                ];
+            }
+        },
         [OperatorType.IS_NOT_NULL] : ({operands}) => [operands[0], "IS NOT NULL"],
         [OperatorType.IS_NULL] : ({operands}) => [operands[0], "IS NULL"],
         [OperatorType.NOT_EQUAL] : ({operands}) => insertBetween(operands, "<>"),

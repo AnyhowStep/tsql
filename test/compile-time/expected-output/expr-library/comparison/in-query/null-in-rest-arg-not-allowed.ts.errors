@@ -1,0 +1,125 @@
+[
+  {
+    "messageText": {
+      "messageText": "Argument of type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>; selectClause: [IExprSelectItem<{ mapper: Mapper<unknown, null>; tableAlias: \"__aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>]; limitClause: undefined; compoundQueryClause: undefined; compoundQueryLimitClause: undefine...' is not assignable to parameter of type 'IQueryBase<{ fromClause: IFromClause<FromClauseData>; selectClause: [IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; }>]; limitClause: LimitClause | undefined; compou...'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Types of property 'selectClause' are incompatible.",
+        "category": 1,
+        "code": 2326,
+        "next": {
+          "messageText": "Type '[IExprSelectItem<{ mapper: Mapper<unknown, null>; tableAlias: \"__aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>]' is not assignable to type '[IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>]'.",
+          "category": 1,
+          "code": 2322,
+          "next": {
+            "messageText": "Type 'IExprSelectItem<{ mapper: Mapper<unknown, null>; tableAlias: \"__aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>' is not assignable to type 'IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>'.",
+            "category": 1,
+            "code": 2322,
+            "next": {
+              "messageText": "Type 'IExprSelectItem<{ mapper: Mapper<unknown, null>; tableAlias: \"__aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>' is not assignable to type 'IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>'.",
+              "category": 1,
+              "code": 2322,
+              "next": {
+                "messageText": "Type '{ mapper: Mapper<unknown, null>; tableAlias: \"__aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }' is not assignable to type '{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }'.",
+                "category": 1,
+                "code": 2322,
+                "next": {
+                  "messageText": "Types of property 'mapper' are incompatible.",
+                  "category": 1,
+                  "code": 2326,
+                  "next": {
+                    "messageText": "Type 'Mapper<unknown, null>' is not assignable to type 'Mapper<unknown, number>'.",
+                    "category": 1,
+                    "code": 2322,
+                    "next": {
+                      "messageText": "Type 'null' is not assignable to type 'number'.",
+                      "category": 1,
+                      "code": 2322
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 28,
+    "start": 295
+  },
+  {
+    "messageText": {
+      "messageText": "Argument of type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: readonly Join<{ tableAlias: \"inQueryTableNull\"; nullable: false; columns: { readonly v: Column<{ tableAlias: \"inQueryTableNull\"; columnAlias: \"v\"; mapper: Mapper<...>; }>; }; ... 4 more ...; mutableColumns: readonly []; }>[]; }>; ... 4 more ...' is not assignable to parameter of type 'IQueryBase<{ fromClause: IFromClause<FromClauseData>; selectClause: [IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; }>]; limitClause: LimitClause | undefined; compou...'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Types of property 'selectClause' are incompatible.",
+        "category": 1,
+        "code": 2326,
+        "next": {
+          "messageText": "Type '[Column<{ tableAlias: \"inQueryTableNull\"; columnAlias: \"v\"; mapper: Mapper<unknown, number | null>; }>]' is not assignable to type '[IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>]'.",
+          "category": 1,
+          "code": 2322,
+          "next": {
+            "messageText": "Type 'Column<{ tableAlias: \"inQueryTableNull\"; columnAlias: \"v\"; mapper: Mapper<unknown, number | null>; }>' is not assignable to type 'IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>'.",
+            "category": 1,
+            "code": 2322,
+            "next": {
+              "messageText": "Type 'Column<{ tableAlias: \"inQueryTableNull\"; columnAlias: \"v\"; mapper: Mapper<unknown, number | null>; }>' is not assignable to type 'IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }>'.",
+              "category": 1,
+              "code": 2322,
+              "next": {
+                "messageText": "Types of property 'mapper' are incompatible.",
+                "category": 1,
+                "code": 2326,
+                "next": {
+                  "messageText": "Type 'Mapper<unknown, number | null>' is not assignable to type 'Mapper<unknown, number>'.",
+                  "category": 1,
+                  "code": 2322,
+                  "next": {
+                    "messageText": "Type 'number | null' is not assignable to type 'number'.",
+                    "category": 1,
+                    "code": 2322,
+                    "next": {
+                      "messageText": "Type 'null' is not assignable to type 'number'.",
+                      "category": 1,
+                      "code": 2322
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 61,
+    "start": 342
+  },
+  {
+    "messageText": {
+      "messageText": "Argument of type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>; selectClause: [IExprSelectItem<{ mapper: Mapper<unknown, null>; tableAlias: \"__aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>]; limitClause: undefined; compoundQueryClause: undefined; compoundQueryLimitClause: undefine...' is not assignable to parameter of type '(Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>; selectClause: [IExprSelectItem<{ mapper: Mapper<unknown, null>; tableAlias: \"__aliased\"; alias: \"value\"; usedRef: IUsedRef<...>; }>]; limitClause: undefined; compoundQueryClause: undefined; compoundQueryLimitClause: undefined...'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Type 'import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/unified-query/query-impl\").Query<{ fromClause: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/from-clause/from-clause\").IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>; selectClause: [...]; limitClause: undefined; compoundQueryClause:...' is not assignable to type 'import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/unified-query/query-impl\").Query<{ fromClause: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/from-clause/from-clause\").IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>; selectClause: [...]; limitClause: undefined; compoundQueryClause:...'. Two different types with this name exist, but they are unrelated.",
+        "category": 1,
+        "code": 2719,
+        "next": {
+          "messageText": "Property '__compileError' is missing in type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>; selectClause: [IExprSelectItem<{ mapper: Mapper<unknown, null>; tableAlias: \"__aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>]; limitClause: undefined; compoundQueryClause: undefined; compoundQueryLimitClause: undefine...' but required in type 'CompileError<[\"Expected\", { index: \"0\"; }, \"to be subtype of\", number, \"received\", null]>'.",
+          "category": 1,
+          "code": 2741
+        }
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 28,
+    "start": 536
+  }
+]

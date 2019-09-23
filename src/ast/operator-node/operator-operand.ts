@@ -23,7 +23,7 @@ export type OperatorOperand = {
     [OperatorType.GREATER_THAN]             : Operand2,
     [OperatorType.GREATER_THAN_OR_EQUAL]    : Operand2,
     [OperatorType.GREATEST]                 : Operand2ToN,
-    [OperatorType.IN]                       : Operand2ToN,
+    [OperatorType.IN]                       : Operand2ToN|Operand2,
     [OperatorType.IS_TRUE]                  : Operand1,
     [OperatorType.IS_FALSE]                 : Operand1,
     [OperatorType.IS_UNKNOWN]               : Operand1,

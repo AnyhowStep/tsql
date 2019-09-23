@@ -14,6 +14,7 @@
     "build": "tsc",
     "rebuild": "(npm run clean) && (npm run build)",
     "test-compile-time": "ts-node -P ./test/compile-time/tsconfig.json ./test/compile-time/runner.ts",
+    "test-compile-time-one": "ts-node -P ./test/compile-time/tsconfig.json ./test/compile-time/test-one.ts",
     "accept-compile-time": "ts-node -P ./test/compile-time/tsconfig.json ./test/compile-time/accept-actual.ts",
     "accept-one": "ts-node -P ./test/compile-time/tsconfig.json ./test/compile-time/accept-one.ts",
     "test-compile-time-interactive": "ts-node -P ./test/compile-time/tsconfig.json ./test/compile-time/interactive.ts",

@@ -8,7 +8,7 @@ import {ExprSelectItemUtil} from "../../../expr-select-item";
 import {LiteralValueNodeUtil} from "../../../ast/literal-value-node";
 import {isDate} from "../../../date-util";
 
-export function buildAst (rawExpr : AnyRawExpr) : Ast {
+export function buildAst (rawExpr : AnyRawExpr|QueryBaseUtil.OneSelectItem<any>) : Ast {
     //Check primitive cases first
     if (typeof rawExpr == "number") {
         return LiteralValueNodeUtil.doubleLiteralNode(rawExpr);

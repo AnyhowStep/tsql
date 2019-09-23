@@ -206,3 +206,104 @@ btw have you ever checked out loki?
 http://lokijs.org/
 
 -->
+
+-----
+
+Investigate Bug with SQLite,
+```sql
+CREATE TABLE "myTable" (
+	"myColumn" INT PRIMARY KEY
+);
+INSERT INTO
+	"myTable"("myColumn")
+VALUES
+	(4);
+
+SELECT (
+  3e0 IN(
+    COALESCE(
+      (
+        SELECT
+          "myTable"."myColumn" AS "myTable--myColumn"
+        FROM
+          "myTable"
+        LIMIT
+          0
+        OFFSET
+          0
+      ),
+      3e0
+    )
+  )
+);
+```
+
++ Expected result : `true`
++ PostgreSQL : `true`
+  + https://www.db-fiddle.com/f/aaKrWx7aAuzzC2HWPcrsBn/8
++ MySQL : `true`
+  + https://www.db-fiddle.com/f/tJNBFe4ECTJcHzgAjKvTz4/1
++ SQLite : `false`
+  + https://www.db-fiddle.com/f/vvtNQMEZ4FGfpvmRp3Linv/1
+
+-----
+
+Investigate Bug with SQLite,
+```sql
+CREATE TABLE "myTable" (
+  "myColumn" INT PRIMARY KEY
+);
+INSERT INTO
+  "myTable"("myColumn")
+VALUES
+  (4);
+
+SELECT
+  COALESCE(
+    (
+      SELECT
+        "myTable"."myColumn" AS "myTable--myColumn"
+      FROM
+        "myTable"
+      LIMIT
+        0
+      OFFSET
+        0
+    ),
+    3e0
+  );
+```
+
++ Expected result : `3`
++ PostgreSQL : `3`
++ MySQL : `3`
++ SQLite : `4`
+  + `COALESCE()` seems to ignore the `LIMIT 0` clause.
+  + Use `WHERE FALSE` when building SQL string.
+
+```sql
+CREATE TABLE "myTable" (
+  "myColumn" INT PRIMARY KEY
+);
+INSERT INTO
+  "myTable"("myColumn")
+VALUES
+  (4);
+
+SELECT
+  COALESCE(
+    (
+      SELECT
+        "myTable"."myColumn" AS "myTable--myColumn"
+      FROM
+        "myTable"
+      WHERE
+        FALSE
+      LIMIT
+        0
+      OFFSET
+        0
+    ),
+    3e0
+  );
+```

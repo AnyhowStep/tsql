@@ -5,10 +5,19 @@ import {
     copyFileSync,
 } from "./util";
 import * as nodeUtil from "util";
+import * as path from "path";
+
+const args = process.argv.slice(2).map(
+    file => path.resolve(process.cwd() + "/" + file)
+);
 
 const {
     allDiffResults
-} = runTest();
+} = runTest(
+    args.length == 0 ?
+    undefined :
+    args
+);
 console.log(allDiffResults.length, "errors found");
 
 const stdin = process.openStdin();

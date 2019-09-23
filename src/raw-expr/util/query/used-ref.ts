@@ -14,7 +14,7 @@ import {IQueryBase, QueryBaseUtil} from "../../../query-base";
  * @todo Refactor this to not require conditional types?
  * Seems impossible.
  */
-export type UsedRef<RawExprT extends AnyRawExpr> = (
+export type UsedRef<RawExprT extends AnyRawExpr|IQueryBase> = (
     /**
      * This implementation is the same as the implementation commented out below.
      * For some reason, this implementation is more efficient in terms of instantiation depth used.
@@ -51,7 +51,7 @@ export type UsedRef<RawExprT extends AnyRawExpr> = (
     RawExprT["usedRef"] :
     never*/
 );
-export function usedRef<RawExprT extends AnyRawExpr> (
+export function usedRef<RawExprT extends AnyRawExpr|IQueryBase> (
     rawExpr : RawExprT
 ) : (
     UsedRef<RawExprT>
