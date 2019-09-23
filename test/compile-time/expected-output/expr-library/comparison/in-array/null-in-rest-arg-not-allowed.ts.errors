@@ -1,37 +1,37 @@
 [
   {
-    "messageText": "Argument of type 'null' is not assignable to parameter of type 'number | IExpr<{ mapper: Mapper<unknown, number>; usedRef: IUsedRef<never>; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; }> | (IQueryBase<...> & IQueryBase<.....'.",
-    "code": 2345,
+    "messageText": "Type 'null' is not assignable to type 'number | IExpr<{ mapper: Mapper<unknown, number>; usedRef: IUsedRef<never>; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; }> | (IQueryBase<...> & IQueryBase<.....'.",
+    "code": 2322,
     "category": 1,
     "length": 4,
-    "start": 64
+    "start": 66
   },
   {
-    "messageText": "Argument of type 'null' is not assignable to parameter of type 'number | IExpr<{ mapper: Mapper<unknown, number>; usedRef: IUsedRef<never>; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; }> | (IQueryBase<...> & IQueryBase<.....'.",
-    "code": 2345,
+    "messageText": "Type 'null' is not assignable to type 'number | IExpr<{ mapper: Mapper<unknown, number>; usedRef: IUsedRef<never>; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; }> | (IQueryBase<...> & IQueryBase<.....'.",
+    "code": 2322,
     "category": 1,
     "length": 4,
-    "start": 89
+    "start": 94
   },
   {
-    "messageText": "Argument of type 'null' is not assignable to parameter of type 'number | IExpr<{ mapper: Mapper<unknown, number>; usedRef: IUsedRef<never>; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; }> | (IQueryBase<...> & IQueryBase<.....'.",
-    "code": 2345,
+    "messageText": "Type 'null' is not assignable to type 'number | IExpr<{ mapper: Mapper<unknown, number>; usedRef: IUsedRef<never>; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; }> | (IQueryBase<...> & IQueryBase<.....'.",
+    "code": 2322,
     "category": 1,
     "length": 4,
-    "start": 114
+    "start": 122
   },
   {
-    "messageText": "Argument of type 'null' is not assignable to parameter of type 'number | IExpr<{ mapper: Mapper<unknown, number>; usedRef: IUsedRef<never>; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; }> | (IQueryBase<...> & IQueryBase<.....'.",
-    "code": 2345,
+    "messageText": "Type 'null' is not assignable to type 'number | IExpr<{ mapper: Mapper<unknown, number>; usedRef: IUsedRef<never>; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; }> | (IQueryBase<...> & IQueryBase<.....'.",
+    "code": 2322,
     "category": 1,
     "length": 4,
-    "start": 145
+    "start": 156
   },
   {
     "messageText": {
-      "messageText": "Argument of type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: readonly Join<{ tableAlias: \"inListTable\"; nullable: false; columns: { readonly v: Column<{ tableAlias: \"inListTable\"; columnAlias: \"v\"; mapper: Mapper<unknown, number>; }>; }; ... 4 more ...; mutableColumns: readonly []; }>[]; }>; ... 4 mor...' is not assignable to parameter of type 'number | IExpr<{ mapper: Mapper<unknown, number>; usedRef: IUsedRef<never>; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; }> | (IQueryBase<...> & IQueryBase<.....'.",
+      "messageText": "Type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: readonly Join<{ tableAlias: \"inListTable\"; nullable: false; columns: { readonly v: Column<{ tableAlias: \"inListTable\"; columnAlias: \"v\"; mapper: Mapper<unknown, number>; }>; }; ... 4 more ...; mutableColumns: readonly []; }>[]; }>; ... 4 mor...' is not assignable to type 'number | IExpr<{ mapper: Mapper<unknown, number>; usedRef: IUsedRef<never>; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; }> | (IQueryBase<...> & IQueryBase<.....'.",
       "category": 1,
-      "code": 2345,
+      "code": 2322,
       "next": {
         "messageText": "Type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: readonly Join<{ tableAlias: \"inListTable\"; nullable: false; columns: { readonly v: Column<{ tableAlias: \"inListTable\"; columnAlias: \"v\"; mapper: Mapper<unknown, number>; }>; }; ... 4 more ...; mutableColumns: readonly []; }>[]; }>; ... 4 mor...' is not assignable to type 'IQueryBase<{ fromClause: IFromClause<FromClauseData>; selectClause: [IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; }>]; limitClause: LimitClause | undefined; compou...'.",
         "category": 1,
@@ -68,9 +68,9 @@
         }
       }
     },
-    "code": 2345,
+    "code": 2322,
     "category": 1,
-    "length": 83,
-    "start": 270
+    "length": 91,
+    "start": 293
   }
 ]

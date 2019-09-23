@@ -5,7 +5,7 @@ export * from "./eq";
 export * from "./greatest";
 export * from "./gt-eq";
 export * from "./gt";
-export * from "./in-list";
+export * from "./in-array";
 export * from "./in-query";
 export * from "./least";
 export * from "./lt-eq";

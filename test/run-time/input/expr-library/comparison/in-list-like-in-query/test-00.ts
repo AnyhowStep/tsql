@@ -8,12 +8,14 @@ tape(__filename, t => {
         .addColumns({
             myColumn : tm.mysql.double(),
         });
-    const expr = tsql.inList(
+    const expr = tsql.inArray(
         3,
-        tsql.from(myTable)
-            .selectValue(columns => columns.myColumn)
-            .limit(0)
-            .coalesce(3)
+        [
+            tsql.from(myTable)
+                .selectValue(columns => columns.myColumn)
+                .limit(0)
+                .coalesce(3)
+        ]
     );
 
     compareSqlPretty(__filename, t, expr.ast);

@@ -7,24 +7,18 @@ tape(__filename, async (t) => {
     const pool = new Pool(new SqliteWorker());
     await pool.acquire(async (connection) => {
         await tsql
-            .selectValue(() => tsql.inList(
+            .selectValue(() => tsql.inArray(
                 3,
-                6,
-                5,
-                4,
-                3
+                [6, 5, 4, 3]
             ))
             .fetchValue(connection)
             .then((value) => {
                 t.deepEqual(value, true);
             });
         await tsql
-            .selectValue(() => tsql.inList(
+            .selectValue(() => tsql.inArray(
                 3,
-                6,
-                5,
-                4,
-                2
+                [6, 5, 4, 2]
             ))
             .fetchValue(connection)
             .then((value) => {

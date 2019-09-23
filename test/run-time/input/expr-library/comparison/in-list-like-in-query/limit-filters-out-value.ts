@@ -23,30 +23,34 @@ tape(__filename, async (t) => {
                 myColumn : tm.mysql.double(),
             });
         await tsql
-            .selectValue(() => tsql.inList(
+            .selectValue(() => tsql.inArray(
                 3,
-                tsql.from(myTable)
-                    .selectValue(columns => columns.myColumn)
-                    .orderBy(columns => [
-                        columns.myColumn.asc(),
-                    ])
-                    .limit(1)
-                    .coalesce(0)
+                [
+                    tsql.from(myTable)
+                        .selectValue(columns => columns.myColumn)
+                        .orderBy(columns => [
+                            columns.myColumn.asc(),
+                        ])
+                        .limit(1)
+                        .coalesce(0)
+                ]
             ))
             .fetchValue(connection)
             .then((value) => {
                 t.deepEqual(value, false);
             });
         await tsql
-            .selectValue(() => tsql.inList(
+            .selectValue(() => tsql.inArray(
                 3,
-                tsql.from(myTable)
-                    .selectValue(columns => columns.myColumn)
-                    .orderBy(columns => [
-                        columns.myColumn.desc(),
-                    ])
-                    .limit(1)
-                    .coalesce(0)
+                [
+                    tsql.from(myTable)
+                        .selectValue(columns => columns.myColumn)
+                        .orderBy(columns => [
+                            columns.myColumn.desc(),
+                        ])
+                        .limit(1)
+                        .coalesce(0)
+                ]
             ))
             .fetchValue(connection)
             .then((value) => {

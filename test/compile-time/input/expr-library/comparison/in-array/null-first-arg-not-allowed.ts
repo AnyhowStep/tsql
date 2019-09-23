@@ -1,3 +1,3 @@
 import * as tsql from "../../../../../../dist";
 
-tsql.inList(null);
+tsql.inArray(null, []);
