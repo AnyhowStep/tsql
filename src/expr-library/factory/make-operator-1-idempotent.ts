@@ -13,7 +13,7 @@ import {TypeHint} from "../../type-hint";
  * An idempotent function `f` has the following property,
  * `f(f(x)) == f(x)`
  */
-export function makeIdempotentUnaryOperator<
+export function makeOperator1Idempotent<
     OperatorTypeT extends OperatorType,
     InputTypeT=never,
     OutputTypeT=never

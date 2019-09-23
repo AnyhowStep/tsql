@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
-import {makeIdempotentUnaryOperator} from "../factory";
+import {makeOperator1Idempotent} from "../factory";
 import {TypeHint} from "../../type-hint";
 
 /**
@@ -16,7 +16,7 @@ import {TypeHint} from "../../type-hint";
  * ```
  * The above throws an error on MySQL, PostgreSQL and SQLite.
  */
-export const abs = makeIdempotentUnaryOperator<OperatorType.ABSOLUTE_VALUE, bigint, bigint>(
+export const abs = makeOperator1Idempotent<OperatorType.ABSOLUTE_VALUE, bigint, bigint>(
     OperatorType.ABSOLUTE_VALUE,
     tm.mysql.unsafeBigInt(),
     TypeHint.BIGINT

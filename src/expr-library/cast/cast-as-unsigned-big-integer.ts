@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeIdempotentUnaryOperator} from "../factory";
+import {makeOperator1Idempotent} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {PrimitiveExpr} from "../../primitive-expr";
 import {Decimal} from "../../decimal";
@@ -9,7 +9,7 @@ import {Decimal} from "../../decimal";
  *
  * Using this may work fine on MySQL but produce inconsistent results on other DBMS.
  */
-export const castAsUnsignedBigInteger = makeIdempotentUnaryOperator<OperatorType.CAST_AS_UNSIGNED_BIG_INTEGER, PrimitiveExpr|Decimal, bigint|null>(
+export const castAsUnsignedBigInteger = makeOperator1Idempotent<OperatorType.CAST_AS_UNSIGNED_BIG_INTEGER, PrimitiveExpr|Decimal, bigint|null>(
     OperatorType.CAST_AS_UNSIGNED_BIG_INTEGER,
     tm.mysql.bigIntUnsigned().orNull()
 );
