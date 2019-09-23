@@ -2,3 +2,4 @@ node_modules
 dist
 test/compile-time/actual-output/*
 report.*
+test/run-time/run-time-test-imports.ts
