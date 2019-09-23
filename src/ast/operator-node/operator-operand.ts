@@ -40,7 +40,7 @@ export type OperatorOperand = {
     [OperatorType.NOT_BETWEEN_AND]          : Operand3,
     [OperatorType.NOT_EQUAL]                : Operand2,
     [OperatorType.NOT_NULL_SAFE_EQUAL]      : Operand2,
-    [OperatorType.NOT_IN]                   : Operand2ToN,
+    [OperatorType.NOT_IN]                   : Operand2ToN|Operand2,
     [OperatorType.NOT_LIKE]                 : Operand2,
     [OperatorType.NOT_LIKE_ESCAPE]          : Operand3,
 

@@ -25,6 +25,8 @@ export function makeUnaryOperator<
     operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand1<OperatorTypeT>,
     mapper : tm.SafeMapper<OutputTypeT>,
     typeHint? : TypeHint
+) : (
+    UnaryOperator<InputTypeT, OutputTypeT>
 ) {
     const result : UnaryOperator<InputTypeT, OutputTypeT> = <
         ArgT extends RawExpr<InputTypeT>
