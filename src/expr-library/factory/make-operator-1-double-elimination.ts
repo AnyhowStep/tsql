@@ -13,7 +13,7 @@ import {TypeHint} from "../../type-hint";
  * A double elimination function `f` has the following property,
  * `f(f(x)) == x`
  */
-export function makeDoubleEliminationUnaryOperator<
+export function makeOperator1DoubleElimination<
     OperatorTypeT extends OperatorType,
     InputTypeT=never,
     OutputTypeT=never
