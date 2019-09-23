@@ -43,7 +43,7 @@ import {nullSafeEq} from "./null-safe-eq";
  * @todo Maybe have it use `eq()` for columns we know are non-nullable
  * and use `nullSafeEq()` for columns that are nullable?
  */
-export type EqSuperKey = (
+export type EqSuperKey =
     <
         TableT extends Pick<ITable, "columns"|"candidateKeys">
     > (
@@ -55,7 +55,7 @@ export type EqSuperKey = (
             usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>
         }>
     )
-);
+;
 export const eqSuperKey : EqSuperKey = (
     <
         TableT extends Pick<ITable, "columns"|"candidateKeys">

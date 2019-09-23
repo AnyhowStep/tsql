@@ -7,7 +7,6 @@ import {WhereClause, WhereClauseUtil} from "../../../where-clause";
 import {ColumnRefUtil} from "../../../column-ref";
 import * as ExprLib from "../../../expr-library";
 import {ColumnIdentifierRefUtil} from "../../../column-identifier-ref";
-import {__WastefulNullSafeUnaryComparison} from "../../../expr-library";
 
 /**
  * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966
@@ -148,7 +147,10 @@ export function whereIsNotNull<
         whereClause : WhereClauseUtil.where(
             fromClause,
             whereClause,
-            () => (ExprLib.isNotNull as __WastefulNullSafeUnaryComparison)(column)
+            /**
+             * @todo Investigate assignability
+             */
+            () => ExprLib.isNotNull(column) as any
         ),
     };
     return result;

@@ -122,6 +122,9 @@ export function whereEqSuperKey<
 > (
     fromClause : FromClauseT,
     whereClause : WhereClause|undefined,
+    /**
+     * @todo Remove this
+     */
     eqSuperKey : EqSuperKey,
     /**
      * This construction effectively makes it impossible for `WhereEqSuperKeyDelegate<>`

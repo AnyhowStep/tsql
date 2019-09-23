@@ -6,9 +6,8 @@ import {RawExprUtil} from "../../raw-expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {Expr} from "../../expr/expr-impl";
 
-export type NullSafeUnaryComparison = (
+export type NullSafeUnaryComparison =
     <
         RawExprT extends RawExpr<PrimitiveExpr>
     >(
@@ -16,23 +15,8 @@ export type NullSafeUnaryComparison = (
     ) => (
         ExprUtil.Intersect<boolean, RawExprT>
     )
-);
-/**
- * Called wasteful because it does not attempt to reuse existing types,
- * wasting our depth limit.
- */
-export type __WastefulNullSafeUnaryComparison = (
-    <
-        RawExprT extends RawExpr<PrimitiveExpr>
-    >(
-        rawExpr : RawExprT
-    ) => (
-        Expr<{
-            mapper : tm.SafeMapper<boolean>,
-            usedRef : RawExprUtil.UsedRef<RawExprT>,
-        }>
-    )
-);
+;
+
 /**
  * Factory for making null-safe unary comparison operators.
  */

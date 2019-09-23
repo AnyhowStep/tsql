@@ -111,6 +111,9 @@ export function whereEqOuterQueryCandidateKey<
 > (
     fromClause : FromClauseT,
     whereClause : WhereClause|undefined,
+    /**
+     * @todo Remove this
+     */
     eqCandidateKeyOfTable : EqCandidateKeyOfTable,
     srcDelegate : WhereEqOuterQueryCandidateKeySrcDelegate<FromClauseT, SrcT>,
     dstDelegate : (
