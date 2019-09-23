@@ -1,4 +1,4 @@
-export * from "./make-binary-operator";
+export * from "./make-operator-2";
 export * from "./make-chainable-decimal-operator";
 export * from "./make-chainable-operator";
 export * from "./make-comparison-1-to-n";

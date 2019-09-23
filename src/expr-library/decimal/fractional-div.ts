@@ -2,12 +2,12 @@ import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 import {Decimal} from "../../decimal";
-import {makeBinaryOperator} from "../factory";
+import {makeOperator2} from "../factory";
 
 /**
  * Performs regular floating-point division
  */
-export const fractionalDiv = makeBinaryOperator<OperatorType.FRACTIONAL_DIVISION, Decimal, Decimal>(
+export const fractionalDiv = makeOperator2<OperatorType.FRACTIONAL_DIVISION, Decimal, Decimal>(
     OperatorType.FRACTIONAL_DIVISION,
     tm.mysql.decimal(),
     TypeHint.DECIMAL

@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {BinaryOperator, makeBinaryOperator} from "../factory";
+import {makeOperator2} from "../factory";
 import {OperatorType} from "../../operator-type";
 
 /**
@@ -9,7 +9,7 @@ import {OperatorType} from "../../operator-type";
  *
  * For two-valued logic, @see {@link xor}
  */
-export const xor3 : BinaryOperator<boolean|null, boolean|null> = makeBinaryOperator(
+export const xor3 = makeOperator2<OperatorType.XOR, boolean|null, boolean|null>(
     OperatorType.XOR,
     tm.mysql.boolean().orNull()
 );

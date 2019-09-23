@@ -4,22 +4,9 @@ import {ExprUtil} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
+import {AssertNonNever} from "../../type-util";
 
-export type BinaryOperator<
-    InputTypeT,
-    OutputTypeT
-> =
-    <
-        LeftT extends RawExpr<InputTypeT>,
-        RightT extends RawExpr<InputTypeT>
-    > (
-        left : LeftT,
-        right : RightT
-    ) => (
-        ExprUtil.Intersect<OutputTypeT, LeftT|RightT>
-    )
-;
-export type BinaryOperator2<
+export type Operator2<
     LeftTypeT,
     RightTypeT,
     OutputTypeT
@@ -34,21 +21,39 @@ export type BinaryOperator2<
         ExprUtil.Intersect<OutputTypeT, LeftT|RightT>
     )
 ;
-/**
- * Refactor to `makeOperator2`
- */
-export function makeBinaryOperator<
+export function makeOperator2<
     OperatorTypeT extends OperatorType,
     InputTypeT=never,
     OutputTypeT=never
 > (
-    operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand2<OperatorTypeT>,
+    operatorType : (
+        & OperatorTypeT
+        & OperatorNodeUtil.AssertHasOperand2<OperatorTypeT>
+        & AssertNonNever<[InputTypeT], "InputTypeT required">
+    ),
     mapper : tm.SafeMapper<OutputTypeT>,
     typeHint? : TypeHint
 ) : (
-    BinaryOperator<InputTypeT, OutputTypeT>
+    Operator2<InputTypeT, InputTypeT, OutputTypeT>
 );
-export function makeBinaryOperator<
+export function makeOperator2<
+    OperatorTypeT extends OperatorType,
+    LeftTypeT=never,
+    RightTypeT=never,
+    OutputTypeT=never
+> (
+    operatorType : (
+        & OperatorTypeT
+        & OperatorNodeUtil.AssertHasOperand2<OperatorTypeT>
+        & AssertNonNever<[LeftTypeT], "LeftTypeT required">
+        & AssertNonNever<[RightTypeT], "RightTypeT required">
+    ),
+    mapper : tm.SafeMapper<OutputTypeT>,
+    typeHint? : TypeHint
+) : (
+    Operator2<LeftTypeT, RightTypeT, OutputTypeT>
+);
+export function makeOperator2<
     OperatorTypeT extends OperatorType,
     LeftTypeT,
     RightTypeT,
@@ -58,22 +63,9 @@ export function makeBinaryOperator<
     mapper : tm.SafeMapper<OutputTypeT>,
     typeHint? : TypeHint
 ) : (
-    BinaryOperator2<LeftTypeT, RightTypeT, OutputTypeT>
-);
-export function makeBinaryOperator<
-    OperatorTypeT extends OperatorType,
-    LeftTypeT,
-    RightTypeT,
-    OutputTypeT
-> (
-    operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand2<OperatorTypeT>,
-    mapper : tm.SafeMapper<OutputTypeT>,
-    typeHint? : TypeHint
-) : (
-    | BinaryOperator<any, OutputTypeT>
-    | BinaryOperator2<any, any, OutputTypeT>
+    Operator2<any, any, OutputTypeT>
 ) {
-    const result : BinaryOperator2<LeftTypeT, RightTypeT, OutputTypeT> = <
+    const result : Operator2<LeftTypeT, RightTypeT, OutputTypeT> = <
         LeftT extends RawExpr<LeftTypeT>,
         RightT extends RawExpr<RightTypeT>
     > (

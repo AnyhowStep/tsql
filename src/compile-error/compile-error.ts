@@ -15,7 +15,7 @@
  * This workaround should only ever be used in function parameter lists.
  *
  */
-export interface CompileError<_ErrorMessageT extends any[]> {
+export interface CompileError<_ErrorMessageT> {
     /**
      * There should never be a value of this type
      */

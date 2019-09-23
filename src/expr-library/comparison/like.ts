@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {makeBinaryOperator, BinaryOperator} from "../factory";
+import {makeOperator2} from "../factory";
 import {makeOperator3} from "../factory/make-operator-3";
 import {RawExpr, RawExprUtil} from "../../raw-expr";
 import {ExprImpl} from "../../expr/expr-impl";
@@ -14,7 +14,7 @@ export function assertValidEscapeChar (escapeChar : string) {
     tm.stringExactLength(1)("escapeChar", escapeChar);
 }
 
-export const likeImpl : BinaryOperator<string, boolean> = makeBinaryOperator<OperatorType.LIKE, string, boolean>(
+export const likeImpl = makeOperator2<OperatorType.LIKE, string, boolean>(
     OperatorType.LIKE,
     tm.mysql.boolean(),
     TypeHint.STRING

@@ -5,14 +5,14 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {makeBinaryOperator, BinaryOperator} from "../factory";
+import {makeOperator2} from "../factory";
 import {makeOperator3} from "../factory/make-operator-3";
 import {RawExpr, RawExprUtil} from "../../raw-expr";
 import {ExprImpl} from "../../expr/expr-impl";
 import {IUsedRef} from "../../used-ref";
 import {assertValidEscapeChar} from "./like";
 
-export const notLikeImpl : BinaryOperator<string, boolean> = makeBinaryOperator<OperatorType.NOT_LIKE, string, boolean>(
+export const notLikeImpl = makeOperator2<OperatorType.NOT_LIKE, string, boolean>(
     OperatorType.NOT_LIKE,
     tm.mysql.boolean(),
     TypeHint.STRING

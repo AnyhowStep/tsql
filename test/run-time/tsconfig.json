@@ -36,6 +36,7 @@
     "include": [
         "./bigint-polyfill.ts",
         "./bluebird-promise.ts",
+        "./run-time-test-imports.ts",
         "./runner.ts",
         "./input/**/*"
     ]
