@@ -10,5 +10,5 @@ export * from "./in-query";
 export * from "./least";
 export * from "./lt-eq";
 export * from "./lt";
-export * from "./not-eq";
 export * from "./not-between";
+export * from "./not-eq";

@@ -186,6 +186,7 @@ See the internal `Buffer` declaration [here](src/buffer.ts)
   + https://github.com/typeorm/typeorm
   + https://github.com/sequelize/sequelize
   + https://github.com/hediet/ts-typed-sql
+  + https://github.com/mikro-orm/mikro-orm
 
 + Remove static use of potentially polyfilled functions like `BigInt`, `Buffer`, etc.
   + Stick to lazy initialization

@@ -2,8 +2,6 @@ import * as tm from "type-mapping";
 import {AnyRawExpr, RawExprUtil} from "../../../raw-expr";
 import {Expr, expr} from "../../expr-impl";
 import {TryReuseExistingType} from "../../../type-util";
-import {IExpr} from "../../expr";
-import {IExprSelectItem} from "../../../expr-select-item";
 import {Ast} from "../../../ast";
 
 export type Intersect<
@@ -14,11 +12,8 @@ export type Intersect<
         ArgsT,
         Expr<{
             mapper : tm.SafeMapper<OutputTypeT>,
-            usedRef : TryReuseExistingType<
-                Extract<ArgsT, IExpr|IExprSelectItem>["usedRef"],
-                RawExprUtil.IntersectUsedRef<
-                    ArgsT
-                >
+            usedRef : RawExprUtil.IntersectUsedRef<
+                ArgsT
             >,
         }>
     >

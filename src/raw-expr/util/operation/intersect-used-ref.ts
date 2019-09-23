@@ -2,6 +2,9 @@ import {AnyRawExpr} from "../../raw-expr";
 import {usedRef, UsedRef} from "../query";
 import {UsedRefUtil} from "../../../used-ref";
 import {IQueryBase} from "../../../query-base";
+import {TryReuseExistingType} from "../../../type-util";
+import {IExpr} from "../../../expr";
+import {IExprSelectItem} from "../../../expr-select-item";
 
 
 
@@ -15,8 +18,11 @@ import {IQueryBase} from "../../../query-base";
 export type IntersectUsedRef<
     U extends AnyRawExpr|IQueryBase
 > =
-    UsedRefUtil.Intersect<
-        UsedRef<U>
+    TryReuseExistingType<
+        Extract<U, IExpr|IExprSelectItem>["usedRef"],
+        UsedRefUtil.Intersect<
+            UsedRef<U>
+        >
     >
 ;
 

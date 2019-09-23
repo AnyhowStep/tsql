@@ -34,6 +34,9 @@ export type BinaryOperator2<
         ExprUtil.Intersect<OutputTypeT, LeftT|RightT>
     )
 ;
+/**
+ * Refactor to `makeOperator2`
+ */
 export function makeBinaryOperator<
     OperatorTypeT extends OperatorType,
     InputTypeT,
