@@ -21,9 +21,9 @@ import {Sqlfier} from "../sqlfier";
 export function toSqlPretty (
     ast : Ast,
     sqlfier : Sqlfier,
-    tokenizerConfig? : (
+    tokenizerConfig : (
         /**
-         * If provided, `stringTypes` must be set because it's too dangerous
+         * `stringTypes` must be set because it's too dangerous
          * to leave it at the default settings.
          *
          * MySQL uses `'\\'` to represent a single backslash character.
