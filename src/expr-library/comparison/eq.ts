@@ -1,4 +1,4 @@
-import {makeComparison, Comparison} from "../factory";
+import {makeComparison2} from "../factory";
 import {OperatorType} from "../../operator-type";
 
 /**
@@ -13,6 +13,6 @@ import {OperatorType} from "../../operator-type";
  * Interestingly enough, if I remove the `Comparison` explicit type annotation,
  * TS takes **much** longer to compile.
  */
-export const eq : Comparison = makeComparison(
+export const eq = makeComparison2(
     OperatorType.EQUAL
 );

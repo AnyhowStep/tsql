@@ -1,4 +1,4 @@
-import {makeComparison, Comparison} from "../factory";
+import {makeComparison2} from "../factory";
 import {OperatorType} from "../../operator-type";
 
 /**
@@ -9,6 +9,6 @@ import {OperatorType} from "../../operator-type";
  * For null-safe inequality, @see {@link nullSafeNotEq}
  *
  */
-export const notEq : Comparison = makeComparison(
+export const notEq = makeComparison2(
     OperatorType.LESS_THAN
 );

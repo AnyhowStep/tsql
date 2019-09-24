@@ -1,4 +1,4 @@
-import {makeComparison, Comparison} from "../factory";
+import {makeComparison2} from "../factory";
 import {OperatorType} from "../../operator-type";
 
 /**
@@ -7,6 +7,6 @@ import {OperatorType} from "../../operator-type";
  * This version of the `>` operator prevents `NULL`.
  *
  */
-export const gt : Comparison = makeComparison(
+export const gt = makeComparison2(
     OperatorType.GREATER_THAN
 );
