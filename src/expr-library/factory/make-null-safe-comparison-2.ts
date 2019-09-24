@@ -1,15 +1,15 @@
 import * as tm from "type-mapping";
 import {ExprUtil} from "../../expr";
 import {RawExpr} from "../../raw-expr";
-import {PrimitiveExpr} from "../../primitive-expr";
 import {RawExprUtil} from "../../raw-expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
+import {ComparableExpr} from "../../comparable-expr";
 
-export type NullSafeComparison = (
+export type NullSafeComparison2 =
     <
-        LeftT extends RawExpr<PrimitiveExpr>,
+        LeftT extends RawExpr<ComparableExpr>,
         RightT extends RawExpr<RawExprUtil.TypeOf<LeftT>|null>
     >(
         left : LeftT,
@@ -17,7 +17,7 @@ export type NullSafeComparison = (
     ) => (
         ExprUtil.Intersect<boolean, LeftT|RightT>
     )
-);
+;
 /**
  * Factory for making null-safe comparison operators.
  *
@@ -26,9 +26,9 @@ export type NullSafeComparison = (
 export function makeNullSafeComparison<OperatorTypeT extends OperatorType> (
     operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand2<OperatorTypeT>,
     typeHint? : TypeHint
-) : NullSafeComparison {
-    const result : NullSafeComparison = <
-        LeftT extends RawExpr<PrimitiveExpr>,
+) : NullSafeComparison2 {
+    const result : NullSafeComparison2 = <
+        LeftT extends RawExpr<ComparableExpr>,
         RightT extends RawExpr<RawExprUtil.TypeOf<LeftT>|null>
     >(
         left : LeftT,

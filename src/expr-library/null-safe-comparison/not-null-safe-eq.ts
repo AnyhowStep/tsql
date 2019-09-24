@@ -1,4 +1,4 @@
-import {makeNullSafeComparison, NullSafeComparison} from "../factory";
+import {makeNullSafeComparison} from "../factory";
 import {OperatorType} from "../../operator-type";
 
 /**
@@ -13,6 +13,6 @@ import {OperatorType} from "../../operator-type";
  *
  * For regular equality, @see {@link eq}
  */
-export const notNullSafeEq : NullSafeComparison = makeNullSafeComparison(
+export const notNullSafeEq = makeNullSafeComparison(
     OperatorType.NOT_NULL_SAFE_EQUAL
 );

@@ -6,7 +6,7 @@ export * from "./make-comparison-2-to-n";
 export * from "./make-comparison-2";
 export * from "./make-comparison-3";
 export * from "./make-null-safe-comparison-1";
-export * from "./make-null-safe-comparison";
+export * from "./make-null-safe-comparison-2";
 export * from "./make-operator-0";
 export * from "./make-operator-1-double-elimination";
 export * from "./make-operator-1-idempotent";
