@@ -1,15 +1,15 @@
 import * as tm from "type-mapping";
 import {ExprUtil} from "../../expr";
 import {RawExpr} from "../../raw-expr";
-import {PrimitiveExpr} from "../../primitive-expr";
 import {RawExprUtil} from "../../raw-expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
+import {ComparableExpr} from "../../comparable-expr";
 
-export type NullSafeUnaryComparison =
+export type NullSafeComparison1 =
     <
-        RawExprT extends RawExpr<PrimitiveExpr>
+        RawExprT extends RawExpr<ComparableExpr>
     >(
         rawExpr : RawExprT
     ) => (
@@ -20,12 +20,12 @@ export type NullSafeUnaryComparison =
 /**
  * Factory for making null-safe unary comparison operators.
  */
-export function makeNullSafeUnaryComparison<OperatorTypeT extends OperatorType> (
+export function makeNullSafeComparison1<OperatorTypeT extends OperatorType> (
     operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand1<OperatorTypeT>,
     typeHint? : TypeHint
-) : NullSafeUnaryComparison {
-    const result : NullSafeUnaryComparison = <
-        RawExprT extends RawExpr<PrimitiveExpr>
+) : NullSafeComparison1 {
+    const result : NullSafeComparison1 = <
+        RawExprT extends RawExpr<ComparableExpr>
     >(
         rawExpr : RawExprT
     ) : (

@@ -1,4 +1,4 @@
-import {makeNullSafeUnaryComparison, NullSafeUnaryComparison} from "../factory";
+import {makeNullSafeComparison1} from "../factory";
 import {OperatorType} from "../../operator-type";
 
 /**
@@ -11,6 +11,6 @@ import {OperatorType} from "../../operator-type";
  *         -> 0, 0, 1
  * ```
  */
-export const isNull : NullSafeUnaryComparison = makeNullSafeUnaryComparison(
+export const isNull = makeNullSafeComparison1(
     OperatorType.IS_NULL
 );
