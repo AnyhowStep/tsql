@@ -1,16 +1,17 @@
-import {AnyRawExpr, RawExpr, RawExprUtil} from "../../../raw-expr";
+import {RawExpr, RawExprUtil} from "../../../raw-expr";
 import {ExprImpl} from "../../../expr/expr-impl";
 import {IUsedRef, UsedRefUtil} from "../../../used-ref";
 import {UninitializedCaseBuilderImpl} from "./uninitialized-case-builder-impl";
+import {NonNullComparableExpr, ComparableExprUtil, ComparableExpr} from "../../../comparable-expr";
 
 export interface CaseBuilder<
-    ValueT,
-    ResultT,
+    ValueT extends NonNullComparableExpr,
+    ResultT extends ComparableExpr,
     UsedRefT extends IUsedRef
 > {
     when<
         CompareValueT extends RawExpr<ValueT>,
-        ThenT extends AnyRawExpr
+        ThenT extends RawExpr<ComparableExprUtil.ComparableType<ResultT>|null>
     > (
         compareValue : CompareValueT,
         then : ThenT
@@ -18,14 +19,28 @@ export interface CaseBuilder<
         CaseBuilder<
             ValueT,
             ResultT|RawExprUtil.TypeOf<ThenT>,
-            UsedRefUtil.Intersect<
+            /**
+             * This is needed to chain many `.when()` calls.
+             *
+             * Without `IntersectTryReuseExistingType<>`,
+             * we can only chain 10+ calls.
+             *
+             * With it, we can chain 100+ calls.
+             */
+            UsedRefUtil.IntersectTryReuseExistingType<
                 | UsedRefT
                 | RawExprUtil.IntersectUsedRef<CompareValueT|ThenT>
             >
         >
     );
-    end () : ExprImpl<ResultT, UsedRefT>;
-    else<ElseT extends AnyRawExpr> (
+    /**
+     * Calling `.end()` without an `ELSE` clause can
+     * cause the result to be `null`
+     */
+    end () : ExprImpl<ResultT|null, UsedRefT>;
+    else<
+        ElseT extends RawExpr<ComparableExprUtil.ComparableType<ResultT>|null>
+    > (
         elseResult : ElseT
     ) : (
         {
@@ -39,10 +54,10 @@ export interface CaseBuilder<
         }
     );
 }
-export interface UninitializedCaseBuilder<ValueT, UsedRefT extends IUsedRef> {
+export interface UninitializedCaseBuilder<ValueT extends NonNullComparableExpr, UsedRefT extends IUsedRef> {
     when<
         CompareValueT extends RawExpr<ValueT>,
-        ThenT extends AnyRawExpr
+        ThenT extends RawExpr<ComparableExpr>
     > (
         compareValue : CompareValueT,
         then : ThenT
@@ -58,20 +73,28 @@ export interface UninitializedCaseBuilder<ValueT, UsedRefT extends IUsedRef> {
     );
 }
 export function caseValue<
-    ValueT extends AnyRawExpr
+    ValueExprT extends RawExpr<NonNullComparableExpr>
 > (
-    value : ValueT
+    valueExpr : ValueExprT
 ) : (
     UninitializedCaseBuilder<
-        RawExprUtil.TypeOf<ValueT>,
-        RawExprUtil.UsedRef<ValueT>
+        ComparableExprUtil.NonNullComparableType<RawExprUtil.TypeOf<ValueExprT>>,
+        RawExprUtil.UsedRef<ValueExprT>
     >
 ) {
     return new UninitializedCaseBuilderImpl<
-        RawExprUtil.TypeOf<ValueT>,
-        RawExprUtil.UsedRef<ValueT>
+        ComparableExprUtil.NonNullComparableType<RawExprUtil.TypeOf<ValueExprT>>,
+        RawExprUtil.UsedRef<ValueExprT>
     >(
-        RawExprUtil.usedRef<ValueT>(value),
-        RawExprUtil.buildAst(value)
+        RawExprUtil.usedRef<ValueExprT>(valueExpr),
+        RawExprUtil.buildAst(valueExpr)
+    ) as (
+        /**
+         * @todo Investigate type instantiation exessively deep error
+         */
+        UninitializedCaseBuilder<
+            ComparableExprUtil.NonNullComparableType<RawExprUtil.TypeOf<ValueExprT>>,
+            RawExprUtil.UsedRef<ValueExprT>
+        >
     );
 }

@@ -2,6 +2,7 @@ import {IUsedRef} from "../../used-ref";
 import {TypeRefUtil} from "../../../type-ref";
 import {TypeRefOf} from "../query";
 import {ColumnIdentifierRefUtil, ColumnIdentifierRef} from "../../../column-identifier-ref";
+import {TryReuseExistingType} from "../../../type-util";
 
 /**
  * Assumes `U` is a union
@@ -12,6 +13,18 @@ export type Intersect<
     IUsedRef<
         TypeRefUtil.Intersect<
             TypeRefOf<U>
+        >
+    >
+);
+export type IntersectTryReuseExistingType<
+    U extends IUsedRef
+> = (
+    TryReuseExistingType<
+        U,
+        IUsedRef<
+            TypeRefUtil.Intersect<
+                TypeRefOf<U>
+            >
         >
     >
 );

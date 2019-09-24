@@ -5,8 +5,6 @@ import {
     Operand3,
     Operand1ToN,
     Operand2ToN,
-    Operand3ToN,
-    Operand4ToN,
     AnyArityOperand,
     Operand0,
 } from "./operand";
@@ -63,8 +61,8 @@ export type OperatorOperand = {
         Control Flow Functions
         https://dev.mysql.com/doc/refman/8.0/en/control-flow-functions.html
     */
-    [OperatorType.CASE]                     : Operand4ToN,
-    [OperatorType.CASE_WHEN]                : Operand3ToN,
+    //[OperatorType.CASE]                     : Operand4ToN,
+    //[OperatorType.CASE_WHEN]                : Operand3ToN,
     [OperatorType.IF]                       : Operand3,
     [OperatorType.IFNULL]                   : Operand2,
     [OperatorType.NULLIF]                   : Operand2,

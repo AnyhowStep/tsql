@@ -463,7 +463,10 @@ export enum OperatorType {
      * + PostgreSQL   : `CASE value WHEN compare_value THEN result [WHEN compare_value THEN result ...] ELSE result END`
      * + SQLite       : `CASE value WHEN compare_value THEN result [WHEN compare_value THEN result ...] ELSE result END`
      */
-    CASE = "CASE",
+    /**
+     * This is handled using `CaseNode`
+     */
+    //CASE = "CASE",
 
     /**
      * + https://dev.mysql.com/doc/refman/8.0/en/control-flow-functions.html#operator_case
@@ -476,7 +479,10 @@ export enum OperatorType {
      * + PostgreSQL   : `CASE WHEN condition THEN result [WHEN condition THEN result ...] ELSE result END`
      * + SQLite       : `CASE WHEN condition THEN result [WHEN condition THEN result ...] ELSE result END`
      */
-    CASE_WHEN = "CASE_WHEN",
+    /**
+     * This is handled using `CaseWhenNode`
+     */
+    //CASE_WHEN = "CASE_WHEN",
 
     /**
      * + https://dev.mysql.com/doc/refman/8.0/en/control-flow-functions.html#function_if

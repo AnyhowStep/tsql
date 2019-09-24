@@ -1,0 +1,38 @@
+[
+  {
+    "messageText": {
+      "messageText": "Argument of type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"someColumn00\"; mapper: Mapper<unknown, 1 | null>; }>' is not assignable to parameter of type 'string | number | bigint | boolean | Date | Buffer | IExpr<{ mapper: Mapper<unknown, string | number | bigint | boolean | Date | Buffer | Decimal>; usedRef: IUsedRef<never>; }> | IColumn<...> | IExprSelectItem<...> | (IQueryBase<...> & IQueryBase<...>)'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"someColumn00\"; mapper: Mapper<unknown, 1 | null>; }>' is not assignable to type 'IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, string | number | bigint | boolean | Date | Buffer | Decimal>; }>'.",
+        "category": 1,
+        "code": 2322,
+        "next": {
+          "messageText": "Types of property 'mapper' are incompatible.",
+          "category": 1,
+          "code": 2326,
+          "next": {
+            "messageText": "Type 'Mapper<unknown, 1 | null>' is not assignable to type 'Mapper<unknown, string | number | bigint | boolean | Date | Buffer | Decimal>'.",
+            "category": 1,
+            "code": 2322,
+            "next": {
+              "messageText": "Type '1 | null' is not assignable to type 'string | number | bigint | boolean | Date | Buffer | Decimal'.",
+              "category": 1,
+              "code": 2322,
+              "next": {
+                "messageText": "Type 'null' is not assignable to type 'string | number | bigint | boolean | Date | Buffer | Decimal'.",
+                "category": 1,
+                "code": 2322
+              }
+            }
+          }
+        }
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 28,
+    "start": 365
+  }
+]

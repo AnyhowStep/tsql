@@ -1,11 +1,12 @@
-import {AnyRawExpr, RawExpr, RawExprUtil} from "../../../raw-expr";
+import {RawExpr, RawExprUtil} from "../../../raw-expr";
 import {IUsedRef, UsedRefUtil} from "../../../used-ref";
 import {Ast} from "../../../ast";
 import {CaseBuilder, UninitializedCaseBuilder} from "./case-value";
 import {CaseBuilderImpl} from "./case-builder-impl";
+import {NonNullComparableExpr, ComparableExpr} from "../../../comparable-expr";
 
 export class UninitializedCaseBuilderImpl<
-    ValueT,
+    ValueT extends NonNullComparableExpr,
     UsedRefT extends IUsedRef
 > implements UninitializedCaseBuilder<ValueT, UsedRefT> {
     private readonly usedRef : UsedRefT;
@@ -18,7 +19,7 @@ export class UninitializedCaseBuilderImpl<
 
     when<
         CompareValueT extends RawExpr<ValueT>,
-        ThenT extends AnyRawExpr
+        ThenT extends RawExpr<ComparableExpr>
     > (
         compareValue : CompareValueT,
         then : ThenT

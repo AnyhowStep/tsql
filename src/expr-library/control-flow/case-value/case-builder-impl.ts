@@ -1,9 +1,10 @@
 import * as tm from "type-mapping";
-import {AnyRawExpr, RawExpr, RawExprUtil} from "../../../raw-expr";
+import {RawExpr, RawExprUtil} from "../../../raw-expr";
 import {ExprImpl, expr} from "../../../expr/expr-impl";
 import {IUsedRef, UsedRefUtil} from "../../../used-ref";
 import {CaseNode} from "../../../ast";
 import {CaseBuilder} from "./case-value";
+import {NonNullComparableExpr, ComparableExpr, ComparableExprUtil} from "../../../comparable-expr";
 
 /**
  * Workaround for,
@@ -25,8 +26,8 @@ declare global {
 }
 
 export class CaseBuilderImpl<
-    ValueT,
-    ResultT,
+    ValueT extends NonNullComparableExpr,
+    ResultT extends ComparableExpr,
     UsedRefT extends IUsedRef
 > implements CaseBuilder<ValueT, ResultT, UsedRefT> {
     private readonly resultMappers : readonly tm.SafeMapper<ResultT>[];
@@ -45,7 +46,7 @@ export class CaseBuilderImpl<
 
     when<
         CompareValueT extends RawExpr<ValueT>,
-        ThenT extends AnyRawExpr
+        ThenT extends RawExpr<ComparableExprUtil.ComparableType<ResultT>|null>
     > (
         compareValue : CompareValueT,
         then : ThenT
@@ -53,7 +54,7 @@ export class CaseBuilderImpl<
         CaseBuilder<
             ValueT,
             ResultT|RawExprUtil.TypeOf<ThenT>,
-            UsedRefUtil.Intersect<
+            UsedRefUtil.IntersectTryReuseExistingType<
                 | UsedRefT
                 | RawExprUtil.IntersectUsedRef<CompareValueT|ThenT>
             >
@@ -62,7 +63,7 @@ export class CaseBuilderImpl<
         return new CaseBuilderImpl<
             ValueT,
             ResultT|RawExprUtil.TypeOf<ThenT>,
-            UsedRefUtil.Intersect<
+            UsedRefUtil.IntersectTryReuseExistingType<
                 | UsedRefT
                 | RawExprUtil.IntersectUsedRef<CompareValueT|ThenT>
             >
@@ -76,7 +77,7 @@ export class CaseBuilderImpl<
                 RawExprUtil.intersectUsedRef<
                     (CompareValueT|ThenT)[]
                 >(compareValue, then)
-            ),
+            ) as any,
             {
                 type : "Case",
                 value : this.ast.value,
@@ -96,23 +97,25 @@ export class CaseBuilderImpl<
             CaseBuilder<
                 ValueT,
                 ResultT|RawExprUtil.TypeOf<ThenT>,
-                UsedRefUtil.Intersect<
+                UsedRefUtil.IntersectTryReuseExistingType<
                     | UsedRefT
                     | RawExprUtil.IntersectUsedRef<CompareValueT|ThenT>
                 >
             >
         );
     }
-    end () : ExprImpl<ResultT, UsedRefT> {
+    end () : ExprImpl<ResultT|null, UsedRefT> {
         return expr(
             {
-                mapper : tm.unsafeOr(...this.resultMappers),
+                mapper : tm.unsafeOr(...this.resultMappers, tm.null()),
                 usedRef : this.usedRef,
             },
             this.ast
         );
     }
-    else<ElseT extends AnyRawExpr> (
+    else<
+        ElseT extends RawExpr<ComparableExprUtil.ComparableType<ResultT>|null>
+    > (
         elseResult : ElseT
     ) : (
         {
