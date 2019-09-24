@@ -39,4 +39,6 @@ export const notImplementedSqlfier : Sqlfier = {
             {} as Writable<OperatorSqlfier>
         ),
     queryBaseSqlfier : notImplemented,
+    caseSqlfier : notImplemented,
+    caseWhenSqlfier : notImplemented,
 };

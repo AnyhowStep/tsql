@@ -1,11 +1,10 @@
 import * as tm from "type-mapping";
 import {AnyRawExpr} from "../../raw-expr";
-import {Ast, parentheses} from "../../../ast";
+import {Ast, parentheses, LiteralValueNodeUtil} from "../../../ast";
 import {ExprUtil} from "../../../expr";
 import {ColumnUtil} from "../../../column";
 import {QueryBaseUtil} from "../../../query-base";
 import {ExprSelectItemUtil} from "../../../expr-select-item";
-import {LiteralValueNodeUtil} from "../../../ast/literal-value-node";
 import {isDate} from "../../../date-util";
 
 export function buildAst (rawExpr : AnyRawExpr|QueryBaseUtil.OneSelectItem<any>) : Ast {

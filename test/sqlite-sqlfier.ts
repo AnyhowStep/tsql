@@ -749,4 +749,30 @@ export const sqliteSqlfier : Sqlfier = {
     queryBaseSqlfier : (rawQuery, toSql) => {
         return queryToSql(rawQuery, toSql, false);
     },
+    caseSqlfier : (node) => {
+        const result : Ast[] = [
+            "CASE", node.value,
+        ];
+        for (const [compareValue, thenResult] of node.cases) {
+            result.push(["WHEN", compareValue, "THEN", thenResult]);
+        }
+        if (node.else != undefined) {
+            result.push(["ELSE", node.else]);
+        }
+        result.push("END");
+        return result;
+    },
+    caseWhenSqlfier : (node) => {
+        const result : Ast[] = [
+            "CASE"
+        ];
+        for (const [condition, thenResult] of node.branches) {
+            result.push(["WHEN", condition, "THEN", thenResult]);
+        }
+        if (node.else != undefined) {
+            result.push(["ELSE", node.else]);
+        }
+        result.push("END");
+        return result;
+    }
 };
