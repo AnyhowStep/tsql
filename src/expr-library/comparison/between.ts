@@ -1,4 +1,4 @@
-import {makeTernaryComparison, TernaryComparison} from "../factory";
+import {makeComparison3} from "../factory";
 import {OperatorType} from "../../operator-type";
 
 /**
@@ -9,6 +9,6 @@ import {OperatorType} from "../../operator-type";
  * For null-safe checks, @see {@link nullSafeBetween}
  *
  */
-export const between : TernaryComparison = makeTernaryComparison(
+export const between = makeComparison3(
     OperatorType.BETWEEN_AND
 );
