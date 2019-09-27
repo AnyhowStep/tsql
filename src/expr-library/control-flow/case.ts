@@ -1,6 +1,7 @@
 import {RawExprUtil, RawExpr} from "../../raw-expr";
 import {UninitializedCaseBuilder, caseValue} from "./case-value";
 import {NonNullComparableExpr, ComparableExprUtil} from "../../comparable-expr";
+import {UninitializedCaseConditionBuilder, caseCondition} from "./case-condition";
 
 function caseConstructor<
     ValueExprT extends RawExpr<NonNullComparableExpr>
@@ -11,8 +12,19 @@ function caseConstructor<
         ComparableExprUtil.NonNullComparableType<RawExprUtil.TypeOf<ValueExprT>>,
         RawExprUtil.UsedRef<ValueExprT>
     >
+);
+function caseConstructor () : (
+    UninitializedCaseConditionBuilder
+);
+function caseConstructor (valueExpr? : any) : (
+    | UninitializedCaseBuilder<any, any>
+    | UninitializedCaseConditionBuilder
 ) {
-    return caseValue(valueExpr);
+    if (valueExpr === undefined) {
+        return caseCondition();
+    } else {
+        return caseValue(valueExpr);
+    }
 }
 export {
     caseConstructor as case,
