@@ -1,10 +1,10 @@
 import {RawExpr, RawExprUtil} from "../../../raw-expr";
 import {ExprImpl} from "../../../expr/expr-impl";
 import {IUsedRef, UsedRefUtil} from "../../../used-ref";
-import {UninitializedCaseBuilderImpl} from "./uninitialized-case-builder-impl";
+import {UninitializedCaseValueBuilderImpl} from "./uninitialized-case-value-builder-impl";
 import {NonNullComparableExpr, ComparableExprUtil, ComparableExpr} from "../../../comparable-expr";
 
-export interface CaseBuilder<
+export interface CaseValueBuilder<
     ValueT extends NonNullComparableExpr,
     ResultT extends ComparableExpr,
     UsedRefT extends IUsedRef
@@ -16,7 +16,7 @@ export interface CaseBuilder<
         compareValue : CompareValueT,
         then : ThenT
     ) : (
-        CaseBuilder<
+        CaseValueBuilder<
             ValueT,
             ResultT|RawExprUtil.TypeOf<ThenT>,
             /**
@@ -54,7 +54,7 @@ export interface CaseBuilder<
         }
     );
 }
-export interface UninitializedCaseBuilder<ValueT extends NonNullComparableExpr, UsedRefT extends IUsedRef> {
+export interface UninitializedCaseValueBuilder<ValueT extends NonNullComparableExpr, UsedRefT extends IUsedRef> {
     when<
         CompareValueT extends RawExpr<ValueT>,
         ThenT extends RawExpr<ComparableExpr>
@@ -62,7 +62,7 @@ export interface UninitializedCaseBuilder<ValueT extends NonNullComparableExpr, 
         compareValue : CompareValueT,
         then : ThenT
     ) : (
-        CaseBuilder<
+        CaseValueBuilder<
             ValueT,
             RawExprUtil.TypeOf<ThenT>,
             UsedRefUtil.Intersect<
@@ -77,12 +77,12 @@ export function caseValue<
 > (
     valueExpr : ValueExprT
 ) : (
-    UninitializedCaseBuilder<
+    UninitializedCaseValueBuilder<
         ComparableExprUtil.NonNullComparableType<RawExprUtil.TypeOf<ValueExprT>>,
         RawExprUtil.UsedRef<ValueExprT>
     >
 ) {
-    return new UninitializedCaseBuilderImpl<
+    return new UninitializedCaseValueBuilderImpl<
         ComparableExprUtil.NonNullComparableType<RawExprUtil.TypeOf<ValueExprT>>,
         RawExprUtil.UsedRef<ValueExprT>
     >(
@@ -92,7 +92,7 @@ export function caseValue<
         /**
          * @todo Investigate type instantiation exessively deep error
          */
-        UninitializedCaseBuilder<
+        UninitializedCaseValueBuilder<
             ComparableExprUtil.NonNullComparableType<RawExprUtil.TypeOf<ValueExprT>>,
             RawExprUtil.UsedRef<ValueExprT>
         >

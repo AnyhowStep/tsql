@@ -3,7 +3,7 @@ import {RawExpr, RawExprUtil} from "../../../raw-expr";
 import {ExprImpl, expr} from "../../../expr/expr-impl";
 import {IUsedRef, UsedRefUtil} from "../../../used-ref";
 import {CaseNode} from "../../../ast";
-import {CaseBuilder} from "./case-value";
+import {CaseValueBuilder} from "./case-value";
 import {NonNullComparableExpr, ComparableExpr, ComparableExprUtil} from "../../../comparable-expr";
 
 /**
@@ -25,11 +25,11 @@ declare global {
     }
 }
 
-export class CaseBuilderImpl<
+export class CaseValueBuilderImpl<
     ValueT extends NonNullComparableExpr,
     ResultT extends ComparableExpr,
     UsedRefT extends IUsedRef
-> implements CaseBuilder<ValueT, ResultT, UsedRefT> {
+> implements CaseValueBuilder<ValueT, ResultT, UsedRefT> {
     private readonly resultMappers : readonly tm.SafeMapper<ResultT>[];
     private readonly usedRef : UsedRefT;
     private readonly ast : CaseNode;
@@ -51,7 +51,7 @@ export class CaseBuilderImpl<
         compareValue : CompareValueT,
         then : ThenT
     ) : (
-        CaseBuilder<
+        CaseValueBuilder<
             ValueT,
             ResultT|RawExprUtil.TypeOf<ThenT>,
             UsedRefUtil.IntersectTryReuseExistingType<
@@ -60,7 +60,7 @@ export class CaseBuilderImpl<
             >
         >
     ) {
-        return new CaseBuilderImpl<
+        return new CaseValueBuilderImpl<
             ValueT,
             ResultT|RawExprUtil.TypeOf<ThenT>,
             UsedRefUtil.IntersectTryReuseExistingType<
@@ -94,7 +94,7 @@ export class CaseBuilderImpl<
             /**
              * @todo Investigate type instantiation exessively deep error
              */
-            CaseBuilder<
+            CaseValueBuilder<
                 ValueT,
                 ResultT|RawExprUtil.TypeOf<ThenT>,
                 UsedRefUtil.IntersectTryReuseExistingType<

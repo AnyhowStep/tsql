@@ -1,14 +1,14 @@
 import {RawExpr, RawExprUtil} from "../../../raw-expr";
 import {IUsedRef, UsedRefUtil} from "../../../used-ref";
 import {Ast} from "../../../ast";
-import {CaseBuilder, UninitializedCaseBuilder} from "./case-value";
-import {CaseBuilderImpl} from "./case-builder-impl";
+import {CaseValueBuilder, UninitializedCaseValueBuilder} from "./case-value";
+import {CaseValueBuilderImpl} from "./case-value-builder-impl";
 import {NonNullComparableExpr, ComparableExpr} from "../../../comparable-expr";
 
-export class UninitializedCaseBuilderImpl<
+export class UninitializedCaseValueBuilderImpl<
     ValueT extends NonNullComparableExpr,
     UsedRefT extends IUsedRef
-> implements UninitializedCaseBuilder<ValueT, UsedRefT> {
+> implements UninitializedCaseValueBuilder<ValueT, UsedRefT> {
     private readonly usedRef : UsedRefT;
     private readonly valueAst : Ast;
 
@@ -24,7 +24,7 @@ export class UninitializedCaseBuilderImpl<
         compareValue : CompareValueT,
         then : ThenT
     ) : (
-        CaseBuilder<
+        CaseValueBuilder<
             ValueT,
             RawExprUtil.TypeOf<ThenT>,
             UsedRefUtil.Intersect<
@@ -33,7 +33,7 @@ export class UninitializedCaseBuilderImpl<
             >
         >
     ) {
-        return new CaseBuilderImpl<
+        return new CaseValueBuilderImpl<
             ValueT,
             RawExprUtil.TypeOf<ThenT>,
             UsedRefUtil.Intersect<
@@ -66,7 +66,7 @@ export class UninitializedCaseBuilderImpl<
             /**
              * @todo Investigate type instantiation exessively deep error
              */
-            CaseBuilder<
+            CaseValueBuilder<
                 ValueT,
                 RawExprUtil.TypeOf<ThenT>,
                 UsedRefUtil.Intersect<

@@ -1,5 +1,5 @@
 import * as tsql from "../../../../../../dist";
-export declare const expr: tsql.CaseBuilder<number, number | null, tsql.IUsedRef<{
+export declare const expr: tsql.CaseValueBuilder<number, number | null, tsql.IUsedRef<{
     readonly myTable: {
         readonly someColumn00: number;
         readonly someColumn01: 1;
