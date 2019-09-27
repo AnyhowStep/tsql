@@ -7,7 +7,7 @@ import {Sqlfier} from "../sqlfier";
 import {QueryBaseUtil} from "../../query-base";
 import {LiteralValueNodeUtil, LiteralValueNode} from "../literal-value-node";
 import {CaseNodeUtil} from "../case-node";
-import {CaseConditionNodeUtil} from "../case-when-node";
+import {CaseConditionNodeUtil} from "../case-condition-node";
 
 export function toSqlAst (ast : Ast, sqlfier : Sqlfier) : string|AstArray|Parentheses|FunctionCall|LiteralValueNode {
     if (typeof ast == "string") {

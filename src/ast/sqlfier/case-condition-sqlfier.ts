@@ -2,7 +2,7 @@ import {AstArray, Ast} from "../ast";
 import {Parentheses} from "../parentheses";
 import {FunctionCall} from "../function-call";
 import {Sqlfier} from "./sqlfier";
-import {CaseConditionNode} from "../case-when-node";
+import {CaseConditionNode} from "../case-condition-node";
 
 export interface CaseConditionSqlfier {
     (

@@ -5,7 +5,7 @@ import {IdentifierNode} from "./identifier-node";
 import {IQueryBase} from "../query-base";
 import {LiteralValueNode} from "./literal-value-node";
 import {CaseNode} from "./case-node";
-import {CaseConditionNode} from "./case-when-node";
+import {CaseConditionNode} from "./case-condition-node";
 
 export interface AstArray extends ReadonlyArray<Ast> {
 }
