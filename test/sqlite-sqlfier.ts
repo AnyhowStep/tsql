@@ -749,7 +749,7 @@ export const sqliteSqlfier : Sqlfier = {
     queryBaseSqlfier : (rawQuery, toSql) => {
         return queryToSql(rawQuery, toSql, false);
     },
-    caseSqlfier : (node) => {
+    caseValueSqlfier : (node) => {
         const result : Ast[] = [
             "CASE", node.value,
         ];

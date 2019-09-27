@@ -1,5 +1,5 @@
 export * from "./case-condition-node";
-export * from "./case-node";
+export * from "./case-value-node";
 export * from "./literal-value-node";
 export * from "./operator-node";
 export * from "./sqlfier";

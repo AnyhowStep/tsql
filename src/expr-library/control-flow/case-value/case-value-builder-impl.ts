@@ -2,7 +2,7 @@ import * as tm from "type-mapping";
 import {RawExpr, RawExprUtil} from "../../../raw-expr";
 import {ExprImpl, expr} from "../../../expr/expr-impl";
 import {IUsedRef, UsedRefUtil} from "../../../used-ref";
-import {CaseNode} from "../../../ast";
+import {CaseValueNode} from "../../../ast";
 import {CaseValueBuilder} from "./case-value";
 import {NonNullComparableExpr, ComparableExpr, ComparableExprUtil} from "../../../comparable-expr";
 
@@ -32,12 +32,12 @@ export class CaseValueBuilderImpl<
 > implements CaseValueBuilder<ValueT, ResultT, UsedRefT> {
     private readonly resultMappers : readonly tm.SafeMapper<ResultT>[];
     private readonly usedRef : UsedRefT;
-    private readonly ast : CaseNode;
+    private readonly ast : CaseValueNode;
 
     constructor (
         resultMappers : tm.SafeMapper<ResultT>[],
         usedRef : UsedRefT,
-        ast : CaseNode,
+        ast : CaseValueNode,
     ) {
         this.resultMappers = resultMappers;
         this.usedRef = usedRef;
@@ -79,7 +79,7 @@ export class CaseValueBuilderImpl<
                 >(compareValue, then)
             ) as any,
             {
-                type : "Case",
+                type : "CaseValue",
                 value : this.ast.value,
                 /**
                  * https://github.com/microsoft/TypeScript/issues/33573

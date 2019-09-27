@@ -52,7 +52,7 @@ export class UninitializedCaseValueBuilderImpl<
                 >(compareValue, then)
             ),
             {
-                type : "Case",
+                type : "CaseValue",
                 value : this.valueAst,
                 cases : [
                     [

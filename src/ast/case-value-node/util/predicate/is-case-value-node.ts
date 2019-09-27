@@ -1,8 +1,8 @@
-import {CaseNode} from "../../case-node";
+import {CaseValueNode} from "../../case-value-node";
 import {isObjectWithOwnEnumerableKeys} from "../../../../type-util";
 
-export function isCaseNode (mixed : unknown) : mixed is CaseNode {
-    if (!isObjectWithOwnEnumerableKeys<CaseNode>()(
+export function isCaseValueNode (mixed : unknown) : mixed is CaseValueNode {
+    if (!isObjectWithOwnEnumerableKeys<CaseValueNode>()(
         mixed,
         [
             "type",
@@ -14,6 +14,6 @@ export function isCaseNode (mixed : unknown) : mixed is CaseNode {
         return false;
     }
     return (
-        mixed.type === "Case"
+        mixed.type === "CaseValue"
     );
 }

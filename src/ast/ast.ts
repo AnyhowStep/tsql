@@ -4,7 +4,7 @@ import {OperatorNode} from "./operator-node";
 import {IdentifierNode} from "./identifier-node";
 import {IQueryBase} from "../query-base";
 import {LiteralValueNode} from "./literal-value-node";
-import {CaseNode} from "./case-node";
+import {CaseValueNode} from "./case-value-node";
 import {CaseConditionNode} from "./case-condition-node";
 
 export interface AstArray extends ReadonlyArray<Ast> {
@@ -45,7 +45,7 @@ export type Ast =
     /**
      * Similar to switch-statements in other languages.
      */
-    | CaseNode
+    | CaseValueNode
     /**
      * Similar to if-statements in other languages.
      */

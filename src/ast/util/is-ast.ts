@@ -5,7 +5,7 @@ import {OperatorNodeUtil} from "../operator-node";
 import {isIdentifierNode} from "../identifier-node";
 import {QueryBaseUtil} from "../../query-base";
 import {LiteralValueNodeUtil} from "../literal-value-node";
-import {CaseNodeUtil} from "../case-node";
+import {CaseValueNodeUtil} from "../case-value-node";
 import {CaseConditionNodeUtil} from "../case-condition-node";
 
 /**
@@ -43,7 +43,7 @@ export function isAst (raw : unknown) : raw is Ast {
     if (QueryBaseUtil.isQuery(raw)) {
         return true;
     }
-    if (CaseNodeUtil.isCaseNode(raw)) {
+    if (CaseValueNodeUtil.isCaseValueNode(raw)) {
         return true;
     }
     if (CaseConditionNodeUtil.isCaseConditionNode(raw)) {

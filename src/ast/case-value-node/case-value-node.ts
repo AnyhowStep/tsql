@@ -9,8 +9,8 @@ export type Case = readonly [Ast, Ast];
 /**
  * Similar to switch-statements in other languages.
  */
-export interface CaseNode {
-    readonly type : "Case",
+export interface CaseValueNode {
+    readonly type : "CaseValue",
     /**
      * The `value` to test against.
      */
