@@ -1,5 +1,5 @@
 export * from "./case-sqlfier";
-export * from "./case-when-sqlfier";
+export * from "./case-condition-sqlfier";
 export * from "./identifier-sqlfier";
 export * from "./not-implemented-sqlfier";
 export * from "./literal-value-sqlfier";

@@ -1,1 +1,1 @@
-export * from "./is-case-when-node";
+export * from "./is-case-condition-node";

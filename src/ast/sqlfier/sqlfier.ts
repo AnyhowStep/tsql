@@ -3,7 +3,7 @@ import {IdentifierSqlfier} from "./identifier-sqlfier";
 import {QueryBaseSqlfier} from "./query-base-sqlfier";
 import {LiteralValueSqlfier} from "./literal-value-sqlfier";
 import {CaseSqlfier} from "./case-sqlfier";
-import {CaseWhenSqlfier} from "./case-when-sqlfier";
+import {CaseConditionSqlfier} from "./case-condition-sqlfier";
 
 export interface Sqlfier {
     readonly identifierSqlfier : IdentifierSqlfier;
@@ -11,5 +11,5 @@ export interface Sqlfier {
     readonly operatorSqlfier : OperatorSqlfier;
     readonly queryBaseSqlfier : QueryBaseSqlfier;
     readonly caseSqlfier : CaseSqlfier;
-    readonly caseWhenSqlfier : CaseWhenSqlfier;
+    readonly caseConditionSqlfier : CaseConditionSqlfier;
 }

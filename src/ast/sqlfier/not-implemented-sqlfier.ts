@@ -40,5 +40,5 @@ export const notImplementedSqlfier : Sqlfier = {
         ),
     queryBaseSqlfier : notImplemented,
     caseSqlfier : notImplemented,
-    caseWhenSqlfier : notImplemented,
+    caseConditionSqlfier : notImplemented,
 };

@@ -29,7 +29,7 @@ export class UninitializedCaseConditionBuilderImpl implements UninitializedCaseC
                 then
             ),
             {
-                type : "CaseWhen",
+                type : "CaseCondition",
                 branches : [
                     [
                         RawExprUtil.buildAst(condition),

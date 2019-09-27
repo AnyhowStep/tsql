@@ -6,7 +6,7 @@ import {isIdentifierNode} from "../identifier-node";
 import {QueryBaseUtil} from "../../query-base";
 import {LiteralValueNodeUtil} from "../literal-value-node";
 import {CaseNodeUtil} from "../case-node";
-import {CaseWhenNodeUtil} from "../case-when-node";
+import {CaseConditionNodeUtil} from "../case-when-node";
 
 /**
  * A type guard for the `Ast` type
@@ -46,7 +46,7 @@ export function isAst (raw : unknown) : raw is Ast {
     if (CaseNodeUtil.isCaseNode(raw)) {
         return true;
     }
-    if (CaseWhenNodeUtil.isCaseWhenNode(raw)) {
+    if (CaseConditionNodeUtil.isCaseConditionNode(raw)) {
         return true;
     }
     return false;

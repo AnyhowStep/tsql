@@ -9,8 +9,8 @@ export type Branch = readonly [Ast, Ast];
 /**
  * Similar to if-statements in other languages.
  */
-export interface CaseWhenNode {
-    readonly type : "CaseWhen",
+export interface CaseConditionNode {
+    readonly type : "CaseCondition",
     /**
      * A `CASE WHEN` expression must have at least one branch.
      */

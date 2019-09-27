@@ -1,6 +1,6 @@
-export * from "./case-when-node";
+export * from "./case-condition-node";
 
-import * as CaseWhenNodeUtil from "./util";
+import * as CaseConditionNodeUtil from "./util";
 export {
-    CaseWhenNodeUtil,
+    CaseConditionNodeUtil,
 };

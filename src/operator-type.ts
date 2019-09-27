@@ -464,7 +464,7 @@ export enum OperatorType {
      * + SQLite       : `CASE value WHEN compare_value THEN result [WHEN compare_value THEN result ...] ELSE result END`
      */
     /**
-     * This is handled using `CaseNode`
+     * This is handled using `CaseValueNode`
      */
     //CASE = "CASE",
 
@@ -480,7 +480,7 @@ export enum OperatorType {
      * + SQLite       : `CASE WHEN condition THEN result [WHEN condition THEN result ...] ELSE result END`
      */
     /**
-     * This is handled using `CaseWhenNode`
+     * This is handled using `CaseConditionNode`
      */
     //CASE_WHEN = "CASE_WHEN",
 

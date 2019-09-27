@@ -2,7 +2,7 @@ import * as tm from "type-mapping";
 import {RawExpr, RawExprUtil} from "../../../raw-expr";
 import {ExprImpl, expr} from "../../../expr/expr-impl";
 import {IUsedRef, UsedRefUtil} from "../../../used-ref";
-import {CaseWhenNode} from "../../../ast";
+import {CaseConditionNode} from "../../../ast";
 import {CaseConditionBuilder} from "./case-condition";
 import {ComparableExpr, ComparableExprUtil} from "../../../comparable-expr";
 
@@ -12,12 +12,12 @@ export class CaseConditionBuilderImpl<
 > implements CaseConditionBuilder<ResultT, UsedRefT> {
     private readonly resultMappers : readonly tm.SafeMapper<ResultT>[];
     private readonly usedRef : UsedRefT;
-    private readonly ast : CaseWhenNode;
+    private readonly ast : CaseConditionNode;
 
     constructor (
         resultMappers : tm.SafeMapper<ResultT>[],
         usedRef : UsedRefT,
-        ast : CaseWhenNode,
+        ast : CaseConditionNode,
     ) {
         this.resultMappers = resultMappers;
         this.usedRef = usedRef;
@@ -57,7 +57,7 @@ export class CaseConditionBuilderImpl<
                 >(condition, then)
             ) as any,
             {
-                type : "CaseWhen",
+                type : "CaseCondition",
                 /**
                  * https://github.com/microsoft/TypeScript/issues/33573
                  */

@@ -7,7 +7,7 @@ import {Sqlfier} from "../sqlfier";
 import {QueryBaseUtil} from "../../query-base";
 import {LiteralValueNodeUtil, LiteralValueNode} from "../literal-value-node";
 import {CaseNodeUtil} from "../case-node";
-import {CaseWhenNodeUtil} from "../case-when-node";
+import {CaseConditionNodeUtil} from "../case-when-node";
 
 export function toSqlAst (ast : Ast, sqlfier : Sqlfier) : string|AstArray|Parentheses|FunctionCall|LiteralValueNode {
     if (typeof ast == "string") {
@@ -42,8 +42,8 @@ export function toSqlAst (ast : Ast, sqlfier : Sqlfier) : string|AstArray|Parent
             (ast2 : Ast) => toSql(ast2, sqlfier),
             sqlfier
         );
-    } else if (CaseWhenNodeUtil.isCaseWhenNode(ast)) {
-        return sqlfier.caseWhenSqlfier(
+    } else if (CaseConditionNodeUtil.isCaseConditionNode(ast)) {
+        return sqlfier.caseConditionSqlfier(
             ast,
             (ast2 : Ast) => toSql(ast2, sqlfier),
             sqlfier

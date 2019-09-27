@@ -2,11 +2,11 @@ import {AstArray, Ast} from "../ast";
 import {Parentheses} from "../parentheses";
 import {FunctionCall} from "../function-call";
 import {Sqlfier} from "./sqlfier";
-import {CaseWhenNode} from "../case-when-node";
+import {CaseConditionNode} from "../case-when-node";
 
-export interface CaseWhenSqlfier {
+export interface CaseConditionSqlfier {
     (
-        node : CaseWhenNode,
+        node : CaseConditionNode,
         toSql : (ast : Ast) => string,
         sqlfier : Sqlfier
     ) : string|AstArray|Parentheses|FunctionCall

@@ -762,7 +762,7 @@ export const sqliteSqlfier : Sqlfier = {
         result.push("END");
         return result;
     },
-    caseWhenSqlfier : (node) => {
+    caseConditionSqlfier : (node) => {
         const result : Ast[] = [
             "CASE"
         ];
