@@ -34,6 +34,9 @@ export async function count (
                 QueryUtil.newInstance(),
                 () => expr(
                     {
+                        /**
+                         * Should not return a value less than zero
+                         */
                         mapper : tm.mysql.bigIntUnsigned(),
                         usedRef : UsedRefUtil.fromColumnRef({}),
                     },

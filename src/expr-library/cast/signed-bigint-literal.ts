@@ -5,6 +5,9 @@ import {Expr} from "../../expr";
 import {LiteralValueNodeUtil} from "../../ast/literal-value-node";
 import {expr} from "../../expr/expr-impl";
 
+/**
+ * Converts `string|number|bigint|Decimal` to a `SIGNED BIGINT`
+ */
 export function signedBigIntLiteral (
     rawSignedBigIntLiteral : string|number|bigint|Decimal
 ) : (

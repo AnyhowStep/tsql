@@ -7,13 +7,18 @@ import {QueryBaseUtil} from "../../../query-base";
 import {ExprSelectItemUtil} from "../../../expr-select-item";
 import {isDate} from "../../../date-util";
 
+/**
+ * + `bigint` is considered a `signed bigint` by this library.
+ * +`DECIMAL` is not supported by this function.
+ * +`UNSIGNED BIGINT` is not supported by this function.
+ */
 export function buildAst (rawExpr : AnyRawExpr|QueryBaseUtil.OneSelectItem<any>) : Ast {
     //Check primitive cases first
     if (typeof rawExpr == "number") {
         return LiteralValueNodeUtil.doubleLiteralNode(rawExpr);
     }
     if (tm.TypeUtil.isBigInt(rawExpr)) {
-        return LiteralValueNodeUtil.bigIntLiteralNode(rawExpr);
+        return LiteralValueNodeUtil.signedBigIntLiteralNode(rawExpr);
     }
     if (typeof rawExpr == "string") {
         return LiteralValueNodeUtil.stringLiteralNode(rawExpr);

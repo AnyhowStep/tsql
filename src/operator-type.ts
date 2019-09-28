@@ -2775,7 +2775,7 @@ export enum OperatorType {
      */
     //CAST_AS_TIME = "CAST_AS_TIME",
 
-    /**
+    /*
      * + https://dev.mysql.com/doc/refman/8.0/en/cast-functions.html#function_cast
      * + https://www.postgresql.org/docs/9.2/datatype.html#DATATYPE-TABLE
      * + https://www.sqlite.org/datatype3.html
@@ -2791,8 +2791,9 @@ export enum OperatorType {
      *
      * -----
      *
-     * Even though **ONLY** MySQL supports `UNSIGNED` types,
-     * we're still adding this because it's too useful to give up.
+     * ~~Even though **ONLY** MySQL supports `UNSIGNED` types,~~
+     * ~~we're still adding this because it's too useful to give up.~~
+     * Support for `BIGINT UNSIGNED` has been dropped.
      *
      * It means that trying to use `UNSIGNED BIGINT` with other databases
      * will produce varying behaviours, though...
@@ -2801,9 +2802,9 @@ export enum OperatorType {
      * `UNSIGNED BIGINT` if we are only looking at the non-negative range.
      *
      * Math with `UNSIGNED BIGINT` fails if the result becomes negative.
-     * `SIGNED BIGINT` have no such inhibitions.
+     * `SIGNED BIGINT` has no such inhibitions.
      */
-    CAST_AS_UNSIGNED_BIG_INTEGER = "CAST_AS_UNSIGNED_BIG_INTEGER",
+    //CAST_AS_UNSIGNED_BIG_INTEGER = "CAST_AS_UNSIGNED_BIG_INTEGER",
 
 
 

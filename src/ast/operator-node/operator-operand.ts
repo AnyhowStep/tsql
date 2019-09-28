@@ -195,7 +195,7 @@ export type OperatorOperand = {
     [OperatorType.CAST_AS_JSON]             : Operand1,
     [OperatorType.CAST_AS_N_CHAR]            : Operand1,
     [OperatorType.CAST_AS_SIGNED_BIG_INTEGER]   : Operand1,
-    [OperatorType.CAST_AS_UNSIGNED_BIG_INTEGER] : Operand1,
+    //[OperatorType.CAST_AS_UNSIGNED_BIG_INTEGER] : Operand1,
 
     /*
         Bit Functions and Operators

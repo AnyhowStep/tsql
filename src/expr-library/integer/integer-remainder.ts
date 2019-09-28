@@ -35,6 +35,6 @@ import {makeOperator2} from "../factory";
  */
 export const integerRemainder = makeOperator2<OperatorType.INTEGER_REMAINDER, bigint, bigint|null>(
     OperatorType.INTEGER_REMAINDER,
-    tm.mysql.unsafeBigInt().orNull(),
+    tm.mysql.bigIntSigned().orNull(),
     TypeHint.BIGINT
 );

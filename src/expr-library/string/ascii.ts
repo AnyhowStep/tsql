@@ -5,6 +5,9 @@ import {TypeHint} from "../../type-hint";
 
 export const ascii = makeOperator1<OperatorType.ASCII, string, bigint>(
     OperatorType.ASCII,
+    /**
+     * Should not return a value less than zero
+     */
     tm.mysql.bigIntUnsigned(),
     TypeHint.STRING
 );

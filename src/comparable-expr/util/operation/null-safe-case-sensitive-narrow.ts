@@ -1,4 +1,4 @@
-import {ComparableExpr} from "../../comparable-expr";
+import {ComparableExpr, CustomComparableExpr} from "../../comparable-expr";
 import {ComparableType} from "../query";
 import {Decimal} from "../../../decimal";
 
@@ -21,7 +21,7 @@ export type NullSafeCaseSensitiveNarrow<
     A extends ComparableExpr,
     B extends A
 > = (
-    Extract<A, Buffer|Date|Decimal> extends never ?
+    Extract<A, Buffer|Date|Decimal|CustomComparableExpr> extends never ?
     B :
     ComparableType<B>
 );

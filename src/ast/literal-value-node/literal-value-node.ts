@@ -34,24 +34,6 @@ export enum LiteralValueType {
 
     /**
      * ```ts
-     * tm.TypeUtil.isBigInt(x) &&
-     * //bigint signed maximum value + 1
-     * tm.BigIntUtil.greaterThanOrEqual(x, BigInt("9223372036854775808")) &&
-     * //bigint unsigned maximum value
-     * tm.BigIntUtil.lessThanOrEqual(x, BigInt("18446744073709551615"))
-     * ```
-     *
-     * + PostgreSQL and SQLite do not support `BIGINT UNSIGNED`.
-     * + PostgreSQL will convert it to `DECIMAL`.
-     * + SQLite will lose precision using `DOUBLE`.
-     *
-     * Consider throwing an error when using values this large in SQLite?
-     * Or implement a bigint extension for SQLite.
-     */
-    BIGINT_UNSIGNED = "BIGINT_UNSIGNED",
-
-    /**
-     * ```ts
      * typeof x == "boolean"
      * ```
      */
@@ -102,11 +84,6 @@ export interface BigIntSignedLiteralNode {
     readonly literalValueType : LiteralValueType.BIGINT_SIGNED,
     readonly literalValue : bigint,
 }
-export interface BigIntUnsignedLiteralNode {
-    readonly type : "LiteralValue",
-    readonly literalValueType : LiteralValueType.BIGINT_UNSIGNED,
-    readonly literalValue : bigint,
-}
 export interface BooleanLiteralNode {
     readonly type : "LiteralValue",
     readonly literalValueType : LiteralValueType.BOOLEAN,
@@ -132,7 +109,6 @@ export type LiteralValueNode =
     | StringLiteralNode
     | DoubleLiteralNode
     | BigIntSignedLiteralNode
-    | BigIntUnsignedLiteralNode
     | BooleanLiteralNode
     | BufferLiteralNode
     | NullLiteralNode

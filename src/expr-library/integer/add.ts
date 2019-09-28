@@ -64,6 +64,6 @@ import {TypeHint} from "../../type-hint";
 export const add : ChainableOperator<bigint> = makeChainableOperator<OperatorType.ADDITION, bigint>(
     OperatorType.ADDITION,
     tm.BigInt(0),
-    tm.mysql.unsafeBigInt(),
+    tm.mysql.bigIntSigned(),
     TypeHint.BIGINT
 );

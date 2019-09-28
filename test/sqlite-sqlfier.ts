@@ -532,10 +532,9 @@ export const sqliteSqlfier : Sqlfier = {
         [LiteralValueType.DOUBLE] : ({literalValue}) => escapeValue(literalValue),
         [LiteralValueType.BIGINT_SIGNED] : ({literalValue}) => escapeValue(literalValue),
         /**
-         * @todo
-         * SQLite doesn't support `BIGINT UNSIGNED` values
+         * @deprecated
          */
-        [LiteralValueType.BIGINT_UNSIGNED] : ({literalValue}) => escapeValue(literalValue),
+        //[LiteralValueType.BIGINT_UNSIGNED] : ({literalValue}) => escapeValue(literalValue),
         [LiteralValueType.BOOLEAN] : ({literalValue}) => escapeValue(literalValue),
         [LiteralValueType.BUFFER] : ({literalValue}) => escapeValue(literalValue),
         [LiteralValueType.NULL] : ({literalValue}) => escapeValue(literalValue),

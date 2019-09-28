@@ -18,6 +18,6 @@ import {TypeHint} from "../../type-hint";
  */
 export const abs = makeOperator1Idempotent<OperatorType.ABSOLUTE_VALUE, bigint, bigint>(
     OperatorType.ABSOLUTE_VALUE,
-    tm.mysql.unsafeBigInt(),
+    tm.mysql.bigIntSigned(),
     TypeHint.BIGINT
 );

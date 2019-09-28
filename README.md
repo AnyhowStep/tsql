@@ -22,6 +22,11 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
 + Efficiency
   + You won't catch me writing O(2<sup>n</sup>) algorithms but I won't lose sleep over wasted CPU cycles
 
++ Direct support for MySQL `BIGINT UNSIGNED` type.
+  + PostgreSQL and SQLite do not support `BIGINT UNSIGNED`.
+  + Trying to shoehorn support for it has proven too complex.
+  + This may be supported by the MySQL-specific version.
+
 -----
 
 ### Project Structure

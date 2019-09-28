@@ -4,8 +4,6 @@ export * from "./cast-as-double";
 export * from "./cast-as-json";
 export * from "./cast-as-n-char";
 export * from "./cast-as-signed-big-integer";
-export * from "./cast-as-unsigned-big-integer";
 export * from "./cast-as-var-char";
 export * from "./decimal-literal";
 export * from "./signed-bigint-literal";
-export * from "./unsigned-bigint-literal";

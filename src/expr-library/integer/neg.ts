@@ -121,6 +121,6 @@ import {makeOperator1DoubleElimination} from "../factory";
  */
 export const neg = makeOperator1DoubleElimination<OperatorType.UNARY_MINUS, bigint, bigint>(
     OperatorType.UNARY_MINUS,
-    tm.mysql.unsafeBigInt(),
+    tm.mysql.bigIntSigned(),
     TypeHint.BIGINT
 );

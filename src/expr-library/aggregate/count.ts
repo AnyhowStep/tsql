@@ -18,6 +18,9 @@ export function count () : (
 ) {
     const result = new ExprImpl(
         {
+            /**
+             * Should not return a value less than zero
+             */
             mapper : tm.mysql.bigIntUnsigned(),
             usedRef : UsedRefUtil.fromColumnRef({}),
         },
