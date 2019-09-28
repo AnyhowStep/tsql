@@ -64,8 +64,8 @@ export type OperatorOperand = {
     //[OperatorType.CASE]                     : Operand4ToN,
     //[OperatorType.CASE_WHEN]                : Operand3ToN,
     [OperatorType.IF]                       : Operand3,
-    [OperatorType.IFNULL]                   : Operand2,
-    [OperatorType.NULLIF]                   : Operand2,
+    [OperatorType.IF_NULL]                  : Operand2,
+    [OperatorType.NULL_IF_EQUAL]            : Operand2,
 
     /*
         String Functions and Operators

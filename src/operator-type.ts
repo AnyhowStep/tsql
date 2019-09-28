@@ -490,8 +490,8 @@ export enum OperatorType {
      * -----
      *
      * + MySQL        : `IF(x, y, z)`
-     * + PostgreSQL   : `CAST WHEN x THEN y ELSE z END`
-     * + SQLite       : `CAST WHEN x THEN y ELSE z END`
+     * + PostgreSQL   : `CASE WHEN x THEN y ELSE z END`
+     * + SQLite       : `CASE WHEN x THEN y ELSE z END`
      */
     IF = "IF",
 
@@ -511,7 +511,7 @@ export enum OperatorType {
      * + PostgreSQL   : `COALESCE(x, y)`
      * + SQLite       : `IFNULL(x, y)`
      */
-    IFNULL = "IFNULL",
+    IF_NULL = "IF_NULL",
 
     /**
      * + https://dev.mysql.com/doc/refman/8.0/en/control-flow-functions.html#function_nullif
@@ -523,8 +523,12 @@ export enum OperatorType {
      * + MySQL        : `NULLIF(x, y)`
      * + PostgreSQL   : `NULLIF(x, y)`
      * + SQLite       : `NULLIF(x, y)`
+     *
+     * -----
+     *
+     * This is the same as `CASE WHEN expr1 = expr2 THEN NULL ELSE expr1 END`
      */
-    NULLIF = "NULLIF",
+    NULL_IF_EQUAL = "NULL_IF_EQUAL",
 
     /*
         String Functions and Operators
@@ -539,7 +543,7 @@ export enum OperatorType {
      *
      * + MySQL          : `ASCII(x)`
      * + PostgreSQL     : `ASCII(x)`
-     * + SQLite         : None, implement with `x.charCodeAt(0)`
+     * + SQLite         : None, implement with `x.length == 0 ? 0 : x.charCodeAt(0)`
      */
     ASCII = "ASCII",
 
@@ -548,18 +552,21 @@ export enum OperatorType {
      *
      * -----
      *
-     * + MySQL          : `BIN(n)`
+     * + MySQL          : `BIN(x)`
      * + PostgreSQL     : None. Implement with,
      * ```sql
      *  REGEXP_REPLACE(
-     *      n::bit(64)::varchar(64),
-     *      '^0+',
-     *      ''
+     *      (x)::bit(64)::varchar(64),
+     *      '^0+(\d+)$',
+     *      '\1'
      *  )
      * ```
      * + SQLite         : None. Implement with,
      * ```ts
-     * (n).toString(2)
+     * //x >= 0
+     * (x).toString(2)
+     * //x < 0
+     * (2n**64n + BigInt(x)).toString(2)
      * ```
      */
     BIN = "BIN",
