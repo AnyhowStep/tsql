@@ -637,6 +637,28 @@ export enum OperatorType {
     CONCAT = "CONCAT",
 
     /**
+     * + https://dev.mysql.com/doc/refman/8.0/en/string-functions.html#function_concat
+     * + https://www.postgresql.org/docs/9.4/functions-string.html#FUNCTIONS-STRING-OTHER
+     *
+     * -----
+     *
+     * + MySQL          : None. Emulate with `CONCAT(COALESCE(x, ''), ...)`
+     * + PostgreSQL     : `CONCAT(x, ...)`
+     *   + PostgreSQL's `CONCAT(x, ...)` Ignores `NULL` arguments
+     *     + This is different from MySQL's `CONCAT()`
+     * + SQLite         : `COALESCE(x, '') || ... || ...`
+     *
+     * -----
+     *
+     * The SQL standard says,
+     * > `<concatenation operator>` is an operator, `||`,
+     * > that returns the character string made by joining its character string operands in the order given.
+     *
+     * MySQL actually treats `||` as the boolean `OR` operator.
+     */
+    NULL_SAFE_CONCAT = "NULL_SAFE_CONCAT",
+
+    /**
      * + https://dev.mysql.com/doc/refman/8.0/en/string-functions.html#function_concat-ws
      * + https://www.postgresql.org/docs/9.4/functions-string.html#FUNCTIONS-STRING-OTHER
      *
@@ -697,8 +719,11 @@ export enum OperatorType {
      * -----
      *
      * + MySQL          : `FROM_BASE64(x)`
+     *   + `FROM_BASE64('~')` === `NULL`
      * + PostgreSQL     : `DECODE(x, 'base64')`
+     *   + `DECODE('~', 'base64')` throws an error
      * + SQLite         : None, implement with user-defined function `atob()`
+     *   + `atob('~')` throws an error
      */
     FROM_BASE64 = "FROM_BASE64",
 
@@ -732,7 +757,7 @@ export enum OperatorType {
      * + PostgreSQL     : `STRPOS(str, substr)`
      * + SQLite         : `INSTR(str, substr)`
      */
-    INSTR = "INSTR",
+    IN_STR = "IN_STR",
 
     /*
      * + https://dev.mysql.com/doc/refman/8.0/en/string-functions.html#function_left
@@ -838,7 +863,9 @@ export enum OperatorType {
      * -----
      *
      * + MySQL          : `LPAD(str, len, padstr)`
+     *   + `LPAD('123', 4, '98')` === `'9123'`
      * + PostgreSQL     : `LPAD(str, len, padstr)`
+     *   + `LPAD('123', 4, '98')` === `'9123'`
      * + SQLite         : None. Implement with user-defined function.
      */
     LPAD = "LPAD",
@@ -1032,7 +1059,7 @@ export enum OperatorType {
      */
     //SPACE = "SPACE",
 
-    /**
+    /*
      * + https://dev.mysql.com/doc/refman/8.0/en/string-functions.html#function_substr
      * + https://www.postgresql.org/docs/9.4/functions-string.html#FUNCTIONS-STRING-OTHER
      * + https://www.sqlite.org/lang_corefunc.html#substr
@@ -1040,10 +1067,23 @@ export enum OperatorType {
      * -----
      *
      * + MySQL          : `SUBSTR(str, pos)/SUBSTR(str, pos, len)`
+     *   + `SUBSTR('hello', -1)` === `'o'`
+     *   + `SUBSTR('hello', -1, -2)` === `''`
+     *   + `SUBSTR('hello', -2, 2)` === `'lo'`
      * + PostgreSQL     : `SUBSTR(str, pos)/SUBSTR(str, pos, len)`
+     *   + `SUBSTR('hello', -1)` === `'hello'`
+     *   + `SUBSTR('hello', -1, -2)` throws an error
+     *   + `SUBSTR('hello', -2, 2)` === `''`
      * + SQLite         : `SUBSTR(str, pos)/SUBSTR(str, pos, len)`
+     *   + `SUBSTR('hello', -1)` === `'o'`
+     *   + `SUBSTR('hello', -1, -2)` === `'ll'`
+     *   + `SUBSTR('hello', -2, 2)` === `'lo'`
+     *
+     * -----
+     *
+     * Behaviour varies too much.
      */
-    SUBSTR = "SUBSTR",
+    //SUBSTR = "SUBSTR",
 
     /*
      * Appears to be MySQl-specific,
@@ -1083,7 +1123,9 @@ export enum OperatorType {
      * -----
      *
      * + MySQL          : `UNHEX(x)`
+     *   + `UNHEX('~')` === `NULL`
      * + PostgreSQL     : `DECODE(x, 'hex')`
+     *   + `DECODE('~', 'hex')` throws an error
      * + SQLite         : None. Implement with user-defined function.
      */
     UNHEX = "UNHEX",
