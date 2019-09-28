@@ -12,5 +12,5 @@ import {makeOperator1Idempotent} from "../factory";
 export const sign = makeOperator1Idempotent<OperatorType.SIGN, bigint, bigint>(
     OperatorType.SIGN,
     tm.mysql.bigIntSigned(),
-    TypeHint.BIGINT
+    TypeHint.BIGINT_SIGNED
 );

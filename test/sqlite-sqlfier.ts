@@ -644,7 +644,7 @@ export const sqliteSqlfier : Sqlfier = {
                         ) + " AS DOUBLE"
                     ]
                 );
-            } else if (typeHint == TypeHint.BIGINT) {
+            } else if (typeHint == TypeHint.BIGINT_SIGNED) {
                 return insertBetween(operands, "%");
             } else {
                 throw new Error(`INTEGER_REMAINDER not implemented for ${typeHint}`);

@@ -20,5 +20,5 @@ import {makeOperator2} from "../factory";
 export const integerDiv = makeOperator2<OperatorType.INTEGER_DIVISION, bigint, bigint|null>(
     OperatorType.INTEGER_DIVISION,
     tm.mysql.bigIntSigned().orNull(),
-    TypeHint.BIGINT
+    TypeHint.BIGINT_SIGNED
 );

@@ -64,5 +64,5 @@ export const mul : ChainableOperator<bigint> = makeChainableOperator<OperatorTyp
     OperatorType.MULTIPLICATION,
     tm.BigInt(1),
     tm.mysql.bigIntSigned(),
-    TypeHint.BIGINT
+    TypeHint.BIGINT_SIGNED
 );

@@ -33,5 +33,5 @@ import {TypeHint} from "../../type-hint";
 export const randomSignedBigInt = makeOperator0<OperatorType.RANDOM, bigint>(
     OperatorType.RANDOM,
     tm.mysql.bigIntSigned(),
-    TypeHint.BIGINT
+    TypeHint.BIGINT_SIGNED
 );

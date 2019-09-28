@@ -65,5 +65,5 @@ export const add : ChainableOperator<bigint> = makeChainableOperator<OperatorTyp
     OperatorType.ADDITION,
     tm.BigInt(0),
     tm.mysql.bigIntSigned(),
-    TypeHint.BIGINT
+    TypeHint.BIGINT_SIGNED
 );

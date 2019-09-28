@@ -3,7 +3,7 @@ export enum TypeHint {
     DECIMAL = "DECIMAL",
     STRING = "STRING",
     DOUBLE = "DOUBLE",
-    BIGINT = "BIGINT",
+    BIGINT_SIGNED = "BIGINT_SIGNED",
     BOOLEAN = "BOOLEAN",
     BUFFER = "BUFFER",
     NULL = "NULL",
