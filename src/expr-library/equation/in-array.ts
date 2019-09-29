@@ -1,10 +1,10 @@
-import {makeComparison2ToN, Comparison2ToN, Comparison1ToNReturn} from "../factory";
+import {makeEquation2ToN, Equation2ToN, Equation1ToNReturn} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {NonNullEquatableType, EquatableTypeUtil} from "../../equatable-type";
 import {RawExpr, RawExprUtil} from "../../raw-expr";
 import {ExprUtil} from "../../expr";
 
-const inArrayImpl : Comparison2ToN = makeComparison2ToN<OperatorType.IN>(
+const inArrayImpl : Equation2ToN = makeEquation2ToN<OperatorType.IN>(
     OperatorType.IN
 );
 /**
@@ -45,7 +45,7 @@ export function inArray<
     arg0 : Arg0T,
     args : ArgsT
 ) : (
-    Comparison1ToNReturn<Arg0T, ArgsT>
+    Equation1ToNReturn<Arg0T, ArgsT>
 ) {
     const [arg1, ...rest] = args;
     if (arg1 == undefined) {
@@ -53,7 +53,7 @@ export function inArray<
          * Calling `inArray()` with an empty array will always
          * return `false` because a value is never in an array of zero elements.
          */
-        return ExprUtil.fromRawExpr(false) as Comparison1ToNReturn<Arg0T, ArgsT>;
+        return ExprUtil.fromRawExpr(false) as Equation1ToNReturn<Arg0T, ArgsT>;
     } else {
         return inArrayImpl<Arg0T, ArgsT[number], ArgsT[number][]>(
             arg0, arg1, ...rest

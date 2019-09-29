@@ -1,4 +1,4 @@
-import {makeComparison2} from "../factory";
+import {makeEquation2} from "../factory";
 import {OperatorType} from "../../operator-type";
 
 /**
@@ -7,12 +7,7 @@ import {OperatorType} from "../../operator-type";
  * This version of the `=` operator prevents `NULL`.
  *
  * For null-safe equality, @see {@link nullSafeEq}
- *
- * -----
- *
- * Interestingly enough, if I remove the `Comparison` explicit type annotation,
- * TS takes **much** longer to compile.
  */
-export const eq = makeComparison2(
+export const eq = makeEquation2(
     OperatorType.EQUAL
 );

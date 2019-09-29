@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {AnyRawExpr, RawExprUtil} from "../../raw-expr";
-import {CoalesceExpr, TypeOfCoalesce} from "../comparison";
+import {CoalesceExpr, TypeOfCoalesce} from "./coalesce";
 import {ExprUtil} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";

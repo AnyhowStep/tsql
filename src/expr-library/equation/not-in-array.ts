@@ -2,13 +2,13 @@
  * @todo Refactor `inArray()` and `notInArray()` so they can share code.
  * Something like a `makeInArray()` factory function.
  */
-import {makeComparison2ToN, Comparison2ToN, Comparison1ToNReturn} from "../factory";
+import {makeEquation2ToN, Equation2ToN, Equation1ToNReturn} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {NonNullEquatableType, EquatableTypeUtil} from "../../equatable-type";
 import {RawExpr, RawExprUtil} from "../../raw-expr";
 import {ExprUtil} from "../../expr";
 
-const notInArrayImpl : Comparison2ToN = makeComparison2ToN<OperatorType.NOT_IN>(
+const notInArrayImpl : Equation2ToN = makeEquation2ToN<OperatorType.NOT_IN>(
     OperatorType.NOT_IN
 );
 /**
@@ -49,7 +49,7 @@ export function notInArray<
     arg0 : Arg0T,
     args : ArgsT
 ) : (
-    Comparison1ToNReturn<Arg0T, ArgsT>
+    Equation1ToNReturn<Arg0T, ArgsT>
 ) {
     const [arg1, ...rest] = args;
     if (arg1 == undefined) {
@@ -57,7 +57,7 @@ export function notInArray<
          * Calling `notInArray()` with an empty array will always
          * return `true` because a value is always **not** in an array of zero elements.
          */
-        return ExprUtil.fromRawExpr(true) as Comparison1ToNReturn<Arg0T, ArgsT>;
+        return ExprUtil.fromRawExpr(true) as Equation1ToNReturn<Arg0T, ArgsT>;
     } else {
         return notInArrayImpl<Arg0T, ArgsT[number], ArgsT[number][]>(
             arg0, arg1, ...rest
