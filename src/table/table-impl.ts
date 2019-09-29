@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {TableData, ITable} from "./table";
+import {TableData, ITable, TableWithPrimaryKey} from "./table";
 import * as TableUtil from "./util";
 import {MapperMap} from "../mapper-map";
 import {Ast} from "../ast";
@@ -9,6 +9,8 @@ import {CandidateKey_NonUnion} from "../candidate-key";
 import {QueryUtil} from "../unified-query";
 import {StrictUnion} from "../type-util";
 import * as ExprLib from "../expr-library";
+import {PrimaryKey_Input} from "../primary-key";
+import {SuperKey_Input} from "../super-key";
 /*import {PrimaryKey, PrimaryKeyUtil} from "../primary-key";
 import {CandidateKey, CandidateKeyUtil} from "../candidate-key";
 import {SuperKey, SuperKeyUtil} from "../super-key";*/
@@ -446,7 +448,7 @@ export class Table<DataT extends TableData> implements ITable {
         return TableUtil.validate(this, connection, result);
     }*/
 
-    assertExistsByCandidateKey (
+    async assertExistsByCandidateKey (
         connection : SelectConnection,
         candidateKey : StrictUnion<CandidateKey_NonUnion<this>>
     ) : (
@@ -464,51 +466,101 @@ export class Table<DataT extends TableData> implements ITable {
             ))
             .assertExists(connection);
     }
+    async assertExistsByPrimaryKey (
+        this : Extract<this, TableWithPrimaryKey>,
+        connection : SelectConnection,
+        primaryKey : PrimaryKey_Input<Extract<this, TableWithPrimaryKey>>
+    ) : (
+        Promise<void>
+    ) {
+        return QueryUtil.newInstance()
+            .from<Extract<this, TableWithPrimaryKey>>(
+                this as (
+                    Extract<this, TableWithPrimaryKey> &
+                    QueryUtil.AssertValidCurrentJoin<QueryUtil.NewInstance, Extract<this, TableWithPrimaryKey>>
+                )
+            )
+            .where(() => (
+                ExprLib.eqPrimaryKey(this, primaryKey) as any
+            ))
+            .assertExists(connection);
+    }
+    async assertExistsBySuperKey (
+        connection : SelectConnection,
+        superKey : SuperKey_Input<this>
+    ) : (
+        Promise<void>
+    ) {
+        return QueryUtil.newInstance()
+            .from<this>(
+                this as (
+                    this &
+                    QueryUtil.AssertValidCurrentJoin<QueryUtil.NewInstance, this>
+                )
+            )
+            .where(() => (
+                ExprLib.eqSuperKey(this, superKey) as any
+            ))
+            .assertExists(connection);
+    }
+
+    async existsByCandidateKey (
+        connection : SelectConnection,
+        candidateKey : StrictUnion<CandidateKey_NonUnion<this>>
+    ) : (
+        Promise<boolean>
+    ) {
+        return QueryUtil.newInstance()
+            .from<this>(
+                this as (
+                    this &
+                    QueryUtil.AssertValidCurrentJoin<QueryUtil.NewInstance, this>
+                )
+            )
+            .where(() => (
+                ExprLib.eqCandidateKey(this, candidateKey) as any
+            ))
+            .exists(connection);
+    }
+    async existsByPrimaryKey (
+        this : Extract<this, TableWithPrimaryKey>,
+        connection : SelectConnection,
+        primaryKey : PrimaryKey_Input<Extract<this, TableWithPrimaryKey>>
+    ) : (
+        Promise<boolean>
+    ) {
+        return QueryUtil.newInstance()
+            .from<Extract<this, TableWithPrimaryKey>>(
+                this as (
+                    Extract<this, TableWithPrimaryKey> &
+                    QueryUtil.AssertValidCurrentJoin<QueryUtil.NewInstance, Extract<this, TableWithPrimaryKey>>
+                )
+            )
+            .where(() => (
+                ExprLib.eqPrimaryKey(this, primaryKey) as any
+            ))
+            .exists(connection);
+    }
+    async existsBySuperKey (
+        connection : SelectConnection,
+        superKey : SuperKey_Input<this>
+    ) : (
+        Promise<boolean>
+    ) {
+        return QueryUtil.newInstance()
+            .from<this>(
+                this as (
+                    this &
+                    QueryUtil.AssertValidCurrentJoin<QueryUtil.NewInstance, this>
+                )
+            )
+            .where(() => (
+                ExprLib.eqSuperKey(this, superKey) as any
+            ))
+            .exists(connection);
+    }
+
     /*
-    assertExistsByPk (
-        this : Extract<this, TableWithPk>,
-        connection : IConnection,
-        pk : PrimaryKey<Extract<this, TableWithPk>>
-    ) : (
-        Promise<void>
-    ) {
-        return QueryUtil.assertExistsByPk(connection, this, pk);
-    }
-    assertExistsBySk (
-        connection : IConnection,
-        sk : SuperKey<this>
-    ) : (
-        Promise<void>
-    ) {
-        return QueryUtil.assertExistsBySk(connection, this, sk);
-    }
-
-    existsByCk (
-        connection : IConnection,
-        ck : CandidateKey<this>
-    ) : (
-        Promise<boolean>
-    ) {
-        return QueryUtil.existsByCk(connection, this, ck);
-    }
-    existsByPk (
-        this : Extract<this, TableWithPk>,
-        connection : IConnection,
-        pk : PrimaryKey<Extract<this, TableWithPk>>
-    ) : (
-        Promise<boolean>
-    ) {
-        return QueryUtil.existsByPk(connection, this, pk);
-    }
-    existsBySk (
-        connection : IConnection,
-        sk : SuperKey<this>
-    ) : (
-        Promise<boolean>
-    ) {
-        return QueryUtil.existsBySk(connection, this, sk);
-    }
-
     fetchOneByCk (
         connection : IConnection,
         ck : CandidateKey<this>

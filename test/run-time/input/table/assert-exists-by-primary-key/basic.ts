@@ -28,7 +28,7 @@ tape(__filename, async (t) => {
             })
             .setPrimaryKey(columns => [columns.testId]);
 
-        await test.assertExistsByCandidateKey(
+        await test.assertExistsByPrimaryKey(
             connection,
             {
                 testVal : BigInt(200),
@@ -39,7 +39,7 @@ tape(__filename, async (t) => {
             t.pass("Should throw error");
         });
 
-        await test.assertExistsByCandidateKey(
+        await test.assertExistsByPrimaryKey(
             connection,
             {
                 testId : BigInt(2),
@@ -50,7 +50,7 @@ tape(__filename, async (t) => {
             t.fail("Should exist");
         });
 
-        await test.assertExistsByCandidateKey(
+        await test.assertExistsByPrimaryKey(
             connection,
             {
                 testId : BigInt(2),
@@ -62,7 +62,7 @@ tape(__filename, async (t) => {
             t.fail("Should exist");
         });
 
-        await test.assertExistsByCandidateKey(
+        await test.assertExistsByPrimaryKey(
             connection,
             {
                 testId : BigInt(4),
@@ -75,7 +75,7 @@ tape(__filename, async (t) => {
 
         await connection.exec(`DELETE FROM test`);
 
-        await test.assertExistsByCandidateKey(
+        await test.assertExistsByPrimaryKey(
             connection,
             {
                 testVal : BigInt(200),
@@ -86,7 +86,7 @@ tape(__filename, async (t) => {
             t.pass("Should throw error");
         });
 
-        await test.assertExistsByCandidateKey(
+        await test.assertExistsByPrimaryKey(
             connection,
             {
                 testId : BigInt(2),
@@ -97,7 +97,7 @@ tape(__filename, async (t) => {
             t.pass();
         });
 
-        await test.assertExistsByCandidateKey(
+        await test.assertExistsByPrimaryKey(
             connection,
             {
                 testId : BigInt(2),
@@ -109,7 +109,7 @@ tape(__filename, async (t) => {
             t.pass();
         });
 
-        await test.assertExistsByCandidateKey(
+        await test.assertExistsByPrimaryKey(
             connection,
             {
                 testId : BigInt(4),

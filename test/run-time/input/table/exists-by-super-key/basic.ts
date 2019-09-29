@@ -28,7 +28,7 @@ tape(__filename, async (t) => {
             })
             .setPrimaryKey(columns => [columns.testId]);
 
-        await test.assertExistsByCandidateKey(
+        await test.existsBySuperKey(
             connection,
             {
                 testVal : BigInt(200),
@@ -39,43 +39,58 @@ tape(__filename, async (t) => {
             t.pass("Should throw error");
         });
 
-        await test.assertExistsByCandidateKey(
+        await test.existsBySuperKey(
             connection,
             {
                 testId : BigInt(2),
             }
-        ).then(() => {
-            t.pass();
-        }).catch(() => {
-            t.fail("Should exist");
+        ).then((value) => {
+            t.deepEqual(value, true);
         });
 
-        await test.assertExistsByCandidateKey(
+        await test.existsBySuperKey(
             connection,
             {
                 testId : BigInt(2),
-                testVal : BigInt(999), //Should get ignored
-            } as any
-        ).then(() => {
-            t.pass();
-        }).catch(() => {
-            t.fail("Should exist");
+                testVal : BigInt(200),
+            }
+        ).then((value) => {
+            t.deepEqual(value, true);
         });
 
-        await test.assertExistsByCandidateKey(
+        await test.existsBySuperKey(
+            connection,
+            {
+                testId : BigInt(2),
+                testVal : BigInt(200),
+                shouldGetIgnored : 999,
+            } as any
+        ).then((value) => {
+            t.deepEqual(value, true);
+        });
+
+        await test.existsBySuperKey(
+            connection,
+            {
+                testId : BigInt(2),
+                testVal : BigInt(300),
+            }
+        ).then((value) => {
+            t.deepEqual(value, false);
+        });
+
+        await test.existsBySuperKey(
             connection,
             {
                 testId : BigInt(4),
             }
-        ).then(() => {
-            t.fail("Should not exist");
-        }).catch(() => {
-            t.pass();
+        ).then((value) => {
+            t.deepEqual(value, false);
         });
 
         await connection.exec(`DELETE FROM test`);
 
-        await test.assertExistsByCandidateKey(
+        await test.existsBySuperKey(
             connection,
             {
                 testVal : BigInt(200),
@@ -86,38 +101,53 @@ tape(__filename, async (t) => {
             t.pass("Should throw error");
         });
 
-        await test.assertExistsByCandidateKey(
+        await test.existsBySuperKey(
             connection,
             {
                 testId : BigInt(2),
             }
-        ).then(() => {
-            t.fail("Should not exist");
-        }).catch(() => {
-            t.pass();
+        ).then((value) => {
+            t.deepEqual(value, false);
         });
 
-        await test.assertExistsByCandidateKey(
+        await test.existsBySuperKey(
             connection,
             {
                 testId : BigInt(2),
-                testVal : BigInt(999), //Should get ignored
-            } as any
-        ).then(() => {
-            t.fail("Should not exist");
-        }).catch(() => {
-            t.pass();
+                testVal : BigInt(200),
+            }
+        ).then((value) => {
+            t.deepEqual(value, false);
         });
 
-        await test.assertExistsByCandidateKey(
+        await test.existsBySuperKey(
+            connection,
+            {
+                testId : BigInt(2),
+                testVal : BigInt(200),
+                shouldGetIgnored : 999,
+            } as any
+        ).then((value) => {
+            t.deepEqual(value, false);
+        });
+
+        await test.existsBySuperKey(
+            connection,
+            {
+                testId : BigInt(2),
+                testVal : BigInt(300),
+            }
+        ).then((value) => {
+            t.deepEqual(value, false);
+        });
+
+        await test.existsBySuperKey(
             connection,
             {
                 testId : BigInt(4),
             }
-        ).then(() => {
-            t.fail("Should not exist");
-        }).catch(() => {
-            t.pass();
+        ).then((value) => {
+            t.deepEqual(value, false);
         });
 
     });
