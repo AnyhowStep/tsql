@@ -3017,33 +3017,41 @@ export enum OperatorType {
      *
      * + MySQL      : `AVG(DISTINCT x)/AVG(x)/AVG(x) OVER()`
      * + PostgreSQL : `AVG(DISTINCT x)/AVG(x)/AVG(x) OVER()`
+     *   + PostgreSQL has to cast `x` to `DECIMAL` if `x` is an integer
+     *     to get the same result as MySQL.
      * + SQLite     : `AVG(DISTINCT x)/AVG(x)/AVG(x) OVER()`
+     *   + A `DECIMAL` polyfill should be added to SQLite and `x` should be casted
+     *     to `DECIMAL` if `x` is an integer to get the same result as MySQL.
      */
     AGGREGATE_AVERAGE = "AGGREGATE_AVERAGE",
 
-    /**
+    /*
      * + https://dev.mysql.com/doc/refman/8.0/en/group-by-functions.html#function_bit-and
      * + https://www.postgresql.org/docs/9.2/functions-aggregate.html#FUNCTIONS-AGGREGATE-TABLE
      *
      * -----
      *
      * + MySQL      : `BIT_AND(x)/BIT_AND(x) OVER()`
+     *   + If `myTable` is empty, `SELECT BIT_AND(myTableId) FROM myTable` === `18446744073709551615`
      * + PostgreSQL : `BIT_AND(x)/BIT_AND(x) OVER()`
+     *   + If `myTable` is empty, `SELECT BIT_AND(myTableId) FROM myTable` === `NULL`
      * + SQLite     : None. Implement with user-defined function.
      */
-    AGGREGATE_BITWISE_AND = "AGGREGATE_BITWISE_AND",
+    //AGGREGATE_BITWISE_AND = "AGGREGATE_BITWISE_AND",
 
-    /**
+    /*
      * + https://dev.mysql.com/doc/refman/8.0/en/group-by-functions.html#function_bit-or
      * + https://www.postgresql.org/docs/9.2/functions-aggregate.html#FUNCTIONS-AGGREGATE-TABLE
      *
      * -----
      *
      * + MySQL      : `BIT_OR(x)/BIT_OR(x) OVER()`
+     *   + If `myTable` is empty, `SELECT BIT_OR(myTableId) FROM myTable` === `0`
      * + PostgreSQL : `BIT_OR(x)/BIT_OR(x) OVER()`
+     *   + If `myTable` is empty, `SELECT BIT_OR(myTableId) FROM myTable` === `NULL`
      * + SQLite     : None. Implement with user-defined function.
      */
-    AGGREGATE_BITWISE_OR = "AGGREGATE_BITWISE_OR",
+    //AGGREGATE_BITWISE_OR = "AGGREGATE_BITWISE_OR",
 
     /**
      * Appears to be MySQL-specific,
@@ -3154,6 +3162,8 @@ export enum OperatorType {
      * + MySQL      : `STDDEV_POP(x)/STDDEV_POP(x) OVER()`
      * + PostgreSQL : `STDDEV_POP(x)/STDDEV_POP(x) OVER()`
      * + SQLite     : None. Implement with user-defined function.
+     *
+     * Should only be provided for `double` because MySQL treats all `x` as `double`.
      */
     AGGREGATE_POPULATION_STANDARD_DEVIATION = "AGGREGATE_POPULATION_STANDARD_DEVIATION",
 
@@ -3167,6 +3177,8 @@ export enum OperatorType {
      * + MySQL      : `STDDEV_SAMP(x)/STDDEV_SAMP(x) OVER()`
      * + PostgreSQL : `STDDEV_SAMP(x)/STDDEV_SAMP(x) OVER()`
      * + SQLite     : None. Implement with user-defined function.
+     *
+     * Should only be provided for `double` because MySQL treats all `x` as `double`.
      */
     AGGREGATE_SAMPLE_STANDARD_DEVIATION = "AGGREGATE_SAMPLE_STANDARD_DEVIATION",
 
@@ -3192,6 +3204,8 @@ export enum OperatorType {
      * + MySQL      : `VAR_POP(x)/VAR_POP(x) OVER()`
      * + PostgreSQL : `VAR_POP(x)/VAR_POP(x) OVER()`
      * + SQLite     : None. Implement with user-defined function.
+     *
+     * Should only be provided for `double` because MySQL treats all `x` as `double`.
      */
     AGGREGATE_POPULATION_VARIANCE = "AGGREGATE_POPULATION_VARIANCE",
 
@@ -3204,6 +3218,8 @@ export enum OperatorType {
      * + MySQL      : `VAR_SAMP(x)/VAR_SAMP(x) OVER()`
      * + PostgreSQL : `VAR_SAMP(x)/VAR_SAMP(x) OVER()`
      * + SQLite     : None. Implement with user-defined function.
+     *
+     * Should only be provided for `double` because MySQL treats all `x` as `double`.
      */
     AGGREGATE_SAMPLE_VARIANCE = "AGGREGATE_SAMPLE_VARIANCE",
 

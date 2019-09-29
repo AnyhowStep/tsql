@@ -1,3 +1,5 @@
+export * from "./aggregate";
+
 export * from "./ascii";
 export * from "./bin";
 export * from "./bit-length";

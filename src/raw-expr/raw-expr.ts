@@ -7,8 +7,8 @@ import {QueryBaseUtil} from "../query-base";
 export type RawExpr<TypeT> = (
     | (
         TypeT extends PrimitiveExpr ?
-            TypeT :
-            never
+        TypeT :
+        never
     )
     | IAnonymousExpr<TypeT>
     | IAnonymousColumn<TypeT>

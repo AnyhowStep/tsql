@@ -1,3 +1,4 @@
+export * from "./aggregate";
 export * from "./bitwise";
 
 export * from "./abs";

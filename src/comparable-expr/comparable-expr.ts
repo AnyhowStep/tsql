@@ -1,3 +1,11 @@
+/**
+ * @todo Split this into,
+ * + `EquatableExpr`
+ * + `SortableExpr`
+ *
+ * + A `SortableExpr` is an `EquatableExpr`
+ * + A `EquatableExpr` may not be a `SortableExpr`
+ */
 import {PrimitiveExpr} from "../primitive-expr";
 import {Decimal} from "../decimal";
 

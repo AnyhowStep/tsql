@@ -32,6 +32,17 @@ If `aggregation` is `undefined`, then it can be used in the `WHERE` clause.
 
 -----
 
+Expressions with `aggregation` set cannot be nested.
+
+The following query is invalid,
+```sql
+SELECT AVG(AVG(myTableId)) FROM myTable
+```
+
+You cannot nest aggregate function calls.
+
+-----
+
 For an expression in the `HAVING` clause, it can only have `usedRef` that are in the `GROUP BY` clause.
 It can have `usedRef` that are in the `FROM` clause.
 

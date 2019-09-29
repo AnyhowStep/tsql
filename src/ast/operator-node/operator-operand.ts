@@ -214,8 +214,6 @@ export type OperatorOperand = {
         https://dev.mysql.com/doc/refman/8.0/en/group-by-functions.html
     */
     [OperatorType.AGGREGATE_AVERAGE]        : Operand2|Operand3,
-    [OperatorType.AGGREGATE_BITWISE_AND]    : Operand2|Operand3,
-    [OperatorType.AGGREGATE_BITWISE_OR]     : Operand2|Operand3,
     [OperatorType.AGGREGATE_COUNT_EXPR]     : Operand2|Operand3,
     [OperatorType.AGGREGATE_COUNT_ALL]      : Operand0|Operand1,
     [OperatorType.AGGREGATE_GROUP_CONCAT]   : Operand2|Operand3,
