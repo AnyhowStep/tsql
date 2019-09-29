@@ -60,6 +60,9 @@
         "./src/map-delegate/**/*",
         "./src/decimal/**/*",
         "./src/comparable-expr/**/*",
+        "./src/fractional-arithmetic-expr/**/*",
+        "./src/integer-arithmetic-expr/**/*",
+        "./src/arithmetic-expr/**/*",
         "./src/index.ts"
     ]
 }

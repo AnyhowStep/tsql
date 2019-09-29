@@ -1,5 +1,6 @@
 export * from "./aliased-expr";
 export * from "./aliased-table";
+export * from "./arithmetic-expr";
 export * from "./ast";
 export * from "./candidate-key";
 export * from "./column";
@@ -21,8 +22,10 @@ export * from "./expr";
 export * from "./expr-library";
 export * from "./expr-select-item";
 export * from "./from-clause";
+export * from "./fractional-arithmetic-expr";
 export * from "./group-by-clause";
 export * from "./having-clause";
+export * from "./integer-arithmetic-expr";
 export * from "./join";
 export * from "./join-map";
 export * from "./limit-clause";

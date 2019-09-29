@@ -2023,7 +2023,7 @@ export enum OperatorType {
      * ```sql
      *  SELECT
      *      EXTRACT(SECOND FROM timestamp '2010-03-27 14:45:32.456789') +
-     *      FLOOR(EXTRACT(MICROSECOND FROM timestamp '2010-03-27 14:45:32.456789') / 1000.0) / 1000.0
+     *      FLOOR(EXTRACT(MICROSECOND FROM timestamp '2010-03-27 14:45:32.456789') / 1000.0e0) / 1000.0e0
      *  > 32.4560
      * ```
      * + PostgreSQL     : `FLOOR(EXTRACT(SECOND FROM datetime) * 1000) / 1000`
@@ -2048,8 +2048,8 @@ export enum OperatorType {
      * -----
      *
      * + MySQL          : `EXTRACT(SECOND FROM datetime)`
-     * + PostgreSQL     : `FLOOR(EXTRACT(SECOND FROM datetime))`
-     * + SQLite         : `strftime('%S', datetime)`
+     * + PostgreSQL     : `CAST(FLOOR(EXTRACT(SECOND FROM datetime)) AS BIGINT)`
+     * + SQLite         : `CAST(strftime('%S', datetime) AS BIGINT)`
      */
     EXTRACT_INTEGER_SECOND = "EXTRACT_INTEGER_SECOND",
 
@@ -2061,8 +2061,8 @@ export enum OperatorType {
      * -----
      *
      * + MySQL          : `EXTRACT(MINUTE FROM datetime)`
-     * + PostgreSQL     : `EXTRACT(MINUTE FROM datetime)`
-     * + SQLite         : `strftime('%M', datetime)`
+     * + PostgreSQL     : `CAST(EXTRACT(MINUTE FROM datetime) AS BIGINT)`
+     * + SQLite         : `CAST(strftime('%M', datetime) AS BIGINT)`
      */
     EXTRACT_MINUTE = "EXTRACT_MINUTE",
 
@@ -2074,8 +2074,8 @@ export enum OperatorType {
      * -----
      *
      * + MySQL          : `EXTRACT(HOUR FROM datetime)`
-     * + PostgreSQL     : `EXTRACT(HOUR FROM datetime)`
-     * + SQLite         : `strftime('%H', datetime)`
+     * + PostgreSQL     : `CAST(EXTRACT(HOUR FROM datetime) AS BIGINT)`
+     * + SQLite         : `CAST(strftime('%H', datetime) AS BIGINT)`
      */
     EXTRACT_HOUR = "EXTRACT_HOUR",
 
@@ -2087,8 +2087,8 @@ export enum OperatorType {
      * -----
      *
      * + MySQL          : `EXTRACT(DAY FROM datetime)`
-     * + PostgreSQL     : `EXTRACT(DAY FROM datetime)`
-     * + SQLite         : `strftime('%d', datetime)`
+     * + PostgreSQL     : `CAST(EXTRACT(DAY FROM datetime) AS BIGINT)`
+     * + SQLite         : `CAST(strftime('%d', datetime) AS BIGINT)`
      */
     EXTRACT_DAY = "EXTRACT_DAY",
 
@@ -2100,8 +2100,8 @@ export enum OperatorType {
      * -----
      *
      * + MySQL          : `EXTRACT(MONTH FROM datetime)`
-     * + PostgreSQL     : `EXTRACT(MONTH FROM datetime)`
-     * + SQLite         : `strftime('%m', datetime)`
+     * + PostgreSQL     : `CAST(EXTRACT(MONTH FROM datetime) AS BIGINT)`
+     * + SQLite         : `CAST(strftime('%m', datetime) AS BIGINT)`
      */
     EXTRACT_MONTH = "EXTRACT_MONTH",
 
@@ -2113,8 +2113,8 @@ export enum OperatorType {
      * -----
      *
      * + MySQL          : `EXTRACT(YEAR FROM datetime)`
-     * + PostgreSQL     : `EXTRACT(YEAR FROM datetime)`
-     * + SQLite         : `strftime('%Y', datetime)`
+     * + PostgreSQL     : `CAST(EXTRACT(YEAR FROM datetime) AS BIGINT)`
+     * + SQLite         : `CAST(strftime('%Y', datetime) AS BIGINT)`
      */
     EXTRACT_YEAR = "EXTRACT_YEAR",
 
@@ -2183,7 +2183,7 @@ export enum OperatorType {
      *
      * -----
      *
-     * + MySQL          : `TIMESTAMPADD(SECOND, x/1000e0, datetime)`
+     * + MySQL          : `TIMESTAMPADD(SECOND, x/1000.0, datetime)`
      * + PostgreSQL     : `datetime + concat(x, ' millisecond')::interval`
      * + SQLite         :
      * ```sql
@@ -2223,7 +2223,9 @@ export enum OperatorType {
      *
      * -----
      *
-     * + MySQL          : `TIMESTAMPADD(MINUTE, x, datetime)`
+     * + MySQL          : `TIMESTAMPADD(SECOND, x*60.0, datetime)`
+     *   + `TIMESTAMPADD(MINUTE, x, datetime)` ignores the fractional part of `x`.
+     *   + We convert `x` to seconds as a workaround.
      * + PostgreSQL     : `datetime + concat(x, ' minute')::interval`
      * + SQLite         :
      * ```sql
@@ -2243,7 +2245,9 @@ export enum OperatorType {
      *
      * -----
      *
-     * + MySQL          : `TIMESTAMPADD(HOUR, x, datetime)`
+     * + MySQL          : `TIMESTAMPADD(SECOND, x*60.0*60.0, datetime)`
+     *   + `TIMESTAMPADD(HOUR, x, datetime)` ignores the fractional part of `x`.
+     *   + We convert `x` to seconds as a workaround.
      * + PostgreSQL     : `datetime + concat(x, ' hour')::interval`
      * + SQLite         :
      * ```sql
@@ -2263,7 +2267,9 @@ export enum OperatorType {
      *
      * -----
      *
-     * + MySQL          : `TIMESTAMPADD(DAY, x, datetime)`
+     * + MySQL          : `TIMESTAMPADD(SECOND, x*24.0*60.0*60.0, datetime)`
+     *   + `TIMESTAMPADD(DAY, x, datetime)` ignores the fractional part of `x`.
+     *   + We convert `x` to seconds as a workaround.
      * + PostgreSQL     : `datetime + concat(x, ' day')::interval`
      * + SQLite         :
      * ```sql
@@ -2339,9 +2345,11 @@ export enum OperatorType {
 
     /**
      * + MySQL          : `FLOOR(TIMESTAMPDIFF(MICROSECOND, from, to)/1000e0)`
+     *   + Should be casted to `BIGINT` after `FLOOR()`
      * + PostgreSQL     : `EXTRACT(DAY FROM (to - from))*24*60*60*1000 + EXTRACT(HOUR FROM (to - from))*60*60*1000 + EXTRACT(MINUTE FROM (to - from))*60*1000 + FLOOR(EXTRACT(SECOND FROM (to - from))*1000)`
      *   + The `FLOOR()` at the end is necessary
      *   + Extracting `SECOND` gives a number with decimal places for milliseconds
+     *   + Every `EXTRACT()/FLOOR()` should be wrapped with a cast to `BIGINT`
      * + SQLite         : `FLOOR((strftime('%J', to) - strftime('%J', from)) * 24 * 60 * 60 * 1000)`
      *   + We don't need to `FLOOR()` the result but it keeps the results consistent across the databases
      */
@@ -2862,7 +2870,7 @@ export enum OperatorType {
      *
      * -----
      *
-     * + MySQL        : `&`
+     * + MySQL        : `CAST(x & y AS SIGNED)`
      * + PostgreSQL   : `&`
      * + SQLite       : `&`
      */
@@ -2875,9 +2883,13 @@ export enum OperatorType {
      *
      * -----
      *
-     * + MySQL        : `~`
-     * + PostgreSQL   : `~`
-     * + SQLite       : `~`
+     * + MySQL        : `CAST(~x AS SIGNED)`
+     *   + `~1337` === `18446744073709550278`
+     *   + `CAST(~1337 AS SIGNED)` === `-1338`
+     * + PostgreSQL   : `~x`
+     *   + `~1337` === `-1338`
+     * + SQLite       : `~x`
+     *   + `~1337` === `-1338`
      */
     BITWISE_NOT = "BITWISE_NOT",
 
@@ -2888,7 +2900,7 @@ export enum OperatorType {
      *
      * -----
      *
-     * + MySQL        : `|`
+     * + MySQL        : `CAST(x | y AS SIGNED)`
      * + PostgreSQL   : `|`
      * + SQLite       : `|`
      */
@@ -2901,7 +2913,7 @@ export enum OperatorType {
      *
      * -----
      *
-     * + MySQL        : `^`
+     * + MySQL        : `CAST(x ^ y AS SIGNED)`
      * + PostgreSQL   : `#`
      * + SQLite       : None, use `(~(a&b))&(a|b)` instead
      *   + https://stackoverflow.com/questions/16440831/bitwise-xor-in-sqlite-bitwise-not-not-working-as-i-expect
@@ -2916,7 +2928,7 @@ export enum OperatorType {
      *
      * -----
      *
-     * + MySQL        : `<<`
+     * + MySQL        : `CAST(x << y AS SIGNED)`
      * + PostgreSQL   : `<<`
      * + SQLite       : `<<`
      */
@@ -2928,7 +2940,7 @@ export enum OperatorType {
      *
      * -----
      *
-     * + MySQL        : `>>`
+     * + MySQL        : `CAST(x >> y AS SIGNED)`
      * + PostgreSQL   : `>>`
      * + SQLite       : `>>`
      */

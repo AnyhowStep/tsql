@@ -1,3 +1,5 @@
+export * from "./bitwise";
+
 export * from "./abs";
 export * from "./add";
 export * from "./integer-div";
