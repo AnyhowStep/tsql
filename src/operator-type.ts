@@ -3241,4 +3241,35 @@ export enum OperatorType {
      * + SQLite     : `EXISTS(query)`
      */
     EXISTS = "EXISTS",
+
+    /*
+        https://dev.mysql.com/doc/refman/5.7/en/information-functions.html
+
+        Information Functions
+    */
+    /**
+     * + https://dev.mysql.com/doc/refman/8.0/en/information-functions.html#function_database
+     * + https://www.postgresql.org/docs/9.2/functions-info.html
+     *
+     * -----
+     *
+     * + MySQL      : `DATABASE()`
+     * + PostgreSQL : `CURRENT_DATABASE()`
+     * + SQLite     : None. It does not make sense to ask what the current database is.
+     *   + Maybe just return dummy data like `"sqliteDb"`
+     */
+    CURRENT_DATABASE = "CURRENT_DATABASE",
+
+    /**
+     * + https://dev.mysql.com/doc/refman/5.7/en/information-functions.html#function_current-user
+     * + https://www.postgresql.org/docs/9.2/functions-info.html
+     *
+     * -----
+     *
+     * + MySQL      : `CURRENT_USER`
+     * + PostgreSQL : `CURRENT_USER`
+     * + SQLite     : None. It does not make sense to ask what the current user is.
+     *   + Maybe just return dummy data like `"sqliteUser"`
+     */
+    CURRENT_USER = "CURRENT_USER",
 }

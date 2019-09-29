@@ -231,6 +231,14 @@ export type OperatorOperand = {
         Subqueries with `EXISTS` or `NOT EXISTS`
     */
     [OperatorType.EXISTS]   : Operand1,
+
+    /*
+        https://dev.mysql.com/doc/refman/5.7/en/information-functions.html
+
+        Information Functions
+    */
+    [OperatorType.CURRENT_DATABASE]     : Operand0,
+    [OperatorType.CURRENT_USER]         : Operand0,
 };
 
 type AssertAssignable<ExpectedT, _ActualT extends ExpectedT> = never;
