@@ -142,6 +142,24 @@ export function initWorker (
                 });
                 return;
             }
+            case SqliteAction.CREATE_AGGREGATE: {
+                const db = await getOrCreateDb();
+                const indirectEval = eval;
+                const init = indirectEval("(" + data.init + ")");
+                const step = indirectEval("(" + data.step + ")");
+                const finalize = indirectEval("(" + data.finalize + ")");
+                db.create_aggregate(
+                    data.functionName,
+                    init,
+                    step,
+                    finalize
+                );
+                postMessage({
+                    id : data.id,
+                    action : data.action,
+                });
+                return;
+            }
             default: {
                 /**
                  * Explicitly check we have handled every case.

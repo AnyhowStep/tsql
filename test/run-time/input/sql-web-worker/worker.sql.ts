@@ -33,6 +33,7 @@ export enum SqliteAction {
     EXPORT = "EXPORT",
     CLOSE = "CLOSE",
     CREATE_FUNCTION = "CREATE_FUNCTION",
+    CREATE_AGGREGATE = "CREATE_AGGREGATE",
 }
 export type FromSqliteMessage = ToDiscriminatedUnion<
     & { id : number }
@@ -54,6 +55,9 @@ export type FromSqliteMessage = ToDiscriminatedUnion<
         }
         | {
             action : SqliteAction.CREATE_FUNCTION,
+        }
+        | {
+            action : SqliteAction.CREATE_AGGREGATE,
         }
         | {
             action : SqliteAction,
@@ -87,6 +91,28 @@ export type ToSqliteMessage = DistributeMerge<
              * ```
              */
             impl : string,
+        }
+        | {
+            action : SqliteAction.CREATE_AGGREGATE,
+            functionName : string,
+            /**
+             * ```ts
+             * (() => { return { count : 0 }; }).toString()
+             * ```
+             */
+            init : string,
+            /**
+             * ```ts
+             * ((state) => { ++state.count; }).toString()
+             * ```
+             */
+            step : string,
+            /**
+             * ```ts
+             * ((state) => state.count).toString()
+             * ```
+             */
+            finalize : string,
         }
     )
 >;

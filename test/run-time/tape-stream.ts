@@ -4,7 +4,9 @@ let assertCount = 0;
 let failCount = 0;
 tape.createStream({ objectMode : true }).on("data", (row) => {
     if (row.ok === false) {
-        console.error(row);
+        if (row.name !== "test exited without ending") {
+            console.error(row);
+        }
         ++failCount;
     }
     if (row.type === "assert") {

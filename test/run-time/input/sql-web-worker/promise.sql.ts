@@ -163,6 +163,27 @@ export class Connection {
             );
         });
     }
+    createAggregate<StateT> (
+        functionName : string,
+        init : () => StateT,
+        step : (state : StateT, ...args : unknown[]) => void,
+        finalize : (state : StateT) => unknown
+    ) {
+        return this.asyncQueue.acquire((worker) => {
+            return postMessage(
+                worker,
+                this.allocateId(),
+                SqliteAction.CREATE_AGGREGATE,
+                {
+                    functionName,
+                    init : init.toString(),
+                    step : step.toString(),
+                    finalize : finalize.toString(),
+                },
+                () => {},
+            );
+        });
+    }
 
     select (query : tsql.IQueryBase) : Promise<tsql.SelectResult> {
         const sql = tsql.AstUtil.toSql(query, sqliteSqlfier);

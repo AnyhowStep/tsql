@@ -781,113 +781,199 @@ Database = (function() {
   const bigintSignedMin = BigInt("-9223372036854775808");
   const bigintSignedMax = BigInt("9223372036854775807");
   const bigint32 = BigInt(32);
-  Database.prototype['create_function'] = function(name, func) {
-    var func_ptr, wrapped_func;
-    wrapped_func = function(cx, argc, argv) {
-      var arg, args, blobptr, data_func, error, i, k, ref, result, value_ptr, value_type;
-      args = [];
-      for (i = k = 0, ref = argc; 0 <= ref ? k < ref : k > ref; i = 0 <= ref ? ++k : --k) {
-        value_ptr = getValue(argv + (4 * i), 'i32');
-        value_type = sqlite3_value_type(value_ptr);
-        data_func = (function() {
-          switch (false) {
-            case value_type !== 1:
-              return function (ptr) {
-                const text = sqlite3_value_text(ptr);
-                return BigInt(text);
-              };
-            case value_type !== 2:
-              return sqlite3_value_double;
-            case value_type !== 3:
-              return sqlite3_value_text;
-            case value_type !== 4:
-              return function(ptr) {
-                var blob_arg, blob_ptr, j, l, ref1, size;
-                size = sqlite3_value_bytes(ptr);
-                blob_ptr = sqlite3_value_blob(ptr);
-                blob_arg = new Uint8Array(size);
-                for (j = l = 0, ref1 = size; 0 <= ref1 ? l < ref1 : l > ref1; j = 0 <= ref1 ? ++l : --l) {
-                  blob_arg[j] = HEAP8[blob_ptr + j];
-                }
-                return blob_arg;
-              };
-            default:
-              return function(ptr) {
-                return null;
-              };
-          }
-        })();
-        arg = data_func(value_ptr);
-        args.push(arg);
-      }
-      try {
-        result = func.apply(null, args);
-      } catch (error1) {
-        error = error1;
-        //console.error("user-defined function error", error);
-        sqlite3_result_error(cx, (typeof error == "string") ? error : String(error), -1);
-        return;
-      }
-
-      if (tm.TypeUtil.isBigInt(result)) {
-        //sqlite3_result_text(cx, result.toString(), -1, -1);
-        //sqlite3_result_double(cx, Number(result));
-        //sqlite3_result_int64(cx, result.toString());
-
-        if (
-          tm.BigIntUtil.greaterThanOrEqual(result, bigintSignedMin) &&
-          tm.BigIntUtil.lessThanOrEqual(result, bigintSignedMax)
-        ) {
-          const leftPart = tm.BigIntUtil.signedRightShift(result, bigint32);
-          const rightPart = tm.BigIntUtil.bitwiseXor(
-            tm.BigIntUtil.leftShift(leftPart, bigint32),
-            result
-          );
-          sqlite3_result_int64(cx, Number(rightPart), Number(leftPart));
-        } else {
-          sqlite3_result_error(cx, "INTEGER value is out of range in "+name+"(); must be between -9223372036854775808 and 9223372036854775807 inclusive", -1);
+  function parseFunctionArguments (argc, argv) {
+    var arg, args, data_func, k, ref, value_ptr, value_type;
+    args = [];
+    for (i = k = 0, ref = argc; 0 <= ref ? k < ref : k > ref; i = 0 <= ref ? ++k : --k) {
+      value_ptr = getValue(argv + (4 * i), 'i32');
+      value_type = sqlite3_value_type(value_ptr);
+      data_func = (function() {
+        switch (false) {
+          case value_type !== 1:
+            return function (ptr) {
+              const text = sqlite3_value_text(ptr);
+              return BigInt(text);
+            };
+          case value_type !== 2:
+            return sqlite3_value_double;
+          case value_type !== 3:
+            return sqlite3_value_text;
+          case value_type !== 4:
+            return function(ptr) {
+              var blob_arg, blob_ptr, j, l, ref1, size;
+              size = sqlite3_value_bytes(ptr);
+              blob_ptr = sqlite3_value_blob(ptr);
+              blob_arg = new Uint8Array(size);
+              for (j = l = 0, ref1 = size; 0 <= ref1 ? l < ref1 : l > ref1; j = 0 <= ref1 ? ++l : --l) {
+                blob_arg[j] = HEAP8[blob_ptr + j];
+              }
+              return blob_arg;
+            };
+          default:
+            return function(ptr) {
+              return null;
+            };
         }
-        return;
-      }
-
-      switch (typeof result) {
-        case 'boolean':
-          sqlite3_result_int(cx, result ? 1 : 0);
-          break;
-        case 'number':
-          if (isFinite(result)) {
-            sqlite3_result_double(cx, result);
-          } else {
-            sqlite3_result_error(cx, "DOUBLE value is out of range in "+name+"(); cannot be -Infinity, +Infinity, or NaN", -1);
-          }
-          break;
-        case 'string':
-          sqlite3_result_text(cx, result, -1, -1);
-          break;
-        case 'object':
-          if (result === null) {
-            sqlite3_result_null(cx);
-          } else if (result.length != null) {
-            blobptr = allocate(result, 'i8', ALLOC_NORMAL);
-            sqlite3_result_blob(cx, blobptr, result.length, -1);
-            _free(blobptr);
-          } else {
-            sqlite3_result_error(cx, "Wrong API use in "+name+"() : tried to return a value of an unknown type (" + result + ").", -1);
-          }
-          break;
-        default:
-          sqlite3_result_null(cx);
-      }
-    };
-    if (name in this.functions) {
-      removeFunction(this.functions[name]);
-      delete this.functions[name];
+      })();
+      arg = data_func(value_ptr);
+      args.push(arg);
     }
-    func_ptr = addFunction(wrapped_func);
-    this.functions[name] = func_ptr;
-    this.handleError(sqlite3_create_function_v2(this.db, name, func.length, SQLite.UTF8, 0, func_ptr, 0, 0, 0));
+    return args;
+  }
+  function setFunctionResult (cx, result) {
+    var blobptr;
+    if (tm.TypeUtil.isBigInt(result)) {
+      //sqlite3_result_text(cx, result.toString(), -1, -1);
+      //sqlite3_result_double(cx, Number(result));
+      //sqlite3_result_int64(cx, result.toString());
+
+      if (
+        tm.BigIntUtil.greaterThanOrEqual(result, bigintSignedMin) &&
+        tm.BigIntUtil.lessThanOrEqual(result, bigintSignedMax)
+      ) {
+        const leftPart = tm.BigIntUtil.signedRightShift(result, bigint32);
+        const rightPart = tm.BigIntUtil.bitwiseXor(
+          tm.BigIntUtil.leftShift(leftPart, bigint32),
+          result
+        );
+        sqlite3_result_int64(cx, Number(rightPart), Number(leftPart));
+      } else {
+        sqlite3_result_error(cx, "INTEGER value is out of range in "+name+"(); must be between -9223372036854775808 and 9223372036854775807 inclusive", -1);
+      }
+      return;
+    }
+
+    switch (typeof result) {
+      case 'boolean':
+        sqlite3_result_int(cx, result ? 1 : 0);
+        break;
+      case 'number':
+        if (isFinite(result)) {
+          sqlite3_result_double(cx, result);
+        } else {
+          sqlite3_result_error(cx, "DOUBLE value is out of range in "+name+"(); cannot be -Infinity, +Infinity, or NaN", -1);
+        }
+        break;
+      case 'string':
+        sqlite3_result_text(cx, result, -1, -1);
+        break;
+      case 'object':
+        if (result === null) {
+          sqlite3_result_null(cx);
+        } else if (result.length != null) {
+          blobptr = allocate(result, 'i8', ALLOC_NORMAL);
+          sqlite3_result_blob(cx, blobptr, result.length, -1);
+          _free(blobptr);
+        } else {
+          sqlite3_result_error(cx, "Wrong API use in "+name+"() : tried to return a value of an unknown type (" + result + ").", -1);
+        }
+        break;
+      default:
+        sqlite3_result_null(cx);
+    }
+  }
+  function invokeWithFunctionArguments(cx, func, args) {
+    try {
+      return func.apply(null, args);
+    } catch (error) {
+      //console.error("user-defined function error", error);
+      sqlite3_result_error(cx, (typeof error == "string") ? error : String(error), -1);
+      return undefined;
+    }
+  }
+  function allocateFunctionPointer (db, name, wrapped_func) {
+    if (name in db.functions) {
+      removeFunction(db.functions[name]);
+      delete db.functions[name];
+    }
+    const func_ptr = addFunction(wrapped_func);
+    db.functions[name] = func_ptr;
+    return func_ptr;
+  }
+  Database.prototype['create_function'] = function(name, func) {
+    const wrapped_func = function(cx, argc, argv) {
+      const args = parseFunctionArguments(argc, argv);
+      const result = invokeWithFunctionArguments(cx, func, args);
+      setFunctionResult(cx, result);
+    };
+
+    const func_ptr = allocateFunctionPointer(this, name, wrapped_func);
+
+    this.handleError(sqlite3_create_function_v2(
+      //db
+      this.db,
+      //zFunctionName
+      name,
+      //nArg
+      //If this parameter is -1,
+      //then the SQL function or aggregate may take any number of arguments between
+      //0 and the limit set by sqlite3_limit(SQLITE_LIMIT_FUNCTION_ARG)
+      /**
+       * @todo Implement vararg function
+       */
+      func.length,
+      //eTextRep
+      SQLite.UTF8,
+      //pApp
+      0,
+      //xFunc
+      func_ptr,
+      //xStep
+      0,
+      //xFinal
+      0,
+      //xDestroy
+      0
+    ));
     return this;
   };
+  Database.prototype['create_aggregate'] = function(name, init, step, finalize) {
+    let state = undefined;
+    const wrapped_step = function(cx, argc, argv) {
+      if (state === undefined) {
+        state = init();
+      }
+      const args = parseFunctionArguments(argc, argv);
+      invokeWithFunctionArguments(cx, step, [state, ...args]);
+    };
+    const wrapped_finalize = function (cx) {
+      const result = invokeWithFunctionArguments(cx, finalize, [state]);
+      setFunctionResult(cx, result);
+      state = undefined;
+    }
+
+    const step_ptr = allocateFunctionPointer(this, name, wrapped_step);
+    const finalize_ptr = allocateFunctionPointer(this, name + "__finalize", wrapped_finalize);
+
+    this.handleError(sqlite3_create_function_v2(
+      //db
+      this.db,
+      //zFunctionName
+      name,
+      //nArg
+      //If this parameter is -1,
+      //then the SQL function or aggregate may take any number of arguments between
+      //0 and the limit set by sqlite3_limit(SQLITE_LIMIT_FUNCTION_ARG)
+      /**
+       * @todo Implement vararg function
+       */
+      step.length-1,
+      //eTextRep
+      SQLite.UTF8,
+      //pApp
+      0,
+      //xFunc
+      0,
+      //xStep
+      step_ptr,
+      //xFinal
+      finalize_ptr,
+      //xDestroy
+      0
+    ));
+    return this;
+  };
+
 
   return Database;
 

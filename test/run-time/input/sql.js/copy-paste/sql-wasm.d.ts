@@ -163,6 +163,12 @@ export interface Database {
      * Register a custom function with SQLite
      */
     create_function (functionName : string, impl : (...args : unknown[]) => unknown) : this;
+    create_aggregate<StateT> (
+        functionName : string,
+        init : () => StateT,
+        step : (state : StateT, ...args : unknown[]) => void,
+        finalize : (state : StateT) => unknown
+    ) : this;
 
 }
 export interface Sqlite {
