@@ -1,4 +1,4 @@
-import {makeProjection2ToN, Projection2ToN} from "../factory";
+import {makeComparisonProjection2ToN, ComparisonProjection2ToN} from "../factory";
 import {OperatorType} from "../../operator-type";
 
 /**
@@ -19,6 +19,6 @@ import {OperatorType} from "../../operator-type";
  *
  * Also, it does not make much sense to get the `GREATEST` of 1 value.
  */
-export const greatest : Projection2ToN = makeProjection2ToN(
+export const greatest : ComparisonProjection2ToN = makeComparisonProjection2ToN(
     OperatorType.GREATEST
 );

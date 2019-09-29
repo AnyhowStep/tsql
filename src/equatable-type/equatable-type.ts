@@ -1,16 +1,8 @@
-/**
- * @todo Split this into,
- * + `EquatableExpr`
- * + `SortableExpr`
- *
- * + A `SortableExpr` is an `EquatableExpr`
- * + A `EquatableExpr` may not be a `SortableExpr`
- */
 import {PrimitiveExpr} from "../primitive-expr";
 import {Decimal} from "../decimal";
 
 /**
- * Any type with this tag is comparable.
+ * Any type with this tag is equatable.
  *
  * @todo Monitor this PR
  *
@@ -19,11 +11,7 @@ import {Decimal} from "../decimal";
 export type CustomEquatableType = { dbEquatable : void };
 
 /**
- * These types can be compared against using operators like,
- * + Greater Than
- * + Greater Than or Equal to
- * + Less Than
- * + Less Than or Equal to
+ * These types support the following operators,
  * + Equal to
  * + Not Equal to
  */

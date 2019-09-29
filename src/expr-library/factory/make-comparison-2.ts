@@ -1,15 +1,15 @@
 import * as tm from "type-mapping";
 import {ExprUtil} from "../../expr";
 import {RawExpr} from "../../raw-expr";
-import {NonNullEquatableType, EquatableTypeUtil} from "../../equatable-type";
+import {NonNullComparableType, ComparableTypeUtil} from "../../comparable-type";
 import {RawExprUtil} from "../../raw-expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
 export type Comparison2Return<
-    LeftT extends RawExpr<NonNullEquatableType>,
-    RightT extends RawExpr<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<LeftT>>>
+    LeftT extends RawExpr<NonNullComparableType>,
+    RightT extends RawExpr<ComparableTypeUtil.BaseNonNullComparableType<RawExprUtil.TypeOf<LeftT>>>
 > =
     ExprUtil.Intersect<
         boolean,
@@ -18,14 +18,14 @@ export type Comparison2Return<
 ;
 export type Comparison2 =
     <
-        LeftT extends RawExpr<NonNullEquatableType>,
+        LeftT extends RawExpr<NonNullComparableType>,
         /**
          * https://github.com/microsoft/TypeScript/issues/33002#issuecomment-523651736
          *
          * @todo Investigate
          */
         //RightT extends RawExpr<RawExprUtil.TypeOf<LeftT>>
-        RightT extends RawExpr<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<LeftT>>>
+        RightT extends RawExpr<ComparableTypeUtil.BaseNonNullComparableType<RawExprUtil.TypeOf<LeftT>>>
     >(
         left : LeftT,
         right : RightT
@@ -44,8 +44,8 @@ export function makeComparison2<OperatorTypeT extends OperatorType> (
     typeHint? : TypeHint
 ) : Comparison2 {
     const result : Comparison2 = <
-        LeftT extends RawExpr<NonNullEquatableType>,
-        RightT extends RawExpr<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<LeftT>>>
+        LeftT extends RawExpr<NonNullComparableType>,
+        RightT extends RawExpr<ComparableTypeUtil.BaseNonNullComparableType<RawExprUtil.TypeOf<LeftT>>>
     >(left : LeftT, right : RightT) : (
         Comparison2Return<LeftT, RightT>
     ) => {
