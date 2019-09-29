@@ -2,15 +2,15 @@ import {RawExpr, RawExprUtil} from "../../../raw-expr";
 import {ExprImpl} from "../../../expr/expr-impl";
 import {IUsedRef, UsedRefUtil} from "../../../used-ref";
 import {UninitializedCaseConditionBuilderImpl} from "./uninitialized-case-condition-builder-impl";
-import {ComparableExprUtil, ComparableExpr} from "../../../comparable-expr";
+import {EquatableTypeUtil, EquatableType} from "../../../equatable-type";
 
 export interface CaseConditionBuilder<
-    ResultT extends ComparableExpr,
+    ResultT extends EquatableType,
     UsedRefT extends IUsedRef
 > {
     when<
         ConditionT extends RawExpr<boolean>,
-        ThenT extends RawExpr<ComparableExprUtil.ComparableType<ResultT>|null>
+        ThenT extends RawExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
     > (
         condition : ConditionT,
         then : ThenT
@@ -37,7 +37,7 @@ export interface CaseConditionBuilder<
      */
     end () : ExprImpl<ResultT|null, UsedRefT>;
     else<
-        ElseT extends RawExpr<ComparableExprUtil.ComparableType<ResultT>|null>
+        ElseT extends RawExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
     > (
         elseResult : ElseT
     ) : (
@@ -55,7 +55,7 @@ export interface CaseConditionBuilder<
 export interface UninitializedCaseConditionBuilder {
     when<
         ConditionT extends RawExpr<boolean>,
-        ThenT extends RawExpr<ComparableExpr>
+        ThenT extends RawExpr<EquatableType>
     > (
         condition : ConditionT,
         then : ThenT

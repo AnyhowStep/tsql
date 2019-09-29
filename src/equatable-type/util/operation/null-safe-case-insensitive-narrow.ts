@@ -1,5 +1,5 @@
-import {NonNullComparableExpr, CustomComparableExpr} from "../../comparable-expr";
-import {NonNullComparableType} from "../query";
+import {EquatableType, CustomEquatableType} from "../../equatable-type";
+import {BaseEquatableType} from "../query";
 import {Decimal} from "../../../decimal";
 
 /**
@@ -22,11 +22,11 @@ import {Decimal} from "../../../decimal";
  *   There is no `Decimal-literal` type
  *
  */
-export type CaseInsensitiveNarrow<
-    A extends NonNullComparableExpr,
-    B extends A
+export type NullSafeCaseInsensitiveNarrow<
+    A extends EquatableType,
+    B extends A|null
 > = (
-    Extract<A, string|Buffer|Date|Decimal|CustomComparableExpr> extends never ?
+    Extract<A, string|Buffer|Date|Decimal|CustomEquatableType> extends never ?
     B :
-    NonNullComparableType<B>
+    BaseEquatableType<B>
 );

@@ -4,7 +4,7 @@
  */
 import {makeComparison2ToN, Comparison2ToN, Comparison1ToNReturn} from "../factory";
 import {OperatorType} from "../../operator-type";
-import {NonNullComparableExpr, ComparableExprUtil} from "../../comparable-expr";
+import {NonNullEquatableType, EquatableTypeUtil} from "../../equatable-type";
 import {RawExpr, RawExprUtil} from "../../raw-expr";
 import {ExprUtil} from "../../expr";
 
@@ -43,8 +43,8 @@ const notInArrayImpl : Comparison2ToN = makeComparison2ToN<OperatorType.NOT_IN>(
  * https://dev.mysql.com/doc/refman/8.0/en/any-in-some-subqueries.html
  */
 export function notInArray<
-    Arg0T extends RawExpr<NonNullComparableExpr>,
-    ArgsT extends readonly RawExpr<ComparableExprUtil.NonNullComparableType<RawExprUtil.TypeOf<Arg0T>>>[]
+    Arg0T extends RawExpr<NonNullEquatableType>,
+    ArgsT extends readonly RawExpr<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<Arg0T>>>[]
 > (
     arg0 : Arg0T,
     args : ArgsT

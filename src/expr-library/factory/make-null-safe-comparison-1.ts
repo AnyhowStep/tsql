@@ -5,11 +5,11 @@ import {RawExprUtil} from "../../raw-expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {ComparableExpr} from "../../comparable-expr";
+import {EquatableType} from "../../equatable-type";
 
 export type NullSafeComparison1 =
     <
-        RawExprT extends RawExpr<ComparableExpr>
+        RawExprT extends RawExpr<EquatableType>
     >(
         rawExpr : RawExprT
     ) => (
@@ -25,7 +25,7 @@ export function makeNullSafeComparison1<OperatorTypeT extends OperatorType> (
     typeHint? : TypeHint
 ) : NullSafeComparison1 {
     const result : NullSafeComparison1 = <
-        RawExprT extends RawExpr<ComparableExpr>
+        RawExprT extends RawExpr<EquatableType>
     >(
         rawExpr : RawExprT
     ) : (

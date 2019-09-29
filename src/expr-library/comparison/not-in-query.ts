@@ -7,7 +7,7 @@ import {QueryBaseUtil} from "../../query-base";
 import {Expr, expr} from "../../expr";
 import {OperatorType} from "../../operator-type";
 import {RawExpr, RawExprUtil} from "../../raw-expr";
-import {NonNullComparableExpr, ComparableExprUtil} from "../../comparable-expr";
+import {NonNullEquatableType, EquatableTypeUtil} from "../../equatable-type";
 import {OperatorNodeUtil} from "../../ast";
 
 /**
@@ -59,8 +59,8 @@ import {OperatorNodeUtil} from "../../ast";
  * ```
  */
 export function notInQuery<
-    RawExprT extends RawExpr<NonNullComparableExpr>,
-    QueryT extends QueryBaseUtil.OneSelectItem<ComparableExprUtil.NonNullComparableType<RawExprUtil.TypeOf<RawExprT>>>
+    RawExprT extends RawExpr<NonNullEquatableType>,
+    QueryT extends QueryBaseUtil.OneSelectItem<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<RawExprT>>>
 > (
     rawExpr : RawExprT,
     query : QueryT

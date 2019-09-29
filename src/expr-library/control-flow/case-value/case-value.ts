@@ -2,16 +2,16 @@ import {RawExpr, RawExprUtil} from "../../../raw-expr";
 import {ExprImpl} from "../../../expr/expr-impl";
 import {IUsedRef, UsedRefUtil} from "../../../used-ref";
 import {UninitializedCaseValueBuilderImpl} from "./uninitialized-case-value-builder-impl";
-import {NonNullComparableExpr, ComparableExprUtil, ComparableExpr} from "../../../comparable-expr";
+import {NonNullEquatableType, EquatableTypeUtil, EquatableType} from "../../../equatable-type";
 
 export interface CaseValueBuilder<
-    ValueT extends NonNullComparableExpr,
-    ResultT extends ComparableExpr,
+    ValueT extends NonNullEquatableType,
+    ResultT extends EquatableType,
     UsedRefT extends IUsedRef
 > {
     when<
         CompareValueT extends RawExpr<ValueT>,
-        ThenT extends RawExpr<ComparableExprUtil.ComparableType<ResultT>|null>
+        ThenT extends RawExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
     > (
         compareValue : CompareValueT,
         then : ThenT
@@ -39,7 +39,7 @@ export interface CaseValueBuilder<
      */
     end () : ExprImpl<ResultT|null, UsedRefT>;
     else<
-        ElseT extends RawExpr<ComparableExprUtil.ComparableType<ResultT>|null>
+        ElseT extends RawExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
     > (
         elseResult : ElseT
     ) : (
@@ -54,10 +54,10 @@ export interface CaseValueBuilder<
         }
     );
 }
-export interface UninitializedCaseValueBuilder<ValueT extends NonNullComparableExpr, UsedRefT extends IUsedRef> {
+export interface UninitializedCaseValueBuilder<ValueT extends NonNullEquatableType, UsedRefT extends IUsedRef> {
     when<
         CompareValueT extends RawExpr<ValueT>,
-        ThenT extends RawExpr<ComparableExpr>
+        ThenT extends RawExpr<EquatableType>
     > (
         compareValue : CompareValueT,
         then : ThenT
@@ -73,17 +73,17 @@ export interface UninitializedCaseValueBuilder<ValueT extends NonNullComparableE
     );
 }
 export function caseValue<
-    ValueExprT extends RawExpr<NonNullComparableExpr>
+    ValueExprT extends RawExpr<NonNullEquatableType>
 > (
     valueExpr : ValueExprT
 ) : (
     UninitializedCaseValueBuilder<
-        ComparableExprUtil.NonNullComparableType<RawExprUtil.TypeOf<ValueExprT>>,
+        EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<ValueExprT>>,
         RawExprUtil.UsedRef<ValueExprT>
     >
 ) {
     return new UninitializedCaseValueBuilderImpl<
-        ComparableExprUtil.NonNullComparableType<RawExprUtil.TypeOf<ValueExprT>>,
+        EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<ValueExprT>>,
         RawExprUtil.UsedRef<ValueExprT>
     >(
         RawExprUtil.usedRef<ValueExprT>(valueExpr),
@@ -93,7 +93,7 @@ export function caseValue<
          * @todo Investigate type instantiation exessively deep error
          */
         UninitializedCaseValueBuilder<
-            ComparableExprUtil.NonNullComparableType<RawExprUtil.TypeOf<ValueExprT>>,
+            EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<ValueExprT>>,
             RawExprUtil.UsedRef<ValueExprT>
         >
     );

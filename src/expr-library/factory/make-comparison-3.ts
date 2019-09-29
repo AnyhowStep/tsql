@@ -1,16 +1,16 @@
 import * as tm from "type-mapping";
 import {ExprUtil} from "../../expr";
 import {RawExpr} from "../../raw-expr";
-import {NonNullComparableExpr, ComparableExprUtil} from "../../comparable-expr";
+import {NonNullEquatableType, EquatableTypeUtil} from "../../equatable-type";
 import {RawExprUtil} from "../../raw-expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
 export type Comparison3Return<
-    LeftT extends RawExpr<NonNullComparableExpr>,
-    MidT extends RawExpr<ComparableExprUtil.NonNullComparableType<RawExprUtil.TypeOf<LeftT>>>,
-    RightT extends RawExpr<ComparableExprUtil.NonNullComparableType<RawExprUtil.TypeOf<LeftT>>>
+    LeftT extends RawExpr<NonNullEquatableType>,
+    MidT extends RawExpr<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<LeftT>>>,
+    RightT extends RawExpr<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<LeftT>>>
 > =
     ExprUtil.Intersect<
         boolean,
@@ -19,15 +19,15 @@ export type Comparison3Return<
 ;
 export type Comparison3 =
     <
-        LeftT extends RawExpr<NonNullComparableExpr>,
-        MidT extends RawExpr<ComparableExprUtil.NonNullComparableType<RawExprUtil.TypeOf<LeftT>>>,
+        LeftT extends RawExpr<NonNullEquatableType>,
+        MidT extends RawExpr<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<LeftT>>>,
         /**
          * https://github.com/microsoft/TypeScript/issues/33002#issuecomment-523651736
          *
          * @todo Investigate
          */
         //RightT extends RawExpr<RawExprUtil.TypeOf<LeftT>>
-        RightT extends RawExpr<ComparableExprUtil.NonNullComparableType<RawExprUtil.TypeOf<LeftT>>>
+        RightT extends RawExpr<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<LeftT>>>
     >(
         left : LeftT,
         mid : MidT,
@@ -47,9 +47,9 @@ export function makeComparison3<OperatorTypeT extends OperatorType> (
     typeHint? : TypeHint
 ) : Comparison3 {
     const result : Comparison3 = <
-        LeftT extends RawExpr<NonNullComparableExpr>,
-        MidT extends RawExpr<ComparableExprUtil.NonNullComparableType<RawExprUtil.TypeOf<LeftT>>>,
-        RightT extends RawExpr<ComparableExprUtil.NonNullComparableType<RawExprUtil.TypeOf<LeftT>>>
+        LeftT extends RawExpr<NonNullEquatableType>,
+        MidT extends RawExpr<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<LeftT>>>,
+        RightT extends RawExpr<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<LeftT>>>
     >(left : LeftT, mid : MidT, right : RightT) : (
         ExprUtil.Intersect<
             boolean,

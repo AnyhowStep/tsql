@@ -4,13 +4,13 @@ import {ExprUtil} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {NonNullComparableExpr, ComparableExprUtil} from "../../comparable-expr";
+import {NonNullEquatableType, EquatableTypeUtil} from "../../equatable-type";
 import {makeOperator2ToN} from "./make-operator-2-to-n";
 
 export type Comparison2ToNReturn<
-    Arg0T extends RawExpr<NonNullComparableExpr>,
-    Arg1T extends RawExpr<ComparableExprUtil.NonNullComparableType<RawExprUtil.TypeOf<Arg0T>>>,
-    ArgsT extends readonly RawExpr<ComparableExprUtil.NonNullComparableType<RawExprUtil.TypeOf<Arg0T>>>[]
+    Arg0T extends RawExpr<NonNullEquatableType>,
+    Arg1T extends RawExpr<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<Arg0T>>>,
+    ArgsT extends readonly RawExpr<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<Arg0T>>>[]
 > =
     ExprUtil.Intersect<
         boolean,
@@ -19,9 +19,9 @@ export type Comparison2ToNReturn<
 ;
 export type Comparison2ToN =
     <
-        Arg0T extends RawExpr<NonNullComparableExpr>,
-        Arg1T extends RawExpr<ComparableExprUtil.NonNullComparableType<RawExprUtil.TypeOf<Arg0T>>>,
-        ArgsT extends readonly RawExpr<ComparableExprUtil.NonNullComparableType<RawExprUtil.TypeOf<Arg0T>>>[]
+        Arg0T extends RawExpr<NonNullEquatableType>,
+        Arg1T extends RawExpr<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<Arg0T>>>,
+        ArgsT extends readonly RawExpr<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<Arg0T>>>[]
     > (
         arg0 : Arg0T,
         arg1 : Arg1T,

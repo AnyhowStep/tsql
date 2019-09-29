@@ -1,15 +1,15 @@
 import {RawExprUtil, RawExpr} from "../../raw-expr";
 import {UninitializedCaseValueBuilder, caseValue} from "./case-value";
-import {NonNullComparableExpr, ComparableExprUtil} from "../../comparable-expr";
+import {NonNullEquatableType, EquatableTypeUtil} from "../../equatable-type";
 import {UninitializedCaseConditionBuilder, caseCondition} from "./case-condition";
 
 function caseConstructor<
-    ValueExprT extends RawExpr<NonNullComparableExpr>
+    ValueExprT extends RawExpr<NonNullEquatableType>
 > (
     valueExpr : ValueExprT
 ) : (
     UninitializedCaseValueBuilder<
-        ComparableExprUtil.NonNullComparableType<RawExprUtil.TypeOf<ValueExprT>>,
+        EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<ValueExprT>>,
         RawExprUtil.UsedRef<ValueExprT>
     >
 );

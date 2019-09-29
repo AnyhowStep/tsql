@@ -4,10 +4,10 @@ import {ExprImpl, expr} from "../../../expr/expr-impl";
 import {IUsedRef, UsedRefUtil} from "../../../used-ref";
 import {CaseConditionNode} from "../../../ast";
 import {CaseConditionBuilder} from "./case-condition";
-import {ComparableExpr, ComparableExprUtil} from "../../../comparable-expr";
+import {EquatableType, EquatableTypeUtil} from "../../../equatable-type";
 
 export class CaseConditionBuilderImpl<
-    ResultT extends ComparableExpr,
+    ResultT extends EquatableType,
     UsedRefT extends IUsedRef
 > implements CaseConditionBuilder<ResultT, UsedRefT> {
     private readonly resultMappers : readonly tm.SafeMapper<ResultT>[];
@@ -26,7 +26,7 @@ export class CaseConditionBuilderImpl<
 
     when<
         ConditionT extends RawExpr<boolean>,
-        ThenT extends RawExpr<ComparableExprUtil.ComparableType<ResultT>|null>
+        ThenT extends RawExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
     > (
         condition : ConditionT,
         then : ThenT
@@ -90,7 +90,7 @@ export class CaseConditionBuilderImpl<
         );
     }
     else<
-        ElseT extends RawExpr<ComparableExprUtil.ComparableType<ResultT>|null>
+        ElseT extends RawExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
     > (
         elseResult : ElseT
     ) : (

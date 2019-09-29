@@ -1,7 +1,7 @@
 import {RawExpr, RawExprUtil} from "../../../raw-expr";
 import {CaseConditionBuilder, UninitializedCaseConditionBuilder} from "./case-condition";
 import {CaseConditionBuilderImpl} from "./case-condition-builder-impl";
-import {ComparableExpr} from "../../../comparable-expr";
+import {EquatableType} from "../../../equatable-type";
 
 export class UninitializedCaseConditionBuilderImpl implements UninitializedCaseConditionBuilder {
     constructor () {
@@ -9,7 +9,7 @@ export class UninitializedCaseConditionBuilderImpl implements UninitializedCaseC
 
     when<
         ConditionT extends RawExpr<boolean>,
-        ThenT extends RawExpr<ComparableExpr>
+        ThenT extends RawExpr<EquatableType>
     > (
         condition : ConditionT,
         then : ThenT

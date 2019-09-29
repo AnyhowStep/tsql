@@ -16,7 +16,7 @@ import {Decimal} from "../decimal";
  *
  * https://github.com/microsoft/TypeScript/pull/33290
  */
-export type CustomComparableExpr = { dbComparable : void };
+export type CustomEquatableType = { dbEquatable : void };
 
 /**
  * These types can be compared against using operators like,
@@ -27,5 +27,5 @@ export type CustomComparableExpr = { dbComparable : void };
  * + Equal to
  * + Not Equal to
  */
-export type ComparableExpr = PrimitiveExpr|Decimal|CustomComparableExpr;
-export type NonNullComparableExpr = Exclude<ComparableExpr, null>;
+export type EquatableType = PrimitiveExpr|Decimal|CustomEquatableType;
+export type NonNullEquatableType = Exclude<EquatableType, null>;

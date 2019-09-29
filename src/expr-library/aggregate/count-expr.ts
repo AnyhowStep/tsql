@@ -1,10 +1,11 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
-import {makeOperator2} from "../factory";
-import {AnyRawExpr} from "../../raw-expr";
+import {makeOperator2, Operator1} from "../factory";
+import {RawExpr} from "../../raw-expr";
 import {ExprUtil} from "../../expr";
+import {EquatableType} from "../../equatable-type";
 
-const countExprImpl = makeOperator2<OperatorType.AGGREGATE_COUNT_EXPR, boolean, any, bigint>(
+const countExprImpl = makeOperator2<OperatorType.AGGREGATE_COUNT_EXPR, boolean, EquatableType, bigint>(
     OperatorType.AGGREGATE_COUNT_EXPR,
     /**
      * Should not return a value less than zero
@@ -12,8 +13,8 @@ const countExprImpl = makeOperator2<OperatorType.AGGREGATE_COUNT_EXPR, boolean, 
     tm.mysql.bigIntUnsigned()
 );
 
-export const countExprDistinct = <
-    ArgT extends AnyRawExpr
+export const countExprDistinct : Operator1<EquatableType, bigint> = <
+    ArgT extends RawExpr<EquatableType>
 >(
     arg : ArgT
 ) : (
@@ -22,8 +23,8 @@ export const countExprDistinct = <
     return countExprImpl(true, arg);
 };
 
-export const countExprAll = <
-    ArgT extends AnyRawExpr
+export const countExprAll : Operator1<EquatableType, bigint> = <
+    ArgT extends RawExpr<EquatableType>
 >(
     arg : ArgT
 ) : (

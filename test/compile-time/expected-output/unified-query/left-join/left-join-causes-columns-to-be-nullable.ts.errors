@@ -1,11 +1,11 @@
 [
   {
     "messageText": {
-      "messageText": "Argument of type 'Column<{ tableAlias: \"myOtherTable\"; columnAlias: \"myOtherTableId\"; mapper: Mapper<unknown, bigint | null>; }>' is not assignable to parameter of type 'string | number | bigint | boolean | Date | Buffer | IExpr<{ mapper: Mapper<unknown, string | number | bigint | boolean | Date | Buffer | Decimal | CustomComparableExpr>; usedRef: IUsedRef<...>; }> | IColumn<...> | IExprSelectItem<...> | (IQueryBase<...> & IQueryBase<...>)'.",
+      "messageText": "Argument of type 'Column<{ tableAlias: \"myOtherTable\"; columnAlias: \"myOtherTableId\"; mapper: Mapper<unknown, bigint | null>; }>' is not assignable to parameter of type 'string | number | bigint | boolean | Date | Buffer | IExpr<{ mapper: Mapper<unknown, string | number | bigint | boolean | Date | Buffer | Decimal | CustomEquatableType>; usedRef: IUsedRef<never>; }> | IColumn<...> | IExprSelectItem<...> | (IQueryBase<...> & IQueryBase<...>)'.",
       "category": 1,
       "code": 2345,
       "next": {
-        "messageText": "Type 'Column<{ tableAlias: \"myOtherTable\"; columnAlias: \"myOtherTableId\"; mapper: Mapper<unknown, bigint | null>; }>' is not assignable to type 'IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, string | number | bigint | boolean | Date | Buffer | Decimal | CustomComparableExpr>; }>'.",
+        "messageText": "Type 'Column<{ tableAlias: \"myOtherTable\"; columnAlias: \"myOtherTableId\"; mapper: Mapper<unknown, bigint | null>; }>' is not assignable to type 'IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, string | number | bigint | boolean | Date | Buffer | Decimal | CustomEquatableType>; }>'.",
         "category": 1,
         "code": 2322,
         "next": {
@@ -13,15 +13,15 @@
           "category": 1,
           "code": 2326,
           "next": {
-            "messageText": "Type 'Mapper<unknown, bigint | null>' is not assignable to type 'Mapper<unknown, string | number | bigint | boolean | Date | Buffer | Decimal | CustomComparableExpr>'.",
+            "messageText": "Type 'Mapper<unknown, bigint | null>' is not assignable to type 'Mapper<unknown, string | number | bigint | boolean | Date | Buffer | Decimal | CustomEquatableType>'.",
             "category": 1,
             "code": 2322,
             "next": {
-              "messageText": "Type 'bigint | null' is not assignable to type 'string | number | bigint | boolean | Date | Buffer | Decimal | CustomComparableExpr'.",
+              "messageText": "Type 'bigint | null' is not assignable to type 'string | number | bigint | boolean | Date | Buffer | Decimal | CustomEquatableType'.",
               "category": 1,
               "code": 2322,
               "next": {
-                "messageText": "Type 'null' is not assignable to type 'string | number | bigint | boolean | Date | Buffer | Decimal | CustomComparableExpr'.",
+                "messageText": "Type 'null' is not assignable to type 'string | number | bigint | boolean | Date | Buffer | Decimal | CustomEquatableType'.",
                 "category": 1,
                 "code": 2322
               }
