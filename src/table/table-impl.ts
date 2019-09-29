@@ -4,6 +4,11 @@ import * as TableUtil from "./util";
 import {MapperMap} from "../mapper-map";
 import {Ast} from "../ast";
 import {ColumnUtil} from "../column";
+import {SelectConnection} from "../execution";
+import {CandidateKey_NonUnion} from "../candidate-key";
+import {QueryUtil} from "../unified-query";
+import {StrictUnion} from "../type-util";
+import * as ExprLib from "../expr-library";
 /*import {PrimaryKey, PrimaryKeyUtil} from "../primary-key";
 import {CandidateKey, CandidateKeyUtil} from "../candidate-key";
 import {SuperKey, SuperKeyUtil} from "../super-key";*/
@@ -426,18 +431,6 @@ export class Table<DataT extends TableData> implements ITable {
     };
 
     /*
-    setImmutable () : TableUtil.SetImmutable<this> {
-        return TableUtil.setImmutable(this);
-    }
-    setMutable<
-        DelegateT extends TableUtil.MutableDelegate<this>
-    > (
-        delegate : DelegateT
-    ) : (
-        TableUtil.SetMutable<this, DelegateT>
-    ) {
-        return TableUtil.setMutable(this, delegate);
-    }
     addParent<
         ParentT extends ITable
     > (
@@ -451,16 +444,27 @@ export class Table<DataT extends TableData> implements ITable {
     /*
     validate (connection : IConnection, result : TableUtil.ValidateTableResult) {
         return TableUtil.validate(this, connection, result);
-    }
+    }*/
 
-    assertExistsByCk (
-        connection : IConnection,
-        ck : CandidateKey<this>
+    assertExistsByCandidateKey (
+        connection : SelectConnection,
+        candidateKey : StrictUnion<CandidateKey_NonUnion<this>>
     ) : (
         Promise<void>
     ) {
-        return QueryUtil.assertExistsByCk(connection, this, ck);
+        return QueryUtil.newInstance()
+            .from<this>(
+                this as (
+                    this &
+                    QueryUtil.AssertValidCurrentJoin<QueryUtil.NewInstance, this>
+                )
+            )
+            .where(() => (
+                ExprLib.eqCandidateKey(this, candidateKey) as any
+            ))
+            .assertExists(connection);
     }
+    /*
     assertExistsByPk (
         this : Extract<this, TableWithPk>,
         connection : IConnection,
