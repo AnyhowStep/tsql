@@ -21,55 +21,68 @@ to `TRUE`/`FALSE`.
 
 In general, allowing `NULL` values in the `WHERE` clause indicates sloppy logic.
 
+-----
+
+By forcing the `WHERE` clause to only allow 2-valued logic,
+we make our queries safer by explicitly deciding how to handle potentially ambiguous cases.
+
+-----
+
 For example,
 ```sql
 SELECT
     *
 FROM
-    device
+    person
 WHERE
     (
         SELECT
-            deviceEnabled.isEnabled
+            organDonationConsent.consented
         FROM
-            deviceEnabled
+            organDonationConsent
         WHERE
-            device.deviceId = deviceEnabled.deviceId
+            person.personId = organDonationConsent.personId
         ORDER BY
-            deviceEnabled.toggledAt DESC
+            organDonationConsent.occurredAt DESC
         LIMIT
             1
     )
 ```
 
-The above query attempts to `SELECT` all devices that are enabled.
+The above query attempts to `SELECT` all `person`s that have `consented` to organ donation.
 
 However, it is possible for the subquery in the `WHERE` clause to evaluate to `NULL`.
-Particularly if the `device` has no matching rows in `deviceEnabled`.
+Particularly if the `person` has no matching rows in `organDonationConsent`.
 
-If we do not have a record of the `device` ever being enabled or disabled,
-what is the default state of the `device`?
+-----
 
-If we want the default state of the device to be `enabled`, then the above query will give us the wrong result!
-In this case, we should rewrite the query,
+When the subquery evaluates to `NULL`, has the `person` consented to organ donation or not?
+
+In some countries, the lack of explicit consent/refusal implies **consent**.
+In others, it implies **refusal**.
+
+If all `person`s lacking explicit consent/refusal are assumed to have `consented`,
+then the above query will return fewer rows than expected!
+
+If **consent** is implied, we should rewrite the query,
 ```sql
 SELECT
     *
 FROM
-    device
+    person
 WHERE
-    -- If the device has no record of being enabled or disabled,
-    -- we assume the device is enabled
+    -- If the `person` has no record of being consenting/refusing,
+    -- we assume the `person` has `consented`
     COALESCE(
         (
             SELECT
-                deviceEnabled.isEnabled
+                organDonationConsent.consented
             FROM
-                deviceEnabled
+                organDonationConsent
             WHERE
-                device.deviceId = deviceEnabled.deviceId
+                person.personId = organDonationConsent.personId
             ORDER BY
-                deviceEnabled.toggledAt DESC
+                organDonationConsent.occurredAt DESC
             LIMIT
                 1
         ),
