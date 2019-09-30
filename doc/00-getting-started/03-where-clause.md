@@ -92,4 +92,155 @@ WHERE
 
 -----
 
-### TODO More documentation
+### `WHERE` Overview
+
+The most basic method to build the `WHERE` clause,
++ `.where(whereDelegate)`
+
+These methods build upon `.where()` to simplify common `WHERE` clause conditions,
++ `.whereEqPrimaryKey(tableDelegate, primaryKey)`
++ `.whereEqCandidateKey(tableDelegate, candidateKey)`
++ `.whereEqSuperKey(tableDelegate, superKey)`
++ `.whereEqColumns(tableDelegate, row)`
++ `.whereEqOuterQueryPrimaryKey(srcDelegate, dstDelegate)`
+
+These methods let you **narrow** the type of columns in the `FROM` clause,
++ `.whereEq(columnDelegate, value)`
++ `.whereIsNotNull(columnDelegate)`
++ `.whereIsNull(columnDelegate)`
++ `.whereNullSafeEq(columnDelegate, value)`
+
+-----
+
+### `.where()`
+
+An arbitrary `WHERE` clause may be specified with,
+```ts
+import * as tsql from "@tsql/tsql";
+/**
+ * Assume we already defined `myTable`, `otherTable` elsewhere
+ */
+import {myTable, otherTable} from "./table";
+
+const myQuery0 = tsql.from(myTable)
+    /**
+     * With only one table in the `FROM` clause,
+     * we do not need to qualify columns with a table name.
+     */
+    .where(columns => tsql.gt(
+        /**
+         * This refers to `myTable.myColumn`
+         */
+        columns.myColumn,
+        9000n
+    ));
+```
+
+The above is the same as writing,
+```sql
+FROM
+    myTable
+WHERE
+    myTable.myColumn > 9000
+```
+
+-----
+
+```ts
+import * as tsql from "@tsql/tsql";
+/**
+ * Assume we already defined `myTable`, `otherTable` elsewhere
+ */
+import {myTable, otherTable} from "./table";
+
+const myQuery = tsql.from(myTable)
+    .innerJoinUsingPrimaryKey(
+        tables => tables.myTable
+        otherTable
+    )
+    /**
+     * With multiple tables in the `FROM` clause,
+     * we need to qualify columns with a table name.
+     */
+    .where(columns => tsql.and(
+        tsql.gt(
+            /**
+             * This refers to `myTable.myColumn`
+             */
+            columns.myTable.myColumn,
+            9000n
+        ),
+        tsql.eq(
+            /**
+             * This refers to `otherTable.otherColumn`
+             */
+            columns.otherTable.otherColumn,
+            69n
+        )
+    ));
+```
+
+The above is the same as writing,
+```sql
+FROM
+    myTable
+INNER JOIN
+    otherTable
+ON
+    -- innerJoinUsingPrimaryKey()
+    -- Assume `otherTableId` is the primary key of `otherTable`
+    myTable.otherTableId = otherTable.otherTableId
+WHERE
+    (myTable.myColumn > 9000) AND
+    (otherTable.otherColumn = 69)
+```
+
+-----
+
+You may call the `.where()` method repeatedly.
+Each invocation `AND`s the current and new conditions.
+
+```ts
+import * as tsql from "@tsql/tsql";
+/**
+ * Assume we already defined `myTable`, `otherTable` elsewhere
+ */
+import {myTable, otherTable} from "./table";
+
+const myQuery = tsql.from(myTable)
+    .innerJoinUsingPrimaryKey(
+        tables => tables.myTable
+        otherTable
+    )
+    /**
+     * With multiple tables in the `FROM` clause,
+     * we need to qualify columns with a table name.
+     */
+    .where(columns => tsql.gt(
+        columns.myTable.myColumn,
+        9000n
+    ))
+    .where(columns => tsql.eq(
+        columns.otherTable.otherColumn,
+        69n
+    )
+    .where(columns => tsql.isNotNull(
+        columns.otherTable.otherColumn2
+    );
+```
+
+The above is the same as writing,
+```sql
+FROM
+    myTable
+INNER JOIN
+    otherTable
+ON
+    -- innerJoinUsingPrimaryKey()
+    -- Assume `otherTableId` is the primary key of `otherTable`
+    myTable.otherTableId = otherTable.otherTableId
+WHERE
+    (myTable.myColumn > 9000) AND
+    (otherTable.otherColumn = 69) AND
+    (otherTable.otherColumn2 IS NOT NULL)
+```
