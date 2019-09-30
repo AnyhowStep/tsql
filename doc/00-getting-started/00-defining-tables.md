@@ -8,7 +8,7 @@ we need to tell the library about the tables in our schema.
 To define a table,
 
 ```ts
-import * as tsql from "@tsql/mysql-5.7";
+import * as tsql from "@tsql/tsql";
 
 /**
  * `"myTable"` is the alias of the table in our schema.
@@ -91,7 +91,7 @@ For example,
 We use the `.addColumns()` method to add columns to the table.
 
 ```ts
-import * as tsql from "@tsql/mysql-5.7";
+import * as tsql from "@tsql/tsql";
 /**
  * `type-mapping` is a batteries-included data mapping library.
  * It contains data mappers suitable for use with MySQL.
@@ -104,7 +104,7 @@ const myTable = tsql.table("myTable")
          * This mapper accepts `string|number|bigint` and
          * outputs a `bigint` greater than or equal to zero.
          */
-        myId : tm.mysql.bigIntUnsigned(),
+        myId : tm.mysql.bigIntSigned(),
         /**
          * This mapper accepts `string` and
          * ensures the string is of length 255 or less.
@@ -139,13 +139,13 @@ However, their values can still be changed *outside* of this library.
 To make all non-`GENERATED` columns **mutable**,
 
 ```ts
-import * as tsql from "@tsql/mysql-5.7";
+import * as tsql from "@tsql/tsql";
 import * as tm from "type-mapping/fluent";
 
 const myTable = tsql.table("myTable")
     //These 3 columns are immutable by default
     .addColumns({
-        myId : tm.mysql.bigIntUnsigned(),
+        myId : tm.mysql.bigIntSigned(),
         title : tm.mysql.varChar(255),
         createdAt : tm.mysql.dateTime(),
     })
@@ -182,12 +182,12 @@ In MySQL, a `UNIQUE KEY` roughly corresponds to the concept of a candidate key.
 To add a candidate key,
 
 ```ts
-import * as tsql from "@tsql/mysql-5.7";
+import * as tsql from "@tsql/tsql";
 import * as tm from "type-mapping/fluent";
 
 const creditCardUsage = tsql.table("creditCardUsage")
     .addColumns({
-        creditCardUsageId : tm.mysql.bigIntUnsigned(),
+        creditCardUsageId : tm.mysql.bigIntSigned(),
         creditCardNumber : tm.mysql.varChar(255),
         /**
          * `DATETIME(3)` gives us millisecond precision.
@@ -268,13 +268,13 @@ It is recommended for every table to have a `PRIMARY KEY`.
 To set the `PRIMARY KEY`,
 
 ```ts
-import * as tsql from "@tsql/mysql-5.7";
+import * as tsql from "@tsql/tsql";
 import * as tm from "type-mapping/fluent";
 
 const pageOfBook = tsql.table("pageOfBook")
     .addColumns({
-        bookId : tm.mysql.bigIntUnsigned(),
-        pageNumber : tm.mysql.bigIntUnsigned(),
+        bookId : tm.mysql.bigIntSigned(),
+        pageNumber : tm.mysql.bigIntSigned(),
         content : tm.mysql.longText(),
     })
     /**
@@ -311,7 +311,7 @@ This is a convenience method for calling `.setPrimaryKey()`
 and returning only one column,
 
 ```ts
-import * as tsql from "@tsql/mysql-5.7";
+import * as tsql from "@tsql/tsql";
 import * as tm from "type-mapping/fluent";
 
 /**
@@ -323,7 +323,7 @@ import * as tm from "type-mapping/fluent";
  */
 const uploadSuccess = tsql.table("uploadSuccess")
     .addColumns({
-        uploadId : tm.mysql.bigIntUnsigned(),
+        uploadId : tm.mysql.bigIntSigned(),
         downloadUrl : tm.mysql.varChar(2048),
         successAt : tm.mysql.dateTime(3),
     })
@@ -346,12 +346,12 @@ when a new row is inserted (if no value is explicitly assigned).
 To set the `AUTO_INCREMENT` column,
 
 ```ts
-import * as tsql from "@tsql/mysql-5.7";
+import * as tsql from "@tsql/tsql";
 import * as tm from "type-mapping/fluent";
 
 const user = tsql.table("user")
     .addColumns({
-        userId : tm.mysql.bigIntUnsigned(),
+        userId : tm.mysql.bigIntSigned(),
         emailAddress : tm.mysql.varChar(255),
         banned : tm.mysql.boolean(),
     })
@@ -400,7 +400,7 @@ An example of a column with an explicit default value is,
 To specify which columns have explicit default values,
 
 ```ts
-import * as tsql from "@tsql/mysql-5.7";
+import * as tsql from "@tsql/tsql";
 import * as tm from "type-mapping/fluent";
 
 const universe = tsql.table("universe")
@@ -439,14 +439,14 @@ An example of a `GENERATED` column is,
 To specify which columns are `GENERATED`,
 
 ```ts
-import * as tsql from "@tsql/mysql-5.7";
+import * as tsql from "@tsql/tsql";
 import * as tm from "type-mapping/fluent";
 
 const player = tsql.table("player")
     .addColumns({
-        playerId : tm.mysql.bigIntUnsigned(),
-        winCount : tm.mysql.bigIntUnsigned(),
-        lossCount : tm.mysql.bigIntUnsigned(),
+        playerId : tm.mysql.bigIntSigned(),
+        winCount : tm.mysql.bigIntSigned(),
+        lossCount : tm.mysql.bigIntSigned(),
         /**
          * Assume this is `GENERATED ALWAYS AS ((winCount + 0e0) / (lossCount + 0e0))`
          */
@@ -469,12 +469,12 @@ const player = tsql.table("player")
 Makes specific columns mutable,
 
 ```ts
-import * as tsql from "@tsql/mysql-5.7";
+import * as tsql from "@tsql/tsql";
 import * as tm from "type-mapping/fluent";
 
 const plugin = tsql.table("plugin")
     .addColumns({
-        pluginId : tm.mysql.bigIntUnsigned(),
+        pluginId : tm.mysql.bigIntSigned(),
         //Min length 1, max length 255
         version : tm.mysql.varChar(1, 255),
         //Min length 1, max length 255
@@ -505,12 +505,12 @@ Good for look-up tables, or append-only tables.
 To disable `DELETE` statements for a table,
 
 ```ts
-import * as tsql from "@tsql/mysql-5.7";
+import * as tsql from "@tsql/tsql";
 import * as tm from "type-mapping/fluent";
 
 const temperatureSensorData = tsql.table("temperatureSensorData")
     .addColumns({
-        sensorId : tm.mysql.bigIntUnsigned(),
+        sensorId : tm.mysql.bigIntSigned(),
         loggedAt : tm.mysql.dateTime(3),
         degreesCelsius : tm.mysql.double(),
     })
@@ -533,12 +533,12 @@ Good for look-up tables.
 To disable `INSERT` statements for a table,
 
 ```ts
-import * as tsql from "@tsql/mysql-5.7";
+import * as tsql from "@tsql/tsql";
 import * as tm from "type-mapping/fluent";
 
 const businessType = tsql.table("businessType")
     .addColumns({
-        businessTypeId : tm.mysql.bigIntUnsigned(),
+        businessTypeId : tm.mysql.bigIntSigned(),
         name : tm.mysql.varChar(255),
         description  :tm.mysql.varChar(2048),
     })
@@ -555,12 +555,12 @@ const businessType = tsql.table("businessType")
 Makes all columns immutable,
 
 ```ts
-import * as tsql from "@tsql/mysql-5.7";
+import * as tsql from "@tsql/tsql";
 import * as tm from "type-mapping/fluent";
 
 const businessType = tsql.table("businessType")
     .addColumns({
-        businessTypeId : tm.mysql.bigIntUnsigned(),
+        businessTypeId : tm.mysql.bigIntSigned(),
         name : tm.mysql.varChar(255),
         description : tm.mysql.varChar(2048),
     })
@@ -574,12 +574,12 @@ const businessType = tsql.table("businessType")
 Removes columns from the set of columns with explicit default values,
 
 ```ts
-import * as tsql from "@tsql/mysql-5.7";
+import * as tsql from "@tsql/tsql";
 import * as tm from "type-mapping/fluent";
 
 const businessType = tsql.table("businessType")
     .addColumns({
-        businessTypeId : tm.mysql.bigIntUnsigned(),
+        businessTypeId : tm.mysql.bigIntSigned(),
         name : tm.mysql.varChar(255),
         description  :tm.mysql.varChar(2048),
     })
@@ -616,12 +616,12 @@ However, if you do any of the above in your application logic,
 you will want to remove it from the set of `GENERATED` columns,
 
 ```ts
-import * as tsql from "@tsql/mysql-5.7";
+import * as tsql from "@tsql/tsql";
 import * as tm from "type-mapping/fluent";
 
 const user = tsql.table("user")
     .addColumns({
-        userId : tm.mysql.bigIntUnsigned(),
+        userId : tm.mysql.bigIntSigned(),
         emailAddress : tm.mysql.varChar(255),
         banned : tm.mysql.boolean(),
     })
@@ -642,12 +642,12 @@ const user = tsql.table("user")
 Makes columns immutable,
 
 ```ts
-import * as tsql from "@tsql/mysql-5.7";
+import * as tsql from "@tsql/tsql";
 import * as tm from "type-mapping/fluent";
 
 const businessType = tsql.table("businessType")
     .addColumns({
-        businessTypeId : tm.mysql.bigIntUnsigned(),
+        businessTypeId : tm.mysql.bigIntSigned(),
         name : tm.mysql.varChar(255),
         description  :tm.mysql.varChar(2048),
     })
@@ -698,7 +698,7 @@ To use both in the same query, you will need to alias (`.as()`) one of the table
 To explicitly set the schema name of a table,
 
 ```ts
-import * as tsql from "@tsql/mysql-5.7";
+import * as tsql from "@tsql/tsql";
 import * as tm from "type-mapping/fluent";
 
 const COLUMNS = tsql.table("COLUMNS")
@@ -725,7 +725,7 @@ Completely different from `.as()`, which aliases a table for a query.
 This method is generally used when you have multiple tables with a similar structure,
 
 ```ts
-import * as tsql from "@tsql/mysql-5.7";
+import * as tsql from "@tsql/tsql";
 import * as tm from "type-mapping/fluent";
 
 /**
@@ -749,7 +749,7 @@ const enumBase = tsql.table("enumBase")
 const musicGenre = enumBase
     .setTableAlias("musicGenre")
     .addColumns({
-        musicGenreId : tm.mysql.bigIntUnsigned(),
+        musicGenreId : tm.mysql.bigIntSigned(),
     })
     .setAutoIncrement(c => c.musicGenreId);
 
@@ -762,7 +762,7 @@ const musicGenre = enumBase
 const instrument = enumBase
     .setTableAlias("instrument")
     .addColumns({
-        instrumentId : tm.mysql.bigIntUnsigned(),
+        instrumentId : tm.mysql.bigIntSigned(),
     })
     .setAutoIncrement(c => c.instrumentId);
 ```

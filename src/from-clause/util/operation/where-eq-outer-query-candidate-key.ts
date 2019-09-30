@@ -122,7 +122,7 @@ export function whereEqOuterQueryCandidateKey<
             DstT
         >
     ),
-    eqCandidateKeyofTableDelegate : EqCandidateKeyOfTableDelegate<SrcT, DstT, SrcColumnsT>
+    eqCandidateKeyOfTableDelegate : EqCandidateKeyOfTableDelegate<SrcT, DstT, SrcColumnsT>
 ) : (
     {
         fromClause : WhereEqOuterQueryCandidateKey<FromClauseT>,
@@ -159,7 +159,7 @@ export function whereEqOuterQueryCandidateKey<
             () => eqCandidateKeyOfTable<SrcT, DstT, SrcColumnsT>(
                 src,
                 dst,
-                eqCandidateKeyofTableDelegate
+                eqCandidateKeyOfTableDelegate
             ) as any
         ),
     };

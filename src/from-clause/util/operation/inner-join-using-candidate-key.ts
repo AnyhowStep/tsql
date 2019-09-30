@@ -109,7 +109,7 @@ export function innerJoinUsingCandidateKey<
         & AssertNonUnion<DstT>
         & AssertValidCurrentJoinBase<FromClauseT, DstT>
     ),
-    eqCandidateKeyofTableDelegate : ExprLib.EqCandidateKeyOfTableDelegate<SrcT, DstT, SrcColumnsT>
+    eqCandidateKeyOfTableDelegate : ExprLib.EqCandidateKeyOfTableDelegate<SrcT, DstT, SrcColumnsT>
 ) : (
     InnerJoinUsingCandidateKey<FromClauseT, DstT>
 ) {
@@ -143,7 +143,7 @@ export function innerJoinUsingCandidateKey<
             >(
                 src,
                 aliasedTable,
-                eqCandidateKeyofTableDelegate
+                eqCandidateKeyOfTableDelegate
             ) as any;
         }
     );

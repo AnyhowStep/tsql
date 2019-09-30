@@ -109,7 +109,7 @@ export function leftJoinUsingCandidateKey<
         & AssertNonUnion<DstT>
         & AssertValidCurrentJoinBase<FromClauseT, DstT>
     ),
-    eqCandidateKeyofTableDelegate : ExprLib.EqCandidateKeyOfTableDelegate<SrcT, DstT, SrcColumnsT>
+    eqCandidateKeyOfTableDelegate : ExprLib.EqCandidateKeyOfTableDelegate<SrcT, DstT, SrcColumnsT>
 ) : (
     LeftJoinUsingCandidateKey<FromClauseT, DstT>
 ) {
@@ -143,7 +143,7 @@ export function leftJoinUsingCandidateKey<
             >(
                 src,
                 aliasedTable,
-                eqCandidateKeyofTableDelegate
+                eqCandidateKeyOfTableDelegate
             ) as any;
         }
     );

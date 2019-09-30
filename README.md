@@ -41,7 +41,7 @@ This project will have multiple subprojects,
       + It's the version I use for work and personal projects at the moment
     + SQLite
       + https://github.com/kripken/sql.js/
-      + Specific version undecided
+      + 3.28
       + One of the goals is to write a query once and execute it both on a server and browser client environment
     + PostgreSQL
       + Specific version undecided
@@ -114,6 +114,8 @@ See the internal `Buffer` declaration [here](src/buffer.ts)
 ### Documentation
 
 0. [Defining Tables](doc/00-getting-started/00-defining-tables.md)
+0. [Data Types](doc/00-getting-started/01-data-types.md)
+0. [`FROM` clause](doc/00-getting-started/02-from-clause.md)
 
 -----
 

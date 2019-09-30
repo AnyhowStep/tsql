@@ -315,7 +315,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
             & TypeUtil.AssertNonUnion<DstT>
             & QueryUtil.AssertValidCurrentJoin<Extract<this, QueryUtil.AfterFromClause>, DstT>
         ),
-        eqCandidateKeyofTableDelegate : ExprLib.EqCandidateKeyOfTableDelegate<SrcT, DstT, SrcColumnsT>
+        eqCandidateKeyOfTableDelegate : ExprLib.EqCandidateKeyOfTableDelegate<SrcT, DstT, SrcColumnsT>
     ) : (
         QueryUtil.InnerJoinUsingCandidateKey<Extract<this, QueryUtil.AfterFromClause>, DstT>
     ) {
@@ -328,7 +328,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
             this,
             srcDelegate,
             aliasedTable,
-            eqCandidateKeyofTableDelegate
+            eqCandidateKeyOfTableDelegate
         );
     }
 
@@ -402,7 +402,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
             & TypeUtil.AssertNonUnion<DstT>
             & QueryUtil.AssertValidCurrentJoin<Extract<this, QueryUtil.AfterFromClause>, DstT>
         ),
-        eqCandidateKeyofTableDelegate : ExprLib.EqCandidateKeyOfTableDelegate<SrcT, DstT, SrcColumnsT>
+        eqCandidateKeyOfTableDelegate : ExprLib.EqCandidateKeyOfTableDelegate<SrcT, DstT, SrcColumnsT>
     ) : (
         QueryUtil.LeftJoinUsingCandidateKey<Extract<this, QueryUtil.AfterFromClause>, DstT>
     ) {
@@ -415,7 +415,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
             this,
             srcDelegate,
             aliasedTable,
-            eqCandidateKeyofTableDelegate
+            eqCandidateKeyOfTableDelegate
         );
     }
 

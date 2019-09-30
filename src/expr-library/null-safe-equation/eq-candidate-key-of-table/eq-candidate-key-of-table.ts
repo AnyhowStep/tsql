@@ -31,7 +31,7 @@ import {nullSafeEq} from "../null-safe-eq";
  *
  * @param src - A table that does not need keys
  * @param dst - The table with at least one candidate key to compare against
- * @param eqCandidateKeyofTableDelegate - A function that returns columns from `src` matching columns of `dst`
+ * @param eqCandidateKeyOfTableDelegate - A function that returns columns from `src` matching columns of `dst`
  */
 export type EqCandidateKeyOfTable =
     <
@@ -41,7 +41,7 @@ export type EqCandidateKeyOfTable =
     > (
         src : SrcT,
         dst : DstT,
-        eqCandidateKeyofTableDelegate : EqCandidateKeyOfTableDelegate<SrcT, DstT, SrcColumnsT>
+        eqCandidateKeyOfTableDelegate : EqCandidateKeyOfTableDelegate<SrcT, DstT, SrcColumnsT>
     ) => (
         Expr<{
             mapper : tm.SafeMapper<boolean>,
@@ -58,7 +58,7 @@ export const eqCandidateKeyOfTable : EqCandidateKeyOfTable = (
     > (
         src : SrcT,
         dst : DstT,
-        eqCandidateKeyofTableDelegate : EqCandidateKeyOfTableDelegate<SrcT, DstT, SrcColumnsT>
+        eqCandidateKeyOfTableDelegate : EqCandidateKeyOfTableDelegate<SrcT, DstT, SrcColumnsT>
     ) : (
         Expr<{
             mapper : tm.SafeMapper<boolean>,
@@ -80,7 +80,7 @@ export const eqCandidateKeyOfTable : EqCandidateKeyOfTable = (
             src.columns,
             columnAliases
         );
-        const srcColumns : SrcColumnsT = eqCandidateKeyofTableDelegate(columns);
+        const srcColumns : SrcColumnsT = eqCandidateKeyOfTableDelegate(columns);
         const dstCandidateKey = assertNullSafeComparableToCandidateKeysOfTable(
             src,
             dst,
