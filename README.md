@@ -3,6 +3,14 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
 
 -----
 
+### Documentation
+
+0. [Defining Tables](doc/00-getting-started/00-defining-tables.md)
+0. [Data Types](doc/00-getting-started/01-data-types.md)
+0. [`FROM` clause](doc/00-getting-started/02-from-clause.md)
+
+-----
+
 ### Goals
 
 + As much as possible, compile-time type-safety!
@@ -108,14 +116,6 @@ interface Buffer {
 
 See the internal `Buffer` declaration [here](src/buffer.ts)
 
-
------
-
-### Documentation
-
-0. [Defining Tables](doc/00-getting-started/00-defining-tables.md)
-0. [Data Types](doc/00-getting-started/01-data-types.md)
-0. [`FROM` clause](doc/00-getting-started/02-from-clause.md)
 
 -----
 
