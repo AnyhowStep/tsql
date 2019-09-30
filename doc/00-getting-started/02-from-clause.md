@@ -57,6 +57,12 @@ At the moment, `RIGHT JOIN`s are not supported because,
 
 -----
 
+### `FULL OUTER JOIN`s
+
+MySQL does not support `FULL OUTER JOIN`. So, this library does not support it, either.
+
+-----
+
 ### `.crossJoin()`
 
 To use a `CROSS JOIN`,
@@ -81,9 +87,9 @@ CROSS JOIN
 
 -----
 
-### `.innerJoin()`
+### `.innerJoin()/.leftJoin()`
 
-To use an `INNER JOIN`,
+To use an `INNER JOIN`/`LEFT JOIN`,
 ```ts
 import * as tsql from "@tsql/tsql";
 /**
@@ -92,6 +98,9 @@ import * as tsql from "@tsql/tsql";
 import {myTable, otherTable} from "./table";
 
 const myQuery = tsql.from(myTable)
+    /**
+     * You may substitute this for `.leftJoin()`
+     */
     .innerJoin(
         otherTable,
         /**
@@ -113,4 +122,140 @@ INNER JOIN
 ON
     (myTable.myTableId = otherTable.myTableId) AND
     (otherTable.otherColumn >= 9001)
+```
+
+-----
+
+### `.innerJoinUsingPrimaryKey()/.leftJoinUsingPrimaryKey()`
+
+Usually, when `JOIN`ing tables, we perform an equi-join using the primary key of a table,
+```ts
+import * as tsql from "@tsql/tsql";
+import * as tm from "type-mapping/fluent";
+
+const loanedBook = tsql.table("loanedBook")
+    .addColumns({
+        loanId : tm.mysql.bigIntSigned(),
+        bookId : tm.mysql.varChar(255),
+        dueAt : tm.mysql.dateTime(3),
+        returnedAt : tm.mysql.dateTime(3).orNull(),
+    })
+    /**
+     * A book may only be lent out once per loan.
+     */
+    .setPrimaryKey(columns => [
+        columns.loanId,
+        columns.bookId,
+    ]);
+const fine = tsql.table("fine")
+    .addColumns({
+        fineId : tm.mysql.bigIntSigned(),
+        loanId : tm.mysql.bigIntSigned(),
+        bookId : tm.mysql.varChar(255),
+        amount : tm.mysql.bigIntSigned(),
+        createdAt : tm.mysql.dateTime(3),
+        paidAt : tm.mysql.dateTime(3).orNull(),
+    })
+    /**
+     * A `loanedBook` may incur multiple fines,
+     * particularly if they are overdue and fines are ignored.
+     */
+    .setAutoIncrement(columns => columns.fineId)
+    .addExplicitDefaultValue(columns => [
+        columns.createdAt,
+    ]);
+
+const myQuery = tsql.from(fine)
+    /**
+     * You may substitute this for `.leftJoinUsingPrimaryKey()`
+     */
+    .innerJoinUsingPrimaryKey(
+        tables => tables.fine,
+        /**
+         * Has primary key (loanId, bookId)
+         */
+        loanedBook
+    );
+```
+
+The above is the same as writing,
+```sql
+FROM
+    fine
+INNER JOIN
+    loanedBook
+ON
+    (fine.loanId = loanedBook.loanId) AND
+    (fine.bookId = loanedBook.bookId)
+```
+
+-----
+
+### `.innerJoinUsingCandidateKey()/.leftJoinUsingCandidateKey()`
+
+You may also perform an equi-join using candidate keys of a table,
+```ts
+import * as tsql from "@tsql/tsql";
+import * as tm from "type-mapping/fluent";
+
+const reservation = tsql.table("reservation")
+    .addColumns({
+        userId : tm.mysql.bigIntSigned(),
+        roomId : tm.mysql.varChar(255),
+        timeSlotId : tm.mysql.bigIntSigned(),
+    })
+    /**
+     * A user may only have one reservation per time-slot
+     */
+    .addCandidateKey(columns => [
+        columns.userId,
+        columns.timeSlotId,
+    ])
+    /**
+     * A room may only be reserved once per time-slot
+     */
+    .addCandidateKey(columns => [
+        columns.roomId,
+        columns.timeSlotId,
+    ]);
+const cateredFood = tsql.table("cateredFood")
+    .addColumns({
+        roomId : tm.mysql.varChar(255),
+        timeSlotId : tm.mysql.bigIntSigned(),
+        foodId : tm.mysql.bigIntSigned(),
+        quantity : tm.mysql.bigIntSigned(),
+    })
+    /**
+     * A reservation may have multiple kinds of food catered.
+     * Each kind of food should only be recorded once per reservation.
+     */
+    .setPrimaryKey(columns => [
+        columns.roomId,
+        columns.timeSlotId,
+        columns.foodId,
+    ]);
+
+const myQuery = tsql.from(cateredFood)
+    /**
+     * You may substitute this for `.leftJoinUsingCandidateKey()`
+     */
+    .innerJoinUsingCandidateKey(
+        tables => tables.cateredFood,
+        reservation,
+        /**
+         * Must be a candidate key of `reservation`
+         */
+        columns => [columns.roomId, columns.timeSlotId]
+    );
+```
+
+The above is the same as writing,
+```sql
+FROM
+    cateredFood
+INNER JOIN
+    reservation
+ON
+    (cateredFood.roomId = reservation.roomId) AND
+    (cateredFood.timeSlotId = reservation.timeSlotId)
 ```
