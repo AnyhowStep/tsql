@@ -695,7 +695,20 @@ export const sqliteSqlfier : Sqlfier = {
             Date and Time Functions
             https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html
         */
-
+        [OperatorType.TIMESTAMPADD_DAY] : ({operands}) => functionCall(
+            "strftime",
+            [
+                pascalStyleEscapeString("%Y-%m-%d %H:%M:%f"),
+                operands[0],
+                insertBetween(
+                    [
+                        operands[1],
+                        pascalStyleEscapeString(" day")
+                    ],
+                    "||"
+                )
+            ]
+        ),
         [OperatorType.UTC_STRING_TO_TIMESTAMP_CONSTRUCTOR] : ({operands}) => functionCall(
             "strftime",
             [
