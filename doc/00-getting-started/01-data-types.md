@@ -20,6 +20,8 @@ SQL Type                    | TypeScript Type
 `CHAR`,`VARCHAR`,`TEXT`     | `string`
 `BINARY`,`VARBINARY`,`BLOB` | `Buffer`
 
+Additional SQL data types may be supported by database-specific libraries.
+
 -----
 
 ### `NULL`
