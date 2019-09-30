@@ -4,13 +4,16 @@ import * as TableUtil from "./util";
 import {MapperMap} from "../mapper-map";
 import {Ast} from "../ast";
 import {ColumnUtil} from "../column";
-import {SelectConnection} from "../execution";
+import {SelectConnection, ExecutionUtil} from "../execution";
 import {CandidateKey_NonUnion} from "../candidate-key";
 import {QueryUtil} from "../unified-query";
 import {StrictUnion} from "../type-util";
 import * as ExprLib from "../expr-library";
 import {PrimaryKey_Input} from "../primary-key";
 import {SuperKey_Input} from "../super-key";
+import {Row_NonUnion} from "../row";
+import {SelectClause, SelectDelegate} from "../select-clause";
+import {FromClauseUtil} from "../from-clause";
 /*import {PrimaryKey, PrimaryKeyUtil} from "../primary-key";
 import {CandidateKey, CandidateKeyUtil} from "../candidate-key";
 import {SuperKey, SuperKeyUtil} from "../super-key";*/
@@ -560,34 +563,66 @@ export class Table<DataT extends TableData> implements ITable {
             .exists(connection);
     }
 
-    /*
-    fetchOneByCk (
-        connection : IConnection,
-        ck : CandidateKey<this>
-    ) : Promise<Row<this>>;
-    fetchOneByCk<
-        DelegateT extends QueryUtil.SelectDelegate<
-            QueryUtil.From<QueryUtil.NewInstance, this>
-        >
+    async fetchOneByCandidateKey (
+        connection : SelectConnection,
+        candidateKey : StrictUnion<CandidateKey_NonUnion<this>>
+    ) : Promise<Row_NonUnion<this>>;
+    async fetchOneByCandidateKey<
+        SelectsT extends SelectClause
     > (
-        connection : IConnection,
-        ck : CandidateKey<this>,
-        delegate : QueryUtil.AssertValidSelectDelegate<
-            QueryUtil.From<QueryUtil.NewInstance, this>,
-            DelegateT
+        connection : SelectConnection,
+        candidateKey : StrictUnion<CandidateKey_NonUnion<this>>,
+        delegate : SelectDelegate<
+            FromClauseUtil.From<
+                FromClauseUtil.NewInstance,
+                this
+            >,
+            undefined,
+            SelectsT
         >
-    ) : Promise<QueryUtil.UnmappedTypeNoJoins<ReturnType<DelegateT>>>;
-    fetchOneByCk (
-        connection : IConnection,
-        ck : CandidateKey<this>,
+    ) : Promise<ExecutionUtil.UnmappedFlattenedRow<
+        QueryUtil.Select<
+            QueryUtil.From<
+                QueryUtil.NewInstance,
+                this
+            >,
+            SelectsT
+        >
+    >>;
+    async fetchOneByCandidateKey (
+        connection : SelectConnection,
+        candidateKey : StrictUnion<CandidateKey_NonUnion<this>>,
         delegate? : (...args : any[]) => any[]
-    ) {
+    ) : Promise<any> {
         if (delegate == undefined) {
-            return QueryUtil.fetchOneByCk(connection, this, ck);
+            return QueryUtil.newInstance()
+                .from<this>(
+                    this as (
+                        this &
+                        QueryUtil.AssertValidCurrentJoin<QueryUtil.NewInstance, this>
+                    )
+                )
+                .where(() => (
+                    ExprLib.eqCandidateKey(this, candidateKey) as any
+                ))
+                .select(((columns : any) => [columns]) as any)
+                .fetchOne(connection);
         } else {
-            return QueryUtil.fetchOneByCk(connection, this, ck, delegate as any);
+            return QueryUtil.newInstance()
+                .from<this>(
+                    this as (
+                        this &
+                        QueryUtil.AssertValidCurrentJoin<QueryUtil.NewInstance, this>
+                    )
+                )
+                .where(() => (
+                    ExprLib.eqCandidateKey(this, candidateKey) as any
+                ))
+                .select(delegate as any)
+                .fetchOne(connection);
         }
     }
+    /*
     fetchOneByPk (
         this : Extract<this, TableWithPk>,
         connection : IConnection,

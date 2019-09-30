@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Argument of type '{ myTableId: bigint; createdAt: Date; }' is not assignable to parameter of type '{ readonly myTableId: bigint; }'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Object literal may only specify known properties, and 'createdAt' does not exist in type '{ readonly myTableId: bigint; }'.",
+        "category": 1,
+        "code": 2353
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 22,
+    "start": 412
+  }
+]
