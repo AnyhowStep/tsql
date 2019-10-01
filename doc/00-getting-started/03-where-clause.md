@@ -106,9 +106,9 @@ These methods build upon `.where()` to simplify common `WHERE` clause conditions
 
 These methods let you **narrow** the type of columns in the `FROM` clause,
 + `.whereEq(columnDelegate, value)`
-+ `.whereIsNotNull(columnDelegate)`
-+ `.whereIsNull(columnDelegate)`
 + `.whereNullSafeEq(columnDelegate, value)`
++ `.whereIsNull(columnDelegate)`
++ `.whereIsNotNull(columnDelegate)`
 
 -----
 
@@ -512,3 +512,249 @@ EXISTS (
 ```
 
 The columns being checked for equality may contain `NULL` values. So, `.whereEqOuterQueryPrimaryKey()` internally uses [null-safe equality](01a-null-safe-equality.md).
+
+-----
+
+### `.whereEq()`
+
+The `.whereEq()` method narrows the type of **non-nullable** columns,
+```ts
+import * as tsql from "@tsql/tsql";
+import * as tm from "type-mapping/fluent";
+
+const customer = tsql.table("customer")
+    .addColumns({
+        customerId : tm.mysql.bigIntSigned(),
+        emailAddress : tm.mysql.varChar(255),
+        rewardsPoints : tm.mysql.bigIntSigned(),
+    })
+    .setAutoIncrement(columns => columns.customerId);
+
+tsql.from(customer)
+    .whereEq(
+        columns => columns.customerId,
+        1n
+    )
+    .select(columns => [columns])
+    //Assume we have this magical connection object acquired
+    .fetchOne(connection)
+    .then((row) => {
+        /**
+         * The type of `row` is inferred as,
+         * { customerId : 1n, emailAddress : string, rewardsPoints : bigint }
+         *
+         * Notice that `customerId`'s type was narrowed from `bigint` to `1n`
+         */
+        console.log(row);
+    });
+```
+
+The above is the same as writing,
+```sql
+SELECT
+    -- This will always be the value `1`
+    -- It can't be any other value because our `WHERE` clause
+    -- filters out all other values except `1`
+    customer.customerId,
+    -- An arbitrary string
+    customer.emailAddress,
+    -- An arbitrary integer
+    customer.rewardsPoints
+FROM
+    customer
+WHERE
+    -- Our very first customer!
+    customer.customerId = 1
+```
+
+`string` types are not narrowed to literal values because `.whereEq()` assumes case-insensitive string equality.
+
+-----
+
+### `.whereNullSafeEq()`
+
+The `.whereNullSafeEq()` method narrows the type of **nullable** columns,
+```ts
+import * as tsql from "@tsql/tsql";
+import * as tm from "type-mapping/fluent";
+
+const loanedBook = tsql.table("loanedBook")
+    .addColumns({
+        loanId : tm.mysql.bigIntSigned(),
+        bookId : tm.mysql.varChar(255),
+        dueAt : tm.mysql.dateTime(3),
+        returnedAt : tm.mysql.dateTime(3).orNull(),
+    })
+    /**
+     * A book may only be lent out once per loan.
+     */
+    .setPrimaryKey(columns => [
+        columns.loanId,
+        columns.bookId,
+    ]);
+
+tsql.from(loanedBook)
+    .whereNullSafeEq(
+        columns => columns.returnedAt,
+        new Date("2010-01-01T00:00:00.000Z")
+    )
+    .select(columns => [columns])
+    //Assume we have this magical connection object acquired
+    .fetchAll(connection)
+    .then((rows) => {
+        /**
+         * The type of `rows` is inferred as,
+         * { loanId : bigint, bookId : string, dueAt : Date, returnedAt : Date }[]
+         *
+         * Notice that `returnedAt`'s type was narrowed from `Date|null` to `Date`
+         */
+        console.log(rows);
+    });
+```
+
+The above is the same as writing,
+```sql
+SELECT
+    -- An arbitrary integer
+    loanedBook.loanId,
+    -- An arbitrary string
+    loanedBook.bookId,
+    -- An arbitrary Date
+    loanedBook.dueAt,
+    -- This will always be the value `Date`
+    -- It can't be any other value because our `WHERE` clause
+    -- filters out all other values except `Date`
+    loanedBook.returnedAt
+FROM
+    loanedBook
+WHERE
+    -- Which books where returned on 2010, New Year's Day, midnight?
+    -- `IS` is SQLite's null-safe equality operator
+    loanedBook.returnedAt IS '2010-01-01 00:00:00.000'
+```
+
+`string` types are not narrowed to literal values because `.whereNullSafeEq()` assumes case-insensitive string equality.
+
+-----
+
+### `.whereIsNull()`
+
+The `.whereIsNull()` method narrows the type of **nullable** columns,
+```ts
+import * as tsql from "@tsql/tsql";
+import * as tm from "type-mapping/fluent";
+
+const loanedBook = tsql.table("loanedBook")
+    .addColumns({
+        loanId : tm.mysql.bigIntSigned(),
+        bookId : tm.mysql.varChar(255),
+        dueAt : tm.mysql.dateTime(3),
+        returnedAt : tm.mysql.dateTime(3).orNull(),
+    })
+    /**
+     * A book may only be lent out once per loan.
+     */
+    .setPrimaryKey(columns => [
+        columns.loanId,
+        columns.bookId,
+    ]);
+
+tsql.from(loanedBook)
+    .whereIsNull(
+        columns => columns.returnedAt
+    )
+    .select(columns => [columns])
+    //Assume we have this magical connection object acquired
+    .fetchAll(connection)
+    .then((rows) => {
+        /**
+         * The type of `rows` is inferred as,
+         * { loanId : bigint, bookId : string, dueAt : Date, returnedAt : null }[]
+         *
+         * Notice that `returnedAt`'s type was narrowed from `Date|null` to `null`
+         */
+        console.log(rows);
+    });
+```
+
+The above is the same as writing,
+```sql
+SELECT
+    -- An arbitrary integer
+    loanedBook.loanId,
+    -- An arbitrary string
+    loanedBook.bookId,
+    -- An arbitrary Date
+    loanedBook.dueAt,
+    -- This will always be the value `null`
+    -- It can't be any other value because our `WHERE` clause
+    -- filters out all other values except `null`
+    loanedBook.returnedAt
+FROM
+    loanedBook
+WHERE
+    -- Which books have not been returned yet?
+    loanedBook.returnedAt IS NULL
+```
+
+-----
+
+### `.whereIsNotNull()`
+
+The `.whereIsNotNull()` method narrows the type of **nullable** columns,
+```ts
+import * as tsql from "@tsql/tsql";
+import * as tm from "type-mapping/fluent";
+
+const loanedBook = tsql.table("loanedBook")
+    .addColumns({
+        loanId : tm.mysql.bigIntSigned(),
+        bookId : tm.mysql.varChar(255),
+        dueAt : tm.mysql.dateTime(3),
+        returnedAt : tm.mysql.dateTime(3).orNull(),
+    })
+    /**
+     * A book may only be lent out once per loan.
+     */
+    .setPrimaryKey(columns => [
+        columns.loanId,
+        columns.bookId,
+    ]);
+
+tsql.from(loanedBook)
+    .whereIsNotNull(
+        columns => columns.returnedAt
+    )
+    .select(columns => [columns])
+    //Assume we have this magical connection object acquired
+    .fetchAll(connection)
+    .then((rows) => {
+        /**
+         * The type of `rows` is inferred as,
+         * { loanId : bigint, bookId : string, dueAt : Date, returnedAt : Date }[]
+         *
+         * Notice that `returnedAt`'s type was narrowed from `Date|null` to `Date`
+         */
+        console.log(rows);
+    });
+```
+
+The above is the same as writing,
+```sql
+SELECT
+    -- An arbitrary integer
+    loanedBook.loanId,
+    -- An arbitrary string
+    loanedBook.bookId,
+    -- An arbitrary Date
+    loanedBook.dueAt,
+    -- This will always be the value `Date`
+    -- It can't be any other value because our `WHERE` clause
+    -- filters out all other values except `Date`
+    loanedBook.returnedAt
+FROM
+    loanedBook
+WHERE
+    -- Which books have been returned?
+    loanedBook.returnedAt IS NOT NULL
+```
