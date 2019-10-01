@@ -16,6 +16,6 @@ PostgreSQL 9.4  | `IS NOT DISTINCT FROM`
 SQLite 3.28     | `IS`
 
 References,
-+ https://dev.mysql.com/doc/refman/8.0/en/comparison-operators.html#operator_equal-to
-+ https://www.postgresql.org/docs/9.1/functions-comparison.html
++ https://dev.mysql.com/doc/refman/5.7/en/comparison-operators.html#operator_equal-to
++ https://www.postgresql.org/docs/9.4/functions-comparison.html
 + https://www.sqlite.org/lang_expr.html#binaryops
