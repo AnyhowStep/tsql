@@ -344,7 +344,7 @@ WHERE
     (reservation.timeSlotId IS 999)
 ```
 
-Candidate keys may contain nullable columns. So, `whereEqCandidateKey()` internally uses [null-safe equality](01a-null-safe-equality.md).
+Candidate keys may contain nullable columns. So, `.whereEqCandidateKey()` internally uses [null-safe equality](01a-null-safe-equality.md).
 
 It is recommended to **only** pass **object literals** to `.whereEqCandidateKey()`.
 Excess property checks are disabled for non-object literals.
@@ -405,7 +405,7 @@ WHERE
     (reservation.extraInformationNoOneCaresAbout IS 'Hello, world!')
 ```
 
-Super keys may contain nullable columns. So, `whereEqSuperKey()` internally uses [null-safe equality](01a-null-safe-equality.md).
+Super keys may contain nullable columns. So, `.whereEqSuperKey()` internally uses [null-safe equality](01a-null-safe-equality.md).
 
 It is recommended to **only** pass **object literals** to `.whereEqSuperKey()`.
 Excess property checks are disabled for non-object literals.
@@ -459,10 +459,56 @@ WHERE
     (cateredFood.quantity IS 777)
 ```
 
-Columns may contain `NULL` values. So, `whereEqColumns()` internally uses [null-safe equality](01a-null-safe-equality.md).
+Columns may contain `NULL` values. So, `.whereEqColumns()` internally uses [null-safe equality](01a-null-safe-equality.md).
 
 It is recommended to **only** pass **object literals** to `.whereEqColumns()`.
 Excess property checks are disabled for non-object literals.
 Even if they were enabled, it would still be possible to slip in extra properties.
 
 Properties not part of the table's columns are ignored during run-time but may indicate lapses in logic.
+
+-----
+
+### `.whereEqOuterQueryPrimaryKey()`
+
+This is a convenience method meant for [correlated subqueries](02a-correlated-subqueries).
+Often times, when we have a correlated subquery, we're just interested in the rows that match a table's primary key.
+```ts
+import * as tsql from "@tsql/tsql";
+import * as tm from "type-mapping/fluent";
+
+const criminalRecord = tsql.table("criminalRecord")
+    .addColumns({
+        criminalRecordId : tm.mysql.bigIntSigned(),
+        personId : tm.mysql.bigIntSigned(),
+        dateOfOffense : tm.mysql.dateTime(3),
+        description : tm.mysql.longText(),
+    })
+    .setAutoIncrement(columns => columns.criminalRecordId);
+
+const hasCriminalRecord = tsql.exists(
+    tsql
+        //Assume a `person` table exists with primary key `(personId)`
+        .requireOuterQueryJoins(person)
+        .from(criminalRecord)
+        .whereEqOuterQueryPrimaryKey(
+            tables => tables.criminalRecord,
+            outerTables => outerTables.person
+        )
+);
+```
+
+The above is the same as writing,
+```sql
+EXISTS (
+    SELECT
+        *
+    FROM
+        criminalRecord
+    WHERE
+        -- `IS` is SQLite's null-safe equality operator
+        criminalRecord.personId IS person.personId
+)
+```
+
+The columns being checked for equality may contain `NULL` values. So, `.whereEqOuterQueryPrimaryKey()` internally uses [null-safe equality](01a-null-safe-equality.md).
