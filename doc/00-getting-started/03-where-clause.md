@@ -288,6 +288,12 @@ WHERE
     (loanedBook.bookId = 'ISBN-13: 9781492037651')
 ```
 
+It is recommended to **only** pass **object literals** to `.whereEqPrimaryKey()`.
+Excess property checks are disabled for non-object literals.
+Even if they were enabled, it would still be possible to slip in extra properties.
+
+Properties not part of the primary key are ignored during run-time but may indicate lapses in logic.
+
 -----
 
 ### `.whereEqCandidateKey()`
@@ -340,8 +346,123 @@ WHERE
 
 Candidate keys may contain nullable columns. So, `whereEqCandidateKey()` internally uses [null-safe equality](01a-null-safe-equality.md).
 
+It is recommended to **only** pass **object literals** to `.whereEqCandidateKey()`.
+Excess property checks are disabled for non-object literals.
+Even if they were enabled, it would still be possible to slip in extra properties.
+
+Properties not part of a candidate key are ignored during run-time but may indicate lapses in logic.
+
 -----
 
 ### `.whereEqSuperKey()`
 
-TODO
+A convenience method that lets you keep rows that match a given super key value,
+```ts
+import * as tsql from "@tsql/tsql";
+import * as tm from "type-mapping/fluent";
+
+const reservation = tsql.table("reservation")
+    .addColumns({
+        userId : tm.mysql.bigIntSigned(),
+        roomId : tm.mysql.varChar(255),
+        timeSlotId : tm.mysql.bigIntSigned(),
+        extraInformationNoOneCaresAbout : tm.mysql.varChar(255),
+    })
+    /**
+     * A user may only have one reservation per time-slot
+     */
+    .addCandidateKey(columns => [
+        columns.userId,
+        columns.timeSlotId,
+    ])
+    /**
+     * A room may only be reserved once per time-slot
+     */
+    .addCandidateKey(columns => [
+        columns.roomId,
+        columns.timeSlotId,
+    ]);
+
+const myQuery = tsql.from(reservation)
+    .whereEqSuperKey(
+        tables => tables.reservation,
+        {
+            roomId : "Red Room",
+            timeSlotId : 999n,
+            extraInformationNoOneCaresAbout : "Hello, world!",
+        }
+    );
+```
+
+The above is the same as writing,
+```sql
+FROM
+    reservation
+WHERE
+    -- `IS` is SQLite's null-safe equality operator
+    (reservation.roomId IS 'Red Room') AND
+    (reservation.timeSlotId IS 999)
+    (reservation.extraInformationNoOneCaresAbout IS 'Hello, world!')
+```
+
+Super keys may contain nullable columns. So, `whereEqSuperKey()` internally uses [null-safe equality](01a-null-safe-equality.md).
+
+It is recommended to **only** pass **object literals** to `.whereEqSuperKey()`.
+Excess property checks are disabled for non-object literals.
+Even if they were enabled, it would still be possible to slip in extra properties.
+
+Properties not part of a super key are ignored during run-time but may indicate lapses in logic.
+
+-----
+
+### `.whereEqColumns()`
+
+A convenience method that lets you keep rows that match a given set of values,
+```ts
+import * as tsql from "@tsql/tsql";
+import * as tm from "type-mapping/fluent";
+
+const cateredFood = tsql.table("cateredFood")
+    .addColumns({
+        roomId : tm.mysql.varChar(255),
+        timeSlotId : tm.mysql.bigIntSigned(),
+        foodId : tm.mysql.bigIntSigned(),
+        quantity : tm.mysql.bigIntSigned(),
+    })
+    /**
+     * A reservation may have multiple kinds of food catered.
+     * Each kind of food should only be recorded once per reservation.
+     */
+    .setPrimaryKey(columns => [
+        columns.roomId,
+        columns.timeSlotId,
+        columns.foodId,
+    ]);
+
+const myQuery = tsql.from(cateredFood)
+    .whereEqColumns(
+        tables => tables.cateredFood,
+        {
+            foodId : 80085n,
+            quantity : 777n,
+        }
+    );
+```
+
+The above is the same as writing,
+```sql
+FROM
+    cateredFood
+WHERE
+    -- `IS` is SQLite's null-safe equality operator
+    (cateredFood.foodId IS 80085) AND
+    (cateredFood.quantity IS 777)
+```
+
+Columns may contain `NULL` values. So, `whereEqColumns()` internally uses [null-safe equality](01a-null-safe-equality.md).
+
+It is recommended to **only** pass **object literals** to `.whereEqColumns()`.
+Excess property checks are disabled for non-object literals.
+Even if they were enabled, it would still be possible to slip in extra properties.
+
+Properties not part of the table's columns are ignored during run-time but may indicate lapses in logic.
