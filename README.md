@@ -7,7 +7,10 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
 
 0. [Defining Tables](doc/00-getting-started/00-defining-tables.md)
 0. [Data Types](doc/00-getting-started/01-data-types.md)
-0. [`FROM` clause](doc/00-getting-started/02-from-clause.md)
+
+   0. [Null-Safe Equality](doc/00-getting-started/02a-correlated-subqueries.md)
+
+0. [`FROM` clause](doc/00-getting-started/01a-null-safe-equality.md)
 
    0. [Correlated Subqueries](doc/00-getting-started/02a-correlated-subqueries.md)
 

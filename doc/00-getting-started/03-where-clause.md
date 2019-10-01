@@ -244,3 +244,104 @@ WHERE
     (otherTable.otherColumn = 69) AND
     (otherTable.otherColumn2 IS NOT NULL)
 ```
+
+-----
+
+### `.whereEqPrimaryKey()`
+
+A convenience method that lets you keep rows that match a given primary key value,
+```ts
+import * as tsql from "@tsql/tsql";
+import * as tm from "type-mapping/fluent";
+
+const loanedBook = tsql.table("loanedBook")
+    .addColumns({
+        loanId : tm.mysql.bigIntSigned(),
+        bookId : tm.mysql.varChar(255),
+        dueAt : tm.mysql.dateTime(3),
+        returnedAt : tm.mysql.dateTime(3).orNull(),
+    })
+    /**
+     * A book may only be lent out once per loan.
+     */
+    .setPrimaryKey(columns => [
+        columns.loanId,
+        columns.bookId,
+    ]);
+
+const myQuery = tsql.from(loanedBook)
+    .whereEqPrimaryKey(
+        tables => tables.loanedBook,
+        {
+            loanId : 1337n,
+            bookId : "ISBN-13: 9781492037651",
+        }
+    );
+```
+
+The above is the same as writing,
+```sql
+FROM
+    loanedBook
+WHERE
+    (loanedBook.loanId = 1337) AND
+    (loanedBook.bookId = 'ISBN-13: 9781492037651')
+```
+
+-----
+
+### `.whereEqCandidateKey()`
+
+A convenience method that lets you keep rows that match a given candidate key value,
+```ts
+import * as tsql from "@tsql/tsql";
+import * as tm from "type-mapping/fluent";
+
+const reservation = tsql.table("reservation")
+    .addColumns({
+        userId : tm.mysql.bigIntSigned(),
+        roomId : tm.mysql.varChar(255),
+        timeSlotId : tm.mysql.bigIntSigned(),
+    })
+    /**
+     * A user may only have one reservation per time-slot
+     */
+    .addCandidateKey(columns => [
+        columns.userId,
+        columns.timeSlotId,
+    ])
+    /**
+     * A room may only be reserved once per time-slot
+     */
+    .addCandidateKey(columns => [
+        columns.roomId,
+        columns.timeSlotId,
+    ]);
+
+const myQuery = tsql.from(reservation)
+    .whereEqCandidateKey(
+        tables => tables.reservation,
+        {
+            roomId : "Red Room",
+            timeSlotId : 999n,
+        }
+    );
+```
+
+The above is the same as writing,
+```sql
+FROM
+    reservation
+WHERE
+    -- `IS` is SQLite's null-safe equality operator
+    (reservation.roomId IS 'Red Room') AND
+    (reservation.timeSlotId IS 999)
+```
+
+Candidate keys may contain nullable columns. So, `whereEqCandidateKey()` internally uses [null-safe equality](01a-null-safe-equality.md).
+
+-----
+
+### `.whereEqSuperKey()`
+
+TODO
