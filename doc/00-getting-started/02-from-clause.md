@@ -259,3 +259,15 @@ ON
     (cateredFood.roomId = reservation.roomId) AND
     (cateredFood.timeSlotId = reservation.timeSlotId)
 ```
+
+-----
+
+### `INNER JOIN` vs `LEFT JOIN`
+
+When a table is `INNER JOIN`'d we say that the table is a **non-nullable** join,
++ Non-nullable columns in the table **will not** have `NULL` values.
++ Nullable columns in the table may have `NULL` values.
+
+When a table is `LEFT JOIN`'d we say that the table is a **nullable** join,
++ Non-nullable columns in the table **may** have `NULL` values.
++ Nullable columns in the table may have `NULL` values.
