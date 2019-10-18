@@ -1,20 +1,23 @@
 import {IFromClause} from "../from-clause";
 import {ColumnRefUtil} from "../column-ref";
-import {AssertNonUnion} from "../type-util";
+import {AssertNonUnion, Identity} from "../type-util";
 import {SelectClause} from "./select-clause";
 import * as SelectClauseUtil from "./util";
 
-export type SelectDelegate<
+export type SelectDelegateColumns<
+    FromClauseT extends IFromClause
+> =
+    ColumnRefUtil.TryFlatten<
+        SelectClauseUtil.AllowedColumnRef<FromClauseT>
+    >
+;
+export type SelectDelegateReturnType<
     FromClauseT extends IFromClause,
     SelectClauseT extends SelectClause|undefined,
     SelectsT extends SelectClause
 > =
-    (
-        columns : ColumnRefUtil.TryFlatten<
-            SelectClauseUtil.AllowedColumnRef<FromClauseT>
-        >
-    ) => (
-        SelectsT
+    Identity<
+        & SelectsT
         /**
          * Hack to force TS to infer a non-empty tuple type, rather than array type.
          *
@@ -31,5 +34,14 @@ export type SelectDelegate<
         & AssertNonUnion<SelectsT>
         & SelectClauseUtil.AssertValidUsedRef<FromClauseT, SelectsT>
         & SelectClauseUtil.AssertValidColumnIdentifier<SelectClauseT, SelectsT>
-    )
+    >
+;
+export type SelectDelegate<
+    FromClauseT extends IFromClause,
+    SelectClauseT extends SelectClause|undefined,
+    SelectsT extends SelectClause
+> =
+    (
+        columns : SelectDelegateColumns<FromClauseT>
+    ) => SelectDelegateReturnType<FromClauseT, SelectClauseT, SelectsT>
 ;

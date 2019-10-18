@@ -6,7 +6,7 @@ import {HavingClause, HavingDelegate} from "../having-clause";
 import {OrderByClause, OrderByDelegate} from "../order-by-clause";
 import {IAliasedTable} from "../aliased-table";
 import {FromClauseUtil} from "../from-clause";
-import {SelectClause, SelectDelegate, SelectValueDelegate} from "../select-clause";
+import {SelectClause} from "../select-clause";
 import {RawExpr, AnyRawExpr, AnySubqueryExpr} from "../raw-expr";
 import {OnDelegate, OnClauseUtil} from "../on-clause";
 import {ITable, TableUtil, TableWithPrimaryKey} from "../table";
@@ -497,7 +497,10 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         RawExprT extends AnyRawExpr
     > (
         this : Extract<this, QueryUtil.BeforeCompoundQueryClause>,
-        selectValueDelegate : SelectValueDelegate<this["fromClause"], this["selectClause"], RawExprT>
+        selectValueDelegate : QueryUtil.QuerySelectValueDelegate<
+            Extract<this, QueryUtil.BeforeCompoundQueryClause>,
+            RawExprT
+        >
     ) : (
         QueryUtil.SelectValue<
             Extract<this, QueryUtil.BeforeCompoundQueryClause>,
@@ -517,7 +520,10 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         SelectsT extends SelectClause
     > (
         this : Extract<this, QueryUtil.BeforeCompoundQueryClause>,
-        selectDelegate : SelectDelegate<this["fromClause"], this["selectClause"], SelectsT>
+        selectDelegate : QueryUtil.QuerySelectDelegate<
+            Extract<this, QueryUtil.BeforeCompoundQueryClause>,
+            SelectsT
+        >
     ) : (
         QueryUtil.Select<
             Extract<this, QueryUtil.BeforeCompoundQueryClause>,

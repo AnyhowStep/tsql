@@ -1,8 +1,8 @@
-import {SelectClauseUtil, SelectValueDelegate} from "../../../select-clause";
+import {SelectClauseUtil, SelectDelegateColumns, SelectValueDelegateReturnType, SelectDelegateReturnType} from "../../../select-clause";
 import {BeforeCompoundQueryClause} from "../helper-type";
 import {AnyRawExpr} from "../../../raw-expr";
 import {select, Select} from "./select";
-import {AssertNonUnion} from "../../../type-util";
+import {Correlate} from "./correlate";
 
 export type SelectValue<
     QueryT extends BeforeCompoundQueryClause,
@@ -13,12 +13,23 @@ export type SelectValue<
         SelectClauseUtil.ValueFromRawExpr<RawExprT>
     >
 );
+
+export type QuerySelectValueDelegate<
+    QueryT extends BeforeCompoundQueryClause,
+    RawExprT extends AnyRawExpr
+> =
+    (
+        columns : SelectDelegateColumns<QueryT["fromClause"]>,
+        subquery : Correlate<QueryT>
+    ) => SelectValueDelegateReturnType<QueryT["fromClause"], QueryT["selectClause"], RawExprT>
+;
+
 export function selectValue<
     QueryT extends BeforeCompoundQueryClause,
     RawExprT extends AnyRawExpr
 > (
     query : QueryT,
-    selectValueDelegate : SelectValueDelegate<QueryT["fromClause"], QueryT["selectClause"], RawExprT>
+    selectValueDelegate : QuerySelectValueDelegate<QueryT, RawExprT>
 ) : (
     SelectValue<QueryT, RawExprT>
 ) {
@@ -27,15 +38,10 @@ export function selectValue<
         SelectClauseUtil.ValueFromRawExpr<RawExprT>
     >(
         query,
-        (columns) => (
-            SelectClauseUtil.valueFromRawExpr<RawExprT>(selectValueDelegate(columns)) as (
-                & SelectClauseUtil.ValueFromRawExpr<RawExprT>
-                & AssertNonUnion<SelectClauseUtil.ValueFromRawExpr<RawExprT>>
-                & SelectClauseUtil.AssertValidUsedRef<
+        (columns, subquery) => (
+            SelectClauseUtil.valueFromRawExpr<RawExprT>(selectValueDelegate(columns, subquery)) as (
+                SelectDelegateReturnType<
                     QueryT["fromClause"],
-                    SelectClauseUtil.ValueFromRawExpr<RawExprT>
-                >
-                & SelectClauseUtil.AssertValidColumnIdentifier<
                     QueryT["selectClause"],
                     SelectClauseUtil.ValueFromRawExpr<RawExprT>
                 >

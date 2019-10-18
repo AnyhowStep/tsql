@@ -16,6 +16,8 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
 
 0. [`WHERE` clause](doc/00-getting-started/03-where-clause.md)
 
+0. [`SELECT` clause](doc/00-getting-started/04-select-clause.md)
+
 -----
 
 ### Goals
@@ -202,6 +204,10 @@ See the internal `Buffer` declaration [here](src/buffer.ts)
   + https://github.com/hediet/ts-typed-sql
   + https://github.com/mikro-orm/mikro-orm
 
++ This library will not handle migrations but it's good to keep an eye on promising migration libraries
+  + https://github.com/graphile/migrate
+  + https://sqitch.org/
+
 + Remove static use of potentially polyfilled functions like `BigInt`, `Buffer`, etc.
   + Stick to lazy initialization
 
@@ -209,6 +215,9 @@ See the internal `Buffer` declaration [here](src/buffer.ts)
   + The escaping rules seem to have changed a lot over the different versions
   + An escape string constant is specified by writing the letter `E` (upper or lower case) just before the opening single quote, e.g., `E'foo'`.
   + If the configuration parameter `standard_conforming_strings` is `off`, then PostgreSQL recognizes backslash escapes in both regular and escape string constants. However, as of PostgreSQL 9.1, the default is `on`
+
++ Add subqueries to certain callbacks (For example, the `.where()` method)
+  + The `.select()` and `.selectValue()` methods already have this
 
 <!--
 > I'm just thinking about how...

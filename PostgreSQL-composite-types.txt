@@ -1,0 +1,48 @@
+Stringy row format?
+
+Keith Layne @keithlayne Oct 02 23:50
+https://www.postgresql.org/docs/11/rowtypes.html#id-1.5.7.24.6
+that didn't work
+kinda like arrays, '(a, b, c)'
+
+AnyhowStep @AnyhowStep Oct 02 23:51
+Ah. Row expressions or whatever they're called
+MySQL has very limited support for those
+
+Keith Layne @keithlayne Oct 02 23:51
+yeah, there's that syntax too
+
+AnyhowStep @AnyhowStep Oct 02 23:53
+I don't think you can SELECT them in MySQL at all but I may be wrong. I think you can only use them as syntactic sugar for some expressions. You can't actually select a row expression.
+You can do that in postgres?
+If so, damn. I need to get my company to migrate some day =(
+
+Keith Layne @keithlayne Oct 02 23:55
+you can do lots of stuff
+the API generator knows what to do with them, works great, but generating the queries to insert them needs some work on my part
+
+AnyhowStep @AnyhowStep 00:00
+PostgreSQL handles column expansion by actually transforming the first form into the second. So, in this example, myfunc() would get invoked three times per row with either syntax.
+Ah, so it is also kinda syntactic sugar
+But still pretty useful sugar
+They have lateral derived tables, though, so... They're still winning by a large margin
+
+AnyhowStep @AnyhowStep 00:18
+Are you using that composite type in multiple tables? Or just one?
+If it's just one, I feel like it's almost no different from just adding more columns. If it's multiple, then I can see it as being more useful, but then I'd be curious why it isn't a table itself. If you nest composite types (you can do that, right?), It basically becomes a strongly typed document, lol
+Table with one column = collection, column with deeply nested composite type = document
+mongo, what?
+Don't want to accidentally denormalize, though. If a composite type is used in multiple places, it almost feels like a denormalization risk
+Unless it's for something like... A Vector3 type (pretending spatial types don't exist) or any sufficiently basic type that can be treated as a primitive
+
+Keith Layne @keithlayne 00:25
+it is denormalizing in some situations
+I have two cases, one is used in two different tables. Should properly be its own table, but the API that nests it doesn't include the FK in the parent object. I could work around this, but there's a lot of automation involved and I want to see how well this works.
+The other is embedded in only one place, but it's an array, so I want to see how well that works out.
+
+Keith Layne @keithlayne 00:31
+part of the problem is that the second one is clearly backed by a table, but the way I have to sync the data and the crappiness of the API means that sometimes they replace records in the array instead of updating fields in existing records. There's an endpoint that's supposed to return what's changed, but it sucks. The updates should be strictly additive but it's like they assume you're gonna write their relational data to a document DB.
+but agree on all your points about just adding columns/tables. What I'm doing is heavily influenced by not just the shape of the data but the desire to automate a bunch of stuff.
+
+AnyhowStep @AnyhowStep 01:31
+I'm going to save this conversation in a text file for future reference...

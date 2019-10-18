@@ -1,7 +1,8 @@
-import {SelectClause, SelectClauseUtil, SelectDelegate} from "../../../select-clause";
+import {SelectClause, SelectClauseUtil, SelectDelegateColumns, SelectDelegateReturnType} from "../../../select-clause";
 import {QueryBaseUtil} from "../../../query-base";
 import {Query} from "../../query-impl";
 import {BeforeCompoundQueryClause} from "../helper-type";
+import {Correlate, correlate} from "./correlate";
 
 /**
  * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966
@@ -43,18 +44,32 @@ export type Select<
         QueryT["mapDelegate"]
     >
 );
+
+export type QuerySelectDelegate<
+    QueryT extends BeforeCompoundQueryClause,
+    SelectsT extends SelectClause
+> =
+    (
+        columns : SelectDelegateColumns<QueryT["fromClause"]>,
+        subquery : Correlate<QueryT>
+    ) => SelectDelegateReturnType<QueryT["fromClause"], QueryT["selectClause"], SelectsT>
+;
+
 export function select<
     QueryT extends BeforeCompoundQueryClause,
     SelectsT extends SelectClause
 > (
     query : QueryT,
-    selectDelegate : SelectDelegate<QueryT["fromClause"], QueryT["selectClause"], SelectsT>
+    selectDelegate : QuerySelectDelegate<QueryT, SelectsT>
+    //selectDelegate : SelectDelegate<QueryT["fromClause"], QueryT["selectClause"], SelectsT>
 ) : (
     Select<QueryT, SelectsT>
 ) {
     if (!QueryBaseUtil.isBeforeCompoundQueryClause(query)) {
         throw new Error(`Cannot SELECT after COMPOUND QUERY clause; this will change the number of columns`);
     }
+    //const correlated = correlate<QueryT>(query);
+
     const selectClause = SelectClauseUtil.select<
         QueryT["fromClause"],
         QueryT["selectClause"],
@@ -62,7 +77,9 @@ export function select<
     >(
         query.fromClause,
         query.selectClause,
-        selectDelegate
+        (columns) => {
+            return selectDelegate(columns, correlate<QueryT>(query));
+        }
     );
 
     const {
