@@ -1,6 +1,7 @@
-import {OrderByDelegate, OrderByClauseUtil} from "../../../order-by-clause";
+import {OrderByClauseUtil, OrderByDelegateColumns, OrderByDelegateReturnType} from "../../../order-by-clause";
 import {Query} from "../../query-impl";
 import {IQuery} from "../../query";
+import {Correlate, correlate} from "./correlate";
 
 /**
  * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966
@@ -39,11 +40,17 @@ export type OrderBy<
         QueryT["mapDelegate"]
     >
 );
+export type QueryOrderByDelegate<QueryT extends IQuery> =
+    (
+        columns : OrderByDelegateColumns<QueryT["fromClause"], QueryT["selectClause"]>,
+        subquery : Correlate<QueryT>
+    ) => OrderByDelegateReturnType<QueryT["fromClause"], QueryT["selectClause"]>
+;
 export function orderBy<
     QueryT extends IQuery
 > (
     query : QueryT,
-    orderByDelegate : OrderByDelegate<QueryT["fromClause"], QueryT["selectClause"]>
+    orderByDelegate : QueryOrderByDelegate<QueryT>
 ) : (
     OrderBy<QueryT>
 ) {
@@ -54,7 +61,9 @@ export function orderBy<
         query.fromClause,
         query.selectClause,
         query.orderByClause,
-        orderByDelegate
+        (columns) => {
+            return orderByDelegate(columns, correlate<QueryT>(query));
+        }
     );
 
     const {

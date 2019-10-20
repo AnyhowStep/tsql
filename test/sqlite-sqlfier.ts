@@ -37,7 +37,7 @@ import {
     Parentheses,
     pascalStyleEscapeString,
 } from "../dist";
-import {LiteralValueType} from "../dist/ast/literal-value-node";
+import {LiteralValueType, LiteralValueNodeUtil} from "../dist/ast/literal-value-node";
 
 const insertBetween = AstUtil.insertBetween;
 
@@ -267,7 +267,15 @@ function orderByClauseToSql (orderByClause : OrderByClause, toSql : (ast : Ast) 
                 );
             }
         } else if (ExprUtil.isExpr(sortExpr)) {
-            result.push(toSql(sortExpr.ast));
+            if (LiteralValueNodeUtil.isLiteralValueNode(sortExpr.ast)) {
+                if (sortExpr.ast.literalValueType == LiteralValueType.BIGINT_SIGNED) {
+                    result.push(toSql([sortExpr.ast, "+ 0"]));
+                } else {
+                    result.push(toSql(sortExpr.ast));
+                }
+            } else {
+                result.push(toSql(sortExpr.ast));
+            }
         } else {
             result.push(toSql(sortExpr.unaliasedAst));
         }

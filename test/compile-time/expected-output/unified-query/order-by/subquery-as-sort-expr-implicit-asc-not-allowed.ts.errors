@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: readonly Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly myColumn: Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn\"; mapper: Mapper<unknown, bigint>; }>; readonly myTableId: Column<...>; readonly myOtherColumn: Column<...>; }; ... 4 more .....' is not assignable to type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn\"; mapper: Mapper<unknown, bigint>; }> | Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }> | Column<...> | Column<...> | IExpr<...> | IExprSelectItem<...> | readonly [...]'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: readonly Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly myColumn: Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn\"; mapper: Mapper<unknown, bigint>; }>; readonly myTableId: Column<...>; readonly myOtherColumn: Column<...>; }; ... 4 more .....' is missing the following properties from type 'Column<{ tableAlias: \"__aliased\"; columnAlias: \"x\"; mapper: Mapper<unknown, bigint>; }>': tableAlias, columnAlias, mapper, unaliasedAst",
+        "category": 1,
+        "code": 2739
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 267,
+    "start": 780
+  }
+]

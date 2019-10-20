@@ -18,6 +18,8 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
 
 0. [`SELECT` clause](doc/00-getting-started/04-select-clause.md)
 
+0. [`ORDER BY` clause](doc/00-getting-started/05-order-by-clause.md)
+
 -----
 
 ### Goals
@@ -335,4 +337,23 @@ SELECT
     ),
     3e0
   );
+```
+
+-----
+
+Be careful of integer literals in the `ORDER BY` clause.
+This is invalid,
+```sql
+SELECT
+  1
+ORDER BY
+  32 ASC;
+```
+
+This is valid,
+```sql
+SELECT
+  1
+ORDER BY
+  32+0 ASC;
 ```

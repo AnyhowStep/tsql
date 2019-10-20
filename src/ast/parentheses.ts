@@ -3,6 +3,7 @@ import * as AstUtil from "./util";
 import {FunctionCall} from "./function-call";
 import {Sqlfier} from "./sqlfier";
 import {isIdentifierNode} from "./identifier-node";
+import {LiteralValueNodeUtil} from "./literal-value-node";
 
 function shouldWrap (ast : Ast, canUnwrap : boolean) : boolean {
     if (Parentheses.IsParentheses(ast)) {
@@ -14,6 +15,10 @@ function shouldWrap (ast : Ast, canUnwrap : boolean) : boolean {
     }
 
     if (FunctionCall.IsFunctionCall(ast)) {
+        return false;
+    }
+
+    if (LiteralValueNodeUtil.isLiteralValueNode(ast)) {
         return false;
     }
 

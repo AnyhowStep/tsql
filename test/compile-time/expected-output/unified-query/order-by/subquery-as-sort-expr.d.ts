@@ -17,15 +17,10 @@ export declare const myQuery: tsql.Query<{
                     columnAlias: "myTableId";
                     mapper: tm.Mapper<unknown, bigint>;
                 }>;
-                readonly myColumn2: tsql.Column<{
+                readonly myOtherColumn: tsql.Column<{
                     tableAlias: "myTable";
-                    columnAlias: "myColumn2";
+                    columnAlias: "myOtherColumn";
                     mapper: tm.Mapper<unknown, bigint>;
-                }>;
-                readonly stringColumn: tsql.Column<{
-                    tableAlias: "myTable";
-                    columnAlias: "stringColumn";
-                    mapper: tm.Mapper<unknown, string>;
                 }>;
             };
             originalColumns: {
@@ -39,15 +34,10 @@ export declare const myQuery: tsql.Query<{
                     columnAlias: "myTableId";
                     mapper: tm.Mapper<unknown, bigint>;
                 }>;
-                readonly myColumn2: tsql.Column<{
+                readonly myOtherColumn: tsql.Column<{
                     tableAlias: "myTable";
-                    columnAlias: "myColumn2";
+                    columnAlias: "myOtherColumn";
                     mapper: tm.Mapper<unknown, bigint>;
-                }>;
-                readonly stringColumn: tsql.Column<{
-                    tableAlias: "myTable";
-                    columnAlias: "stringColumn";
-                    mapper: tm.Mapper<unknown, string>;
                 }>;
             };
             primaryKey: undefined;
@@ -56,40 +46,14 @@ export declare const myQuery: tsql.Query<{
             mutableColumns: readonly [];
         }>[];
     }>;
-    selectClause: [tsql.Column<{
-        tableAlias: "myTable";
-        columnAlias: "myColumn";
+    selectClause: [tsql.IExprSelectItem<{
         mapper: tm.Mapper<unknown, bigint>;
-    }>, tsql.IExprSelectItem<{
-        mapper: tm.Mapper<unknown, bigint>;
-        tableAlias: "myTable";
-        alias: "aliasedColumnExpression";
-        usedRef: tsql.IUsedRef<never>;
-    }>, tsql.IExprSelectItem<{
-        mapper: tm.Mapper<unknown, "I am an aliased expression">;
         tableAlias: "__aliased";
-        alias: "aliasedLiteralValueExpression";
-        usedRef: tsql.IUsedRef<never>;
-    }>, tsql.IExprSelectItem<{
-        mapper: tm.Mapper<unknown, string>;
-        tableAlias: "__aliased";
-        alias: "aliasedExpression";
-        usedRef: tsql.IUsedRef<never>;
-    }>, tsql.IExprSelectItem<{
-        mapper: tm.Mapper<unknown, bigint | null>;
-        tableAlias: "__aliased";
-        alias: "aliasedSubqueryExpression";
+        alias: "x";
         usedRef: tsql.IUsedRef<never>;
     }>];
     limitClause: undefined;
     compoundQueryClause: undefined;
     compoundQueryLimitClause: undefined;
     mapDelegate: undefined;
-}>;
-export declare const fetchedRow: Promise<{
-    readonly myColumn: bigint;
-    readonly aliasedSubqueryExpression: bigint | null;
-    readonly aliasedColumnExpression: bigint;
-    readonly aliasedLiteralValueExpression: "I am an aliased expression";
-    readonly aliasedExpression: string;
 }>;

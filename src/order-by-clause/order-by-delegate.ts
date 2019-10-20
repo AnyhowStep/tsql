@@ -34,6 +34,40 @@ type ValidSortExpr<
     }>
 ;
 
+export type OrderByDelegateColumns<
+    /**
+     * @todo Debate if this should be changed to `FromClauseUtil.AfterFromClause`
+     * It doesn't make much sense to use `ORDER BY` without a `FROM` clause.
+     * Are you going to order one row?
+     */
+    FromClauseT extends IFromClause,
+    SelectClauseT extends SelectClause|undefined
+> =
+    ColumnRefUtil.TryFlatten<
+        OrderByClauseUtil.AllowedColumnRef<FromClauseT, SelectClauseT>
+    >
+;
+
+export type OrderByDelegateReturnType<
+    /**
+     * @todo Debate if this should be changed to `FromClauseUtil.AfterFromClause`
+     * It doesn't make much sense to use `ORDER BY` without a `FROM` clause.
+     * Are you going to order one row?
+     */
+    FromClauseT extends IFromClause,
+    SelectClauseT extends SelectClause|undefined
+> =
+    /**
+     * This does not have to be a tuple.
+     *
+     * It can be an array.
+     */
+    readonly (
+        | ValidSortExpr<FromClauseT, SelectClauseT>
+        | readonly [ValidSortExpr<FromClauseT, SelectClauseT>, SortDirection]
+    )[]
+;
+
 /**
  * This will change when,
  * + The `ORDER BY` clause enforces proper `GROUP BY` interactions.
@@ -48,18 +82,6 @@ export type OrderByDelegate<
     SelectClauseT extends SelectClause|undefined
 > = (
     (
-        columns : ColumnRefUtil.TryFlatten<
-            OrderByClauseUtil.AllowedColumnRef<FromClauseT, SelectClauseT>
-        >
-    ) => (
-        /**
-         * This does not have to be a tuple.
-         *
-         * It can be an array.
-         */
-        readonly (
-            | ValidSortExpr<FromClauseT, SelectClauseT>
-            | readonly [ValidSortExpr<FromClauseT, SelectClauseT>, SortDirection]
-        )[]
-    )
+        columns : OrderByDelegateColumns<FromClauseT, SelectClauseT>
+    ) => OrderByDelegateReturnType<FromClauseT, SelectClauseT>
 );

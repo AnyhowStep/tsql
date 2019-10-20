@@ -3,7 +3,7 @@ import {ExtraQueryData, QueryData, IQuery} from "./query";
 import {WhereClause, WhereDelegate} from "../where-clause";
 import {GroupByClause, GroupByDelegate} from "../group-by-clause";
 import {HavingClause, HavingDelegate} from "../having-clause";
-import {OrderByClause, OrderByDelegate} from "../order-by-clause";
+import {OrderByClause} from "../order-by-clause";
 import {IAliasedTable} from "../aliased-table";
 import {FromClauseUtil} from "../from-clause";
 import {SelectClause} from "../select-clause";
@@ -29,6 +29,7 @@ import {CompoundQueryType} from "../compound-query";
 import {CompoundQueryClauseUtil} from "../compound-query-clause";
 import {MapDelegate} from "../map-delegate";
 import {ExecutionUtil, SelectConnection, IsolableSelectConnection} from "../execution";
+import {SortDirection} from "../sort-direction";
 
 export class Query<DataT extends QueryData> implements IQuery<DataT> {
     readonly fromClause : DataT["fromClause"];
@@ -478,9 +479,8 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     }
 
     orderBy (
-        orderByDelegate : OrderByDelegate<
-            this["fromClause"],
-            this["selectClause"]
+        orderByDelegate : QueryUtil.QueryOrderByDelegate<
+            this
         >
     ) : (
         QueryUtil.OrderBy<this>
@@ -1009,6 +1009,76 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         >(
             this,
             defaultValue
+        );
+    }
+
+    /**
+     * Convenience method for,
+     * ```ts
+     *  myQuery.limit(1).coalesce(null).asc();
+     * ```
+     *
+     * Usage,
+     * ```ts
+     *  myQuery.limit(1).asc();
+     * ```
+     */
+    asc (this : Extract<this, AnySubqueryExpr>) : (
+        QueryBaseUtil.Asc<
+            Extract<this, AnySubqueryExpr>
+        >
+    ) {
+        return QueryBaseUtil.asc<
+            Extract<this, AnySubqueryExpr>
+        >(
+            this
+        );
+    }
+
+    /**
+     * Convenience method for,
+     * ```ts
+     *  myQuery.limit(1).coalesce(null).desc();
+     * ```
+     *
+     * Usage,
+     * ```ts
+     *  myQuery.limit(1).desc();
+     * ```
+     */
+    desc (this : Extract<this, AnySubqueryExpr>) : (
+        QueryBaseUtil.Desc<
+            Extract<this, AnySubqueryExpr>
+        >
+    ) {
+        return QueryBaseUtil.desc<
+            Extract<this, AnySubqueryExpr>
+        >(
+            this
+        );
+    }
+
+    /**
+     * Convenience method for,
+     * ```ts
+     *  myQuery.limit(1).coalesce(null).sort(sortDirection);
+     * ```
+     *
+     * Usage,
+     * ```ts
+     *  myQuery.limit(1).sort(sortDirection);
+     * ```
+     */
+    sort (this : Extract<this, AnySubqueryExpr>, sortDirection : SortDirection) : (
+        QueryBaseUtil.Sort<
+            Extract<this, AnySubqueryExpr>
+        >
+    ) {
+        return QueryBaseUtil.sort<
+            Extract<this, AnySubqueryExpr>
+        >(
+            this,
+            sortDirection
         );
     }
 
