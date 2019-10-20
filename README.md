@@ -20,6 +20,8 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
 
 0. [`ORDER BY` clause](doc/00-getting-started/05-order-by-clause.md)
 
+0. [`LIMIT` clause](doc/00-getting-started/06-limit-clause.md)
+
 -----
 
 ### Goals
@@ -342,7 +344,8 @@ SELECT
 -----
 
 Be careful of integer literals in the `ORDER BY` clause.
-This is invalid,
+
+This is invalid (MySQL, PostgreSQL, SQLite),
 ```sql
 SELECT
   1
@@ -350,10 +353,26 @@ ORDER BY
   32 ASC;
 ```
 
-This is valid,
+This is valid (MySQL, PostgreSQL, SQLite),
 ```sql
 SELECT
   1
 ORDER BY
   32+0 ASC;
+```
+
+This is invalid (PostgreSQL; valid for other two databases),
+```sql
+SELECT
+  1
+ORDER BY
+  32e0 ASC;
+```
+
+This is valid (MySQL, PostgreSQL, SQLite),
+```sql
+SELECT
+  1
+ORDER BY
+  32e0+0 ASC;
 ```

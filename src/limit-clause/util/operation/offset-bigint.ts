@@ -27,6 +27,9 @@ import {LimitClause} from "../../limit-clause";
 export type ALL_ROW_COUNT = 9223372036854775807n;
 export const ALL_ROW_COUNT : ALL_ROW_COUNT = tm.TypeUtil.getBigIntFactoryFunctionOrError()("9223372036854775807") as ALL_ROW_COUNT;
 
+export type MAX_OFFSET = 9223372036854775807n;
+export const MAX_OFFSET : MAX_OFFSET = tm.TypeUtil.getBigIntFactoryFunctionOrError()("9223372036854775807") as MAX_OFFSET;
+
 export type OffsetBigInt<
     LimitClauseT extends LimitClause|undefined,
     OffsetT extends bigint
@@ -53,6 +56,9 @@ export function offsetBigInt<
 ) {
     if (tm.BigIntUtil.lessThan(offset, 0)) {
         throw new Error(`Cannot OFFSET fewer than zero rows`);
+    }
+    if (tm.BigIntUtil.greaterThan(offset, MAX_OFFSET)) {
+        throw new Error(`Cannot OFFSET more than ${MAX_OFFSET} rows`);
     }
 
     if (limitClause == undefined) {
