@@ -13,6 +13,8 @@ The [advice](/doc/00-getting-started/06-limit-clause.md#number-vs-bigint) and [c
 ### Overview
 
 + `.compoundQueryLimit()`
+
   The compound query version of [`.limit()`](/doc/00-getting-started/06-limit-clause.md#limit)
 + `.compoundQueryOffset()`
+
   The compound query version of [`.offset()`](/doc/00-getting-started/06-limit-clause.md#offset)
