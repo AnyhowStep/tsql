@@ -26,6 +26,8 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
 
 0. [Compound Query `ORDER BY` clause](doc/00-getting-started/08-compound-query-order-by-clause.md)
 
+0. [Compound Query `LIMIT` clause](doc/00-getting-started/09-compound-query-limit-clause.md)
+
 -----
 
 ### Goals
