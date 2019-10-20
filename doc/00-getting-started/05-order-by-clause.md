@@ -74,7 +74,7 @@ Because of this oversight, you can perform the following sorts,
 However, you cannot perform the following sort,
 + `myQuery` (with `ASC` implied)
 
-See the tests [here](test/compile-time/input/unified-query/order-by/subquery-as-sort-expr) and [here](test/compile-time/input/unified-query/order-by/subquery-as-sort-expr-implicit-asc-not-allowed) for examples.
+See the tests [here](/test/compile-time/input/unified-query/order-by/subquery-as-sort-expr) and [here](/test/compile-time/input/unified-query/order-by/subquery-as-sort-expr-implicit-asc-not-allowed) for examples.
 
 -----
 
