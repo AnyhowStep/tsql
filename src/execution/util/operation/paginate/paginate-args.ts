@@ -15,7 +15,18 @@ const maybeRowOffset = tm.mysql.bigIntSigned().orUndefined();
  * It gets rounded to `9223372036854776000`
  */
 export interface RawPaginateArgs {
+    /**
+     * The page to fetch.
+     * The first page is zero.
+     */
     page? : number|bigint,
+    /**
+     * The number of rows to fetch per page.
+     * You should control this value.
+     *
+     * If `rowsPerPage` is too high, and too many rows are fetched,
+     * it may cause an out-of-memory exception!
+     */
     rowsPerPage? : number|bigint,
     /**
      * When positive, lets you skip the first `rowOffset` rows.
