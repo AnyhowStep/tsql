@@ -38,7 +38,7 @@ export interface RawPaginateArgs {
 ```
 
 `.paginate(connection, rawPaginateArgs)` will try to process the `rawPaginateArgs` into a usable form,
-using the [`toPaginateArgs()` function](/src/execution/util/operation/paginate/paginate-args.ts#L32-L59)
+using the [`toPaginateArgs()` function](/src/execution/util/operation/paginate/paginate-args.ts#L43-L70)
 
 -----
 
