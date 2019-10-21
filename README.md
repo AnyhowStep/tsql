@@ -30,6 +30,8 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
 
 0. [`.map()`](doc/00-getting-started/10-map.md)
 
+0. [`.fetchAllXxx()`](doc/00-getting-started/11-fetch-all-xxx.md)
+
 -----
 
 ### Goals
