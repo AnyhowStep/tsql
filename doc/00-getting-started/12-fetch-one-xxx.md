@@ -20,9 +20,13 @@ Maybe implement the following?
 + `.fetchOneUnmappedFlattened()`
 + `.fetchOneMapped()`
 
+-----
+
 + `.fetchOneUnmappedOr()`
 + `.fetchOneUnmappedFlattenedOr()`
 + `.fetchOneMappedOr()`
+
+-----
 
 + `.fetchOneUnmappedOrUndefined()`
 + `.fetchOneUnmappedFlattenedOrUndefined()`

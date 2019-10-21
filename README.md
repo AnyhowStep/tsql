@@ -34,6 +34,10 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
 
 0. [`.fetchOneXxx()`](doc/00-getting-started/12-fetch-one-xxx.md)
 
+0. [`.fetchValueArray()`](doc/00-getting-started/13-fetch-value-array.md)
+
+0. [`.fetchValueXxx()`](doc/00-getting-started/14-fetch-value-xxx.md)
+
 -----
 
 ### Goals
