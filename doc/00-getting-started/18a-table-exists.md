@@ -250,7 +250,7 @@ await myTable.assertExists(
 
 Convenience method for,
 ```ts
-const exists : boolean = await tsql.from(myTable)
+await tsql.from(myTable)
     .where(columns => tsql.gt(
         columns.myColumn,
         9001n
