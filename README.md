@@ -46,6 +46,10 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
 
 0. [`query.exists()/query.assertExists()`](doc/00-getting-started/18-query-exists.md)
 
+   0. [`table.exists()/table.assertExists()`](doc/00-getting-started/18a-table-exists.md)
+
+0. [Derived Table](doc/00-getting-started/19-derived-table.md)
+
 -----
 
 ### Goals
