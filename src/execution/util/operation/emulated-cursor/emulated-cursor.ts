@@ -11,17 +11,17 @@ export type EmulatedCursor<
 
 /**
  * Considerations:
- * + MySQL **does not** support cursors on the protocol level
+ * + MySQL **does not** support cursors at the protocol level
  *   + https://github.com/sidorares/node-mysql2/issues/1014
  *   + https://github.com/sidorares/node-mysql2/pull/822#issuecomment-409415308
  *   + https://github.com/sidorares/node-mysql2/blob/9404163b0dc4bdc24f6dddd18144532f41115842/lib/commands/query.js#L239
  *   + https://github.com/mysqljs/mysql/issues/274
  * + Cursors are useful for processing large amounts of data without loading everything into memory at once
- * + Cursors can prevent out-of-memory exceptions, since data is loaded in chunks
+ * + Cursors can prevent out-of-memory exceptions, since data is loaded in batches
  *
  * -----
  *
- * Since cursors are not natively supported, we emulate it using pagination.
+ * Since cursors are not natively supported (by MySQL), we emulate it using pagination.
  * So, we use the `LIMIT` and `OFFSET` clauses, and load rows in batches as we iterate.
  *
  * -----
@@ -57,7 +57,7 @@ export type EmulatedCursor<
  * > { rowId : 2 }
  *
  * //batch 2
- * > { rowId : 2 }
+ * > { rowId : 2 } //This is a duplicate item, what gives?
  * > { rowId : 3 }
  *
  * //batch 3
@@ -72,7 +72,11 @@ export type EmulatedCursor<
  * + Missing `ORDER BY` clause
  *   + Without an `ORDER BY` clause, the order that rows are returned in is undefined behaviour.
  *   + Rows are retrieved in batches and a row may appear in multiple batches.
- *   + Add an `ORDER BY` clause
+ *   + To fix, add an `ORDER BY` clause
+ *
+ * + Non-unique ordering
+ *   + The `ORDER BY` clause may not guarantee a unique ordering
+ *   + To fix, modify the `ORDER BY` clause and guarantee a unique ordering
  *
  * + Not using a transaction
  *   + A different connection may have inserted a row into the table you are iterating over
@@ -80,7 +84,7 @@ export type EmulatedCursor<
  *     The new row may have pushed other rows "down" the table,
  *     causing the next retrieved batch to contain rows already seen.
  *
- *   + Use the cursor in a transaction
+ *   + To fix, use the cursor in a transaction
  *
  * + Modifying the table being iterated over
  *   + `INSERT/DELETE/UPDATE` statements may modify the table you are iterating over.
@@ -90,7 +94,7 @@ export type EmulatedCursor<
  *
  * -----
  *
- * With an `ORDER BY` clause, you can pretend the above `cursor` code is,
+ * With an `ORDER BY` clause that guarantees a unique ordering, you can pretend the above `cursor` code is,
  * ```ts
  * declare const cursor : MyRowT[];
  * for (const row of cursor) {

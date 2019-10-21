@@ -40,6 +40,8 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
 
 0. [`.paginate()`](doc/00-getting-started/15-paginate.md)
 
+0. [`.emulatedCursor()`](doc/00-getting-started/16-emulated-cursor.md)
+
 -----
 
 ### Goals
