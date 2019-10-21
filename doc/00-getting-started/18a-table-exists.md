@@ -104,6 +104,31 @@ const exists : boolean = await tsql.from(myTable)
 
 -----
 
+### `table.exists(connection, whereDelegate)`
+
+Checks if a row exists on a table, matching an arbitrary condition.
+```ts
+const exists : boolean = await myTable.exists(
+    connection,
+    columns => tsql.gt(
+        columns.myColumn,
+        9001n
+    )
+);
+```
+
+Convenience method for,
+```ts
+const exists : boolean = await tsql.from(myTable)
+    .where(columns => tsql.gt(
+        columns.myColumn,
+        9001n
+    ))
+    .exists(connection);
+```
+
+-----
+
 ### `table.assertExistsXxx()`
 
 A collection of convenience methods to assert a row exists on a table.
@@ -205,5 +230,30 @@ await tsql.from(myTable)
             //etc.
         }
     )
+    .assertExists(connection);
+```
+
+-----
+
+### `table.assertExists(connection, whereDelegate)`
+
+Asserts a row exists on a table, matching an arbitrary condition.
+```ts
+await myTable.assertExists(
+    connection,
+    columns => tsql.gt(
+        columns.myColumn,
+        9001n
+    )
+);
+```
+
+Convenience method for,
+```ts
+const exists : boolean = await tsql.from(myTable)
+    .where(columns => tsql.gt(
+        columns.myColumn,
+        9001n
+    ))
     .assertExists(connection);
 ```

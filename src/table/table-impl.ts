@@ -14,6 +14,7 @@ import {SuperKey_Input} from "../super-key";
 import {Row_NonUnion} from "../row";
 import {SelectClause, SelectDelegate} from "../select-clause";
 import {FromClauseUtil} from "../from-clause";
+import {WhereDelegate} from "../where-clause";
 /*import {PrimaryKey, PrimaryKeyUtil} from "../primary-key";
 import {CandidateKey, CandidateKeyUtil} from "../candidate-key";
 import {SuperKey, SuperKeyUtil} from "../super-key";*/
@@ -451,6 +452,27 @@ export class Table<DataT extends TableData> implements ITable {
         return TableUtil.validate(this, connection, result);
     }*/
 
+    async assertExists (
+        connection : SelectConnection,
+        whereDelegate : WhereDelegate<
+            FromClauseUtil.From<
+                FromClauseUtil.NewInstance,
+                this
+            >
+        >
+    ) : (
+        Promise<void>
+    ) {
+        return QueryUtil.newInstance()
+            .from<this>(
+                this as (
+                    this &
+                    QueryUtil.AssertValidCurrentJoin<QueryUtil.NewInstance, this>
+                )
+            )
+            .where(whereDelegate)
+            .assertExists(connection);
+    }
     async assertExistsByCandidateKey (
         connection : SelectConnection,
         candidateKey : StrictUnion<CandidateKey_NonUnion<this>>
@@ -507,6 +529,27 @@ export class Table<DataT extends TableData> implements ITable {
             .assertExists(connection);
     }
 
+    async exists (
+        connection : SelectConnection,
+        whereDelegate : WhereDelegate<
+            FromClauseUtil.From<
+                FromClauseUtil.NewInstance,
+                this
+            >
+        >
+    ) : (
+        Promise<boolean>
+    ) {
+        return QueryUtil.newInstance()
+            .from<this>(
+                this as (
+                    this &
+                    QueryUtil.AssertValidCurrentJoin<QueryUtil.NewInstance, this>
+                )
+            )
+            .where(whereDelegate)
+            .exists(connection);
+    }
     async existsByCandidateKey (
         connection : SelectConnection,
         candidateKey : StrictUnion<CandidateKey_NonUnion<this>>
