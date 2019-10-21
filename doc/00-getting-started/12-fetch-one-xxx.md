@@ -12,13 +12,31 @@ The `.fetchOneXxx()` methods fetch a single row, at most.
 
 -----
 
+### TODO?
+
+Maybe implement the following?
+
++ `.fetchOneUnmapped()`
++ `.fetchOneUnmappedFlattened()`
++ `.fetchOneMapped()`
+
++ `.fetchOneUnmappedOr()`
++ `.fetchOneUnmappedFlattenedOr()`
++ `.fetchOneMappedOr()`
+
++ `.fetchOneUnmappedOrUndefined()`
++ `.fetchOneUnmappedFlattenedOrUndefined()`
++ `.fetchOneMappedOrUndefined()`
+
+-----
+
 ### `.fetchOne()`
 
 Attempts to fetch exactly one row.
 
-If zero rows are fetched, a `tsql.RowNotFoundError` is thrown.
-
-If two (or more) rows are fetched, a `tsql.TooManyRowsFoundError` is thrown.
++ If zero rows are fetched, a `tsql.RowNotFoundError` is thrown.
++ If two (or more) rows are fetched, a `tsql.TooManyRowsFoundError` is thrown.
++ The shape of the row follows the behaviour of [`fetchAll()`](/doc/00-getting-started/11-fetch-all-xxx.md#fetchall)
 
 -----
 
@@ -26,9 +44,9 @@ If two (or more) rows are fetched, a `tsql.TooManyRowsFoundError` is thrown.
 
 Attempts to fetch exactly one row.
 
-If zero rows are fetched, `defaultValue` is returned.
-
-If two (or more) rows are fetched, a `tsql.TooManyRowsFoundError` is thrown.
++ If zero rows are fetched, `defaultValue` is returned.
++ If two (or more) rows are fetched, a `tsql.TooManyRowsFoundError` is thrown.
++ The shape of the row follows the behaviour of [`fetchAll()`](/doc/00-getting-started/11-fetch-all-xxx.md#fetchall)
 
 -----
 
