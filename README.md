@@ -42,6 +42,10 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
 
 0. [`.emulatedCursor()`](doc/00-getting-started/16-emulated-cursor.md)
 
+0. [`query.count()`](doc/00-getting-started/17-query-count.md)
+
+0. [`query.exists()/query.assertExists()`](doc/00-getting-started/18-query-exists.md)
+
 -----
 
 ### Goals
