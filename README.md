@@ -32,6 +32,8 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
 
 0. [`.fetchAllXxx()`](doc/00-getting-started/11-fetch-all-xxx.md)
 
+0. [`.fetchOneXxx()`](doc/00-getting-started/12-fetch-one-xxx.md)
+
 -----
 
 ### Goals
