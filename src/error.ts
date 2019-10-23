@@ -41,7 +41,7 @@ TooManyRowsFoundError.prototype.name = "TooManyRowsFoundError";
 export class NoColumnsSelectedError extends Error {
     constructor (message : string) {
         super(message);
-        Object.setPrototypeOf(this, RowNotFoundError.prototype);
+        Object.setPrototypeOf(this, NoColumnsSelectedError.prototype);
     }
 }
 NoColumnsSelectedError.prototype.name = "NoColumnsSelectedError";
@@ -49,7 +49,7 @@ NoColumnsSelectedError.prototype.name = "NoColumnsSelectedError";
 export class TooManyColumnsSelectedError extends Error {
     constructor (message : string) {
         super(message);
-        Object.setPrototypeOf(this, RowNotFoundError.prototype);
+        Object.setPrototypeOf(this, TooManyColumnsSelectedError.prototype);
     }
 }
 TooManyColumnsSelectedError.prototype.name = "TooManyColumnsSelectedError";

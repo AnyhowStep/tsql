@@ -479,17 +479,10 @@ export class Table<DataT extends TableData> implements ITable {
     ) : (
         Promise<void>
     ) {
-        return QueryUtil.newInstance()
-            .from<this>(
-                this as (
-                    this &
-                    QueryUtil.AssertValidCurrentJoin<QueryUtil.NewInstance, this>
-                )
-            )
-            .where(() => (
-                ExprLib.eqCandidateKey(this, candidateKey) as any
-            ))
-            .assertExists(connection);
+        return this.assertExists(
+            connection,
+            () => ExprLib.eqCandidateKey(this, candidateKey) as any
+        );
     }
     async assertExistsByPrimaryKey (
         this : Extract<this, TableWithPrimaryKey>,
@@ -498,17 +491,10 @@ export class Table<DataT extends TableData> implements ITable {
     ) : (
         Promise<void>
     ) {
-        return QueryUtil.newInstance()
-            .from<Extract<this, TableWithPrimaryKey>>(
-                this as (
-                    Extract<this, TableWithPrimaryKey> &
-                    QueryUtil.AssertValidCurrentJoin<QueryUtil.NewInstance, Extract<this, TableWithPrimaryKey>>
-                )
-            )
-            .where(() => (
-                ExprLib.eqPrimaryKey(this, primaryKey) as any
-            ))
-            .assertExists(connection);
+        return this.assertExists(
+            connection,
+            () => ExprLib.eqPrimaryKey(this, primaryKey) as any
+        );
     }
     async assertExistsBySuperKey (
         connection : SelectConnection,
@@ -516,17 +502,10 @@ export class Table<DataT extends TableData> implements ITable {
     ) : (
         Promise<void>
     ) {
-        return QueryUtil.newInstance()
-            .from<this>(
-                this as (
-                    this &
-                    QueryUtil.AssertValidCurrentJoin<QueryUtil.NewInstance, this>
-                )
-            )
-            .where(() => (
-                ExprLib.eqSuperKey(this, superKey) as any
-            ))
-            .assertExists(connection);
+        return this.assertExists(
+            connection,
+            () => ExprLib.eqSuperKey(this, superKey) as any
+        );
     }
 
     async exists (
@@ -556,17 +535,10 @@ export class Table<DataT extends TableData> implements ITable {
     ) : (
         Promise<boolean>
     ) {
-        return QueryUtil.newInstance()
-            .from<this>(
-                this as (
-                    this &
-                    QueryUtil.AssertValidCurrentJoin<QueryUtil.NewInstance, this>
-                )
-            )
-            .where(() => (
-                ExprLib.eqCandidateKey(this, candidateKey) as any
-            ))
-            .exists(connection);
+        return this.exists(
+            connection,
+            () => ExprLib.eqCandidateKey(this, candidateKey) as any
+        );
     }
     async existsByPrimaryKey (
         this : Extract<this, TableWithPrimaryKey>,
@@ -575,17 +547,10 @@ export class Table<DataT extends TableData> implements ITable {
     ) : (
         Promise<boolean>
     ) {
-        return QueryUtil.newInstance()
-            .from<Extract<this, TableWithPrimaryKey>>(
-                this as (
-                    Extract<this, TableWithPrimaryKey> &
-                    QueryUtil.AssertValidCurrentJoin<QueryUtil.NewInstance, Extract<this, TableWithPrimaryKey>>
-                )
-            )
-            .where(() => (
-                ExprLib.eqPrimaryKey(this, primaryKey) as any
-            ))
-            .exists(connection);
+        return this.exists(
+            connection,
+            () => ExprLib.eqPrimaryKey(this, primaryKey) as any
+        );
     }
     async existsBySuperKey (
         connection : SelectConnection,
@@ -593,17 +558,92 @@ export class Table<DataT extends TableData> implements ITable {
     ) : (
         Promise<boolean>
     ) {
-        return QueryUtil.newInstance()
+        return this.exists(
+            connection,
+            () => ExprLib.eqSuperKey(this, superKey) as any
+        );
+    }
+
+    async fetchOne (
+        connection : SelectConnection,
+        whereDelegate : WhereDelegate<
+            FromClauseUtil.From<
+                FromClauseUtil.NewInstance,
+                this
+            >
+        >
+    ) : Promise<Row_NonUnion<this>>;
+    async fetchOne<
+        SelectsT extends SelectClause
+    > (
+        connection : SelectConnection,
+        whereDelegate : WhereDelegate<
+            FromClauseUtil.From<
+                FromClauseUtil.NewInstance,
+                this
+            >
+        >,
+        selectDelegate : SelectDelegate<
+            FromClauseUtil.From<
+                FromClauseUtil.NewInstance,
+                this
+            >,
+            undefined,
+            SelectsT
+        >
+    ) : Promise<ExecutionUtil.UnmappedFlattenedRow<
+        QueryUtil.Select<
+            QueryUtil.From<
+                QueryUtil.NewInstance,
+                this
+            >,
+            SelectsT
+        >
+    >>;
+    async fetchOne (
+        connection : SelectConnection,
+        whereDelegate : WhereDelegate<
+            FromClauseUtil.From<
+                FromClauseUtil.NewInstance,
+                this
+            >
+        >,
+        selectDelegate? : (...args : any[]) => any[]
+    ) : Promise<any> {
+        const query = QueryUtil.newInstance()
             .from<this>(
                 this as (
                     this &
                     QueryUtil.AssertValidCurrentJoin<QueryUtil.NewInstance, this>
                 )
             )
-            .where(() => (
-                ExprLib.eqSuperKey(this, superKey) as any
-            ))
-            .exists(connection);
+            .where(whereDelegate);
+        if (selectDelegate == undefined) {
+            return query
+                .select(((columns : any) => [columns]) as any)
+                .fetchOne(connection);
+        } else {
+            return query
+                .select(selectDelegate as any)
+                .fetchOne(connection);
+        }
+    }
+
+    private async fetchOneHelper (
+        connection : SelectConnection,
+        whereDelegate : WhereDelegate<
+            FromClauseUtil.From<
+                FromClauseUtil.NewInstance,
+                this
+            >
+        >,
+        selectDelegate? : (...args : any[]) => any[]
+    ) : Promise<any> {
+        if (selectDelegate == undefined) {
+            return this.fetchOne(connection, whereDelegate);
+        } else {
+            return this.fetchOne(connection, whereDelegate, selectDelegate as any);
+        }
     }
 
     async fetchOneByCandidateKey (
@@ -615,7 +655,7 @@ export class Table<DataT extends TableData> implements ITable {
     > (
         connection : SelectConnection,
         candidateKey : StrictUnion<CandidateKey_NonUnion<this>>,
-        delegate : SelectDelegate<
+        selectDelegate : SelectDelegate<
             FromClauseUtil.From<
                 FromClauseUtil.NewInstance,
                 this
@@ -635,96 +675,92 @@ export class Table<DataT extends TableData> implements ITable {
     async fetchOneByCandidateKey (
         connection : SelectConnection,
         candidateKey : StrictUnion<CandidateKey_NonUnion<this>>,
-        delegate? : (...args : any[]) => any[]
+        selectDelegate? : (...args : any[]) => any[]
     ) : Promise<any> {
-        if (delegate == undefined) {
-            return QueryUtil.newInstance()
-                .from<this>(
-                    this as (
-                        this &
-                        QueryUtil.AssertValidCurrentJoin<QueryUtil.NewInstance, this>
-                    )
-                )
-                .where(() => (
-                    ExprLib.eqCandidateKey(this, candidateKey) as any
-                ))
-                .select(((columns : any) => [columns]) as any)
-                .fetchOne(connection);
-        } else {
-            return QueryUtil.newInstance()
-                .from<this>(
-                    this as (
-                        this &
-                        QueryUtil.AssertValidCurrentJoin<QueryUtil.NewInstance, this>
-                    )
-                )
-                .where(() => (
-                    ExprLib.eqCandidateKey(this, candidateKey) as any
-                ))
-                .select(delegate as any)
-                .fetchOne(connection);
-        }
+        return this.fetchOneHelper(
+            connection,
+            () => ExprLib.eqCandidateKey(this, candidateKey) as any,
+            selectDelegate
+        );
+    }
+    async fetchOneByPrimaryKey (
+        this : Extract<this, TableWithPrimaryKey>,
+        connection : SelectConnection,
+        primaryKey : PrimaryKey_Input<Extract<this, TableWithPrimaryKey>>
+    ) : Promise<Row_NonUnion<this>>;
+    async fetchOneByPrimaryKey<
+        SelectsT extends SelectClause
+    > (
+        this : Extract<this, TableWithPrimaryKey>,
+        connection : SelectConnection,
+        primaryKey : PrimaryKey_Input<Extract<this, TableWithPrimaryKey>>,
+        selectDelegate : SelectDelegate<
+            FromClauseUtil.From<
+                FromClauseUtil.NewInstance,
+                this
+            >,
+            undefined,
+            SelectsT
+        >
+    ) : Promise<ExecutionUtil.UnmappedFlattenedRow<
+        QueryUtil.Select<
+            QueryUtil.From<
+                QueryUtil.NewInstance,
+                this
+            >,
+            SelectsT
+        >
+    >>;
+    async fetchOneByPrimaryKey (
+        this : Extract<this, TableWithPrimaryKey>,
+        connection : SelectConnection,
+        primaryKey : PrimaryKey_Input<Extract<this, TableWithPrimaryKey>>,
+        selectDelegate? : (...args : any[]) => any[]
+    ) : Promise<any> {
+        return this.fetchOneHelper(
+            connection,
+            () => ExprLib.eqPrimaryKey(this, primaryKey) as any,
+            selectDelegate
+        );
+    }
+    async fetchOneBySuperKey (
+        connection : SelectConnection,
+        superKey : SuperKey_Input<this>
+    ) : Promise<Row_NonUnion<this>>;
+    async fetchOneBySuperKey<
+        SelectsT extends SelectClause
+    > (
+        connection : SelectConnection,
+        superKey : SuperKey_Input<this>,
+        selectDelegate : SelectDelegate<
+            FromClauseUtil.From<
+                FromClauseUtil.NewInstance,
+                this
+            >,
+            undefined,
+            SelectsT
+        >
+    ) : Promise<ExecutionUtil.UnmappedFlattenedRow<
+        QueryUtil.Select<
+            QueryUtil.From<
+                QueryUtil.NewInstance,
+                this
+            >,
+            SelectsT
+        >
+    >>;
+    async fetchOneBySuperKey (
+        connection : SelectConnection,
+        superKey : SuperKey_Input<this>,
+        selectDelegate? : (...args : any[]) => any[]
+    ) : Promise<any> {
+        return this.fetchOneHelper(
+            connection,
+            () => ExprLib.eqSuperKey(this, superKey) as any,
+            selectDelegate
+        );
     }
     /*
-    fetchOneByPk (
-        this : Extract<this, TableWithPk>,
-        connection : IConnection,
-        pk : PrimaryKey<Extract<this, TableWithPk>>
-    ) : (
-        Promise<Row<this>>
-    );
-    fetchOneByPk<
-        DelegateT extends QueryUtil.SelectDelegate<
-            QueryUtil.From<QueryUtil.NewInstance, Extract<this, TableWithPk>>
-        >
-    > (
-        this : Extract<this, TableWithPk>,
-        connection : IConnection,
-        pk : PrimaryKey<Extract<this, TableWithPk>>,
-        delegate : QueryUtil.AssertValidSelectDelegate<
-            QueryUtil.From<QueryUtil.NewInstance, Extract<this, TableWithPk>>,
-            DelegateT
-        >
-    ) : Promise<QueryUtil.UnmappedTypeNoJoins<ReturnType<DelegateT>>>;
-    fetchOneByPk (
-        this : Extract<this, TableWithPk>,
-        connection : IConnection,
-        pk : PrimaryKey<Extract<this, TableWithPk>>,
-        delegate? : (...args : any[]) => any
-    ) {
-        if (delegate == undefined) {
-            return QueryUtil.fetchOneByPk(connection, this, pk);
-        } else {
-            return QueryUtil.fetchOneByPk(connection, this, pk, delegate as any);
-        }
-    }
-    fetchOneBySk (
-        connection : IConnection,
-        sk : SuperKey<this>
-    ) : Promise<Row<this>>;
-    fetchOneBySk<
-        DelegateT extends QueryUtil.SelectDelegate<
-            QueryUtil.From<QueryUtil.NewInstance, this>
-        >
-    > (
-        connection : IConnection,
-        sk : SuperKey<this>,
-        delegate : QueryUtil.AssertValidSelectDelegate<
-            QueryUtil.From<QueryUtil.NewInstance, this>,
-            DelegateT
-        >
-    ) : Promise<QueryUtil.UnmappedTypeNoJoins<ReturnType<DelegateT>>>;
-    fetchOneBySk (
-        connection : IConnection,
-        sk : SuperKey<this>,
-        delegate? : (...args : any[]) => any[]
-    ) {
-        if (delegate == undefined) {
-            return QueryUtil.fetchOneBySk(connection, this, sk);
-        } else {
-            return QueryUtil.fetchOneBySk(connection, this, sk, delegate as any);
-        }
-    }
 
     fetchValueByCk<
         DelegateT extends QueryUtil.SelectValueDelegate<this>
