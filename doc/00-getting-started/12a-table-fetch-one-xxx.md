@@ -97,7 +97,7 @@ const row = await myTable.fetchOneByCandidateKey(
 
 Convenience method for,
 ```ts
-const exists : boolean = await tsql.from(myTable)
+const row = await tsql.from(myTable)
     .whereEqCandidateKey(
         tables => tables.myTable,
         {
@@ -260,7 +260,7 @@ const row = await tsql.from(myTable)
         9001n
     ))
     .select(columns => [columns])
-    .exists(connection);
+    .fetchOne(connection);
 ```
 
 -----
