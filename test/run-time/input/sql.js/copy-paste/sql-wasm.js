@@ -1248,7 +1248,7 @@ if (ENVIRONMENT_IS_NODE) {
 
 
   process['on']('unhandledRejection', (err) => {
-    console.log("unhandled rejection", err, err.sql);
+    console.log("[unhandled rejection]", err, err.sql);
     //abort(err);
   });
 

@@ -1,18 +1,19 @@
-export declare const fetchedRow0: Promise<{
+import * as tsql from "../../../../../dist";
+export declare const fetchedRow0: tsql.ExecutionUtil.FetchOnePromise<{
     readonly createdAt: Date;
     readonly myTableId: bigint;
 }>;
-export declare const fetchedRow1: Promise<{
+export declare const fetchedRow1: tsql.ExecutionUtil.FetchOnePromise<{
     readonly myTableId: bigint;
 }>;
-export declare const fetchedRow2: Promise<{
+export declare const fetchedRow2: tsql.ExecutionUtil.FetchOnePromise<{
     readonly createdAt: Date;
 }>;
-export declare const fetchedRow3: Promise<{
+export declare const fetchedRow3: tsql.ExecutionUtil.FetchOnePromise<{
     readonly createdAt: Date;
     readonly myTableId: bigint;
 }>;
-export declare const fetchedRow4: Promise<{
+export declare const fetchedRow4: tsql.ExecutionUtil.FetchOnePromise<{
     readonly createdAt: Date;
     readonly myTableId: bigint;
     readonly dayAfterCreation: Date;

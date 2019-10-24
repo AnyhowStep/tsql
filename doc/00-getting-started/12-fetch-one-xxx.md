@@ -22,18 +22,6 @@ Maybe implement the following?
 
 -----
 
-+ `.fetchOneUnmappedOr()`
-+ `.fetchOneUnmappedFlattenedOr()`
-+ `.fetchOneMappedOr()`
-
------
-
-+ `.fetchOneUnmappedOrUndefined()`
-+ `.fetchOneUnmappedFlattenedOrUndefined()`
-+ `.fetchOneMappedOrUndefined()`
-
------
-
 ### `.fetchOne()`
 
 Attempts to fetch exactly one row.
@@ -57,3 +45,45 @@ Attempts to fetch exactly one row.
 ### `.fetchOneOrUndefined()`
 
 Convenience method for `.fetchOneOr(connection, undefined)`.
+
+-----
+
+### `ExecutionUtil.FetchOnePromise<>`
+
+`.fetchOne()` actually returns a value of type `ExecutionUtil.FetchOnePromise<>`
+
+It is essentially the same as `Promise<>`, with two extra methods,
+
++ `.or(defaultValue)`
+
+  Behaves the same as `.fetchOneOr()`
+
+  ```ts
+  myQuery
+      .fetchOne(connection)
+      .or(1337)
+      .then((row) => {
+          if (row == 1337) {
+              //No row was fetched
+          } else {
+              //A row was fetched
+          }
+      });
+  ```
+
++ `.orUndefined()`
+
+  Behaves the same as `.fetchOneOrUndefined()`
+
+  ```ts
+  myQuery
+      .fetchOne(connection)
+      .orUndefined()
+      .then((row) => {
+          if (row == undefined) {
+              //No row was fetched
+          } else {
+              //A row was fetched
+          }
+      });
+  ```

@@ -2,6 +2,8 @@
 
 A collection of convenience methods to fetch a single row from a table, at most.
 
+All these methods return an instance of type `ExecutionUtil.FetchOnePromise<>`
+
 -----
 
 ### `table.fetchOneByPrimaryKey()`

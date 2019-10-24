@@ -1,8 +1,6 @@
 import {FetchAllConnection, FetchedRow} from "../../helper-type";
 import {QueryBaseUtil} from "../../../../query-base";
-import {fetchAllImpl} from "./fetch-all-impl";
-import {trySetLimit2} from "./try-set-limit-2";
-import {ensureOneOr} from "./ensure-one-or";
+import {fetchOneImpl} from "./fetch-one-impl";
 
 export async function fetchOneOrImpl<
     QueryT extends QueryBaseUtil.AfterSelectClause & QueryBaseUtil.NonCorrelated,
@@ -17,11 +15,6 @@ export async function fetchOneOrImpl<
         row : FetchedRow<QueryT>|DefaultValueT,
     }>
 ) {
-    const limitedQuery = trySetLimit2(query);
-
-    const fetched = await fetchAllImpl<QueryT>(limitedQuery, connection);
-    return {
-        sql : fetched.sql,
-        row : ensureOneOr(limitedQuery, fetched, defaultValue),
-    };
+    return fetchOneImpl(query, connection)
+        .or(defaultValue);
 }

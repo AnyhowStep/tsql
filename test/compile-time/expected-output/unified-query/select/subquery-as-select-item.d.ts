@@ -86,7 +86,7 @@ export declare const myQuery: tsql.Query<{
     compoundQueryLimitClause: undefined;
     mapDelegate: undefined;
 }>;
-export declare const fetchedRow: Promise<{
+export declare const fetchedRow: tsql.ExecutionUtil.FetchOnePromise<{
     readonly myColumn: bigint;
     readonly aliasedSubqueryExpression: bigint | null;
     readonly aliasedColumnExpression: bigint;

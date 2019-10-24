@@ -564,7 +564,7 @@ export class Table<DataT extends TableData> implements ITable {
         );
     }
 
-    async fetchOne (
+    fetchOne (
         connection : SelectConnection,
         whereDelegate : WhereDelegate<
             FromClauseUtil.From<
@@ -572,8 +572,8 @@ export class Table<DataT extends TableData> implements ITable {
                 this
             >
         >
-    ) : Promise<Row_NonUnion<this>>;
-    async fetchOne<
+    ) : ExecutionUtil.FetchOnePromise<Row_NonUnion<this>>;
+    fetchOne<
         SelectsT extends SelectClause
     > (
         connection : SelectConnection,
@@ -591,7 +591,7 @@ export class Table<DataT extends TableData> implements ITable {
             undefined,
             SelectsT
         >
-    ) : Promise<ExecutionUtil.UnmappedFlattenedRow<
+    ) : ExecutionUtil.FetchOneReturnType<
         QueryUtil.Select<
             QueryUtil.From<
                 QueryUtil.NewInstance,
@@ -599,8 +599,8 @@ export class Table<DataT extends TableData> implements ITable {
             >,
             SelectsT
         >
-    >>;
-    async fetchOne (
+    >;
+    fetchOne (
         connection : SelectConnection,
         whereDelegate : WhereDelegate<
             FromClauseUtil.From<
@@ -609,27 +609,44 @@ export class Table<DataT extends TableData> implements ITable {
             >
         >,
         selectDelegate? : (...args : any[]) => any[]
-    ) : Promise<any> {
-        const query = QueryUtil.newInstance()
-            .from<this>(
-                this as (
-                    this &
-                    QueryUtil.AssertValidCurrentJoin<QueryUtil.NewInstance, this>
+    ) : ExecutionUtil.FetchOnePromise<any> {
+        try {
+            const query = QueryUtil.newInstance()
+                .from<this>(
+                    this as (
+                        this &
+                        QueryUtil.AssertValidCurrentJoin<QueryUtil.NewInstance, this>
+                    )
                 )
-            )
-            .where(whereDelegate);
-        if (selectDelegate == undefined) {
-            return query
-                .select(((columns : any) => [columns]) as any)
-                .fetchOne(connection);
-        } else {
-            return query
-                .select(selectDelegate as any)
-                .fetchOne(connection);
+                .where(whereDelegate);
+            if (selectDelegate == undefined) {
+                return query
+                    .select(((columns : any) => [columns]) as any)
+                    .fetchOne(connection);
+            } else {
+                return query
+                    .select(selectDelegate as any)
+                    .fetchOne(connection);
+            }
+        } catch (err) {
+            const result = Promise.reject(err) as ExecutionUtil.FetchOnePromise<any>;
+            //eslint-disable-next-line @typescript-eslint/unbound-method
+            result.or = () => {
+                //To avoid `unhandled rejection` warnings
+                result.catch(() => {});
+                return Promise.reject(err);
+            };
+            //eslint-disable-next-line @typescript-eslint/unbound-method
+            result.orUndefined = () => {
+                //To avoid `unhandled rejection` warnings
+                result.catch(() => {});
+                return Promise.reject(err);
+            };
+            return result;
         }
     }
 
-    private async fetchOneHelper (
+    private fetchOneHelper (
         connection : SelectConnection,
         whereDelegate : WhereDelegate<
             FromClauseUtil.From<
@@ -638,7 +655,7 @@ export class Table<DataT extends TableData> implements ITable {
             >
         >,
         selectDelegate? : (...args : any[]) => any[]
-    ) : Promise<any> {
+    ) : ExecutionUtil.FetchOnePromise<any> {
         if (selectDelegate == undefined) {
             return this.fetchOne(connection, whereDelegate);
         } else {
@@ -646,11 +663,11 @@ export class Table<DataT extends TableData> implements ITable {
         }
     }
 
-    async fetchOneByCandidateKey (
+    fetchOneByCandidateKey (
         connection : SelectConnection,
         candidateKey : StrictUnion<CandidateKey_NonUnion<this>>
-    ) : Promise<Row_NonUnion<this>>;
-    async fetchOneByCandidateKey<
+    ) : ExecutionUtil.FetchOnePromise<Row_NonUnion<this>>;
+    fetchOneByCandidateKey<
         SelectsT extends SelectClause
     > (
         connection : SelectConnection,
@@ -663,7 +680,7 @@ export class Table<DataT extends TableData> implements ITable {
             undefined,
             SelectsT
         >
-    ) : Promise<ExecutionUtil.UnmappedFlattenedRow<
+    ) : ExecutionUtil.FetchOneReturnType<
         QueryUtil.Select<
             QueryUtil.From<
                 QueryUtil.NewInstance,
@@ -671,24 +688,24 @@ export class Table<DataT extends TableData> implements ITable {
             >,
             SelectsT
         >
-    >>;
-    async fetchOneByCandidateKey (
+    >;
+    fetchOneByCandidateKey (
         connection : SelectConnection,
         candidateKey : StrictUnion<CandidateKey_NonUnion<this>>,
         selectDelegate? : (...args : any[]) => any[]
-    ) : Promise<any> {
+    ) : ExecutionUtil.FetchOnePromise<any> {
         return this.fetchOneHelper(
             connection,
             () => ExprLib.eqCandidateKey(this, candidateKey) as any,
             selectDelegate
         );
     }
-    async fetchOneByPrimaryKey (
+    fetchOneByPrimaryKey (
         this : Extract<this, TableWithPrimaryKey>,
         connection : SelectConnection,
         primaryKey : PrimaryKey_Input<Extract<this, TableWithPrimaryKey>>
-    ) : Promise<Row_NonUnion<this>>;
-    async fetchOneByPrimaryKey<
+    ) : ExecutionUtil.FetchOnePromise<Row_NonUnion<this>>;
+    fetchOneByPrimaryKey<
         SelectsT extends SelectClause
     > (
         this : Extract<this, TableWithPrimaryKey>,
@@ -702,7 +719,7 @@ export class Table<DataT extends TableData> implements ITable {
             undefined,
             SelectsT
         >
-    ) : Promise<ExecutionUtil.UnmappedFlattenedRow<
+    ) : ExecutionUtil.FetchOneReturnType<
         QueryUtil.Select<
             QueryUtil.From<
                 QueryUtil.NewInstance,
@@ -710,24 +727,24 @@ export class Table<DataT extends TableData> implements ITable {
             >,
             SelectsT
         >
-    >>;
-    async fetchOneByPrimaryKey (
+    >;
+    fetchOneByPrimaryKey (
         this : Extract<this, TableWithPrimaryKey>,
         connection : SelectConnection,
         primaryKey : PrimaryKey_Input<Extract<this, TableWithPrimaryKey>>,
         selectDelegate? : (...args : any[]) => any[]
-    ) : Promise<any> {
+    ) : ExecutionUtil.FetchOnePromise<any> {
         return this.fetchOneHelper(
             connection,
             () => ExprLib.eqPrimaryKey(this, primaryKey) as any,
             selectDelegate
         );
     }
-    async fetchOneBySuperKey (
+    fetchOneBySuperKey (
         connection : SelectConnection,
         superKey : SuperKey_Input<this>
-    ) : Promise<Row_NonUnion<this>>;
-    async fetchOneBySuperKey<
+    ) : ExecutionUtil.FetchOnePromise<Row_NonUnion<this>>;
+    fetchOneBySuperKey<
         SelectsT extends SelectClause
     > (
         connection : SelectConnection,
@@ -740,7 +757,7 @@ export class Table<DataT extends TableData> implements ITable {
             undefined,
             SelectsT
         >
-    ) : Promise<ExecutionUtil.UnmappedFlattenedRow<
+    ) : ExecutionUtil.FetchOneReturnType<
         QueryUtil.Select<
             QueryUtil.From<
                 QueryUtil.NewInstance,
@@ -748,12 +765,12 @@ export class Table<DataT extends TableData> implements ITable {
             >,
             SelectsT
         >
-    >>;
-    async fetchOneBySuperKey (
+    >;
+    fetchOneBySuperKey (
         connection : SelectConnection,
         superKey : SuperKey_Input<this>,
         selectDelegate? : (...args : any[]) => any[]
-    ) : Promise<any> {
+    ) : ExecutionUtil.FetchOnePromise<any> {
         return this.fetchOneHelper(
             connection,
             () => ExprLib.eqSuperKey(this, superKey) as any,

@@ -1319,15 +1319,13 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
             >
         >
     ) : (
-        Promise<
-            ExecutionUtil.FetchedRow<
-                Extract<
-                    this,
-                    (
-                        & QueryBaseUtil.AfterSelectClause
-                        & QueryBaseUtil.NonCorrelated
-                    )
-                >
+        ExecutionUtil.FetchOneReturnType<
+            Extract<
+                this,
+                (
+                    & QueryBaseUtil.AfterSelectClause
+                    & QueryBaseUtil.NonCorrelated
+                )
             >
         >
     ) {

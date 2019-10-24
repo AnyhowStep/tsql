@@ -29,3 +29,28 @@ tape(__filename, async (t) => {
 
     t.end();
 });
+
+tape(__filename, async (t) => {
+    const pool = new Pool(new SqliteWorker());
+
+    const resultSet = await pool.acquire((connection) => {
+        return tsql.selectValue(() => 42 as number)
+            .unionDistinct(
+                tsql.selectValue(() => 99)
+            )
+            .compoundQueryOrderBy(columns => [
+                columns.value.desc(),
+            ])
+            .compoundQueryLimit(1)
+            .fetchOne(connection)
+            .or("Hello, world");
+    });
+    t.deepEqual(
+        resultSet,
+        {
+            value : 99,
+        }
+    );
+
+    t.end();
+});
