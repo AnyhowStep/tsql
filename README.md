@@ -40,6 +40,8 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
 
 0. [`.fetchValueXxx()`](doc/00-getting-started/14-fetch-value-xxx.md)
 
+   0. [`table.fetchValueXxx()`](doc/00-getting-started/14a-table-fetch-value-xxx.md)
+
 0. [`.paginate()`](doc/00-getting-started/15-paginate.md)
 
 0. [`.emulatedCursor()`](doc/00-getting-started/16-emulated-cursor.md)

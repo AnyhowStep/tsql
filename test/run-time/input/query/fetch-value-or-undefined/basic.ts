@@ -22,3 +22,19 @@ tape(__filename, async (t) => {
 
     t.end();
 });
+
+tape(__filename, async (t) => {
+    const pool = new Pool(new SqliteWorker());
+
+    const resultSet = await pool.acquire((connection) => {
+        return tsql.selectValue(() => 42)
+            .fetchValue(connection)
+            .orUndefined();
+    });
+    t.deepEqual(
+        resultSet,
+        42
+    );
+
+    t.end();
+});

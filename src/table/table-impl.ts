@@ -12,9 +12,10 @@ import * as ExprLib from "../expr-library";
 import {PrimaryKey_Input} from "../primary-key";
 import {SuperKey_Input} from "../super-key";
 import {Row_NonUnion} from "../row";
-import {SelectClause, SelectDelegate} from "../select-clause";
+import {SelectClause, SelectDelegate, SelectValueDelegate, SelectClauseUtil} from "../select-clause";
 import {FromClauseUtil} from "../from-clause";
 import {WhereDelegate} from "../where-clause";
+import {AnyRawExpr} from "../raw-expr";
 /*import {PrimaryKey, PrimaryKeyUtil} from "../primary-key";
 import {CandidateKey, CandidateKeyUtil} from "../candidate-key";
 import {SuperKey, SuperKeyUtil} from "../super-key";*/
@@ -777,206 +778,162 @@ export class Table<DataT extends TableData> implements ITable {
             selectDelegate
         );
     }
+
+    fetchValue<
+        RawExprT extends AnyRawExpr
+    > (
+        connection : SelectConnection,
+        whereDelegate : WhereDelegate<
+            FromClauseUtil.From<
+                FromClauseUtil.NewInstance,
+                this
+            >
+        >,
+        selectValueDelegate : SelectValueDelegate<
+            FromClauseUtil.From<
+                FromClauseUtil.NewInstance,
+                this
+            >,
+            undefined,
+            RawExprT
+        >
+    ) : ExecutionUtil.FetchValueReturnType<
+        /**
+         * @todo Report assignability bug to TS issues page
+         */
+        /*
+            QueryUtil.SelectValue<
+                QueryUtil.From<
+                    QueryUtil.NewInstance,
+                    this
+                >,
+                RawExprT
+            >
+        */
+        QueryUtil.SelectNoSelectClause<
+            QueryUtil.From<
+                QueryUtil.NewInstance,
+                this
+            >,
+            SelectClauseUtil.ValueFromRawExpr<RawExprT>
+        >
+    > {
+        try {
+            return QueryUtil.newInstance()
+                .from<this>(
+                    this as (
+                        this &
+                        QueryUtil.AssertValidCurrentJoin<QueryUtil.NewInstance, this>
+                    )
+                )
+                .where(whereDelegate)
+                .selectValue(selectValueDelegate as any)
+                .fetchValue(connection) as ExecutionUtil.FetchValuePromise<any>;
+        } catch (err) {
+            const result = Promise.reject(err) as ExecutionUtil.FetchValuePromise<any>;
+            //eslint-disable-next-line @typescript-eslint/unbound-method
+            result.or = () => {
+                //To avoid `unhandled rejection` warnings
+                result.catch(() => {});
+                return Promise.reject(err);
+            };
+            //eslint-disable-next-line @typescript-eslint/unbound-method
+            result.orUndefined = () => {
+                //To avoid `unhandled rejection` warnings
+                result.catch(() => {});
+                return Promise.reject(err);
+            };
+            return result;
+        }
+    }
+
+    fetchValueByCandidateKey<
+        RawExprT extends AnyRawExpr
+    > (
+        connection : SelectConnection,
+        candidateKey : StrictUnion<CandidateKey_NonUnion<this>>,
+        selectValueDelegate : SelectValueDelegate<
+            FromClauseUtil.From<
+                FromClauseUtil.NewInstance,
+                this
+            >,
+            undefined,
+            RawExprT
+        >
+    ) : ExecutionUtil.FetchValueReturnType<
+        QueryUtil.SelectNoSelectClause<
+            QueryUtil.From<
+                QueryUtil.NewInstance,
+                this
+            >,
+            SelectClauseUtil.ValueFromRawExpr<RawExprT>
+        >
+    > {
+        return this.fetchValue(
+            connection,
+            () => ExprLib.eqCandidateKey(this, candidateKey) as any,
+            selectValueDelegate
+        );
+    }
+    fetchValueByPrimaryKey<
+        RawExprT extends AnyRawExpr
+    > (
+        this : Extract<this, TableWithPrimaryKey>,
+        connection : SelectConnection,
+        primaryKey : PrimaryKey_Input<Extract<this, TableWithPrimaryKey>>,
+        selectValueDelegate : SelectValueDelegate<
+            FromClauseUtil.From<
+                FromClauseUtil.NewInstance,
+                Extract<this, TableWithPrimaryKey>
+            >,
+            undefined,
+            RawExprT
+        >
+    ) : ExecutionUtil.FetchValueReturnType<
+        QueryUtil.SelectNoSelectClause<
+            QueryUtil.From<
+                QueryUtil.NewInstance,
+                Extract<this, TableWithPrimaryKey>
+            >,
+            SelectClauseUtil.ValueFromRawExpr<RawExprT>
+        >
+    > {
+        return this.fetchValue(
+            connection,
+            () => ExprLib.eqPrimaryKey(this, primaryKey) as any,
+            selectValueDelegate
+        );
+    }
+    fetchValueBySuperKey<
+        RawExprT extends AnyRawExpr
+    > (
+        connection : SelectConnection,
+        superKey : SuperKey_Input<this>,
+        selectValueDelegate : SelectValueDelegate<
+            FromClauseUtil.From<
+                FromClauseUtil.NewInstance,
+                this
+            >,
+            undefined,
+            RawExprT
+        >
+    ) : ExecutionUtil.FetchValueReturnType<
+        QueryUtil.SelectNoSelectClause<
+            QueryUtil.From<
+                QueryUtil.NewInstance,
+                this
+            >,
+            SelectClauseUtil.ValueFromRawExpr<RawExprT>
+        >
+    > {
+        return this.fetchValue(
+            connection,
+            () => ExprLib.eqSuperKey(this, superKey) as any,
+            selectValueDelegate
+        );
+    }
+
     /*
-
-    fetchValueByCk<
-        DelegateT extends QueryUtil.SelectValueDelegate<this>
-    > (
-        connection : IConnection,
-        ck : CandidateKey<this>,
-        delegate : QueryUtil.AssertValidSelectValueDelegate<this, DelegateT>
-    ) : (
-        Promise<
-            RawExprUtil.TypeOf<ReturnType<DelegateT>>
-        >
-    ) {
-        return QueryUtil.fetchValueByCk<this, DelegateT>(
-            connection,
-            this,
-            ck,
-            delegate
-        );
-    }
-    fetchValueByPk<
-        DelegateT extends QueryUtil.SelectValueDelegate<Extract<this, TableWithPk>>
-    > (
-        this : Extract<this, TableWithPk>,
-        connection : IConnection,
-        pk : PrimaryKey<Extract<this, TableWithPk>>,
-        delegate : QueryUtil.AssertValidSelectValueDelegate<Extract<this, TableWithPk>, DelegateT>
-    ) : (
-        Promise<
-            RawExprUtil.TypeOf<ReturnType<DelegateT>>
-        >
-    ) {
-        return QueryUtil.fetchValueByPk<Extract<this, TableWithPk>, DelegateT>(
-            connection,
-            this,
-            pk,
-            delegate
-        );
-    }
-    fetchValueBySk<
-        DelegateT extends QueryUtil.SelectValueDelegate<this>
-    > (
-        connection : IConnection,
-        sk : SuperKey<this>,
-        delegate : QueryUtil.AssertValidSelectValueDelegate<this, DelegateT>
-    ) : (
-        Promise<
-            RawExprUtil.TypeOf<ReturnType<DelegateT>>
-        >
-    ) {
-        return QueryUtil.fetchValueBySk<this, DelegateT>(
-            connection,
-            this,
-            sk,
-            delegate
-        );
-    }
-
-    fetchValueOrUndefinedByCk<
-        DelegateT extends QueryUtil.SelectValueDelegate<this>
-    > (
-        connection : IConnection,
-        ck : CandidateKey<this>,
-        delegate : QueryUtil.AssertValidSelectValueDelegate<this, DelegateT>
-    ) : (
-        Promise<
-            RawExprUtil.TypeOf<ReturnType<DelegateT>>|undefined
-        >
-    ) {
-        return QueryUtil.fetchValueOrUndefinedByCk<this, DelegateT>(
-            connection,
-            this,
-            ck,
-            delegate
-        );
-    }
-    fetchValueOrUndefinedByPk<
-        DelegateT extends QueryUtil.SelectValueDelegate<Extract<this, TableWithPk>>
-    > (
-        this : Extract<this, TableWithPk>,
-        connection : IConnection,
-        pk : PrimaryKey<Extract<this, TableWithPk>>,
-        delegate : QueryUtil.AssertValidSelectValueDelegate<Extract<this, TableWithPk>, DelegateT>
-    ) : (
-        Promise<
-            RawExprUtil.TypeOf<ReturnType<DelegateT>>|undefined
-        >
-    ) {
-        return QueryUtil.fetchValueOrUndefinedByPk<Extract<this, TableWithPk>, DelegateT>(
-            connection,
-            this,
-            pk,
-            delegate
-        );
-    }
-    fetchValueOrUndefinedBySk<
-        DelegateT extends QueryUtil.SelectValueDelegate<this>
-    > (
-        connection : IConnection,
-        sk : SuperKey<this>,
-        delegate : QueryUtil.AssertValidSelectValueDelegate<this, DelegateT>
-    ) : (
-        Promise<
-            RawExprUtil.TypeOf<ReturnType<DelegateT>>|undefined
-        >
-    ) {
-        return QueryUtil.fetchValueOrUndefinedBySk<this, DelegateT>(
-            connection,
-            this,
-            sk,
-            delegate
-        );
-    }
-
-    fetchZeroOrOneByCk (
-        connection : IConnection,
-        ck : CandidateKey<this>
-    ) : Promise<Row<this>|undefined>;
-    fetchZeroOrOneByCk<
-        DelegateT extends QueryUtil.SelectDelegate<
-            QueryUtil.From<QueryUtil.NewInstance, this>
-        >
-    > (
-        connection : IConnection,
-        ck : CandidateKey<this>,
-        delegate : QueryUtil.AssertValidSelectDelegate<
-            QueryUtil.From<QueryUtil.NewInstance, this>,
-            DelegateT
-        >
-    ) : Promise<QueryUtil.UnmappedTypeNoJoins<ReturnType<DelegateT>>|undefined>;
-    fetchZeroOrOneByCk (
-        connection : IConnection,
-        ck : CandidateKey<this>,
-        delegate? : (...args : any[]) => any[]
-    ) {
-        if (delegate == undefined) {
-            return QueryUtil.fetchZeroOrOneByCk(connection, this, ck);
-        } else {
-            return QueryUtil.fetchZeroOrOneByCk(connection, this, ck, delegate as any);
-        }
-    }
-    fetchZeroOrOneByPk (
-        this : Extract<this, TableWithPk>,
-        connection : IConnection,
-        pk : PrimaryKey<Extract<this, TableWithPk>>
-    ) : (
-        Promise<Row<this>|undefined>
-    );
-    fetchZeroOrOneByPk<
-        DelegateT extends QueryUtil.SelectDelegate<
-            QueryUtil.From<QueryUtil.NewInstance, Extract<this, TableWithPk>>
-        >
-    > (
-        this : Extract<this, TableWithPk>,
-        connection : IConnection,
-        pk : PrimaryKey<Extract<this, TableWithPk>>,
-        delegate : QueryUtil.AssertValidSelectDelegate<
-            QueryUtil.From<QueryUtil.NewInstance, Extract<this, TableWithPk>>,
-            DelegateT
-        >
-    ) : Promise<QueryUtil.UnmappedTypeNoJoins<ReturnType<DelegateT>>|undefined>;
-    fetchZeroOrOneByPk (
-        this : Extract<this, TableWithPk>,
-        connection : IConnection,
-        pk : PrimaryKey<Extract<this, TableWithPk>>,
-        delegate? : (...args : any[]) => any
-    ) {
-        if (delegate == undefined) {
-            return QueryUtil.fetchZeroOrOneByPk(connection, this, pk);
-        } else {
-            return QueryUtil.fetchZeroOrOneByPk(connection, this, pk, delegate as any);
-        }
-    }
-    fetchZeroOrOneBySk (
-        connection : IConnection,
-        sk : SuperKey<this>
-    ) : Promise<Row<this>|undefined>;
-    fetchZeroOrOneBySk<
-        DelegateT extends QueryUtil.SelectDelegate<
-            QueryUtil.From<QueryUtil.NewInstance, this>
-        >
-    > (
-        connection : IConnection,
-        sk : SuperKey<this>,
-        delegate : QueryUtil.AssertValidSelectDelegate<
-            QueryUtil.From<QueryUtil.NewInstance, this>,
-            DelegateT
-        >
-    ) : Promise<QueryUtil.UnmappedTypeNoJoins<ReturnType<DelegateT>>|undefined>;
-    fetchZeroOrOneBySk (
-        connection : IConnection,
-        sk : SuperKey<this>,
-        delegate? : (...args : any[]) => any[]
-    ) {
-        if (delegate == undefined) {
-            return QueryUtil.fetchZeroOrOneBySk(connection, this, sk);
-        } else {
-            return QueryUtil.fetchZeroOrOneBySk(connection, this, sk, delegate as any);
-        }
-    }
 
     insertAndFetch<
         RowT extends InsertRow<Extract<this, InsertableTable>>

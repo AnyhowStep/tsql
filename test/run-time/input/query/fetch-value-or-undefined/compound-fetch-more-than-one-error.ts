@@ -30,3 +30,27 @@ tape(__filename, async (t) => {
 
     t.end();
 });
+
+tape(__filename, async (t) => {
+    const pool = new Pool(new SqliteWorker());
+
+    await pool.acquire((connection) => {
+        return tsql.selectValue(() => 42 as number)
+            .unionDistinct(
+                tsql.selectValue(() => 99)
+            )
+            .compoundQueryOrderBy(columns => [
+                columns.value.desc(),
+            ])
+            .fetchValue(connection)
+            .orUndefined();
+    }).then(() => {
+        t.fail("Expected to fail");
+    }).catch((err) => {
+        t.true(err instanceof tsql.TooManyRowsFoundError);
+        t.deepEqual(err.name, "TooManyRowsFoundError");
+        t.deepEqual(err.sql, `SELECT 42e0 AS "__aliased--value" UNION SELECT 99e0 AS "__aliased--value" ORDER BY "__aliased--value" DESC LIMIT 2 OFFSET 0`);
+    });
+
+    t.end();
+});

@@ -1420,15 +1420,13 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         >,
         connection : SelectConnection
     ) : (
-        Promise<
-            QueryBaseUtil.TypeOfSelectItem<
-                Extract<
-                    this,
-                    (
-                        & QueryBaseUtil.OneSelectItem<any>
-                        & QueryBaseUtil.NonCorrelated
-                    )
-                >
+        ExecutionUtil.FetchValueReturnType<
+            Extract<
+                this,
+                (
+                    & QueryBaseUtil.OneSelectItem<any>
+                    & QueryBaseUtil.NonCorrelated
+                )
             >
         >
     ) {

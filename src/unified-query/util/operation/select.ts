@@ -3,6 +3,46 @@ import {QueryBaseUtil} from "../../../query-base";
 import {Query} from "../../query-impl";
 import {BeforeCompoundQueryClause} from "../helper-type";
 import {Correlate, correlate} from "./correlate";
+import {BeforeSelectClause} from "../../../query-base/util";
+
+/**
+ * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966
+ *
+ * This hack should only really be reserved for types that are more likely
+ * to trigger max depth/max count errors.
+ */
+export type SelectNoSelectClauseImpl<
+    SelectsT extends SelectClause,
+    FromClauseT extends BeforeCompoundQueryClause["fromClause"],
+    LimitClauseT extends BeforeCompoundQueryClause["limitClause"],
+    CompoundQueryClauseT extends BeforeCompoundQueryClause["compoundQueryClause"],
+    CompoundQueryLimitClauseT extends BeforeCompoundQueryClause["compoundQueryLimitClause"],
+    MapDelegateT extends BeforeCompoundQueryClause["mapDelegate"],
+> = (
+    Query<{
+        fromClause : FromClauseT,
+        selectClause : SelectsT,
+
+        limitClause : LimitClauseT,
+
+        compoundQueryClause : CompoundQueryClauseT,
+        compoundQueryLimitClause : CompoundQueryLimitClauseT,
+        mapDelegate : MapDelegateT,
+    }>
+);
+export type SelectNoSelectClause<
+    QueryT extends BeforeCompoundQueryClause & BeforeSelectClause,
+    SelectsT extends SelectClause
+> = (
+    SelectNoSelectClauseImpl<
+        SelectsT,
+        QueryT["fromClause"],
+        QueryT["limitClause"],
+        QueryT["compoundQueryClause"],
+        QueryT["compoundQueryLimitClause"],
+        QueryT["mapDelegate"]
+    >
+);
 
 /**
  * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966
