@@ -1,7 +1,9 @@
+import * as tm from "type-mapping";
 import * as tsql from "../../../../dist";
 import {ISqliteWorker, SqliteAction, FromSqliteMessage, ToSqliteMessage} from "./worker.sql";
 import {AsyncQueue} from "./async-queue";
 import {sqliteSqlfier} from "../../../sqlite-sqlfier";
+import {ITable, RawExprUtil} from "../../../../dist";
 
 export class IdAllocator {
     private nextId = 0;
@@ -217,6 +219,77 @@ export class Connection {
                         return obj;
                     }),
                     columns : resultSet.columns,
+                };
+            })
+            .catch((err) => {
+                //console.error("error encountered", sql);
+                throw err;
+            });
+    }
+
+    insertOne<TableT extends ITable> (table : TableT, row : tsql.InsertRow<TableT>) : Promise<tsql.InsertResult> {
+        const columnAliases = tsql.TableUtil.columnAlias(table)
+            .filter(columnAlias => {
+                return (row as { [k:string]:unknown })[columnAlias] !== undefined;
+            })
+            .sort();
+
+        const values = columnAliases.map(
+            columnAlias => RawExprUtil.buildAst(
+                row[columnAlias as unknown as keyof typeof row
+            ])
+        ).reduce<tsql.Ast[]>(
+            (values, ast) => {
+                if (values.length > 0) {
+                    values.push(", ");
+                }
+                values.push(ast);
+                return values;
+            },
+            [] as tsql.Ast[]
+        );
+
+        const ast : tsql.Ast[] = [
+            `INSERT INTO`,
+            /**
+             * We use the `unaliasedAst` because the user may have called `setSchemaName()`
+             */
+            table.unaliasedAst,
+            "(",
+            columnAliases.map(tsql.escapeIdentifierWithDoubleQuotes).join(", "),
+            ") VALUES (",
+            ...values,
+            ")",
+        ];
+        const sql = tsql.AstUtil.toSql(ast, sqliteSqlfier);
+        return this.exec(sql)
+            .then(async (result) => {
+                if (result.execResult.length != 0) {
+                    throw new Error(`insertOne() should have no result set; found ${result.execResult.length}`);
+                }
+                if (result.rowsModified != 1) {
+                    throw new Error(`insertOne() should modify one row`);
+                }
+
+                const autoIncrementId = (table.autoIncrement == undefined) ?
+                    undefined :
+                    await tsql
+                        .selectValue(() => tsql.expr(
+                            {
+                                mapper : tm.mysql.bigIntSigned(),
+                                usedRef : tsql.UsedRefUtil.fromColumnRef({}),
+                            },
+                            "LAST_INESRT_ROWID()"
+                        ))
+                        .fetchValue(this);
+
+                const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
+                return {
+                    query : { sql, },
+                    insertedRowCount : BigInt(1),
+                    autoIncrementId,
+                    warningCount : BigInt(0),
+                    message : "ok",
                 };
             })
             .catch((err) => {

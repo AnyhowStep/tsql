@@ -231,3 +231,8 @@ export type TableWithPrimaryKey = (
     ITable &
     { primaryKey : Key }
 );
+
+export type TableWithAutoIncrement = (
+    ITable &
+    { autoIncrement : string }
+);

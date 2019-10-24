@@ -26,6 +26,7 @@ export * from "./from-clause";
 export * from "./fractional-arithmetic-expr";
 export * from "./group-by-clause";
 export * from "./having-clause";
+export * from "./insert";
 export * from "./integer-arithmetic-expr";
 export * from "./join";
 export * from "./join-map";

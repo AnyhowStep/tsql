@@ -1,5 +1,7 @@
 import {TransactionCallback} from "../pool";
 import {IQueryBase} from "../../query-base";
+import {ITable} from "../../table";
+import {InsertRow} from "../../insert";
 
 export interface RawQueryResult {
     query   : { sql : string },
@@ -12,17 +14,37 @@ export interface SelectResult {
     columns : string[],
 }
 export interface InsertResult {
-    fieldCount   : number;
-    affectedRows : number;
-    insertId     : bigint;
-    serverStatus : number;
-    warningCount : number;
-    message      : string;
-    protocol41   : boolean;
-    changedRows  : number;
+    query : { sql : string },
 
-    //alias for affectedRows
-    insertedRowCount : number;
+    //alias for affectedRows on MySQL
+    insertedRowCount : bigint;
+
+    /**
+     * If the table has an `AUTO_INCREMENT`/`SERIAL` column, it returns `> 0n`.
+     * Else, it returns `undefined`.
+     *
+     * If multiple rows are inserted, there is no guarantee that `insertId` will be set.
+     *
+     * -----
+     *
+     * If you explicitly set the value of the `AUTO_INCREMENT` column,
+     * should there be a guarantee that it is set to the explicit value?
+     *
+     * Using MySQL's `LAST_INSERT_ID()` returns `0`, in this case.
+     * But the library should be able to infer...
+     */
+    //alias for `insertId` in MySQL
+    autoIncrementId : bigint|undefined;
+
+    /**
+     * May be the duplicate row count, or some other value.
+     */
+    warningCount : bigint;
+    /**
+     * An arbitrary message.
+     * May be an empty string.
+     */
+    message : string;
 }
 export interface RawUpdateResult {
     fieldCount   : number;
@@ -132,7 +154,7 @@ export interface IConnection {
     /**
      * @todo
      */
-    insert (sql : string) : Promise<InsertResult>;
+    insertOne<TableT extends ITable> (table : TableT, row : InsertRow<TableT>) : Promise<InsertResult>;
     /**
      * @todo
      */
@@ -151,3 +173,8 @@ export interface ITransactionConnection extends IConnection {
  * Only `SELECT` statements can be executed by this connection.
  */
 export type SelectConnection = Pick<IConnection, "select">;
+
+/**
+ * `INSERT` and `SELECT` statements can be executed by this connection.
+ */
+export type InsertOneConnection = Pick<IConnection, "select"|"insertOne">;
