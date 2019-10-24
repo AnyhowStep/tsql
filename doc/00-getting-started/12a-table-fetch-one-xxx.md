@@ -2,7 +2,7 @@
 
 A collection of convenience methods to fetch a single row from a table, at most.
 
-All these methods return an instance of type `ExecutionUtil.FetchOnePromise<>`
+All these methods return an instance of type [`ExecutionUtil.FetchOnePromise<>`](/doc/00-getting-started/12-fetch-one-xxx.md#executionutilfetchonepromise)
 
 -----
 

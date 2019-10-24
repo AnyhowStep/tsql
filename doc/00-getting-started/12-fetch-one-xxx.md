@@ -50,7 +50,7 @@ Convenience method for `.fetchOneOr(connection, undefined)`.
 
 ### `ExecutionUtil.FetchOnePromise<>`
 
-`.fetchOne()` actually returns a value of type `ExecutionUtil.FetchOnePromise<>`
+`.fetchOne()` actually returns a value of type [`ExecutionUtil.FetchOnePromise<>`](/src/execution/util/operation/fetch-one.ts#L5-L8)
 
 It is essentially the same as `Promise<>`, with two extra methods,
 
