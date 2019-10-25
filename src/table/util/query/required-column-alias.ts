@@ -8,7 +8,8 @@ export type RequiredColumnAlias<TableT extends ITable> =
         (
             TableT["generatedColumns"][number] |
             TableT["nullableColumns"][number] |
-            TableT["explicitDefaultValueColumns"][number]
+            TableT["explicitDefaultValueColumns"][number] |
+            TableT["autoIncrement"]
         )
     >
 ;
@@ -22,7 +23,8 @@ export function isRequiredColumnAlias<TableT extends ITable> (
         Object.prototype.propertyIsEnumerable.call(table.columns, columnAlias) &&
         table.generatedColumns.indexOf(columnAlias) < 0 &&
         table.nullableColumns.indexOf(columnAlias) < 0 &&
-        table.explicitDefaultValueColumns.indexOf(columnAlias) < 0
+        table.explicitDefaultValueColumns.indexOf(columnAlias) < 0 &&
+        table.autoIncrement !== columnAlias
     );
 }
 export function requiredColumnAlias<TableT extends ITable> (

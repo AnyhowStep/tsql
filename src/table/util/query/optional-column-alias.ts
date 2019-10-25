@@ -6,9 +6,11 @@ export type OptionalColumnAlias<TableT extends ITable> =
         (
             | TableT["nullableColumns"][number]
             | TableT["explicitDefaultValueColumns"][number]
+            | TableT["autoIncrement"]
         ),
         (
-            TableT["generatedColumns"][number]
+            | TableT["generatedColumns"][number]
+            | undefined
         )
     >
 ;
@@ -19,7 +21,8 @@ export function isOptionalColumnAlias<TableT extends ITable> (
     return (
         (
             table.nullableColumns.indexOf(columnAlias) >= 0 ||
-            table.explicitDefaultValueColumns.indexOf(columnAlias) >= 0
+            table.explicitDefaultValueColumns.indexOf(columnAlias) >= 0 ||
+            table.autoIncrement === columnAlias
         ) &&
         table.generatedColumns.indexOf(columnAlias) < 0
     );

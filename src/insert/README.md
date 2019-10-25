@@ -149,5 +149,5 @@ VALUES
   + https://dev.mysql.com/doc/refman/8.0/en/information-functions.html#function_last-insert-id
 + PostgreSQL  : `... RETURNING /* AUTO_INCREMENT COLUMN NAME */`
   + https://stackoverflow.com/questions/2944297/postgresql-function-for-last-inserted-id
-+ SQLite      : `LAST_INESRT_ROWID()`
++ SQLite      : `LAST_INSERT_ROWID()`
   + https://www.sqlite.org/lang_corefunc.html#last_insert_rowid

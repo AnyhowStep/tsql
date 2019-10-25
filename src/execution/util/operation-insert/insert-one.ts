@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
-import {ITable, TableWithAutoIncrement, TableUtil} from "../../../table";
+import {ITable, TableWithAutoIncrement, TableUtil, TableWithoutAutoIncrement} from "../../../table";
 import {InsertOneConnection, InsertResult} from "../../connection";
-import {InsertRow} from "../../../insert";
+import {InsertRow, InsertRowPrimitiveAutoIncrement} from "../../../insert";
 import {isPrimitiveExpr} from "../../../primitive-expr/util";
 import {RawExprUtil} from "../../../raw-expr";
 import {ExprUtil} from "../../../expr";
@@ -140,12 +140,12 @@ export async function insertOne<
 > (
     connection : InsertOneConnection,
     table : TableT,
-    row : InsertRow<TableT>
+    row : InsertRowPrimitiveAutoIncrement<TableT>
 ) : (
     Promise<InsertOneResultWithAutoIncrement<TableT>>
 );
 export async function insertOne<
-    TableT extends ITable
+    TableT extends TableWithoutAutoIncrement
 > (
     connection : InsertOneConnection,
     table : TableT,
@@ -164,11 +164,40 @@ export async function insertOne<
 ) {
     row = cleanInsertRow(table, row);
 
-    const insertResult = await connection.insertOne(table, row);
-
     if (table.autoIncrement == undefined) {
-        return insertResult;
+        return connection.insertOne(table, row);
     }
+
+    const explicitAutoIncrementValue = (row as { [k:string]:unknown })[table.autoIncrement];
+
+    if (explicitAutoIncrementValue === undefined) {
+        const insertResult = await connection.insertOne(table, row);
+
+        if (insertResult.autoIncrementId != undefined) {
+            return {
+                ...insertResult,
+                [table.autoIncrement] : insertResult.autoIncrementId,
+            };
+        }
+
+        /**
+         * @todo Custom error type
+         */
+        throw new Error(`Successful insertOne() to ${table.alias} should return autoIncrementId`);
+    }
+
+    if (
+        typeof explicitAutoIncrementValue != "number" &&
+        typeof explicitAutoIncrementValue != "string" &&
+        !tm.TypeUtil.isBigInt(explicitAutoIncrementValue)
+    ) {
+        /**
+         * @todo Custom error type
+         */
+        throw new Error(`Explicit autoIncrement value for ${table.alias} must be bigint|number|string`);
+    }
+
+    const insertResult = await connection.insertOne(table, row);
 
     if (insertResult.autoIncrementId != undefined) {
         return {
@@ -177,25 +206,14 @@ export async function insertOne<
         };
     }
 
-    const explicitAutoIncrementValue = (row as { [k:string]:unknown })[table.autoIncrement];
-    if (
-        typeof explicitAutoIncrementValue == "number" ||
-        typeof explicitAutoIncrementValue == "string" ||
-        tm.TypeUtil.isBigInt(explicitAutoIncrementValue)
-    ) {
-        const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
-        /**
-         * User supplied an explicit value for the `AUTO_INCREMENT`/`SERIAL` column, for whatever reason.
-         * Use it.
-         */
-        return {
-            ...insertResult,
-            [table.autoIncrement] : BigInt(explicitAutoIncrementValue),
-        };
-    }
-
+    const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
     /**
-     * @todo Custom error type
+     * User supplied an explicit value for the `AUTO_INCREMENT`/`SERIAL` column, for whatever reason.
+     * Use it.
      */
-    throw new Error(`Successful insertOne() to ${table.alias} should return autoIncrementId`);
+    return {
+        ...insertResult,
+        autoIncrementId : BigInt(explicitAutoIncrementValue),
+        [table.autoIncrement] : BigInt(explicitAutoIncrementValue),
+    };
 }

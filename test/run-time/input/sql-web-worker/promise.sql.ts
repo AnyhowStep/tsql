@@ -271,23 +271,37 @@ export class Connection {
                     throw new Error(`insertOne() should modify one row`);
                 }
 
-                const autoIncrementId = (table.autoIncrement == undefined) ?
+                const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
+
+                const autoIncrementId = (
+                    (table.autoIncrement == undefined) ?
                     undefined :
+                    (row[table.autoIncrement as keyof typeof row] === undefined) ?
                     await tsql
                         .selectValue(() => tsql.expr(
                             {
                                 mapper : tm.mysql.bigIntSigned(),
                                 usedRef : tsql.UsedRefUtil.fromColumnRef({}),
                             },
-                            "LAST_INESRT_ROWID()"
+                            "LAST_INSERT_ROWID()"
                         ))
-                        .fetchValue(this);
+                        .fetchValue(this) :
+                    /**
+                     * Emulate MySQL behaviour
+                     */
+                    BigInt(0)
+                );
 
-                const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
                 return {
                     query : { sql, },
                     insertedRowCount : BigInt(1),
-                    autoIncrementId,
+                    autoIncrementId : (
+                        autoIncrementId == undefined ?
+                        undefined :
+                        tm.BigIntUtil.equal(autoIncrementId, BigInt(0)) ?
+                        undefined :
+                        autoIncrementId
+                    ),
                     warningCount : BigInt(0),
                     message : "ok",
                 };

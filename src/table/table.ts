@@ -236,3 +236,8 @@ export type TableWithAutoIncrement = (
     ITable &
     { autoIncrement : string }
 );
+
+export type TableWithoutAutoIncrement = (
+    ITable &
+    { autoIncrement : undefined }
+);
