@@ -1,6 +1,6 @@
 import {TransactionCallback} from "../pool";
 import {IQueryBase} from "../../query-base";
-import {ITable} from "../../table";
+import {InsertableTable} from "../../table";
 import {InsertRow} from "../../insert";
 
 export interface RawQueryResult {
@@ -67,6 +67,32 @@ export interface InsertManyResult {
      */
     message : string;
 }
+export interface IgnoredInsertOneResult {
+    query : { sql : string },
+
+    //alias for affectedRows on MySQL
+    insertedRowCount : 0n;
+
+    /**
+     * No rows were inserted. So, there cannot be an `autoIncrementId`.
+     */
+    //alias for `insertId` in MySQL
+    autoIncrementId : undefined;
+
+    /**
+     * May be the duplicate row count, or some other value.
+     */
+    warningCount : bigint;
+    /**
+     * An arbitrary message.
+     * May be an empty string.
+     */
+    message : string;
+}
+export type InsertIgnoreOneResult =
+    | IgnoredInsertOneResult
+    | InsertOneResult
+;
 export interface RawUpdateResult {
     fieldCount   : number;
     affectedRows : number;
@@ -172,8 +198,12 @@ export interface IConnection {
 
     rawQuery (sql : string) : Promise<RawQueryResult>;
     select (query : IQueryBase) : Promise<SelectResult>;
-    insertOne<TableT extends ITable> (table : TableT, row : InsertRow<TableT>) : Promise<InsertOneResult>;
-    insertMany<TableT extends ITable> (table : TableT, rows : readonly [InsertRow<TableT>, ...InsertRow<TableT>[]]) : Promise<InsertManyResult>;
+
+    insertOne<TableT extends InsertableTable> (table : TableT, row : InsertRow<TableT>) : Promise<InsertOneResult>;
+    insertMany<TableT extends InsertableTable> (table : TableT, rows : readonly [InsertRow<TableT>, ...InsertRow<TableT>[]]) : Promise<InsertManyResult>;
+
+    insertIgnoreOne<TableT extends InsertableTable> (table : TableT, row : InsertRow<TableT>) : Promise<InsertIgnoreOneResult>;
+
     /**
      * @todo
      */
@@ -202,3 +232,8 @@ export type InsertOneConnection = Pick<IConnection, "select"|"insertOne">;
  * `INSERT` and `SELECT` statements can be executed by this connection.
  */
 export type InsertManyConnection = Pick<IConnection, "select"|"insertMany">;
+
+/**
+ * `INSERT` and `SELECT` statements can be executed by this connection.
+ */
+export type InsertIgnoreOneConnection = Pick<IConnection, "select"|"insertIgnoreOne">;

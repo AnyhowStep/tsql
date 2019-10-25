@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {ITable} from "../../../table";
+import {ITable, InsertableTable, TableUtil} from "../../../table";
 import {InsertManyResult, InsertManyConnection} from "../../connection";
 import {InsertRow, InsertUtil} from "../../../insert";
 
@@ -13,7 +13,7 @@ import {InsertRow, InsertUtil} from "../../../insert";
  * ```
  */
 export async function insertMany<
-    TableT extends ITable
+    TableT extends ITable & InsertableTable
 > (
     connection : InsertManyConnection,
     table : TableT,
@@ -21,6 +21,8 @@ export async function insertMany<
 ) : (
     Promise<InsertManyResult>
 ) {
+    TableUtil.assertInsertEnabled(table);
+
     if (rows.length == 0) {
         return {
             query : {

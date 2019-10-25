@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {ITable, TableWithAutoIncrement, TableWithoutAutoIncrement} from "../../../table";
+import {ITable, TableWithAutoIncrement, TableWithoutAutoIncrement, InsertableTable, TableUtil} from "../../../table";
 import {InsertOneConnection, InsertOneResult} from "../../connection";
 import {InsertRow, InsertRowPrimitiveAutoIncrement, InsertUtil} from "../../../insert";
 
@@ -20,7 +20,7 @@ export type InsertOneResultWithAutoIncrement<
  * ```
  */
 export async function insertOne<
-    TableT extends TableWithAutoIncrement
+    TableT extends TableWithAutoIncrement & InsertableTable
 > (
     connection : InsertOneConnection,
     table : TableT,
@@ -29,7 +29,7 @@ export async function insertOne<
     Promise<InsertOneResultWithAutoIncrement<TableT>>
 );
 export async function insertOne<
-    TableT extends TableWithoutAutoIncrement
+    TableT extends TableWithoutAutoIncrement & InsertableTable
 > (
     connection : InsertOneConnection,
     table : TableT,
@@ -38,7 +38,7 @@ export async function insertOne<
     Promise<InsertOneResult>
 );
 export async function insertOne<
-    TableT extends ITable
+    TableT extends ITable & InsertableTable
 > (
     connection : InsertOneConnection,
     table : TableT,
@@ -46,6 +46,8 @@ export async function insertOne<
 ) : (
     Promise<InsertOneResult>
 ) {
+    TableUtil.assertInsertEnabled(table);
+
     row = InsertUtil.cleanInsertRow(table, row);
 
     if (table.autoIncrement == undefined) {
