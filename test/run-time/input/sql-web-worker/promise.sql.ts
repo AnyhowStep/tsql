@@ -227,7 +227,7 @@ export class Connection {
             });
     }
 
-    insertOne<TableT extends ITable> (table : TableT, row : tsql.InsertRow<TableT>) : Promise<tsql.InsertResult> {
+    insertOne<TableT extends ITable> (table : TableT, row : tsql.InsertRow<TableT>) : Promise<tsql.InsertOneResult> {
         const columnAliases = tsql.TableUtil.columnAlias(table)
             .filter(columnAlias => {
                 return (row as { [k:string]:unknown })[columnAlias] !== undefined;
@@ -294,7 +294,7 @@ export class Connection {
 
                 return {
                     query : { sql, },
-                    insertedRowCount : BigInt(1),
+                    insertedRowCount : BigInt(1) as 1n,
                     autoIncrementId : (
                         autoIncrementId == undefined ?
                         undefined :

@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {ITable, TableWithAutoIncrement, TableUtil, TableWithoutAutoIncrement} from "../../../table";
-import {InsertOneConnection, InsertResult} from "../../connection";
+import {InsertOneConnection, InsertOneResult} from "../../connection";
 import {InsertRow, InsertRowPrimitiveAutoIncrement} from "../../../insert";
 import {isPrimitiveExpr} from "../../../primitive-expr/util";
 import {RawExprUtil} from "../../../raw-expr";
@@ -122,7 +122,7 @@ function cleanInsertRow<TableT extends ITable> (table : TableT, row : InsertRow<
 export type InsertOneResultWithAutoIncrement<
     TableT extends TableWithAutoIncrement
 > =
-    & InsertResult
+    & InsertOneResult
     & { [columnAlias in TableT["autoIncrement"]] : bigint }
 ;
 
@@ -151,7 +151,7 @@ export async function insertOne<
     table : TableT,
     row : InsertRow<TableT>
 ) : (
-    Promise<InsertResult>
+    Promise<InsertOneResult>
 );
 export async function insertOne<
     TableT extends ITable
@@ -160,7 +160,7 @@ export async function insertOne<
     table : TableT,
     row : InsertRow<TableT>
 ) : (
-    Promise<InsertResult>
+    Promise<InsertOneResult>
 ) {
     row = cleanInsertRow(table, row);
 

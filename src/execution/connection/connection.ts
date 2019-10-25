@@ -13,11 +13,11 @@ export interface SelectResult {
     rows    : Record<string, unknown>[],
     columns : string[],
 }
-export interface InsertResult {
+export interface InsertOneResult {
     query : { sql : string },
 
     //alias for affectedRows on MySQL
-    insertedRowCount : bigint;
+    insertedRowCount : 1n;
 
     /**
      * If the table has an `AUTO_INCREMENT`/`SERIAL` column, it returns `> 0n`.
@@ -35,6 +35,22 @@ export interface InsertResult {
      */
     //alias for `insertId` in MySQL
     autoIncrementId : bigint|undefined;
+
+    /**
+     * May be the duplicate row count, or some other value.
+     */
+    warningCount : bigint;
+    /**
+     * An arbitrary message.
+     * May be an empty string.
+     */
+    message : string;
+}
+export interface InsertManyResult {
+    query : { sql : string },
+
+    //alias for affectedRows on MySQL
+    insertedRowCount : bigint;
 
     /**
      * May be the duplicate row count, or some other value.
@@ -151,10 +167,8 @@ export interface IConnection {
 
     rawQuery (sql : string) : Promise<RawQueryResult>;
     select (query : IQueryBase) : Promise<SelectResult>;
-    /**
-     * @todo
-     */
-    insertOne<TableT extends ITable> (table : TableT, row : InsertRow<TableT>) : Promise<InsertResult>;
+    insertOne<TableT extends ITable> (table : TableT, row : InsertRow<TableT>) : Promise<InsertOneResult>;
+    insertMany<TableT extends ITable> (table : TableT, row : InsertRow<TableT>[]) : Promise<InsertManyResult>;
     /**
      * @todo
      */
@@ -178,3 +192,8 @@ export type SelectConnection = Pick<IConnection, "select">;
  * `INSERT` and `SELECT` statements can be executed by this connection.
  */
 export type InsertOneConnection = Pick<IConnection, "select"|"insertOne">;
+
+/**
+ * `INSERT` and `SELECT` statements can be executed by this connection.
+ */
+export type InsertManyConnection = Pick<IConnection, "select"|"insertMany">;

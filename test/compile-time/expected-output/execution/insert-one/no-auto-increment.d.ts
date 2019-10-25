@@ -1,2 +1,2 @@
 import * as tsql from "../../../../../dist";
-export declare const p: Promise<tsql.InsertResult>;
+export declare const p: Promise<tsql.InsertOneResult>;
