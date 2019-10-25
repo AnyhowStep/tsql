@@ -312,6 +312,101 @@ export class Connection {
             });
     }
 
+    insertIgnoreOne<TableT extends ITable> (table : TableT, row : tsql.InsertRow<TableT>) : Promise<tsql.InsertIgnoreOneResult> {
+        const columnAliases = tsql.TableUtil.columnAlias(table)
+            .filter(columnAlias => {
+                return (row as { [k:string]:unknown })[columnAlias] !== undefined;
+            })
+            .sort();
+
+        const values = columnAliases
+            .map(columnAlias => RawExprUtil.buildAst(
+                row[columnAlias as unknown as keyof typeof row]
+            ))
+            .reduce<tsql.Ast[]>(
+                (values, ast) => {
+                    if (values.length > 0) {
+                        values.push(", ");
+                    }
+                    values.push(ast);
+                    return values;
+                },
+                [] as tsql.Ast[]
+            );
+
+        const ast : tsql.Ast[] = [
+            `INSERT OR IGNORE INTO`,
+            /**
+             * We use the `unaliasedAst` because the user may have called `setSchemaName()`
+             */
+            table.unaliasedAst,
+            "(",
+            columnAliases.map(tsql.escapeIdentifierWithDoubleQuotes).join(", "),
+            ") VALUES (",
+            ...values,
+            ")",
+        ];
+        const sql = tsql.AstUtil.toSql(ast, sqliteSqlfier);
+        return this.exec(sql)
+            .then(async (result) => {
+                if (result.execResult.length != 0) {
+                    throw new Error(`insertIgnoreOne() should have no result set; found ${result.execResult.length}`);
+                }
+                if (result.rowsModified != 0 && result.rowsModified != 1) {
+                    throw new Error(`insertIgnoreOne() should modify zero or one row`);
+                }
+
+                const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
+
+                if (result.rowsModified == 0) {
+                    return {
+                        query : { sql, },
+                        insertedRowCount : BigInt(result.rowsModified) as 0n,
+                        autoIncrementId : undefined,
+                        warningCount : BigInt(0),
+                        message : "ok",
+                    };
+                }
+
+                const autoIncrementId = (
+                    (table.autoIncrement == undefined) ?
+                    undefined :
+                    (row[table.autoIncrement as keyof typeof row] === undefined) ?
+                    await tsql
+                        .selectValue(() => tsql.expr(
+                            {
+                                mapper : tm.mysql.bigIntSigned(),
+                                usedRef : tsql.UsedRefUtil.fromColumnRef({}),
+                            },
+                            "LAST_INSERT_ROWID()"
+                        ))
+                        .fetchValue(this) :
+                    /**
+                     * Emulate MySQL behaviour
+                     */
+                    BigInt(0)
+                );
+
+                return {
+                    query : { sql, },
+                    insertedRowCount : BigInt(result.rowsModified) as 1n,
+                    autoIncrementId : (
+                        autoIncrementId == undefined ?
+                        undefined :
+                        tm.BigIntUtil.equal(autoIncrementId, BigInt(0)) ?
+                        undefined :
+                        autoIncrementId
+                    ),
+                    warningCount : BigInt(0),
+                    message : "ok",
+                };
+            })
+            .catch((err) => {
+                //console.error("error encountered", sql);
+                throw err;
+            });
+    }
+
     private async fetchTableStructure (tableName : string) {
         const sqlite_master = tsql.table("sqlite_master")
             .addColumns({
