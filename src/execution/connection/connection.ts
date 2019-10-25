@@ -93,6 +93,27 @@ export type InsertIgnoreOneResult =
     | IgnoredInsertOneResult
     | InsertOneResult
 ;
+export interface InsertIgnoreManyResult {
+    query : {
+        /**
+         * Is an empty string if no rows were inserted.
+         */
+        sql : string
+    },
+
+    //alias for affectedRows on MySQL
+    insertedRowCount : bigint;
+
+    /**
+     * May be the duplicate row count, or some other value.
+     */
+    warningCount : bigint;
+    /**
+     * An arbitrary message.
+     * May be an empty string.
+     */
+    message : string;
+}
 export interface RawUpdateResult {
     fieldCount   : number;
     affectedRows : number;
@@ -203,6 +224,7 @@ export interface IConnection {
     insertMany<TableT extends InsertableTable> (table : TableT, rows : readonly [InsertRow<TableT>, ...InsertRow<TableT>[]]) : Promise<InsertManyResult>;
 
     insertIgnoreOne<TableT extends InsertableTable> (table : TableT, row : InsertRow<TableT>) : Promise<InsertIgnoreOneResult>;
+    insertIgnoreMany<TableT extends InsertableTable> (table : TableT, rows : readonly [InsertRow<TableT>, ...InsertRow<TableT>[]]) : Promise<InsertIgnoreManyResult>;
 
     /**
      * @todo
@@ -237,3 +259,8 @@ export type InsertManyConnection = Pick<IConnection, "select"|"insertMany">;
  * `INSERT` and `SELECT` statements can be executed by this connection.
  */
 export type InsertIgnoreOneConnection = Pick<IConnection, "select"|"insertIgnoreOne">;
+
+/**
+ * `INSERT` and `SELECT` statements can be executed by this connection.
+ */
+export type InsertIgnoreManyConnection = Pick<IConnection, "select"|"insertIgnoreMany">;
