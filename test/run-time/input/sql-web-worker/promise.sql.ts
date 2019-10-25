@@ -234,20 +234,20 @@ export class Connection {
             })
             .sort();
 
-        const values = columnAliases.map(
-            columnAlias => RawExprUtil.buildAst(
-                row[columnAlias as unknown as keyof typeof row
-            ])
-        ).reduce<tsql.Ast[]>(
-            (values, ast) => {
-                if (values.length > 0) {
-                    values.push(", ");
-                }
-                values.push(ast);
-                return values;
-            },
-            [] as tsql.Ast[]
-        );
+        const values = columnAliases
+            .map(columnAlias => RawExprUtil.buildAst(
+                row[columnAlias as unknown as keyof typeof row]
+            ))
+            .reduce<tsql.Ast[]>(
+                (values, ast) => {
+                    if (values.length > 0) {
+                        values.push(", ");
+                    }
+                    values.push(ast);
+                    return values;
+                },
+                [] as tsql.Ast[]
+            );
 
         const ast : tsql.Ast[] = [
             `INSERT INTO`,
@@ -302,6 +302,201 @@ export class Connection {
                         undefined :
                         autoIncrementId
                     ),
+                    warningCount : BigInt(0),
+                    message : "ok",
+                };
+            })
+            .catch((err) => {
+                //console.error("error encountered", sql);
+                throw err;
+            });
+    }
+
+    private async fetchTableStructure (tableName : string) {
+        const sqlite_master = tsql.table("sqlite_master")
+            .addColumns({
+                sql : tm.string(),
+                name : tm.string(),
+            })
+            .setPrimaryKey(columns => [columns.name]);
+        const sql = await sqlite_master.fetchValueByPrimaryKey(
+            this,
+            {
+                name : tableName,
+            },
+            columns => columns.sql
+        );
+
+        //Modified version of
+        //http://afoucal.free.fr/index.php/2009/01/26/get-default-value-and-unique-attribute-field-sqlite-database-using-air/
+        const allColumnDefSql = sql.replace(/^CREATE\s+\w+\s+(("\w+"|\w+)|\[(.+)\])\s+(\(|AS|)/im , "");
+        function getColumnDefSqlImpl (columnAlias : string) {
+            const columnRegex = new RegExp(columnAlias + "(.*?)(,|\r|$)", "m");
+
+            const columnDefSqlMatch = allColumnDefSql.match(columnRegex);
+            if (columnDefSqlMatch == undefined) {
+                return undefined;
+            }
+            return columnDefSqlMatch[1];
+        }
+        function getColumnDefSql (columnAlias : string) {
+            const resultA = getColumnDefSqlImpl(columnAlias);
+            if (resultA != undefined) {
+                return resultA;
+            }
+            const resultB = getColumnDefSqlImpl(tsql.escapeIdentifierWithDoubleQuotes(columnAlias));
+            if (resultB != undefined) {
+                return resultB;
+            }
+            throw new Error(`Cannot find column definition for ${tableName}.${columnAlias}`);
+        }
+        function isAutoIncrement (columnAlias : string) {
+            return /AUTOINCREMENT/i.test(getColumnDefSql(columnAlias));
+        }
+
+        const {execResult} = await this
+            .exec(`pragma table_info(${tsql.escapeIdentifierWithDoubleQuotes(tableName)})`);
+        if (execResult.length != 1) {
+            throw new Error(`Expected to fetch table info`);
+        }
+        const resultSet = execResult[0];
+        const objArr = resultSet.values.map((row) => {
+            const obj = resultSet.columns.reduce(
+                (obj, columnAlias, index) => {
+                    (obj as any)[columnAlias] = row[index];
+                    return obj;
+                },
+                {}
+            );
+            (obj as any).isAutoIncrement = isAutoIncrement((obj as any).name);
+            return obj;
+        });
+        return objArr as {
+            cid : bigint,
+            name : string,
+            type : string,
+            notnull : 1n|0n,
+            dflt_value : string|null,
+            pk : 1n|0n,
+            isAutoIncrement : boolean,
+        }[];
+    }
+
+    /**
+     * Unfortunately... This is SQLite.
+     *
+     * SQLite does not support the `DEFAULT` keyword present in MySQL and PostgreSQL
+     * ```sql
+     *  INSERT INTO
+     *      myTable (a, b)
+     *  VALUES
+     *      -- Error invalid syntax `DEFAULT`
+     *      (DEFAULT, 42);
+     * ```
+     *
+     * So, we need to break this into multiple `.insertOne()` statements
+     * to work for all cases.
+     *
+     * We can probably be more efficient and group rows into batches if they're
+     * consecutive and have the same columns that are defined but...
+     *
+     * Too much work for now.
+     *
+     * -----
+     *
+     * The thing is, if even one of the rows has an error on `INSERT`,
+     * then all `INSERT` must be rolled back.
+     */
+    async insertMany<TableT extends ITable> (
+        table : TableT,
+        rows : readonly [tsql.InsertRow<TableT>, ...tsql.InsertRow<TableT>[]]
+    ) : Promise<tsql.InsertManyResult> {
+        const structure = await this.fetchTableStructure(table.alias);
+        //console.log(structure);
+
+        const columnAliases = tsql.TableUtil.columnAlias(table)
+            .sort();
+
+        const values = rows.map(row => {
+            const ast = columnAliases
+                .map(columnAlias => {
+                    const value = row[columnAlias as unknown as keyof typeof row];
+                    if (value === undefined) {
+                        const columnDef = structure.find(columnDef => {
+                            return columnDef.name == columnAlias;
+                        });
+                        if (columnDef == undefined) {
+                            throw new Error(`Unknown column ${table.alias}.${columnAlias}`);
+                        }
+                        if (columnDef.dflt_value != undefined) {
+                            return columnDef.dflt_value;
+                        }
+
+                        if (tm.BigIntUtil.equal(columnDef.notnull, tm.BigInt(1))) {
+                            if (columnDef.isAutoIncrement) {
+                                return "NULL";
+                            }
+                            throw new Error(`${table.alias}.${columnAlias} is not nullable`);
+                        } else {
+                            return "NULL";
+                        }
+                    } else {
+                        return RawExprUtil.buildAst(
+                            value
+                        );
+                    }
+                })
+                .reduce<tsql.Ast[]>(
+                    (values, ast) => {
+                        if (values.length > 0) {
+                            values.push(", ");
+                        }
+                        values.push(ast);
+                        return values;
+                    },
+                    [] as tsql.Ast[]
+                );
+            ast.unshift("(");
+            ast.push(")");
+            return ast;
+        })
+        .reduce<tsql.Ast[]>(
+            (values, ast) => {
+                if (values.length > 0) {
+                    values.push(", ");
+                }
+                values.push(ast);
+                return values;
+            },
+            [] as tsql.Ast[]
+        );
+
+        const ast : tsql.Ast[] = [
+            `INSERT INTO`,
+            /**
+             * We use the `unaliasedAst` because the user may have called `setSchemaName()`
+             */
+            table.unaliasedAst,
+            "(",
+            columnAliases.map(tsql.escapeIdentifierWithDoubleQuotes).join(", "),
+            ") VALUES",
+            ...values,
+        ];
+        const sql = tsql.AstUtil.toSql(ast, sqliteSqlfier);
+        return this.exec(sql)
+            .then(async (result) => {
+                if (result.execResult.length != 0) {
+                    throw new Error(`insertMany() should have no result set; found ${result.execResult.length}`);
+                }
+                if (result.rowsModified != rows.length) {
+                    throw new Error(`insertMany() should modify ${rows.length} rows; only modified ${result.rowsModified} rows`);
+                }
+
+                const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
+
+                return {
+                    query : { sql, },
+                    insertedRowCount : BigInt(result.rowsModified),
                     warningCount : BigInt(0),
                     message : "ok",
                 };

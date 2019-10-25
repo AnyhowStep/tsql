@@ -1,123 +1,7 @@
 import * as tm from "type-mapping";
-import {ITable, TableWithAutoIncrement, TableUtil, TableWithoutAutoIncrement} from "../../../table";
+import {ITable, TableWithAutoIncrement, TableWithoutAutoIncrement} from "../../../table";
 import {InsertOneConnection, InsertOneResult} from "../../connection";
-import {InsertRow, InsertRowPrimitiveAutoIncrement} from "../../../insert";
-import {isPrimitiveExpr} from "../../../primitive-expr/util";
-import {RawExprUtil} from "../../../raw-expr";
-import {ExprUtil} from "../../../expr";
-import {ExprSelectItemUtil} from "../../../expr-select-item";
-import {QueryBaseUtil} from "../../../query-base";
-
-function cleanInsertRowColumn<TableT extends ITable> (
-    table : TableT,
-    row : InsertRow<TableT>,
-    columnAlias : keyof InsertRow<TableT>,
-    required : true
-) : InsertRow<TableT>[keyof InsertRow<TableT>];
-function cleanInsertRowColumn<TableT extends ITable> (
-    table : TableT,
-    row : InsertRow<TableT>,
-    columnAlias : keyof InsertRow<TableT>,
-    required : false
-) : InsertRow<TableT>[keyof InsertRow<TableT>]|undefined;
-function cleanInsertRowColumn<TableT extends ITable> (
-    table : TableT,
-    row : InsertRow<TableT>,
-    columnAlias : keyof InsertRow<TableT>,
-    required : boolean
-) : InsertRow<TableT>[keyof InsertRow<TableT>]|undefined {
-    const value = (
-        /**
-         * This is just safer
-         */
-        (
-            Object.prototype.hasOwnProperty.call(row, columnAlias) &&
-            Object.prototype.propertyIsEnumerable.call(row, columnAlias)
-        ) ?
-        row[columnAlias] :
-        undefined
-    );
-    if (value === undefined) {
-        if (required) {
-            /**
-             * @todo Custom error type
-             */
-            throw new Error(`Expected value for ${table.alias}.${columnAlias}; received undefined`);
-        } else {
-            return undefined;
-        }
-    }
-
-    if (isPrimitiveExpr(value)) {
-        return table.columns[columnAlias].mapper(
-            `${table.alias}.${columnAlias}`,
-            value
-        );
-    } else if (RawExprUtil.isAnySubqueryExpr(value)) {
-        /**
-         * Can't really perform many checks here.
-         * We can, however, check for `NULL`s.
-         */
-        if (
-            QueryBaseUtil.isZeroOrOneRow(value) &&
-            !tm.canOutputNull(table.columns[columnAlias].mapper)
-        ) {
-            /**
-             * @todo Custom error type
-             */
-            throw new Error(`Cannot INSERT possibly NULL subquery expression to ${table.alias}.${columnAlias}`);
-        }
-        return value as any;
-    } else {
-        /**
-         * Could be an `IExpr`, `IExprSelectItem`
-         *
-         * @todo Should we validate these?
-         */
-        if (
-            !ExprUtil.isExpr(value) &&
-            !ExprSelectItemUtil.isExprSelectItem(value)
-        ) {
-            /**
-             * @todo Custom error type
-             */
-            throw new Error(`Expected for ${table.alias}.${columnAlias} Expr|ExprSelectItem`);
-        }
-        return value as any;
-    }
-}
-
-/**
- * Removes excess properties.
- * Removes properties with value `undefined`.
- * Checks required properties are there.
- */
-function cleanInsertRow<TableT extends ITable> (table : TableT, row : InsertRow<TableT>) : InsertRow<TableT> {
-    const result = {} as InsertRow<TableT>;
-    for (const requiredColumnAlias of TableUtil.requiredColumnAlias(table)) {
-        result[requiredColumnAlias] = cleanInsertRowColumn(
-            table,
-            row,
-            requiredColumnAlias,
-            true
-        ) as any;
-    }
-
-    for (const optionalColumnAlias of TableUtil.optionalColumnAlias(table)) {
-        const value = cleanInsertRowColumn(
-            table,
-            row,
-            optionalColumnAlias,
-            false
-        );
-        if (value === undefined) {
-            continue;
-        }
-        result[optionalColumnAlias] = value as any;
-    }
-
-    return result;
-}
+import {InsertRow, InsertRowPrimitiveAutoIncrement, InsertUtil} from "../../../insert";
 
 export type InsertOneResultWithAutoIncrement<
     TableT extends TableWithAutoIncrement
@@ -162,7 +46,7 @@ export async function insertOne<
 ) : (
     Promise<InsertOneResult>
 ) {
-    row = cleanInsertRow(table, row);
+    row = InsertUtil.cleanInsertRow(table, row);
 
     if (table.autoIncrement == undefined) {
         return connection.insertOne(table, row);

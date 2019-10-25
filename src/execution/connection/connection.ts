@@ -47,7 +47,12 @@ export interface InsertOneResult {
     message : string;
 }
 export interface InsertManyResult {
-    query : { sql : string },
+    query : {
+        /**
+         * Is an empty string if no rows were inserted.
+         */
+        sql : string
+    },
 
     //alias for affectedRows on MySQL
     insertedRowCount : bigint;
@@ -168,7 +173,7 @@ export interface IConnection {
     rawQuery (sql : string) : Promise<RawQueryResult>;
     select (query : IQueryBase) : Promise<SelectResult>;
     insertOne<TableT extends ITable> (table : TableT, row : InsertRow<TableT>) : Promise<InsertOneResult>;
-    insertMany<TableT extends ITable> (table : TableT, row : InsertRow<TableT>[]) : Promise<InsertManyResult>;
+    insertMany<TableT extends ITable> (table : TableT, rows : readonly [InsertRow<TableT>, ...InsertRow<TableT>[]]) : Promise<InsertManyResult>;
     /**
      * @todo
      */

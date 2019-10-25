@@ -1,3 +1,5 @@
+import {ITable} from "./table";
+
 export class RowNotFoundError extends Error {
     /**
      * The SQL string that caused this error.
@@ -69,3 +71,57 @@ export class CannotCountError extends Error {
     }
 }
 CannotCountError.prototype.name = "CannotCountError";
+
+export class MissingRequiredInsertColumnError extends Error {
+    readonly table : ITable;
+    readonly columnAlias : string;
+
+    constructor (
+        message : string,
+        table : ITable,
+        columnAlias : string
+    ) {
+        super(message);
+        Object.setPrototypeOf(this, MissingRequiredInsertColumnError.prototype);
+
+        this.table = table;
+        this.columnAlias = columnAlias;
+    }
+}
+MissingRequiredInsertColumnError.prototype.name = "MissingRequiredInsertColumnError";
+
+export class NullableRequiredInsertColumnError extends Error {
+    readonly table : ITable;
+    readonly columnAlias : string;
+
+    constructor (
+        message : string,
+        table : ITable,
+        columnAlias : string
+    ) {
+        super(message);
+        Object.setPrototypeOf(this, NullableRequiredInsertColumnError.prototype);
+
+        this.table = table;
+        this.columnAlias = columnAlias;
+    }
+}
+NullableRequiredInsertColumnError.prototype.name = "NullableRequiredInsertColumnError";
+
+export class InvalidInsertColumnError extends Error {
+    readonly table : ITable;
+    readonly columnAlias : string;
+
+    constructor (
+        message : string,
+        table : ITable,
+        columnAlias : string
+    ) {
+        super(message);
+        Object.setPrototypeOf(this, InvalidInsertColumnError.prototype);
+
+        this.table = table;
+        this.columnAlias = columnAlias;
+    }
+}
+InvalidInsertColumnError.prototype.name = "InvalidInsertColumnError";
