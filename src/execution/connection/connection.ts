@@ -276,6 +276,22 @@ export interface IConnection {
         table : TableT,
         row : InsertSelectRow<QueryT, TableT>
     ) : Promise<InsertManyResult>;
+    insertIgnoreSelect<
+        QueryT extends QueryBaseUtil.AfterSelectClause,
+        TableT extends InsertableTable
+    > (
+        query : QueryT,
+        table : TableT,
+        row : InsertSelectRow<QueryT, TableT>
+    ) : Promise<InsertIgnoreManyResult>;
+    replaceSelect<
+        QueryT extends QueryBaseUtil.AfterSelectClause,
+        TableT extends InsertableTable & DeletableTable
+    > (
+        query : QueryT,
+        table : TableT,
+        row : InsertSelectRow<QueryT, TableT>
+    ) : Promise<ReplaceManyResult>;
     /**
      * @todo
      */
@@ -329,3 +345,13 @@ export type ReplaceManyConnection = Pick<IConnection, "select"|"replaceMany">;
  * `INSERT` and `SELECT` statements can be executed by this connection.
  */
 export type InsertSelectConnection = Pick<IConnection, "select"|"insertSelect">;
+
+/**
+ * `INSERT` and `SELECT` statements can be executed by this connection.
+ */
+export type InsertIgnoreSelectConnection = Pick<IConnection, "select"|"insertIgnoreSelect">;
+
+/**
+ * `INSERT` and `SELECT` statements can be executed by this connection.
+ */
+export type ReplaceSelectConnection = Pick<IConnection, "select"|"replaceSelect">;

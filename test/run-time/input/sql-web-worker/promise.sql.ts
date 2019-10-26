@@ -227,7 +227,11 @@ export class Connection {
             });
     }
 
-    insertOne<TableT extends ITable> (table : TableT, row : tsql.InsertRow<TableT>) : Promise<tsql.InsertOneResult> {
+    private insertOneSqlString<TableT extends ITable> (
+        table : TableT,
+        row : tsql.InsertRow<TableT>,
+        modifier : string
+    ) : string {
         const columnAliases = tsql.TableUtil.columnAlias(table)
             .filter(columnAlias => {
                 return (row as { [k:string]:unknown })[columnAlias] !== undefined;
@@ -251,7 +255,7 @@ export class Connection {
 
         const ast : tsql.Ast[] = values.length == 0 ?
             [
-                `INSERT INTO`,
+                `INSERT ${modifier} INTO`,
                 /**
                  * We use the `unaliasedAst` because the user may have called `setSchemaName()`
                  */
@@ -259,7 +263,7 @@ export class Connection {
                 "DEFAULT VALUES",
             ] :
             [
-                `INSERT INTO`,
+                `INSERT ${modifier} INTO`,
                 /**
                  * We use the `unaliasedAst` because the user may have called `setSchemaName()`
                  */
@@ -270,7 +274,11 @@ export class Connection {
                 ...values,
                 ")",
             ];
-        const sql = tsql.AstUtil.toSql(ast, sqliteSqlfier);
+        return tsql.AstUtil.toSql(ast, sqliteSqlfier);
+    }
+
+    insertOne<TableT extends ITable> (table : TableT, row : tsql.InsertRow<TableT>) : Promise<tsql.InsertOneResult> {
+        const sql = this.insertOneSqlString(table, row, "");
         return this.exec(sql)
             .then(async (result) => {
                 if (result.execResult.length != 0) {
@@ -322,49 +330,7 @@ export class Connection {
     }
 
     replaceOne<TableT extends ITable> (table : TableT, row : tsql.InsertRow<TableT>) : Promise<tsql.ReplaceOneResult> {
-        const columnAliases = tsql.TableUtil.columnAlias(table)
-            .filter(columnAlias => {
-                return (row as { [k:string]:unknown })[columnAlias] !== undefined;
-            })
-            .sort();
-
-        const values = columnAliases
-            .map(columnAlias => RawExprUtil.buildAst(
-                row[columnAlias as unknown as keyof typeof row]
-            ))
-            .reduce<tsql.Ast[]>(
-                (values, ast) => {
-                    if (values.length > 0) {
-                        values.push(", ");
-                    }
-                    values.push(ast);
-                    return values;
-                },
-                [] as tsql.Ast[]
-            );
-
-        const ast : tsql.Ast[] = values.length == 0 ?
-            [
-                `INSERT OR REPLACE INTO`,
-                /**
-                 * We use the `unaliasedAst` because the user may have called `setSchemaName()`
-                 */
-                table.unaliasedAst,
-                "DEFAULT VALUES",
-            ] :
-            [
-                `INSERT OR REPLACE INTO`,
-                /**
-                 * We use the `unaliasedAst` because the user may have called `setSchemaName()`
-                 */
-                table.unaliasedAst,
-                "(",
-                columnAliases.map(tsql.escapeIdentifierWithDoubleQuotes).join(", "),
-                ") VALUES (",
-                ...values,
-                ")",
-            ];
-        const sql = tsql.AstUtil.toSql(ast, sqliteSqlfier);
+        const sql = this.insertOneSqlString(table, row, "OR REPLACE");
         return this.exec(sql)
             .then(async (result) => {
                 if (result.execResult.length != 0) {
@@ -390,49 +356,7 @@ export class Connection {
     }
 
     insertIgnoreOne<TableT extends ITable> (table : TableT, row : tsql.InsertRow<TableT>) : Promise<tsql.InsertIgnoreOneResult> {
-        const columnAliases = tsql.TableUtil.columnAlias(table)
-            .filter(columnAlias => {
-                return (row as { [k:string]:unknown })[columnAlias] !== undefined;
-            })
-            .sort();
-
-        const values = columnAliases
-            .map(columnAlias => RawExprUtil.buildAst(
-                row[columnAlias as unknown as keyof typeof row]
-            ))
-            .reduce<tsql.Ast[]>(
-                (values, ast) => {
-                    if (values.length > 0) {
-                        values.push(", ");
-                    }
-                    values.push(ast);
-                    return values;
-                },
-                [] as tsql.Ast[]
-            );
-
-        const ast : tsql.Ast[] = values.length == 0 ?
-            [
-                `INSERT OR IGNORE INTO`,
-                /**
-                 * We use the `unaliasedAst` because the user may have called `setSchemaName()`
-                 */
-                table.unaliasedAst,
-                "DEFAULT VALUES",
-            ] :
-            [
-                `INSERT OR IGNORE INTO`,
-                /**
-                 * We use the `unaliasedAst` because the user may have called `setSchemaName()`
-                 */
-                table.unaliasedAst,
-                "(",
-                columnAliases.map(tsql.escapeIdentifierWithDoubleQuotes).join(", "),
-                ") VALUES (",
-                ...values,
-                ")",
-            ];
-        const sql = tsql.AstUtil.toSql(ast, sqliteSqlfier);
+        const sql = this.insertOneSqlString(table, row, "OR IGNORE");
         return this.exec(sql)
             .then(async (result) => {
                 if (result.execResult.length != 0) {
@@ -563,6 +487,86 @@ export class Connection {
         }[];
     }
 
+    private async insertManySqlString<TableT extends ITable> (
+        table : TableT,
+        rows : readonly [tsql.InsertRow<TableT>, ...tsql.InsertRow<TableT>[]],
+        modifier : string
+    ) : Promise<string> {
+        const structure = await this.fetchTableStructure(table.alias);
+        //console.log(structure);
+
+        const columnAliases = tsql.TableUtil.columnAlias(table)
+            .sort();
+
+        const values = rows.map(row => {
+            const ast = columnAliases
+                .map(columnAlias => {
+                    const value = row[columnAlias as unknown as keyof typeof row];
+                    if (value === undefined) {
+                        const columnDef = structure.find(columnDef => {
+                            return columnDef.name == columnAlias;
+                        });
+                        if (columnDef == undefined) {
+                            throw new Error(`Unknown column ${table.alias}.${columnAlias}`);
+                        }
+                        if (columnDef.dflt_value != undefined) {
+                            return columnDef.dflt_value;
+                        }
+
+                        if (tm.BigIntUtil.equal(columnDef.notnull, tm.BigInt(1))) {
+                            if (columnDef.isAutoIncrement) {
+                                return "NULL";
+                            }
+                            throw new Error(`${table.alias}.${columnAlias} is not nullable`);
+                        } else {
+                            return "NULL";
+                        }
+                    } else {
+                        return RawExprUtil.buildAst(
+                            value
+                        );
+                    }
+                })
+                .reduce<tsql.Ast[]>(
+                    (values, ast) => {
+                        if (values.length > 0) {
+                            values.push(", ");
+                        }
+                        values.push(ast);
+                        return values;
+                    },
+                    [] as tsql.Ast[]
+                );
+            ast.unshift("(");
+            ast.push(")");
+            return ast;
+        })
+        .reduce<tsql.Ast[]>(
+            (values, ast) => {
+                if (values.length > 0) {
+                    values.push(", ");
+                }
+                values.push(ast);
+                return values;
+            },
+            [] as tsql.Ast[]
+        );
+
+        const ast : tsql.Ast[] = [
+            `INSERT ${modifier} INTO`,
+            /**
+             * We use the `unaliasedAst` because the user may have called `setSchemaName()`
+             */
+            table.unaliasedAst,
+            "(",
+            columnAliases.map(tsql.escapeIdentifierWithDoubleQuotes).join(", "),
+            ") VALUES",
+            ...values,
+        ];
+        const sql = tsql.AstUtil.toSql(ast, sqliteSqlfier);
+        return sql;
+    }
+
     /**
      * Unfortunately... This is SQLite.
      *
@@ -592,78 +596,7 @@ export class Connection {
         table : TableT,
         rows : readonly [tsql.InsertRow<TableT>, ...tsql.InsertRow<TableT>[]]
     ) : Promise<tsql.InsertManyResult> {
-        const structure = await this.fetchTableStructure(table.alias);
-        //console.log(structure);
-
-        const columnAliases = tsql.TableUtil.columnAlias(table)
-            .sort();
-
-        const values = rows.map(row => {
-            const ast = columnAliases
-                .map(columnAlias => {
-                    const value = row[columnAlias as unknown as keyof typeof row];
-                    if (value === undefined) {
-                        const columnDef = structure.find(columnDef => {
-                            return columnDef.name == columnAlias;
-                        });
-                        if (columnDef == undefined) {
-                            throw new Error(`Unknown column ${table.alias}.${columnAlias}`);
-                        }
-                        if (columnDef.dflt_value != undefined) {
-                            return columnDef.dflt_value;
-                        }
-
-                        if (tm.BigIntUtil.equal(columnDef.notnull, tm.BigInt(1))) {
-                            if (columnDef.isAutoIncrement) {
-                                return "NULL";
-                            }
-                            throw new Error(`${table.alias}.${columnAlias} is not nullable`);
-                        } else {
-                            return "NULL";
-                        }
-                    } else {
-                        return RawExprUtil.buildAst(
-                            value
-                        );
-                    }
-                })
-                .reduce<tsql.Ast[]>(
-                    (values, ast) => {
-                        if (values.length > 0) {
-                            values.push(", ");
-                        }
-                        values.push(ast);
-                        return values;
-                    },
-                    [] as tsql.Ast[]
-                );
-            ast.unshift("(");
-            ast.push(")");
-            return ast;
-        })
-        .reduce<tsql.Ast[]>(
-            (values, ast) => {
-                if (values.length > 0) {
-                    values.push(", ");
-                }
-                values.push(ast);
-                return values;
-            },
-            [] as tsql.Ast[]
-        );
-
-        const ast : tsql.Ast[] = [
-            `INSERT INTO`,
-            /**
-             * We use the `unaliasedAst` because the user may have called `setSchemaName()`
-             */
-            table.unaliasedAst,
-            "(",
-            columnAliases.map(tsql.escapeIdentifierWithDoubleQuotes).join(", "),
-            ") VALUES",
-            ...values,
-        ];
-        const sql = tsql.AstUtil.toSql(ast, sqliteSqlfier);
+        const sql = await this.insertManySqlString(table, rows, "");
         return this.exec(sql)
             .then(async (result) => {
                 if (result.execResult.length != 0) {
@@ -692,78 +625,7 @@ export class Connection {
         table : TableT,
         rows : readonly [tsql.InsertRow<TableT>, ...tsql.InsertRow<TableT>[]]
     ) : Promise<tsql.InsertIgnoreManyResult> {
-        const structure = await this.fetchTableStructure(table.alias);
-        //console.log(structure);
-
-        const columnAliases = tsql.TableUtil.columnAlias(table)
-            .sort();
-
-        const values = rows.map(row => {
-            const ast = columnAliases
-                .map(columnAlias => {
-                    const value = row[columnAlias as unknown as keyof typeof row];
-                    if (value === undefined) {
-                        const columnDef = structure.find(columnDef => {
-                            return columnDef.name == columnAlias;
-                        });
-                        if (columnDef == undefined) {
-                            throw new Error(`Unknown column ${table.alias}.${columnAlias}`);
-                        }
-                        if (columnDef.dflt_value != undefined) {
-                            return columnDef.dflt_value;
-                        }
-
-                        if (tm.BigIntUtil.equal(columnDef.notnull, tm.BigInt(1))) {
-                            if (columnDef.isAutoIncrement) {
-                                return "NULL";
-                            }
-                            throw new Error(`${table.alias}.${columnAlias} is not nullable`);
-                        } else {
-                            return "NULL";
-                        }
-                    } else {
-                        return RawExprUtil.buildAst(
-                            value
-                        );
-                    }
-                })
-                .reduce<tsql.Ast[]>(
-                    (values, ast) => {
-                        if (values.length > 0) {
-                            values.push(", ");
-                        }
-                        values.push(ast);
-                        return values;
-                    },
-                    [] as tsql.Ast[]
-                );
-            ast.unshift("(");
-            ast.push(")");
-            return ast;
-        })
-        .reduce<tsql.Ast[]>(
-            (values, ast) => {
-                if (values.length > 0) {
-                    values.push(", ");
-                }
-                values.push(ast);
-                return values;
-            },
-            [] as tsql.Ast[]
-        );
-
-        const ast : tsql.Ast[] = [
-            `INSERT OR IGNORE INTO`,
-            /**
-             * We use the `unaliasedAst` because the user may have called `setSchemaName()`
-             */
-            table.unaliasedAst,
-            "(",
-            columnAliases.map(tsql.escapeIdentifierWithDoubleQuotes).join(", "),
-            ") VALUES",
-            ...values,
-        ];
-        const sql = tsql.AstUtil.toSql(ast, sqliteSqlfier);
+        const sql = await this.insertManySqlString(table, rows, "OR IGNORE");
         return this.exec(sql)
             .then(async (result) => {
                 if (result.execResult.length != 0) {
@@ -792,78 +654,7 @@ export class Connection {
         table : TableT,
         rows : readonly [tsql.InsertRow<TableT>, ...tsql.InsertRow<TableT>[]]
     ) : Promise<tsql.ReplaceManyResult> {
-        const structure = await this.fetchTableStructure(table.alias);
-        //console.log(structure);
-
-        const columnAliases = tsql.TableUtil.columnAlias(table)
-            .sort();
-
-        const values = rows.map(row => {
-            const ast = columnAliases
-                .map(columnAlias => {
-                    const value = row[columnAlias as unknown as keyof typeof row];
-                    if (value === undefined) {
-                        const columnDef = structure.find(columnDef => {
-                            return columnDef.name == columnAlias;
-                        });
-                        if (columnDef == undefined) {
-                            throw new Error(`Unknown column ${table.alias}.${columnAlias}`);
-                        }
-                        if (columnDef.dflt_value != undefined) {
-                            return columnDef.dflt_value;
-                        }
-
-                        if (tm.BigIntUtil.equal(columnDef.notnull, tm.BigInt(1))) {
-                            if (columnDef.isAutoIncrement) {
-                                return "NULL";
-                            }
-                            throw new Error(`${table.alias}.${columnAlias} is not nullable`);
-                        } else {
-                            return "NULL";
-                        }
-                    } else {
-                        return RawExprUtil.buildAst(
-                            value
-                        );
-                    }
-                })
-                .reduce<tsql.Ast[]>(
-                    (values, ast) => {
-                        if (values.length > 0) {
-                            values.push(", ");
-                        }
-                        values.push(ast);
-                        return values;
-                    },
-                    [] as tsql.Ast[]
-                );
-            ast.unshift("(");
-            ast.push(")");
-            return ast;
-        })
-        .reduce<tsql.Ast[]>(
-            (values, ast) => {
-                if (values.length > 0) {
-                    values.push(", ");
-                }
-                values.push(ast);
-                return values;
-            },
-            [] as tsql.Ast[]
-        );
-
-        const ast : tsql.Ast[] = [
-            `INSERT OR REPLACE INTO`,
-            /**
-             * We use the `unaliasedAst` because the user may have called `setSchemaName()`
-             */
-            table.unaliasedAst,
-            "(",
-            columnAliases.map(tsql.escapeIdentifierWithDoubleQuotes).join(", "),
-            ") VALUES",
-            ...values,
-        ];
-        const sql = tsql.AstUtil.toSql(ast, sqliteSqlfier);
+        const sql = await this.insertManySqlString(table, rows, "OR REPLACE");
         return this.exec(sql)
             .then(async (result) => {
                 if (result.execResult.length != 0) {
@@ -888,14 +679,15 @@ export class Connection {
             });
     }
 
-    async insertSelect<
+    private async insertSelectSqlString<
         QueryT extends tsql.QueryBaseUtil.AfterSelectClause,
         TableT extends tsql.InsertableTable
     > (
         query : QueryT,
         table : TableT,
-        row : tsql.InsertSelectRow<QueryT, TableT>
-    ) : Promise<tsql.InsertManyResult> {
+        row : tsql.InsertSelectRow<QueryT, TableT>,
+        modifier : string
+    ) : Promise<string> {
         const structure = await this.fetchTableStructure(table.alias);
         //console.log(structure);
 
@@ -948,7 +740,7 @@ export class Connection {
             );
 
         const ast : tsql.Ast[] = [
-            `INSERT INTO`,
+            `INSERT ${modifier} INTO`,
             /**
              * We use the `unaliasedAst` because the user may have called `setSchemaName()`
              */
@@ -964,6 +756,18 @@ export class Connection {
             ") AS tmp"
         ];
         const sql = tsql.AstUtil.toSql(ast, sqliteSqlfier);
+        return sql;
+    }
+
+    async insertSelect<
+        QueryT extends tsql.QueryBaseUtil.AfterSelectClause,
+        TableT extends tsql.InsertableTable
+    > (
+        query : QueryT,
+        table : TableT,
+        row : tsql.InsertSelectRow<QueryT, TableT>
+    ) : Promise<tsql.InsertManyResult> {
+        const sql = await this.insertSelectSqlString(query, table, row, "");
         return this.exec(sql)
             .then(async (result) => {
                 if (result.execResult.length != 0) {
@@ -978,6 +782,72 @@ export class Connection {
                 return {
                     query : { sql, },
                     insertedRowCount : BigInt(result.rowsModified),
+                    warningCount : BigInt(0),
+                    message : "ok",
+                };
+            })
+            .catch((err) => {
+                //console.error("error encountered", sql);
+                throw err;
+            });
+    }
+
+    async insertIgnoreSelect<
+        QueryT extends tsql.QueryBaseUtil.AfterSelectClause,
+        TableT extends tsql.InsertableTable
+    > (
+        query : QueryT,
+        table : TableT,
+        row : tsql.InsertSelectRow<QueryT, TableT>
+    ) : Promise<tsql.InsertIgnoreManyResult> {
+        const sql = await this.insertSelectSqlString(query, table, row, "OR IGNORE");
+        return this.exec(sql)
+            .then(async (result) => {
+                if (result.execResult.length != 0) {
+                    throw new Error(`insertIgnoreSelect() should have no result set; found ${result.execResult.length}`);
+                }
+                if (result.rowsModified < 0) {
+                    throw new Error(`insertIgnoreSelect() should modify zero, or more rows; modified ${result.rowsModified} rows`);
+                }
+
+                const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
+
+                return {
+                    query : { sql, },
+                    insertedRowCount : BigInt(result.rowsModified),
+                    warningCount : BigInt(0),
+                    message : "ok",
+                };
+            })
+            .catch((err) => {
+                //console.error("error encountered", sql);
+                throw err;
+            });
+    }
+
+    async replaceSelect<
+        QueryT extends tsql.QueryBaseUtil.AfterSelectClause,
+        TableT extends tsql.InsertableTable & tsql.DeletableTable
+    > (
+        query : QueryT,
+        table : TableT,
+        row : tsql.InsertSelectRow<QueryT, TableT>
+    ) : Promise<tsql.ReplaceManyResult> {
+        const sql = await this.insertSelectSqlString(query, table, row, "OR REPLACE");
+        return this.exec(sql)
+            .then(async (result) => {
+                if (result.execResult.length != 0) {
+                    throw new Error(`replaceSelect() should have no result set; found ${result.execResult.length}`);
+                }
+                if (result.rowsModified < 0) {
+                    throw new Error(`replaceSelect() should modify zero, or more rows; modified ${result.rowsModified} rows`);
+                }
+
+                const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
+
+                return {
+                    query : { sql, },
+                    insertedOrReplacedRowCount : BigInt(result.rowsModified),
                     warningCount : BigInt(0),
                     message : "ok",
                 };
