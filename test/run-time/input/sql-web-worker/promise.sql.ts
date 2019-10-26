@@ -249,18 +249,27 @@ export class Connection {
                 [] as tsql.Ast[]
             );
 
-        const ast : tsql.Ast[] = [
-            `INSERT INTO`,
-            /**
-             * We use the `unaliasedAst` because the user may have called `setSchemaName()`
-             */
-            table.unaliasedAst,
-            "(",
-            columnAliases.map(tsql.escapeIdentifierWithDoubleQuotes).join(", "),
-            ") VALUES (",
-            ...values,
-            ")",
-        ];
+        const ast : tsql.Ast[] = values.length == 0 ?
+            [
+                `INSERT INTO`,
+                /**
+                 * We use the `unaliasedAst` because the user may have called `setSchemaName()`
+                 */
+                table.unaliasedAst,
+                "DEFAULT VALUES",
+            ] :
+            [
+                `INSERT INTO`,
+                /**
+                 * We use the `unaliasedAst` because the user may have called `setSchemaName()`
+                 */
+                table.unaliasedAst,
+                "(",
+                columnAliases.map(tsql.escapeIdentifierWithDoubleQuotes).join(", "),
+                ") VALUES (",
+                ...values,
+                ")",
+            ];
         const sql = tsql.AstUtil.toSql(ast, sqliteSqlfier);
         return this.exec(sql)
             .then(async (result) => {
@@ -334,18 +343,27 @@ export class Connection {
                 [] as tsql.Ast[]
             );
 
-        const ast : tsql.Ast[] = [
-            `INSERT OR REPLACE INTO`,
-            /**
-             * We use the `unaliasedAst` because the user may have called `setSchemaName()`
-             */
-            table.unaliasedAst,
-            "(",
-            columnAliases.map(tsql.escapeIdentifierWithDoubleQuotes).join(", "),
-            ") VALUES (",
-            ...values,
-            ")",
-        ];
+        const ast : tsql.Ast[] = values.length == 0 ?
+            [
+                `INSERT OR REPLACE INTO`,
+                /**
+                 * We use the `unaliasedAst` because the user may have called `setSchemaName()`
+                 */
+                table.unaliasedAst,
+                "DEFAULT VALUES",
+            ] :
+            [
+                `INSERT OR REPLACE INTO`,
+                /**
+                 * We use the `unaliasedAst` because the user may have called `setSchemaName()`
+                 */
+                table.unaliasedAst,
+                "(",
+                columnAliases.map(tsql.escapeIdentifierWithDoubleQuotes).join(", "),
+                ") VALUES (",
+                ...values,
+                ")",
+            ];
         const sql = tsql.AstUtil.toSql(ast, sqliteSqlfier);
         return this.exec(sql)
             .then(async (result) => {
@@ -393,18 +411,27 @@ export class Connection {
                 [] as tsql.Ast[]
             );
 
-        const ast : tsql.Ast[] = [
-            `INSERT OR IGNORE INTO`,
-            /**
-             * We use the `unaliasedAst` because the user may have called `setSchemaName()`
-             */
-            table.unaliasedAst,
-            "(",
-            columnAliases.map(tsql.escapeIdentifierWithDoubleQuotes).join(", "),
-            ") VALUES (",
-            ...values,
-            ")",
-        ];
+        const ast : tsql.Ast[] = values.length == 0 ?
+            [
+                `INSERT OR IGNORE INTO`,
+                /**
+                 * We use the `unaliasedAst` because the user may have called `setSchemaName()`
+                 */
+                table.unaliasedAst,
+                "DEFAULT VALUES",
+            ] :
+            [
+                `INSERT OR IGNORE INTO`,
+                /**
+                 * We use the `unaliasedAst` because the user may have called `setSchemaName()`
+                 */
+                table.unaliasedAst,
+                "(",
+                columnAliases.map(tsql.escapeIdentifierWithDoubleQuotes).join(", "),
+                ") VALUES (",
+                ...values,
+                ")",
+            ];
         const sql = tsql.AstUtil.toSql(ast, sqliteSqlfier);
         return this.exec(sql)
             .then(async (result) => {
