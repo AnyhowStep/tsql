@@ -9,7 +9,7 @@ import {FromClauseUtil} from "../from-clause";
 import {SelectClause} from "../select-clause";
 import {RawExpr, AnyRawExpr, AnySubqueryExpr} from "../raw-expr";
 import {OnDelegate, OnClauseUtil} from "../on-clause";
-import {ITable, TableUtil, TableWithPrimaryKey} from "../table";
+import {ITable, TableUtil, TableWithPrimaryKey, InsertableTable} from "../table";
 import {ColumnUtil} from "../column";
 import {PrimitiveExpr, NonNullPrimitiveExpr} from "../primitive-expr";
 import {JoinArrayUtil} from "../join";
@@ -28,8 +28,9 @@ import {QueryBaseUtil} from "../query-base";
 import {CompoundQueryType} from "../compound-query";
 import {CompoundQueryClauseUtil} from "../compound-query-clause";
 import {MapDelegate} from "../map-delegate";
-import {ExecutionUtil, SelectConnection, IsolableSelectConnection} from "../execution";
+import {ExecutionUtil, SelectConnection, IsolableSelectConnection, InsertSelectConnection, InsertManyResult} from "../execution";
 import {SortDirection} from "../sort-direction";
+import {InsertSelectDelegate} from "../insert-select";
 
 export class Query<DataT extends QueryData> implements IQuery<DataT> {
     readonly fromClause : DataT["fromClause"];
@@ -1522,5 +1523,27 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         >
     ) {
         return ExecutionUtil.emulatedCursor(this, connection, rawArgs);
+    }
+
+    insert<
+        TableT extends InsertableTable
+    > (
+        this : Extract<this, QueryBaseUtil.AfterSelectClause>,
+        connection : InsertSelectConnection,
+        table : TableT,
+        rowDelegate : InsertSelectDelegate<
+            Extract<this, QueryBaseUtil.AfterSelectClause>,
+            TableT
+        >
+    ) : Promise<InsertManyResult> {
+        return ExecutionUtil.insertSelect<
+            Extract<this, QueryBaseUtil.AfterSelectClause>,
+            TableT
+        >(
+            connection,
+            this,
+            table,
+            rowDelegate
+        );
     }
 }

@@ -888,6 +888,106 @@ export class Connection {
             });
     }
 
+    async insertSelect<
+        QueryT extends tsql.QueryBaseUtil.AfterSelectClause,
+        TableT extends tsql.InsertableTable
+    > (
+        query : QueryT,
+        table : TableT,
+        row : tsql.InsertSelectRow<QueryT, TableT>
+    ) : Promise<tsql.InsertManyResult> {
+        const structure = await this.fetchTableStructure(table.alias);
+        //console.log(structure);
+
+        const columnAliases = tsql.TableUtil.columnAlias(table)
+            .sort();
+
+        const values = columnAliases
+            .map(columnAlias => {
+                const value = row[columnAlias as unknown as keyof typeof row];
+                if (value === undefined) {
+                    const columnDef = structure.find(columnDef => {
+                        return columnDef.name == columnAlias;
+                    });
+                    if (columnDef == undefined) {
+                        throw new Error(`Unknown column ${table.alias}.${columnAlias}`);
+                    }
+                    if (columnDef.dflt_value != undefined) {
+                        return columnDef.dflt_value;
+                    }
+
+                    if (tm.BigIntUtil.equal(columnDef.notnull, tm.BigInt(1))) {
+                        if (columnDef.isAutoIncrement) {
+                            return "NULL";
+                        }
+                        throw new Error(`${table.alias}.${columnAlias} is not nullable`);
+                    } else {
+                        return "NULL";
+                    }
+                } else {
+                    if (tsql.ColumnUtil.isColumn(value)) {
+                        return tsql.escapeIdentifierWithDoubleQuotes(
+                            `${(value as tsql.IColumn).tableAlias}${tsql.SEPARATOR}${(value as tsql.IColumn).columnAlias}`
+                        );
+                    } else {
+                        return RawExprUtil.buildAst(
+                            value
+                        );
+                    }
+                }
+            })
+            .reduce<tsql.Ast[]>(
+                (values, ast) => {
+                    if (values.length > 0) {
+                        values.push(", ");
+                    }
+                    values.push(ast);
+                    return values;
+                },
+                [] as tsql.Ast[]
+            );
+
+        const ast : tsql.Ast[] = [
+            `INSERT INTO`,
+            /**
+             * We use the `unaliasedAst` because the user may have called `setSchemaName()`
+             */
+            table.unaliasedAst,
+            "(",
+            columnAliases.map(tsql.escapeIdentifierWithDoubleQuotes).join(", "),
+            ")",
+            "SELECT",
+            ...values,
+            "FROM",
+            "(",
+            query,
+            ") AS tmp"
+        ];
+        const sql = tsql.AstUtil.toSql(ast, sqliteSqlfier);
+        return this.exec(sql)
+            .then(async (result) => {
+                if (result.execResult.length != 0) {
+                    throw new Error(`insertSelect() should have no result set; found ${result.execResult.length}`);
+                }
+                if (result.rowsModified < 0) {
+                    throw new Error(`insertSelect() should modify zero, or more rows; modified ${result.rowsModified} rows`);
+                }
+
+                const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
+
+                return {
+                    query : { sql, },
+                    insertedRowCount : BigInt(result.rowsModified),
+                    warningCount : BigInt(0),
+                    message : "ok",
+                };
+            })
+            .catch((err) => {
+                //console.error("error encountered", sql);
+                throw err;
+            });
+    }
+
 }
 
 /**

@@ -1,7 +1,8 @@
 import {TransactionCallback} from "../pool";
-import {IQueryBase} from "../../query-base";
+import {IQueryBase, QueryBaseUtil} from "../../query-base";
 import {InsertableTable, DeletableTable} from "../../table";
 import {InsertRow} from "../../insert";
+import {InsertSelectRow} from "../../insert-select";
 
 export interface RawQueryResult {
     query   : { sql : string },
@@ -267,6 +268,14 @@ export interface IConnection {
     replaceOne<TableT extends InsertableTable & DeletableTable> (table : TableT, row : InsertRow<TableT>) : Promise<ReplaceOneResult>;
     replaceMany<TableT extends InsertableTable & DeletableTable> (table : TableT, rows : readonly [InsertRow<TableT>, ...InsertRow<TableT>[]]) : Promise<ReplaceManyResult>;
 
+    insertSelect<
+        QueryT extends QueryBaseUtil.AfterSelectClause,
+        TableT extends InsertableTable
+    > (
+        query : QueryT,
+        table : TableT,
+        row : InsertSelectRow<QueryT, TableT>
+    ) : Promise<InsertManyResult>;
     /**
      * @todo
      */
@@ -315,3 +324,8 @@ export type ReplaceOneConnection = Pick<IConnection, "select"|"replaceOne">;
  * `INSERT` and `SELECT` statements can be executed by this connection.
  */
 export type ReplaceManyConnection = Pick<IConnection, "select"|"replaceMany">;
+
+/**
+ * `INSERT` and `SELECT` statements can be executed by this connection.
+ */
+export type InsertSelectConnection = Pick<IConnection, "select"|"insertSelect">;

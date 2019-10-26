@@ -65,6 +65,7 @@
         "./src/integer-arithmetic-expr/**/*",
         "./src/arithmetic-expr/**/*",
         "./src/insert/**/*",
+        "./src/insert-select/**/*",
         "./src/index.ts"
     ]
 }
