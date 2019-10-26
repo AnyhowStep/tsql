@@ -1,27 +1,28 @@
 import * as tm from "type-mapping";
-import {ITable, InsertableTable, TableUtil} from "../../../table";
-import {InsertManyResult, InsertManyConnection} from "../../connection";
+import {ITable, InsertableTable, TableUtil, DeletableTable} from "../../../table";
+import {ReplaceManyConnection, ReplaceManyResult} from "../../connection";
 import {InsertRow, InsertUtil} from "../../../insert";
 
 /**
- * Inserts zero-to-many rows
+ * Inserts/Replaces zero-to-many rows
  * ```sql
- *  INSERT INTO
+ *  REPLACE INTO
  *      myTable (...column_list)
  *  VALUES
  *      ...row_list;
  * ```
  */
-export async function insertMany<
-    TableT extends ITable & InsertableTable
+export async function replaceMany<
+    TableT extends ITable & InsertableTable & DeletableTable
 > (
-    connection : InsertManyConnection,
+    connection : ReplaceManyConnection,
     table : TableT,
     rows : readonly InsertRow<TableT>[]
 ) : (
-    Promise<InsertManyResult>
+    Promise<ReplaceManyResult>
 ) {
     TableUtil.assertInsertEnabled(table);
+    TableUtil.assertDeleteEnabled(table);
 
     if (rows.length == 0) {
         return {
@@ -32,7 +33,7 @@ export async function insertMany<
                  */
                 sql : "",
             },
-            insertedRowCount : tm.BigInt(0),
+            insertedOrReplacedRowCount : tm.BigInt(0),
             /**
              * Should this be considered a warning?
              * Probably not.
@@ -41,7 +42,7 @@ export async function insertMany<
             message : "No rows to insert",
         };
     }
-    return connection.insertMany(
+    return connection.replaceMany(
         table,
         rows.map(
             row => InsertUtil.cleanInsertRow(table, row)

@@ -133,6 +133,25 @@ export interface ReplaceOneResult {
      */
     message : string;
 }
+export interface ReplaceManyResult {
+    query : { sql : string },
+
+    /**
+     * We can't tell if the row was inserted, or if it was replaced.
+     */
+    //alias for affectedRows on MySQL
+    insertedOrReplacedRowCount : bigint;
+
+    /**
+     * May be the duplicate row count, or some other value.
+     */
+    warningCount : bigint;
+    /**
+     * An arbitrary message.
+     * May be an empty string.
+     */
+    message : string;
+}
 export interface RawUpdateResult {
     fieldCount   : number;
     affectedRows : number;
@@ -246,6 +265,7 @@ export interface IConnection {
     insertIgnoreMany<TableT extends InsertableTable> (table : TableT, rows : readonly [InsertRow<TableT>, ...InsertRow<TableT>[]]) : Promise<InsertIgnoreManyResult>;
 
     replaceOne<TableT extends InsertableTable & DeletableTable> (table : TableT, row : InsertRow<TableT>) : Promise<ReplaceOneResult>;
+    replaceMany<TableT extends InsertableTable & DeletableTable> (table : TableT, rows : readonly [InsertRow<TableT>, ...InsertRow<TableT>[]]) : Promise<ReplaceManyResult>;
 
     /**
      * @todo
@@ -290,3 +310,8 @@ export type InsertIgnoreManyConnection = Pick<IConnection, "select"|"insertIgnor
  * `INSERT` and `SELECT` statements can be executed by this connection.
  */
 export type ReplaceOneConnection = Pick<IConnection, "select"|"replaceOne">;
+
+/**
+ * `INSERT` and `SELECT` statements can be executed by this connection.
+ */
+export type ReplaceManyConnection = Pick<IConnection, "select"|"replaceMany">;

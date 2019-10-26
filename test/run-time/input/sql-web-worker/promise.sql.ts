@@ -760,6 +760,107 @@ export class Connection {
                 throw err;
             });
     }
+
+    async replaceMany<TableT extends ITable> (
+        table : TableT,
+        rows : readonly [tsql.InsertRow<TableT>, ...tsql.InsertRow<TableT>[]]
+    ) : Promise<tsql.ReplaceManyResult> {
+        const structure = await this.fetchTableStructure(table.alias);
+        //console.log(structure);
+
+        const columnAliases = tsql.TableUtil.columnAlias(table)
+            .sort();
+
+        const values = rows.map(row => {
+            const ast = columnAliases
+                .map(columnAlias => {
+                    const value = row[columnAlias as unknown as keyof typeof row];
+                    if (value === undefined) {
+                        const columnDef = structure.find(columnDef => {
+                            return columnDef.name == columnAlias;
+                        });
+                        if (columnDef == undefined) {
+                            throw new Error(`Unknown column ${table.alias}.${columnAlias}`);
+                        }
+                        if (columnDef.dflt_value != undefined) {
+                            return columnDef.dflt_value;
+                        }
+
+                        if (tm.BigIntUtil.equal(columnDef.notnull, tm.BigInt(1))) {
+                            if (columnDef.isAutoIncrement) {
+                                return "NULL";
+                            }
+                            throw new Error(`${table.alias}.${columnAlias} is not nullable`);
+                        } else {
+                            return "NULL";
+                        }
+                    } else {
+                        return RawExprUtil.buildAst(
+                            value
+                        );
+                    }
+                })
+                .reduce<tsql.Ast[]>(
+                    (values, ast) => {
+                        if (values.length > 0) {
+                            values.push(", ");
+                        }
+                        values.push(ast);
+                        return values;
+                    },
+                    [] as tsql.Ast[]
+                );
+            ast.unshift("(");
+            ast.push(")");
+            return ast;
+        })
+        .reduce<tsql.Ast[]>(
+            (values, ast) => {
+                if (values.length > 0) {
+                    values.push(", ");
+                }
+                values.push(ast);
+                return values;
+            },
+            [] as tsql.Ast[]
+        );
+
+        const ast : tsql.Ast[] = [
+            `INSERT OR REPLACE INTO`,
+            /**
+             * We use the `unaliasedAst` because the user may have called `setSchemaName()`
+             */
+            table.unaliasedAst,
+            "(",
+            columnAliases.map(tsql.escapeIdentifierWithDoubleQuotes).join(", "),
+            ") VALUES",
+            ...values,
+        ];
+        const sql = tsql.AstUtil.toSql(ast, sqliteSqlfier);
+        return this.exec(sql)
+            .then(async (result) => {
+                if (result.execResult.length != 0) {
+                    throw new Error(`replaceMany() should have no result set; found ${result.execResult.length}`);
+                }
+                if (result.rowsModified != rows.length) {
+                    throw new Error(`replaceMany() should modify ${rows.length} rows; modified ${result.rowsModified} rows`);
+                }
+
+                const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
+
+                return {
+                    query : { sql, },
+                    insertedOrReplacedRowCount : BigInt(result.rowsModified),
+                    warningCount : BigInt(0),
+                    message : "ok",
+                };
+            })
+            .catch((err) => {
+                //console.error("error encountered", sql);
+                throw err;
+            });
+    }
+
 }
 
 /**
