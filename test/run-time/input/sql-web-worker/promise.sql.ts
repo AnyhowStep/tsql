@@ -312,6 +312,65 @@ export class Connection {
             });
     }
 
+    replaceOne<TableT extends ITable> (table : TableT, row : tsql.InsertRow<TableT>) : Promise<tsql.ReplaceOneResult> {
+        const columnAliases = tsql.TableUtil.columnAlias(table)
+            .filter(columnAlias => {
+                return (row as { [k:string]:unknown })[columnAlias] !== undefined;
+            })
+            .sort();
+
+        const values = columnAliases
+            .map(columnAlias => RawExprUtil.buildAst(
+                row[columnAlias as unknown as keyof typeof row]
+            ))
+            .reduce<tsql.Ast[]>(
+                (values, ast) => {
+                    if (values.length > 0) {
+                        values.push(", ");
+                    }
+                    values.push(ast);
+                    return values;
+                },
+                [] as tsql.Ast[]
+            );
+
+        const ast : tsql.Ast[] = [
+            `INSERT OR REPLACE INTO`,
+            /**
+             * We use the `unaliasedAst` because the user may have called `setSchemaName()`
+             */
+            table.unaliasedAst,
+            "(",
+            columnAliases.map(tsql.escapeIdentifierWithDoubleQuotes).join(", "),
+            ") VALUES (",
+            ...values,
+            ")",
+        ];
+        const sql = tsql.AstUtil.toSql(ast, sqliteSqlfier);
+        return this.exec(sql)
+            .then(async (result) => {
+                if (result.execResult.length != 0) {
+                    throw new Error(`replaceOne() should have no result set; found ${result.execResult.length}`);
+                }
+                if (result.rowsModified != 1) {
+                    throw new Error(`replaceOne() should modify one row`);
+                }
+
+                const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
+
+                return {
+                    query : { sql, },
+                    insertedOrReplacedRowCount : BigInt(1) as 1n,
+                    warningCount : BigInt(0),
+                    message : "ok",
+                };
+            })
+            .catch((err) => {
+                //console.error("error encountered", sql);
+                throw err;
+            });
+    }
+
     insertIgnoreOne<TableT extends ITable> (table : TableT, row : tsql.InsertRow<TableT>) : Promise<tsql.InsertIgnoreOneResult> {
         const columnAliases = tsql.TableUtil.columnAlias(table)
             .filter(columnAlias => {

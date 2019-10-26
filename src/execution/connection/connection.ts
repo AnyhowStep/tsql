@@ -1,6 +1,6 @@
 import {TransactionCallback} from "../pool";
 import {IQueryBase} from "../../query-base";
-import {InsertableTable} from "../../table";
+import {InsertableTable, DeletableTable} from "../../table";
 import {InsertRow} from "../../insert";
 
 export interface RawQueryResult {
@@ -103,6 +103,25 @@ export interface InsertIgnoreManyResult {
 
     //alias for affectedRows on MySQL
     insertedRowCount : bigint;
+
+    /**
+     * May be the duplicate row count, or some other value.
+     */
+    warningCount : bigint;
+    /**
+     * An arbitrary message.
+     * May be an empty string.
+     */
+    message : string;
+}
+export interface ReplaceOneResult {
+    query : { sql : string },
+
+    /**
+     * We can't tell if the row was inserted, or if it was replaced.
+     */
+    //alias for affectedRows on MySQL
+    insertedOrReplacedRowCount : 1n;
 
     /**
      * May be the duplicate row count, or some other value.
@@ -226,6 +245,8 @@ export interface IConnection {
     insertIgnoreOne<TableT extends InsertableTable> (table : TableT, row : InsertRow<TableT>) : Promise<InsertIgnoreOneResult>;
     insertIgnoreMany<TableT extends InsertableTable> (table : TableT, rows : readonly [InsertRow<TableT>, ...InsertRow<TableT>[]]) : Promise<InsertIgnoreManyResult>;
 
+    replaceOne<TableT extends InsertableTable & DeletableTable> (table : TableT, row : InsertRow<TableT>) : Promise<ReplaceOneResult>;
+
     /**
      * @todo
      */
@@ -264,3 +285,8 @@ export type InsertIgnoreOneConnection = Pick<IConnection, "select"|"insertIgnore
  * `INSERT` and `SELECT` statements can be executed by this connection.
  */
 export type InsertIgnoreManyConnection = Pick<IConnection, "select"|"insertIgnoreMany">;
+
+/**
+ * `INSERT` and `SELECT` statements can be executed by this connection.
+ */
+export type ReplaceOneConnection = Pick<IConnection, "select"|"replaceOne">;

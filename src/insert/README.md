@@ -59,6 +59,9 @@ Can easily be unified if table has only one unique key.
     1. `SELECT EXISTS(...)`
     1. If exists, `UPDATE` all columns. Otherwise, `INSERT`.
     1. `COMMIT;`
+
+    However, we cannot use this if we are already in a transaction.
+    + What about nested transactions?
   + https://stackoverflow.com/questions/35888012/use-multiple-conflict-target-in-on-conflict-clause
 + SQLite      : `REPLACE ...`
 
