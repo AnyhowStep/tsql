@@ -9,7 +9,7 @@ import {FromClauseUtil} from "../from-clause";
 import {SelectClause} from "../select-clause";
 import {RawExpr, AnyRawExpr, AnySubqueryExpr} from "../raw-expr";
 import {OnDelegate, OnClauseUtil} from "../on-clause";
-import {ITable, TableUtil, TableWithPrimaryKey, InsertableTable} from "../table";
+import {ITable, TableUtil, TableWithPrimaryKey, InsertableTable, DeletableTable} from "../table";
 import {ColumnUtil} from "../column";
 import {PrimitiveExpr, NonNullPrimitiveExpr} from "../primitive-expr";
 import {JoinArrayUtil} from "../join";
@@ -28,7 +28,7 @@ import {QueryBaseUtil} from "../query-base";
 import {CompoundQueryType} from "../compound-query";
 import {CompoundQueryClauseUtil} from "../compound-query-clause";
 import {MapDelegate} from "../map-delegate";
-import {ExecutionUtil, SelectConnection, IsolableSelectConnection, InsertSelectConnection, InsertManyResult} from "../execution";
+import {ExecutionUtil, SelectConnection, IsolableSelectConnection, InsertSelectConnection, InsertManyResult, InsertIgnoreSelectConnection, InsertIgnoreManyResult, ReplaceSelectConnection, ReplaceManyResult} from "../execution";
 import {SortDirection} from "../sort-direction";
 import {InsertSelectDelegate} from "../insert-select";
 
@@ -1537,6 +1537,50 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         >
     ) : Promise<InsertManyResult> {
         return ExecutionUtil.insertSelect<
+            Extract<this, QueryBaseUtil.AfterSelectClause>,
+            TableT
+        >(
+            connection,
+            this,
+            table,
+            rowDelegate
+        );
+    }
+
+    insertIgnore<
+        TableT extends InsertableTable
+    > (
+        this : Extract<this, QueryBaseUtil.AfterSelectClause>,
+        connection : InsertIgnoreSelectConnection,
+        table : TableT,
+        rowDelegate : InsertSelectDelegate<
+            Extract<this, QueryBaseUtil.AfterSelectClause>,
+            TableT
+        >
+    ) : Promise<InsertIgnoreManyResult> {
+        return ExecutionUtil.insertIgnoreSelect<
+            Extract<this, QueryBaseUtil.AfterSelectClause>,
+            TableT
+        >(
+            connection,
+            this,
+            table,
+            rowDelegate
+        );
+    }
+
+    replace<
+        TableT extends InsertableTable & DeletableTable
+    > (
+        this : Extract<this, QueryBaseUtil.AfterSelectClause>,
+        connection : ReplaceSelectConnection,
+        table : TableT,
+        rowDelegate : InsertSelectDelegate<
+            Extract<this, QueryBaseUtil.AfterSelectClause>,
+            TableT
+        >
+    ) : Promise<ReplaceManyResult> {
+        return ExecutionUtil.replaceSelect<
             Extract<this, QueryBaseUtil.AfterSelectClause>,
             TableT
         >(
