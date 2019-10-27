@@ -3,7 +3,7 @@ import * as tsql from "../../../../dist";
 import {ISqliteWorker, SqliteAction, FromSqliteMessage, ToSqliteMessage} from "./worker.sql";
 import {AsyncQueue} from "./async-queue";
 import {sqliteSqlfier} from "../../../sqlite-sqlfier";
-import {ITable, RawExprUtil} from "../../../../dist";
+import {ITable, RawExprUtil, WhereClause, DeletableTable, DeleteResult} from "../../../../dist";
 
 export class IdAllocator {
     private nextId = 0;
@@ -858,6 +858,40 @@ export class Connection {
             });
     }
 
+    delete (
+        table : DeletableTable,
+        whereClause : WhereClause
+    ) : Promise<DeleteResult> {
+        const ast : tsql.Ast[] = [
+            "DELETE FROM",
+            table.unaliasedAst,
+            "WHERE",
+            whereClause.ast
+        ];
+        const sql = tsql.AstUtil.toSql(ast, sqliteSqlfier);
+        return this.exec(sql)
+            .then(async (result) => {
+                if (result.execResult.length != 0) {
+                    throw new Error(`delete() should have no result set; found ${result.execResult.length}`);
+                }
+                if (result.rowsModified < 0) {
+                    throw new Error(`delete() should modify zero, or more rows; modified ${result.rowsModified} rows`);
+                }
+
+                const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
+
+                return {
+                    query : { sql, },
+                    deletedRowCount : BigInt(result.rowsModified),
+                    warningCount : BigInt(0),
+                    message : "ok",
+                };
+            })
+            .catch((err) => {
+                //console.error("error encountered", sql);
+                throw err;
+            });
+    }
 }
 
 /**

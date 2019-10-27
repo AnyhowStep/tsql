@@ -3,6 +3,7 @@ import {IQueryBase, QueryBaseUtil} from "../../query-base";
 import {InsertableTable, DeletableTable} from "../../table";
 import {InsertRow} from "../../insert";
 import {InsertSelectRow} from "../../insert-select";
+import {WhereClause} from "../../where-clause";
 
 export interface RawQueryResult {
     query   : { sql : string },
@@ -208,6 +209,24 @@ export type UpdateOneResult = (
     UpdateResult &
     { foundRowCount : 1, updatedRowCount : 0|1 }
 );
+export interface DeleteResult {
+    query : { sql : string },
+
+    //Alias for affectedRows
+    deletedRowCount : bigint;
+
+    /**
+     * @todo MySQL sometimes gives a `warningCount` value `> 0` for
+     * `DELETE` statements. Recall why.
+     */
+    warningCount : bigint;
+    /**
+     * An arbitrary message.
+     * May be an empty string.
+     */
+    message : string;
+}
+/*
 export interface RawDeleteResult {
     fieldCount   : number;
     affectedRows : number;
@@ -229,7 +248,7 @@ export interface DeleteResult extends RawDeleteResult {
     deletedTableCount : number;
     /*
         In general, we cannot deduce this correctly.
-    */
+    * /
     //foundRowCount
     //deletedRowCount
 }
@@ -246,7 +265,7 @@ export type DeleteOneResult = (
     DeleteResult &
     { foundRowCount : 1, deletedRowCount : 1 }
 );
-
+*/
 export interface IConnection {
     isInTransaction () : this is ITransactionConnection;
     transaction<ResultT> (
@@ -292,14 +311,13 @@ export interface IConnection {
         table : TableT,
         row : InsertSelectRow<QueryT, TableT>
     ) : Promise<ReplaceManyResult>;
+
+    delete (table : DeletableTable, whereClause : WhereClause) : Promise<DeleteResult>;
+
     /**
      * @todo
      */
     update (sql : string) : Promise<RawUpdateResult>;
-    /**
-     * @todo
-     */
-    delete (sql : string) : Promise<RawDeleteResult>;
 }
 export interface ITransactionConnection extends IConnection {
     rollback () : Promise<void>;
@@ -355,3 +373,8 @@ export type InsertIgnoreSelectConnection = Pick<IConnection, "select"|"insertIgn
  * `INSERT` and `SELECT` statements can be executed by this connection.
  */
 export type ReplaceSelectConnection = Pick<IConnection, "select"|"replaceSelect">;
+
+/**
+ * `DELETE` and `SELECT` statements can be executed by this connection.
+ */
+export type DeleteConnection = Pick<IConnection, "select"|"delete">;
