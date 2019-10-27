@@ -14,7 +14,7 @@ tape(__filename, async (t) => {
         })
         .setPrimaryKey(columns => [columns.testId]);
 
-    const insertResult = await pool.acquire(async (connection) => {
+    const result = await pool.acquire(async (connection) => {
         await connection.exec(`
             CREATE TABLE dst (
                 testId INT PRIMARY KEY,
@@ -39,11 +39,11 @@ tape(__filename, async (t) => {
         );
     });
     t.deepEqual(
-        insertResult.deletedRowCount,
+        result.deletedRowCount,
         BigInt(1)
     );
     t.deepEqual(
-        insertResult.warningCount,
+        result.warningCount,
         BigInt(0)
     );
 

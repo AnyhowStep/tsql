@@ -892,6 +892,94 @@ export class Connection {
                 throw err;
             });
     }
+
+    rollback () : Promise<void> {
+        if (!this.isInTransaction()) {
+            return Promise.reject(new Error("Not in transaction; cannot rollback"));
+        }
+        return this.exec("ROLLBACK")
+            .then(() => {
+                this.inTransaction = false;
+            });
+    }
+    commit () : Promise<void> {
+        if (!this.isInTransaction()) {
+            return Promise.reject(new Error("Not in transaction; cannot commit"));
+        }
+        return this.exec("COMMIT")
+            .then(() => {
+                this.inTransaction = false;
+            });
+    }
+
+    private inTransaction = false;
+    isInTransaction () : this is tsql.ITransactionConnection {
+        return this.inTransaction;
+    }
+    transaction<ResultT> (
+        callback : tsql.TransactionCallback<ResultT>
+    ) : Promise<ResultT> {
+        if (this.inTransaction) {
+            return Promise.reject(new Error(`Transaction already started`));
+        }
+        this.inTransaction = true;
+
+        return new Promise<ResultT>((resolve, reject) => {
+            this.exec("BEGIN TRANSACTION")
+                .then(() => {
+                    return callback(this as unknown as tsql.ITransactionConnection);
+                })
+                .then((result) => {
+                    if (!this.isInTransaction()) {
+                        resolve(result);
+                        return;
+                    }
+
+                    this.commit()
+                        .then(() => {
+                            resolve(result);
+                        })
+                        .catch((commitErr) => {
+                            this.rollback()
+                                .then(() => {
+                                    reject(commitErr);
+                                })
+                                .catch((rollbackErr) => {
+                                    commitErr.rollbackErr = rollbackErr;
+                                    reject(commitErr);
+                                });
+                        });
+                })
+                .catch((err) => {
+                    if (!this.isInTransaction()) {
+                        reject(err);
+                        return;
+                    }
+
+                    this.rollback()
+                        .then(() => {
+                            reject(err);
+                        })
+                        .catch((rollbackErr) => {
+                            err.rollbackErr = rollbackErr;
+                            reject(err);
+                        });
+                });
+        });
+    }
+    transactionIfNotInOne<ResultT> (
+        callback : tsql.TransactionCallback<ResultT>
+    ) : Promise<ResultT> {
+        if (this.isInTransaction()) {
+            try {
+                return callback(this);
+            } catch (err) {
+                return Promise.reject(err);
+            }
+        } else {
+            return this.transaction(callback);
+        }
+    }
 }
 
 /**

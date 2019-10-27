@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {ITable, InsertableTable, TableUtil, DeletableTable} from "../../../table";
+import {InsertableTable, TableUtil, DeletableTable} from "../../../table";
 import {ReplaceManyConnection, ReplaceManyResult} from "../../connection";
 import {InsertRow, InsertUtil} from "../../../insert";
 
@@ -13,7 +13,7 @@ import {InsertRow, InsertUtil} from "../../../insert";
  * ```
  */
 export async function replaceMany<
-    TableT extends ITable & InsertableTable & DeletableTable
+    TableT extends InsertableTable & DeletableTable
 > (
     connection : ReplaceManyConnection,
     table : TableT,

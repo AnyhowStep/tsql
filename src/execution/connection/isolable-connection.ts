@@ -1,4 +1,4 @@
-import {SelectConnection} from "./connection";
+import {SelectConnection, DeleteConnection} from "./connection";
 
 /**
  * A callback containing an isolated connection.
@@ -46,4 +46,13 @@ export interface IsolatedConnection<K> extends IsolableConnection<K> {
 export type IsolableSelectConnection = (
     & SelectConnection
     & IsolableConnection<SelectConnection>
+);
+
+/**
+ * + Allows `SELECT/DELETE` statements
+ * +
+ */
+export type IsolableDeleteConnection = (
+    & DeleteConnection
+    & IsolableConnection<DeleteConnection>
 );

@@ -1,10 +1,10 @@
 import * as tm from "type-mapping";
-import {TableData, ITable, TableWithPrimaryKey} from "./table";
+import {TableData, ITable, TableWithPrimaryKey, DeletableTable, InsertableTable, TableWithoutAutoIncrement, TableWithAutoIncrement} from "./table";
 import * as TableUtil from "./util";
 import {MapperMap} from "../mapper-map";
 import {Ast} from "../ast";
 import {ColumnUtil} from "../column";
-import {SelectConnection, ExecutionUtil} from "../execution";
+import {SelectConnection, ExecutionUtil, DeleteConnection, InsertOneConnection, InsertOneResult, DeleteResult, InsertIgnoreOneResult, InsertIgnoreOneConnection, ReplaceOneResult, ReplaceOneConnection, ReplaceManyResult, ReplaceManyConnection, InsertIgnoreManyResult, InsertIgnoreManyConnection, InsertManyResult, InsertManyConnection, IsolableDeleteConnection} from "../execution";
 import {CandidateKey_NonUnion} from "../candidate-key";
 import {QueryUtil} from "../unified-query";
 import {StrictUnion} from "../type-util";
@@ -16,6 +16,8 @@ import {SelectClause, SelectDelegate, SelectValueDelegate, SelectClauseUtil} fro
 import {FromClauseUtil} from "../from-clause";
 import {WhereDelegate} from "../where-clause";
 import {AnyRawExpr} from "../raw-expr";
+import {InsertRow, InsertRowPrimitiveAutoIncrement} from "../insert";
+import {InsertOneResultWithAutoIncrement, InsertIgnoreOneResultWithAutoIncrement, DeleteOneResult, DeleteZeroOrOneResult} from "../execution/util";
 /*import {PrimaryKey, PrimaryKeyUtil} from "../primary-key";
 import {CandidateKey, CandidateKeyUtil} from "../candidate-key";
 import {SuperKey, SuperKeyUtil} from "../super-key";*/
@@ -933,6 +935,219 @@ export class Table<DataT extends TableData> implements ITable {
         );
     }
 
+    insertOne (
+        this : Extract<this, TableWithAutoIncrement & InsertableTable>,
+        connection : InsertOneConnection,
+        row : InsertRowPrimitiveAutoIncrement<Extract<this, TableWithAutoIncrement & InsertableTable>>
+    ) : Promise<InsertOneResultWithAutoIncrement<Extract<this, TableWithAutoIncrement & InsertableTable>>>;
+    insertOne (
+        this : Extract<this, TableWithoutAutoIncrement & InsertableTable>,
+        connection : InsertOneConnection,
+        row : InsertRow<Extract<this, TableWithoutAutoIncrement & InsertableTable>>
+    ) : Promise<InsertOneResult>;
+    insertOne (
+        connection : InsertOneConnection,
+        row : any
+    ) : Promise<InsertOneResult> {
+        return ExecutionUtil.insertOne(
+            connection,
+            this as any,
+            row as any
+        );
+    }
+
+    insertMany (
+        this : Extract<this, InsertableTable>,
+        connection : InsertManyConnection,
+        rows : readonly InsertRow<Extract<this, InsertableTable>>[]
+    ) : Promise<InsertManyResult> {
+        return ExecutionUtil.insertMany(
+            connection,
+            this,
+            rows
+        );
+    }
+
+    insertIgnoreOne (
+        this : Extract<this, TableWithAutoIncrement & InsertableTable>,
+        connection : InsertIgnoreOneConnection,
+        row : InsertRowPrimitiveAutoIncrement<Extract<this, TableWithAutoIncrement & InsertableTable>>
+    ) : Promise<InsertIgnoreOneResultWithAutoIncrement<Extract<this, TableWithAutoIncrement & InsertableTable>>>;
+    insertIgnoreOne (
+        this : Extract<this, TableWithoutAutoIncrement & InsertableTable>,
+        connection : InsertIgnoreOneConnection,
+        row : InsertRow<Extract<this, TableWithoutAutoIncrement & InsertableTable>>
+    ) : Promise<InsertIgnoreOneResult>;
+    insertIgnoreOne (
+        connection : InsertIgnoreOneConnection,
+        row : any
+    ) : Promise<InsertIgnoreOneResult> {
+        return ExecutionUtil.insertIgnoreOne(
+            connection,
+            this as any,
+            row as any
+        );
+    }
+
+    insertIgnoreMany (
+        this : Extract<this, InsertableTable>,
+        connection : InsertIgnoreManyConnection,
+        rows : readonly InsertRow<Extract<this, InsertableTable>>[]
+    ) : Promise<InsertIgnoreManyResult> {
+        return ExecutionUtil.insertIgnoreMany(
+            connection,
+            this,
+            rows
+        );
+    }
+
+    replaceOne (
+        this : Extract<this, InsertableTable & DeletableTable>,
+        connection : ReplaceOneConnection,
+        row : InsertRow<Extract<this, InsertableTable & DeletableTable>>
+    ) : Promise<ReplaceOneResult> {
+        return ExecutionUtil.replaceOne(
+            connection,
+            this,
+            row
+        );
+    }
+
+    replaceMany (
+        this : Extract<this, InsertableTable & DeletableTable>,
+        connection : ReplaceManyConnection,
+        rows : readonly InsertRow<Extract<this, InsertableTable & DeletableTable>>[]
+    ) : Promise<ReplaceManyResult> {
+        return ExecutionUtil.replaceMany(
+            connection,
+            this,
+            rows
+        );
+    }
+
+    delete (
+        this : Extract<this, DeletableTable>,
+        connection : DeleteConnection,
+        whereDelegate : WhereDelegate<
+            FromClauseUtil.From<
+                FromClauseUtil.NewInstance,
+                Extract<this, DeletableTable>
+            >
+        >
+    ) : Promise<DeleteResult> {
+        return ExecutionUtil.delete(connection, this, whereDelegate);
+    }
+
+    deleteOne (
+        this : Extract<this, DeletableTable>,
+        connection : IsolableDeleteConnection,
+        whereDelegate : WhereDelegate<
+            FromClauseUtil.From<
+                FromClauseUtil.NewInstance,
+                Extract<this, DeletableTable>
+            >
+        >
+    ) : Promise<DeleteOneResult> {
+        return ExecutionUtil.deleteOne(connection, this, whereDelegate);
+    }
+
+    deleteZeroOrOne (
+        this : Extract<this, DeletableTable>,
+        connection : IsolableDeleteConnection,
+        whereDelegate : WhereDelegate<
+            FromClauseUtil.From<
+                FromClauseUtil.NewInstance,
+                Extract<this, DeletableTable>
+            >
+        >
+    ) : Promise<DeleteZeroOrOneResult> {
+        return ExecutionUtil.deleteZeroOrOne(connection, this, whereDelegate);
+    }
+
+    deleteOneByCandidateKey (
+        this : Extract<this, DeletableTable>,
+        connection : IsolableDeleteConnection,
+        candidateKey : StrictUnion<CandidateKey_NonUnion<this>>
+    ) : Promise<DeleteOneResult> {
+        return this.deleteOne(
+            connection,
+            () => ExprLib.eqCandidateKey(
+                this,
+                candidateKey
+            ) as any
+        );
+    }
+
+    deleteOneByPrimaryKey (
+        this : Extract<this, DeletableTable & TableWithPrimaryKey>,
+        connection : IsolableDeleteConnection,
+        primaryKey : PrimaryKey_Input<Extract<this, DeletableTable & TableWithPrimaryKey>>
+    ) : Promise<DeleteOneResult> {
+        return this.deleteOne(
+            connection,
+            () => ExprLib.eqPrimaryKey(
+                this,
+                primaryKey
+            ) as any
+        );
+    }
+
+    deleteOneBySuperKey (
+        this : Extract<this, DeletableTable>,
+        connection : IsolableDeleteConnection,
+        superKey : SuperKey_Input<this>
+    ) : Promise<DeleteOneResult> {
+        return this.deleteOne(
+            connection,
+            () => ExprLib.eqSuperKey(
+                this,
+                superKey
+            ) as any
+        );
+    }
+
+    deleteZeroOrOneByCandidateKey (
+        this : Extract<this, DeletableTable>,
+        connection : IsolableDeleteConnection,
+        candidateKey : StrictUnion<CandidateKey_NonUnion<this>>
+    ) : Promise<DeleteZeroOrOneResult> {
+        return this.deleteZeroOrOne(
+            connection,
+            () => ExprLib.eqCandidateKey(
+                this,
+                candidateKey
+            ) as any
+        );
+    }
+
+    deleteZeroOrOneByPrimaryKey (
+        this : Extract<this, DeletableTable & TableWithPrimaryKey>,
+        connection : IsolableDeleteConnection,
+        primaryKey : PrimaryKey_Input<Extract<this, DeletableTable & TableWithPrimaryKey>>
+    ) : Promise<DeleteZeroOrOneResult> {
+        return this.deleteZeroOrOne(
+            connection,
+            () => ExprLib.eqPrimaryKey(
+                this,
+                primaryKey
+            ) as any
+        );
+    }
+
+    deleteZeroOrOneBySuperKey (
+        this : Extract<this, DeletableTable>,
+        connection : IsolableDeleteConnection,
+        superKey : SuperKey_Input<this>
+    ) : Promise<DeleteZeroOrOneResult> {
+        return this.deleteZeroOrOne(
+            connection,
+            () => ExprLib.eqSuperKey(
+                this,
+                superKey
+            ) as any
+        );
+    }
+
     /*
 
     insertAndFetch<
@@ -948,34 +1163,6 @@ export class Table<DataT extends TableData> implements ITable {
             insertRow
         );
     }
-    insertIgnore (
-        this : Extract<this, InsertableTable>,
-        connection : IConnection,
-        insertRow : InsertRow<Extract<this, InsertableTable>>
-    ) : (
-        Promise<InsertUtil.InsertIgnoreResult<Extract<this, InsertableTable>>>
-    ) {
-        return InsertUtil.insertIgnore(connection, this, insertRow);
-    }
-    insert (
-        this : Extract<this, InsertableTable>,
-        connection : IConnection,
-        insertRow : InsertRow<Extract<this, InsertableTable>>
-    ) : (
-        Promise<InsertUtil.InsertResult<Extract<this, InsertableTable>>>
-    ) {
-        return InsertUtil.insert(connection, this, insertRow);
-    }
-    replace (
-        this : Extract<this, InsertableTable>,
-        connection : IConnection,
-        insertRow : InsertRow<Extract<this, InsertableTable>>
-    ) : (
-        Promise<InsertUtil.ReplaceResult<Extract<this, InsertableTable>>>
-    ) {
-        return InsertUtil.replace(connection, this, insertRow);
-    }
-
     updateAndFetchOneByCk<
         DelegateT extends UpdateUtil.SingleTableSetDelegateFromTable<this>
     > (
@@ -1249,60 +1436,5 @@ export class Table<DataT extends TableData> implements ITable {
             delegate
         );
     }
-
-    deleteOneByCk (
-        this : Extract<this, DeletableTable> & TableUtil.AssertHasCandidateKey<this>,
-        connection : IConnection,
-        ck : CandidateKey<Extract<this, DeletableTable>>
-    ) : (
-        Promise<DeleteOneResult>
-    ) {
-        return DeleteUtil.deleteOneByCk(connection, this, ck);
-    }
-    deleteOneByPk (
-        this : Extract<this, DeletableTable & TableWithPk>,
-        connection : IConnection,
-        pk : PrimaryKey<Extract<this, DeletableTable & TableWithPk>>
-    ) : (
-        Promise<DeleteOneResult>
-    ) {
-        return DeleteUtil.deleteOneByPk(connection, this, pk);
-    }
-    deleteOneBySk (
-        this : Extract<this, DeletableTable> & TableUtil.AssertHasCandidateKey<this>,
-        connection : IConnection,
-        sk : SuperKey<Extract<this, DeletableTable>>
-    ) : (
-        Promise<DeleteOneResult>
-    ) {
-        return DeleteUtil.deleteOneBySk(connection, this, sk);
-    }
-
-    deleteZeroOrOneByCk (
-        this : Extract<this, DeletableTable> & TableUtil.AssertHasCandidateKey<this>,
-        connection : IConnection,
-        ck : CandidateKey<Extract<this, DeletableTable>>
-    ) : (
-        Promise<DeleteZeroOrOneResult>
-    ) {
-        return DeleteUtil.deleteZeroOrOneByCk(connection, this, ck);
-    }
-    deleteZeroOrOneByPk (
-        this : Extract<this, DeletableTable & TableWithPk>,
-        connection : IConnection,
-        pk : PrimaryKey<Extract<this, DeletableTable & TableWithPk>>
-    ) : (
-        Promise<DeleteZeroOrOneResult>
-    ) {
-        return DeleteUtil.deleteZeroOrOneByPk(connection, this, pk);
-    }
-    deleteZeroOrOneBySk (
-        this : Extract<this, DeletableTable> & TableUtil.AssertHasCandidateKey<this>,
-        connection : IConnection,
-        sk : SuperKey<Extract<this, DeletableTable>>
-    ) : (
-        Promise<DeleteZeroOrOneResult>
-    ) {
-        return DeleteUtil.deleteZeroOrOneBySk(connection, this, sk);
-    }*/
+    */
 }

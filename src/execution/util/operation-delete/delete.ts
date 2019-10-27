@@ -1,4 +1,4 @@
-import {DeletableTable} from "../../../table";
+import {DeletableTable, TableUtil} from "../../../table";
 import {WhereDelegate, WhereClauseUtil} from "../../../where-clause";
 import {FromClauseUtil} from "../../../from-clause";
 import {DeleteResult, DeleteConnection} from "../../connection";
@@ -15,6 +15,8 @@ async function del<
         >
     >
 ) : Promise<DeleteResult> {
+    TableUtil.assertDeleteEnabled(table);
+
     const where = WhereClauseUtil.where(
         FromClauseUtil.from<
             FromClauseUtil.NewInstance,

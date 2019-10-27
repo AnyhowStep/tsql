@@ -1,4 +1,4 @@
-import {ITable, InsertableTable, TableUtil, DeletableTable} from "../../../table";
+import {InsertableTable, TableUtil, DeletableTable} from "../../../table";
 import {ReplaceOneResult, ReplaceOneConnection} from "../../connection";
 import {InsertRow, InsertUtil} from "../../../insert";
 
@@ -15,7 +15,7 @@ import {InsertRow, InsertUtil} from "../../../insert";
  * Replacing a row is essentially deleting the old row and inserting a new row.
  */
 export async function replaceOne<
-    TableT extends ITable & InsertableTable & DeletableTable
+    TableT extends InsertableTable & DeletableTable
 > (
     connection : ReplaceOneConnection,
     table : TableT,
