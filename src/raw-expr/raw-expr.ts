@@ -1,10 +1,11 @@
 import * as tm from "type-mapping";
 import {PrimitiveExpr} from "../primitive-expr";
 import {IAnonymousExpr, IExpr} from "../expr";
-import {IAnonymousColumn, IColumn} from "../column";
+import {IAnonymousColumn, IColumn, ColumnUtil} from "../column";
 import {IAnonymousExprSelectItem, IExprSelectItem} from "../expr-select-item";
 import {QueryBaseUtil} from "../query-base";
-import {IUsedRef} from "../used-ref";
+import {IUsedRef, UsedRefUtil} from "../used-ref";
+import {ColumnMap} from "../column-map";
 
 export type RawExpr<TypeT> = (
     | (
@@ -59,3 +60,25 @@ export type RawExprNoUsedRef<TypeT> = (
         usedRef : IUsedRef<{}>,
     }>
 );
+
+/**
+ * We don't support subqueries because it's too complicated
+ * to check their `IUsedRef`
+ */
+export type RawExprUsingColumnMap<
+    ColumnMapT extends ColumnMap,
+    TypeT
+> =
+    | Extract<TypeT, PrimitiveExpr>
+    | IExpr<{
+        mapper : tm.SafeMapper<TypeT>,
+        usedRef : UsedRefUtil.FromColumnMap<ColumnMapT>,
+    }>
+    | ColumnUtil.FromColumnMap<ColumnMapT>
+    | IExprSelectItem<{
+        mapper : tm.SafeMapper<TypeT>,
+        usedRef : UsedRefUtil.FromColumnMap<ColumnMapT>,
+        tableAlias : string,
+        alias : string,
+    }>
+;

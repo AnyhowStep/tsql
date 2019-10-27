@@ -51,6 +51,7 @@ export * from "./table";
 export * from "./type-map";
 export * from "./type-ref";
 export * from "./unified-query";
+export * from "./update";
 export * from "./used-ref";
 export * from "./where-clause";
 

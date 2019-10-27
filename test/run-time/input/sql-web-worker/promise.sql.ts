@@ -3,7 +3,7 @@ import * as tsql from "../../../../dist";
 import {ISqliteWorker, SqliteAction, FromSqliteMessage, ToSqliteMessage} from "./worker.sql";
 import {AsyncQueue} from "./async-queue";
 import {sqliteSqlfier} from "../../../sqlite-sqlfier";
-import {ITable, RawExprUtil, WhereClause, DeletableTable, DeleteResult} from "../../../../dist";
+import {ITable, RawExprUtil, WhereClause, DeletableTable, DeleteResult, AssignmentMap, UpdateResult} from "../../../../dist";
 
 export class IdAllocator {
     private nextId = 0;
@@ -883,6 +883,94 @@ export class Connection {
                 return {
                     query : { sql, },
                     deletedRowCount : BigInt(result.rowsModified),
+                    warningCount : BigInt(0),
+                    message : "ok",
+                };
+            })
+            .catch((err) => {
+                //console.error("error encountered", sql);
+                throw err;
+            });
+    }
+
+    update<TableT extends ITable> (
+        table : TableT,
+        assignmentMap : AssignmentMap<TableT>,
+        whereClause : WhereClause
+    ) : Promise<UpdateResult> {
+        const mutableColumnAlias = Object.keys(assignmentMap)
+            .filter(columnAlias => {
+                const value = assignmentMap[columnAlias as keyof typeof assignmentMap];
+                return (
+                    value !== undefined &&
+                    table.mutableColumns.indexOf(columnAlias) >= 0
+                );
+            })
+            .sort();
+
+        if (mutableColumnAlias.length == 0) {
+            //Empty assignment list...
+            return tsql.from(table as any)
+                .where(() => whereClause as any)
+                .count(this)
+                .then((count) => {
+                    return {
+                        query : {
+                            /**
+                             * No `UPDATE` statement executed
+                             */
+                            sql : "",
+                        },
+                        foundRowCount : count,
+                        updatedRowCount : BigInt(0),
+                        warningCount : BigInt(0),
+                        message : "ok",
+                    };
+                });
+        }
+
+        const assignmentList = mutableColumnAlias.reduce<tsql.Ast[]>(
+            (ast, columnAlias) => {
+                const value = assignmentMap[columnAlias as keyof typeof assignmentMap];
+                const assignment = [
+                    tsql.escapeIdentifierWithDoubleQuotes(columnAlias),
+                    "=",
+                    tsql.RawExprUtil.buildAst(value as Exclude<typeof value, undefined>)
+                ];
+
+                if (ast.length > 0) {
+                    ast.push(",");
+                }
+                ast.push(assignment);
+                return ast;
+            },
+            []
+        );
+
+        const ast : tsql.Ast[] = [
+            "UPDATE",
+            table.unaliasedAst,
+            "SET",
+            ...assignmentList,
+            "WHERE",
+            whereClause.ast
+        ];
+        const sql = tsql.AstUtil.toSql(ast, sqliteSqlfier);
+        return this.exec(sql)
+            .then(async (result) => {
+                if (result.execResult.length != 0) {
+                    throw new Error(`update() should have no result set; found ${result.execResult.length}`);
+                }
+                if (result.rowsModified < 0) {
+                    throw new Error(`update() should modify zero, or more rows; modified ${result.rowsModified} rows`);
+                }
+
+                const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
+
+                return {
+                    query : { sql, },
+                    foundRowCount : BigInt(result.rowsModified),
+                    updatedRowCount : BigInt(result.rowsModified),
                     warningCount : BigInt(0),
                     message : "ok",
                 };

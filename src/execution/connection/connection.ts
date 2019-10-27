@@ -1,9 +1,10 @@
 import {TransactionCallback} from "../pool";
 import {IQueryBase, QueryBaseUtil} from "../../query-base";
-import {InsertableTable, DeletableTable} from "../../table";
+import {InsertableTable, DeletableTable, ITable} from "../../table";
 import {InsertRow} from "../../insert";
 import {InsertSelectRow} from "../../insert-select";
 import {WhereClause} from "../../where-clause";
+import {AssignmentMap} from "../../update";
 
 export interface RawQueryResult {
     query   : { sql : string },
@@ -154,6 +155,7 @@ export interface ReplaceManyResult {
      */
     message : string;
 }
+/*
 export interface RawUpdateResult {
     fieldCount   : number;
     affectedRows : number;
@@ -168,7 +170,7 @@ export interface RawUpdateResult {
     /*
         Prefixed with `raw` because MySQL is weird
         with how it returns results.
-    */
+    * /
     //Alias for affectedRows
     rawFoundRowCount : number;
     //Alias for changedRows
@@ -178,7 +180,7 @@ export interface UpdateResult extends RawUpdateResult {
     updatedTableCount : number;
     /*
         foundRowCount = rawFoundRowCount / updatedTableCount
-    */
+    * /
     foundRowCount : number;
     /*
         We cannot reasonably derive this value
@@ -195,7 +197,7 @@ export interface UpdateResult extends RawUpdateResult {
         If updatedTableCount == 1,
         then you may use rawUpdatedRowCount
         as the "real" number of rows updated.
-    */
+    * /
     //updatedRowCount : number;
 }
 export type UpdateZeroOrOneResult = (
@@ -208,7 +210,7 @@ export type UpdateZeroOrOneResult = (
 export type UpdateOneResult = (
     UpdateResult &
     { foundRowCount : 1, updatedRowCount : 0|1 }
-);
+);*/
 export interface DeleteResult {
     query : { sql : string },
 
@@ -226,46 +228,32 @@ export interface DeleteResult {
      */
     message : string;
 }
-/*
-export interface RawDeleteResult {
-    fieldCount   : number;
-    affectedRows : number;
-    //Should always be zero
-    insertId     : number;
-    serverStatus : number;
-    warningCount : number;
-    message      : string;
-    protocol41   : boolean;
-    //Should always be zero
-    changedRows  : number;
 
-    //Alias for affectedRows + warningCount
-    rawFoundRowCount : number;
+export interface UpdateResult {
+    query : { sql : string },
+
     //Alias for affectedRows
-    rawDeletedRowCount : number;
+    foundRowCount : bigint;
+
+    /**
+     * You cannot trust this number for SQLite.
+     * SQLite thinks that all found rows are updated, even if you set `x = x`.
+     *
+     */
+    //Alias for changedRows
+    updatedRowCount : bigint;
+
+    /**
+     * May be the duplicate row count, or some other value.
+     */
+    warningCount : bigint;
+    /**
+     * An arbitrary message.
+     * May be an empty string.
+     */
+    message : string;
 }
-export interface DeleteResult extends RawDeleteResult {
-    deletedTableCount : number;
-    /*
-        In general, we cannot deduce this correctly.
-    * /
-    //foundRowCount
-    //deletedRowCount
-}
-//Not used with IGNORE modifier. Therefore, found == deleted
-export type DeleteZeroOrOneResult = (
-    DeleteResult &
-    (
-        { foundRowCount : 0, deletedRowCount : 0 } |
-        { foundRowCount : 1, deletedRowCount : 1 }
-    )
-);
-//Not used with IGNORE modifier. Therefore, found == deleted
-export type DeleteOneResult = (
-    DeleteResult &
-    { foundRowCount : 1, deletedRowCount : 1 }
-);
-*/
+
 export interface IConnection {
     isInTransaction () : this is ITransactionConnection;
     transaction<ResultT> (
@@ -314,10 +302,11 @@ export interface IConnection {
 
     delete (table : DeletableTable, whereClause : WhereClause) : Promise<DeleteResult>;
 
-    /**
-     * @todo
-     */
-    update (sql : string) : Promise<RawUpdateResult>;
+    update<TableT extends ITable> (
+        table : TableT,
+        assignmentMap : AssignmentMap<TableT>,
+        whereClause : WhereClause
+    ) : Promise<UpdateResult>;
 }
 export interface ITransactionConnection extends IConnection {
     rollback () : Promise<void>;
@@ -378,3 +367,8 @@ export type ReplaceSelectConnection = Pick<IConnection, "select"|"replaceSelect"
  * `DELETE` and `SELECT` statements can be executed by this connection.
  */
 export type DeleteConnection = Pick<IConnection, "select"|"delete">;
+
+/**
+ * `UPDATE` and `SELECT` statements can be executed by this connection.
+ */
+export type UpdateConnection = Pick<IConnection, "select"|"update">;
