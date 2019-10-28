@@ -1,0 +1,9 @@
+[
+  {
+    "messageText": "Argument of type '{}' is not assignable to parameter of type 'never'.",
+    "code": 2345,
+    "category": 1,
+    "length": 2,
+    "start": 394
+  }
+]

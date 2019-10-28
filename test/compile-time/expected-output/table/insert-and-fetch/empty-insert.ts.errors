@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Argument of type '{}' is not assignable to parameter of type '{} & { readonly testVal?: bigint | IExpr<{ mapper: Mapper<unknown, bigint>; usedRef: IUsedRef<{}>; }> | IExprSelectItem<{ mapper: Mapper<unknown, bigint>; tableAlias: string; alias: string; usedRef: IUsedRef<{}>; }> | (IQueryBase<...> & ... 1 more ... & IQueryBase<...>) | undefined; } & { ...; }'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Property 'testId' is missing in type '{}' but required in type '{ readonly testId: bigint; }'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 2,
+    "start": 442
+  }
+]

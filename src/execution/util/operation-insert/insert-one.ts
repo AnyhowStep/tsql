@@ -7,6 +7,7 @@ export type InsertOneResultWithAutoIncrement<
     TableT extends TableWithAutoIncrement
 > =
     & InsertOneResult
+    & { autoIncrementId : bigint }
     & { [columnAlias in TableT["autoIncrement"]] : bigint }
 ;
 

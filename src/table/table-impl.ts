@@ -4,19 +4,19 @@ import * as TableUtil from "./util";
 import {MapperMap} from "../mapper-map";
 import {Ast} from "../ast";
 import {ColumnUtil} from "../column";
-import {SelectConnection, ExecutionUtil, DeleteConnection, InsertOneConnection, InsertOneResult, DeleteResult, InsertIgnoreOneResult, InsertIgnoreOneConnection, ReplaceOneResult, ReplaceOneConnection, ReplaceManyResult, ReplaceManyConnection, InsertIgnoreManyResult, InsertIgnoreManyConnection, InsertManyResult, InsertManyConnection, IsolableDeleteConnection, UpdateConnection, UpdateResult, IsolableUpdateConnection} from "../execution";
+import {SelectConnection, ExecutionUtil, DeleteConnection, InsertOneConnection, InsertOneResult, DeleteResult, InsertIgnoreOneResult, InsertIgnoreOneConnection, ReplaceOneResult, ReplaceOneConnection, ReplaceManyResult, ReplaceManyConnection, InsertIgnoreManyResult, InsertIgnoreManyConnection, InsertManyResult, InsertManyConnection, IsolableDeleteConnection, UpdateConnection, UpdateResult, IsolableUpdateConnection, IsolableInsertOneConnection} from "../execution";
 import {CandidateKey_NonUnion} from "../candidate-key";
 import {QueryUtil} from "../unified-query";
 import {StrictUnion} from "../type-util";
 import * as ExprLib from "../expr-library";
 import {PrimaryKey_Input} from "../primary-key";
 import {SuperKey_Input} from "../super-key";
-import {Row_NonUnion} from "../row";
+import {Row_NonUnion, Row} from "../row";
 import {SelectClause, SelectDelegate, SelectValueDelegate, SelectClauseUtil} from "../select-clause";
 import {FromClauseUtil} from "../from-clause";
 import {WhereDelegate} from "../where-clause";
 import {AnyRawExpr} from "../raw-expr";
-import {InsertRow, InsertRowPrimitiveAutoIncrement} from "../insert";
+import {InsertRow, InsertRowPrimitiveAutoIncrement, InsertRowPrimitiveCandidateKey} from "../insert";
 import {InsertOneResultWithAutoIncrement, InsertIgnoreOneResultWithAutoIncrement, DeleteOneResult, DeleteZeroOrOneResult, UpdateOneResult, UpdateZeroOrOneResult} from "../execution/util";
 import {AssignmentMapDelegate} from "../update";
 /*import {PrimaryKey, PrimaryKeyUtil} from "../primary-key";
@@ -614,57 +614,12 @@ export class Table<DataT extends TableData> implements ITable {
         >,
         selectDelegate? : (...args : any[]) => any[]
     ) : ExecutionUtil.FetchOnePromise<any> {
-        try {
-            const query = QueryUtil.newInstance()
-                .from<this>(
-                    this as (
-                        this &
-                        QueryUtil.AssertValidCurrentJoin<QueryUtil.NewInstance, this>
-                    )
-                )
-                .where(whereDelegate);
-            if (selectDelegate == undefined) {
-                return query
-                    .select(((columns : any) => [columns]) as any)
-                    .fetchOne(connection);
-            } else {
-                return query
-                    .select(selectDelegate as any)
-                    .fetchOne(connection);
-            }
-        } catch (err) {
-            const result = Promise.reject(err) as ExecutionUtil.FetchOnePromise<any>;
-            //eslint-disable-next-line @typescript-eslint/unbound-method
-            result.or = () => {
-                //To avoid `unhandled rejection` warnings
-                result.catch(() => {});
-                return Promise.reject(err);
-            };
-            //eslint-disable-next-line @typescript-eslint/unbound-method
-            result.orUndefined = () => {
-                //To avoid `unhandled rejection` warnings
-                result.catch(() => {});
-                return Promise.reject(err);
-            };
-            return result;
-        }
-    }
-
-    private fetchOneHelper (
-        connection : SelectConnection,
-        whereDelegate : WhereDelegate<
-            FromClauseUtil.From<
-                FromClauseUtil.NewInstance,
-                this
-            >
-        >,
-        selectDelegate? : (...args : any[]) => any[]
-    ) : ExecutionUtil.FetchOnePromise<any> {
-        if (selectDelegate == undefined) {
-            return this.fetchOne(connection, whereDelegate);
-        } else {
-            return this.fetchOne(connection, whereDelegate, selectDelegate as any);
-        }
+        return TableUtil.__fetchOneHelper(
+            connection,
+            this,
+            whereDelegate,
+            selectDelegate
+        );
     }
 
     fetchOneByCandidateKey (
@@ -698,8 +653,9 @@ export class Table<DataT extends TableData> implements ITable {
         candidateKey : StrictUnion<CandidateKey_NonUnion<this>>,
         selectDelegate? : (...args : any[]) => any[]
     ) : ExecutionUtil.FetchOnePromise<any> {
-        return this.fetchOneHelper(
+        return TableUtil.__fetchOneHelper(
             connection,
+            this,
             () => ExprLib.eqCandidateKey(this, candidateKey) as any,
             selectDelegate
         );
@@ -738,8 +694,9 @@ export class Table<DataT extends TableData> implements ITable {
         primaryKey : PrimaryKey_Input<Extract<this, TableWithPrimaryKey>>,
         selectDelegate? : (...args : any[]) => any[]
     ) : ExecutionUtil.FetchOnePromise<any> {
-        return this.fetchOneHelper(
+        return TableUtil.__fetchOneHelper(
             connection,
+            this,
             () => ExprLib.eqPrimaryKey(this, primaryKey) as any,
             selectDelegate
         );
@@ -775,8 +732,9 @@ export class Table<DataT extends TableData> implements ITable {
         superKey : SuperKey_Input<this>,
         selectDelegate? : (...args : any[]) => any[]
     ) : ExecutionUtil.FetchOnePromise<any> {
-        return this.fetchOneHelper(
+        return TableUtil.__fetchOneHelper(
             connection,
+            this,
             () => ExprLib.eqSuperKey(this, superKey) as any,
             selectDelegate
         );
@@ -1280,21 +1238,29 @@ export class Table<DataT extends TableData> implements ITable {
         );
     }
 
-    /*
-
-    insertAndFetch<
-        RowT extends InsertRow<Extract<this, InsertableTable>>
-    > (
-        this : Extract<this, InsertableTable> & TableUtil.AssertHasCandidateKey<this>,
-        connection : IConnection,
-        insertRow : RowT
-    ) : Promise<InsertUtil.InsertAndFetchResult<Extract<this, InsertableTable>, RowT>> {
-        return InsertUtil.insertAndFetch<Extract<this, InsertableTable>, RowT>(
+    insertAndFetch (
+        this : Extract<this, TableWithAutoIncrement & InsertableTable>,
+        connection : IsolableInsertOneConnection,
+        row : InsertRowPrimitiveAutoIncrement<Extract<this, TableWithAutoIncrement & InsertableTable>>
+    ) : Promise<Row<Extract<this, TableWithAutoIncrement & InsertableTable>>>;
+    insertAndFetch (
+        this : Extract<this, TableWithoutAutoIncrement & InsertableTable>,
+        connection : IsolableInsertOneConnection,
+        row : InsertRowPrimitiveCandidateKey<Extract<this, TableWithoutAutoIncrement & InsertableTable>>
+    ) : Promise<Row<Extract<this, TableWithoutAutoIncrement & InsertableTable>>>;
+    insertAndFetch (
+        connection : IsolableInsertOneConnection,
+        row : any
+    ) : Promise<any> {
+        return ExecutionUtil.insertAndFetch(
             connection,
-            this,
-            insertRow
+            this as any,
+            row as any
         );
     }
+
+    /*
+
     updateAndFetchOneByCk<
         DelegateT extends UpdateUtil.SingleTableSetDelegateFromTable<this>
     > (
