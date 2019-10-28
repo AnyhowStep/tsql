@@ -7,7 +7,7 @@ import {ColumnUtil} from "../column";
 import {SelectConnection, ExecutionUtil, DeleteConnection, InsertOneConnection, InsertOneResult, DeleteResult, InsertIgnoreOneResult, InsertIgnoreOneConnection, ReplaceOneResult, ReplaceOneConnection, ReplaceManyResult, ReplaceManyConnection, InsertIgnoreManyResult, InsertIgnoreManyConnection, InsertManyResult, InsertManyConnection, IsolableDeleteConnection, UpdateConnection, UpdateResult, IsolableUpdateConnection, IsolableInsertOneConnection} from "../execution";
 import {CandidateKey_NonUnion} from "../candidate-key";
 import {QueryUtil} from "../unified-query";
-import {StrictUnion} from "../type-util";
+import {StrictUnion, AssertNonUnion} from "../type-util";
 import * as ExprLib from "../expr-library";
 import {PrimaryKey_Input} from "../primary-key";
 import {SuperKey_Input} from "../super-key";
@@ -1259,32 +1259,28 @@ export class Table<DataT extends TableData> implements ITable {
         );
     }
 
-    /*
-
-    updateAndFetchOneByCk<
-        DelegateT extends UpdateUtil.SingleTableSetDelegateFromTable<this>
+    updateAndFetchOneByCandidateKey<
+        CandidateKeyT extends StrictUnion<CandidateKey_NonUnion<this>>,
+        AssignmentMapT extends ExecutionUtil.UpdateAndFetchOneByCandidateKeyAssignmentMap<this, CandidateKeyT>
     > (
-        this : this & TableUtil.AssertHasCandidateKey<this>,
-        connection : IConnection,
-        ck : CandidateKey<this>,
-        delegate : DelegateT
-    ) : (
-        UpdateUtil.AssertValidSingleTableSetDelegateFromTable_Hack<
+        connection : IsolableUpdateConnection,
+        candidateKey : CandidateKeyT & AssertNonUnion<CandidateKeyT>,
+        assignmentMapDelegate : AssignmentMapDelegate<this, AssignmentMapT>
+    ) : Promise<ExecutionUtil.UpdateAndFetchOneResult<this, AssignmentMapT>> {
+        return ExecutionUtil.updateAndFetchOneByCandidateKey<
             this,
-            DelegateT,
-            Promise<UpdateUtil.UpdateAndFetchOneResult<
-                this,
-                DelegateT
-            >>
-        >
-    ) {
-        return UpdateUtil.updateAndFetchOneByCk<this, DelegateT>(
+            CandidateKeyT,
+            AssignmentMapT
+        >(
             connection,
             this,
-            ck,
-            delegate
+            candidateKey,
+            assignmentMapDelegate
         );
     }
+
+    /*
+
     updateAndFetchOneByPk<
         DelegateT extends UpdateUtil.SingleTableSetDelegateFromTable<Extract<this, TableWithPk>>
     > (
