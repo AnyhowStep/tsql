@@ -4,7 +4,7 @@ import * as TableUtil from "./util";
 import {MapperMap} from "../mapper-map";
 import {Ast} from "../ast";
 import {ColumnUtil} from "../column";
-import {SelectConnection, ExecutionUtil, DeleteConnection, InsertOneConnection, InsertOneResult, DeleteResult, InsertIgnoreOneResult, InsertIgnoreOneConnection, ReplaceOneResult, ReplaceOneConnection, ReplaceManyResult, ReplaceManyConnection, InsertIgnoreManyResult, InsertIgnoreManyConnection, InsertManyResult, InsertManyConnection, IsolableDeleteConnection} from "../execution";
+import {SelectConnection, ExecutionUtil, DeleteConnection, InsertOneConnection, InsertOneResult, DeleteResult, InsertIgnoreOneResult, InsertIgnoreOneConnection, ReplaceOneResult, ReplaceOneConnection, ReplaceManyResult, ReplaceManyConnection, InsertIgnoreManyResult, InsertIgnoreManyConnection, InsertManyResult, InsertManyConnection, IsolableDeleteConnection, UpdateConnection, UpdateResult, IsolableUpdateConnection} from "../execution";
 import {CandidateKey_NonUnion} from "../candidate-key";
 import {QueryUtil} from "../unified-query";
 import {StrictUnion} from "../type-util";
@@ -17,7 +17,8 @@ import {FromClauseUtil} from "../from-clause";
 import {WhereDelegate} from "../where-clause";
 import {AnyRawExpr} from "../raw-expr";
 import {InsertRow, InsertRowPrimitiveAutoIncrement} from "../insert";
-import {InsertOneResultWithAutoIncrement, InsertIgnoreOneResultWithAutoIncrement, DeleteOneResult, DeleteZeroOrOneResult} from "../execution/util";
+import {InsertOneResultWithAutoIncrement, InsertIgnoreOneResultWithAutoIncrement, DeleteOneResult, DeleteZeroOrOneResult, UpdateOneResult, UpdateZeroOrOneResult} from "../execution/util";
+import {AssignmentMapDelegate} from "../update";
 /*import {PrimaryKey, PrimaryKeyUtil} from "../primary-key";
 import {CandidateKey, CandidateKeyUtil} from "../candidate-key";
 import {SuperKey, SuperKeyUtil} from "../super-key";*/
@@ -1148,6 +1149,137 @@ export class Table<DataT extends TableData> implements ITable {
         );
     }
 
+    update (
+        connection : UpdateConnection,
+        whereDelegate : WhereDelegate<
+            FromClauseUtil.From<
+                FromClauseUtil.NewInstance,
+                this
+            >
+        >,
+        assignmentMapDelegate : AssignmentMapDelegate<this>
+    ) : Promise<UpdateResult> {
+        return ExecutionUtil.update(connection, this, whereDelegate, assignmentMapDelegate);
+    }
+
+    updateOne (
+        connection : IsolableUpdateConnection,
+        whereDelegate : WhereDelegate<
+            FromClauseUtil.From<
+                FromClauseUtil.NewInstance,
+                this
+            >
+        >,
+        assignmentMapDelegate : AssignmentMapDelegate<this>
+    ) : Promise<UpdateOneResult> {
+        return ExecutionUtil.updateOne(connection, this, whereDelegate, assignmentMapDelegate);
+    }
+
+    updateZeroOrOne (
+        connection : IsolableUpdateConnection,
+        whereDelegate : WhereDelegate<
+            FromClauseUtil.From<
+                FromClauseUtil.NewInstance,
+                this
+            >
+        >,
+        assignmentMapDelegate : AssignmentMapDelegate<this>
+    ) : Promise<UpdateZeroOrOneResult> {
+        return ExecutionUtil.updateZeroOrOne(connection, this, whereDelegate, assignmentMapDelegate);
+    }
+
+    updateOneByCandidateKey (
+        connection : IsolableUpdateConnection,
+        candidateKey : StrictUnion<CandidateKey_NonUnion<this>>,
+        assignmentMapDelegate : AssignmentMapDelegate<this>
+    ) : Promise<UpdateOneResult> {
+        return this.updateOne(
+            connection,
+            () => ExprLib.eqCandidateKey(
+                this,
+                candidateKey
+            ) as any,
+            assignmentMapDelegate
+        );
+    }
+
+    updateOneByPrimaryKey (
+        this : Extract<this, TableWithPrimaryKey>,
+        connection : IsolableUpdateConnection,
+        primaryKey : PrimaryKey_Input<Extract<this, TableWithPrimaryKey>>,
+        assignmentMapDelegate : AssignmentMapDelegate<this>
+    ) : Promise<UpdateOneResult> {
+        return this.updateOne(
+            connection,
+            () => ExprLib.eqPrimaryKey(
+                this,
+                primaryKey
+            ) as any,
+            assignmentMapDelegate
+        );
+    }
+
+    updateOneBySuperKey (
+        connection : IsolableUpdateConnection,
+        superKey : SuperKey_Input<this>,
+        assignmentMapDelegate : AssignmentMapDelegate<this>
+    ) : Promise<UpdateOneResult> {
+        return this.updateOne(
+            connection,
+            () => ExprLib.eqSuperKey(
+                this,
+                superKey
+            ) as any,
+            assignmentMapDelegate
+        );
+    }
+
+    updateZeroOrOneByCandidateKey (
+        connection : IsolableUpdateConnection,
+        candidateKey : StrictUnion<CandidateKey_NonUnion<this>>,
+        assignmentMapDelegate : AssignmentMapDelegate<this>
+    ) : Promise<UpdateZeroOrOneResult> {
+        return this.updateZeroOrOne(
+            connection,
+            () => ExprLib.eqCandidateKey(
+                this,
+                candidateKey
+            ) as any,
+            assignmentMapDelegate
+        );
+    }
+
+    updateZeroOrOneByPrimaryKey (
+        this : Extract<this, TableWithPrimaryKey>,
+        connection : IsolableUpdateConnection,
+        primaryKey : PrimaryKey_Input<Extract<this, TableWithPrimaryKey>>,
+        assignmentMapDelegate : AssignmentMapDelegate<this>
+    ) : Promise<UpdateZeroOrOneResult> {
+        return this.updateZeroOrOne(
+            connection,
+            () => ExprLib.eqPrimaryKey(
+                this,
+                primaryKey
+            ) as any,
+            assignmentMapDelegate
+        );
+    }
+
+    updateZeroOrOneBySuperKey (
+        connection : IsolableUpdateConnection,
+        superKey : SuperKey_Input<this>,
+        assignmentMapDelegate : AssignmentMapDelegate<this>
+    ) : Promise<UpdateZeroOrOneResult> {
+        return this.updateZeroOrOne(
+            connection,
+            () => ExprLib.eqSuperKey(
+                this,
+                superKey
+            ) as any,
+            assignmentMapDelegate
+        );
+    }
+
     /*
 
     insertAndFetch<
@@ -1302,134 +1434,6 @@ export class Table<DataT extends TableData> implements ITable {
         >
     ) {
         return UpdateUtil.updateAndFetchZeroOrOneBySk<this, DelegateT>(
-            connection,
-            this,
-            sk,
-            delegate
-        );
-    }
-
-    updateOneByCk<
-        DelegateT extends UpdateUtil.SingleTableSetDelegateFromTable<this>
-    > (
-        this : this & TableUtil.AssertHasCandidateKey<this>,
-        connection : IConnection,
-        ck : CandidateKey<this>,
-        delegate : DelegateT
-    ) : (
-        UpdateUtil.AssertValidSingleTableSetDelegateFromTable_Hack<
-            this,
-            DelegateT,
-            Promise<UpdateOneResult>
-        >
-    ) {
-        return UpdateUtil.updateOneByCk<this, DelegateT>(
-            connection,
-            this,
-            ck,
-            delegate
-        );
-    }
-    updateOneByPk<
-        DelegateT extends UpdateUtil.SingleTableSetDelegateFromTable<Extract<this, TableWithPk>>
-    > (
-        this : Extract<this, TableWithPk> & TableUtil.AssertHasCandidateKey<this>,
-        connection : IConnection,
-        pk : PrimaryKey<Extract<this, TableWithPk>>,
-        delegate : DelegateT
-    ) : (
-        UpdateUtil.AssertValidSingleTableSetDelegateFromTable_Hack<
-            Extract<this, TableWithPk>,
-            DelegateT,
-            Promise<UpdateOneResult>
-        >
-    ) {
-        return UpdateUtil.updateOneByPk<Extract<this, TableWithPk>, DelegateT>(
-            connection,
-            this,
-            pk,
-            delegate
-        );
-    }
-    updateOneBySk<
-        DelegateT extends UpdateUtil.SingleTableSetDelegateFromTable<this>
-    > (
-        this : this & TableUtil.AssertHasCandidateKey<this>,
-        connection : IConnection,
-        sk : SuperKey<this>,
-        delegate : DelegateT
-    ) : (
-        UpdateUtil.AssertValidSingleTableSetDelegateFromTable_Hack<
-            this,
-            DelegateT,
-            Promise<UpdateOneResult>
-        >
-    ) {
-        return UpdateUtil.updateOneBySk<this, DelegateT>(
-            connection,
-            this,
-            sk,
-            delegate
-        );
-    }
-
-    updateZeroOrOneByCk<
-        DelegateT extends UpdateUtil.SingleTableSetDelegateFromTable<this>
-    > (
-        this : this & TableUtil.AssertHasCandidateKey<this>,
-        connection : IConnection,
-        ck : CandidateKey<this>,
-        delegate : DelegateT
-    ) : (
-        UpdateUtil.AssertValidSingleTableSetDelegateFromTable_Hack<
-            this,
-            DelegateT,
-            Promise<UpdateZeroOrOneResult>
-        >
-    ) {
-        return UpdateUtil.updateZeroOrOneByCk<this, DelegateT>(
-            connection,
-            this,
-            ck,
-            delegate
-        );
-    }
-    updateZeroOrOneByPk<
-        DelegateT extends UpdateUtil.SingleTableSetDelegateFromTable<Extract<this, TableWithPk>>
-    > (
-        this : Extract<this, TableWithPk> & TableUtil.AssertHasCandidateKey<this>,
-        connection : IConnection,
-        pk : PrimaryKey<Extract<this, TableWithPk>>,
-        delegate : DelegateT
-    ) : (
-        UpdateUtil.AssertValidSingleTableSetDelegateFromTable_Hack<
-            Extract<this, TableWithPk>,
-            DelegateT,
-            Promise<UpdateZeroOrOneResult>
-        >
-    ) {
-        return UpdateUtil.updateZeroOrOneByPk<Extract<this, TableWithPk>, DelegateT>(
-            connection,
-            this,
-            pk,
-            delegate
-        );
-    }
-    updateZeroOrOneBySk<
-        DelegateT extends UpdateUtil.SingleTableSetDelegateFromTable<this>
-    > (
-        this : this & TableUtil.AssertHasCandidateKey<this>,
-        connection : IConnection,
-        sk : SuperKey<this>,
-        delegate : DelegateT
-    ) : (
-        UpdateUtil.AssertValidSingleTableSetDelegateFromTable_Hack<
-            this,
-            DelegateT,
-            Promise<UpdateZeroOrOneResult>
-        >
-    ) {
-        return UpdateUtil.updateZeroOrOneBySk<this, DelegateT>(
             connection,
             this,
             sk,

@@ -30,9 +30,8 @@ tape(__filename, async (t) => {
                 (3,300);
         `);
 
-        return tsql.ExecutionUtil.updateOne(
+        return dst.updateOne(
             connection,
-            dst,
             () => tsql.eqPrimaryKey(
                 dst,
                 {
@@ -41,7 +40,10 @@ tape(__filename, async (t) => {
             ),
             columns => {
                 return {
-                    testVal : columns.testVal,
+                    testVal : tsql.integer.add(
+                        columns.testVal,
+                        BigInt(50)
+                    ),
                 };
             }
         );
@@ -51,10 +53,6 @@ tape(__filename, async (t) => {
         BigInt(1)
     );
     t.deepEqual(
-        /**
-         * SQLite will return `updatedRowCount == foundRowCount`,
-         * even though it is a no-op assignment.
-         */
         result.updatedRowCount,
         BigInt(1)
     );
@@ -78,7 +76,7 @@ tape(__filename, async (t) => {
                 [
                     {
                         testId : BigInt(1),
-                        testVal : BigInt(100),
+                        testVal : BigInt(150),
                     },
                     {
                         testId : BigInt(2),

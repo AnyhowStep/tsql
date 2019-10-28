@@ -17,7 +17,7 @@ tape(__filename, async (t) => {
             columns.testVal,
         ]);
 
-    const result = await pool.acquire(async (connection) => {
+    await pool.acquire(async (connection) => {
         await connection.exec(`
             CREATE TABLE dst (
                 testId INT PRIMARY KEY,
@@ -30,38 +30,26 @@ tape(__filename, async (t) => {
                 (3,300);
         `);
 
-        return tsql.ExecutionUtil.updateOne(
+        return dst.updateZeroOrOne(
             connection,
-            dst,
-            () => tsql.eqPrimaryKey(
-                dst,
-                {
-                    testId : BigInt(1),
-                }
+            columns => tsql.lt(
+                columns.testVal,
+                BigInt(299)
             ),
             columns => {
                 return {
-                    testVal : columns.testVal,
+                    testVal : tsql.integer.add(
+                        columns.testVal,
+                        BigInt(50)
+                    ),
                 };
             }
-        );
+        ).then(() => {
+            t.fail("Should not update");
+        }).catch((err) => {
+            t.true(err instanceof tsql.TooManyRowsFoundError);
+        });
     });
-    t.deepEqual(
-        result.foundRowCount,
-        BigInt(1)
-    );
-    t.deepEqual(
-        /**
-         * SQLite will return `updatedRowCount == foundRowCount`,
-         * even though it is a no-op assignment.
-         */
-        result.updatedRowCount,
-        BigInt(1)
-    );
-    t.deepEqual(
-        result.warningCount,
-        BigInt(0)
-    );
 
     await pool
         .acquire(async (connection) => {

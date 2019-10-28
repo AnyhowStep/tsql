@@ -304,8 +304,8 @@ export interface IConnection {
 
     update<TableT extends ITable> (
         table : TableT,
-        assignmentMap : AssignmentMap<TableT>,
-        whereClause : WhereClause
+        whereClause : WhereClause,
+        assignmentMap : AssignmentMap<TableT>
     ) : Promise<UpdateResult>;
 }
 export interface ITransactionConnection extends IConnection {

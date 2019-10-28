@@ -36,20 +36,20 @@ export async function updateZeroOrOne<
 > (
     connection : IsolableUpdateConnection,
     table : TableT,
-    assignmentMapDelegate : AssignmentMapDelegate<TableT>,
     whereDelegate : WhereDelegate<
         FromClauseUtil.From<
             FromClauseUtil.NewInstance,
             TableT
         >
-    >
+    >,
+    assignmentMapDelegate : AssignmentMapDelegate<TableT>
 ) : Promise<UpdateZeroOrOneResult> {
     return connection.transactionIfNotInOne(async (connection) : Promise<UpdateZeroOrOneResult> => {
         const result = await impl.update(
             connection,
             table,
-            assignmentMapDelegate,
-            whereDelegate
+            whereDelegate,
+            assignmentMapDelegate
         );
         if (tm.BigIntUtil.equal(result.foundRowCount, tm.BigInt(0))) {
             if (tm.BigIntUtil.equal(result.updatedRowCount, tm.BigInt(0))) {

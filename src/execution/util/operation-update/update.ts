@@ -9,15 +9,14 @@ export async function update<
 > (
     connection : UpdateConnection,
     table : TableT,
-    assignmentMapDelegate : AssignmentMapDelegate<TableT>,
     whereDelegate : WhereDelegate<
         FromClauseUtil.From<
             FromClauseUtil.NewInstance,
             TableT
         >
-    >
+    >,
+    assignmentMapDelegate : AssignmentMapDelegate<TableT>
 ) : Promise<UpdateResult> {
-    const assignmentMap = UpdateUtil.set(table, assignmentMapDelegate);
     const where = WhereClauseUtil.where(
         FromClauseUtil.from<
             FromClauseUtil.NewInstance,
@@ -35,5 +34,6 @@ export async function update<
         undefined,
         whereDelegate
     );
-    return connection.update(table, assignmentMap, where);
+    const assignmentMap = UpdateUtil.set(table, assignmentMapDelegate);
+    return connection.update(table, where, assignmentMap);
 }

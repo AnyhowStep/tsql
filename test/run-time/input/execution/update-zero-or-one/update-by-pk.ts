@@ -33,6 +33,12 @@ tape(__filename, async (t) => {
         return tsql.ExecutionUtil.updateZeroOrOne(
             connection,
             dst,
+            () => tsql.eqPrimaryKey(
+                dst,
+                {
+                    testId : BigInt(1),
+                }
+            ),
             columns => {
                 return {
                     testVal : tsql.integer.add(
@@ -40,13 +46,7 @@ tape(__filename, async (t) => {
                         BigInt(50)
                     ),
                 };
-            },
-            () => tsql.eqPrimaryKey(
-                dst,
-                {
-                    testId : BigInt(1),
-                }
-            )
+            }
         );
     });
     t.deepEqual(

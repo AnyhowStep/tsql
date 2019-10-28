@@ -12,12 +12,9 @@ tape(__filename, async (t) => {
             testId : tm.mysql.bigIntUnsigned(),
             testVal : tm.mysql.bigIntUnsigned(),
         })
-        .setPrimaryKey(columns => [columns.testId])
-        .addMutable(columns => [
-            columns.testVal,
-        ]);
+        .setPrimaryKey(columns => [columns.testId]);
 
-    const result = await pool.acquire(async (connection) => {
+    await pool.acquire(async (connection) => {
         await connection.exec(`
             CREATE TABLE dst (
                 testId INT PRIMARY KEY,
@@ -30,9 +27,8 @@ tape(__filename, async (t) => {
                 (3,300);
         `);
 
-        return tsql.ExecutionUtil.updateOne(
+        return dst.update(
             connection,
-            dst,
             () => tsql.eqPrimaryKey(
                 dst,
                 {
@@ -41,27 +37,18 @@ tape(__filename, async (t) => {
             ),
             columns => {
                 return {
-                    testVal : columns.testVal,
-                };
+                    testVal : tsql.integer.add(
+                        columns.testVal,
+                        BigInt(50)
+                    ),
+                } as any;
             }
-        );
+        ).then(() => {
+            t.fail("Should not update anything");
+        }).catch(() => {
+            t.pass("Cannot update immutable column");
+        });
     });
-    t.deepEqual(
-        result.foundRowCount,
-        BigInt(1)
-    );
-    t.deepEqual(
-        /**
-         * SQLite will return `updatedRowCount == foundRowCount`,
-         * even though it is a no-op assignment.
-         */
-        result.updatedRowCount,
-        BigInt(1)
-    );
-    t.deepEqual(
-        result.warningCount,
-        BigInt(0)
-    );
 
     await pool
         .acquire(async (connection) => {

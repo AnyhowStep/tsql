@@ -30,19 +30,16 @@ tape(__filename, async (t) => {
                 (3,300);
         `);
 
-        return tsql.ExecutionUtil.updateOne(
+        return dst.updateOne(
             connection,
-            dst,
             () => tsql.eqPrimaryKey(
                 dst,
                 {
                     testId : BigInt(1),
                 }
             ),
-            columns => {
-                return {
-                    testVal : columns.testVal,
-                };
+            () => {
+                return {};
             }
         );
     });
@@ -56,7 +53,7 @@ tape(__filename, async (t) => {
          * even though it is a no-op assignment.
          */
         result.updatedRowCount,
-        BigInt(1)
+        BigInt(0)
     );
     t.deepEqual(
         result.warningCount,

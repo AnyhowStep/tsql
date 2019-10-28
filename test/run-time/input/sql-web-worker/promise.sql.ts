@@ -895,8 +895,8 @@ export class Connection {
 
     update<TableT extends ITable> (
         table : TableT,
-        assignmentMap : AssignmentMap<TableT>,
-        whereClause : WhereClause
+        whereClause : WhereClause,
+        assignmentMap : AssignmentMap<TableT>
     ) : Promise<UpdateResult> {
         const mutableColumnAlias = Object.keys(assignmentMap)
             .filter(columnAlias => {

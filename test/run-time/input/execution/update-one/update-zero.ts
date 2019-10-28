@@ -33,6 +33,10 @@ tape(__filename, async (t) => {
         return tsql.ExecutionUtil.updateOne(
             connection,
             dst,
+            columns => tsql.lt(
+                columns.testVal,
+                BigInt(99)
+            ),
             columns => {
                 return {
                     testVal : tsql.integer.add(
@@ -40,11 +44,7 @@ tape(__filename, async (t) => {
                         BigInt(50)
                     ),
                 };
-            },
-            columns => tsql.lt(
-                columns.testVal,
-                BigInt(99)
-            )
+            }
         ).then(() => {
             t.fail("Should not update");
         }).catch((err) => {

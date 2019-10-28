@@ -31,20 +31,20 @@ export async function updateOne<
 > (
     connection : IsolableUpdateConnection,
     table : TableT,
-    assignmentMapDelegate : AssignmentMapDelegate<TableT>,
     whereDelegate : WhereDelegate<
         FromClauseUtil.From<
             FromClauseUtil.NewInstance,
             TableT
         >
-    >
+    >,
+    assignmentMapDelegate : AssignmentMapDelegate<TableT>
 ) : Promise<UpdateOneResult> {
     return connection.transactionIfNotInOne(async (connection) : Promise<UpdateOneResult> => {
         const result = await impl.update(
             connection,
             table,
-            assignmentMapDelegate,
-            whereDelegate
+            whereDelegate,
+            assignmentMapDelegate
         );
         if (tm.BigIntUtil.equal(result.foundRowCount, tm.BigInt(0))) {
             throw new RowNotFoundError(

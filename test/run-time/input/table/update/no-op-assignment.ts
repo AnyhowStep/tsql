@@ -30,9 +30,8 @@ tape(__filename, async (t) => {
                 (3,300);
         `);
 
-        return tsql.ExecutionUtil.updateOne(
+        return dst.update(
             connection,
-            dst,
             () => tsql.eqPrimaryKey(
                 dst,
                 {

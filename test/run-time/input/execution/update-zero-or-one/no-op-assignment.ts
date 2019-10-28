@@ -33,17 +33,17 @@ tape(__filename, async (t) => {
         return tsql.ExecutionUtil.updateZeroOrOne(
             connection,
             dst,
-            columns => {
-                return {
-                    testVal : columns.testVal,
-                };
-            },
             () => tsql.eqPrimaryKey(
                 dst,
                 {
                     testId : BigInt(1),
                 }
-            )
+            ),
+            columns => {
+                return {
+                    testVal : columns.testVal,
+                };
+            }
         );
     });
     t.deepEqual(

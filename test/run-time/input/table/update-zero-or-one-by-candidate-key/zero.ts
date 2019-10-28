@@ -30,33 +30,28 @@ tape(__filename, async (t) => {
                 (3,300);
         `);
 
-        return tsql.ExecutionUtil.updateOne(
+        return dst.updateZeroOrOneByCandidateKey(
             connection,
-            dst,
-            () => tsql.eqPrimaryKey(
-                dst,
-                {
-                    testId : BigInt(1),
-                }
-            ),
+            {
+                testId : BigInt(4),
+            },
             columns => {
                 return {
-                    testVal : columns.testVal,
+                    testVal : tsql.integer.add(
+                        columns.testVal,
+                        BigInt(50)
+                    ),
                 };
             }
         );
     });
     t.deepEqual(
         result.foundRowCount,
-        BigInt(1)
+        BigInt(0)
     );
     t.deepEqual(
-        /**
-         * SQLite will return `updatedRowCount == foundRowCount`,
-         * even though it is a no-op assignment.
-         */
         result.updatedRowCount,
-        BigInt(1)
+        BigInt(0)
     );
     t.deepEqual(
         result.warningCount,
