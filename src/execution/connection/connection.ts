@@ -155,62 +155,6 @@ export interface ReplaceManyResult {
      */
     message : string;
 }
-/*
-export interface RawUpdateResult {
-    fieldCount   : number;
-    affectedRows : number;
-    //Should always be zero
-    insertId     : number;
-    serverStatus : number;
-    warningCount : number;
-    message      : string;
-    protocol41   : boolean;
-    changedRows  : number;
-
-    /*
-        Prefixed with `raw` because MySQL is weird
-        with how it returns results.
-    * /
-    //Alias for affectedRows
-    rawFoundRowCount : number;
-    //Alias for changedRows
-    rawUpdatedRowCount : number;
-}
-export interface UpdateResult extends RawUpdateResult {
-    updatedTableCount : number;
-    /*
-        foundRowCount = rawFoundRowCount / updatedTableCount
-    * /
-    foundRowCount : number;
-    /*
-        We cannot reasonably derive this value
-        in the general case.
-
-        With multiple tables, especially.
-        Refer to
-        execution/input/update/multi-4 and
-        execution/input/update/multi-6
-
-        They have the same updateResult but update
-        very different rows.
-
-        If updatedTableCount == 1,
-        then you may use rawUpdatedRowCount
-        as the "real" number of rows updated.
-    * /
-    //updatedRowCount : number;
-}
-export type UpdateZeroOrOneResult = (
-    UpdateResult &
-    (
-        { foundRowCount : 0, updatedRowCount : 0 } |
-        { foundRowCount : 1, updatedRowCount : 0|1 }
-    )
-);
-export type UpdateOneResult = (
-    UpdateResult &
-    { foundRowCount : 1, updatedRowCount : 0|1 }
-);*/
 export interface DeleteResult {
     query : { sql : string },
 
@@ -239,6 +183,7 @@ export interface UpdateResult {
      * You cannot trust this number for SQLite.
      * SQLite thinks that all found rows are updated, even if you set `x = x`.
      *
+     * @todo Consider renaming this to `unreliableUpdatedRowCount`?
      */
     //Alias for changedRows
     updatedRowCount : bigint;

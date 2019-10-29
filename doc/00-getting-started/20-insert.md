@@ -59,6 +59,16 @@ const insertResult = await myTable.insertOne(
 );
 ```
 
+The above is the same as writing,
+```sql
+INSERT INTO
+    myTable (myColumn0, myColumn1)
+VALUES
+    (100, CURRENT_TIMESTAMP(0))
+```
+
+-----
+
 If `table` has an auto-increment column,
 the `insertResult` will contain the auto-increment value,
 ```ts
@@ -108,9 +118,20 @@ const insertResult = await myTable.insertMany(
             //`CURRENT_TIMESTAMP(0)`
             myColumn1 : tsql.currentTimestamp0(),
         },
+        //...
         //snip, you may have more rows here.
     ]
 );
+```
+
+The above is the same as writing,
+```sql
+INSERT INTO
+    myTable (myColumn0, myColumn1)
+VALUES
+    (100, CURRENT_TIMESTAMP(0)),
+    -- ...
+    -- snip you may have more rows here.
 ```
 
 If the array is empty, it does not access the database at all,
@@ -174,3 +195,56 @@ Like `table.insertOne()`, but performs `REPLACE` instead.
 Like `table.insertMany()`, but performs `REPLACE` instead.
 
 -----
+
+### `query.insert()`
+
+Inserts a result set into a table,
+```ts
+import * as tsql from "@tsql/tsql";
+/**
+ * Assume we already defined `src`, and `dst` elsewhere.
+ */
+import {src, dst} from "./table";
+
+const insertResult = await tsql
+    .from(src)
+    .select(columns => [
+        columns.testId,
+        tsql.integer.add(
+            columns.testVal,
+            BigInt(50)
+        ).as("sum")
+    ])
+    .insert(
+        connection,
+        dst,
+        columns => {
+            return {
+                testId : columns.src.testId,
+                testVal : columns.__aliased.sum,
+            };
+        }
+    );
+```
+
+The above is the same as writing,
+```sql
+INSERT INTO
+    dst (testId, testVal)
+SELECT
+    src.testId, (src.testVal + 50)
+FROM
+    src
+```
+
+-----
+
+### `query.insertIgnore()`
+
+Like `query.insert()`, but performs `INSERT IGNORE` instead.
+
+-----
+
+### `query.replace()`
+
+Like `query.insert()`, but performs `REPLACE` instead.
