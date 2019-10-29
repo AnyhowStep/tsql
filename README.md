@@ -54,6 +54,8 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
 
 0. [Derived Table](doc/00-getting-started/19-derived-table.md)
 
+0. [`INSERT`](doc/00-getting-started/20-insert.md)
+
 -----
 
 ### Goals
