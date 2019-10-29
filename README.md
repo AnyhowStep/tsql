@@ -408,3 +408,16 @@ SELECT
 ORDER BY
   32e0+0 ASC;
 ```
+
+-----
+
+### TODO Feature Parity with `typed-orm`
+
++ Table-Per-Type Utils
++ Audit Log Pattern Utils
++ Application<->DB schema validation
++ Emulated `FULL OUTER JOIN` (MySQL does not have it)
++ Make `type-mapping` fit the `tsql` use case better.
+  + Prefer `tm.db.bigIntSigned()` over `tm.mysql.bigIntSigned()` or something
++ Database events
++ Unify `information_schema` access?
