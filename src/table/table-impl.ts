@@ -1279,56 +1279,56 @@ export class Table<DataT extends TableData> implements ITable {
         );
     }
 
-    /*
+    updateAndFetchOneByPrimaryKey<
+        AssignmentMapT extends ExecutionUtil.UpdateAndFetchOneByPrimaryKeyAssignmentMap<
+            Extract<this, TableWithPrimaryKey>
+        >
+    > (
+        this : Extract<this, TableWithPrimaryKey>,
+        connection : IsolableUpdateConnection,
+        primaryKey : PrimaryKey_Input<
+            Extract<this, TableWithPrimaryKey>
+        >,
+        assignmentMapDelegate : AssignmentMapDelegate<
+            Extract<this, TableWithPrimaryKey>,
+            AssignmentMapT
+        >
+    ) : Promise<ExecutionUtil.UpdateAndFetchOneResult<
+        Extract<this, TableWithPrimaryKey>,
+        AssignmentMapT
+    >> {
+        return ExecutionUtil.updateAndFetchOneByPrimaryKey<
+            Extract<this, TableWithPrimaryKey>,
+            AssignmentMapT
+        >(
+            connection,
+            this,
+            primaryKey,
+            assignmentMapDelegate
+        );
+    }
 
-    updateAndFetchOneByPk<
-        DelegateT extends UpdateUtil.SingleTableSetDelegateFromTable<Extract<this, TableWithPk>>
+    updateAndFetchOneBySuperKey<
+        SuperKeyT extends SuperKey_Input<this>,
+        AssignmentMapT extends ExecutionUtil.UpdateAndFetchOneBySuperKeyAssignmentMap<this, SuperKeyT>
     > (
-        this : Extract<this, TableWithPk> & TableUtil.AssertHasCandidateKey<this>,
-        connection : IConnection,
-        pk : PrimaryKey<Extract<this, TableWithPk>>,
-        delegate : DelegateT
-    ) : (
-        UpdateUtil.AssertValidSingleTableSetDelegateFromTable_Hack<
-            Extract<this, TableWithPk>,
-            DelegateT,
-            Promise<UpdateUtil.UpdateAndFetchOneResult<
-                Extract<this, TableWithPk>,
-                DelegateT
-            >>
-        >
-    ) {
-        return UpdateUtil.updateAndFetchOneByPk<Extract<this, TableWithPk>, DelegateT>(
+        connection : IsolableUpdateConnection,
+        superKey : SuperKeyT & AssertNonUnion<SuperKeyT>,
+        assignmentMapDelegate : AssignmentMapDelegate<this, AssignmentMapT>
+    ) : Promise<ExecutionUtil.UpdateAndFetchOneResult<this, AssignmentMapT>> {
+        return ExecutionUtil.updateAndFetchOneBySuperKey<
+            this,
+            SuperKeyT,
+            AssignmentMapT
+        >(
             connection,
             this,
-            pk,
-            delegate
+            superKey,
+            assignmentMapDelegate
         );
     }
-    updateAndFetchOneBySk<
-        DelegateT extends UpdateUtil.SingleTableSetDelegateFromTable<this>
-    > (
-        this : this & TableUtil.AssertHasCandidateKey<this>,
-        connection : IConnection,
-        sk : SuperKey<this>,
-        delegate : DelegateT
-    ) : (
-        UpdateUtil.AssertValidSingleTableSetDelegateFromTable_Hack<
-            this,
-            DelegateT,
-            Promise<UpdateUtil.UpdateAndFetchOneResult<
-                this,
-                DelegateT
-            >>
-        >
-    ) {
-        return UpdateUtil.updateAndFetchOneBySk<this, DelegateT>(
-            connection,
-            this,
-            sk,
-            delegate
-        );
-    }
+
+    /*
 
     updateAndFetchZeroOrOneByCk<
         DelegateT extends UpdateUtil.SingleTableSetDelegateFromTable<this>
