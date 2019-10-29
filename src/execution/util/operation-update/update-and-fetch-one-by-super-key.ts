@@ -59,16 +59,21 @@ export type UpdateAndFetchOneBySuperKeyAssignmentMap<
         AssignmentMap<TableT>
     >
 ;
-export async function updateAndFetchOneBySuperKey<
+
+/**
+ * Not meant to be called externally
+ *
+ * @todo Better name
+ */
+export function __updateAndFetchOneBySuperKeyHelper<
     TableT extends ITable,
     SuperKeyT extends SuperKey_Input<TableT>,
     AssignmentMapT extends UpdateAndFetchOneBySuperKeyAssignmentMap<TableT, SuperKeyT>
 > (
-    connection : IsolableUpdateConnection,
     table : TableT,
     superKey : SuperKeyT & AssertNonUnion<SuperKeyT>,
     assignmentMapDelegate : AssignmentMapDelegate<TableT, AssignmentMapT>
-) : Promise<UpdateAndFetchOneResult<TableT, AssignmentMapT>> {
+) {
     superKey = SuperKeyUtil.mapper(table)(
         `${table.alias}[superKey]`,
         superKey
@@ -98,13 +103,44 @@ export async function updateAndFetchOneBySuperKey<
         }
     }
 
+    return {
+        curSuperKey : superKey,
+        assignmentMap,
+        newSuperKey,
+    };
+}
+
+export async function updateAndFetchOneBySuperKey<
+    TableT extends ITable,
+    SuperKeyT extends SuperKey_Input<TableT>,
+    AssignmentMapT extends UpdateAndFetchOneBySuperKeyAssignmentMap<TableT, SuperKeyT>
+> (
+    connection : IsolableUpdateConnection,
+    table : TableT,
+    superKey : SuperKeyT & AssertNonUnion<SuperKeyT>,
+    assignmentMapDelegate : AssignmentMapDelegate<TableT, AssignmentMapT>
+) : Promise<UpdateAndFetchOneResult<TableT, AssignmentMapT>> {
+    const {
+        curSuperKey,
+        assignmentMap,
+        newSuperKey,
+    } = __updateAndFetchOneBySuperKeyHelper<
+        TableT,
+        SuperKeyT,
+        AssignmentMapT
+    >(
+        table,
+        superKey,
+        assignmentMapDelegate
+    );
+
     return connection.transactionIfNotInOne(async (connection) : Promise<UpdateAndFetchOneResult<TableT, AssignmentMapT>> => {
         const updateOneResult = await updateOne(
             connection,
             table,
             () => ExprLib.eqSuperKey(
                 table,
-                superKey
+                curSuperKey
             ) as any,
             () => assignmentMap
         );

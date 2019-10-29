@@ -50,15 +50,20 @@ export type UpdateAndFetchOneByPrimaryKeyAssignmentMap<
         AssignmentMap<TableT>
     >
 ;
-export async function updateAndFetchOneByPrimaryKey<
+
+/**
+ * Not meant to be called externally
+ *
+ * @todo Better name
+ */
+export function __updateAndFetchOneByPrimaryKeyHelper<
     TableT extends TableWithPrimaryKey,
     AssignmentMapT extends UpdateAndFetchOneByPrimaryKeyAssignmentMap<TableT>
 > (
-    connection : IsolableUpdateConnection,
     table : TableT,
     primaryKey : PrimaryKey_Input<TableT>,
     assignmentMapDelegate : AssignmentMapDelegate<TableT, AssignmentMapT>
-) : Promise<UpdateAndFetchOneResult<TableT, AssignmentMapT>> {
+) {
     primaryKey = PrimaryKeyUtil.mapper(table)(
         `${table.alias}[primaryKey]`,
         primaryKey
@@ -85,13 +90,42 @@ export async function updateAndFetchOneByPrimaryKey<
         }
     }
 
+    return {
+        curPrimaryKey : primaryKey,
+        assignmentMap,
+        newPrimaryKey,
+    };
+}
+
+export async function updateAndFetchOneByPrimaryKey<
+    TableT extends TableWithPrimaryKey,
+    AssignmentMapT extends UpdateAndFetchOneByPrimaryKeyAssignmentMap<TableT>
+> (
+    connection : IsolableUpdateConnection,
+    table : TableT,
+    primaryKey : PrimaryKey_Input<TableT>,
+    assignmentMapDelegate : AssignmentMapDelegate<TableT, AssignmentMapT>
+) : Promise<UpdateAndFetchOneResult<TableT, AssignmentMapT>> {
+    const {
+        curPrimaryKey,
+        assignmentMap,
+        newPrimaryKey,
+    } = __updateAndFetchOneByPrimaryKeyHelper<
+        TableT,
+        AssignmentMapT
+    >(
+        table,
+        primaryKey,
+        assignmentMapDelegate
+    );
+
     return connection.transactionIfNotInOne(async (connection) : Promise<UpdateAndFetchOneResult<TableT, AssignmentMapT>> => {
         const updateOneResult = await updateOne(
             connection,
             table,
             () => ExprLib.eqPrimaryKey(
                 table,
-                primaryKey as any
+                curPrimaryKey
             ) as any,
             () => assignmentMap
         );

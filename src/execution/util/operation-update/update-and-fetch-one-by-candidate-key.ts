@@ -92,16 +92,21 @@ export type UpdateAndFetchOneByCandidateKeyAssignmentMap<
         AssignmentMap<TableT>
     >
 ;
-export async function updateAndFetchOneByCandidateKey<
+
+/**
+ * Not meant to be called externally
+ *
+ * @todo Better name
+ */
+export function __updateAndFetchOneByCandidateKeyHelper<
     TableT extends ITable,
     CandidateKeyT extends StrictUnion<CandidateKey_NonUnion<TableT>>,
     AssignmentMapT extends UpdateAndFetchOneByCandidateKeyAssignmentMap<TableT, CandidateKeyT>
 > (
-    connection : IsolableUpdateConnection,
     table : TableT,
     candidateKey : CandidateKeyT & AssertNonUnion<CandidateKeyT>,
     assignmentMapDelegate : AssignmentMapDelegate<TableT, AssignmentMapT>
-) : Promise<UpdateAndFetchOneResult<TableT, AssignmentMapT>> {
+) {
     candidateKey = CandidateKeyUtil.mapper(table)(
         `${table.alias}[candidateKey]`,
         candidateKey
@@ -128,13 +133,44 @@ export async function updateAndFetchOneByCandidateKey<
         }
     }
 
+    return {
+        curCandidateKey : candidateKey,
+        assignmentMap,
+        newCandidateKey,
+    };
+}
+
+export async function updateAndFetchOneByCandidateKey<
+    TableT extends ITable,
+    CandidateKeyT extends StrictUnion<CandidateKey_NonUnion<TableT>>,
+    AssignmentMapT extends UpdateAndFetchOneByCandidateKeyAssignmentMap<TableT, CandidateKeyT>
+> (
+    connection : IsolableUpdateConnection,
+    table : TableT,
+    candidateKey : CandidateKeyT & AssertNonUnion<CandidateKeyT>,
+    assignmentMapDelegate : AssignmentMapDelegate<TableT, AssignmentMapT>
+) : Promise<UpdateAndFetchOneResult<TableT, AssignmentMapT>> {
+    const {
+        curCandidateKey,
+        assignmentMap,
+        newCandidateKey,
+    } = __updateAndFetchOneByCandidateKeyHelper<
+        TableT,
+        CandidateKeyT,
+        AssignmentMapT
+    >(
+        table,
+        candidateKey,
+        assignmentMapDelegate
+    );
+
     return connection.transactionIfNotInOne(async (connection) : Promise<UpdateAndFetchOneResult<TableT, AssignmentMapT>> => {
         const updateOneResult = await updateOne(
             connection,
             table,
             () => ExprLib.eqCandidateKey(
                 table,
-                candidateKey
+                curCandidateKey
             ) as any,
             () => assignmentMap
         );
