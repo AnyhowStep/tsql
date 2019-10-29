@@ -56,6 +56,8 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
 
 0. [`INSERT`](doc/00-getting-started/20-insert.md)
 
+0. [`DELETE`](doc/00-getting-started/21-delete.md)
+
 -----
 
 ### Goals

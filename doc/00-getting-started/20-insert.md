@@ -168,7 +168,7 @@ console.log(myRow.myColumn1);
 Internally, it calls `connection.transactionIfNotInOne(callback)`.
 Then, inside the callback, it executes an `INSERT` and `SELECT` statement.
 
-If the transaction commits successfully, the row is returned.
+If exactly one row is inserted and fetched, the row is returned.
 
 -----
 
