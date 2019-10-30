@@ -67,6 +67,7 @@
         "./src/insert/**/*",
         "./src/insert-select/**/*",
         "./src/update/**/*",
+        "./src/schema-introspection/**/*",
         "./src/index.ts"
     ]
 }

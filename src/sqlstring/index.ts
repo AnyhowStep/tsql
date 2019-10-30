@@ -71,6 +71,16 @@ export function escapeIdentifierWithDoubleQuotes (rawIdentifier : string) : stri
     );
 }
 
+export function tryUnescapeIdentifierWithDoubleQuotes (rawIdentifier : string) : string {
+    rawIdentifier = rawIdentifier.trim();
+    if (rawIdentifier.startsWith(`"`) && rawIdentifier.endsWith(`"`)) {
+        rawIdentifier = rawIdentifier.substr(1, rawIdentifier.length-2);
+        return rawIdentifier.replace(/""/g, `"`);
+    } else {
+        return rawIdentifier;
+    }
+}
+
 /**
  * Escapes a MySQL value.
  *

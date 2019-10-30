@@ -5,6 +5,7 @@ import {InsertRow} from "../../insert";
 import {InsertSelectRow} from "../../insert-select";
 import {WhereClause} from "../../where-clause";
 import {AssignmentMap} from "../../update";
+import {SchemaMeta} from "../../schema-introspection";
 
 export interface RawQueryResult {
     query   : { sql : string },
@@ -252,6 +253,12 @@ export interface IConnection {
         whereClause : WhereClause,
         assignmentMap : AssignmentMap<TableT>
     ) : Promise<UpdateResult>;
+
+    /**
+     *
+     * @param schemaAlias - If `undefined`, it uses the implied schema of the connection
+     */
+    tryFetchSchemaMeta (schemaAlias : string|undefined) : Promise<SchemaMeta|undefined>;
 }
 export interface ITransactionConnection extends IConnection {
     rollback () : Promise<void>;

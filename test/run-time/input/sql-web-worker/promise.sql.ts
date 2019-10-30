@@ -5,6 +5,16 @@ import {AsyncQueue} from "./async-queue";
 import {sqliteSqlfier} from "../../../sqlite-sqlfier";
 import {ITable, RawExprUtil, WhereClause, DeletableTable, DeleteResult, AssignmentMap, UpdateResult} from "../../../../dist";
 
+const sqlite_master = tsql.table("sqlite_master")
+    .addColumns({
+        type : tm.string(),
+        name : tm.string(),
+        tbl_name : tm.string(),
+        rootpage : tm.mysql.bigIntSigned(),
+        sql : tm.mysql.varChar().orNull(),
+    })
+    .setPrimaryKey(columns => [columns.name]);
+
 export class IdAllocator {
     private nextId = 0;
     allocateId () {
@@ -418,12 +428,6 @@ export class Connection {
     }
 
     private async fetchTableStructure (tableName : string) {
-        const sqlite_master = tsql.table("sqlite_master")
-            .addColumns({
-                sql : tm.string(),
-                name : tm.string(),
-            })
-            .setPrimaryKey(columns => [columns.name]);
         const sql = await sqlite_master.fetchValueByPrimaryKey(
             this,
             {
@@ -431,6 +435,9 @@ export class Connection {
             },
             columns => columns.sql
         );
+        if (sql == undefined) {
+            throw new Error(`Table ${tableName} should have SQL string`);
+        }
 
         //Modified version of
         //http://afoucal.free.fr/index.php/2009/01/26/get-default-value-and-unique-attribute-field-sqlite-database-using-air/
@@ -445,25 +452,37 @@ export class Connection {
             return columnDefSqlMatch[1];
         }
         function getColumnDefSql (columnAlias : string) {
-            const resultA = getColumnDefSqlImpl(columnAlias);
-            if (resultA != undefined) {
-                return resultA;
+            const resultQuoted = getColumnDefSqlImpl(tsql.escapeIdentifierWithDoubleQuotes(columnAlias));
+            if (resultQuoted != undefined) {
+                return resultQuoted;
             }
-            const resultB = getColumnDefSqlImpl(tsql.escapeIdentifierWithDoubleQuotes(columnAlias));
-            if (resultB != undefined) {
-                return resultB;
+            const resultUnquoted = getColumnDefSqlImpl(columnAlias);
+            if (resultUnquoted != undefined) {
+                return resultUnquoted;
             }
             throw new Error(`Cannot find column definition for ${tableName}.${columnAlias}`);
         }
         function isAutoIncrement (columnAlias : string) {
             return /AUTOINCREMENT/i.test(getColumnDefSql(columnAlias));
         }
+        function isUnique (columnAlias : string) {
+            return /UNIQUE/i.test(getColumnDefSql(columnAlias));
+        }
+        function isPrimaryKey (columnAlias : string) {
+            return /PRIMARY\s+KEY/i.test(getColumnDefSql(columnAlias));
+        }
+
+        let constraintSql = allColumnDefSql;
 
         const {execResult} = await this
             .exec(`pragma table_info(${tsql.escapeIdentifierWithDoubleQuotes(tableName)})`);
         if (execResult.length != 1) {
             throw new Error(`Expected to fetch table info`);
         }
+
+        const candidateKeys : tsql.CandidateKeyMeta[] = [];
+        let primaryKey : tsql.CandidateKeyMeta|undefined = undefined;
+
         const resultSet = execResult[0];
         const objArr = resultSet.values.map((row) => {
             const obj = resultSet.columns.reduce(
@@ -474,17 +493,86 @@ export class Connection {
                 {}
             );
             (obj as any).isAutoIncrement = isAutoIncrement((obj as any).name);
+            (obj as any).isUnique = isUnique((obj as any).name);
+            (obj as any).isPrimaryKey = isPrimaryKey((obj as any).name);
+
+            const columnDef = getColumnDefSql((obj as any).name);
+            constraintSql = constraintSql.replace(columnDef, "");
+
+            if (isPrimaryKey((obj as any).name)) {
+                if (primaryKey != undefined) {
+                    throw new Error(`Multiple primary keys found`);
+                }
+                primaryKey = {
+                    candidateKeyName : (obj as any).name,
+                    columnAliases : [(obj as any).name],
+                };
+            } else if (isUnique((obj as any).name)) {
+                const constraintRegex = /CONSTRAINT\s+(.+)\s+UNIQUE/gi;
+                const constraintMatch = constraintRegex.exec(columnDef);
+                if (constraintMatch == undefined) {
+                    throw new Error(`Cannot get UNIQUE constraint of ${(obj as any).name}`);
+                }
+                candidateKeys.push({
+                    candidateKeyName : tsql.tryUnescapeIdentifierWithDoubleQuotes(constraintMatch[1]),
+                    columnAliases : [(obj as any).name],
+                });
+            }
             return obj;
         });
-        return objArr as {
-            cid : bigint,
-            name : string,
-            type : string,
-            notnull : 1n|0n,
-            dflt_value : string|null,
-            pk : 1n|0n,
-            isAutoIncrement : boolean,
-        }[];
+
+        const constraintRegex = /CONSTRAINT\s+(.+)\s+(UNIQUE|PRIMARY\s+KEY)\s*\((.+)\)/gi;
+        while (true) {
+            const constraintMatch = constraintRegex.exec(constraintSql);
+            if (constraintMatch == undefined) {
+                break;
+            }
+            const constraintName = tsql.tryUnescapeIdentifierWithDoubleQuotes(constraintMatch[1]);
+            const constraintType = constraintMatch[2];
+            const constraintColumns = constraintMatch[3];
+            const columnRegex = /\s*(.+?)\s*(,|$)/gi;
+
+            const columnAliases : string[] = [];
+
+            while (true) {
+                const columnMatch = columnRegex.exec(constraintColumns);
+                if (columnMatch == undefined) {
+                    break;
+                }
+                columnAliases.push(tsql.tryUnescapeIdentifierWithDoubleQuotes(columnMatch[1]));
+            }
+
+            if (constraintType.toUpperCase() == "UNIQUE") {
+                candidateKeys.push({
+                    candidateKeyName : constraintName,
+                    columnAliases,
+                });
+            } else {
+                if (primaryKey != undefined) {
+                    throw new Error(`Multiple primary keys found`);
+                }
+                primaryKey = {
+                    candidateKeyName : constraintName,
+                    columnAliases,
+                };
+            }
+        }
+
+        return {
+            columns : objArr as {
+                cid : bigint,
+                name : string,
+                type : string,
+                notnull : 1n|0n,
+                dflt_value : string|null,
+                pk : 1n|0n,
+                isAutoIncrement : boolean,
+                isUnique : boolean,
+                isPrimaryKey : boolean,
+            }[],
+            candidateKeys,
+            primaryKey,
+        };
     }
 
     private async insertManySqlString<TableT extends ITable> (
@@ -492,7 +580,7 @@ export class Connection {
         rows : readonly [tsql.InsertRow<TableT>, ...tsql.InsertRow<TableT>[]],
         modifier : string
     ) : Promise<string> {
-        const structure = await this.fetchTableStructure(table.alias);
+        const structure = (await this.fetchTableStructure(table.alias)).columns;
         //console.log(structure);
 
         const columnAliases = tsql.TableUtil.columnAlias(table)
@@ -688,7 +776,7 @@ export class Connection {
         row : tsql.InsertSelectRow<QueryT, TableT>,
         modifier : string
     ) : Promise<string> {
-        const structure = await this.fetchTableStructure(table.alias);
+        const structure = (await this.fetchTableStructure(table.alias)).columns;
         //console.log(structure);
 
         const columnAliases = tsql.TableUtil.columnAlias(table)
@@ -1067,6 +1155,47 @@ export class Connection {
         } else {
             return this.transaction(callback);
         }
+    }
+
+    private async fetchTableMeta (tableAlias : string) : Promise<tsql.TableMeta> {
+        const structure = await this.fetchTableStructure(tableAlias);
+        return {
+            tableAlias,
+            columns : structure.columns.map((column) : tsql.ColumnMeta => {
+                return {
+                    columnAlias : column.name,
+                    isAutoIncrement : column.isAutoIncrement,
+                    isNullable : tm.BigIntUtil.equal(column.notnull, tm.BigInt(0)),
+                    explicitDefaultValue : typeof column.dflt_value == "string" ?
+                        column.dflt_value :
+                        undefined,
+                    generationExpression : undefined,
+                };
+            }),
+            candidateKeys : structure.candidateKeys,
+            primaryKey : structure.primaryKey,
+        };
+    }
+
+    /**
+     * Ignores `schemaAlias` for now.
+     */
+    async tryFetchSchemaMeta (schemaAlias : string|undefined) : Promise<tsql.SchemaMeta|undefined> {
+        const tables = await tsql
+            .from(sqlite_master)
+            .whereEq(
+                columns => columns.type,
+                "table"
+            )
+            .selectValue(columns => columns.name)
+            .map((row) => {
+                return this.fetchTableMeta(row.sqlite_master.name);
+            })
+            .fetchAll(this);
+        return {
+            schemaAlias : schemaAlias == undefined ? "main" : schemaAlias,
+            tables,
+        };
     }
 }
 
