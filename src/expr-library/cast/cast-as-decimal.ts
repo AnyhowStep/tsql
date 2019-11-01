@@ -1,6 +1,5 @@
 import * as tm from "type-mapping/fluent";
 import {OperatorType} from "../../operator-type";
-import {PrimitiveExpr} from "../../primitive-expr";
 import {Decimal} from "../../decimal";
 import {RawExpr, RawExprUtil} from "../../raw-expr";
 import {Expr, expr} from "../../expr";
@@ -46,6 +45,42 @@ export function assertValidDecimalPrecisionAndScale (
 }
 
 /**
+ * Any type with this tag can be converted to `DECIMAL`.
+ *
+ * @todo Monitor this PR
+ *
+ * https://github.com/microsoft/TypeScript/pull/33290
+ */
+export type CustomDecimalCastableType = { dbDecimalCastable : void };
+/**
+ * These types can be casted to `DECIMAL`, in general.
+ *
+ * -----
+ *
+ * ### PostgreSQL
+ *
+ * + bigint     = OK, or Error (if overflow)
+ * + number     = OK, or Error (if overflow)
+ * + string     = OK, or Error (if invalid format)
+ * + boolean    = Error
+ * + Date       = Error
+ * + Buffer     = Error
+ * + null       = NULL
+ *
+ * @todo Convert other cast functions to this
+ * @todo Afterwards, determine if all these casting functions should be moved to adapter libraries
+ * https://github.com/AnyhowStep/tsql/issues/15
+ */
+export type DecimalCastableType =
+    | bigint
+    | number
+    | string
+    | null
+    | CustomDecimalCastableType
+;
+export type NonNullDecimalCastableType = Exclude<DecimalCastableType, null>;
+
+/**
  * @todo Determine which conversions are not allowed for all `CAST()` functions.
  * For example, casting `bytea` to `DECIMAL` is not allowed in PostgreSQL.
  * It will result in a run-time error.
@@ -75,9 +110,76 @@ export function assertValidDecimalPrecisionAndScale (
  *   + So, it's basically just treated like a `NUMERIC` type (and we get an `INTEGER`)
  *
  * @todo Try to unify casting behaviour?
+ *
+ * -----
+ *
+ * @todo Is there ever a case where casting a non-null value to `DECIMAL`
+ * gives us `NULL`?
+ *
+ * MySQL seems to return zero, even for data types like `BINARY`.
+ *
+ * -----
+ *
+ * ### PostgreSQL
+ *
+ * + bigint     = OK, or Error (if overflow)
+ * + number     = OK, or Error (if overflow)
+ * + string     = OK, or Error (if invalid format)
+ * + boolean    = Error
+ * + Date       = Error
+ * + Buffer     = Error
+ * + null       = NULL
  */
 export function castAsDecimal<
-    ArgT extends RawExpr<PrimitiveExpr|Decimal>,
+    ArgT extends RawExpr<NonNullDecimalCastableType|Decimal>,
+> (
+    arg : ArgT,
+    /**
+     * + MySQL's max precision is `65`
+     * + PostgreSQL's min precision is `1`
+     */
+    precision : number|bigint,
+    /**
+     * + MySQL's max scale is `30`.
+     * + The min scale is `0`.
+     * + `scale` must be <= `precision`.
+     */
+    scale : number|bigint
+) : (
+    Expr<{
+        mapper : tm.SafeMapper<Decimal>,
+        /**
+         * @todo Use `TryReuseExistingType<>` hack to fight off depth limit
+         */
+        usedRef : RawExprUtil.UsedRef<ArgT>,
+    }>
+);
+export function castAsDecimal<
+    ArgT extends RawExpr<DecimalCastableType|Decimal>,
+> (
+    arg : ArgT,
+    /**
+     * + MySQL's max precision is `65`
+     * + PostgreSQL's min precision is `1`
+     */
+    precision : number|bigint,
+    /**
+     * + MySQL's max scale is `30`.
+     * + The min scale is `0`.
+     * + `scale` must be <= `precision`.
+     */
+    scale : number|bigint
+) : (
+    Expr<{
+        mapper : tm.SafeMapper<Decimal|null>,
+        /**
+         * @todo Use `TryReuseExistingType<>` hack to fight off depth limit
+         */
+        usedRef : RawExprUtil.UsedRef<ArgT>,
+    }>
+);
+export function castAsDecimal<
+    ArgT extends RawExpr<DecimalCastableType|Decimal>,
 > (
     arg : ArgT,
     /**
@@ -100,10 +202,13 @@ export function castAsDecimal<
         usedRef : RawExprUtil.UsedRef<ArgT>,
     }>
 ) {
+    const argMapper = RawExprUtil.mapper(arg);
     const decimalDefinition = assertValidDecimalPrecisionAndScale(precision, scale);
     return expr(
         {
-            mapper : tm.mysql.decimal().orNull(),
+            mapper : tm.canOutputNull(argMapper) ?
+                tm.mysql.decimal().orNull() :
+                tm.mysql.decimal(),
             usedRef : RawExprUtil.usedRef(arg),
         },
         OperatorNodeUtil.operatorNode3(

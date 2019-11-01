@@ -43,6 +43,7 @@ export * from "./query-base";
 export * from "./raw-expr";
 export * from "./row";
 export * from "./schema-introspection";
+export * from "./schema-validation";
 export * from "./select-clause";
 export * from "./select-item";
 export * from "./sort-direction";

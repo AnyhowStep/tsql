@@ -27,7 +27,7 @@ Connection pooling | Yes | Yes
 Nested object `INSERT` in one call | Yes | No
 MySQL support | Yes | Not yet; should create a separate `@tsql/mysql-5.7` library
 PostgreSQL support | Yes | Not yet; should create a separate `@tsql/pg-9.4` library
-SQLite support | Yes | Not yet; should create a separate `@tsql/sqlite-js-3.28` library
+SQLite support | Yes | Not yet; should create a separate `@tsql/sqlite-js-3.28` library (the tests in this library use SQLite)
 MongoDB support | *(Coming very soon)* | Not yet; maybe?
 Cursor support | Yes (How?) | Yes; emulated cursor because MySQL does not natively support cursors
 Raw queries | Yes | Partial; not ergonomic yet
