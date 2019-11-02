@@ -113,7 +113,7 @@ export interface ColumnGeneratedOnApplicationOnlyAutoIncrementMismatchInsertDisa
     type : SchemaValidationWarningType.COLUMN_GENERATED_ON_APPLICATION_ONLY_AUTO_INCREMENT_MISMATCH_INSERT_DISABLED,
     description : string,
     tableAlias : string,
-    columnAlias : string,
+    applicationColumnAlias : string,
 }
 export interface ColumnGeneratedOnApplicationOnlyUsingDatabaseDefaultValueWarning {
     type : SchemaValidationWarningType.COLUMN_GENERATED_ON_APPLICATION_ONLY_USING_DATABASE_DEFAULT_VALUE,

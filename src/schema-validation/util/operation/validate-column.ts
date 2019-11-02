@@ -42,10 +42,10 @@ export function validateColumn (
 
     const applicationNullable = applicationTable.nullableColumns.includes(columnMeta.columnAlias);
     const applicationMutable = applicationTable.mutableColumns.includes(applicationColumn.columnAlias);
-    const applicationAutoIncrement = (
+    /*const applicationAutoIncrement = (
         applicationTable.autoIncrement != undefined &&
         applicationTable.autoIncrement == applicationColumn.columnAlias
-    );
+    );*/
     const applicationGenerated = applicationTable.generatedColumns.includes(applicationColumn.columnAlias);
     const applicationExplicitDefaultValue = applicationTable.explicitDefaultValueColumns.includes(applicationColumn.columnAlias);
 
@@ -162,7 +162,10 @@ export function validateColumn (
         }
     } else {
         if (applicationGenerated) {
-            if (applicationAutoIncrement) {
+            if (
+                applicationTable.autoIncrement != undefined &&
+                applicationTable.autoIncrement == applicationColumn.columnAlias
+            ) {
                 /**
                  * On application code, we implicitly add auto-increment columns
                  * to the list of generated columns, even though they're not really
@@ -190,16 +193,16 @@ export function validateColumn (
                     if (applicationTable.insertEnabled) {
                         result.errors.push({
                             type : SchemaValidationErrorType.COLUMN_GENERATED_ON_APPLICATION_ONLY_AUTO_INCREMENT_MISMATCH_INSERT_WILL_FAIL,
-                            description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} is auto-increment on application, not auto-increment on database; INSERTs will fail`,
+                            description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} is auto-increment and generated on application, not on database; INSERTs will fail`,
                             tableAlias : applicationTable.alias,
-                            columnAlias : applicationColumn.columnAlias,
+                            applicationColumnAlias : applicationTable.autoIncrement,
                         });
                     } else {
                         result.warnings.push({
                             type : SchemaValidationWarningType.COLUMN_GENERATED_ON_APPLICATION_ONLY_AUTO_INCREMENT_MISMATCH_INSERT_DISABLED,
-                            description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} is auto-increment on application, not auto-increment on database; INSERTs will fail. However, INSERTs are disabled`,
+                            description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} is auto-increment and generated on application, not on database; INSERTs will fail but INSERTs are disabled`,
                             tableAlias : applicationTable.alias,
-                            columnAlias : applicationColumn.columnAlias,
+                            applicationColumnAlias : applicationTable.autoIncrement,
                         });
                     }
                 }
@@ -222,7 +225,7 @@ export function validateColumn (
                      */
                     result.warnings.push({
                         type : SchemaValidationWarningType.COLUMN_GENERATED_ON_APPLICATION_ONLY_USING_DATABASE_DEFAULT_VALUE,
-                        description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} is generated on application, not generated on database; but the database default value is used`,
+                        description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} is generated on application only; INSERTs will use database default value`,
                         tableAlias : applicationTable.alias,
                         columnAlias : applicationColumn.columnAlias,
                     });

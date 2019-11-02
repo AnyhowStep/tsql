@@ -147,7 +147,7 @@ export interface ColumnGeneratedOnApplicationOnlyAutoIncrementMismatchInsertWill
     type : SchemaValidationErrorType.COLUMN_GENERATED_ON_APPLICATION_ONLY_AUTO_INCREMENT_MISMATCH_INSERT_WILL_FAIL,
     description : string,
     tableAlias : string,
-    columnAlias : string,
+    applicationColumnAlias : string,
 }
 export interface ColumnGeneratedOnApplicationOnlyInsertWillFailError {
     type : SchemaValidationErrorType.COLUMN_GENERATED_ON_APPLICATION_ONLY_INSERT_WILL_FAIL,
