@@ -205,8 +205,45 @@ export function runTest (files? : string[]) {
         });
     }
     Object.keys(errorDict).forEach((fileName) => {
+        function replaceAll (useEllipsis : boolean, prefix : string, str : string) : string {
+            while (true) {
+                const newStr = str.replace(
+                    (
+                        useEllipsis ?
+                        prefix + "..." :
+                        prefix
+                    ),
+                    ""
+                );
+                if (newStr == str) {
+                    return str;
+                }
+                str = newStr;
+            }
+        }
         function toRelativePath (str : string) : string {
-            return str.replace(path.normalize(__dirname + "/../../"), "");
+            let prefix = path.normalize(__dirname + "/../../");
+            let useEllipsis = false;
+            while (prefix.length > 5) {
+                let newStr = replaceAll(
+                    useEllipsis,
+                    prefix,
+                    str
+                );
+                if (newStr == str) {
+                    if (!useEllipsis) {
+                        useEllipsis = true;
+                        newStr = replaceAll(
+                            useEllipsis,
+                            prefix,
+                            str
+                        );
+                    }
+                }
+                str = newStr;
+                prefix = prefix.substr(0, prefix.length-1);
+            }
+            return str;
         }
         function useRelativePath (
             obj : ts.DiagnosticMessageChain
