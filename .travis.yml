@@ -26,4 +26,4 @@ script:
   - npm install codecov
 
 after_success:
-  - ./node_modules/.bin/codecov
+  - ./node_modules/.bin/c8 report --reporter=text-lcov | ./node_modules/.bin/codecov --pipe
