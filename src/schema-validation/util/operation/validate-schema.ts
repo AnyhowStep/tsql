@@ -4,6 +4,7 @@ import {SchemaValidationResult, WritableSchemaValidationResult} from "../../sche
 import {SchemaValidationWarningType} from "../../schema-validation-warning";
 import {validateTable} from "./validate-table";
 import {SchemaValidationErrorType} from "../../schema-validation-error";
+import {escapeIdentifierWithDoubleQuotes} from "../../../sqlstring";
 
 export function validateSchema (
     applicationTables : readonly ITable[],
@@ -23,7 +24,7 @@ export function validateSchema (
     for (const tableMeta of tablesOnDatabaseOnly) {
         result.warnings.push({
             type : SchemaValidationWarningType.TABLE_ON_DATABASE_ONLY,
-            description : `Table ${tableMeta.tableAlias} exists on database, not on application`,
+            description : `Table ${escapeIdentifierWithDoubleQuotes(schemaMeta.schemaAlias)}.${escapeIdentifierWithDoubleQuotes(tableMeta.tableAlias)} exists on database only`,
             databaseTableAlias : tableMeta.tableAlias,
         });
     }
@@ -37,8 +38,9 @@ export function validateSchema (
     for (const applicationTable of tablesOnApplicationOnly) {
         result.errors.push({
             type : SchemaValidationErrorType.TABLE_ON_APPLICATION_ONLY,
-            description : `Table ${applicationTable.alias} exists on application, not on database`,
+            description : `Table ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)} exists on application only; not found on schema ${escapeIdentifierWithDoubleQuotes(schemaMeta.schemaAlias)}`,
             applicationTableAlias : applicationTable.alias,
+            databaseSchemaAlias : schemaMeta.schemaAlias,
         });
     }
 

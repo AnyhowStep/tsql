@@ -35,6 +35,7 @@ export interface TableOnApplicationOnlyError {
     type : SchemaValidationErrorType.TABLE_ON_APPLICATION_ONLY,
     description : string,
     applicationTableAlias : string,
+    databaseSchemaAlias : string,
 }
 
 export interface TableAliasMismatchError {

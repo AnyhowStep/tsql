@@ -32,7 +32,7 @@ export function validateColumn (
     if (applicationColumn.columnAlias != columnMeta.columnAlias) {
         result.errors.push({
             type : SchemaValidationErrorType.COLUMN_ALIAS_MISMATCH,
-            description : `Application column is named ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)}, database column is named ${applicationTable.alias}.${columnMeta.columnAlias}`,
+            description : `Application column is named ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)}, database column is named ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(columnMeta.columnAlias)}`,
             tableAlias : applicationTable.alias,
             applicationColumnAlias : applicationColumn.columnAlias,
             databaseColumnAlias : columnMeta.columnAlias,
