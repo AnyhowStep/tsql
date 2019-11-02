@@ -11,6 +11,7 @@ export enum SchemaValidationErrorType {
     DATABASE_TABLE_HAS_NO_PRIMARY_OR_CANDIDATE_KEY = "DATABASE_TABLE_HAS_NO_PRIMARY_OR_CANDIDATE_KEY",
 
     COLUMN_ON_DATABASE_ONLY_INSERT_WILL_FAIL = "COLUMN_ON_DATABASE_ONLY_INSERT_WILL_FAIL",
+    COLUMN_ON_APPLICATION_ONLY = "COLUMN_ON_APPLICATION_ONLY",
 
     COLUMN_ALIAS_MISMATCH = "COLUMN_ALIAS_MISMATCH",
 
@@ -61,7 +62,7 @@ export interface CandidateKeyOnApplicationOnlyError {
     type : SchemaValidationErrorType.CANDIDATE_KEY_ON_APPLICATION_ONLY,
     description : string,
     tableAlias : string,
-    candidateKey : readonly string[],
+    applicationCandidateKey : readonly string[],
 }
 
 export interface DatabaseTableHasNoPrimaryOrCandidateKeysError {
@@ -78,6 +79,13 @@ export interface ColumnOnDatabaseOnlyInsertWillFailError {
     hasDefaultOrGeneratedValue : false,
     insertEnabled : true,
 }
+export interface ColumnOnApplicationOnlyError {
+    type : SchemaValidationErrorType.COLUMN_ON_APPLICATION_ONLY,
+    description : string,
+    tableAlias : string,
+    applicationColumnAlias : string,
+}
+
 
 export interface AutoIncrementOnApplicationOnlyInsertWillFailError {
     type : SchemaValidationErrorType.AUTO_INCREMENT_ON_APPLICATION_ONLY_INSERT_WILL_FAIL,
@@ -164,6 +172,7 @@ export type SchemaValidationError =
     | DatabaseTableHasNoPrimaryOrCandidateKeysError
 
     | ColumnOnDatabaseOnlyInsertWillFailError
+    | ColumnOnApplicationOnlyError
 
     | AutoIncrementOnApplicationOnlyInsertWillFailError
     | AutoIncrementMismatchInsertWillFailError

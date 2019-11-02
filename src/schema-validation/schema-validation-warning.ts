@@ -48,7 +48,7 @@ export interface CandidateKeyOnDatabaseOnlyWarning {
     type : SchemaValidationWarningType.CANDIDATE_KEY_ON_DATABASE_ONLY,
     description : string,
     tableAlias : string,
-    candidateKey : readonly string[],
+    databaseCandidateKey : readonly string[],
 }
 
 export interface ColumnOnDatabaseOnlyWithDefaultOrGeneratedValueWarning {
