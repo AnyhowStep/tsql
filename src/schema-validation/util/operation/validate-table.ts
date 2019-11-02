@@ -251,10 +251,13 @@ export function validateTable (
                      */
                     result.warnings.push({
                         type : SchemaValidationWarningType.COLUMN_ON_DATABASE_ONLY_WITH_DEFAULT_OR_GENERATED_VALUE,
-                        description : `Column ${tableMeta.tableAlias}.${columnMeta.columnAlias} exists on database, not on application; but has a default or generated value`,
-                        databaseTableAlias : tableMeta.tableAlias,
+                        description : `Column ${escapeIdentifierWithDoubleQuotes(tableMeta.tableAlias)}.${escapeIdentifierWithDoubleQuotes(columnMeta.columnAlias)} exists on database only; but has a default or generated value`,
+                        tableAlias : tableMeta.tableAlias,
                         databaseColumnAlias : columnMeta.columnAlias,
-                        hasDefaultOrGeneratedValue : true,
+                        isNullable : columnMeta.isNullable,
+                        isAutoIncrement : columnMeta.isAutoIncrement,
+                        generationExpression : columnMeta.generationExpression,
+                        explicitDefaultValue : columnMeta.explicitDefaultValue,
                         insertEnabled : applicationTable.insertEnabled,
                     });
                 } else {
@@ -275,10 +278,13 @@ export function validateTable (
                      */
                     result.errors.push({
                         type : SchemaValidationErrorType.COLUMN_ON_DATABASE_ONLY_INSERT_WILL_FAIL,
-                        description : `Column ${tableMeta.tableAlias}.${columnMeta.columnAlias} exists on database, not on application; INSERTs will fail because the column has no default or generated value`,
-                        databaseTableAlias : tableMeta.tableAlias,
+                        description : `Column ${escapeIdentifierWithDoubleQuotes(tableMeta.tableAlias)}.${escapeIdentifierWithDoubleQuotes(columnMeta.columnAlias)} exists on database only; INSERTs will fail`,
+                        tableAlias : tableMeta.tableAlias,
                         databaseColumnAlias : columnMeta.columnAlias,
-                        hasDefaultOrGeneratedValue : false,
+                        isNullable : columnMeta.isNullable,
+                        isAutoIncrement : columnMeta.isAutoIncrement,
+                        generationExpression : columnMeta.generationExpression,
+                        explicitDefaultValue : columnMeta.explicitDefaultValue,
                         insertEnabled : applicationTable.insertEnabled,
                     });
                 }
@@ -299,9 +305,13 @@ export function validateTable (
                  */
                 result.warnings.push({
                     type : SchemaValidationWarningType.COLUMN_ON_DATABASE_ONLY_INSERT_DISABLED,
-                    description : `Column ${tableMeta.tableAlias}.${columnMeta.columnAlias} exists on database, not on application; but INSERT is disabled for the table`,
-                    databaseTableAlias : tableMeta.tableAlias,
+                    description : `Column ${escapeIdentifierWithDoubleQuotes(tableMeta.tableAlias)}.${escapeIdentifierWithDoubleQuotes(columnMeta.columnAlias)} exists on database only; INSERTs may fail but INSERTs are disabled`,
+                    tableAlias : tableMeta.tableAlias,
                     databaseColumnAlias : columnMeta.columnAlias,
+                    isNullable : columnMeta.isNullable,
+                    isAutoIncrement : columnMeta.isAutoIncrement,
+                    generationExpression : columnMeta.generationExpression,
+                    explicitDefaultValue : columnMeta.explicitDefaultValue,
                     insertEnabled : applicationTable.insertEnabled,
                 });
             }

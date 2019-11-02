@@ -54,17 +54,24 @@ export interface CandidateKeyOnDatabaseOnlyWarning {
 export interface ColumnOnDatabaseOnlyWithDefaultOrGeneratedValueWarning {
     type : SchemaValidationWarningType.COLUMN_ON_DATABASE_ONLY_WITH_DEFAULT_OR_GENERATED_VALUE,
     description : string,
-    databaseTableAlias : string,
+    tableAlias : string,
     databaseColumnAlias : string,
-    hasDefaultOrGeneratedValue : true,
+    isNullable : boolean,
+    isAutoIncrement : boolean,
+    generationExpression : string|undefined,
+    explicitDefaultValue : string|undefined,
     insertEnabled : true,
 }
 
 export interface ColumnOnDatabaseOnlyInsertDisabledWarning {
     type : SchemaValidationWarningType.COLUMN_ON_DATABASE_ONLY_INSERT_DISABLED,
     description : string,
-    databaseTableAlias : string,
+    tableAlias : string,
     databaseColumnAlias : string,
+    isNullable : boolean,
+    isAutoIncrement : boolean,
+    generationExpression : string|undefined,
+    explicitDefaultValue : string|undefined,
     insertEnabled : false,
 }
 

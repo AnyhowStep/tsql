@@ -74,9 +74,12 @@ export interface DatabaseTableHasNoPrimaryOrCandidateKeysError {
 export interface ColumnOnDatabaseOnlyInsertWillFailError {
     type : SchemaValidationErrorType.COLUMN_ON_DATABASE_ONLY_INSERT_WILL_FAIL,
     description : string,
-    databaseTableAlias : string,
+    tableAlias : string,
     databaseColumnAlias : string,
-    hasDefaultOrGeneratedValue : false,
+    isNullable : false,
+    isAutoIncrement : false,
+    generationExpression : undefined,
+    explicitDefaultValue : undefined,
     insertEnabled : true,
 }
 export interface ColumnOnApplicationOnlyError {
