@@ -14,6 +14,7 @@ const args = process.argv.slice(2).map(
 const {
     allDiffResults
 } = runTest(
+    false,
     args.length == 0 ?
     undefined :
     args

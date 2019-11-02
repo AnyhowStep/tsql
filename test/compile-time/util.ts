@@ -115,7 +115,7 @@ export function copyAllFilesAndDirectoriesSync (fromRootDir : string, toRootDir 
     }
 }
 
-export function runTest (files? : string[]) {
+export function runTest (ignoreErrorMessageText : boolean, files? : string[]) {
     removeAllFilesAndDirectoriesSync(actualOutputRoot);
 
     const rootNames = files == undefined ?
@@ -295,13 +295,17 @@ export function runTest (files? : string[]) {
         errorDiffs : diff.Change[],
     }[] = [];
 
-    function diffFiles (actualPath : string, expectedPath : string) {
-        const actualData = fs.existsSync(actualPath) ?
+    function diffFiles (actualPath : string, expectedPath : string, transformer? : (str : string) => string) {
+        let actualData = fs.existsSync(actualPath) ?
             fs.readFileSync(actualPath).toString() :
             "";
-        const expectedData = fs.existsSync(expectedPath) ?
+        let expectedData = fs.existsSync(expectedPath) ?
             fs.readFileSync(expectedPath).toString() :
             "";
+        if (transformer != undefined) {
+            actualData = transformer(actualData);
+            expectedData = transformer(expectedData);
+        }
         return diff.diffLines(
             expectedData,
             actualData,
@@ -336,7 +340,34 @@ export function runTest (files? : string[]) {
 
         const errorDiffs = diffFiles(
             actualErrorOutputPath,
-            expectedErrorOutputPath
+            expectedErrorOutputPath,
+            (
+                ignoreErrorMessageText ?
+                (str) => {
+                    if (str == "") {
+                        return "";
+                    }
+                    const obj : {
+                        messageText: string | ts.DiagnosticMessageChain;
+                        category: ts.DiagnosticCategory;
+                        code: number;
+                        length: number | undefined;
+                        start: number | undefined;
+                    } = JSON.parse(str);
+
+                    if (typeof obj.messageText == "string") {
+                        delete obj.messageText;
+                    } else {
+                        let cur : ts.DiagnosticMessageChain|undefined = obj.messageText;
+                        while (cur != undefined) {
+                            delete cur.messageText;
+                            cur = cur.next;
+                        }
+                    }
+                    return JSON.stringify(obj, null, 2);
+                }:
+                undefined
+            )
         );
         if (declarationDiffs.length > 0 || errorDiffs.length > 0) {
             allDiffResults.push({

@@ -4,7 +4,7 @@ const start = new Date().getTime();
 const {
     rootNames,
     allDiffResults
-} = runTest(false);
+} = runTest(true);
 const end = new Date().getTime();
 const timeTaken = end-start;
 
