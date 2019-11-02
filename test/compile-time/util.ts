@@ -347,24 +347,27 @@ export function runTest (ignoreErrorMessageText : boolean, files? : string[]) {
                     if (str == "") {
                         return "";
                     }
-                    const obj : {
+                    const errorArr : {
                         messageText: string | ts.DiagnosticMessageChain;
                         category: ts.DiagnosticCategory;
                         code: number;
                         length: number | undefined;
                         start: number | undefined;
-                    } = JSON.parse(str);
-
-                    if (typeof obj.messageText == "string") {
-                        delete obj.messageText;
-                    } else {
-                        let cur : ts.DiagnosticMessageChain|undefined = obj.messageText;
-                        while (cur != undefined) {
-                            delete cur.messageText;
-                            cur = cur.next;
+                    }[] = JSON.parse(str);
+                    const newErrorArr = errorArr.map(obj => {
+                        if (typeof obj.messageText == "string") {
+                            delete obj.messageText;
+                        } else {
+                            let cur : ts.DiagnosticMessageChain|undefined = obj.messageText;
+                            while (cur != undefined) {
+                                delete cur.messageText;
+                                cur = cur.next;
+                            }
                         }
-                    }
-                    return JSON.stringify(obj, null, 2);
+                        return obj;
+                    });
+                    return JSON.stringify(newErrorArr, null, 2);
+
                 }:
                 undefined
             )

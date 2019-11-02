@@ -1,6 +1,9 @@
 import {runTest} from "./util";
 
 const start = new Date().getTime();
+/**
+ * https://github.com/microsoft/TypeScript/issues/26238#issuecomment-549018426
+ */
 const {
     rootNames,
     allDiffResults
