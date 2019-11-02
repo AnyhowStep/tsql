@@ -1,5 +1,7 @@
 [![Build Status](https://travis-ci.org/AnyhowStep/tsql.svg?branch=master)](https://travis-ci.org/AnyhowStep/tsql)
 
+[![codecov](https://codecov.io/gh/AnyhowStep/tsql/branch/master/graph/badge.svg)](https://codecov.io/gh/AnyhowStep/tsql)
+
 This library is unusable at the moment.
 It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyhowstep/typed-orm)
 
