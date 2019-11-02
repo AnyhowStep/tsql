@@ -140,21 +140,21 @@ export function validateColumn (
             if (applicationTable.insertEnabled) {
                 result.errors.push({
                     type : SchemaValidationErrorType.COLUMN_GENERATED_ON_DATABASE_ONLY_INSERT_WILL_FAIL,
-                    description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} is nullable on application only; INSERTs using NULL value will fail`,
+                    description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} is generated on database only; INSERTs will fail`,
                     tableAlias : applicationTable.alias,
                     columnAlias : applicationColumn.columnAlias,
                 });
             } else if (applicationMutable) {
                 result.errors.push({
                     type : SchemaValidationErrorType.COLUMN_GENERATED_ON_DATABASE_ONLY_UPDATE_WILL_FAIL,
-                    description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} is nullable on application only; UPDATEs using NULL value will fail`,
+                    description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} is generated on database only; UPDATEs will fail`,
                     tableAlias : applicationTable.alias,
                     columnAlias : applicationColumn.columnAlias,
                 });
             } else {
                 result.warnings.push({
                     type : SchemaValidationWarningType.COLUMN_GENERATED_ON_DATABASE_ONLY_INSERT_AND_UPDATE_DISABLED,
-                    description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} is nullable on application only; however, the column value cannot be set to NULL through INSERT and UPDATE statements`,
+                    description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} is generated on database only; INSERTs and UPDATEs will fail but both are disabled`,
                     tableAlias : applicationTable.alias,
                     columnAlias : applicationColumn.columnAlias,
                 });
