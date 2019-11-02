@@ -1,0 +1,28 @@
+language: node_js
+
+node_js:
+  - 'node'
+  - '11'
+  - '12'
+
+branches:
+  only:
+  - master
+
+
+install:
+  - npm install
+
+cache:
+  directories:
+    - node_modules
+
+git:
+  depth: 1
+
+script:
+  - npm run sanity-check
+  - npm install codecov
+
+after_success:
+  - ./node_modules/.bin/codecov

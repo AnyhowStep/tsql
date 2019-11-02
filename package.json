@@ -20,7 +20,8 @@
     "test-compile-time-interactive": "ts-node -P ./test/compile-time/tsconfig.json ./test/compile-time/interactive.ts",
     "test-run-time": "ts-node -P ./test/run-time/tsconfig.json -r ./test/run-time/tape-stream.ts -r ./test/run-time/bluebird-promise.ts ./test/run-time/runner.ts",
     "test-run-time-bigint-polyfill": "ts-node -P ./test/run-time/tsconfig.json -r ./test/run-time/tape-stream.ts -r ./test/run-time/bigint-polyfill.ts -r ./test/run-time/bluebird-promise.ts ./test/run-time/runner.ts",
-    "sanity-check": "(npm run rebuild) && (npm run test-run-time) && (npm run test-run-time-bigint-polyfill) && (npm run test-compile-time)",
+    "sanity-check": "(npm run rebuild) && (c8 --reporter=html npm run test-run-time) && (npm run test-run-time-bigint-polyfill) && (npm run test-compile-time)",
+    "sanity-check-travis": "(npm run rebuild) && (c8 --reporter=json npm run test-run-time) && (npm run test-run-time-bigint-polyfill) && (npm run test-compile-time)",
     "c8-report": "(c8 --reporter=html npm run test-run-time)",
     "count-loc": "find ./src -name '*.ts' | xargs wc -l"
   },
