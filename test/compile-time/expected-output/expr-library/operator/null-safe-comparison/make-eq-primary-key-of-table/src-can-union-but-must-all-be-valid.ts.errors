@@ -1,7 +1,7 @@
 [
   {
     "messageText": {
-      "messageText": "Argument of type 'import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/table/table-impl\").Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly userId: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/column/column-impl\").Column<{ tableAlias: \"myTable\"; columnAlias: \"userId\"; mapper: import(\"/home/anyhowstep/node-proj...' is not assignable to parameter of type 'import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/table/table-impl\").Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly userId: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/column/column-impl\").Column<{ tableAlias: \"myTable\"; columnAlias: \"userId\"; mapper: import(\"/home/anyhowstep/node-proj...'.",
+      "messageText": "Argument of type 'import(\"dist/table/table-impl\").Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly userId: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/column/column-impl\").Column<{ tableAlias: \"myTable\"; columnAlias: \"userId\"; mapper: import(\"/home/anyhowstep/node-proj...' is not assignable to parameter of type 'import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/table/table-impl\").Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly userId: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/column/column-impl\").Column<{ tableAlias: \"myTable\"; columnAlias: \"userId\"; mapper: import(\"/home/anyhowstep/node-proj...'.",
       "category": 1,
       "code": 2345,
       "next": {

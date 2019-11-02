@@ -5,7 +5,7 @@
       "category": 1,
       "code": 2345,
       "next": {
-        "messageText": "Type 'import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/unified-query/query-impl\").Query<{ fromClause: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/from-clause/from-clause\").IFromClause<{ outerQueryJoins: undefined; currentJoins: readonly import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/join/join-impl\")....' is not assignable to type 'import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/unified-query/query-impl\").Query<{ fromClause: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/from-clause/from-clause\").IFromClause<{ outerQueryJoins: undefined; currentJoins: readonly import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/join/join-impl\")....'. Two different types with this name exist, but they are unrelated.",
+        "messageText": "Type 'import(\"dist/unified-query/query-impl\").Query<{ fromClause: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/from-clause/from-clause\").IFromClause<{ outerQueryJoins: undefined; currentJoins: readonly import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/join/join-impl\")....' is not assignable to type 'import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/unified-query/query-impl\").Query<{ fromClause: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/from-clause/from-clause\").IFromClause<{ outerQueryJoins: undefined; currentJoins: readonly import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/join/join-impl\")....'. Two different types with this name exist, but they are unrelated.",
         "category": 1,
         "code": 2719,
         "next": {

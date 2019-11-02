@@ -1,7 +1,7 @@
 [
   {
     "messageText": {
-      "messageText": "Argument of type 'import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/unified-query/query-impl\").Query<{ fromClause: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/from-clause/from-clause\").IFromClause<{ outerQueryJoins: readonly import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/join/join-impl\").Join<{ tableAlias: \"cqcOu...' is not assignable to parameter of type 'import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/unified-query/query-impl\").Query<{ fromClause: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/from-clause/from-clause\").IFromClause<{ outerQueryJoins: readonly import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/join/join-impl\").Join<{ tableAlias: \"cqcOu...'.",
+      "messageText": "Argument of type 'import(\"dist/unified-query/query-impl\").Query<{ fromClause: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/from-clause/from-clause\").IFromClause<{ outerQueryJoins: readonly import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/join/join-impl\").Join<{ tableAlias: \"cqcOu...' is not assignable to parameter of type 'import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/unified-query/query-impl\").Query<{ fromClause: import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/from-clause/from-clause\").IFromClause<{ outerQueryJoins: readonly import(\"/home/anyhowstep/node-projects/tsql/tsql/dist/join/join-impl\").Join<{ tableAlias: \"cqcOu...'.",
       "category": 1,
       "code": 2345,
       "next": {

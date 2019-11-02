@@ -1,6 +1,7 @@
 import * as ts from "typescript";
 import * as fs from "fs";
 import * as diff from "diff";
+import * as path from "path";
 
 import {getAllTsFiles} from "../util";
 export {getAllTsFiles};
@@ -204,9 +205,45 @@ export function runTest (files? : string[]) {
         });
     }
     Object.keys(errorDict).forEach((fileName) => {
+        function toRelativePath (str : string) : string {
+            return str.replace(path.normalize(__dirname + "/../../"), "");
+        }
+        function useRelativePath (
+            obj : ts.DiagnosticMessageChain
+        ) : ts.DiagnosticMessageChain {
+            if ("next" in obj) {
+                return {
+                    ...obj,
+                    messageText : toRelativePath(obj.messageText),
+                    next : (
+                        obj.next == undefined ?
+                        undefined :
+                        useRelativePath(obj.next)
+                    ),
+                };
+            } else {
+                return {
+                    ...obj,
+                    messageText : toRelativePath(obj.messageText),
+                };
+            }
+        }
+        let err = errorDict[fileName];
+        if (err != undefined) {
+            err = err.map(obj => {
+                return {
+                    ...obj,
+                    messageText : (
+                        typeof obj.messageText == "string" ?
+                        toRelativePath(obj.messageText) :
+                        useRelativePath(obj.messageText)
+                    ),
+                };
+            });
+        }
         fs.writeFileSync(
             actualOutputRoot + "/" + fileName + ".errors",
-            JSON.stringify(errorDict[fileName], null, 2)
+            JSON.stringify(err, null, 2)
         );
     });
 
