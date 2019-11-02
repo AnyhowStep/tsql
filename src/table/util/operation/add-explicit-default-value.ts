@@ -17,7 +17,7 @@ export type AddExplicitDefaultValueColumnAlias<
         Extract<keyof TableT["columns"], string>,
         (
             | TableT["generatedColumns"][number]
-            | TableT["nullableColumns"][number]
+            //| TableT["nullableColumns"][number]
             | TableT["autoIncrement"]
             | TableT["explicitDefaultValueColumns"][number]
         )
@@ -45,7 +45,7 @@ export function addExplicitDefaultValueColumnMap<
             .filter(column => {
                 return (
                     !table.generatedColumns.includes(column.columnAlias) &&
-                    !table.nullableColumns.includes(column.columnAlias) &&
+                    //!table.nullableColumns.includes(column.columnAlias) &&
                     (table.autoIncrement != column.columnAlias) &&
                     !table.explicitDefaultValueColumns.includes(column.columnAlias)
                 );

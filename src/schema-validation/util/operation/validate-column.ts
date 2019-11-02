@@ -4,6 +4,7 @@ import {ColumnMeta} from "../../../schema-introspection";
 import {WritableSchemaValidationResult, SchemaValidationResult} from "../../schema-validation-result";
 import {SchemaValidationErrorType} from "../../schema-validation-error";
 import {SchemaValidationWarningType} from "../../schema-validation-warning";
+import {escapeIdentifierWithDoubleQuotes} from "../../../sqlstring";
 
 export function validateColumn (
     applicationTable : Pick<
@@ -31,7 +32,7 @@ export function validateColumn (
     if (applicationColumn.columnAlias != columnMeta.columnAlias) {
         result.errors.push({
             type : SchemaValidationErrorType.COLUMN_ALIAS_MISMATCH,
-            description : `Application column is named ${applicationTable.alias}.${applicationColumn.columnAlias}, database column is named ${applicationTable.alias}.${columnMeta.columnAlias}`,
+            description : `Application column is named ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)}, database column is named ${applicationTable.alias}.${columnMeta.columnAlias}`,
             tableAlias : applicationTable.alias,
             applicationColumnAlias : applicationColumn.columnAlias,
             databaseColumnAlias : columnMeta.columnAlias,
@@ -69,7 +70,7 @@ export function validateColumn (
              */
             result.errors.push({
                 type : SchemaValidationErrorType.COLUMN_NULLABLE_ON_DATABASE_ONLY,
-                description : `Column ${applicationTable.alias}.${applicationColumn.columnAlias} is nullable on database, not on application; SELECT statements will fail`,
+                description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} is nullable on database only; SELECTs will fail`,
                 tableAlias : applicationTable.alias,
                 columnAlias : applicationColumn.columnAlias,
             });
@@ -92,21 +93,21 @@ export function validateColumn (
             if (applicationTable.insertEnabled) {
                 result.errors.push({
                     type : SchemaValidationErrorType.COLUMN_NULLABLE_ON_APPLICATION_ONLY_INSERT_WILL_FAIL,
-                    description : `Column ${applicationTable.alias}.${applicationColumn.columnAlias} is nullable on application, not on database; INSERTs using NULL value will fail`,
+                    description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} is nullable on application only; INSERTs using NULL value will fail`,
                     tableAlias : applicationTable.alias,
                     columnAlias : applicationColumn.columnAlias,
                 });
             } else if (applicationMutable) {
                 result.errors.push({
                     type : SchemaValidationErrorType.COLUMN_NULLABLE_ON_APPLICATION_ONLY_UPDATE_WILL_FAIL,
-                    description : `Column ${applicationTable.alias}.${applicationColumn.columnAlias} is nullable on application, not on database; UPDATEs using NULL value will fail`,
+                    description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} is nullable on application only; UPDATEs using NULL value will fail`,
                     tableAlias : applicationTable.alias,
                     columnAlias : applicationColumn.columnAlias,
                 });
             } else {
                 result.warnings.push({
                     type : SchemaValidationWarningType.COLUMN_NULLABLE_ON_APPLICATION_ONLY_INSERT_AND_UPDATE_DISABLED,
-                    description : `Column ${applicationTable.alias}.${applicationColumn.columnAlias} is nullable on application, not on database; INSERTs and UPDATEs using NULL value will fail. However, the column value cannot be set to NULL through INSERT and UPDATE statements on the application`,
+                    description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} is nullable on application only; INSERTs and UPDATEs using NULL value will fail but both are disabled`,
                     tableAlias : applicationTable.alias,
                     columnAlias : applicationColumn.columnAlias,
                 });
@@ -139,21 +140,21 @@ export function validateColumn (
             if (applicationTable.insertEnabled) {
                 result.errors.push({
                     type : SchemaValidationErrorType.COLUMN_GENERATED_ON_DATABASE_ONLY_INSERT_WILL_FAIL,
-                    description : `Column ${applicationTable.alias}.${applicationColumn.columnAlias} is nullable on application, not on database; INSERTs using NULL value will fail`,
+                    description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} is nullable on application only; INSERTs using NULL value will fail`,
                     tableAlias : applicationTable.alias,
                     columnAlias : applicationColumn.columnAlias,
                 });
             } else if (applicationMutable) {
                 result.errors.push({
                     type : SchemaValidationErrorType.COLUMN_GENERATED_ON_DATABASE_ONLY_UPDATE_WILL_FAIL,
-                    description : `Column ${applicationTable.alias}.${applicationColumn.columnAlias} is nullable on application, not on database; UPDATEs using NULL value will fail`,
+                    description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} is nullable on application only; UPDATEs using NULL value will fail`,
                     tableAlias : applicationTable.alias,
                     columnAlias : applicationColumn.columnAlias,
                 });
             } else {
                 result.warnings.push({
                     type : SchemaValidationWarningType.COLUMN_GENERATED_ON_DATABASE_ONLY_INSERT_AND_UPDATE_DISABLED,
-                    description : `Column ${applicationTable.alias}.${applicationColumn.columnAlias} is nullable on application, not on database; however, the column value cannot be set to NULL through INSERT and UPDATE statements`,
+                    description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} is nullable on application only; however, the column value cannot be set to NULL through INSERT and UPDATE statements`,
                     tableAlias : applicationTable.alias,
                     columnAlias : applicationColumn.columnAlias,
                 });
@@ -189,14 +190,14 @@ export function validateColumn (
                     if (applicationTable.insertEnabled) {
                         result.errors.push({
                             type : SchemaValidationErrorType.COLUMN_GENERATED_ON_APPLICATION_ONLY_AUTO_INCREMENT_MISMATCH_INSERT_WILL_FAIL,
-                            description : `Column ${applicationTable.alias}.${applicationColumn.columnAlias} is auto-increment on application, not auto-increment on database; INSERTs will fail`,
+                            description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} is auto-increment on application, not auto-increment on database; INSERTs will fail`,
                             tableAlias : applicationTable.alias,
                             columnAlias : applicationColumn.columnAlias,
                         });
                     } else {
                         result.warnings.push({
                             type : SchemaValidationWarningType.COLUMN_GENERATED_ON_APPLICATION_ONLY_AUTO_INCREMENT_MISMATCH_INSERT_DISABLED,
-                            description : `Column ${applicationTable.alias}.${applicationColumn.columnAlias} is auto-increment on application, not auto-increment on database; INSERTs will fail. However, INSERTs are disabled`,
+                            description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} is auto-increment on application, not auto-increment on database; INSERTs will fail. However, INSERTs are disabled`,
                             tableAlias : applicationTable.alias,
                             columnAlias : applicationColumn.columnAlias,
                         });
@@ -221,7 +222,7 @@ export function validateColumn (
                      */
                     result.warnings.push({
                         type : SchemaValidationWarningType.COLUMN_GENERATED_ON_APPLICATION_ONLY_USING_DATABASE_DEFAULT_VALUE,
-                        description : `Column ${applicationTable.alias}.${applicationColumn.columnAlias} is generated on application, not generated on database; but the database default value is used`,
+                        description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} is generated on application, not generated on database; but the database default value is used`,
                         tableAlias : applicationTable.alias,
                         columnAlias : applicationColumn.columnAlias,
                     });
@@ -240,14 +241,14 @@ export function validateColumn (
                     if (applicationTable.insertEnabled) {
                         result.errors.push({
                             type : SchemaValidationErrorType.COLUMN_GENERATED_ON_APPLICATION_ONLY_INSERT_WILL_FAIL,
-                            description : `Column ${applicationTable.alias}.${applicationColumn.columnAlias} is generated on application only; INSERTs will fail`,
+                            description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} is generated on application only; INSERTs will fail`,
                             tableAlias : applicationTable.alias,
                             columnAlias : applicationColumn.columnAlias,
                         });
                     } else {
                         result.warnings.push({
                             type : SchemaValidationWarningType.COLUMN_GENERATED_ON_APPLICATION_ONLY_INSERT_DISABLED,
-                            description : `Column ${applicationTable.alias}.${applicationColumn.columnAlias} is generated on application only; INSERTs will fail but INSERTs are disabled`,
+                            description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} is generated on application only; INSERTs will fail but INSERTs are disabled`,
                             tableAlias : applicationTable.alias,
                             columnAlias : applicationColumn.columnAlias,
                         });
@@ -279,9 +280,10 @@ export function validateColumn (
              */
             result.warnings.push({
                 type : SchemaValidationWarningType.COLUMN_EXPLICIT_DEFAULT_VALUE_ON_DATABASE_ONLY,
-                description : `Column ${applicationTable.alias}.${applicationColumn.columnAlias} has explicit default value on database only`,
+                description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} has explicit default value on database only`,
                 tableAlias : applicationTable.alias,
                 columnAlias : applicationColumn.columnAlias,
+                explicitDefaultValue : columnMeta.explicitDefaultValue,
             });
         }
     } else {
@@ -304,10 +306,14 @@ export function validateColumn (
                  * + Attempts to use as expression are fine.
                  */
                 result.warnings.push({
-                    type : SchemaValidationWarningType.COLUMN_EXPLICIT_DEFAULT_VALUE_ON_APPLICATION_ONLY_USING_DATABASE_GENERATED_VALUE_OR_NULLABLE,
-                    description : `Column ${applicationTable.alias}.${applicationColumn.columnAlias} has explicit default value on application only`,
+                    type : SchemaValidationWarningType.COLUMN_EXPLICIT_DEFAULT_VALUE_ON_APPLICATION_ONLY_USING_DATABASE_GENERATED_OR_NULL_VALUE,
+                    description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} has explicit default value on application only; INSERTs will use database generated or NULL value`,
                     tableAlias : applicationTable.alias,
                     columnAlias : applicationColumn.columnAlias,
+                    isNullable : columnMeta.isNullable,
+                    isAutoIncrement : columnMeta.isAutoIncrement,
+                    generationExpression : columnMeta.generationExpression,
+                    explicitDefaultValue : columnMeta.explicitDefaultValue,
                 });
             } else {
                 /**
@@ -325,14 +331,14 @@ export function validateColumn (
                 if (applicationTable.insertEnabled) {
                     result.errors.push({
                         type : SchemaValidationErrorType.COLUMN_EXPLICIT_DEFAULT_VALUE_ON_APPLICATION_ONLY_INSERT_WILL_FAIL,
-                        description : `Column ${applicationTable.alias}.${applicationColumn.columnAlias} has explicit default value on application only; INSERTs will fail`,
+                        description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} has explicit default value on application only; INSERTs will fail`,
                         tableAlias : applicationTable.alias,
                         columnAlias : applicationColumn.columnAlias,
                     });
                 } else {
                     result.warnings.push({
                         type : SchemaValidationWarningType.COLUMN_EXPLICIT_DEFAULT_VALUE_ON_APPLICATION_ONLY_INSERT_DISABLED,
-                        description : `Column ${applicationTable.alias}.${applicationColumn.columnAlias} has explicit default value on application only; INSERTs will fail but INSERTs are disabled`,
+                        description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} has explicit default value on application only; INSERTs will fail but INSERTs are disabled`,
                         tableAlias : applicationTable.alias,
                         columnAlias : applicationColumn.columnAlias,
                     });

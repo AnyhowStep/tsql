@@ -22,7 +22,7 @@ export enum SchemaValidationWarningType {
     COLUMN_GENERATED_ON_APPLICATION_ONLY_INSERT_DISABLED = "COLUMN_GENERATED_ON_APPLICATION_ONLY_INSERT_DISABLED",
 
     COLUMN_EXPLICIT_DEFAULT_VALUE_ON_DATABASE_ONLY = "COLUMN_EXPLICIT_DEFAULT_VALUE_ON_DATABASE_ONLY",
-    COLUMN_EXPLICIT_DEFAULT_VALUE_ON_APPLICATION_ONLY_USING_DATABASE_GENERATED_VALUE_OR_NULLABLE = "COLUMN_EXPLICIT_DEFAULT_VALUE_ON_APPLICATION_ONLY_USING_DATABASE_GENERATED_VALUE_OR_NULLABLE",
+    COLUMN_EXPLICIT_DEFAULT_VALUE_ON_APPLICATION_ONLY_USING_DATABASE_GENERATED_OR_NULL_VALUE = "COLUMN_EXPLICIT_DEFAULT_VALUE_ON_APPLICATION_ONLY_USING_DATABASE_GENERATED_OR_NULL_VALUE",
     COLUMN_EXPLICIT_DEFAULT_VALUE_ON_APPLICATION_ONLY_INSERT_DISABLED = "COLUMN_EXPLICIT_DEFAULT_VALUE_ON_APPLICATION_ONLY_INSERT_DISABLED",
 }
 
@@ -133,12 +133,17 @@ export interface ColumnExplicitDefaultValueOnDatabaseOnlyWarning {
     description : string,
     tableAlias : string,
     columnAlias : string,
+    explicitDefaultValue : string,
 }
-export interface ColumnExplicitDefaultValueOnApplicationOnlyUsingDatabaseGeneratedValueOrNullableWarning {
-    type : SchemaValidationWarningType.COLUMN_EXPLICIT_DEFAULT_VALUE_ON_APPLICATION_ONLY_USING_DATABASE_GENERATED_VALUE_OR_NULLABLE,
+export interface ColumnExplicitDefaultValueOnApplicationOnlyUsingDatabaseGeneratedOrNullValueWarning {
+    type : SchemaValidationWarningType.COLUMN_EXPLICIT_DEFAULT_VALUE_ON_APPLICATION_ONLY_USING_DATABASE_GENERATED_OR_NULL_VALUE,
     description : string,
     tableAlias : string,
     columnAlias : string,
+    isNullable : boolean,
+    isAutoIncrement : boolean,
+    generationExpression : string|undefined,
+    explicitDefaultValue : undefined,
 }
 export interface ColumnExplicitDefaultValueOnApplicationOnlyInsertDisabledWarning {
     type : SchemaValidationWarningType.COLUMN_EXPLICIT_DEFAULT_VALUE_ON_APPLICATION_ONLY_INSERT_DISABLED,
@@ -170,6 +175,6 @@ export type SchemaValidationWarning =
     | ColumnGeneratedOnApplicationOnlyInsertDisabledWarning
 
     | ColumnExplicitDefaultValueOnDatabaseOnlyWarning
-    | ColumnExplicitDefaultValueOnApplicationOnlyUsingDatabaseGeneratedValueOrNullableWarning
+    | ColumnExplicitDefaultValueOnApplicationOnlyUsingDatabaseGeneratedOrNullValueWarning
     | ColumnExplicitDefaultValueOnApplicationOnlyInsertDisabledWarning
 ;
