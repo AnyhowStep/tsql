@@ -1,5 +1,7 @@
 import {LogData, ILog} from "./log";
-//import * as LogUtil from "./util";
+import {SelectConnection} from "../execution";
+import {PrimaryKey_Input} from "../primary-key";
+import * as LogUtil from "./util";
 
 export class Log<DataT extends LogData> implements ILog<DataT> {
     readonly tracked : DataT["tracked"];
@@ -37,5 +39,16 @@ export class Log<DataT extends LogData> implements ILog<DataT> {
     }
 
 
-
+    fetchLatest (
+        connection : SelectConnection,
+        primaryKey : PrimaryKey_Input<this["ownerTable"]>
+    ) : (
+        LogUtil.FetchLatestByPrimaryKey<this>
+    ) {
+        return LogUtil.fetchLatestByPrimaryKey<this>(
+            this,
+            connection,
+            primaryKey
+        );
+    }
 }
