@@ -17,6 +17,7 @@ export * from "./compound-query-order-by-clause";
 export * from "./decimal";
 export * from "./derived-table";
 export * from "./derived-table-select-item";
+export * from "./design-pattern-log";
 export * from "./equatable-type";
 export * from "./execution";
 export * from "./expr";

@@ -13,7 +13,7 @@ const start = new Date().getTime();
 const {
     rootNames,
     allDiffResults
-} = runTest(args);
+} = runTest(false, args);
 const end = new Date().getTime();
 const timeTaken = end-start;
 

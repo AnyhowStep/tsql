@@ -32,12 +32,7 @@ export type AnyRawExpr = (
     | IExprSelectItem
 );
 
-export type RawExprNoUsedRef<TypeT> = (
-    | (
-        TypeT extends PrimitiveExpr ?
-        TypeT :
-        never
-    )
+export type NonPrimitiveRawExprNoUsedRef<TypeT> =
     | IExpr<{
         mapper : tm.SafeMapper<TypeT>,
         usedRef : IUsedRef<{}>,
@@ -59,7 +54,20 @@ export type RawExprNoUsedRef<TypeT> = (
 
         usedRef : IUsedRef<{}>,
     }>
-);
+;
+export type AnyRawExprNoUsedRef =
+    | PrimitiveExpr
+    | NonPrimitiveRawExprNoUsedRef<any>
+;
+
+export type RawExprNoUsedRef<TypeT> =
+    | (
+        TypeT extends PrimitiveExpr ?
+        TypeT :
+        never
+    )
+    | NonPrimitiveRawExprNoUsedRef<TypeT>
+;
 
 /**
  * We don't support subqueries because it's too complicated

@@ -69,6 +69,7 @@
         "./src/update/**/*",
         "./src/schema-introspection/**/*",
         "./src/schema-validation/**/*",
+        "./src/design-pattern-log/**/*",
         "./src/index.ts"
     ]
 }

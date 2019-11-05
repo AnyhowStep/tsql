@@ -5,7 +5,7 @@
       "category": 1,
       "code": 2345,
       "next": {
-        "messageText": "Property 'testVal' is missing in type '{ testId: bigint; }' but required in type '{ readonly testId: bigint | IExpr<{ mapper: Mapper<unknown, bigint>; usedRef: IUsedRef<{}>; }> | IExprSelectItem<{ mapper: Mapper<unknown, bigint>; tableAlias: string; alias: string; usedRef: IUsedRef<{}>; }> | (IQueryBase<...> & ... 1 more ... & IQueryBase<...>); readonly testVal: bigint | ... 2 more ... | (IQueryB...'.",
+        "messageText": "Property 'testVal' is missing in type '{ testId: bigint; }' but required in type '{ readonly testId: RawExprNoUsedRef<bigint>; readonly testVal: RawExprNoUsedRef<bigint>; }'.",
         "category": 1,
         "code": 2741
       }
@@ -21,7 +21,7 @@
       "category": 1,
       "code": 2345,
       "next": {
-        "messageText": "Property 'testId' is missing in type '{ testVal: bigint; }' but required in type '{ readonly testId: bigint | IExpr<{ mapper: Mapper<unknown, bigint>; usedRef: IUsedRef<{}>; }> | IExprSelectItem<{ mapper: Mapper<unknown, bigint>; tableAlias: string; alias: string; usedRef: IUsedRef<{}>; }> | (IQueryBase<...> & ... 1 more ... & IQueryBase<...>); readonly testVal: bigint | ... 2 more ... | (IQueryB...'.",
+        "messageText": "Property 'testId' is missing in type '{ testVal: bigint; }' but required in type '{ readonly testId: RawExprNoUsedRef<bigint>; readonly testVal: RawExprNoUsedRef<bigint>; }'.",
         "category": 1,
         "code": 2741
       }
