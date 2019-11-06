@@ -23,8 +23,8 @@ export type InsertOneResultWithAutoIncrement<
 export async function insertOne<
     TableT extends TableWithAutoIncrement & InsertableTable
 > (
-    connection : InsertOneConnection,
     table : TableT,
+    connection : InsertOneConnection,
     row : InsertRowPrimitiveAutoIncrement<TableT>
 ) : (
     Promise<InsertOneResultWithAutoIncrement<TableT>>
@@ -32,8 +32,8 @@ export async function insertOne<
 export async function insertOne<
     TableT extends TableWithoutAutoIncrement & InsertableTable
 > (
-    connection : InsertOneConnection,
     table : TableT,
+    connection : InsertOneConnection,
     row : InsertRow<TableT>
 ) : (
     Promise<InsertOneResult>
@@ -41,8 +41,8 @@ export async function insertOne<
 export async function insertOne<
     TableT extends ITable & InsertableTable
 > (
-    connection : InsertOneConnection,
     table : TableT,
+    connection : InsertOneConnection,
     row : InsertRow<TableT>
 ) : (
     Promise<InsertOneResult>

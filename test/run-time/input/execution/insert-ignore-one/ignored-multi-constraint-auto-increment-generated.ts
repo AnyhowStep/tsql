@@ -31,8 +31,8 @@ tape(__filename, async (t) => {
         `);
 
         return tsql.ExecutionUtil.insertIgnoreOne(
-            connection,
             test,
+            connection,
             {
                 testVal : BigInt(444),
             }

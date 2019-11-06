@@ -28,8 +28,8 @@ tape(__filename, async (t) => {
         `);
 
         return tsql.ExecutionUtil.deleteOne(
-            connection,
             dst,
+            connection,
             () => tsql.eqPrimaryKey(
                 dst,
                 {

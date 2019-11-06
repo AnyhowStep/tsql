@@ -23,8 +23,8 @@ tape(__filename, async (t) => {
         `);
 
         return tsql.ExecutionUtil.insertIgnoreMany(
-            connection,
             test,
+            connection,
             [
                 {
                     testVal : BigInt(100),

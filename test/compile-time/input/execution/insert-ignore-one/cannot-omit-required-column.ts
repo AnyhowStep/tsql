@@ -8,8 +8,8 @@ const test = tsql.table("test")
     });
 
 export const p = tsql.ExecutionUtil.insertIgnoreOne(
-    null as any,
     test,
+    null as any,
     {
         testId : BigInt(5),
         //testVal : BigInt(400),
@@ -17,8 +17,8 @@ export const p = tsql.ExecutionUtil.insertIgnoreOne(
 );
 
 export const p2 = tsql.ExecutionUtil.insertIgnoreOne(
-    null as any,
     test,
+    null as any,
     {
         //testId : BigInt(5),
         testVal : BigInt(400),

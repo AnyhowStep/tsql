@@ -103,7 +103,7 @@ export function setCopyDefaultsDelegate<
         ));
 
     const copyDefaults : CopyDefaultsDelegate<DataT> = async (args) => {
-        const rawResult = rawCopyDefaultsDelegate({
+        const rawResult = await rawCopyDefaultsDelegate({
             ...args,
             ownerPrimaryKey : PrimaryKeyUtil.mapper(log.ownerTable)(
                 `${log.ownerTable.alias} PRIMARY KEY`,

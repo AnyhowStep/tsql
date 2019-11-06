@@ -145,8 +145,8 @@ export async function updateAndFetchOneByCandidateKey<
     CandidateKeyT extends StrictUnion<CandidateKey_NonUnion<TableT>>,
     AssignmentMapT extends UpdateAndFetchOneByCandidateKeyAssignmentMap<TableT, CandidateKeyT>
 > (
-    connection : IsolableUpdateConnection,
     table : TableT,
+    connection : IsolableUpdateConnection,
     candidateKey : CandidateKeyT & AssertNonUnion<CandidateKeyT>,
     assignmentMapDelegate : AssignmentMapDelegate<TableT, AssignmentMapT>
 ) : Promise<UpdateAndFetchOneResult<TableT, AssignmentMapT>> {
@@ -166,8 +166,8 @@ export async function updateAndFetchOneByCandidateKey<
 
     return connection.transactionIfNotInOne(async (connection) : Promise<UpdateAndFetchOneResult<TableT, AssignmentMapT>> => {
         const updateOneResult = await updateOne(
-            connection,
             table,
+            connection,
             () => ExprLib.eqCandidateKey(
                 table,
                 curCandidateKey
@@ -175,8 +175,8 @@ export async function updateAndFetchOneByCandidateKey<
             () => assignmentMap
         );
         const row = await TableUtil.__fetchOneHelper(
-            connection,
             table,
+            connection,
             () => ExprLib.eqCandidateKey(
                 table,
                 newCandidateKey

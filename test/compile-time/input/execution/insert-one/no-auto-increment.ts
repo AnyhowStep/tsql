@@ -8,8 +8,8 @@ const test = tsql.table("test")
     });
 
 export const p = tsql.ExecutionUtil.insertOne(
-    null as any,
     test,
+    null as any,
     {
         testId : BigInt(5),
         testVal : BigInt(400),

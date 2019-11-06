@@ -34,8 +34,8 @@ export type UpdateZeroOrOneResult =
 export async function updateZeroOrOne<
     TableT extends ITable
 > (
-    connection : IsolableUpdateConnection,
     table : TableT,
+    connection : IsolableUpdateConnection,
     whereDelegate : WhereDelegate<
         FromClauseUtil.From<
             FromClauseUtil.NewInstance,
@@ -46,8 +46,8 @@ export async function updateZeroOrOne<
 ) : Promise<UpdateZeroOrOneResult> {
     return connection.transactionIfNotInOne(async (connection) : Promise<UpdateZeroOrOneResult> => {
         const result = await impl.update(
-            connection,
             table,
+            connection,
             whereDelegate,
             assignmentMapDelegate
         );

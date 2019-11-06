@@ -15,8 +15,8 @@ import {InsertRow, InsertUtil} from "../../../insert";
 export async function insertMany<
     TableT extends ITable & InsertableTable
 > (
-    connection : InsertManyConnection,
     table : TableT,
+    connection : InsertManyConnection,
     rows : readonly InsertRow<TableT>[]
 ) : (
     Promise<InsertManyResult>

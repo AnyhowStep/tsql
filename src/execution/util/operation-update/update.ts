@@ -7,8 +7,8 @@ import {AssignmentMapDelegate, UpdateUtil} from "../../../update";
 export async function update<
     TableT extends ITable
 > (
-    connection : UpdateConnection,
     table : TableT,
+    connection : UpdateConnection,
     whereDelegate : WhereDelegate<
         FromClauseUtil.From<
             FromClauseUtil.NewInstance,

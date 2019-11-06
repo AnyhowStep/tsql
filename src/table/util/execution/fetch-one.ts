@@ -7,8 +7,8 @@ import {QueryUtil} from "../../../unified-query";
 import {ITable} from "../../table";
 
 export function fetchOne<TableT extends ITable> (
-    connection : SelectConnection,
     table : TableT,
+    connection : SelectConnection,
     whereDelegate : WhereDelegate<
         FromClauseUtil.From<
             FromClauseUtil.NewInstance,
@@ -20,8 +20,8 @@ export function fetchOne<
     TableT extends ITable,
     SelectsT extends SelectClause
 > (
-    connection : SelectConnection,
     table : TableT,
+    connection : SelectConnection,
     whereDelegate : WhereDelegate<
         FromClauseUtil.From<
             FromClauseUtil.NewInstance,
@@ -50,8 +50,8 @@ export function fetchOne<
 export function fetchOne<
     TableT extends ITable
 > (
-    connection : SelectConnection,
     table : TableT,
+    connection : SelectConnection,
     whereDelegate : WhereDelegate<
         FromClauseUtil.From<
             FromClauseUtil.NewInstance,
@@ -99,8 +99,8 @@ export function fetchOne<
 export function __fetchOneHelper<
     TableT extends ITable
 > (
-    connection : SelectConnection,
     table : TableT,
+    connection : SelectConnection,
     whereDelegate : WhereDelegate<
         FromClauseUtil.From<
             FromClauseUtil.NewInstance,
@@ -110,8 +110,8 @@ export function __fetchOneHelper<
     selectDelegate? : (...args : any[]) => any[]
 ) : ExecutionUtil.FetchOnePromise<any> {
     if (selectDelegate == undefined) {
-        return fetchOne(connection, table, whereDelegate);
+        return fetchOne(table, connection, whereDelegate);
     } else {
-        return fetchOne(connection, table, whereDelegate, selectDelegate as any);
+        return fetchOne(table, connection, whereDelegate, selectDelegate as any);
     }
 }

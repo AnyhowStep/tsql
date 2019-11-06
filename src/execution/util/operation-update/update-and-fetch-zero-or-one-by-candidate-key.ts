@@ -26,8 +26,8 @@ export async function updateAndFetchZeroOrOneByCandidateKey<
     CandidateKeyT extends StrictUnion<CandidateKey_NonUnion<TableT>>,
     AssignmentMapT extends UpdateAndFetchOneByCandidateKeyAssignmentMap<TableT, CandidateKeyT>
 > (
-    connection : IsolableUpdateConnection,
     table : TableT,
+    connection : IsolableUpdateConnection,
     candidateKey : CandidateKeyT & AssertNonUnion<CandidateKeyT>,
     assignmentMapDelegate : AssignmentMapDelegate<TableT, AssignmentMapT>
 ) : Promise<UpdateAndFetchZeroOrOneResult<TableT, AssignmentMapT>> {
@@ -47,8 +47,8 @@ export async function updateAndFetchZeroOrOneByCandidateKey<
 
     return connection.transactionIfNotInOne(async (connection) : Promise<UpdateAndFetchZeroOrOneResult<TableT, AssignmentMapT>> => {
         const updateZeroOrOneResult = await updateZeroOrOne(
-            connection,
             table,
+            connection,
             () => ExprLib.eqCandidateKey(
                 table,
                 curCandidateKey
@@ -64,8 +64,8 @@ export async function updateAndFetchZeroOrOneByCandidateKey<
         } else {
             const updateOneResult = updateZeroOrOneResult as UpdateOneResult;
             const row = await TableUtil.__fetchOneHelper(
-                connection,
                 table,
+                connection,
                 () => ExprLib.eqCandidateKey(
                     table,
                     newCandidateKey

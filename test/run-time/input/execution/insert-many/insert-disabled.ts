@@ -24,8 +24,8 @@ tape(__filename, async (t) => {
         `);
 
         return tsql.ExecutionUtil.insertMany(
-            connection,
             test as (typeof test & tsql.InsertableTable),
+            connection,
             [
                 {
                     testId : BigInt(4),

@@ -23,8 +23,8 @@ tape(__filename, async (t) => {
         `);
 
         return tsql.ExecutionUtil.insertMany(
-            connection,
             test,
+            connection,
             [
                 {
                     testVal : BigInt(100),

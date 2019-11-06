@@ -15,8 +15,8 @@ import {InsertRow, InsertUtil} from "../../../insert";
 export async function replaceMany<
     TableT extends InsertableTable & DeletableTable
 > (
-    connection : ReplaceManyConnection,
     table : TableT,
+    connection : ReplaceManyConnection,
     rows : readonly InsertRow<TableT>[]
 ) : (
     Promise<ReplaceManyResult>

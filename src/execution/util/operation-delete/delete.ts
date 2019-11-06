@@ -6,8 +6,8 @@ import {DeleteResult, DeleteConnection} from "../../connection";
 async function del<
     TableT extends DeletableTable
 > (
-    connection : DeleteConnection,
     table : TableT,
+    connection : DeleteConnection,
     whereDelegate : WhereDelegate<
         FromClauseUtil.From<
             FromClauseUtil.NewInstance,

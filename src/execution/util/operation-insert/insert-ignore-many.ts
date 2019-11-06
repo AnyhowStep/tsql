@@ -15,8 +15,8 @@ import {InsertRow, InsertUtil} from "../../../insert";
 export async function insertIgnoreMany<
     TableT extends ITable & InsertableTable
 > (
-    connection : InsertIgnoreManyConnection,
     table : TableT,
+    connection : InsertIgnoreManyConnection,
     rows : readonly InsertRow<TableT>[]
 ) : (
     Promise<InsertIgnoreManyResult>

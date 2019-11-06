@@ -32,8 +32,8 @@ tape(__filename, async (t) => {
         `);
 
         return tsql.ExecutionUtil.insertOne(
-            connection,
             test,
+            connection,
             {}
         );
     });

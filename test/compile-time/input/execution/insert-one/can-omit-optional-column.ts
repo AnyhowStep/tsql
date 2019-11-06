@@ -9,8 +9,8 @@ const test = tsql.table("test")
     .addExplicitDefaultValue(columns => [columns.testId]);
 
 export const p = tsql.ExecutionUtil.insertOne(
-    null as any,
     test,
+    null as any,
     {
         testId : BigInt(5),
         testVal : BigInt(400),
@@ -18,8 +18,8 @@ export const p = tsql.ExecutionUtil.insertOne(
 );
 
 export const p2 = tsql.ExecutionUtil.insertOne(
-    null as any,
     test,
+    null as any,
     {
         //testId : BigInt(5),
         testVal : BigInt(400),
@@ -27,8 +27,8 @@ export const p2 = tsql.ExecutionUtil.insertOne(
 );
 
 export const p3 = tsql.ExecutionUtil.insertOne(
-    null as any,
     test,
+    null as any,
     {
         testId : undefined,
         testVal : BigInt(400),

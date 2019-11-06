@@ -34,8 +34,8 @@ function isIgnoredResult (result : InsertIgnoreOneResult) : result is IgnoredIns
 export async function insertIgnoreOne<
     TableT extends TableWithAutoIncrement & InsertableTable
 > (
-    connection : InsertIgnoreOneConnection,
     table : TableT,
+    connection : InsertIgnoreOneConnection,
     row : InsertRowPrimitiveAutoIncrement<TableT>
 ) : (
     Promise<InsertIgnoreOneResultWithAutoIncrement<TableT>>
@@ -43,8 +43,8 @@ export async function insertIgnoreOne<
 export async function insertIgnoreOne<
     TableT extends TableWithoutAutoIncrement & InsertableTable
 > (
-    connection : InsertIgnoreOneConnection,
     table : TableT,
+    connection : InsertIgnoreOneConnection,
     row : InsertRow<TableT>
 ) : (
     Promise<InsertIgnoreOneResult>
@@ -52,8 +52,8 @@ export async function insertIgnoreOne<
 export async function insertIgnoreOne<
     TableT extends ITable & InsertableTable
 > (
-    connection : InsertIgnoreOneConnection,
     table : TableT,
+    connection : InsertIgnoreOneConnection,
     row : InsertRow<TableT>
 ) : (
     Promise<InsertIgnoreOneResult>

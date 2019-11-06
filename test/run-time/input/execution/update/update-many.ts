@@ -31,8 +31,8 @@ tape(__filename, async (t) => {
         `);
 
         return tsql.ExecutionUtil.update(
-            connection,
             dst,
+            connection,
             columns => tsql.lt(
                 columns.testVal,
                 BigInt(299)

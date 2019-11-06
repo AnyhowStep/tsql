@@ -15,8 +15,8 @@ export async function updateAndFetchZeroOrOneBySuperKey<
     SuperKeyT extends SuperKey_Input<TableT>,
     AssignmentMapT extends UpdateAndFetchOneBySuperKeyAssignmentMap<TableT, SuperKeyT>
 > (
-    connection : IsolableUpdateConnection,
     table : TableT,
+    connection : IsolableUpdateConnection,
     superKey : SuperKeyT & AssertNonUnion<SuperKeyT>,
     assignmentMapDelegate : AssignmentMapDelegate<TableT, AssignmentMapT>
 ) : Promise<UpdateAndFetchZeroOrOneResult<TableT, AssignmentMapT>> {
@@ -36,8 +36,8 @@ export async function updateAndFetchZeroOrOneBySuperKey<
 
     return connection.transactionIfNotInOne(async (connection) : Promise<UpdateAndFetchZeroOrOneResult<TableT, AssignmentMapT>> => {
         const updateZeroOrOneResult = await updateZeroOrOne(
-            connection,
             table,
+            connection,
             () => ExprLib.eqSuperKey(
                 table,
                 curSuperKey
@@ -53,8 +53,8 @@ export async function updateAndFetchZeroOrOneBySuperKey<
         } else {
             const updateOneResult = updateZeroOrOneResult as UpdateOneResult;
             const row = await TableUtil.__fetchOneHelper(
-                connection,
                 table,
+                connection,
                 () => ExprLib.eqSuperKey(
                     table,
                     newSuperKey

@@ -467,15 +467,11 @@ export class Table<DataT extends TableData> implements ITable {
     ) : (
         Promise<void>
     ) {
-        return QueryUtil.newInstance()
-            .from<this>(
-                this as (
-                    this &
-                    QueryUtil.AssertValidCurrentJoin<QueryUtil.NewInstance, this>
-                )
-            )
-            .where(whereDelegate)
-            .assertExists(connection);
+        return TableUtil.assertExists(
+            this,
+            connection,
+            whereDelegate
+        );
     }
     async assertExistsByCandidateKey (
         connection : SelectConnection,
@@ -615,8 +611,8 @@ export class Table<DataT extends TableData> implements ITable {
         selectDelegate? : (...args : any[]) => any[]
     ) : ExecutionUtil.FetchOnePromise<any> {
         return TableUtil.__fetchOneHelper(
-            connection,
             this,
+            connection,
             whereDelegate,
             selectDelegate
         );
@@ -654,8 +650,8 @@ export class Table<DataT extends TableData> implements ITable {
         selectDelegate? : (...args : any[]) => any[]
     ) : ExecutionUtil.FetchOnePromise<any> {
         return TableUtil.__fetchOneHelper(
-            connection,
             this,
+            connection,
             () => ExprLib.eqCandidateKey(this, candidateKey) as any,
             selectDelegate
         );
@@ -695,8 +691,8 @@ export class Table<DataT extends TableData> implements ITable {
         selectDelegate? : (...args : any[]) => any[]
     ) : ExecutionUtil.FetchOnePromise<any> {
         return TableUtil.__fetchOneHelper(
-            connection,
             this,
+            connection,
             () => ExprLib.eqPrimaryKey(this, primaryKey) as any,
             selectDelegate
         );
@@ -733,8 +729,8 @@ export class Table<DataT extends TableData> implements ITable {
         selectDelegate? : (...args : any[]) => any[]
     ) : ExecutionUtil.FetchOnePromise<any> {
         return TableUtil.__fetchOneHelper(
-            connection,
             this,
+            connection,
             () => ExprLib.eqSuperKey(this, superKey) as any,
             selectDelegate
         );
@@ -909,8 +905,8 @@ export class Table<DataT extends TableData> implements ITable {
         row : any
     ) : Promise<InsertOneResult> {
         return ExecutionUtil.insertOne(
-            connection,
             this as any,
+            connection,
             row as any
         );
     }
@@ -921,8 +917,8 @@ export class Table<DataT extends TableData> implements ITable {
         rows : readonly InsertRow<Extract<this, InsertableTable>>[]
     ) : Promise<InsertManyResult> {
         return ExecutionUtil.insertMany(
-            connection,
             this,
+            connection,
             rows
         );
     }
@@ -942,8 +938,8 @@ export class Table<DataT extends TableData> implements ITable {
         row : any
     ) : Promise<InsertIgnoreOneResult> {
         return ExecutionUtil.insertIgnoreOne(
-            connection,
             this as any,
+            connection,
             row as any
         );
     }
@@ -954,8 +950,8 @@ export class Table<DataT extends TableData> implements ITable {
         rows : readonly InsertRow<Extract<this, InsertableTable>>[]
     ) : Promise<InsertIgnoreManyResult> {
         return ExecutionUtil.insertIgnoreMany(
-            connection,
             this,
+            connection,
             rows
         );
     }
@@ -966,8 +962,8 @@ export class Table<DataT extends TableData> implements ITable {
         row : InsertRow<Extract<this, InsertableTable & DeletableTable>>
     ) : Promise<ReplaceOneResult> {
         return ExecutionUtil.replaceOne(
-            connection,
             this,
+            connection,
             row
         );
     }
@@ -978,8 +974,8 @@ export class Table<DataT extends TableData> implements ITable {
         rows : readonly InsertRow<Extract<this, InsertableTable & DeletableTable>>[]
     ) : Promise<ReplaceManyResult> {
         return ExecutionUtil.replaceMany(
-            connection,
             this,
+            connection,
             rows
         );
     }
@@ -994,7 +990,7 @@ export class Table<DataT extends TableData> implements ITable {
             >
         >
     ) : Promise<DeleteResult> {
-        return ExecutionUtil.delete(connection, this, whereDelegate);
+        return ExecutionUtil.delete(this, connection, whereDelegate);
     }
 
     deleteOne (
@@ -1007,7 +1003,7 @@ export class Table<DataT extends TableData> implements ITable {
             >
         >
     ) : Promise<DeleteOneResult> {
-        return ExecutionUtil.deleteOne(connection, this, whereDelegate);
+        return ExecutionUtil.deleteOne(this, connection, whereDelegate);
     }
 
     deleteZeroOrOne (
@@ -1020,7 +1016,7 @@ export class Table<DataT extends TableData> implements ITable {
             >
         >
     ) : Promise<DeleteZeroOrOneResult> {
-        return ExecutionUtil.deleteZeroOrOne(connection, this, whereDelegate);
+        return ExecutionUtil.deleteZeroOrOne(this, connection, whereDelegate);
     }
 
     deleteOneByCandidateKey (
@@ -1117,7 +1113,7 @@ export class Table<DataT extends TableData> implements ITable {
         >,
         assignmentMapDelegate : AssignmentMapDelegate<this>
     ) : Promise<UpdateResult> {
-        return ExecutionUtil.update(connection, this, whereDelegate, assignmentMapDelegate);
+        return ExecutionUtil.update(this, connection, whereDelegate, assignmentMapDelegate);
     }
 
     updateOne (
@@ -1130,7 +1126,7 @@ export class Table<DataT extends TableData> implements ITable {
         >,
         assignmentMapDelegate : AssignmentMapDelegate<this>
     ) : Promise<UpdateOneResult> {
-        return ExecutionUtil.updateOne(connection, this, whereDelegate, assignmentMapDelegate);
+        return ExecutionUtil.updateOne(this, connection, whereDelegate, assignmentMapDelegate);
     }
 
     updateZeroOrOne (
@@ -1143,7 +1139,7 @@ export class Table<DataT extends TableData> implements ITable {
         >,
         assignmentMapDelegate : AssignmentMapDelegate<this>
     ) : Promise<UpdateZeroOrOneResult> {
-        return ExecutionUtil.updateZeroOrOne(connection, this, whereDelegate, assignmentMapDelegate);
+        return ExecutionUtil.updateZeroOrOne(this, connection, whereDelegate, assignmentMapDelegate);
     }
 
     updateOneByCandidateKey (
@@ -1253,8 +1249,8 @@ export class Table<DataT extends TableData> implements ITable {
         row : any
     ) : Promise<any> {
         return ExecutionUtil.insertAndFetch(
-            connection,
             this as any,
+            connection,
             row as any
         );
     }
@@ -1272,8 +1268,8 @@ export class Table<DataT extends TableData> implements ITable {
             CandidateKeyT,
             AssignmentMapT
         >(
-            connection,
             this,
+            connection,
             candidateKey,
             assignmentMapDelegate
         );
@@ -1301,8 +1297,8 @@ export class Table<DataT extends TableData> implements ITable {
             Extract<this, TableWithPrimaryKey>,
             AssignmentMapT
         >(
-            connection,
             this,
+            connection,
             primaryKey,
             assignmentMapDelegate
         );
@@ -1321,8 +1317,8 @@ export class Table<DataT extends TableData> implements ITable {
             SuperKeyT,
             AssignmentMapT
         >(
-            connection,
             this,
+            connection,
             superKey,
             assignmentMapDelegate
         );
@@ -1341,8 +1337,8 @@ export class Table<DataT extends TableData> implements ITable {
             CandidateKeyT,
             AssignmentMapT
         >(
-            connection,
             this,
+            connection,
             candidateKey,
             assignmentMapDelegate
         );
@@ -1370,8 +1366,8 @@ export class Table<DataT extends TableData> implements ITable {
             Extract<this, TableWithPrimaryKey>,
             AssignmentMapT
         >(
-            connection,
             this,
+            connection,
             primaryKey,
             assignmentMapDelegate
         );
@@ -1390,8 +1386,8 @@ export class Table<DataT extends TableData> implements ITable {
             SuperKeyT,
             AssignmentMapT
         >(
-            connection,
             this,
+            connection,
             superKey,
             assignmentMapDelegate
         );

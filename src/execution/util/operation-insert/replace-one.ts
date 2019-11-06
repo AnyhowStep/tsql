@@ -17,8 +17,8 @@ import {InsertRow, InsertUtil} from "../../../insert";
 export async function replaceOne<
     TableT extends InsertableTable & DeletableTable
 > (
-    connection : ReplaceOneConnection,
     table : TableT,
+    connection : ReplaceOneConnection,
     row : InsertRow<TableT>
 ) : (
     Promise<ReplaceOneResult>

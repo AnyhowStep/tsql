@@ -26,8 +26,8 @@ export interface DeleteZeroOrOneResult {
 export async function deleteZeroOrOne<
     TableT extends DeletableTable
 > (
-    connection : IsolableDeleteConnection,
     table : TableT,
+    connection : IsolableDeleteConnection,
     whereDelegate : WhereDelegate<
         FromClauseUtil.From<
             FromClauseUtil.NewInstance,
@@ -39,8 +39,8 @@ export async function deleteZeroOrOne<
 
     return connection.transactionIfNotInOne(async (connection) : Promise<DeleteZeroOrOneResult> => {
         const result = await impl.delete(
-            connection,
             table,
+            connection,
             whereDelegate
         );
         if (tm.BigIntUtil.equal(result.deletedRowCount, tm.BigInt(0))) {

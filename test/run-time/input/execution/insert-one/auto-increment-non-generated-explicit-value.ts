@@ -30,8 +30,8 @@ tape(__filename, async (t) => {
         `);
 
         return tsql.ExecutionUtil.insertOne(
-            connection,
             test,
+            connection,
             {
                 testId : BigInt(5),
                 testVal : BigInt(400),

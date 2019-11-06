@@ -33,8 +33,8 @@ tape(__filename, async (t) => {
         `);
 
         return tsql.ExecutionUtil.replaceOne(
-            connection,
             test,
+            connection,
             {}
         );
     });

@@ -9,8 +9,8 @@ const test = tsql.table("test")
     .disableInsert();
 
 export const p = tsql.ExecutionUtil.insertIgnoreOne(
-    null as any,
     test,
+    null as any,
     {
         testId : BigInt(5),
         testVal : BigInt(400),

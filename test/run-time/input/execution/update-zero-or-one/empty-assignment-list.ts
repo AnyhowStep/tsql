@@ -31,8 +31,8 @@ tape(__filename, async (t) => {
         `);
 
         return tsql.ExecutionUtil.updateZeroOrOne(
-            connection,
             dst,
+            connection,
             () => tsql.eqPrimaryKey(
                 dst,
                 {

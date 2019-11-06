@@ -1,6 +1,7 @@
 import {TableWithPrimaryKey, InsertableTable} from "../table";
 import {IColumn} from "../column";
 import {SortDirection} from "../sort-direction";
+import {IsolableSelectConnection} from "../execution";
 
 /**
  * Properties ordered this way to look nicest when type is emitted/displayed.
@@ -33,7 +34,10 @@ export interface ILog<DataT extends LogData=LogData> {
     /**
      * May have `ownerTable` as `IUsedRef`
      */
-    readonly copyDefaultsDelegate : () => Promise<unknown>,
+    readonly copyDefaultsDelegate : (args : {
+        ownerPrimaryKey : unknown,
+        connection : IsolableSelectConnection
+    }) => Promise<unknown>,
 
     /**
      * May have `ownerTable` as `IUsedRef`

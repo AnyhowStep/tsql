@@ -29,8 +29,8 @@ export interface UpdateOneResult {
 export async function updateOne<
     TableT extends ITable
 > (
-    connection : IsolableUpdateConnection,
     table : TableT,
+    connection : IsolableUpdateConnection,
     whereDelegate : WhereDelegate<
         FromClauseUtil.From<
             FromClauseUtil.NewInstance,
@@ -41,8 +41,8 @@ export async function updateOne<
 ) : Promise<UpdateOneResult> {
     return connection.transactionIfNotInOne(async (connection) : Promise<UpdateOneResult> => {
         const result = await impl.update(
-            connection,
             table,
+            connection,
             whereDelegate,
             assignmentMapDelegate
         );

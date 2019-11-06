@@ -13,8 +13,8 @@ export async function updateAndFetchZeroOrOneByPrimaryKey<
     TableT extends TableWithPrimaryKey,
     AssignmentMapT extends UpdateAndFetchOneByPrimaryKeyAssignmentMap<TableT>
 > (
-    connection : IsolableUpdateConnection,
     table : TableT,
+    connection : IsolableUpdateConnection,
     primaryKey : PrimaryKey_Input<TableT>,
     assignmentMapDelegate : AssignmentMapDelegate<TableT, AssignmentMapT>
 ) : Promise<UpdateAndFetchZeroOrOneResult<TableT, AssignmentMapT>> {
@@ -33,8 +33,8 @@ export async function updateAndFetchZeroOrOneByPrimaryKey<
 
     return connection.transactionIfNotInOne(async (connection) : Promise<UpdateAndFetchZeroOrOneResult<TableT, AssignmentMapT>> => {
         const updateZeroOrOneResult = await updateZeroOrOne(
-            connection,
             table,
+            connection,
             () => ExprLib.eqPrimaryKey(
                 table,
                 curPrimaryKey
@@ -50,8 +50,8 @@ export async function updateAndFetchZeroOrOneByPrimaryKey<
         } else {
             const updateOneResult = updateZeroOrOneResult as UpdateOneResult;
             const row = await TableUtil.__fetchOneHelper(
-                connection,
                 table,
+                connection,
                 () => ExprLib.eqPrimaryKey(
                     table,
                     newPrimaryKey

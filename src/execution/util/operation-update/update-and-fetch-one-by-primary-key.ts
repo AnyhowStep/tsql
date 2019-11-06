@@ -101,8 +101,8 @@ export async function updateAndFetchOneByPrimaryKey<
     TableT extends TableWithPrimaryKey,
     AssignmentMapT extends UpdateAndFetchOneByPrimaryKeyAssignmentMap<TableT>
 > (
-    connection : IsolableUpdateConnection,
     table : TableT,
+    connection : IsolableUpdateConnection,
     primaryKey : PrimaryKey_Input<TableT>,
     assignmentMapDelegate : AssignmentMapDelegate<TableT, AssignmentMapT>
 ) : Promise<UpdateAndFetchOneResult<TableT, AssignmentMapT>> {
@@ -121,8 +121,8 @@ export async function updateAndFetchOneByPrimaryKey<
 
     return connection.transactionIfNotInOne(async (connection) : Promise<UpdateAndFetchOneResult<TableT, AssignmentMapT>> => {
         const updateOneResult = await updateOne(
-            connection,
             table,
+            connection,
             () => ExprLib.eqPrimaryKey(
                 table,
                 curPrimaryKey
@@ -130,8 +130,8 @@ export async function updateAndFetchOneByPrimaryKey<
             () => assignmentMap
         );
         const row = await TableUtil.__fetchOneHelper(
-            connection,
             table,
+            connection,
             () => ExprLib.eqPrimaryKey(
                 table,
                 newPrimaryKey

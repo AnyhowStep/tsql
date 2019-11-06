@@ -1,5 +1,5 @@
 import {LogData, ILog} from "./log";
-import {SelectConnection} from "../execution";
+import {SelectConnection, IsolableSelectConnection} from "../execution";
 import {PrimaryKey_Input} from "../primary-key";
 import * as LogUtil from "./util";
 
@@ -38,6 +38,20 @@ export class Log<DataT extends LogData> implements ILog<DataT> {
         this.trackedDefaults = extraData.trackedDefaults;
     }
 
+
+    fetchDefault (
+        this : this & LogUtil.AssertAllTrackedHasDefaultValue<this>,
+        connection : IsolableSelectConnection,
+        primaryKey : PrimaryKey_Input<this["ownerTable"]>
+    ) : (
+        Promise<LogUtil.LatestOrDefaultRow<this>>
+    ) {
+        return LogUtil.fetchDefault<this>(
+            this,
+            connection,
+            primaryKey
+        );
+    }
 
     fetchLatest (
         connection : SelectConnection,

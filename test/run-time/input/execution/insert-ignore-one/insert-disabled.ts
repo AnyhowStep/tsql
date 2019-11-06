@@ -24,8 +24,8 @@ tape(__filename, async (t) => {
         `);
 
         return tsql.ExecutionUtil.insertIgnoreOne(
-            connection,
             test as (typeof test & tsql.InsertableTable),
+            connection,
             {
                 testId : BigInt(4),
                 testVal : BigInt(400),

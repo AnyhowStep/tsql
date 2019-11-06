@@ -31,8 +31,8 @@ tape(__filename, async (t) => {
         `);
 
         return tsql.ExecutionUtil.replaceOne(
-            connection,
             test,
+            connection,
             {
                 testId : BigInt(1),
                 testVal : BigInt(444),

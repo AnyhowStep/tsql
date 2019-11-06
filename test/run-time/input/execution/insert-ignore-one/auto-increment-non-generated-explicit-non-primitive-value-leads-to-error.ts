@@ -30,8 +30,8 @@ tape(__filename, async (t) => {
         `);
 
         return tsql.ExecutionUtil.insertIgnoreOne(
-            connection,
             test,
+            connection,
             {
                 testId : tsql.ExprUtil.fromRawExpr(BigInt(5)),
                 testVal : BigInt(400),

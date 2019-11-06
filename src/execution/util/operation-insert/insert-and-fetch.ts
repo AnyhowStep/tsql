@@ -17,8 +17,8 @@ import * as ExprLib from "../../../expr-library";
 export async function insertAndFetch<
     TableT extends TableWithAutoIncrement & InsertableTable
 > (
-    connection : IsolableInsertOneConnection,
     table : TableT,
+    connection : IsolableInsertOneConnection,
     row : InsertRowPrimitiveAutoIncrement<TableT>
 ) : (
     Promise<Row<TableT>>
@@ -26,8 +26,8 @@ export async function insertAndFetch<
 export async function insertAndFetch<
     TableT extends TableWithoutAutoIncrement & InsertableTable
 > (
-    connection : IsolableInsertOneConnection,
     table : TableT,
+    connection : IsolableInsertOneConnection,
     /**
      * @todo Better type safety here?
      */
@@ -38,8 +38,8 @@ export async function insertAndFetch<
 export async function insertAndFetch<
     TableT extends ITable & InsertableTable
 > (
-    connection : IsolableInsertOneConnection,
     table : TableT,
+    connection : IsolableInsertOneConnection,
     row : InsertRow<TableT>
 ) : (
     Promise<Row<TableT>>
@@ -48,10 +48,10 @@ export async function insertAndFetch<
 
     return connection.transactionIfNotInOne(async (connection) : Promise<Row<TableT>> => {
         if (table.autoIncrement == undefined) {
-            await insertOne(connection, table as TableT & TableWithoutAutoIncrement, row);
+            await insertOne(table as TableT & TableWithoutAutoIncrement, connection, row);
             return TableUtil.fetchOne(
-                connection,
                 table,
+                connection,
                 /**
                  * @todo Better type safety here?
                  *
@@ -64,10 +64,10 @@ export async function insertAndFetch<
                 ) as any
             );
         } else {
-            const insertResult = await insertOne(connection, table as TableT & TableWithAutoIncrement, row);
+            const insertResult = await insertOne(table as TableT & TableWithAutoIncrement, connection, row);
             return TableUtil.fetchOne(
-                connection,
                 table,
+                connection,
                 /**
                  * We use this instead of `eqPrimaryKey()` because it's possible
                  * for an `AUTO_INCREMENT` column to not be a primary key
