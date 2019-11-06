@@ -4,17 +4,17 @@ import {latestByPrimaryKey} from "./latest-by-primary-key";
 import {ExecutionUtil, SelectConnection} from "../../../../execution";
 import {Row} from "../../../../row";
 
-export type FetchLatestByPrimaryKey<LogT extends ILog> =
+export type FetchLatest<LogT extends ILog> =
     ExecutionUtil.FetchOnePromise<
         Row<LogT["logTable"]>
     >
 ;
-export function fetchLatestByPrimaryKey<LogT extends ILog> (
+export function fetchLatest<LogT extends ILog> (
     log : LogT,
     connection : SelectConnection,
     primaryKey : PrimaryKey_Input<LogT["ownerTable"]>
 ) : (
-    FetchLatestByPrimaryKey<LogT>
+    FetchLatest<LogT>
 ) {
     const result : (
         ExecutionUtil.FetchOnePromise<any>

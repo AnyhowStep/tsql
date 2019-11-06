@@ -24,7 +24,7 @@ export type AssertAllTrackedHasDefaultValue<LogT extends ILog> =
     ]>
 ;
 
-function assertAllTrackedHasDefaultValue (log : ILog) {
+export function assertAllTrackedHasDefaultValue (log : ILog) {
     if (!KeyUtil.isEqual(
         log.tracked,
         log.trackedWithDefaultValue
@@ -33,7 +33,7 @@ function assertAllTrackedHasDefaultValue (log : ILog) {
     }
 }
 
-export type LatestOrDefaultRow<LogT extends ILog> =
+export type DefaultRow<LogT extends ILog> =
     Identity<{
         readonly [columnAlias in (
             | LogT["ownerTable"]["primaryKey"][number]
@@ -51,18 +51,18 @@ export type LatestOrDefaultRow<LogT extends ILog> =
 export async function fetchDefault<
     LogT extends ILog
 > (
-    log : LogT & AssertAllTrackedHasDefaultValue<LogT>,
+    log : LogT,// & AssertAllTrackedHasDefaultValue<LogT>,
     connection : IsolableSelectConnection,
     primaryKey : PrimaryKey_Input<LogT["ownerTable"]>
-) : Promise<LatestOrDefaultRow<LogT>> {
-    assertAllTrackedHasDefaultValue(log);
+) : Promise<DefaultRow<LogT>> {
+    //assertAllTrackedHasDefaultValue(log);
 
     primaryKey = PrimaryKeyUtil.mapper(log.ownerTable)(
         `${log.ownerTable.alias} PRIMARY KEY`,
         primaryKey
     ) as any;
 
-    return connection.transactionIfNotInOne(async (connection) : Promise<LatestOrDefaultRow<LogT>> => {
+    return connection.transactionIfNotInOne(async (connection) : Promise<DefaultRow<LogT>> => {
         //If the owner does not exist, there is no default value
         await TableUtil.assertExists(
             log.ownerTable,
@@ -92,6 +92,6 @@ export async function fetchDefault<
             ...copyDefaults,
             ...trackedDefaults,
             ...primaryKey,
-        } as LatestOrDefaultRow<LogT>;
+        } as DefaultRow<LogT>;
     })
 }

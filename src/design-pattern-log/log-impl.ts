@@ -38,13 +38,11 @@ export class Log<DataT extends LogData> implements ILog<DataT> {
         this.trackedDefaults = extraData.trackedDefaults;
     }
 
-
     fetchDefault (
-        this : this & LogUtil.AssertAllTrackedHasDefaultValue<this>,
         connection : IsolableSelectConnection,
         primaryKey : PrimaryKey_Input<this["ownerTable"]>
     ) : (
-        Promise<LogUtil.LatestOrDefaultRow<this>>
+        Promise<LogUtil.DefaultRow<this>>
     ) {
         return LogUtil.fetchDefault<this>(
             this,
@@ -57,12 +55,29 @@ export class Log<DataT extends LogData> implements ILog<DataT> {
         connection : SelectConnection,
         primaryKey : PrimaryKey_Input<this["ownerTable"]>
     ) : (
-        LogUtil.FetchLatestByPrimaryKey<this>
+        LogUtil.FetchLatest<this>
     ) {
-        return LogUtil.fetchLatestByPrimaryKey<this>(
+        return LogUtil.fetchLatest<this>(
             this,
             connection,
             primaryKey
         );
     }
+
+    /**
+     * @todo Make this part of fluent API of `fetchLatest()`?
+     */
+    fetchLatestOrDefault (
+        connection : IsolableSelectConnection,
+        primaryKey : PrimaryKey_Input<this["ownerTable"]>
+    ) : (
+        Promise<LogUtil.FetchLatestOrDefault<this>>
+    ) {
+        return LogUtil.fetchLatestOrDefault<this>(
+            this,
+            connection,
+            primaryKey
+        );
+    }
+
 }
