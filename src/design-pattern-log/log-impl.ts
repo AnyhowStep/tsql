@@ -117,6 +117,19 @@ export class Log<DataT extends LogData> implements ILog<DataT> {
         );
     }
 
+    exists (
+        connection : IsolableSelectConnection,
+        primaryKey : PrimaryKey_Input<this["ownerTable"]>
+    ) : (
+        Promise<boolean>
+    ) {
+        return LogUtil.exists<this>(
+            this,
+            connection,
+            primaryKey
+        );
+    }
+
     trackOrInsert (
         connection : IsolableInsertOneConnection,
         primaryKey : PrimaryKey_Input<this["ownerTable"]>,
