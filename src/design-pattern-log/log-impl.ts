@@ -85,7 +85,7 @@ export class Log<DataT extends LogData> implements ILog<DataT> {
         primaryKey : PrimaryKey_Input<this["ownerTable"]>,
         trackOrInsertRow : LogUtil.TrackOrInsertRow<this>
     ) : (
-        Promise<LogUtil.TrackOrInsert<this>>
+        Promise<LogUtil.Track<this>>
     ) {
         return LogUtil.trackOrInsert(
             this,
@@ -98,9 +98,9 @@ export class Log<DataT extends LogData> implements ILog<DataT> {
     unsafeTrack (
         connection : IsolableInsertOneConnection,
         primaryKey : PrimaryKey_Input<this["ownerTable"]>,
-        unsafeTrackRow : LogUtil.UnsafeTrackRow<this>
+        unsafeTrackRow : LogUtil.TrackRow<this>
     ) : (
-        Promise<LogUtil.UnsafeTrack<this>>
+        Promise<LogUtil.Track<this>>
     ) {
         return LogUtil.unsafeTrack(
             this,
@@ -114,9 +114,9 @@ export class Log<DataT extends LogData> implements ILog<DataT> {
         this : this & LogUtil.AssertAllTrackedHasDefaultValue<this>,
         connection : IsolableInsertOneConnection,
         primaryKey : PrimaryKey_Input<this["ownerTable"]>,
-        trackRow : LogUtil.UnsafeTrackRow<this>
+        trackRow : LogUtil.TrackRow<this>
     ) : (
-        Promise<LogUtil.UnsafeTrack<this>>
+        Promise<LogUtil.Track<this>>
     ) {
         return LogUtil.track(
             this,

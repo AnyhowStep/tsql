@@ -10,7 +10,7 @@ import {escapeIdentifierWithDoubleQuotes} from "../../../../sqlstring";
 import {PrimitiveExprUtil} from "../../../../primitive-expr";
 import {Row} from "../../../../row";
 
-export type UnsafeTrackRow<LogT extends ILog> =
+export type TrackRow<LogT extends ILog> =
     /**
      * All `trackedWithDefaultValue` columns may have values set or unset.
      * If unset, previous values are used, if any.
@@ -71,14 +71,10 @@ export type UnsafeTrackRow<LogT extends ILog> =
     }
 ;
 
-/**
- * Seems to have the same behaviour as `trackOrInsert()`'s `toInsertRow()`.
- * @todo Refactor and merge the two
- */
-export function toInsertRow<LogT extends ILog> (
+function toInsertRow<LogT extends ILog> (
     log : LogT,
     prvRow : DefaultRow<LogT>,
-    newRow : UnsafeTrackRow<LogT>
+    newRow : TrackRow<LogT>
 ) {
     const result : any = {};
 
@@ -157,7 +153,7 @@ export function toInsertRow<LogT extends ILog> (
     };
 }
 
-export type UnsafeTrackResult<LatestRowT, DefaultRowT> =
+export type TrackResult<LatestRowT, DefaultRowT> =
     | {
         changed : true,
         previous : LatestOrDefault<LatestRowT, DefaultRowT>,
@@ -169,8 +165,8 @@ export type UnsafeTrackResult<LatestRowT, DefaultRowT> =
     }
 ;
 
-export type UnsafeTrack<LogT extends ILog> =
-    UnsafeTrackResult<
+export type Track<LogT extends ILog> =
+    TrackResult<
         Row<LogT["logTable"]>,
         DefaultRow<LogT>
     >
@@ -184,11 +180,11 @@ export async function unsafeTrack<LogT extends ILog> (
     log : LogT,
     connection : IsolableInsertOneConnection,
     primaryKey : PrimaryKey_Input<LogT["ownerTable"]>,
-    unsafeTrackRow : UnsafeTrackRow<LogT>
+    unsafeTrackRow : TrackRow<LogT>
 ) : (
-    Promise<UnsafeTrack<LogT>>
+    Promise<Track<LogT>>
 ) {
-    return connection.transactionIfNotInOne(async (connection) : Promise<UnsafeTrack<LogT>> => {
+    return connection.transactionIfNotInOne(async (connection) : Promise<Track<LogT>> => {
         const latestOrDefault = await fetchLatestOrDefault(log, connection, primaryKey);
         const {changed, insertRow} = toInsertRow(
             log,
