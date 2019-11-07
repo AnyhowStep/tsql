@@ -2,6 +2,7 @@ import {LogData, ILog} from "./log";
 import {SelectConnection, IsolableSelectConnection, IsolableInsertOneConnection} from "../execution";
 import {PrimaryKey_Input} from "../primary-key";
 import * as LogUtil from "./util";
+import {AnyRawExpr} from "../raw-expr";
 
 export class Log<DataT extends LogData> implements ILog<DataT> {
     readonly tracked : DataT["tracked"];
@@ -61,6 +62,24 @@ export class Log<DataT extends LogData> implements ILog<DataT> {
             this,
             connection,
             primaryKey
+        );
+    }
+
+    fetchLatestValue<RawExprT extends AnyRawExpr> (
+        connection : SelectConnection,
+        primaryKey : PrimaryKey_Input<this["ownerTable"]>,
+        selectValueDelegate : LogUtil.FetchLatestValueSelectValueDelegate<
+            this,
+            RawExprT
+        >
+    ) : (
+        LogUtil.FetchLatestValue<RawExprT>
+    ) {
+        return LogUtil.fetchLatestValue<this, RawExprT>(
+            this,
+            connection,
+            primaryKey,
+            selectValueDelegate
         );
     }
 
