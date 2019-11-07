@@ -1,5 +1,5 @@
 import {LogData, ILog} from "./log";
-import {SelectConnection, IsolableSelectConnection} from "../execution";
+import {SelectConnection, IsolableSelectConnection, IsolableInsertOneConnection} from "../execution";
 import {PrimaryKey_Input} from "../primary-key";
 import * as LogUtil from "./util";
 
@@ -80,4 +80,18 @@ export class Log<DataT extends LogData> implements ILog<DataT> {
         );
     }
 
+    trackOrInsert (
+        connection : IsolableInsertOneConnection,
+        primaryKey : PrimaryKey_Input<this["ownerTable"]>,
+        trackOrInsertRow : LogUtil.TrackOrInsertRow<this>
+    ) : (
+        Promise<LogUtil.TrackOrInsert<this>>
+    ) {
+        return LogUtil.trackOrInsert(
+            this,
+            connection,
+            primaryKey,
+            trackOrInsertRow
+        );
+    }
 }
