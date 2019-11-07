@@ -99,6 +99,24 @@ export class Log<DataT extends LogData> implements ILog<DataT> {
         );
     }
 
+    fetchLatestValueOrDefault<ColumnT extends LogUtil.FetchLatestValueOrDefaultColumn<this>> (
+        connection : IsolableSelectConnection,
+        primaryKey : PrimaryKey_Input<this["ownerTable"]>,
+        selectValueDelegate : LogUtil.FetchLatestValueOrDefaultSelectValueDelegate<
+            this,
+            ColumnT
+        >
+    ) : (
+        Promise<ReturnType<ColumnT["mapper"]>>
+    ) {
+        return LogUtil.fetchLatestValueOrDefault<this, ColumnT>(
+            this,
+            connection,
+            primaryKey,
+            selectValueDelegate
+        );
+    }
+
     trackOrInsert (
         connection : IsolableInsertOneConnection,
         primaryKey : PrimaryKey_Input<this["ownerTable"]>,
