@@ -75,7 +75,7 @@ export type UnsafeTrackRow<LogT extends ILog> =
  * Seems to have the same behaviour as `trackOrInsert()`'s `toInsertRow()`.
  * @todo Refactor and merge the two
  */
-function toInsertRow<LogT extends ILog> (
+export function toInsertRow<LogT extends ILog> (
     log : LogT,
     prvRow : DefaultRow<LogT>,
     newRow : UnsafeTrackRow<LogT>
