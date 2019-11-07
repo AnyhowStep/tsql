@@ -94,4 +94,19 @@ export class Log<DataT extends LogData> implements ILog<DataT> {
             trackOrInsertRow
         );
     }
+
+    unsafeTrack (
+        connection : IsolableInsertOneConnection,
+        primaryKey : PrimaryKey_Input<this["ownerTable"]>,
+        unsafeTrackRow : LogUtil.UnsafeTrackRow<this>
+    ) : (
+        Promise<LogUtil.UnsafeTrack<this>>
+    ) {
+        return LogUtil.unsafeTrack(
+            this,
+            connection,
+            primaryKey,
+            unsafeTrackRow
+        );
+    }
 }
