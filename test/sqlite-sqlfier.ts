@@ -602,7 +602,15 @@ export const sqliteSqlfier : Sqlfier = {
         ],
         [OperatorType.XOR] : ({operands}) => insertBetween(operands, "<>"),
 
-        [OperatorType.CAST_AS_DOUBLE] : ({operands}, toSql) => functionCall("CAST", [`${toSql(operands)} AS DOUBLE`]),
+        /*
+            Control Flow Functions
+            https://dev.mysql.com/doc/refman/8.0/en/control-flow-functions.html
+        */
+        /*
+            String Functions and Operators
+            https://dev.mysql.com/doc/refman/8.0/en/string-functions.html
+        */
+        [OperatorType.CONCAT] : ({operands}) => insertBetween(operands, "||"),
 
         /*
             Arithmetic Operators
@@ -737,6 +745,8 @@ export const sqliteSqlfier : Sqlfier = {
                 toSql(arg) + `AS DECIMAL(${toSql(precision)}, ${toSql(scale)})`
             ]
         ),
+
+        [OperatorType.CAST_AS_DOUBLE] : ({operands}, toSql) => functionCall("CAST", [`${toSql(operands)} AS DOUBLE`]),
 
         /*
             Aggregate (GROUP BY) Function Descriptions
