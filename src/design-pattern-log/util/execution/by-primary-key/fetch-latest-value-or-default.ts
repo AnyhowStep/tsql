@@ -9,11 +9,16 @@ import * as ExprLib from "../../../../expr-library";
 import {ColumnIdentifierMapUtil} from "../../../../column-identifier-map";
 import {PrimitiveExprUtil} from "../../../../primitive-expr";
 import {QueryUtil} from "../../../../unified-query";
+import {Identity} from "../../../../type-util";
 
 export type FetchLatestValueOrDefaultColumnMap<
     LogT extends ILog
 > =
-    Pick<LogT["logTable"]["columns"], LogT["trackedWithDefaultValue"][number]>
+    Identity<{
+        [columnAlias in LogT["trackedWithDefaultValue"][number]] : (
+            LogT["logTable"]["columns"][columnAlias]
+        )
+    }>
 ;
 export type FetchLatestValueOrDefaultColumn<
     LogT extends ILog
@@ -47,7 +52,7 @@ export async function fetchLatestValueOrDefault<
         log.logTable.columns,
         log.trackedWithDefaultValue
     );
-    const column = selectValueDelegate(columns);
+    const column = selectValueDelegate(columns as any);
     ColumnIdentifierMapUtil.assertHasColumnIdentifier(columns, column);
 
     const latestValueOrUndefined = await fetchLatestValue<LogT, ColumnT>(

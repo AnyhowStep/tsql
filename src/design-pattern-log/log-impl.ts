@@ -189,6 +189,14 @@ export class Log<DataT extends LogData> implements ILog<DataT> {
                 RawExprT
             >
         ) => LogUtil.CorrelatedSubquery.LatestValue<ILog<DataT>, RawExprT>,
+        latestValueOrDefault : <
+            ColumnT extends LogUtil.CorrelatedSubquery.LatestValueOrDefaultColumn<ILog<DataT>>
+        >(
+            selectValueDelegate : LogUtil.CorrelatedSubquery.LatestValueOrDefaultSelectValueDelegate<
+                ILog<DataT>,
+                ColumnT
+            >
+        ) => LogUtil.CorrelatedSubquery.LatestValueOrDefault<ILog<DataT>, ColumnT>,
     } = {
         exists : () : LogUtil.CorrelatedSubquery.Exists<ILog<DataT>> => {
             return LogUtil.CorrelatedSubquery.exists(this);
@@ -203,6 +211,16 @@ export class Log<DataT extends LogData> implements ILog<DataT> {
             >
         ) : LogUtil.CorrelatedSubquery.LatestValue<ILog<DataT>, RawExprT> => {
             return LogUtil.CorrelatedSubquery.latestValue(this, selectValueDelegate);
+        },
+        latestValueOrDefault : <
+            ColumnT extends LogUtil.CorrelatedSubquery.LatestValueOrDefaultColumn<ILog<DataT>>
+        >(
+            selectValueDelegate : LogUtil.CorrelatedSubquery.LatestValueOrDefaultSelectValueDelegate<
+                ILog<DataT>,
+                ColumnT
+            >
+        ) : LogUtil.CorrelatedSubquery.LatestValueOrDefault<ILog<DataT>, ColumnT> => {
+            return LogUtil.CorrelatedSubquery.latestValueOrDefault(this, selectValueDelegate);
         },
     };
 }
