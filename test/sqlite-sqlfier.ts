@@ -606,6 +606,16 @@ export const sqliteSqlfier : Sqlfier = {
             Control Flow Functions
             https://dev.mysql.com/doc/refman/8.0/en/control-flow-functions.html
         */
+        [OperatorType.IF] : ({operands : [a, b, c]}) => [
+            "CASE WHEN",
+            a,
+            "THEN",
+            b,
+            "ELSE",
+            c,
+            "END"
+        ],
+
         /*
             String Functions and Operators
             https://dev.mysql.com/doc/refman/8.0/en/string-functions.html

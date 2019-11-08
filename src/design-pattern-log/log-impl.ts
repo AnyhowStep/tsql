@@ -183,12 +183,26 @@ export class Log<DataT extends LogData> implements ILog<DataT> {
     readonly correlatedSubquery : {
         exists : () => LogUtil.CorrelatedSubquery.Exists<ILog<DataT>>,
         latest : () => LogUtil.CorrelatedSubquery.Latest<ILog<DataT>>,
+        latestValue : <RawExprT extends AnyRawExpr>(
+            selectValueDelegate : LogUtil.CorrelatedSubquery.LatestValueSelectValueDelegate<
+                ILog<DataT>,
+                RawExprT
+            >
+        ) => LogUtil.CorrelatedSubquery.LatestValue<ILog<DataT>, RawExprT>,
     } = {
         exists : () : LogUtil.CorrelatedSubquery.Exists<ILog<DataT>> => {
             return LogUtil.CorrelatedSubquery.exists(this);
         },
         latest : () : LogUtil.CorrelatedSubquery.Latest<ILog<DataT>> => {
             return LogUtil.CorrelatedSubquery.latest(this);
+        },
+        latestValue : <RawExprT extends AnyRawExpr>(
+            selectValueDelegate : LogUtil.CorrelatedSubquery.LatestValueSelectValueDelegate<
+                ILog<DataT>,
+                RawExprT
+            >
+        ) : LogUtil.CorrelatedSubquery.LatestValue<ILog<DataT>, RawExprT> => {
+            return LogUtil.CorrelatedSubquery.latestValue(this, selectValueDelegate);
         },
     };
 }
