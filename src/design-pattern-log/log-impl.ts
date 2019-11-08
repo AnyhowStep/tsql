@@ -175,4 +175,16 @@ export class Log<DataT extends LogData> implements ILog<DataT> {
             trackRow
         );
     }
+
+    /**
+     * A collection of correlated subqueries/expressions,
+     * these require the `ownerTable` to be in the `FROM` clause.
+     */
+    readonly correlatedSubquery : {
+        exists : () => LogUtil.CorrelatedSubquery.Exists<ILog<DataT>>,
+    } = {
+        exists : () : LogUtil.CorrelatedSubquery.Exists<ILog<DataT>> => {
+            return LogUtil.CorrelatedSubquery.exists(this);
+        },
+    };
 }
