@@ -14,10 +14,10 @@ export type LogMustSetTrackedDefaultsData =
         | "tracked"
         | "doNotCopy"
         | "copy"
+        | "latestOrder"
     >
     & Pick<
         ILog,
-        | "latestOrder"
         | "copyDefaultsDelegate"
     >
 ;
@@ -56,6 +56,8 @@ export type SetTrackedDefaults<
 
         logTable : DataT["logTable"];
         ownerTable : DataT["ownerTable"];
+
+        latestOrder : DataT["latestOrder"];
     }>
 ;
 
@@ -123,6 +125,8 @@ export function setTrackedDefaults<
 
         logTable : DataT["logTable"];
         ownerTable : DataT["ownerTable"];
+
+        latestOrder : DataT["latestOrder"];
     }>(
         {
             tracked,
@@ -132,9 +136,9 @@ export function setTrackedDefaults<
 
             logTable,
             ownerTable,
+            latestOrder,
         },
         {
-            latestOrder,
             copyDefaultsDelegate,
             trackedDefaults,
         }

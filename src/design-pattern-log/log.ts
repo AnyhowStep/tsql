@@ -12,6 +12,12 @@ export interface LogData {
     readonly copy : readonly string[],
     readonly trackedWithDefaultValue : readonly string[],
 
+    /**
+     * (`ownerTable`'s PK, `IColumn`) must form a
+     * candidate key of `logTable`
+     */
+    readonly latestOrder : readonly [IColumn, SortDirection],
+
     readonly logTable : InsertableTable,
     readonly ownerTable : TableWithPrimaryKey,
 }
@@ -29,7 +35,7 @@ export interface ILog<DataT extends LogData=LogData> {
      * (`ownerTable`'s PK, `IColumn`) must form a
      * candidate key of `logTable`
      */
-    readonly latestOrder : readonly [IColumn, SortDirection],
+    readonly latestOrder : DataT["latestOrder"],
 
     /**
      * May have `ownerTable` as `IUsedRef`

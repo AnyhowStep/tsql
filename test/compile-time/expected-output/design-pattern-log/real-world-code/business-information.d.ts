@@ -203,4 +203,9 @@ export declare const businessInformationLog: tsql.Log<{
         explicitDefaultValueColumns: readonly "rwc_bi_createdAt"[];
         mutableColumns: readonly [];
     }>;
+    latestOrder: readonly [tsql.Column<{
+        tableAlias: "businessInformation";
+        columnAlias: "updatedAt";
+        mapper: tm.Mapper<unknown, Date>;
+    }>, "DESC"];
 }>;

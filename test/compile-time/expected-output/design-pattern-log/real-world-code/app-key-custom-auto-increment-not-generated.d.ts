@@ -153,4 +153,9 @@ export declare const appKeyCustomLog: tsql.Log<{
         explicitDefaultValueColumns: readonly "rwc_akc_createdAt"[];
         mutableColumns: readonly ("key" | "disabledAt")[];
     }>;
+    latestOrder: readonly [tsql.Column<{
+        tableAlias: "appKeyCustom";
+        columnAlias: "rwc_akc_updatedAt";
+        mapper: tm.Mapper<unknown, Date>;
+    }>, "DESC"];
 }>;
