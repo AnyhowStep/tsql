@@ -1,5 +1,5 @@
 import {TableWithPrimaryKey} from "../../../table";
-import {LogMustSetNewestOrder} from "./02-set-newest-order";
+import {LogMustSetLatestOrder} from "./02-set-latest-order";
 import {LogData} from "../../log";
 
 export type LogMustSetOwnerData = Pick<
@@ -15,12 +15,12 @@ export class LogMustSetOwner<DataT extends LogMustSetOwnerData> {
     }
 
     setOwner<OwnerTableT extends TableWithPrimaryKey> (ownerTable : OwnerTableT) : (
-        LogMustSetNewestOrder<{
+        LogMustSetLatestOrder<{
             logTable : DataT["logTable"],
             ownerTable : OwnerTableT,
         }>
     ) {
-        return new LogMustSetNewestOrder<{
+        return new LogMustSetLatestOrder<{
             logTable : DataT["logTable"],
             ownerTable : OwnerTableT,
         }>({

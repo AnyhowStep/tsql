@@ -72,8 +72,8 @@ export const business = table("business")
     .removeAllMutable();
 
 businessFile.candidateKeys
-type ca = NewestOrderColumnAlias<typeof businessFile, typeof businessFileType>;
-type cm = NewestOrderColumnMap<typeof businessFile, typeof businessFileType>;
+type ca = LatestOrderColumnAlias<typeof businessFile, typeof businessFileType>;
+type cm = LatestOrderColumnMap<typeof businessFile, typeof businessFileType>;
 
 const businessFileLog = log(
     {

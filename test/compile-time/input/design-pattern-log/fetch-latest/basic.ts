@@ -30,7 +30,7 @@ const appKeyCustom = tsql.table("appKeyCustom")
 
 const appKeyCustomLog = tsql.log(appKeyCustom)
     .setOwner(appKey)
-    .setNewestOrder(c => c.rwc_akc_updatedAt.desc())
+    .setLatestOrder(c => c.rwc_akc_updatedAt.desc())
     .setTracked(c => [c.custom])
     .setDoNotCopy(() => [])
     .setTrackedDefaults({

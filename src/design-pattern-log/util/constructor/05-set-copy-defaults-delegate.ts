@@ -19,7 +19,7 @@ export type LogMustSetCopyDefaultsDelegateData =
     >
     & Pick<
         ILog,
-        | "newestOrder"
+        | "latestOrder"
     >
 ;
 
@@ -70,7 +70,7 @@ export type SetCopyDefaultsDelegate<
     LogMustSetTrackedDefaults<{
         logTable : DataT["logTable"];
         ownerTable : DataT["ownerTable"];
-        newestOrder : DataT["newestOrder"];
+        latestOrder : DataT["latestOrder"];
         tracked : DataT["tracked"];
         doNotCopy : DataT["doNotCopy"];
         copy : DataT["copy"];
@@ -150,7 +150,7 @@ export function setCopyDefaultsDelegate<
     const {
         logTable,
         ownerTable,
-        newestOrder,
+        latestOrder,
         tracked,
         doNotCopy,
         copy,
@@ -158,7 +158,7 @@ export function setCopyDefaultsDelegate<
     return new LogMustSetTrackedDefaults<{
         logTable : DataT["logTable"];
         ownerTable : DataT["ownerTable"];
-        newestOrder : DataT["newestOrder"];
+        latestOrder : DataT["latestOrder"];
         tracked : DataT["tracked"];
         doNotCopy : DataT["doNotCopy"];
         copy : DataT["copy"];
@@ -166,7 +166,7 @@ export function setCopyDefaultsDelegate<
     }>({
         logTable,
         ownerTable,
-        newestOrder,
+        latestOrder,
         tracked,
         doNotCopy,
         copy,
@@ -177,7 +177,7 @@ export function setCopyDefaultsDelegate<
 export class LogMustSetCopyDefaultsDelegate<DataT extends LogMustSetCopyDefaultsDelegateData> {
     readonly logTable : DataT["logTable"];
     readonly ownerTable : DataT["ownerTable"];
-    readonly newestOrder : DataT["newestOrder"];
+    readonly latestOrder : DataT["latestOrder"];
     readonly tracked : DataT["tracked"];
     readonly doNotCopy : DataT["doNotCopy"];
     readonly copy : DataT["copy"];
@@ -185,7 +185,7 @@ export class LogMustSetCopyDefaultsDelegate<DataT extends LogMustSetCopyDefaults
     constructor (data : DataT) {
         this.logTable = data.logTable;
         this.ownerTable = data.ownerTable;
-        this.newestOrder = data.newestOrder;
+        this.latestOrder = data.latestOrder;
         this.tracked = data.tracked;
         this.doNotCopy = data.doNotCopy;
         this.copy = data.copy;

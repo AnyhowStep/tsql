@@ -39,11 +39,11 @@ We might have the following table called `personJogData`,
   Referring back to the example,
   this is `(personId)`.
 
-+ `newestOrder`
++ `latestOrder`
 
-  The `[IColumn, SortDirection]` tuple that sorts rows of the `logTable` from newest to oldest.
+  The `[IColumn, SortDirection]` tuple that sorts rows of the `logTable` from latest to earliest.
 
-  The (`ownerIdentifier`, `newestOrder`) pair must be a candidate key of the `logTable`.
+  The (`ownerIdentifier`, `latestOrder`) pair must be a candidate key of the `logTable`.
 
   Referring back to the example,
   this is `[loggedAt, DESC]`
@@ -69,7 +69,7 @@ We might have the following table called `personJogData`,
 
   + The `ownerIdentifier` is `ownerId`
   + The `tracked` is `value`
-  + The `newestOrder` is `[updatedAt, DESC]`
+  + The `latestOrder` is `[updatedAt, DESC]`
   + The `doNotCopy` is `updatedBy`
 
   -----
@@ -103,7 +103,7 @@ We might have the following table called `personJogData`,
 
 + `copy`
 
-  Columns not in `ownerIdentifier`, `tracked`, `newestOrder`, and `doNotCopy` are implicitly copied over when new rows are added.
+  Columns not in `ownerIdentifier`, `tracked`, `latestOrder`, and `doNotCopy` are implicitly copied over when new rows are added.
 
 + `copyDefaultsDelegate`
 

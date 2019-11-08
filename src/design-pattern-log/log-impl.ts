@@ -13,7 +13,7 @@ export class Log<DataT extends LogData> implements ILog<DataT> {
     readonly logTable : DataT["logTable"];
     readonly ownerTable : DataT["ownerTable"];
 
-    readonly newestOrder : ILog["newestOrder"];
+    readonly latestOrder : ILog["latestOrder"];
     readonly copyDefaultsDelegate : ILog["copyDefaultsDelegate"];
     readonly trackedDefaults : ILog["trackedDefaults"];
 
@@ -21,7 +21,7 @@ export class Log<DataT extends LogData> implements ILog<DataT> {
         data : DataT,
         extraData : Pick<
             ILog,
-            | "newestOrder"
+            | "latestOrder"
             | "copyDefaultsDelegate"
             | "trackedDefaults"
         >
@@ -34,7 +34,7 @@ export class Log<DataT extends LogData> implements ILog<DataT> {
         this.logTable = data.logTable;
         this.ownerTable = data.ownerTable;
 
-        this.newestOrder = extraData.newestOrder;
+        this.latestOrder = extraData.latestOrder;
         this.copyDefaultsDelegate = extraData.copyDefaultsDelegate;
         this.trackedDefaults = extraData.trackedDefaults;
     }

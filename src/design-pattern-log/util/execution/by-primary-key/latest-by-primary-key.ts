@@ -33,6 +33,6 @@ export function latestByPrimaryKey<LogT extends ILog> (
             log.logTable,
             primaryKey as any
         ))
-        .orderBy(() => [log.newestOrder as any])
+        .orderBy(() => [log.latestOrder as any])
         .limit(1);
 }

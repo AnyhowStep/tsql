@@ -29,7 +29,7 @@ export interface ILog<DataT extends LogData=LogData> {
      * (`ownerTable`'s PK, `IColumn`) must form a
      * candidate key of `logTable`
      */
-    readonly newestOrder : readonly [IColumn, SortDirection],
+    readonly latestOrder : readonly [IColumn, SortDirection],
 
     /**
      * May have `ownerTable` as `IUsedRef`

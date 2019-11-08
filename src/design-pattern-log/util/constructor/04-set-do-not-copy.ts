@@ -15,7 +15,7 @@ export type LogMustSetDoNotCopyData =
     >
     & Pick<
         ILog,
-        | "newestOrder"
+        | "latestOrder"
     >
 ;
 
@@ -61,7 +61,7 @@ export type SetDoNotCopy<
     LogMustSetTrackedDefaults<{
         logTable : DataT["logTable"];
         ownerTable : DataT["ownerTable"];
-        newestOrder : DataT["newestOrder"];
+        latestOrder : DataT["latestOrder"];
         tracked : DataT["tracked"];
         doNotCopy : readonly (DoNotCopyT[number]["columnAlias"])[];
         copy : readonly Exclude<
@@ -73,7 +73,7 @@ export type SetDoNotCopy<
     LogMustSetCopyDefaultsDelegate<{
         logTable : DataT["logTable"];
         ownerTable : DataT["ownerTable"];
-        newestOrder : DataT["newestOrder"];
+        latestOrder : DataT["latestOrder"];
         tracked : DataT["tracked"];
         doNotCopy : readonly (DoNotCopyT[number]["columnAlias"])[];
         copy : readonly Exclude<
@@ -107,7 +107,7 @@ export function setDoNotCopy<
     const {
         logTable,
         ownerTable,
-        newestOrder,
+        latestOrder,
         tracked,
     } = log;
     const copy = log.copy
@@ -126,7 +126,7 @@ export function setDoNotCopy<
         const result = new LogMustSetTrackedDefaults<{
             logTable : DataT["logTable"];
             ownerTable : DataT["ownerTable"];
-            newestOrder : DataT["newestOrder"];
+            latestOrder : DataT["latestOrder"];
             tracked : DataT["tracked"];
             doNotCopy : readonly (DoNotCopyT[number]["columnAlias"])[];
             copy : readonly Exclude<
@@ -137,7 +137,7 @@ export function setDoNotCopy<
         }>({
             logTable,
             ownerTable,
-            newestOrder,
+            latestOrder,
             tracked,
             doNotCopy : doNotCopy.map(c => c.columnAlias),
             copy,
@@ -148,7 +148,7 @@ export function setDoNotCopy<
         const result = new LogMustSetCopyDefaultsDelegate<{
             logTable : DataT["logTable"];
             ownerTable : DataT["ownerTable"];
-            newestOrder : DataT["newestOrder"];
+            latestOrder : DataT["latestOrder"];
             tracked : DataT["tracked"];
             doNotCopy : readonly (DoNotCopyT[number]["columnAlias"])[];
             copy : readonly Exclude<
@@ -158,7 +158,7 @@ export function setDoNotCopy<
         }>({
             logTable,
             ownerTable,
-            newestOrder,
+            latestOrder,
             tracked,
             doNotCopy : doNotCopy.map(c => c.columnAlias),
             copy,
@@ -170,14 +170,14 @@ export function setDoNotCopy<
 export class LogMustSetDoNotCopy<DataT extends LogMustSetDoNotCopyData> {
     readonly logTable : DataT["logTable"];
     readonly ownerTable : DataT["ownerTable"];
-    readonly newestOrder : DataT["newestOrder"];
+    readonly latestOrder : DataT["latestOrder"];
     readonly tracked : DataT["tracked"];
     readonly copy : DataT["copy"];
 
     constructor (data : DataT) {
         this.logTable = data.logTable;
         this.ownerTable = data.ownerTable;
-        this.newestOrder = data.newestOrder;
+        this.latestOrder = data.latestOrder;
         this.tracked = data.tracked;
         this.copy = data.copy;
     }

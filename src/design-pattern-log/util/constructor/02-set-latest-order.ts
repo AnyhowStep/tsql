@@ -7,14 +7,14 @@ import {ColumnIdentifierMapUtil} from "../../../column-identifier-map";
 import {LogData} from "../../log";
 import {LogMustSetTracked} from "./03-set-tracked";
 
-export type LogMustSetNewestOrderData = Pick<
+export type LogMustSetLatestOrderData = Pick<
     LogData,
     | "logTable"
     | "ownerTable"
 >;
 
-export type NewestOrderColumnAlias<
-    DataT extends LogMustSetNewestOrderData
+export type LatestOrderColumnAlias<
+    DataT extends LogMustSetLatestOrderData
 > =
     {
         [columnAlias in (
@@ -38,12 +38,12 @@ export type NewestOrderColumnAlias<
         | DataT["logTable"]["generatedColumns"][number]
     ]
 ;
-export function newestOrderColumnAlias<
-    DataT extends LogMustSetNewestOrderData
+export function latestOrderColumnAlias<
+    DataT extends LogMustSetLatestOrderData
 > (
     data : DataT
 ) : (
-    NewestOrderColumnAlias<DataT>[]
+    LatestOrderColumnAlias<DataT>[]
 ) {
     const {logTable, ownerTable} = data;
     const possibleColumnAliases = [
@@ -56,37 +56,37 @@ export function newestOrderColumnAlias<
         [...ownerTable.primaryKey, columnAlias]
     ));
 
-    return result as NewestOrderColumnAlias<DataT>[];
+    return result as LatestOrderColumnAlias<DataT>[];
 }
-export type NewestOrderColumnMap<
-    DataT extends LogMustSetNewestOrderData
+export type LatestOrderColumnMap<
+    DataT extends LogMustSetLatestOrderData
 > =
     Identity<{
-        [columnAlias in NewestOrderColumnAlias<DataT>] : (
+        [columnAlias in LatestOrderColumnAlias<DataT>] : (
             DataT["logTable"]["columns"][columnAlias]
         )
     }>
 ;
-export type NewestOrder<
-    DataT extends LogMustSetNewestOrderData
+export type LatestOrder<
+    DataT extends LogMustSetLatestOrderData
 > =
     readonly [
         ColumnUtil.FromColumnMap<
-            NewestOrderColumnMap<DataT>
+            LatestOrderColumnMap<DataT>
         >,
         SortDirection
     ]
 ;
-export type NewestOrderDelegate<
-    DataT extends LogMustSetNewestOrderData,
-    NewestOrderT extends NewestOrder<DataT>
+export type LatestOrderDelegate<
+    DataT extends LogMustSetLatestOrderData,
+    LatestOrderT extends LatestOrder<DataT>
 > =
     (
-        columns : NewestOrderColumnMap<DataT>
-    ) => NewestOrderT
+        columns : LatestOrderColumnMap<DataT>
+    ) => LatestOrderT
 ;
 
-export class LogMustSetNewestOrder<DataT extends LogMustSetNewestOrderData> {
+export class LogMustSetLatestOrder<DataT extends LogMustSetLatestOrderData> {
     readonly logTable : DataT["logTable"];
     readonly ownerTable : DataT["ownerTable"];
 
@@ -95,37 +95,37 @@ export class LogMustSetNewestOrder<DataT extends LogMustSetNewestOrderData> {
         this.ownerTable = data.ownerTable;
     }
 
-    setNewestOrder<
-        NewestOrderT extends NewestOrder<DataT>
+    setLatestOrder<
+        LatestOrderT extends LatestOrder<DataT>
     >(
-        newestOrderDelegate : NewestOrderDelegate<DataT, NewestOrderT>
+        latestOrderDelegate : LatestOrderDelegate<DataT, LatestOrderT>
     ) : (
         LogMustSetTracked<{
             logTable : DataT["logTable"],
             ownerTable : DataT["ownerTable"],
-            newestOrder : NewestOrderT,
+            latestOrder : LatestOrderT,
         }>
     ) {
-        const newestOrderColumns = ColumnMapUtil.pick(
+        const latestOrderColumns = ColumnMapUtil.pick(
             this.logTable.columns,
-            newestOrderColumnAlias(
+            latestOrderColumnAlias(
                 this
             )
         );
-        const newestOrder = newestOrderDelegate(newestOrderColumns as any);
+        const latestOrder = latestOrderDelegate(latestOrderColumns as any);
         ColumnIdentifierMapUtil.assertHasColumnIdentifiers(
-            newestOrderColumns,
-            [newestOrder[0]]
+            latestOrderColumns,
+            [latestOrder[0]]
         );
 
         return new LogMustSetTracked<{
             logTable : DataT["logTable"],
             ownerTable : DataT["ownerTable"],
-            newestOrder : NewestOrderT,
+            latestOrder : LatestOrderT,
         }>({
             logTable : this.logTable,
             ownerTable : this.ownerTable,
-            newestOrder,
+            latestOrder,
         });
     }
 }

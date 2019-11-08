@@ -17,7 +17,7 @@ export type LogMustSetTrackedDefaultsData =
     >
     & Pick<
         ILog,
-        | "newestOrder"
+        | "latestOrder"
         | "copyDefaultsDelegate"
     >
 ;
@@ -100,7 +100,7 @@ export function setTrackedDefaults<
     const {
         logTable,
         ownerTable,
-        newestOrder,
+        latestOrder,
         tracked,
         doNotCopy,
         copy,
@@ -134,7 +134,7 @@ export function setTrackedDefaults<
             ownerTable,
         },
         {
-            newestOrder,
+            latestOrder,
             copyDefaultsDelegate,
             trackedDefaults,
         }
@@ -144,7 +144,7 @@ export function setTrackedDefaults<
 export class LogMustSetTrackedDefaults<DataT extends LogMustSetTrackedDefaultsData> {
     readonly logTable : DataT["logTable"];
     readonly ownerTable : DataT["ownerTable"];
-    readonly newestOrder : DataT["newestOrder"];
+    readonly latestOrder : DataT["latestOrder"];
     readonly tracked : DataT["tracked"];
     readonly doNotCopy : DataT["doNotCopy"];
     readonly copy : DataT["copy"];
@@ -153,7 +153,7 @@ export class LogMustSetTrackedDefaults<DataT extends LogMustSetTrackedDefaultsDa
     constructor (data : DataT) {
         this.logTable = data.logTable;
         this.ownerTable = data.ownerTable;
-        this.newestOrder = data.newestOrder;
+        this.latestOrder = data.latestOrder;
         this.tracked = data.tracked;
         this.doNotCopy = data.doNotCopy;
         this.copy = data.copy;

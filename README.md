@@ -189,11 +189,8 @@ See the internal `Buffer` declaration [here](src/buffer.ts)
 ### TODO
 
 + Important, create sub-packages for different MySQL versions/different DBMSs
-+ Add `fetchOneByPrimaryKey` alias for `fetchOneByPk` and other similar methods
 + Support for other DBMS'
   > random 2cents: if you're going for this, I say ideally support every sql offered by aws rds (aurora, postgres, my, maira, oracle & MS)
-+ Avoid single-letter names in documentation/readme; prefer `columns` over `c`
-+ `fetchOneByArbitraryCondition`
 + Refactor `FromXxx` to `FromXxxArray` if it is meant to distribute?
 + Monitor this issue,
   https://github.com/microsoft/TypeScript/issues/32824
@@ -228,12 +225,6 @@ See the internal `Buffer` declaration [here](src/buffer.ts)
   + https://www.postgresql.org/docs/current/sql-syntax-lexical.html#SQL-SYNTAX-IDENTIFIERS
 
 > Quoting an identifier also makes it case-sensitive, whereas unquoted names are always folded to lower case. For example, the identifiers FOO, foo, and "foo" are considered the same by PostgreSQL, but "Foo" and "FOO" are different from these three and each other. (The folding of unquoted names to lower case in PostgreSQL is incompatible with the SQL standard, which says that unquoted names should be folded to upper case. Thus, foo should be equivalent to "FOO" not "foo" according to the standard. If you want to write portable applications you are advised to always quote a particular name or never quote it.)
-
-+ Investigate cursors
-  + https://github.com/sidorares/node-mysql2/issues/1014
-  + https://github.com/sidorares/node-mysql2/pull/822#issuecomment-409415308
-  + https://github.com/sidorares/node-mysql2/blob/9404163b0dc4bdc24f6dddd18144532f41115842/lib/commands/query.js#L239
-  + https://github.com/mysqljs/mysql/issues/274
 
 + https://stackoverflow.com/questions/41936403/mysql-ieee-floating-point-nan-positiveinfinity-negativeinfinity
   + `NaN`, `+Infinity`, `-Infinity` are not valid `DOUBLE` values according to the SQL standard
@@ -279,143 +270,6 @@ btw have you ever checked out loki?
 http://lokijs.org/
 
 -->
-
------
-
-Investigate Bug with SQLite,
-```sql
-CREATE TABLE "myTable" (
-	"myColumn" INT PRIMARY KEY
-);
-INSERT INTO
-	"myTable"("myColumn")
-VALUES
-	(4);
-
-SELECT (
-  3e0 IN(
-    COALESCE(
-      (
-        SELECT
-          "myTable"."myColumn" AS "myTable--myColumn"
-        FROM
-          "myTable"
-        LIMIT
-          0
-        OFFSET
-          0
-      ),
-      3e0
-    )
-  )
-);
-```
-
-+ Expected result : `true`
-+ PostgreSQL : `true`
-  + https://www.db-fiddle.com/f/aaKrWx7aAuzzC2HWPcrsBn/8
-+ MySQL : `true`
-  + https://www.db-fiddle.com/f/tJNBFe4ECTJcHzgAjKvTz4/1
-+ SQLite : `false`
-  + https://www.db-fiddle.com/f/vvtNQMEZ4FGfpvmRp3Linv/1
-
------
-
-Investigate Bug with SQLite,
-```sql
-CREATE TABLE "myTable" (
-  "myColumn" INT PRIMARY KEY
-);
-INSERT INTO
-  "myTable"("myColumn")
-VALUES
-  (4);
-
-SELECT
-  COALESCE(
-    (
-      SELECT
-        "myTable"."myColumn" AS "myTable--myColumn"
-      FROM
-        "myTable"
-      LIMIT
-        0
-      OFFSET
-        0
-    ),
-    3e0
-  );
-```
-
-+ Expected result : `3`
-+ PostgreSQL : `3`
-+ MySQL : `3`
-+ SQLite : `4`
-  + `COALESCE()` seems to ignore the `LIMIT 0` clause.
-  + Use `WHERE FALSE` when building SQL string.
-
-```sql
-CREATE TABLE "myTable" (
-  "myColumn" INT PRIMARY KEY
-);
-INSERT INTO
-  "myTable"("myColumn")
-VALUES
-  (4);
-
-SELECT
-  COALESCE(
-    (
-      SELECT
-        "myTable"."myColumn" AS "myTable--myColumn"
-      FROM
-        "myTable"
-      WHERE
-        FALSE
-      LIMIT
-        0
-      OFFSET
-        0
-    ),
-    3e0
-  );
-```
-
------
-
-Be careful of integer literals in the `ORDER BY` clause.
-
-This is invalid (MySQL, PostgreSQL, SQLite),
-```sql
-SELECT
-  1
-ORDER BY
-  32 ASC;
-```
-
-This is valid (MySQL, PostgreSQL, SQLite),
-```sql
-SELECT
-  1
-ORDER BY
-  32+0 ASC;
-```
-
-This is invalid (PostgreSQL; valid for other two databases),
-```sql
-SELECT
-  1
-ORDER BY
-  32e0 ASC;
-```
-
-This is valid (MySQL, PostgreSQL, SQLite),
-```sql
-SELECT
-  1
-ORDER BY
-  32e0+0 ASC;
-```
 
 -----
 

@@ -31,7 +31,7 @@ export const businessInformation = tsql.table("businessInformation")
 
 export const businessInformationLog = tsql.log(businessInformation)
     .setOwner(business)
-    .setNewestOrder(c => c.updatedAt.desc())
+    .setLatestOrder(c => c.updatedAt.desc())
     .setTracked(c => [
         c.name,
         c.description,

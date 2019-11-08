@@ -29,7 +29,7 @@ export const businessEnabled = tsql.table("businessEnabled")
 
 export const businessEnabledLog = tsql.log(businessEnabled)
     .setOwner(business)
-    .setNewestOrder(columns => columns.updatedAt.desc())
+    .setLatestOrder(columns => columns.updatedAt.desc())
     .setTracked(columns => [columns.enabled, columns.enabled2])
     .setDoNotCopy(c => [
         c.updatedByExternalUserId

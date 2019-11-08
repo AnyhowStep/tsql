@@ -13,7 +13,7 @@ export type LogMustSetTrackedData =
     >
     & Pick<
         ILog,
-        | "newestOrder"
+        | "latestOrder"
     >
 ;
 
@@ -26,7 +26,7 @@ export type TrackedColumnMap<
             | DataT["ownerTable"]["primaryKey"][number]
             | DataT["logTable"]["generatedColumns"][number]
             | DataT["logTable"]["autoIncrement"]
-            | DataT["newestOrder"][0]["columnAlias"]
+            | DataT["latestOrder"][0]["columnAlias"]
         >] : (
             DataT["logTable"]["columns"][columnAlias]
         )
@@ -56,12 +56,12 @@ export type TrackedDelegate<
 export class LogMustSetTracked<DataT extends LogMustSetTrackedData> {
     readonly logTable : DataT["logTable"];
     readonly ownerTable : DataT["ownerTable"];
-    readonly newestOrder : DataT["newestOrder"];
+    readonly latestOrder : DataT["latestOrder"];
 
     constructor (data : DataT) {
         this.logTable = data.logTable;
         this.ownerTable = data.ownerTable;
-        this.newestOrder = data.newestOrder;
+        this.latestOrder = data.latestOrder;
     }
 
     setTracked<
@@ -72,7 +72,7 @@ export class LogMustSetTracked<DataT extends LogMustSetTrackedData> {
         LogMustSetDoNotCopy<{
             logTable : DataT["logTable"],
             ownerTable : DataT["ownerTable"],
-            newestOrder : DataT["newestOrder"],
+            latestOrder : DataT["latestOrder"],
             tracked : readonly (TrackedT[number]["columnAlias"])[],
             copy : readonly (
                 Exclude<
@@ -80,7 +80,7 @@ export class LogMustSetTracked<DataT extends LogMustSetTrackedData> {
                     | DataT["ownerTable"]["primaryKey"][number]
                     | DataT["logTable"]["generatedColumns"][number]
                     | DataT["logTable"]["autoIncrement"]
-                    | DataT["newestOrder"][0]["columnAlias"]
+                    | DataT["latestOrder"][0]["columnAlias"]
                     | TrackedT[number]["columnAlias"]
                 >
             )[],
@@ -91,7 +91,7 @@ export class LogMustSetTracked<DataT extends LogMustSetTrackedData> {
             [
                 ...this.ownerTable.primaryKey,
                 ...this.logTable.generatedColumns,
-                this.newestOrder[0].columnAlias,
+                this.latestOrder[0].columnAlias,
             ]
         );
         const tracked = trackedDelegate(trackedColumns as any);
@@ -108,7 +108,7 @@ export class LogMustSetTracked<DataT extends LogMustSetTrackedData> {
                 [] :
                 [this.logTable.autoIncrement]
             ),
-            this.newestOrder[0].columnAlias,
+            this.latestOrder[0].columnAlias,
             ...tracked.map(column => column.columnAlias),
         ];
         const copy = ColumnArrayUtil.fromColumnMap(this.logTable.columns)
@@ -120,7 +120,7 @@ export class LogMustSetTracked<DataT extends LogMustSetTrackedData> {
         return new LogMustSetDoNotCopy<{
             logTable : DataT["logTable"],
             ownerTable : DataT["ownerTable"],
-            newestOrder : DataT["newestOrder"],
+            latestOrder : DataT["latestOrder"],
             tracked : readonly (TrackedT[number]["columnAlias"])[],
             copy : readonly (
                 Exclude<
@@ -128,14 +128,14 @@ export class LogMustSetTracked<DataT extends LogMustSetTrackedData> {
                     | DataT["ownerTable"]["primaryKey"][number]
                     | DataT["logTable"]["generatedColumns"][number]
                     | DataT["logTable"]["autoIncrement"]
-                    | DataT["newestOrder"][0]["columnAlias"]
+                    | DataT["latestOrder"][0]["columnAlias"]
                     | TrackedT[number]["columnAlias"]
                 >
             )[],
         }>({
             logTable : this.logTable,
             ownerTable : this.ownerTable,
-            newestOrder : this.newestOrder,
+            latestOrder : this.latestOrder,
             tracked : tracked.map(column => column.columnAlias),
             copy : copy as any,
         });
