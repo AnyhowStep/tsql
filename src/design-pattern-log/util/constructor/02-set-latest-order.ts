@@ -18,12 +18,11 @@ export type LatestOrderColumnAlias<
 > =
     {
         [columnAlias in (
-            | DataT["ownerTable"]["primaryKey"][number]
             | DataT["logTable"]["explicitDefaultValueColumns"][number]
             | DataT["logTable"]["generatedColumns"][number]
         )] : (
             KeyArrayUtil.HasKey<
-            DataT["logTable"]["candidateKeys"],
+                DataT["logTable"]["candidateKeys"],
                 readonly (
                     | DataT["ownerTable"]["primaryKey"][number]
                     | columnAlias
@@ -33,7 +32,6 @@ export type LatestOrderColumnAlias<
             never
         )
     }[
-        | DataT["ownerTable"]["primaryKey"][number]
         | DataT["logTable"]["explicitDefaultValueColumns"][number]
         | DataT["logTable"]["generatedColumns"][number]
     ]
@@ -47,7 +45,6 @@ export function latestOrderColumnAlias<
 ) {
     const {logTable, ownerTable} = data;
     const possibleColumnAliases = [
-        ...ownerTable.primaryKey,
         ...logTable.explicitDefaultValueColumns,
         ...logTable.generatedColumns,
     ];
