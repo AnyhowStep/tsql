@@ -68,6 +68,14 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
 
   0. [Schema Validation](doc/01-schema-introspection-and-validation/00-schema-validation.md)
 
++ **Design Pattern**
+  0. Log
+
+     0. [Introduction](doc/02-design-pattern/00-log/00-introduction.md)
+     0. [Set Up](doc/02-design-pattern/00-log/01-set-up.md)
+
+  0. Table-per-type (TODO)
+
 -----
 
 ### Goals

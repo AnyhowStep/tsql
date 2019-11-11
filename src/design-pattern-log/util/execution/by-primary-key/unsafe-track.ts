@@ -98,6 +98,22 @@ function toInsertRow<LogT extends ILog> (
                 /**
                  * Use the previous value, since we don't have a new value.
                  */
+                /**
+                 * @todo Fix this, somehow
+                 * Copying values from `prvRow` is not safe.
+                 *
+                 * For example, if `prvRow[copyColumnAlias]` is of type...
+                 * `SomeLib.BigDecimal`. Then, we would not know how to convert
+                 * that data type to a SQL string.
+                 *
+                 * This will cause a run-time error.
+                 *
+                 * -----
+                 *
+                 * @todo Maybe have a way for adapter libraries to wrap the `log()` builder
+                 * and provide a data mapper?
+                 * One that can convert `SomeLib.BigDecimal` to an `IExpr`.
+                 */
                 result[trackedColumnAlias] = prvValue;
             }
         } else {
@@ -144,6 +160,22 @@ function toInsertRow<LogT extends ILog> (
      * Copy the previous row's `copy`
      */
     for (const copyColumnAlias of log.copy) {
+        /**
+         * @todo Fix this, somehow
+         * Copying values from `prvRow` is not safe.
+         *
+         * For example, if `prvRow[copyColumnAlias]` is of type...
+         * `SomeLib.BigDecimal`. Then, we would not know how to convert
+         * that data type to a SQL string.
+         *
+         * This will cause a run-time error.
+         *
+         * -----
+         *
+         * @todo Maybe have a way for adapter libraries to wrap the `log()` builder
+         * and provide a data mapper?
+         * One that can convert `SomeLib.BigDecimal` to an `IExpr`.
+         */
         result[copyColumnAlias] = prvRow[copyColumnAlias as keyof typeof prvRow];
     }
 
