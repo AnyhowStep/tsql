@@ -68,7 +68,7 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
 
 1. [Schema Introspection](doc/01-schema-introspection-and-validation/00-schema-introspection.md)
 
-1. [Schema Validation](doc/01-schema-introspection-and-validation/00-schema-validation.md)
+1. [Schema Validation](doc/01-schema-introspection-and-validation/01-schema-validation.md)
 
 #### Design Pattern
 

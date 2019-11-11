@@ -1,59 +1,6 @@
-### Overview
+import * as tm from "type-mapping";
+import * as tsql from "../../../../../dist";
 
-To use the `log` design pattern helper, we will need two tables,
-+ The `logTable` contains the time-series data.
-
-  It tracks the values of attributes over time.
-
-+ The `ownerTable` contains entities whose attributes are being tracked.
-
-Additional constraints exist, but they will be documented below.
-Most of these constraints were added due to personal use cases.
-Therefore, the constraints may prove unsuitable for your use cases.
-
------
-
-### Example Use Case
-
-Imagine we are conducting a study.
-We would like to track the lightbulb usage of households over time.
-
-During the study, we assume no one will switch on/off lighbulbs in a household,
-except for the people who live there (occupants).
-
-We will have the following tables,
-+ `household`
-
-  + A `household` may have one-to-many `occupant`s living in it.
-  + A `household` may have one-to-many `lightbulb`s installed.
-
-+ `occupant`
-
-  + An `occupant` lives in one `household`.
-
-+ `lightbulb`
-
-  + A `lightbulb` is installed in one `household`.
-
-+ `lightbulbState`
-
-  This is our `logTable`.
-
-  + A `lightbulbState` describes one `lightbulb`.
-  + A `lightbulbState` is changed by one `occupant`.
-  + A `lightbulbState` may only be changed if the `occupant` and `lightbulb` belong to the same `household`.`(*)`
-  + Every time the `lightbulbState` is changed, we add a new row to the table.
-
-In order to enforce the constraint marked `(*)`, we will need the following foreign keys on `lightbulbState`,
-+ `(lightbulbId, householdId) REFERENCES lightbulb(lightbulbId, householdId)`
-+ `(occupantId, householdId) REFERENCES occupant(occupantId, householdId)`
-
------
-
-We will only care about the `lightbulb` (`ownerTable`) and `lightbulbState` (`logTable`) tables,
-```ts
-import * as tsql from "@tsql/tsql";
-import * as tm from "type-mapping/fluent";
 
 /**
  * Our `ownerTable`.
@@ -123,23 +70,11 @@ const lightbulbState = tsql.table("lightbulbState")
         columns.lightbulbId,
         columns.loggedAt,
     ]);
-```
-
------
-
-### Setting Up the `Log` Class
-
-The `Log` class implements our log design pattern helper.
-
-To get an instance of `Log`, we use a **builder**.
-A fully set up `Log` instance looks like this,
-```ts
-import * as tsql from "@tsql/tsql";
 
 /**
  * This is an instance of the `Log` class.
  */
-const lightbulbStateLog = tsql
+export const lightbulbStateLog = tsql
     /**
      * This gives us a builder for our `Log` class.
      *
@@ -294,26 +229,3 @@ const lightbulbStateLog = tsql
     .setTrackedDefaults({
         switchedOn : false,
     });
-```
-
------
-
-Setting up an instance of the `Log` class always takes 6-7 steps,
-and the methods are always called in the same order.
-
-This monotonous, but predictable, piece of boilerplate will
-give us access to more complex queries and logging methods.
-
------
-
-### Explaining the Set Up In-Depth
-
-TODO
-
-0. `log()`
-0. `setOwner()`
-0. `setLatestOrder()`
-0. `setTracked()`
-0. `setDoNotCopy()`
-0. `setCopyDefaults()`
-0. `setTrackedDefaults()`
