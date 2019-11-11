@@ -8,6 +8,7 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
 ### Documentation
 
 + **Getting Started**
+
   0. [Defining Tables](doc/00-getting-started/00-defining-tables.md)
   0. [Data Types](doc/00-getting-started/01-data-types.md)
 
@@ -64,11 +65,13 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
   0. [`UPDATE`](doc/00-getting-started/22-update.md)
 
 + **Schema Introspection and Validation**
+
   0. [Schema Introspection](doc/01-schema-introspection-and-validation/00-schema-introspection.md)
 
   0. [Schema Validation](doc/01-schema-introspection-and-validation/00-schema-validation.md)
 
 + **Design Pattern**
+
   0. Log
 
      0. [Introduction](doc/02-design-pattern/00-log/00-introduction.md)
