@@ -78,6 +78,8 @@ It is a work-in-progress and a rewrite of [`typed-orm`](https://github.com/anyho
 
    1. [Set Up](doc/02-design-pattern/00-log/01-set-up.md)
 
+   1. [`INSERT`](doc/02-design-pattern/00-log/02-insert.md)
+
 1. Table-per-type (TODO)
 
 -----
