@@ -1,7 +1,7 @@
-import {ILog} from "../../../log";
-import {QueryUtil} from "../../../../unified-query";
-import {PrimaryKey_Input, PrimaryKeyUtil} from "../../../../primary-key";
-import * as ExprLib from "../../../../expr-library";
+import {ILog} from "../../log";
+import {QueryUtil} from "../../../unified-query";
+import {PrimaryKey_Input, PrimaryKeyUtil} from "../../../primary-key";
+import * as ExprLib from "../../../expr-library";
 
 export type LatestByPrimaryKey<LogT extends ILog> = (
     QueryUtil.LimitBigInt<

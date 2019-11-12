@@ -1,6 +1,6 @@
-import {ILog} from "../../../log";
-import {IsolableInsertOneConnection} from "../../../../execution";
-import {PrimaryKey_Input} from "../../../../primary-key";
+import {ILog} from "../../log";
+import {IsolableInsertOneConnection} from "../../../execution";
+import {PrimaryKey_Input} from "../../../primary-key";
 import {AssertAllTrackedHasDefaultValue, assertAllTrackedHasDefaultValue} from "./fetch-default";
 import {TrackRow, Track, unsafeTrack} from "./unsafe-track";
 

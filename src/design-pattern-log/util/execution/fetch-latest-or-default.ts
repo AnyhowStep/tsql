@@ -1,8 +1,8 @@
-import {ILog} from "../../../log";
+import {ILog} from "../../log";
 import {DefaultRow, fetchDefault} from "./fetch-default";
-import {Row} from "../../../../row";
-import {IsolableSelectConnection} from "../../../../execution";
-import {PrimaryKey_Input} from "../../../../primary-key";
+import {Row} from "../../../row";
+import {IsolableSelectConnection} from "../../../execution";
+import {PrimaryKey_Input} from "../../../primary-key";
 import {fetchLatest} from "./fetch-latest";
 
 export type LatestOrDefault<LatestRowT, DefaultRowT> =

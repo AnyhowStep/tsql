@@ -1,14 +1,14 @@
 import * as tm from "type-mapping";
-import {ILog} from "../../../log";
-import {IsolableInsertOneConnection, ExecutionUtil} from "../../../../execution";
-import {PrimaryKey_Input} from "../../../../primary-key";
-import {TableUtil} from "../../../../table";
-import {RawExprNoUsedRef} from "../../../../raw-expr";
+import {ILog} from "../../log";
+import {IsolableInsertOneConnection, ExecutionUtil} from "../../../execution";
+import {PrimaryKey_Input} from "../../../primary-key";
+import {TableUtil} from "../../../table";
+import {RawExprNoUsedRef} from "../../../raw-expr";
 import {fetchLatestOrDefault, LatestOrDefault} from "./fetch-latest-or-default";
 import {DefaultRow} from "./fetch-default";
-import {escapeIdentifierWithDoubleQuotes} from "../../../../sqlstring";
-import {PrimitiveExprUtil} from "../../../../primitive-expr";
-import {Row} from "../../../../row";
+import {escapeIdentifierWithDoubleQuotes} from "../../../sqlstring";
+import {PrimitiveExprUtil} from "../../../primitive-expr";
+import {Row} from "../../../row";
 
 export type TrackRow<LogT extends ILog> =
     /**

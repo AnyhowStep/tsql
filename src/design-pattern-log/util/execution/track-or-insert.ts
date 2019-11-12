@@ -1,8 +1,8 @@
-import {ILog} from "../../../log";
-import {IsolableInsertOneConnection} from "../../../../execution";
-import {PrimaryKey_Input} from "../../../../primary-key";
-import {TableUtil} from "../../../../table";
-import {RawExprNoUsedRef} from "../../../../raw-expr";
+import {ILog} from "../../log";
+import {IsolableInsertOneConnection} from "../../../execution";
+import {PrimaryKey_Input} from "../../../primary-key";
+import {TableUtil} from "../../../table";
+import {RawExprNoUsedRef} from "../../../raw-expr";
 import {Track, unsafeTrack} from "./unsafe-track";
 
 export type TrackOrInsertRow<LogT extends ILog> =

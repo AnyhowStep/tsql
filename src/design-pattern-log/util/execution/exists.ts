@@ -1,8 +1,8 @@
-import {ILog} from "../../../log";
-import {QueryUtil} from "../../../../unified-query";
-import {PrimaryKey_Input, PrimaryKeyUtil} from "../../../../primary-key";
-import * as ExprLib from "../../../../expr-library";
-import {SelectConnection} from "../../../../execution";
+import {ILog} from "../../log";
+import {QueryUtil} from "../../../unified-query";
+import {PrimaryKey_Input, PrimaryKeyUtil} from "../../../primary-key";
+import * as ExprLib from "../../../expr-library";
+import {SelectConnection} from "../../../execution";
 
 export async function exists<LogT extends ILog> (
     log : LogT,

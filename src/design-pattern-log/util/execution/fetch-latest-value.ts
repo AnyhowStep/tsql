@@ -1,10 +1,10 @@
-import {ILog} from "../../../log";
-import {PrimaryKey_Input} from "../../../../primary-key";
+import {ILog} from "../../log";
+import {PrimaryKey_Input} from "../../../primary-key";
 import {latestByPrimaryKey} from "./latest-by-primary-key";
-import {ExecutionUtil, SelectConnection} from "../../../../execution";
-import {FromClauseUtil} from "../../../../from-clause";
-import {AnyRawExpr, RawExprUtil} from "../../../../raw-expr";
-import {SelectValueDelegate} from "../../../../select-clause";
+import {ExecutionUtil, SelectConnection} from "../../../execution";
+import {FromClauseUtil} from "../../../from-clause";
+import {AnyRawExpr, RawExprUtil} from "../../../raw-expr";
+import {SelectValueDelegate} from "../../../select-clause";
 
 export type FetchLatestValue<RawExprT extends AnyRawExpr> =
     ExecutionUtil.FetchValuePromise<
