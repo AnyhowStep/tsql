@@ -298,6 +298,8 @@ const lightbulbStateLog = tsql
 
 -----
 
+### Set Up Explanation
+
 Setting up an instance of the `Log` class always takes 6-7 steps,
 and the methods are always called in the same order.
 
@@ -306,14 +308,190 @@ give us access to more complex queries and logging methods.
 
 -----
 
-### Explaining the Set Up In-Depth
+1. `log(logTable)`
 
-TODO
+   We need to know where to find the time-series data.
 
-0. `log()`
-0. `setOwner()`
-0. `setLatestOrder()`
-0. `setTracked()`
-0. `setDoNotCopy()`
-0. `setCopyDefaults()`
-0. `setTrackedDefaults()`
+1. `setOwner(ownerTable)`
+
+   We need to know what entity we are describing.
+
+1. `setLatestOrder()`
+
+   Given an entity, we need to know which row was most recently inserted.
+
+1. `setTracked()`
+
+   You must always have at least one `tracked` column.
+
+   These columns are used for "change detection".
+   If no change is detected, then no new rows are added to the `logTable`.
+
+1. `setDoNotCopy()`
+
+   It is possible for there to be no `doNotCopy` columns.
+   If so, just set it to an empty array.
+
+1. `setCopyDefaults()`
+
+   If there are no `copy` columns, then calling this method is not required.
+   (You won't be able to call it, in fact.)
+
+1. `setTrackedDefaults()`
+
+   This is always the last method you call,
+   which completes the instantiation of the `Log` class.
+
+-----
+
+### `log(logTable)`
+
+This function instantiates a **builder** that we will use
+to create an instance of the `Log` class.
+
+-----
+
+This function takes the `logTable` as an argument.
+
+The `logTable` contains the time-series data.
+
+It tracks the values of attributes over time.
+
+-----
+
+### `setOwner(ownerTable)`
+
+We need to know what entity the data is describing.
+
+-----
+
+This function takes the `ownerTable` as an argument.
+
++ The `logTable` must have a foreign key to the `ownerTable`'s primary key.
++ The foreign key columns must have the same column names as the `ownerTable`'s primary key.
+
+-----
+
+### `setLatestOrder(latestOrderDelegate)`
+
+Given an entity, we need to know which row was most recently inserted.
+
+We need to know how to sort our result set,
+bringing the latest rows to the top,
+and earliest rows to the bottom.
+
+-----
+
+Takes a callback that returns the `latestOrder`.
+
++ The `latestOrder` is an `[IColumn, SortDirection]` tuple.
++ The `latestOrder` sorts rows of the `logTable` from latest to earliest.
++ This `latestOrder` column represents the "timestamp" that the change in value occurred at.
+
+-----
+
+The primary key of the `ownerTable` and `latestOrder` column must
+form a candidate key of the `logTable`.
+
+This is so we **do not** log two, or more, changes to a lightbulb **at the same time**.
+
+-----
+
+The `latestOrder` column of the `logTable` must have an explicit `DEFAULT` value
+(or be a `GENERATED` column).
+
+For example, `CURRENT_TIMESTAMP(0/1/2/3)`.
+
+You don't necessarily have to use the `DATETIME` data type for your `latestOrder` column,
+but it's probably the most common use case.
+
+-----
+
+### `setTracked(trackedDelegate)`
+
+We need to know what set of columns we are tracking over time.
+
+-----
+
+Takes a callback that returns the `tracked` columns.
+
+-----
+
+You must always have at least one `tracked` column.
+
+These columns are used for "change detection".
+
+When attempting to insert new rows using the `Log` class,
+if no change is detected, then no new rows are added to the `logTable`.
+
+-----
+
+### `setDoNotCopy(doNotCopyDelegate)`
+
+For columns we do not track, they can be,
++ A `doNotCopy` column
++ A `copy` column
+
+A `doNotCopy` column is typically used for columns
+that tell us "who" or "what" caused the data to change.
+
+-----
+
+Takes a callback that returns the `doNotCopy` columns.
+
+-----
+
+It is possible for there to be no `doNotCopy` columns.
+If so, just set it to an empty array.
+
+-----
+
+### `setCopyDefaults(copyDefaultsDelegate)`
+
+All remaining columns are `copy` columns.
+
+A `copy` column is typically used for columns
+that participate in a foreign key constraint referencing the `ownerTable`,
+whose values never change.
+
+-----
+
+Takes a callback. This callback **SHOULD** be deterministic.
+Calling it multiple times for the same entity should always yield the same result.
+
+If there are no `copy` columns, then calling this method is not required.
+(You won't be able to call it, in fact.)
+
+-----
+
+When a row is added to the `logTable`, describing an `ownerTable` for the first time,
+we need to know what values to use for the `copy` columns.
+
+This callback function is used to determine the initial value of `copy` columns.
+
+When subsequent rows are added, the value of `copy` columns is copied over to the new rows.
+
+-----
+
+### `setTrackedDefaults(trackedDefaults)`
+
+This is always the last method you call,
+which completes the instantiation of the `Log` class.
+
+Contains the default value of all tracked columns.
+
+This is different from the `DEFAULT` modifier of a column in DDL.
+
+-----
+
+When an entity has no rows in the `logTable`,
+we usually still need to know what the "starting state" of the entity is.
+
+The `trackedDefaults` object contains the "starting state" of these entities.
+These expressions/values **SHOULD** be deterministic.
+Given an entity, evaluating these expressions/values should always yield the same result.
+
+-----
+
+For some `tracked` columns, it does not make sense to have a default value.
+For these columns, we can use `undefined` (not `NULL`) as the default value.
