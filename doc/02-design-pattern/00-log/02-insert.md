@@ -98,6 +98,12 @@ https://github.com/AnyhowStep/tsql/issues/23
 
 -----
 
+### Assumptions
+
+The rest of the documentation assumes these gotcha's do not exist.
+
+-----
+
 ### `unsafeTrack()`
 
 If all `tracked` columns have default values in `trackedDefaults`,
