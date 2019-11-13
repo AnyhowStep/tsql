@@ -6,5 +6,6 @@ export * from "./fetch-latest-value";
 export * from "./fetch-latest";
 export * from "./latest-by-primary-key";
 export * from "./track-or-insert";
+export * from "./track-result";
 export * from "./track";
 export * from "./unsafe-track";

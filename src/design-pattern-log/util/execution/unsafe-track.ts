@@ -4,11 +4,12 @@ import {IsolableInsertOneConnection, ExecutionUtil} from "../../../execution";
 import {PrimaryKey_Input} from "../../../primary-key";
 import {TableUtil} from "../../../table";
 import {RawExprNoUsedRef} from "../../../raw-expr";
-import {fetchLatestOrDefault, LatestOrDefault} from "./fetch-latest-or-default";
+import {fetchLatestOrDefault} from "./fetch-latest-or-default";
 import {DefaultRow} from "./fetch-default";
 import {escapeIdentifierWithDoubleQuotes} from "../../../sqlstring";
 import {PrimitiveExprUtil} from "../../../primitive-expr";
 import {Row} from "../../../row";
+import {TrackResult} from "./track-result";
 
 export type TrackRow<LogT extends ILog> =
     /**
@@ -184,18 +185,6 @@ function toInsertRow<LogT extends ILog> (
         insertRow : result,
     };
 }
-
-export type TrackResult<LatestRowT, DefaultRowT> =
-    | {
-        changed : true,
-        previous : LatestOrDefault<LatestRowT, DefaultRowT>,
-        current : LatestRowT,
-    }
-    | {
-        changed : false,
-        previous : LatestOrDefault<LatestRowT, DefaultRowT>,
-    }
-;
 
 export type Track<LogT extends ILog> =
     TrackResult<

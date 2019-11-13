@@ -15,7 +15,9 @@ if these new rows satisfy some constraints.
 
 ### `TrackResult`
 
-TODO Link to the `TrackResult` type.
+All the `INSERT` helpers return a [`TrackResult`](/src/design-pattern-log/util/execution/track-result.ts)
+
+The `changed : boolean` property tells you if a new row was inserted, or not.
 
 -----
 
