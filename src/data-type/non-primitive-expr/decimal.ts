@@ -54,7 +54,7 @@ export function makeDecimalDataType (
             precision,
             scale
         ),
-        (a, b) => a === b,
+        (a, b) => a.toString() === b.toString(),
         extraMapper
     );
 }
