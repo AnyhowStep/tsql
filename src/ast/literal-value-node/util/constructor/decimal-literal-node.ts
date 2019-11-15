@@ -17,7 +17,7 @@ export function decimalLiteralNode (
      */
     scale : number|bigint
 ) : DecimalLiteralNode {
-    const mapper = tm.mysql.decimal();
+    const mapper = tm.mysql.decimal(precision, scale);
 
     const decimalDefinition = ExprLib.assertValidDecimalPrecisionAndScale(precision, scale);
     const literalValue = mapper("rawDecimalLiteral", rawDecimalLiteral).toString();
