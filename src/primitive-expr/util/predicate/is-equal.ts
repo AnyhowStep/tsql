@@ -1,3 +1,4 @@
+import * as tm from "type-mapping";
 import {PrimitiveExpr} from "../../primitive-expr";
 import {isDate} from "../../../date-util";
 
@@ -25,6 +26,8 @@ export function isEqual (a : PrimitiveExpr, b : PrimitiveExpr) : boolean {
         }
     }
 
-    //No idea, assume not equal
-    return false;
+    /**
+     * Use `strictEqual()` algorithm that handles `bigint` polyfill
+     */
+    return tm.TypeUtil.strictEqual(a, b);
 }
