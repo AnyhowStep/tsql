@@ -26,7 +26,7 @@ export function decimalLiteral (
 ) {
     return expr(
         {
-            mapper : tm.mysql.decimal(),
+            mapper : tm.mysql.decimal(precision, scale),
             usedRef : UsedRefUtil.fromColumnRef({}),
         },
         LiteralValueNodeUtil.decimalLiteralNode(

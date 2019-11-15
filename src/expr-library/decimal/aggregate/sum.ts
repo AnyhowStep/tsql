@@ -1,4 +1,4 @@
-import * as tm from "type-mapping";
+import {decimalMapper} from "../decimal-mapper";
 import {OperatorType} from "../../../operator-type";
 import {TypeHint} from "../../../type-hint";
 import {makeOperator2, Operator1} from "../../factory";
@@ -8,7 +8,7 @@ import {Decimal} from "../../../decimal";
 
 const sumImpl = makeOperator2<OperatorType.AGGREGATE_SUM, boolean, Decimal, Decimal|null>(
     OperatorType.AGGREGATE_SUM,
-    tm.mysql.decimal().orNull(),
+    decimalMapper.orNull(),
     TypeHint.DECIMAL
 );
 

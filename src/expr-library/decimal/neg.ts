@@ -1,4 +1,4 @@
-import * as tm from "type-mapping";
+import {decimalMapper} from "./decimal-mapper";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 import {Decimal} from "../../decimal";
@@ -10,6 +10,6 @@ import {makeOperator1DoubleElimination} from "../factory";
  */
 export const neg = makeOperator1DoubleElimination<OperatorType.UNARY_MINUS, Decimal, Decimal>(
     OperatorType.UNARY_MINUS,
-    tm.mysql.decimal(),
+    decimalMapper,
     TypeHint.DECIMAL
 );

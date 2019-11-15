@@ -12,6 +12,7 @@ import {LiteralValueNodeUtil, LiteralValueNode} from "../../ast/literal-value-no
 import {PrimitiveExprUtil} from "../../primitive-expr";
 import {TypeHint} from "../../type-hint";
 import {Decimal} from "../../decimal";
+import {decimalMapper} from "../decimal/decimal-mapper";
 
 function tryGetFlattenableElements (
     rawExpr : AnyRawExpr,
@@ -83,7 +84,7 @@ export function makeChainableDecimalOperator<
 ) : (
     ChainableDecimalOperator
 ) {
-    const identityElement = tm.mysql.decimal()("rawIdentityElement", rawIdentityElement);
+    const identityElement = decimalMapper("rawIdentityElement", rawIdentityElement);
     let identityAst : LiteralValueNode|undefined = undefined;
 
     const result : ChainableDecimalOperator = <ArrT extends RawExpr<Decimal>[]> (

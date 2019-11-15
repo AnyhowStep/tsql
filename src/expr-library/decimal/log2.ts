@@ -1,4 +1,4 @@
-import * as tm from "type-mapping";
+import {decimalMapper} from "./decimal-mapper";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 import {Decimal} from "../../decimal";
@@ -10,6 +10,6 @@ import {makeOperator1} from "../factory";
  */
 export const log2 = makeOperator1<OperatorType.LOG2, Decimal, Decimal|null>(
     OperatorType.LOG2,
-    tm.mysql.decimal().orNull(),
+    decimalMapper.orNull(),
     TypeHint.DECIMAL
 );
