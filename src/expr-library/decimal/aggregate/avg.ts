@@ -1,4 +1,4 @@
-import * as tm from "type-mapping";
+import {decimalMapper} from "../decimal-mapper";
 import {OperatorType} from "../../../operator-type";
 import {TypeHint} from "../../../type-hint";
 import {makeOperator2, Operator1} from "../../factory";
@@ -8,7 +8,7 @@ import {ExprUtil} from "../../../expr";
 
 const avgImpl = makeOperator2<OperatorType.AGGREGATE_AVERAGE, boolean, Decimal, Decimal|null>(
     OperatorType.AGGREGATE_AVERAGE,
-    tm.mysql.decimal().orNull(),
+    decimalMapper.orNull(),
     TypeHint.DECIMAL
 );
 

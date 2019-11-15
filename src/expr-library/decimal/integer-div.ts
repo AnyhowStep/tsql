@@ -1,4 +1,4 @@
-import * as tm from "type-mapping";
+import {decimalMapper} from "./decimal-mapper";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 import {Decimal} from "../../decimal";
@@ -9,6 +9,6 @@ import {makeOperator2} from "../factory";
  */
 export const integerDiv = makeOperator2<OperatorType.INTEGER_DIVISION, Decimal, Decimal|null>(
     OperatorType.INTEGER_DIVISION,
-    tm.mysql.decimal().orNull(),
+    decimalMapper.orNull(),
     TypeHint.DECIMAL
 );

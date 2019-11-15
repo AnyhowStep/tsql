@@ -1,4 +1,3 @@
-import * as tm from "type-mapping";
 import {ILog} from "../../log";
 import {IsolableInsertOneConnection, ExecutionUtil} from "../../../execution";
 import {PrimaryKey_Input} from "../../../primary-key";
@@ -127,7 +126,7 @@ function toInsertRow<LogT extends ILog> (
                 rawNewValue
             );
             result[trackedColumnAlias] = newValue;
-            if (!tm.TypeUtil.strictEqual(newValue, prvValue)) {
+            if (!PrimitiveExprUtil.isEqual(newValue, prvValue)) {
                 /**
                  * New value is used, we consider this a change.
                  */

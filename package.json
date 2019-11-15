@@ -50,6 +50,7 @@
     "eslint": "^5.16.0",
     "eslint-plugin-local": "^1.0.0",
     "eslint-utils": "^1.4.1",
+    "handlebars": "^4.5.2",
     "sql.js": "^1.0.0",
     "tape": "^4.11.0",
     "ts-node": "^8.3.0",
@@ -57,6 +58,6 @@
     "typescript": "^3.5.1"
   },
   "dependencies": {
-    "type-mapping": "^1.27.0"
+    "type-mapping": "^1.28.0"
   }
 }

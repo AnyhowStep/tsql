@@ -1,4 +1,4 @@
-import * as tm from "type-mapping";
+import {decimalMapper} from "./decimal-mapper";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 import {Decimal} from "../../decimal";
@@ -10,6 +10,6 @@ import {makeOperator1} from "../factory";
  */
 export const sqrt = makeOperator1<OperatorType.SQUARE_ROOT, Decimal, Decimal|null>(
     OperatorType.SQUARE_ROOT,
-    tm.mysql.decimal().orNull(),
+    decimalMapper.orNull(),
     TypeHint.DECIMAL
 );

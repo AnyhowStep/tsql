@@ -1,14 +1,17 @@
-import * as tm from "type-mapping";
 import {OperatorType} from "../../../operator-type";
 import {TypeHint} from "../../../type-hint";
 import {makeOperator2, Operator1} from "../../factory";
 import {RawExpr} from "../../../raw-expr";
 import {ExprUtil} from "../../../expr";
 import {Decimal} from "../../../decimal";
+import {decimalMapper} from "../../decimal/decimal-mapper";
 
+/**
+ * The return type being `DECIMAL` is intentional.
+ */
 const sumImpl = makeOperator2<OperatorType.AGGREGATE_SUM, boolean, bigint, Decimal|null>(
     OperatorType.AGGREGATE_SUM,
-    tm.mysql.decimal().orNull(),
+    decimalMapper.orNull(),
     TypeHint.BIGINT_SIGNED
 );
 

@@ -207,8 +207,8 @@ export function castAsDecimal<
     return expr(
         {
             mapper : tm.canOutputNull(argMapper) ?
-                tm.mysql.decimal().orNull() :
-                tm.mysql.decimal(),
+                tm.mysql.decimal(precision, scale).orNull() :
+                tm.mysql.decimal(precision, scale),
             usedRef : RawExprUtil.usedRef(arg),
         },
         OperatorNodeUtil.operatorNode3(
