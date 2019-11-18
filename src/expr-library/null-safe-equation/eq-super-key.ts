@@ -6,6 +6,7 @@ import {and} from "../logical";
 import {SuperKey_Input, SuperKeyUtil, SuperKey_Output} from "../../super-key";
 import {ColumnMapUtil} from "../../column-map";
 import {nullSafeEq} from "./null-safe-eq";
+import {DataTypeUtil} from "../../data-type";
 
 /**
  * Convenience function for,
@@ -85,7 +86,10 @@ export const eqSuperKey : EqSuperKey = (
             .map((columnAlias) => {
                 const expr = nullSafeEq(
                     table.columns[columnAlias],
-                    superKey[columnAlias as keyof SuperKey_Output<TableT>]
+                    DataTypeUtil.toRawExpr(
+                        table.columns[columnAlias].mapper,
+                        superKey[columnAlias as keyof SuperKey_Output<TableT>]
+                    )
                 );
                 return expr as Expr<{
                     mapper : tm.SafeMapper<boolean>,

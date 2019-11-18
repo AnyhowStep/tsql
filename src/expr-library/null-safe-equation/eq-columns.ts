@@ -6,6 +6,7 @@ import {and} from "../logical";
 import {ColumnMapUtil} from "../../column-map";
 import {PartialRow_Input, PartialRowUtil, PartialRow_Output} from "../../partial-row";
 import {nullSafeEq} from "./null-safe-eq";
+import {DataTypeUtil} from "../../data-type";
 
 /**
  * Convenience function for,
@@ -82,7 +83,10 @@ export const eqColumns : EqColumns = (
             .map((columnAlias) => {
                 const expr = nullSafeEq(
                     table.columns[columnAlias],
-                    columns[columnAlias as keyof PartialRow_Output<TableT>]
+                    DataTypeUtil.toRawExpr(
+                        table.columns[columnAlias].mapper,
+                        columns[columnAlias as keyof PartialRow_Output<TableT>]
+                    )
                 );
                 return expr as Expr<{
                     mapper : tm.SafeMapper<boolean>,
