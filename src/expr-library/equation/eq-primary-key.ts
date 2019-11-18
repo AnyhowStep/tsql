@@ -6,6 +6,7 @@ import {UsedRefUtil} from "../../used-ref";
 import {eq} from "./eq";
 import {and} from "../logical";
 import {ColumnMapUtil} from "../../column-map";
+import {DataTypeUtil} from "../../data-type";
 
 /**
  * Convenience function for,
@@ -60,11 +61,17 @@ export function eqPrimaryKey<
     const arr = Object.keys(primaryKey).sort().map((columnAlias) => {
         /**
          * We use `eq` because the primary key of a table cannot have
-         * nullable columns.
+         * nullable columns... Right?
+         *
+         * @todo Decide if we should use null-safe equality anyway,
+         * just to be super safe
          */
         const expr = eq(
             table.columns[columnAlias],
-            primaryKey[columnAlias as keyof PrimaryKey_Output<TableT>]
+            DataTypeUtil.toRawExpr(
+                table.columns[columnAlias].mapper,
+                primaryKey[columnAlias as keyof PrimaryKey_Output<TableT>]
+            )
         );
         return expr as Expr<{
             mapper : tm.SafeMapper<boolean>,

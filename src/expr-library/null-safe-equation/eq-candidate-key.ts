@@ -7,6 +7,7 @@ import {CandidateKey_Input, CandidateKeyUtil, CandidateKey_Output} from "../../c
 import {ColumnMapUtil} from "../../column-map";
 import {StrictUnion} from "../../type-util";
 import {nullSafeEq} from "./null-safe-eq";
+import {DataTypeUtil} from "../../data-type";
 
 /**
  * Convenience function for,
@@ -89,7 +90,10 @@ export const eqCandidateKey : EqCandidateKey = (
         const arr = Object.keys(candidateKey).sort().map((columnAlias) => {
             const expr = nullSafeEq(
                 table.columns[columnAlias],
-                candidateKey[columnAlias as keyof CandidateKey_Output<TableT>]
+                DataTypeUtil.toRawExpr(
+                    table.columns[columnAlias].mapper,
+                    candidateKey[columnAlias as keyof CandidateKey_Output<TableT>]
+                )
             );
             return expr as Expr<{
                 mapper : tm.SafeMapper<boolean>,
