@@ -54,7 +54,40 @@ export function makeDecimalDataType (
             precision,
             scale
         ),
-        (a, b) => a.toString() === b.toString(),
+        /**
+         * We consider +0 and -0 to be the same
+         */
+        (a, b) => {
+            if (a === b) {
+                //Early-exit
+                return true;
+            }
+            if (a.toString() === b.toString()) {
+                //Early-exit
+                return true;
+            }
+
+            const parsedA = tm.FixedPointUtil.tryParse(a.toString());
+            if (parsedA == undefined) {
+                /**
+                 * This should never happen...
+                 */
+                throw new Error(`Invalid DECIMAL a found`);
+            }
+            const parsedB = tm.FixedPointUtil.tryParse(b.toString());
+            if (parsedB == undefined) {
+                /**
+                 * This should never happen...
+                 */
+                throw new Error(`Invalid DECIMAL b found`);
+            }
+
+            return tm.FixedPointUtil.isEqual(
+                parsedA,
+                parsedB,
+                tm.FixedPointUtil.ZeroEqualityAlgorithm.NEGATIVE_AND_POSITIVE_ZERO_ARE_EQUAL
+            );
+        },
         extraMapper
     );
 }

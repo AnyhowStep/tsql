@@ -9,6 +9,7 @@ import {escapeIdentifierWithDoubleQuotes} from "../../../sqlstring";
 import {PrimitiveExprUtil} from "../../../primitive-expr";
 import {Row} from "../../../row";
 import {TrackResult} from "./track-result";
+import {DataTypeUtil} from "../../../data-type";
 
 export type TrackRow<LogT extends ILog> =
     /**
@@ -82,7 +83,10 @@ function toInsertRow<LogT extends ILog> (
      * Copy `prvRow`'s primary key
      */
     for (const primaryKeyColumnAlias of log.ownerTable.primaryKey) {
-        result[primaryKeyColumnAlias] = prvRow[primaryKeyColumnAlias as keyof typeof prvRow];
+        result[primaryKeyColumnAlias] = DataTypeUtil.toRawExpr(
+            log.logTable.columns[primaryKeyColumnAlias].mapper,
+            prvRow[primaryKeyColumnAlias as keyof typeof prvRow]
+        );
     }
     /**
      * Copy all `tracked` values, if no new value is provided.
@@ -98,23 +102,10 @@ function toInsertRow<LogT extends ILog> (
                 /**
                  * Use the previous value, since we don't have a new value.
                  */
-                /**
-                 * @todo Fix this, somehow
-                 * Copying values from `prvRow` is not safe.
-                 *
-                 * For example, if `prvRow[copyColumnAlias]` is of type...
-                 * `SomeLib.BigDecimal`. Then, we would not know how to convert
-                 * that data type to a SQL string.
-                 *
-                 * This will cause a run-time error.
-                 *
-                 * -----
-                 *
-                 * @todo Maybe have a way for adapter libraries to wrap the `log()` builder
-                 * and provide a data mapper?
-                 * One that can convert `SomeLib.BigDecimal` to an `IExpr`.
-                 */
-                result[trackedColumnAlias] = prvValue;
+                result[trackedColumnAlias] = DataTypeUtil.toRawExpr(
+                    log.logTable.columns[trackedColumnAlias].mapper,
+                    prvValue
+                );
             }
         } else {
             const newValue = (
@@ -126,7 +117,12 @@ function toInsertRow<LogT extends ILog> (
                 rawNewValue
             );
             result[trackedColumnAlias] = newValue;
-            if (!PrimitiveExprUtil.isEqual(newValue, prvValue)) {
+
+            if (!DataTypeUtil.isNullSafeEqual(
+                log.logTable.columns[trackedColumnAlias].mapper,
+                newValue,
+                prvValue
+            )) {
                 /**
                  * New value is used, we consider this a change.
                  */
@@ -160,23 +156,10 @@ function toInsertRow<LogT extends ILog> (
      * Copy the previous row's `copy`
      */
     for (const copyColumnAlias of log.copy) {
-        /**
-         * @todo Fix this, somehow
-         * Copying values from `prvRow` is not safe.
-         *
-         * For example, if `prvRow[copyColumnAlias]` is of type...
-         * `SomeLib.BigDecimal`. Then, we would not know how to convert
-         * that data type to a SQL string.
-         *
-         * This will cause a run-time error.
-         *
-         * -----
-         *
-         * @todo Maybe have a way for adapter libraries to wrap the `log()` builder
-         * and provide a data mapper?
-         * One that can convert `SomeLib.BigDecimal` to an `IExpr`.
-         */
-        result[copyColumnAlias] = prvRow[copyColumnAlias as keyof typeof prvRow];
+        result[copyColumnAlias] = DataTypeUtil.toRawExpr(
+            log.logTable.columns[copyColumnAlias].mapper,
+            prvRow[copyColumnAlias as keyof typeof prvRow]
+        );
     }
 
     return {
