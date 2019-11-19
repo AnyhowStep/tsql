@@ -151,7 +151,7 @@ This project will have multiple subprojects,
 
 ### Running on Non-`node` Environments
 
-This library requires `BigInt` and `Buffer` support.
+This library requires `BigInt` support.
 
 If your environment does not have them, you must polyfill them before this library is loaded.
 
@@ -167,28 +167,6 @@ The simplest `BigInt` polyfill that should work is,
   };
 }) as any;
 ```
-
------
-
-The simplest `Buffer` polyfill that should work is,
-```ts
-(global as any).Buffer = {
-  isBuffer : (mixed : unknown) : mixed is Buffer => {
-    return /*snip implementation*/;
-  },
-} as any;
-```
-
-If the above returns `true`, then the `Buffer` must support,
-```ts
-interface Buffer {
-    equals : (other : Buffer) => boolean,
-    toString : (encoding : "hex") => string,
-}
-```
-
-See the internal `Buffer` declaration [here](src/buffer.ts)
-
 
 -----
 
@@ -263,7 +241,7 @@ See the internal `Buffer` declaration [here](src/buffer.ts)
   + https://github.com/graphile/migrate
   + https://sqitch.org/
 
-+ Remove static use of potentially polyfilled functions like `BigInt`, `Buffer`, etc.
++ Remove static use of potentially polyfilled functions like `BigInt`, etc.
   + Stick to lazy initialization
 
 + Investigate https://www.postgresql.org/docs/9.2/sql-syntax-lexical.html#SQL-SYNTAX-STRINGS-ESCAPE

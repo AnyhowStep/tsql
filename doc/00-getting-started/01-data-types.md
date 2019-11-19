@@ -18,7 +18,7 @@ SQL Type                    | TypeScript Type
 `BOOLEAN`                   | `boolean`
 `DATETIME`                  | `Date`
 `CHAR`,`VARCHAR`,`TEXT`     | `string`
-`BINARY`,`VARBINARY`,`BLOB` | `Buffer`
+`BINARY`,`VARBINARY`,`BLOB` | `Uint8Array`
 
 Additional SQL data types may be supported by database-specific libraries.
 
@@ -265,6 +265,10 @@ References:
 
 -----
 
-All `BINARY`,`VARBINARY`,`BLOB` types **SHOULD** have a Typescript type of `Buffer`.
+All `BINARY`,`VARBINARY`,`BLOB` types **SHOULD** have a Typescript type of `Uint8Array`.
 
 If this convention is not followed, this library makes no guarantees regarding the consistency of query results.
+
+-----
+
+`node` libraries may use `Buffer`. This is fine because `Buffer extends Uint8Array`.
