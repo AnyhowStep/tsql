@@ -9,6 +9,6 @@ export type BaseNonNullComparableType<T extends NonNullComparableType> = (
     string :
     T extends boolean ?
     boolean :
-    //Date|Buffer|Decimal|CustomComparableType do not have literal types
+    //Date|Uint8Array|Decimal|CustomComparableType do not have literal types
     T
 );

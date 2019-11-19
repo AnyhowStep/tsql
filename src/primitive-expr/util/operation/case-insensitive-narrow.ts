@@ -8,9 +8,9 @@ import {NonNullPrimitiveType} from "../query";
  *   Given`x = 'HeLlO'`,
  *   `x` could be `'hello'` or `'HELLO'`
  *
- * + You cannot narrow `Buffer` to a `Buffer-literal`
+ * + You cannot narrow `Uint8Array` to a `Uint8Array-literal`
  *
- *   There is no `Buffer-literal` type
+ *   There is no `Uint8Array-literal` type
  *
  * + You cannot narrow `Date` to a `Date-literal`
  *
@@ -21,7 +21,7 @@ export type CaseInsensitiveNarrow<
     A extends NonNullPrimitiveExpr,
     B extends A
 > = (
-    Extract<A, string|Buffer|Date> extends never ?
+    Extract<A, string|Uint8Array|Date> extends never ?
     B :
     NonNullPrimitiveType<B>
 );

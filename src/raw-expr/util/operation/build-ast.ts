@@ -29,7 +29,7 @@ export function buildAst (rawExpr : AnyRawExpr|QueryBaseUtil.OneSelectItem<any>)
     if (isDate(rawExpr)) {
         return LiteralValueNodeUtil.dateTimeLiteralNode(rawExpr);
     }
-    if (Buffer.isBuffer(rawExpr)) {
+    if (rawExpr instanceof Uint8Array) {
         //escape(Buffer.from("hello")) == "X'68656c6c6f'"
         return LiteralValueNodeUtil.bufferLiteralNode(rawExpr);
     }

@@ -16,7 +16,7 @@ export function isPrimitiveExpr (raw : unknown) : raw is PrimitiveExpr {
     if (isDate(raw)) {
         return true;
     }
-    if (Buffer.isBuffer(raw)) {
+    if (raw instanceof Uint8Array) {
         return true;
     }
     if (raw === null) {

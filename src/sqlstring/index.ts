@@ -88,7 +88,7 @@ export function tryUnescapeIdentifierWithDoubleQuotes (rawIdentifier : string) :
  *
  * @param rawValue - The value to escape
  */
-export function escapeValue (rawValue : null|boolean|number|bigint|Buffer) : string {
+export function escapeValue (rawValue : null|boolean|number|bigint|Uint8Array) : string {
     if (rawValue === null) {
         return "NULL";
     }
@@ -162,10 +162,10 @@ export function escapeValue (rawValue : null|boolean|number|bigint|Buffer) : str
             }
         }
         case "object": {
-            if (Buffer.isBuffer(rawValue)) {
-                return bufferToString(rawValue);
+            if (rawValue instanceof Uint8Array) {
+                return uint8ArrayToString(rawValue);
             } else {
-                throw new Error(`Don't know how to escape non-Buffer object`);
+                throw new Error(`Don't know how to escape non-Uint8Array object`);
             }
         }
         default: {
@@ -174,8 +174,21 @@ export function escapeValue (rawValue : null|boolean|number|bigint|Buffer) : str
     }
 };
 
-function bufferToString (buffer : Buffer) : string {
-  return "X" + cStyleEscapeString(buffer.toString("hex"));
+//https://stackoverflow.com/questions/40031688/javascript-arraybuffer-to-hex
+function buf2hex(buffer : ArrayBuffer) {
+    return Array.prototype.map
+        .call(
+            new Uint8Array(buffer),
+            //Should always return a string of length 2
+            x => ("0" + x.toString(16)).slice(-2)
+        )
+        .join("");
+}
+
+function uint8ArrayToString (buffer : Uint8Array) : string {
+    return "X" + cStyleEscapeString(
+        buf2hex(buffer)
+    );
 };
 
 /**

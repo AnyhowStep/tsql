@@ -15,7 +15,7 @@ import {TypeHint} from "../../type-hint";
 function tryGetFlattenableElements (
     rawExpr : AnyRawExpr,
     operatorType : OperatorType,
-    identityElement : null|boolean|number|bigint|string|Buffer,
+    identityElement : null|boolean|number|bigint|string|Uint8Array,
     identityAst : LiteralValueNode
 ) : AstArray|undefined {
     if (ExprUtil.isExpr(rawExpr)) {
@@ -75,7 +75,7 @@ export type ChainableOperatorReturn<
         ArrT[number]
     >
 ;
-export type ChainableOperator<TypeT extends null|boolean|number|bigint|string|Buffer> =
+export type ChainableOperator<TypeT extends null|boolean|number|bigint|string|Uint8Array> =
     <ArrT extends RawExpr<TypeT>[]> (
         ...arr : ArrT
     ) => (
@@ -84,7 +84,7 @@ export type ChainableOperator<TypeT extends null|boolean|number|bigint|string|Bu
 ;
 export function makeChainableOperator<
     OperatorTypeT extends OperatorType,
-    TypeT extends null|boolean|number|bigint|string|Buffer
+    TypeT extends null|boolean|number|bigint|string|Uint8Array
 > (
     operatorType : OperatorTypeT & OperatorNodeUtil.AssertHasOperand1ToN<OperatorTypeT>,
     identityElement : TypeT,

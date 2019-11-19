@@ -9,9 +9,9 @@ import {Decimal} from "../../../decimal";
  *   Given`x = 'HeLlO'`,
  *   `x` could be `'hello'` or `'HELLO'`
  *
- * + You cannot narrow `Buffer` to a `Buffer-literal`
+ * + You cannot narrow `Uint8Array` to a `Uint8Array-literal`
  *
- *   There is no `Buffer-literal` type
+ *   There is no `Uint8Array-literal` type
  *
  * + You cannot narrow `Date` to a `Date-literal`
  *
@@ -26,7 +26,7 @@ export type NullSafeCaseInsensitiveNarrow<
     A extends EquatableType,
     B extends A|null
 > = (
-    Extract<A, string|Buffer|Date|Decimal|CustomEquatableType> extends never ?
+    Extract<A, string|Uint8Array|Date|Decimal|CustomEquatableType> extends never ?
     B :
     BaseEquatableType<B>
 );

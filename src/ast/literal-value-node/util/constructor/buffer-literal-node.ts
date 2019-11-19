@@ -1,7 +1,7 @@
 import {LiteralValueType, BufferLiteralNode} from "../../literal-value-node";
 
 export function bufferLiteralNode (
-    literalValue : Buffer
+    literalValue : Uint8Array
 ) : BufferLiteralNode {
     return {
         type : "LiteralValue",

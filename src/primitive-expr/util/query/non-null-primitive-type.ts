@@ -9,6 +9,6 @@ export type NonNullPrimitiveType<T extends NonNullPrimitiveExpr> = (
     string :
     T extends boolean ?
     boolean :
-    //Date|Buffer do not have literal types
+    //Date|Uint8Array do not have literal types
     T
 );

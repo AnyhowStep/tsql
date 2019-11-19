@@ -59,7 +59,6 @@ export * from "./update";
 export * from "./used-ref";
 export * from "./where-clause";
 
-export * from "./buffer";
 export * from "./constants";
 export * from "./error";
 export * from "./operator-type";
