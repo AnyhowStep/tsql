@@ -2,18 +2,20 @@ import * as tm from "type-mapping";
 import * as DataTypeUtil from "../util";
 import {DataType} from "../data-type-impl";
 
+const equals = tm.ArrayBufferUtil.equals;
+
 export function makeBlobDataType (
     mapperFactory : {
-        (desiredLengthMin : number, desiredLengthMax : number) : tm.FluentMapper<tm.SafeMapper<Buffer>>,
-        (desiredLengthMax : number) : tm.FluentMapper<tm.SafeMapper<Buffer>>,
-        () : tm.FluentMapper<tm.SafeMapper<Buffer>>,
+        (desiredLengthMin : number, desiredLengthMax : number) : tm.FluentMapper<tm.SafeMapper<Uint8Array>>,
+        (desiredLengthMax : number) : tm.FluentMapper<tm.SafeMapper<Uint8Array>>,
+        () : tm.FluentMapper<tm.SafeMapper<Uint8Array>>,
         maxLength : number,
     }
 ) : (
     {
-        (desiredLengthMin : number, desiredLengthMax : number, extraMapper? : tm.Mapper<Buffer, Buffer>) : DataType<Buffer>,
-        (desiredLengthMax : number, extraMapper? : tm.Mapper<Buffer, Buffer>) : DataType<Buffer>,
-        (extraMapper? : tm.Mapper<Buffer, Buffer>) : DataType<Buffer>,
+        (desiredLengthMin : number, desiredLengthMax : number, extraMapper? : tm.Mapper<Uint8Array, Uint8Array>) : DataType<Uint8Array>,
+        (desiredLengthMax : number, extraMapper? : tm.Mapper<Uint8Array, Uint8Array>) : DataType<Uint8Array>,
+        (extraMapper? : tm.Mapper<Uint8Array, Uint8Array>) : DataType<Uint8Array>,
         maxLength : number,
     }
 ) {
@@ -22,7 +24,7 @@ export function makeBlobDataType (
             return DataTypeUtil.makeDataType(
                 mapperFactory(a as number, b as number),
                 value => value,
-                (a, b) => a.equals(b),
+                equals,
                 c as any
             );
         } else if (b != undefined) {
@@ -30,13 +32,13 @@ export function makeBlobDataType (
                 return DataTypeUtil.makeDataType(
                     mapperFactory(a as number, b),
                     value => value,
-                    (a, b) => a.equals(b)
+                    equals,
                 );
             } else {
                 return DataTypeUtil.makeDataType(
                     mapperFactory(a as number),
                     value => value,
-                    (a, b) => a.equals(b),
+                    equals,
                     b as any
                 );
             }
@@ -45,13 +47,13 @@ export function makeBlobDataType (
                 return DataTypeUtil.makeDataType(
                     mapperFactory(a),
                     value => value,
-                    (a, b) => a.equals(b)
+                    equals,
                 );
             } else {
                 return DataTypeUtil.makeDataType(
                     mapperFactory(),
                     value => value,
-                    (a, b) => a.equals(b),
+                    equals,
                     a as any
                 );
             }
@@ -59,7 +61,7 @@ export function makeBlobDataType (
             return DataTypeUtil.makeDataType(
                 mapperFactory(),
                 value => value,
-                (a, b) => a.equals(b)
+                equals,
             );
         }
     };
@@ -76,7 +78,7 @@ export function makeBlobDataType (
  * This corresponds to MySQL's `BINARY` data type.
  * + Max length: `255`; `(2^8)-1`
  */
-export const dtBinary = makeBlobDataType(tm.mysql.binary);
+export const dtBinary = makeBlobDataType(tm.mysql.uint8ArrayBinary);
 
 /**
  * + MySQL      : `VARBINARY`
@@ -87,7 +89,7 @@ export const dtBinary = makeBlobDataType(tm.mysql.binary);
  * This corresponds to MySQL's `VARBINARY` data type.
  * + Max length: `65,535`; `(2^16)-1`
  */
-export const dtVarBinary = makeBlobDataType(tm.mysql.varBinary);
+export const dtVarBinary = makeBlobDataType(tm.mysql.uint8ArrayBinary);
 
 /**
  * Short for "Binary Large OBject"
@@ -100,7 +102,7 @@ export const dtVarBinary = makeBlobDataType(tm.mysql.varBinary);
  * This corresponds to MySQL's `TINY BLOB` data type.
  * + Max length: `255`; `(2^8)-1`
  */
-export const dtTinyBlob = makeBlobDataType(tm.mysql.tinyBlob);
+export const dtTinyBlob = makeBlobDataType(tm.mysql.uint8ArrayTinyBlob);
 
 /**
  * Short for "Binary Large OBject"
@@ -113,7 +115,7 @@ export const dtTinyBlob = makeBlobDataType(tm.mysql.tinyBlob);
  * This corresponds to MySQL's `BLOB` data type.
  * + Max length: `65,535`; `(2^16)-1`
  */
-export const dtBlob = makeBlobDataType(tm.mysql.blob);
+export const dtBlob = makeBlobDataType(tm.mysql.uint8ArrayBlob);
 
 /**
  * Short for "Binary Large OBject"
@@ -126,7 +128,7 @@ export const dtBlob = makeBlobDataType(tm.mysql.blob);
  * This corresponds to MySQL's `MEDIUM BLOB` data type.
  * + Max length: `16,777,215`; `(2^24)-1`
  */
-export const dtMediumBlob = makeBlobDataType(tm.mysql.mediumBlob);
+export const dtMediumBlob = makeBlobDataType(tm.mysql.uint8ArrayMediumBlob);
 
 /**
  * Short for "Binary Large OBject"
@@ -156,6 +158,6 @@ export const dtMediumBlob = makeBlobDataType(tm.mysql.mediumBlob);
  * https://www.sqlite.org/limits.html
  *
  * However, it is possible that the underlying implementation
- * may be restricted from having a `Buffer` of that length.
+ * may be restricted from having a `Uint8Array` of that length.
  */
-export const dtLongBlob = makeBlobDataType(tm.mysql.longBlob);
+export const dtLongBlob = makeBlobDataType(tm.mysql.uint8ArrayLongBlob);

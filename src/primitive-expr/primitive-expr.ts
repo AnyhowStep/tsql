@@ -1,6 +1,6 @@
 /**
  * In particular,
- * + `BLOB` data should be sent as a `Buffer`
+ * + `BLOB` data should be sent as a `Uint8Array`
  * + `JSON` data should be sent as a `string`
  * + `undefined` IS NOT ALLOWED
  * + `DECIMAL` data is sent as `string` for now because
@@ -9,5 +9,5 @@
  * We do not consider `DECIMAL` a primitive because JS does not support it natively.
  *
  */
-export type PrimitiveExpr = bigint|number|string|boolean|Date|Buffer|null;
+export type PrimitiveExpr = bigint|number|string|boolean|Date|Uint8Array|null;
 export type NonNullPrimitiveExpr = Exclude<PrimitiveExpr, null>;

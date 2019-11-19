@@ -40,9 +40,11 @@ export enum LiteralValueType {
     BOOLEAN = "BOOLEAN",
 
     /**
+     * An unsigned char array (8-bit unsigned integer)
      * ```ts
-     * Buffer.isBuffer(x)
+     * x instanceof Uint8Array
      * ```
+     * @todo Rename this to `UINT8ARRAY`?
      */
     BUFFER = "BUFFER",
 
@@ -89,10 +91,13 @@ export interface BooleanLiteralNode {
     readonly literalValueType : LiteralValueType.BOOLEAN,
     readonly literalValue : boolean,
 }
+/**
+ * @todo Rename this to Uint8ArrayLiteralNode
+ */
 export interface BufferLiteralNode {
     readonly type : "LiteralValue",
     readonly literalValueType : LiteralValueType.BUFFER,
-    readonly literalValue : Buffer,
+    readonly literalValue : Uint8Array,
 }
 export interface NullLiteralNode {
     readonly type : "LiteralValue",

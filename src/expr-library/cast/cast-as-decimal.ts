@@ -64,7 +64,7 @@ export type CustomDecimalCastableType = { dbDecimalCastable : void };
  * + string     = OK, or Error (if invalid format)
  * + boolean    = Error
  * + Date       = Error
- * + Buffer     = Error
+ * + Uint8Array = Error
  * + null       = NULL
  *
  * @todo Convert other cast functions to this
@@ -127,7 +127,7 @@ export type NonNullDecimalCastableType = Exclude<DecimalCastableType, null>;
  * + string     = OK, or Error (if invalid format)
  * + boolean    = Error
  * + Date       = Error
- * + Buffer     = Error
+ * + Uint8Array = Error
  * + null       = NULL
  */
 export function castAsDecimal<

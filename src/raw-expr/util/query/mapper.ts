@@ -36,8 +36,8 @@ export function mapper<RawExprT extends AnyRawExpr> (
     if (isDate(rawExpr)) {
         return tm.mysql.dateTime(3) as tm.AnySafeMapper as Mapper<RawExprT>;
     }
-    if (Buffer.isBuffer(rawExpr)) {
-        return tm.instanceOfBuffer() as tm.AnySafeMapper as Mapper<RawExprT>;
+    if (rawExpr instanceof Uint8Array) {
+        return tm.instanceOfUint8Array() as tm.AnySafeMapper as Mapper<RawExprT>;
     }
     if (rawExpr === null) {
         return tm.null() as tm.AnySafeMapper as Mapper<RawExprT>;

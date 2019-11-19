@@ -18,9 +18,9 @@ export function isEqual (a : PrimitiveExpr, b : PrimitiveExpr) : boolean {
         }
     }
 
-    if (Buffer.isBuffer(a)) {
-        if (Buffer.isBuffer(b)) {
-            return a.equals(b);
+    if (a instanceof Uint8Array) {
+        if (b instanceof Uint8Array) {
+            return tm.ArrayBufferUtil.equals(a, b);
         } else {
             return false;
         }

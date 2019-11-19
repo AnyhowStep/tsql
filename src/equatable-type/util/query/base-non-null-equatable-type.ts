@@ -9,6 +9,6 @@ export type BaseNonNullEquatableType<T extends NonNullEquatableType> = (
     string :
     T extends boolean ?
     boolean :
-    //Date|Buffer|Decimal|CustomEquatableType do not have literal types
+    //Date|Uint8Array|Decimal|CustomEquatableType do not have literal types
     T
 );
