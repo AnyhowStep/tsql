@@ -93,5 +93,5 @@ export async function fetchDefault<
             ...trackedDefaults,
             ...primaryKey,
         } as DefaultRow<LogT>;
-    })
+    });
 }

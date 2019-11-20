@@ -1,4 +1,3 @@
-import * as tm from "type-mapping";
 import {ILog} from "../../log";
 import {IsolableInsertOneConnection, ExecutionUtil, SelectConnection} from "../../../execution";
 import {PrimaryKey_Input} from "../../../primary-key";
@@ -7,11 +6,9 @@ import {RawExprNoUsedRef_Input} from "../../../raw-expr";
 import {fetchLatestOrDefault} from "./fetch-latest-or-default";
 import {DefaultRow} from "./fetch-default";
 import {escapeIdentifierWithDoubleQuotes} from "../../../sqlstring";
-import {PrimitiveExprUtil} from "../../../primitive-expr";
 import {Row} from "../../../row";
 import {TrackResult} from "./track-result";
 import {DataTypeUtil} from "../../../data-type";
-import {QueryUtil} from "../../../unified-query";
 
 export type TrackRow<LogT extends ILog> =
     /**
@@ -111,47 +108,22 @@ async function toInsertRow<LogT extends ILog> (
                 );
             }
         } else {
-            const newValueResult = tm.tryMap(
-                log.logTable.columns[trackedColumnAlias].mapper,
-                ``,
+            const newValue = await DataTypeUtil.evaluateExpr(
+                log.logTable.columns[trackedColumnAlias],
+                connection,
                 rawNewValue
             );
-            if (newValueResult.success) {
-                result[trackedColumnAlias] = newValueResult.value;
+            result[trackedColumnAlias] = newValue;
 
-                if (!DataTypeUtil.isNullSafeEqual(
-                    log.logTable.columns[trackedColumnAlias].mapper,
-                    newValueResult.value,
-                    prvValue
-                )) {
-                    /**
-                     * New value is used, we consider this a change.
-                     */
-                    changed = true;
-                }
-            } else {
-                //Probably an expression, evaluate it to figure out what its value is
-                const rawEvaluatedNewValue = await QueryUtil
-                    .newInstance()
-                    .selectValue(() => rawNewValue as any)
-                    .fetchValue(connection);
-                //We must have a value now
-                const evaluatedValue = log.logTable.columns[trackedColumnAlias].mapper(
-                    `${log.logTable.alias}.${trackedColumnAlias}`,
-                    rawEvaluatedNewValue
-                );
-                result[trackedColumnAlias] = evaluatedValue;
-
-                if (!DataTypeUtil.isNullSafeEqual(
-                    log.logTable.columns[trackedColumnAlias].mapper,
-                    evaluatedValue,
-                    prvValue
-                )) {
-                    /**
-                     * New value is used, we consider this a change.
-                     */
-                    changed = true;
-                }
+            if (!DataTypeUtil.isNullSafeEqual(
+                log.logTable.columns[trackedColumnAlias].mapper,
+                newValue,
+                prvValue
+            )) {
+                /**
+                 * New value is used, we consider this a change.
+                 */
+                changed = true;
             }
         }
     }
@@ -167,12 +139,9 @@ async function toInsertRow<LogT extends ILog> (
                 continue;
             }
         }
-        const newValue = (
-            PrimitiveExprUtil.isPrimitiveExpr(rawNewValue) ?
-            log.logTable.columns[doNotCopyColumnAlias].mapper(
-                `${escapeIdentifierWithDoubleQuotes(log.logTable.alias)}.${escapeIdentifierWithDoubleQuotes(doNotCopyColumnAlias)}`,
-                rawNewValue
-            ) :
+        const newValue = await DataTypeUtil.evaluateExpr(
+            log.logTable.columns[doNotCopyColumnAlias],
+            connection,
             rawNewValue
         );
         result[doNotCopyColumnAlias] = newValue;

@@ -2,7 +2,6 @@ import {ILog, LogData} from "../../log";
 import {Log} from "../../log-impl";
 import {TableUtil} from "../../../table";
 import {RawExprNoUsedRef_Input, RawExprUtil} from "../../../raw-expr";
-import {PrimitiveExprUtil} from "../../../primitive-expr";
 import {UsedRefUtil} from "../../../used-ref";
 import {Identity} from "../../../type-util";
 
@@ -88,12 +87,8 @@ export function setTrackedDefaults<
         const usedRef = RawExprUtil.usedRef(rawValue);
         UsedRefUtil.assertAllowed(allowedRef, usedRef);
 
-        const value = (
-            PrimitiveExprUtil.isPrimitiveExpr(rawValue) ?
-            log.logTable.columns[columnAlias].mapper(
-                `${log.logTable.alias}.${columnAlias}`,
-                rawValue
-            ) :
+        const value = RawExprUtil.mapRawExprInput(
+            log.logTable.columns[columnAlias],
             rawValue
         );
 

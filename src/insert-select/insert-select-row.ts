@@ -3,6 +3,9 @@ import {RawExprNoUsedRef_Output} from "../raw-expr";
 import {QueryBaseUtil} from "../query-base";
 import {ColumnUtil} from "../column";
 
+/**
+ * @todo Allow `RawExprNoUsedRef_Input`
+ */
 export type InsertSelectRow<
     QueryT extends QueryBaseUtil.AfterSelectClause,
     TableT extends ITable

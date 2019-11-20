@@ -51,6 +51,10 @@ export async function insertAndFetch<
 
     return connection.transactionIfNotInOne(async (connection) : Promise<Row<TableT>> => {
         if (table.autoIncrement == undefined) {
+            /**
+             * @todo We can do better here. Probably.
+             * Maybe implement `DataTypeUtil.evaluateCandidateKey(table, row)` or something
+             */
             const candidateKeyResult = tm.tryMapHandled(
                 CandidateKeyUtil.mapperPreferPrimaryKey(table),
                 ``,

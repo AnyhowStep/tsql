@@ -2,7 +2,7 @@ import * as tm from "type-mapping";
 import {ITable, TableWithAutoIncrement, TableWithoutAutoIncrement, InsertableTable, TableUtil} from "../../../table";
 import {InsertOneConnection, InsertOneResult} from "../../connection";
 import {InsertRow_Input, InsertUtil} from "../../../insert";
-import {QueryUtil} from "../../../unified-query";
+import {DataTypeUtil} from "../../../data-type";
 
 export type InsertOneResultWithAutoIncrement<
     AutoIncrementColumnAlias extends string
@@ -79,22 +79,11 @@ export async function insertOne<
         throw new Error(`Successful insertOne() to ${table.alias} should return autoIncrementId`);
     }
 
-    const explicitAutoIncrementValueIsColumnValue = tm.tryMap(
-        table.columns[table.autoIncrement].mapper,
-        ``,
+    explicitAutoIncrementValue = await DataTypeUtil.evaluateExpr(
+        table.columns[table.autoIncrement],
+        connection,
         explicitAutoIncrementValue
-    ).success;
-
-    if (!explicitAutoIncrementValueIsColumnValue) {
-        /**
-         * We probably have an `IExpr` or something.
-         * We'll need to convert it to a JS-land column value we can use.
-         */
-        explicitAutoIncrementValue = await QueryUtil
-            .newInstance()
-            .selectValue(() => explicitAutoIncrementValue as any)
-            .fetchValue(connection);
-    }
+    );
 
     const insertResult = await connection.insertOne(
         table,

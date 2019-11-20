@@ -32,6 +32,13 @@ export type AnyRawExpr = (
     | IExprSelectItem
 );
 
+export type AnyNonPrimitiveRawExpr =
+    | IExpr
+    | IColumn
+    | AnySubqueryExpr
+    | IExprSelectItem
+;
+
 export type NonPrimitiveRawExprNoUsedRef<TypeT> =
     | IExpr<{
         mapper : tm.SafeMapper<TypeT>,
