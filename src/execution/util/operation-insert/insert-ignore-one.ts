@@ -6,21 +6,25 @@ import {InsertOneResultWithAutoIncrement} from "./insert-one";
 import {Identity} from "../../../type-util";
 
 export type IgnoredInsertOneResultWithAutoIncrement<
-    TableT extends TableWithAutoIncrement
+    AutoIncrementColumnAlias extends string
 > =
     Identity<
         & IgnoredInsertOneResult
-        & { [columnAlias in TableT["autoIncrement"]] : undefined }
+        & { [columnAlias in AutoIncrementColumnAlias] : undefined }
     >
 ;
 
 export type InsertIgnoreOneResultWithAutoIncrement<
+    AutoIncrementColumnAlias extends string
+> =
+    | IgnoredInsertOneResultWithAutoIncrement<AutoIncrementColumnAlias>
+    | InsertOneResultWithAutoIncrement<AutoIncrementColumnAlias>
+;
+
+export type InsertIgnoreOneWithAutoIncrementReturnType<
     TableT extends TableWithAutoIncrement
 > =
-    Identity<
-        | IgnoredInsertOneResultWithAutoIncrement<TableT>
-        | InsertOneResultWithAutoIncrement<TableT>
-    >
+    InsertIgnoreOneResultWithAutoIncrement<TableT["autoIncrement"]>
 ;
 
 function isIgnoredResult (result : InsertIgnoreOneResult) : result is IgnoredInsertOneResult {
@@ -43,7 +47,7 @@ export async function insertIgnoreOne<
     connection : InsertIgnoreOneConnection,
     row : InsertRow<TableT>
 ) : (
-    Promise<InsertIgnoreOneResultWithAutoIncrement<TableT>>
+    Promise<InsertIgnoreOneWithAutoIncrementReturnType<TableT>>
 );
 export async function insertIgnoreOne<
     TableT extends TableWithoutAutoIncrement & InsertableTable

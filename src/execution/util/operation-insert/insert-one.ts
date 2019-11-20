@@ -3,16 +3,18 @@ import {ITable, TableWithAutoIncrement, TableWithoutAutoIncrement, InsertableTab
 import {InsertOneConnection, InsertOneResult} from "../../connection";
 import {InsertRow, InsertUtil} from "../../../insert";
 import {QueryUtil} from "../../../unified-query";
-import {Identity} from "../../../type-util";
 
 export type InsertOneResultWithAutoIncrement<
+    AutoIncrementColumnAlias extends string
+> =
+    & InsertOneResult
+    & { autoIncrementId : bigint }
+    & { [columnAlias in AutoIncrementColumnAlias] : bigint }
+;
+export type InsertOneWithAutoIncrementReturnType<
     TableT extends TableWithAutoIncrement
 > =
-    Identity<
-        & InsertOneResult
-        & { autoIncrementId : bigint }
-        & { [columnAlias in TableT["autoIncrement"]] : bigint }
-    >
+    InsertOneResultWithAutoIncrement<TableT["autoIncrement"]>
 ;
 
 /**
@@ -31,7 +33,7 @@ export async function insertOne<
     connection : InsertOneConnection,
     row : InsertRow<TableT>
 ) : (
-    Promise<InsertOneResultWithAutoIncrement<TableT>>
+    Promise<InsertOneWithAutoIncrementReturnType<TableT>>
 );
 export async function insertOne<
     TableT extends TableWithoutAutoIncrement & InsertableTable
