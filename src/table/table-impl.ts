@@ -16,7 +16,7 @@ import {SelectClause, SelectDelegate, SelectValueDelegate, SelectClauseUtil} fro
 import {FromClauseUtil} from "../from-clause";
 import {WhereDelegate} from "../where-clause";
 import {AnyRawExpr} from "../raw-expr";
-import {InsertRow, InsertRowPrimitiveCandidateKey} from "../insert";
+import {InsertRow, InsertRowRequireCandidateKey} from "../insert";
 import {InsertOneWithAutoIncrementReturnType, InsertIgnoreOneWithAutoIncrementReturnType, DeleteOneResult, DeleteZeroOrOneResult, UpdateOneResult, UpdateZeroOrOneResult} from "../execution/util";
 import {AssignmentMapDelegate} from "../update";
 /*import {PrimaryKey, PrimaryKeyUtil} from "../primary-key";
@@ -1242,7 +1242,9 @@ export class Table<DataT extends TableData> implements ITable {
     insertAndFetch (
         this : Extract<this, TableWithoutAutoIncrement & InsertableTable>,
         connection : IsolableInsertOneConnection,
-        row : InsertRowPrimitiveCandidateKey<Extract<this, TableWithoutAutoIncrement & InsertableTable>>
+        row : InsertRowRequireCandidateKey<
+            Extract<this, TableWithoutAutoIncrement & InsertableTable>
+        >
     ) : Promise<Row<Extract<this, TableWithoutAutoIncrement & InsertableTable>>>;
     insertAndFetch (
         connection : IsolableInsertOneConnection,

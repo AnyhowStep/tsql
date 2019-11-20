@@ -107,7 +107,7 @@ export function __updateAndFetchOneByCandidateKeyHelper<
     candidateKey : CandidateKeyT & AssertNonUnion<CandidateKeyT>,
     assignmentMapDelegate : AssignmentMapDelegate<TableT, AssignmentMapT>
 ) {
-    candidateKey = CandidateKeyUtil.mapper(table)(
+    candidateKey = CandidateKeyUtil.mapperPreferPrimaryKey(table)(
         `${table.alias}[candidateKey]`,
         candidateKey
     ) as any;

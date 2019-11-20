@@ -2,7 +2,7 @@ import {ITable, TableUtil} from "../table";
 import {RawExprNoUsedRef} from "../raw-expr";
 import {Key} from "../key";
 
-export type InsertRowPrimitiveCandidateKeyImpl<
+export type InsertRowRequireCandidateKeyImpl<
     TableT extends ITable,
     CandidateKeyT extends Key
 > =
@@ -22,16 +22,21 @@ export type InsertRowPrimitiveCandidateKeyImpl<
                 >
             )
         }
+        /**
+         * This Candidate key is required.
+         */
         & {
             readonly [candidateKeyColumnAlias in CandidateKeyT[number]] : (
-                ReturnType<TableT["columns"][candidateKeyColumnAlias]["mapper"]>
+                RawExprNoUsedRef<
+                    ReturnType<TableT["columns"][candidateKeyColumnAlias]["mapper"]>
+                >
             )
         }
     ) :
     never
 ;
-export type InsertRowPrimitiveCandidateKey<TableT extends ITable> =
-    InsertRowPrimitiveCandidateKeyImpl<
+export type InsertRowRequireCandidateKey<TableT extends ITable> =
+    InsertRowRequireCandidateKeyImpl<
         TableT,
         TableT["candidateKeys"][number]
     >

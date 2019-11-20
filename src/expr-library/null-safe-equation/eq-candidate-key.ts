@@ -55,7 +55,7 @@ import {DataTypeUtil} from "../../data-type";
  */
 export type EqCandidateKey = (
     <
-        TableT extends Pick<ITable, "columns"|"candidateKeys">
+        TableT extends Pick<ITable, "columns"|"candidateKeys"|"primaryKey">
     > (
         table : TableT,
         candidateKeyInput : StrictUnion<CandidateKey_Input<TableT>>
@@ -68,7 +68,7 @@ export type EqCandidateKey = (
 );
 export const eqCandidateKey : EqCandidateKey = (
     <
-        TableT extends Pick<ITable, "columns"|"candidateKeys">
+        TableT extends Pick<ITable, "columns"|"candidateKeys"|"primaryKey">
     > (
         table : TableT,
         candidateKeyInput : StrictUnion<CandidateKey_Input<TableT>>
@@ -78,7 +78,7 @@ export const eqCandidateKey : EqCandidateKey = (
             usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>
         }>
     ) => {
-        const candidateKey = CandidateKeyUtil.mapper(table)(
+        const candidateKey = CandidateKeyUtil.mapperPreferPrimaryKey(table)(
             `${ColumnMapUtil.tableAlias(table.columns)}.candidateKey`,
             candidateKeyInput
         );
