@@ -1,21 +1,26 @@
 import * as tm from "type-mapping";
 import {ITable, TableWithAutoIncrement, TableWithoutAutoIncrement, InsertableTable, TableUtil} from "../../../table";
 import {IgnoredInsertOneResult, InsertIgnoreOneResult, InsertIgnoreOneConnection} from "../../connection";
-import {InsertRow, InsertRowPrimitiveAutoIncrement, InsertUtil} from "../../../insert";
+import {InsertRow, InsertUtil} from "../../../insert";
 import {InsertOneResultWithAutoIncrement} from "./insert-one";
+import {Identity} from "../../../type-util";
 
 export type IgnoredInsertOneResultWithAutoIncrement<
     TableT extends TableWithAutoIncrement
 > =
-    & IgnoredInsertOneResult
-    & { [columnAlias in TableT["autoIncrement"]] : undefined }
+    Identity<
+        & IgnoredInsertOneResult
+        & { [columnAlias in TableT["autoIncrement"]] : undefined }
+    >
 ;
 
 export type InsertIgnoreOneResultWithAutoIncrement<
     TableT extends TableWithAutoIncrement
 > =
-    | IgnoredInsertOneResultWithAutoIncrement<TableT>
-    | InsertOneResultWithAutoIncrement<TableT>
+    Identity<
+        | IgnoredInsertOneResultWithAutoIncrement<TableT>
+        | InsertOneResultWithAutoIncrement<TableT>
+    >
 ;
 
 function isIgnoredResult (result : InsertIgnoreOneResult) : result is IgnoredInsertOneResult {
@@ -36,7 +41,7 @@ export async function insertIgnoreOne<
 > (
     table : TableT,
     connection : InsertIgnoreOneConnection,
-    row : InsertRowPrimitiveAutoIncrement<TableT>
+    row : InsertRow<TableT>
 ) : (
     Promise<InsertIgnoreOneResultWithAutoIncrement<TableT>>
 );

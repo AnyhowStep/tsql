@@ -15,7 +15,7 @@ tape(__filename, async (t) => {
         .setAutoIncrement(columns => columns.testId)
         .removeGenerated(columns => [columns.testId]);
 
-    await pool.acquire(async (connection) => {
+    const insertResult = await pool.acquire(async (connection) => {
         await connection.exec(`
             CREATE TABLE test (
                 testId INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -34,13 +34,16 @@ tape(__filename, async (t) => {
             {
                 testId : tsql.ExprUtil.fromRawExpr(BigInt(5)),
                 testVal : BigInt(400),
-            } as any
-        ).then(() => {
-            t.fail("Should not insert anything");
-        }).catch(() => {
-            t.pass("Should error");
-        });
+            }
+        );
     });
+    t.deepEqual(
+        insertResult,
+        {
+            testId : BigInt(5),
+            testVal : BigInt(400),
+        }
+    );
 
     await pool
         .acquire(async (connection) => {
@@ -49,7 +52,7 @@ tape(__filename, async (t) => {
         .then((count) => {
             t.deepEqual(
                 count,
-                BigInt(3)
+                BigInt(4)
             );
         })
         .catch((err) => {
