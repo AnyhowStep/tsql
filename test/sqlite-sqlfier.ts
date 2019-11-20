@@ -707,6 +707,8 @@ export const sqliteSqlfier : Sqlfier = {
         [OperatorType.RANDOM] : ({operands, typeHint}) => {
             if (typeHint == TypeHint.DOUBLE) {
                 return functionCall("FRANDOM", operands);
+            } else if (typeHint == TypeHint.BIGINT_SIGNED) {
+                return functionCall("RANDOM", operands);
             } else {
                 throw new Error(`RANDOM not implemented for ${typeHint}`);
             }

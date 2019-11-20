@@ -29,40 +29,33 @@ tape(__filename, async (t) => {
                 (3, 300);
         `);
 
-        return tsql.ExecutionUtil.insertOne(
-            test,
+        return test.insertAndFetch(
             connection,
             {
-                testId : tsql.ExprUtil.fromRawExpr(BigInt(5)),
+                testId : tsql.integer.add(BigInt(3), BigInt(2)),
                 testVal : BigInt(400),
             }
         );
     });
     t.deepEqual(
-        insertResult.insertedRowCount,
-        BigInt(1)
-    );
-    t.deepEqual(
-        insertResult.autoIncrementId,
-        BigInt(5)
-    );
-    t.deepEqual(
-        insertResult.warningCount,
-        BigInt(0)
-    );
-    t.deepEqual(
-        insertResult.testId,
-        BigInt(5)
+        insertResult,
+        {
+            testId : BigInt(5),
+            testVal : BigInt(400),
+        }
     );
 
     await pool
         .acquire(async (connection) => {
-            return tsql.from(test).count(connection);
+            return test.fetchOneByPrimaryKey(connection, { testId : BigInt(5) });
         })
-        .then((count) => {
+        .then((row) => {
             t.deepEqual(
-                count,
-                BigInt(4)
+                row,
+                {
+                    testId : BigInt(5),
+                    testVal : BigInt(400),
+                }
             );
         })
         .catch((err) => {

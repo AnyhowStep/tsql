@@ -9,7 +9,7 @@ tape(__filename, async (t) => {
 
     const test = tsql.table("test")
         .addColumns({
-            testId : tm.mysql.bigIntUnsigned(),
+            testId : tsql.dtBigIntSigned(),
             testVal : tm.mysql.bigIntUnsigned(),
         })
         .setAutoIncrement(columns => columns.testId)
@@ -29,11 +29,10 @@ tape(__filename, async (t) => {
                 (3, 300);
         `);
 
-        return tsql.ExecutionUtil.insertOne(
-            test,
+        return test.insertOne(
             connection,
             {
-                testId : tsql.ExprUtil.fromRawExpr(BigInt(5)),
+                testId : tsql.integer.randomSignedBigInt(),
                 testVal : BigInt(400),
             }
         );
@@ -42,18 +41,33 @@ tape(__filename, async (t) => {
         insertResult.insertedRowCount,
         BigInt(1)
     );
-    t.deepEqual(
-        insertResult.autoIncrementId,
-        BigInt(5)
+    t.true(
+        tm.TypeUtil.isBigInt(insertResult.autoIncrementId)
     );
     t.deepEqual(
         insertResult.warningCount,
         BigInt(0)
     );
-    t.deepEqual(
-        insertResult.testId,
-        BigInt(5)
+    t.true(
+        tm.TypeUtil.isBigInt(insertResult.testId)
     );
+
+    await pool
+        .acquire(async (connection) => {
+            return test.fetchOneByPrimaryKey(
+                connection,
+                insertResult
+            );
+        })
+        .then((row) => {
+            t.deepEqual(
+                row,
+                {
+                    testId : insertResult.autoIncrementId,
+                    testVal : BigInt(400),
+                }
+            );
+        });
 
     await pool
         .acquire(async (connection) => {

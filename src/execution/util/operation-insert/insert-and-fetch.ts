@@ -1,6 +1,6 @@
 import {ITable, TableWithAutoIncrement, TableWithoutAutoIncrement, InsertableTable, TableUtil} from "../../../table";
 import {IsolableInsertOneConnection} from "../../connection";
-import {InsertRow, InsertRowPrimitiveAutoIncrement, InsertRowPrimitiveCandidateKey} from "../../../insert";
+import {InsertRow, InsertRowPrimitiveCandidateKey} from "../../../insert";
 import {Row} from "../../../row";
 import {insertOne} from "./insert-one";
 import * as ExprLib from "../../../expr-library";
@@ -19,7 +19,7 @@ export async function insertAndFetch<
 > (
     table : TableT,
     connection : IsolableInsertOneConnection,
-    row : InsertRowPrimitiveAutoIncrement<TableT>
+    row : InsertRow<TableT>
 ) : (
     Promise<Row<TableT>>
 );
