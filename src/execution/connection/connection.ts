@@ -212,10 +212,26 @@ export interface IConnection {
     rawQuery (sql : string) : Promise<RawQueryResult>;
     select (query : IQueryBase) : Promise<SelectResult>;
 
+    /**
+     * This does not allow custom data types.
+     * All custom data types must be wrapped by an expression.
+     */
     insertOne<TableT extends InsertableTable> (table : TableT, row : InsertRow<TableT>) : Promise<InsertOneResult>;
+    /**
+     * This does not allow custom data types.
+     * All custom data types must be wrapped by an expression.
+     */
     insertMany<TableT extends InsertableTable> (table : TableT, rows : readonly [InsertRow<TableT>, ...InsertRow<TableT>[]]) : Promise<InsertManyResult>;
 
+    /**
+     * This does not allow custom data types.
+     * All custom data types must be wrapped by an expression.
+     */
     insertIgnoreOne<TableT extends InsertableTable> (table : TableT, row : InsertRow<TableT>) : Promise<InsertIgnoreOneResult>;
+    /**
+     * This does not allow custom data types.
+     * All custom data types must be wrapped by an expression.
+     */
     insertIgnoreMany<TableT extends InsertableTable> (table : TableT, rows : readonly [InsertRow<TableT>, ...InsertRow<TableT>[]]) : Promise<InsertIgnoreManyResult>;
 
     replaceOne<TableT extends InsertableTable & DeletableTable> (table : TableT, row : InsertRow<TableT>) : Promise<ReplaceOneResult>;

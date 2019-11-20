@@ -6,7 +6,8 @@ import {RawExprUtil} from "../../../raw-expr";
 import {QueryBaseUtil} from "../../../query-base";
 import {ExprUtil} from "../../../expr";
 import {ExprSelectItemUtil} from "../../../expr-select-item";
-import {MissingRequiredInsertColumnError, NullableRequiredInsertColumnError, InvalidInsertColumnError} from "../../../error";
+import {MissingRequiredInsertColumnError, NullableRequiredInsertColumnError} from "../../../error";
+import {DataTypeUtil} from "../../../data-type";
 
 export function cleanInsertColumn<TableT extends ITable> (
     table : TableT,
@@ -81,20 +82,25 @@ export function cleanInsertColumn<TableT extends ITable> (
         return value as any;
     } else {
         /**
-         * Could be an `IExpr`, `IExprSelectItem`
-         *
-         * @todo Should we validate these?
+         * Could be an `IExpr`, `IExprSelectItem`, or a custom data type
          */
         if (
-            !ExprUtil.isExpr(value) &&
-            !ExprSelectItemUtil.isExprSelectItem(value)
+            ExprUtil.isExpr(value) ||
+            ExprSelectItemUtil.isExprSelectItem(value)
         ) {
-            throw new InvalidInsertColumnError(
-                `Expected PrimitiveExpr|Expr|ExprSelectItem|AnySubquery for ${table.alias}.${columnAlias} `,
-                table,
-                columnAlias
-            );
+            /**
+             * @todo Should we validate these?
+             * How would one even do that?
+             */
+            return value as any;
         }
-        return value as any;
+
+        /**
+         * Maybe a custom data type?
+         */
+        return DataTypeUtil.toRawExpr(
+            table.columns[columnAlias].mapper,
+            value
+        );
     }
 }
