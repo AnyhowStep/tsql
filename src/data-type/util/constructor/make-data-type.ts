@@ -1,11 +1,11 @@
 import * as tm from "type-mapping";
 import {IDataType} from "../../data-type";
-import {RawExprNoUsedRef} from "../../../raw-expr";
+import {RawExprNoUsedRef_Output} from "../../../raw-expr";
 import {DataType} from "../../data-type-impl";
 
 export function makeDataType<TypeT>(
     mapper : tm.SafeMapper<TypeT>,
-    toRawExpr : (value : TypeT) => RawExprNoUsedRef<TypeT>,
+    toRawExpr : (value : TypeT) => RawExprNoUsedRef_Output<TypeT>,
     isNullSafeEqual : (a : TypeT, b : TypeT) => boolean,
     extraMapper? : tm.Mapper<TypeT, TypeT>
 ) : DataType<TypeT> {
@@ -22,12 +22,12 @@ export function makeDataType<TypeT>(
     dataType.orNull = () : IDataType<TypeT|null> => {
         return makeDataType(
             tm.orNull(myMapper),
-            (value : TypeT|null) : RawExprNoUsedRef<TypeT|null> => {
+            (value : TypeT|null) : RawExprNoUsedRef_Output<TypeT|null> => {
                 if (value === null) {
                     return null;
                 } else {
-                    const rawExpr : RawExprNoUsedRef<TypeT> = toRawExpr(value);
-                    return rawExpr as RawExprNoUsedRef<TypeT|null>;
+                    const rawExpr : RawExprNoUsedRef_Output<TypeT> = toRawExpr(value);
+                    return rawExpr as RawExprNoUsedRef_Output<TypeT|null>;
                 }
             },
             (a : TypeT|null, b : TypeT|null) : boolean => {

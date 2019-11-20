@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {isDataType} from "../predicate";
 import {PrimitiveExprUtil} from "../../../primitive-expr";
-import {RawExprNoUsedRef} from "../../../raw-expr";
+import {RawExprNoUsedRef_Output} from "../../../raw-expr";
 
 /**
  * If `mapper` is `IDataType`, it uses `mapper.toRawExpr()`.
@@ -12,7 +12,7 @@ import {RawExprNoUsedRef} from "../../../raw-expr";
 export function toRawExpr<TypeT> (
     mapper : tm.SafeMapper<TypeT>,
     value : TypeT
-) : RawExprNoUsedRef<TypeT> {
+) : RawExprNoUsedRef_Output<TypeT> {
     if (isDataType(mapper)) {
         return mapper.toRawExpr(
             /**
@@ -22,7 +22,7 @@ export function toRawExpr<TypeT> (
         );
     } else {
         if (PrimitiveExprUtil.isPrimitiveExpr(value)) {
-            return value as RawExprNoUsedRef<TypeT>;
+            return value as RawExprNoUsedRef_Output<TypeT>;
         } else {
             /**
              * @todo Custom `Error` type

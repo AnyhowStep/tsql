@@ -1,7 +1,7 @@
 import {ILog, LogData} from "../../log";
 import {Log} from "../../log-impl";
 import {TableUtil} from "../../../table";
-import {RawExprNoUsedRef, RawExprUtil} from "../../../raw-expr";
+import {RawExprNoUsedRef_Input, RawExprUtil} from "../../../raw-expr";
 import {PrimitiveExprUtil} from "../../../primitive-expr";
 import {UsedRefUtil} from "../../../used-ref";
 import {Identity} from "../../../type-util";
@@ -29,7 +29,7 @@ export type TrackedDefaults<
             DataT["tracked"][number]
         )] : (
             | undefined
-            | RawExprNoUsedRef<
+            | RawExprNoUsedRef_Input<
                 TableUtil.ColumnType<DataT["logTable"], columnAlias>
             >
         )

@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {ITable, TableWithAutoIncrement, TableWithoutAutoIncrement, InsertableTable, TableUtil} from "../../../table";
 import {IgnoredInsertOneResult, InsertIgnoreOneResult, InsertIgnoreOneConnection} from "../../connection";
-import {InsertRow, InsertUtil} from "../../../insert";
+import {InsertRow_Input, InsertUtil} from "../../../insert";
 import {InsertOneResultWithAutoIncrement} from "./insert-one";
 import {Identity} from "../../../type-util";
 
@@ -45,7 +45,7 @@ export async function insertIgnoreOne<
 > (
     table : TableT,
     connection : InsertIgnoreOneConnection,
-    row : InsertRow<TableT>
+    row : InsertRow_Input<TableT>
 ) : (
     Promise<InsertIgnoreOneWithAutoIncrementReturnType<TableT>>
 );
@@ -54,7 +54,7 @@ export async function insertIgnoreOne<
 > (
     table : TableT,
     connection : InsertIgnoreOneConnection,
-    row : InsertRow<TableT>
+    row : InsertRow_Input<TableT>
 ) : (
     Promise<InsertIgnoreOneResult>
 );
@@ -63,7 +63,7 @@ export async function insertIgnoreOne<
 > (
     table : TableT,
     connection : InsertIgnoreOneConnection,
-    row : InsertRow<TableT>
+    row : InsertRow_Input<TableT>
 ) : (
     Promise<InsertIgnoreOneResult>
 ) {

@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {RawExprNoUsedRef} from "../raw-expr";
+import {RawExprNoUsedRef_Output} from "../raw-expr";
 
 /**
  * When just using `TypeT` with a `PrimitiveExpr`,
@@ -31,7 +31,7 @@ export interface IDataType<TypeT> extends tm.SafeMapper<TypeT> {
      *
      * @param value - The value to convert to a `RawExpr`
      */
-    toRawExpr (value : TypeT) : RawExprNoUsedRef<TypeT>;
+    toRawExpr (value : TypeT) : RawExprNoUsedRef_Output<TypeT>;
 
     /**
      * At the moment, this is specifically used by `Log.track()`

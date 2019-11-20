@@ -1,6 +1,6 @@
 import {InsertableTable, TableUtil, DeletableTable} from "../../../table";
 import {ReplaceOneResult, ReplaceOneConnection} from "../../connection";
-import {InsertRow, InsertUtil} from "../../../insert";
+import {InsertRow_Input, InsertUtil} from "../../../insert";
 
 /**
  * Only inserts/replaces one row
@@ -19,7 +19,7 @@ export async function replaceOne<
 > (
     table : TableT,
     connection : ReplaceOneConnection,
-    row : InsertRow<TableT>
+    row : InsertRow_Input<TableT>
 ) : (
     Promise<ReplaceOneResult>
 ) {

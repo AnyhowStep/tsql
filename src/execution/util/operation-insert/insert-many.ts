@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {ITable, InsertableTable, TableUtil} from "../../../table";
 import {InsertManyResult, InsertManyConnection} from "../../connection";
-import {InsertRow, InsertUtil} from "../../../insert";
+import {InsertRow_Input, InsertUtil, InsertRow_Output} from "../../../insert";
 
 /**
  * Inserts zero-to-many rows
@@ -17,7 +17,7 @@ export async function insertMany<
 > (
     table : TableT,
     connection : InsertManyConnection,
-    rows : readonly InsertRow<TableT>[]
+    rows : readonly InsertRow_Input<TableT>[]
 ) : (
     Promise<InsertManyResult>
 ) {
@@ -45,6 +45,6 @@ export async function insertMany<
         table,
         rows.map(
             row => InsertUtil.cleanInsertRow(table, row)
-        ) as [InsertRow<TableT>, ...InsertRow<TableT>[]]
+        ) as [InsertRow_Output<TableT>, ...InsertRow_Output<TableT>[]]
     );
 }

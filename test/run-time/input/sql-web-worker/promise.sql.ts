@@ -239,7 +239,7 @@ export class Connection {
 
     private insertOneSqlString<TableT extends ITable> (
         table : TableT,
-        row : tsql.InsertRow<TableT>,
+        row : tsql.InsertRow_Output<TableT>,
         modifier : string
     ) : string {
         const columnAliases = tsql.TableUtil.columnAlias(table)
@@ -287,7 +287,7 @@ export class Connection {
         return tsql.AstUtil.toSql(ast, sqliteSqlfier);
     }
 
-    insertOne<TableT extends ITable> (table : TableT, row : tsql.InsertRow<TableT>) : Promise<tsql.InsertOneResult> {
+    insertOne<TableT extends ITable> (table : TableT, row : tsql.InsertRow_Output<TableT>) : Promise<tsql.InsertOneResult> {
         const sql = this.insertOneSqlString(table, row, "");
         return this.exec(sql)
             .then(async (result) => {
@@ -339,7 +339,7 @@ export class Connection {
             });
     }
 
-    replaceOne<TableT extends ITable> (table : TableT, row : tsql.InsertRow<TableT>) : Promise<tsql.ReplaceOneResult> {
+    replaceOne<TableT extends ITable> (table : TableT, row : tsql.InsertRow_Output<TableT>) : Promise<tsql.ReplaceOneResult> {
         const sql = this.insertOneSqlString(table, row, "OR REPLACE");
         return this.exec(sql)
             .then(async (result) => {
@@ -365,7 +365,7 @@ export class Connection {
             });
     }
 
-    insertIgnoreOne<TableT extends ITable> (table : TableT, row : tsql.InsertRow<TableT>) : Promise<tsql.InsertIgnoreOneResult> {
+    insertIgnoreOne<TableT extends ITable> (table : TableT, row : tsql.InsertRow_Output<TableT>) : Promise<tsql.InsertIgnoreOneResult> {
         const sql = this.insertOneSqlString(table, row, "OR IGNORE");
         return this.exec(sql)
             .then(async (result) => {
@@ -577,7 +577,7 @@ export class Connection {
 
     private async insertManySqlString<TableT extends ITable> (
         table : TableT,
-        rows : readonly [tsql.InsertRow<TableT>, ...tsql.InsertRow<TableT>[]],
+        rows : readonly [tsql.InsertRow_Output<TableT>, ...tsql.InsertRow_Output<TableT>[]],
         modifier : string
     ) : Promise<string> {
         const structure = (await this.fetchTableStructure(table.alias)).columns;
@@ -682,7 +682,7 @@ export class Connection {
      */
     async insertMany<TableT extends ITable> (
         table : TableT,
-        rows : readonly [tsql.InsertRow<TableT>, ...tsql.InsertRow<TableT>[]]
+        rows : readonly [tsql.InsertRow_Output<TableT>, ...tsql.InsertRow_Output<TableT>[]]
     ) : Promise<tsql.InsertManyResult> {
         const sql = await this.insertManySqlString(table, rows, "");
         return this.exec(sql)
@@ -711,7 +711,7 @@ export class Connection {
 
     async insertIgnoreMany<TableT extends ITable> (
         table : TableT,
-        rows : readonly [tsql.InsertRow<TableT>, ...tsql.InsertRow<TableT>[]]
+        rows : readonly [tsql.InsertRow_Output<TableT>, ...tsql.InsertRow_Output<TableT>[]]
     ) : Promise<tsql.InsertIgnoreManyResult> {
         const sql = await this.insertManySqlString(table, rows, "OR IGNORE");
         return this.exec(sql)
@@ -740,7 +740,7 @@ export class Connection {
 
     async replaceMany<TableT extends ITable> (
         table : TableT,
-        rows : readonly [tsql.InsertRow<TableT>, ...tsql.InsertRow<TableT>[]]
+        rows : readonly [tsql.InsertRow_Output<TableT>, ...tsql.InsertRow_Output<TableT>[]]
     ) : Promise<tsql.ReplaceManyResult> {
         const sql = await this.insertManySqlString(table, rows, "OR REPLACE");
         return this.exec(sql)

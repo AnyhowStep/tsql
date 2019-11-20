@@ -60,12 +60,23 @@ export type AnyRawExprNoUsedRef =
     | NonPrimitiveRawExprNoUsedRef<any>
 ;
 
-export type RawExprNoUsedRef<TypeT> =
+/**
+ * Custom data types **not** allowed
+ */
+export type RawExprNoUsedRef_Output<TypeT> =
     | (
         TypeT extends PrimitiveExpr ?
         TypeT :
         never
     )
+    | NonPrimitiveRawExprNoUsedRef<TypeT>
+;
+
+/**
+ * Custom data types allowed
+ */
+export type RawExprNoUsedRef_Input<TypeT> =
+    | TypeT
     | NonPrimitiveRawExprNoUsedRef<TypeT>
 ;
 

@@ -5,7 +5,7 @@
       "category": 1,
       "code": 2345,
       "next": {
-        "messageText": "Property 'testId' is missing in type '{}' but required in type '{ readonly testId: RawExprNoUsedRef<bigint>; }'.",
+        "messageText": "Property 'testId' is missing in type '{}' but required in type '{ readonly testId: RawExprNoUsedRef_Input<bigint>; }'.",
         "category": 1,
         "code": 2741
       }

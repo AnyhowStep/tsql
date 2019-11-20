@@ -1,8 +1,9 @@
+import * as tm from "type-mapping";
 import {ILog} from "../../log";
-import {IsolableInsertOneConnection, ExecutionUtil} from "../../../execution";
+import {IsolableInsertOneConnection, ExecutionUtil, SelectConnection} from "../../../execution";
 import {PrimaryKey_Input} from "../../../primary-key";
 import {TableUtil} from "../../../table";
-import {RawExprNoUsedRef} from "../../../raw-expr";
+import {RawExprNoUsedRef_Input} from "../../../raw-expr";
 import {fetchLatestOrDefault} from "./fetch-latest-or-default";
 import {DefaultRow} from "./fetch-default";
 import {escapeIdentifierWithDoubleQuotes} from "../../../sqlstring";
@@ -10,6 +11,7 @@ import {PrimitiveExprUtil} from "../../../primitive-expr";
 import {Row} from "../../../row";
 import {TrackResult} from "./track-result";
 import {DataTypeUtil} from "../../../data-type";
+import {QueryUtil} from "../../../unified-query";
 
 export type TrackRow<LogT extends ILog> =
     /**
@@ -21,7 +23,7 @@ export type TrackRow<LogT extends ILog> =
      */
     & {
         readonly [columnAlias in LogT["trackedWithDefaultValue"][number]]? : (
-            RawExprNoUsedRef<TableUtil.ColumnType<LogT["logTable"], columnAlias>>
+            RawExprNoUsedRef_Input<TableUtil.ColumnType<LogT["logTable"], columnAlias>>
         )
     }
     /**
@@ -43,7 +45,7 @@ export type TrackRow<LogT extends ILog> =
             LogT["trackedWithDefaultValue"][number]
         >] : (
             | undefined
-            | RawExprNoUsedRef<TableUtil.ColumnType<LogT["logTable"], columnAlias>>
+            | RawExprNoUsedRef_Input<TableUtil.ColumnType<LogT["logTable"], columnAlias>>
         )
     }
     /**
@@ -54,7 +56,7 @@ export type TrackRow<LogT extends ILog> =
             LogT["doNotCopy"][number],
             TableUtil.RequiredColumnAlias<LogT["logTable"]>
         >] : (
-            RawExprNoUsedRef<TableUtil.ColumnType<LogT["logTable"], columnAlias>>
+            RawExprNoUsedRef_Input<TableUtil.ColumnType<LogT["logTable"], columnAlias>>
         )
     }
     /**
@@ -67,13 +69,14 @@ export type TrackRow<LogT extends ILog> =
             LogT["doNotCopy"][number],
             TableUtil.OptionalColumnAlias<LogT["logTable"]>
         >]? : (
-            RawExprNoUsedRef<TableUtil.ColumnType<LogT["logTable"], columnAlias>>
+            RawExprNoUsedRef_Input<TableUtil.ColumnType<LogT["logTable"], columnAlias>>
         )
     }
 ;
 
-function toInsertRow<LogT extends ILog> (
+async function toInsertRow<LogT extends ILog> (
     log : LogT,
+    connection : SelectConnection,
     prvRow : DefaultRow<LogT>,
     newRow : TrackRow<LogT>
 ) {
@@ -108,25 +111,47 @@ function toInsertRow<LogT extends ILog> (
                 );
             }
         } else {
-            const newValue = (
-                PrimitiveExprUtil.isPrimitiveExpr(rawNewValue) ?
-                log.logTable.columns[trackedColumnAlias].mapper(
-                    `${escapeIdentifierWithDoubleQuotes(log.logTable.alias)}.${escapeIdentifierWithDoubleQuotes(trackedColumnAlias)}`,
-                    rawNewValue
-                ) :
+            const newValueResult = tm.tryMap(
+                log.logTable.columns[trackedColumnAlias].mapper,
+                ``,
                 rawNewValue
             );
-            result[trackedColumnAlias] = newValue;
+            if (newValueResult.success) {
+                result[trackedColumnAlias] = newValueResult.value;
 
-            if (!DataTypeUtil.isNullSafeEqual(
-                log.logTable.columns[trackedColumnAlias].mapper,
-                newValue,
-                prvValue
-            )) {
-                /**
-                 * New value is used, we consider this a change.
-                 */
-                changed = true;
+                if (!DataTypeUtil.isNullSafeEqual(
+                    log.logTable.columns[trackedColumnAlias].mapper,
+                    newValueResult.value,
+                    prvValue
+                )) {
+                    /**
+                     * New value is used, we consider this a change.
+                     */
+                    changed = true;
+                }
+            } else {
+                //Probably an expression, evaluate it to figure out what its value is
+                const rawEvaluatedNewValue = await QueryUtil
+                    .newInstance()
+                    .selectValue(() => rawNewValue as any)
+                    .fetchValue(connection);
+                //We must have a value now
+                const evaluatedValue = log.logTable.columns[trackedColumnAlias].mapper(
+                    `${log.logTable.alias}.${trackedColumnAlias}`,
+                    rawEvaluatedNewValue
+                );
+                result[trackedColumnAlias] = evaluatedValue;
+
+                if (!DataTypeUtil.isNullSafeEqual(
+                    log.logTable.columns[trackedColumnAlias].mapper,
+                    evaluatedValue,
+                    prvValue
+                )) {
+                    /**
+                     * New value is used, we consider this a change.
+                     */
+                    changed = true;
+                }
             }
         }
     }
@@ -189,8 +214,9 @@ export async function unsafeTrack<LogT extends ILog> (
 ) {
     return connection.transactionIfNotInOne(async (connection) : Promise<Track<LogT>> => {
         const latestOrDefault = await fetchLatestOrDefault(log, connection, primaryKey);
-        const {changed, insertRow} = toInsertRow(
+        const {changed, insertRow} = await toInsertRow(
             log,
+            connection,
             latestOrDefault.row as DefaultRow<LogT>,
             unsafeTrackRow
         );
