@@ -71,6 +71,9 @@ export async function insertAndFetch<
                 //We can't get a candidate key literal from the `row`.
                 //We need to make a DB call to evaluate the expressions on `row`.
                 row = InsertUtil.cleanInsertRow(table, row);
+                /**
+                 * This `row` can contain custom data types
+                 */
                 row = await ExecutionUtil.fetchOne(
                     QueryUtil
                         .newInstance()
