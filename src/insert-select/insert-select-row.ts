@@ -1,5 +1,5 @@
 import {ITable, TableUtil} from "../table";
-import {RawExprNoUsedRef} from "../raw-expr";
+import {RawExprNoUsedRef_Output} from "../raw-expr";
 import {QueryBaseUtil} from "../query-base";
 import {ColumnUtil} from "../column";
 
@@ -9,7 +9,7 @@ export type InsertSelectRow<
 > =
     & {
         readonly [columnAlias in TableUtil.RequiredColumnAlias<TableT>] : (
-            | RawExprNoUsedRef<
+            | RawExprNoUsedRef_Output<
                 ReturnType<TableT["columns"][columnAlias]["mapper"]>
             >
             | ColumnUtil.ExtractWithType<
@@ -20,7 +20,7 @@ export type InsertSelectRow<
     }
     & {
         readonly [columnAlias in TableUtil.OptionalColumnAlias<TableT>]? : (
-            | RawExprNoUsedRef<
+            | RawExprNoUsedRef_Output<
                 ReturnType<TableT["columns"][columnAlias]["mapper"]>
             >
             | ColumnUtil.ExtractWithType<

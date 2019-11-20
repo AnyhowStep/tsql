@@ -248,7 +248,34 @@ Statement = (function() {
     if (pos == null) {
       pos = this.pos++;
     }
-    return sqlite3_column_text(this.stmt, pos);
+    /**
+     * Hacking in support for a custom data type
+     * to perform actual custom data type support tests.
+     */
+    const str = sqlite3_column_text(this.stmt, pos);
+    if (str[0] != "{") {
+      return str;
+    }
+    try {
+      const obj = JSON.parse(str);
+      const keys = Object.keys(obj);
+      if (
+        keys.length == 2 &&
+        keys.includes("x") &&
+        keys.includes("y") &&
+        typeof obj.x == "number" &&
+        typeof obj.y == "number"
+      ) {
+        /**
+         * Our custom data type `{ x : number, y : number }`
+         */
+        return obj;
+      } else {
+        return str;
+      }
+    } catch (err) {
+      return str;
+    }
   };
 
   Statement.prototype.getBlob = function(pos) {

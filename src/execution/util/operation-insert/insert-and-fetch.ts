@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {ITable, TableWithAutoIncrement, TableWithoutAutoIncrement, InsertableTable, TableUtil} from "../../../table";
 import {IsolableInsertOneConnection} from "../../connection";
-import {InsertRow, InsertUtil, InsertRowRequireCandidateKey} from "../../../insert";
+import {InsertRow_Input, InsertUtil, InsertRowRequireCandidateKey_Input} from "../../../insert";
 import {Row} from "../../../row";
 import {insertOne} from "./insert-one";
 import * as ExprLib from "../../../expr-library";
@@ -24,7 +24,7 @@ export async function insertAndFetch<
 > (
     table : TableT,
     connection : IsolableInsertOneConnection,
-    row : InsertRow<TableT>
+    row : InsertRow_Input<TableT>
 ) : (
     Promise<Row<TableT>>
 );
@@ -33,7 +33,7 @@ export async function insertAndFetch<
 > (
     table : TableT,
     connection : IsolableInsertOneConnection,
-    row : InsertRowRequireCandidateKey<TableT>
+    row : InsertRowRequireCandidateKey_Input<TableT>
 ) : (
     Promise<Row<TableT>>
 );
@@ -42,7 +42,7 @@ export async function insertAndFetch<
 > (
     table : TableT,
     connection : IsolableInsertOneConnection,
-    row : InsertRow<TableT>
+    row : InsertRow_Input<TableT>
 ) : (
     Promise<Row<TableT>>
 ) {
@@ -57,7 +57,7 @@ export async function insertAndFetch<
                 row
             );
             if (candidateKeyResult.success) {
-                await insertOne(table as TableT & TableWithoutAutoIncrement, connection, row);
+                await insertOne(table as TableT & TableWithoutAutoIncrement, connection, row as any);
                 return TableUtil.fetchOne(
                     table,
                     connection,
@@ -92,7 +92,7 @@ export async function insertAndFetch<
                     `${table.alias}.candidateKey`,
                     row
                 );
-                await insertOne(table as TableT & TableWithoutAutoIncrement, connection, row);
+                await insertOne(table as TableT & TableWithoutAutoIncrement, connection, row as any);
                 return TableUtil.fetchOne(
                     table,
                     connection,
@@ -103,7 +103,7 @@ export async function insertAndFetch<
                 );
             }
         } else {
-            const insertResult = await insertOne(table as TableT & TableWithAutoIncrement, connection, row);
+            const insertResult = await insertOne(table as TableT & TableWithAutoIncrement, connection, row as any);
             return TableUtil.fetchOne(
                 table,
                 connection,

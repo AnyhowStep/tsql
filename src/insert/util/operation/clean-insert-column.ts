@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {ITable} from "../../../table";
-import {InsertRow} from "../../insert-row";
+import {InsertRow_Input, InsertRow_Output} from "../../insert-row";
 import {PrimitiveExprUtil} from "../../../primitive-expr";
 import {RawExprUtil} from "../../../raw-expr";
 import {QueryBaseUtil} from "../../../query-base";
@@ -11,22 +11,22 @@ import {DataTypeUtil} from "../../../data-type";
 
 export function cleanInsertColumn<TableT extends ITable> (
     table : TableT,
-    row : InsertRow<TableT>,
-    columnAlias : keyof InsertRow<TableT>,
+    row : InsertRow_Input<TableT>,
+    columnAlias : keyof InsertRow_Input<TableT>,
     required : true
-) : InsertRow<TableT>[keyof InsertRow<TableT>];
+) : InsertRow_Output<TableT>[keyof InsertRow_Output<TableT>];
 export function cleanInsertColumn<TableT extends ITable> (
     table : TableT,
-    row : InsertRow<TableT>,
-    columnAlias : keyof InsertRow<TableT>,
+    row : InsertRow_Input<TableT>,
+    columnAlias : keyof InsertRow_Input<TableT>,
     required : false
-) : InsertRow<TableT>[keyof InsertRow<TableT>]|undefined;
+) : InsertRow_Output<TableT>[keyof InsertRow_Output<TableT>]|undefined;
 export function cleanInsertColumn<TableT extends ITable> (
     table : TableT,
-    row : InsertRow<TableT>,
-    columnAlias : keyof InsertRow<TableT>,
+    row : InsertRow_Input<TableT>,
+    columnAlias : keyof InsertRow_Input<TableT>,
     required : boolean
-) : InsertRow<TableT>[keyof InsertRow<TableT>]|undefined {
+) : InsertRow_Output<TableT>[keyof InsertRow_Output<TableT>]|undefined {
     const value = (
         /**
          * This is just safer.

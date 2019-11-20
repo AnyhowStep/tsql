@@ -4,7 +4,7 @@ import {PrimitiveExprUtil} from "../../../primitive-expr";
 import {Identity} from "../../../type-util";
 import {IsolableSelectConnection} from "../../../execution";
 import {PrimaryKey_Input, PrimaryKeyUtil} from "../../../primary-key";
-import {RawExprNoUsedRef, RawExprUtil} from "../../../raw-expr";
+import {RawExprNoUsedRef_Input, RawExprUtil} from "../../../raw-expr";
 import {UsedRefUtil} from "../../../used-ref";
 import {LogMustSetTrackedDefaults} from "./06-set-tracked-defaults";
 
@@ -32,7 +32,7 @@ export type CopyDefaults<
                 TableUtil.RequiredColumnAlias<DataT["logTable"]>,
                 DataT["copy"][number]
             >] : (
-                RawExprNoUsedRef<
+                RawExprNoUsedRef_Input<
                     TableUtil.ColumnType<DataT["logTable"], columnAlias>
                 >
             )
@@ -46,7 +46,7 @@ export type CopyDefaults<
                  * Makes things more explicit by forcing `undefined`
                  */
                 | undefined
-                | RawExprNoUsedRef<
+                | RawExprNoUsedRef_Input<
                     TableUtil.ColumnType<DataT["logTable"], columnAlias>
                 >
             )

@@ -16,7 +16,7 @@ import {SelectClause, SelectDelegate, SelectValueDelegate, SelectClauseUtil} fro
 import {FromClauseUtil} from "../from-clause";
 import {WhereDelegate} from "../where-clause";
 import {AnyRawExpr} from "../raw-expr";
-import {InsertRow, InsertRowRequireCandidateKey} from "../insert";
+import {InsertRow_Input, InsertRowRequireCandidateKey_Input} from "../insert";
 import {InsertOneWithAutoIncrementReturnType, InsertIgnoreOneWithAutoIncrementReturnType, DeleteOneResult, DeleteZeroOrOneResult, UpdateOneResult, UpdateZeroOrOneResult} from "../execution/util";
 import {AssignmentMapDelegate} from "../update";
 /*import {PrimaryKey, PrimaryKeyUtil} from "../primary-key";
@@ -893,12 +893,12 @@ export class Table<DataT extends TableData> implements ITable {
     insertOne (
         this : Extract<this, TableWithAutoIncrement & InsertableTable>,
         connection : InsertOneConnection,
-        row : InsertRow<Extract<this, TableWithAutoIncrement & InsertableTable>>
+        row : InsertRow_Input<Extract<this, TableWithAutoIncrement & InsertableTable>>
     ) : Promise<InsertOneWithAutoIncrementReturnType<Extract<this, TableWithAutoIncrement & InsertableTable>>>;
     insertOne (
         this : Extract<this, TableWithoutAutoIncrement & InsertableTable>,
         connection : InsertOneConnection,
-        row : InsertRow<Extract<this, TableWithoutAutoIncrement & InsertableTable>>
+        row : InsertRow_Input<Extract<this, TableWithoutAutoIncrement & InsertableTable>>
     ) : Promise<InsertOneResult>;
     insertOne (
         connection : InsertOneConnection,
@@ -914,7 +914,7 @@ export class Table<DataT extends TableData> implements ITable {
     insertMany (
         this : Extract<this, InsertableTable>,
         connection : InsertManyConnection,
-        rows : readonly InsertRow<Extract<this, InsertableTable>>[]
+        rows : readonly InsertRow_Input<Extract<this, InsertableTable>>[]
     ) : Promise<InsertManyResult> {
         return ExecutionUtil.insertMany(
             this,
@@ -926,12 +926,12 @@ export class Table<DataT extends TableData> implements ITable {
     insertIgnoreOne (
         this : Extract<this, TableWithAutoIncrement & InsertableTable>,
         connection : InsertIgnoreOneConnection,
-        row : InsertRow<Extract<this, TableWithAutoIncrement & InsertableTable>>
+        row : InsertRow_Input<Extract<this, TableWithAutoIncrement & InsertableTable>>
     ) : Promise<InsertIgnoreOneWithAutoIncrementReturnType<Extract<this, TableWithAutoIncrement & InsertableTable>>>;
     insertIgnoreOne (
         this : Extract<this, TableWithoutAutoIncrement & InsertableTable>,
         connection : InsertIgnoreOneConnection,
-        row : InsertRow<Extract<this, TableWithoutAutoIncrement & InsertableTable>>
+        row : InsertRow_Input<Extract<this, TableWithoutAutoIncrement & InsertableTable>>
     ) : Promise<InsertIgnoreOneResult>;
     insertIgnoreOne (
         connection : InsertIgnoreOneConnection,
@@ -947,7 +947,7 @@ export class Table<DataT extends TableData> implements ITable {
     insertIgnoreMany (
         this : Extract<this, InsertableTable>,
         connection : InsertIgnoreManyConnection,
-        rows : readonly InsertRow<Extract<this, InsertableTable>>[]
+        rows : readonly InsertRow_Input<Extract<this, InsertableTable>>[]
     ) : Promise<InsertIgnoreManyResult> {
         return ExecutionUtil.insertIgnoreMany(
             this,
@@ -959,7 +959,7 @@ export class Table<DataT extends TableData> implements ITable {
     replaceOne (
         this : Extract<this, InsertableTable & DeletableTable>,
         connection : ReplaceOneConnection,
-        row : InsertRow<Extract<this, InsertableTable & DeletableTable>>
+        row : InsertRow_Input<Extract<this, InsertableTable & DeletableTable>>
     ) : Promise<ReplaceOneResult> {
         return ExecutionUtil.replaceOne(
             this,
@@ -971,7 +971,7 @@ export class Table<DataT extends TableData> implements ITable {
     replaceMany (
         this : Extract<this, InsertableTable & DeletableTable>,
         connection : ReplaceManyConnection,
-        rows : readonly InsertRow<Extract<this, InsertableTable & DeletableTable>>[]
+        rows : readonly InsertRow_Input<Extract<this, InsertableTable & DeletableTable>>[]
     ) : Promise<ReplaceManyResult> {
         return ExecutionUtil.replaceMany(
             this,
@@ -1237,12 +1237,12 @@ export class Table<DataT extends TableData> implements ITable {
     insertAndFetch (
         this : Extract<this, TableWithAutoIncrement & InsertableTable>,
         connection : IsolableInsertOneConnection,
-        row : InsertRow<Extract<this, TableWithAutoIncrement & InsertableTable>>
+        row : InsertRow_Input<Extract<this, TableWithAutoIncrement & InsertableTable>>
     ) : Promise<Row<Extract<this, TableWithAutoIncrement & InsertableTable>>>;
     insertAndFetch (
         this : Extract<this, TableWithoutAutoIncrement & InsertableTable>,
         connection : IsolableInsertOneConnection,
-        row : InsertRowRequireCandidateKey<
+        row : InsertRowRequireCandidateKey_Input<
             Extract<this, TableWithoutAutoIncrement & InsertableTable>
         >
     ) : Promise<Row<Extract<this, TableWithoutAutoIncrement & InsertableTable>>>;

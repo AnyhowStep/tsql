@@ -1,5 +1,5 @@
 import {ITable, TableUtil} from "../../../table";
-import {InsertRow} from "../../insert-row";
+import {InsertRow_Input, InsertRow_Output} from "../../insert-row";
 import {cleanInsertColumn} from "./clean-insert-column";
 
 /**
@@ -7,8 +7,8 @@ import {cleanInsertColumn} from "./clean-insert-column";
  * + Removes properties with value `undefined`.
  * + Checks required properties are there.
  */
-export function cleanInsertRow<TableT extends ITable> (table : TableT, row : InsertRow<TableT>) : InsertRow<TableT> {
-    const result = {} as InsertRow<TableT>;
+export function cleanInsertRow<TableT extends ITable> (table : TableT, row : InsertRow_Input<TableT>) : InsertRow_Output<TableT> {
+    const result = {} as InsertRow_Input<TableT>;
     for (const requiredColumnAlias of TableUtil.requiredColumnAlias(table)) {
         result[requiredColumnAlias] = cleanInsertColumn(
             table,

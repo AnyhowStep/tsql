@@ -1,11 +1,11 @@
 [
   {
     "messageText": {
-      "messageText": "Argument of type '{ testId: bigint; }' is not assignable to parameter of type 'InsertRow<Table<{ isLateral: false; alias: \"test\"; columns: { readonly testId: Column<{ tableAlias: \"test\"; columnAlias: \"testId\"; mapper: Mapper<unknown, bigint>; }>; readonly testVal: Column<{ tableAlias: \"test\"; columnAlias: \"testVal\"; mapper: Mapper<...>; }>; }; ... 10 more ...; mutableColumns: readonly []; }>>'.",
+      "messageText": "Argument of type '{ testId: bigint; }' is not assignable to parameter of type '{ readonly testId: RawExprNoUsedRef_Input<bigint>; readonly testVal: RawExprNoUsedRef_Input<bigint>; } & {}'.",
       "category": 1,
       "code": 2345,
       "next": {
-        "messageText": "Property 'testVal' is missing in type '{ testId: bigint; }' but required in type '{ readonly testId: RawExprNoUsedRef<bigint>; readonly testVal: RawExprNoUsedRef<bigint>; }'.",
+        "messageText": "Property 'testVal' is missing in type '{ testId: bigint; }' but required in type '{ readonly testId: RawExprNoUsedRef_Input<bigint>; readonly testVal: RawExprNoUsedRef_Input<bigint>; }'.",
         "category": 1,
         "code": 2741
       }
@@ -17,11 +17,11 @@
   },
   {
     "messageText": {
-      "messageText": "Argument of type '{ testVal: bigint; }' is not assignable to parameter of type 'InsertRow<Table<{ isLateral: false; alias: \"test\"; columns: { readonly testId: Column<{ tableAlias: \"test\"; columnAlias: \"testId\"; mapper: Mapper<unknown, bigint>; }>; readonly testVal: Column<{ tableAlias: \"test\"; columnAlias: \"testVal\"; mapper: Mapper<...>; }>; }; ... 10 more ...; mutableColumns: readonly []; }>>'.",
+      "messageText": "Argument of type '{ testVal: bigint; }' is not assignable to parameter of type '{ readonly testId: RawExprNoUsedRef_Input<bigint>; readonly testVal: RawExprNoUsedRef_Input<bigint>; } & {}'.",
       "category": 1,
       "code": 2345,
       "next": {
-        "messageText": "Property 'testId' is missing in type '{ testVal: bigint; }' but required in type '{ readonly testId: RawExprNoUsedRef<bigint>; readonly testVal: RawExprNoUsedRef<bigint>; }'.",
+        "messageText": "Property 'testId' is missing in type '{ testVal: bigint; }' but required in type '{ readonly testId: RawExprNoUsedRef_Input<bigint>; readonly testVal: RawExprNoUsedRef_Input<bigint>; }'.",
         "category": 1,
         "code": 2741
       }
