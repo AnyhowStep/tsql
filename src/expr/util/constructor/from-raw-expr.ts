@@ -1,6 +1,10 @@
+import * as tm from "type-mapping";
 import {Expr, ExprImpl, expr} from "../../expr-impl";
-import {RawExpr, RawExprUtil} from "../../../raw-expr";
+import {RawExpr, RawExprUtil, RawExprNoUsedRef_Input} from "../../../raw-expr";
 import {PrimitiveExpr} from "../../../primitive-expr";
+import {IAnonymousColumn} from "../../../column";
+import {DataTypeUtil} from "../../../data-type";
+import {IUsedRef} from "../../../used-ref";
 
 export type FromRawExpr<RawExprT extends RawExpr<PrimitiveExpr>> = (
     Expr<{
@@ -28,4 +32,30 @@ export function fromRawExpr<
         },
         ast
     );
+}
+
+export function fromRawExprNoUsedRefInput<
+    TypeT
+> (
+    mapper : tm.SafeMapper<TypeT>|IAnonymousColumn<TypeT>,
+    value : RawExprNoUsedRef_Input<TypeT>
+) : (
+    Expr<{
+        mapper : tm.SafeMapper<TypeT>,
+        usedRef : IUsedRef<{}>,
+    }>
+) {
+    if (RawExprUtil.isAnyNonPrimitiveRawExpr(value)) {
+        /**
+         * Cannot map a `NonPrimitiveRawExpr`
+         */
+        return fromRawExpr(value as any);
+    } else {
+        return fromRawExpr(
+            DataTypeUtil.toRawExpr(
+                mapper,
+                value
+            ) as any
+        );
+    }
 }

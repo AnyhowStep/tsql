@@ -1,6 +1,7 @@
 import * as tm from "type-mapping";
-import {RawExprNoUsedRef_Input, RawExprUtil} from "../..";
 import {IAnonymousColumn, ColumnUtil} from "../../../column";
+import {isAnyNonPrimitiveRawExpr} from "../predicate";
+import {RawExprNoUsedRef_Input} from "../../raw-expr";
 
 /**
  * If `value` is `AnyNonPrimitiveRawExpr`, we don't bother checking.
@@ -20,7 +21,7 @@ export function mapRawExprInput<TypeT> (
         mapper = mapper.mapper;
     }
 
-    if (RawExprUtil.isAnyNonPrimitiveRawExpr(value)) {
+    if (isAnyNonPrimitiveRawExpr(value)) {
         /**
          * Cannot map a `NonPrimitiveRawExpr`
          */

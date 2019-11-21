@@ -1,7 +1,7 @@
 import {CompoundQueryOrderByDelegate, CompoundQueryOrderByClauseUtil} from "../../../compound-query-order-by-clause";
 import {Query} from "../../query-impl";
 import {IQuery} from "../../query";
-import {QueryUtil} from "../..";
+import {AfterSelectClause} from "../helper-type";
 
 /**
  * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966
@@ -41,7 +41,7 @@ export type CompoundQueryOrderBy<
     >
 );
 export function compoundQueryOrderBy<
-    QueryT extends QueryUtil.AfterSelectClause
+    QueryT extends AfterSelectClause
 > (
     query : QueryT,
     compoundQueryOrderByDelegate : CompoundQueryOrderByDelegate<QueryT["selectClause"]>
