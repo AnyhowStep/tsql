@@ -91,7 +91,7 @@ export const eqCandidateKey : EqCandidateKey = (
             const expr = nullSafeEq(
                 table.columns[columnAlias],
                 DataTypeUtil.toRawExpr(
-                    table.columns[columnAlias].mapper,
+                    table.columns[columnAlias],
                     candidateKey[columnAlias as keyof CandidateKey_Output<TableT>]
                 )
             );

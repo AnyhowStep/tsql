@@ -17,13 +17,6 @@ export function toRawExpr<TypeT> (
     let valueName = "literal-value";
 
     if (ColumnUtil.isColumn(mapper)) {
-        /**
-         * @todo Investigate bug
-         * ```ts
-         * mapper = mapper.mapper;
-         * valueName = `${mapper.tableAlias}${mapper.columnAlias}`; //This gives an error
-         * ```
-         */
         valueName = `${mapper.tableAlias}${mapper.columnAlias}`;
         mapper = mapper.mapper;
     }

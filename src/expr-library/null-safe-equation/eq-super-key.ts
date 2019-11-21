@@ -87,7 +87,7 @@ export const eqSuperKey : EqSuperKey = (
                 const expr = nullSafeEq(
                     table.columns[columnAlias],
                     DataTypeUtil.toRawExpr(
-                        table.columns[columnAlias].mapper,
+                        table.columns[columnAlias],
                         superKey[columnAlias as keyof SuperKey_Output<TableT>]
                     )
                 );

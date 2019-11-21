@@ -119,7 +119,7 @@ export function cleanInsertSelectColumn<
          * Maybe a custom data type?
          */
         return DataTypeUtil.toRawExpr(
-            table.columns[columnAlias].mapper,
+            table.columns[columnAlias],
             value
         );
     }

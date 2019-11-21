@@ -84,7 +84,7 @@ async function toInsertRow<LogT extends ILog> (
      */
     for (const primaryKeyColumnAlias of log.ownerTable.primaryKey) {
         result[primaryKeyColumnAlias] = DataTypeUtil.toRawExpr(
-            log.logTable.columns[primaryKeyColumnAlias].mapper,
+            log.logTable.columns[primaryKeyColumnAlias],
             prvRow[primaryKeyColumnAlias as keyof typeof prvRow]
         );
     }
@@ -103,7 +103,7 @@ async function toInsertRow<LogT extends ILog> (
                  * Use the previous value, since we don't have a new value.
                  */
                 result[trackedColumnAlias] = DataTypeUtil.toRawExpr(
-                    log.logTable.columns[trackedColumnAlias].mapper,
+                    log.logTable.columns[trackedColumnAlias],
                     prvValue
                 );
             }
@@ -151,7 +151,7 @@ async function toInsertRow<LogT extends ILog> (
      */
     for (const copyColumnAlias of log.copy) {
         result[copyColumnAlias] = DataTypeUtil.toRawExpr(
-            log.logTable.columns[copyColumnAlias].mapper,
+            log.logTable.columns[copyColumnAlias],
             prvRow[copyColumnAlias as keyof typeof prvRow]
         );
     }
