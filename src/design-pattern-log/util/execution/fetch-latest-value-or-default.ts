@@ -1,15 +1,14 @@
 import {ILog} from "../../log";
 import {PrimaryKey_Input} from "../../../primary-key";
-import {ExecutionUtil, IsolableSelectConnection} from "../../../execution";
+import {IsolableSelectConnection} from "../../../execution";
 import {ColumnUtil} from "../../../column";
 import {fetchLatestValue} from "./fetch-latest-value";
 import {ColumnMapUtil} from "../../../column-map";
 import {TableUtil} from "../../../table";
 import * as ExprLib from "../../../expr-library";
 import {ColumnIdentifierMapUtil} from "../../../column-identifier-map";
-import {PrimitiveExprUtil} from "../../../primitive-expr";
-import {QueryUtil} from "../../../unified-query";
 import {Identity} from "../../../type-util";
+import {DataTypeUtil} from "../../../data-type";
 
 export type FetchLatestValueOrDefaultColumnMap<
     LogT extends ILog
@@ -75,16 +74,10 @@ export async function fetchLatestValueOrDefault<
                 primaryKey
             ) as any
         );
-        const rawExprNoUsedRef = log.trackedDefaults[column.columnAlias];
-        if (PrimitiveExprUtil.isPrimitiveExpr(rawExprNoUsedRef)) {
-            return rawExprNoUsedRef;
-        } else {
-            return ExecutionUtil.fetchValue(
-                QueryUtil
-                    .newInstance()
-                    .selectValue(() => rawExprNoUsedRef as any) as any,
-                connection
-            );
-        }
+        return DataTypeUtil.evaluateExpr(
+            log.logTable.columns[column.columnAlias],
+            connection,
+            log.trackedDefaults[column.columnAlias]
+        );
     });
 }

@@ -69,7 +69,7 @@ export function eqPrimaryKey<
         const expr = eq(
             table.columns[columnAlias],
             DataTypeUtil.toRawExpr(
-                table.columns[columnAlias].mapper,
+                table.columns[columnAlias],
                 primaryKey[columnAlias as keyof PrimaryKey_Output<TableT>]
             )
         );

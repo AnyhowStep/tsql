@@ -2,7 +2,6 @@ import {ITable} from "../../../table";
 import {AssignmentMap} from "../../assignment-map";
 import {UsedRefUtil} from "../../../used-ref";
 import {RawExprUtil, AnyRawExpr} from "../../../raw-expr";
-import {PrimitiveExprUtil} from "../../../primitive-expr";
 
 export function cleanAssignmentMap<
     TableT extends ITable
@@ -38,9 +37,10 @@ export function cleanAssignmentMap<
             RawExprUtil.usedRef(value as AnyRawExpr)
         );
 
-        result[columnAlias as keyof typeof raw] = PrimitiveExprUtil.isPrimitiveExpr(value) ?
-            table.columns[columnAlias].mapper(`${table.alias}.${columnAlias}`, value) :
-            value;
+        result[columnAlias as keyof typeof raw] = RawExprUtil.mapRawExprInput(
+            table.columns[columnAlias],
+            value
+        );
     }
 
     /*

@@ -1,12 +1,12 @@
 import {ILog, LogData} from "../../log";
 import {TableUtil} from "../../../table";
-import {PrimitiveExprUtil} from "../../../primitive-expr";
 import {Identity} from "../../../type-util";
 import {IsolableSelectConnection} from "../../../execution";
 import {PrimaryKey_Input, PrimaryKeyUtil} from "../../../primary-key";
 import {RawExprNoUsedRef_Input, RawExprUtil} from "../../../raw-expr";
 import {UsedRefUtil} from "../../../used-ref";
 import {LogMustSetTrackedDefaults} from "./06-set-tracked-defaults";
+import {DataTypeUtil} from "../../../data-type";
 
 export type LogMustSetCopyDefaultsDelegateData =
     & Pick<
@@ -119,12 +119,9 @@ export function setCopyDefaultsDelegate<
             const usedRef = RawExprUtil.usedRef(rawValue);
             UsedRefUtil.assertAllowed(allowedRef, usedRef);
 
-            result[columnAlias] = (
-                PrimitiveExprUtil.isPrimitiveExpr(rawValue) ?
-                log.logTable.columns[columnAlias].mapper(
-                    `${log.logTable.alias}.${columnAlias}`,
-                    rawValue
-                ) :
+            result[columnAlias] = await DataTypeUtil.evaluateExpr(
+                log.logTable.columns[columnAlias],
+                args.connection,
                 rawValue
             );
         }
@@ -136,12 +133,9 @@ export function setCopyDefaultsDelegate<
             const usedRef = RawExprUtil.usedRef(rawValue);
             UsedRefUtil.assertAllowed(allowedRef, usedRef);
 
-            result[columnAlias] = (
-                PrimitiveExprUtil.isPrimitiveExpr(rawValue) ?
-                log.logTable.columns[columnAlias].mapper(
-                    `${log.logTable.alias}.${columnAlias}`,
-                    rawValue
-                ) :
+            result[columnAlias] = await DataTypeUtil.evaluateExpr(
+                log.logTable.columns[columnAlias],
+                args.connection,
                 rawValue
             );
         }

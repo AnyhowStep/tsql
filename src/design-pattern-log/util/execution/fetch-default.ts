@@ -34,18 +34,30 @@ export function assertAllTrackedHasDefaultValue (log : ILog) {
 }
 
 export type DefaultRow<LogT extends ILog> =
-    Identity<{
-        readonly [columnAlias in (
-            | LogT["ownerTable"]["primaryKey"][number]
-            | LogT["trackedWithDefaultValue"][number]
-            | LogT["copy"][number]
-        )] : (
-            TableUtil.ColumnType<
-                LogT["logTable"],
-                columnAlias
-            >
-        )
-    }>
+    Identity<
+        & {
+            readonly [columnAlias in (
+                | LogT["ownerTable"]["primaryKey"][number]
+                | LogT["trackedWithDefaultValue"][number]
+                | Extract<LogT["copy"][number], TableUtil.RequiredColumnAlias<LogT["logTable"]>>
+            )] : (
+                TableUtil.ColumnType<
+                    LogT["logTable"],
+                    columnAlias
+                >
+            )
+        }
+        & {
+            readonly [columnAlias in (
+                Extract<LogT["copy"][number], TableUtil.OptionalColumnAlias<LogT["logTable"]>>
+            )]? : (
+                TableUtil.ColumnType<
+                    LogT["logTable"],
+                    columnAlias
+                >
+            )
+        }
+    >
 ;
 
 export async function fetchDefault<
@@ -93,5 +105,5 @@ export async function fetchDefault<
             ...trackedDefaults,
             ...primaryKey,
         } as DefaultRow<LogT>;
-    })
+    });
 }
