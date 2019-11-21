@@ -6,6 +6,7 @@ import {insertOne} from "./insert-one";
 import * as ExprLib from "../../../expr-library";
 import {DataTypeUtil} from "../../../data-type";
 import {TryEvaluateColumnsResult} from "../../../data-type/util";
+import {KeyArrayUtil} from "../../../key";
 
 /**
  * Convenience method for
@@ -47,20 +48,27 @@ export async function insertAndFetch<
     TableUtil.assertHasCandidateKey(table);
 
     return connection.transactionIfNotInOne(async (connection) : Promise<Row<TableT>> => {
-        if (table.autoIncrement == undefined) {
-            const candidateKeyR : (
+        if (
+            table.autoIncrement == undefined ||
+            /**
+             * With some databases, it's possible for the `autoIncrement` column
+             * to not be a candidate key at all!
+             */
+            !KeyArrayUtil.hasKey(table.candidateKeys, [table.autoIncrement])
+        ) {
+            const candidateKeyResult : (
                 TryEvaluateColumnsResult<TableT, any>
             ) = await DataTypeUtil.tryEvaluateCandidateKeyPreferPrimaryKey(
                 table,
                 connection,
                 row as any
             );
-            if (!candidateKeyR.success) {
-                throw candidateKeyR.error;
+            if (!candidateKeyResult.success) {
+                throw candidateKeyResult.error;
             }
             row = {
                 ...row,
-                ...candidateKeyR.outputRow,
+                ...candidateKeyResult.outputRow,
             };
             await insertOne(table as TableT & TableWithoutAutoIncrement, connection, row as any);
             return TableUtil.fetchOne(
@@ -68,7 +76,7 @@ export async function insertAndFetch<
                 connection,
                 () => ExprLib.eqCandidateKey(
                     table,
-                    candidateKeyR.outputRow as any
+                    candidateKeyResult.outputRow as any
                 ) as any
             );
         } else {
@@ -84,7 +92,6 @@ export async function insertAndFetch<
                 () => ExprLib.eqCandidateKey(
                     table,
                     {
-                        ...row,
                         [table.autoIncrement as string] : insertResult.autoIncrementId,
                     } as any
                 ) as any
