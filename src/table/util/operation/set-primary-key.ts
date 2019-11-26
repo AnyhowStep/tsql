@@ -7,6 +7,10 @@ import {AssertValidCandidateKey, assertValidCandidateKey} from "./add-candidate-
 import {KeyArrayUtil, KeyUtil} from "../../../key";
 import {pickOwnEnumerable} from "../../../type-util";
 
+/**
+ * @todo Allow custom data types for primary key.
+ * The downside of this is that checking for `NULL` values will become harder.
+ */
 export type SetPrimaryKeyColumnAlias<TableT extends Pick<ITable, "columns">> = (
     {
         [columnAlias in Extract<keyof TableT["columns"], string>] : (
