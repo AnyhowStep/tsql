@@ -1,15 +1,16 @@
 import {ITable} from "../../../table";
-import {AssignmentMap} from "../../assignment-map";
+import {AssignmentMap_Input, AssignmentMap_Output} from "../../assignment-map";
 import {UsedRefUtil} from "../../../used-ref";
 import {RawExprUtil, AnyRawExpr} from "../../../raw-expr";
+import {DataTypeUtil} from "../../../data-type";
 
 export function cleanAssignmentMap<
     TableT extends ITable
 > (
     table : TableT,
-    raw : AssignmentMap<TableT>
-) : AssignmentMap<TableT> {
-    const result = {} as AssignmentMap<TableT>;
+    raw : AssignmentMap_Input<TableT>
+) : AssignmentMap_Output<TableT> {
+    const result = {} as AssignmentMap_Output<TableT>;
 
     const allowed = UsedRefUtil.fromColumnMap(table.columns);
 
@@ -32,15 +33,24 @@ export function cleanAssignmentMap<
             }
         }
 
-        UsedRefUtil.assertAllowed(
-            allowed,
-            RawExprUtil.usedRef(value as AnyRawExpr)
-        );
-
-        result[columnAlias as keyof typeof raw] = RawExprUtil.mapRawExprInput(
-            table.columns[columnAlias],
-            value
-        );
+        /**
+         * @todo Clean this up
+         */
+        if (RawExprUtil.isAnyNonPrimitiveRawExpr(value)) {
+            UsedRefUtil.assertAllowed(
+                allowed,
+                RawExprUtil.usedRef(value as AnyRawExpr)
+            );
+            result[columnAlias as keyof typeof raw] = RawExprUtil.mapRawExprInput(
+                table.columns[columnAlias],
+                value
+            );
+        } else {
+            result[columnAlias as keyof typeof raw] = DataTypeUtil.toRawExpr(
+                table.columns[columnAlias],
+                value
+            );
+        }
     }
 
     /*

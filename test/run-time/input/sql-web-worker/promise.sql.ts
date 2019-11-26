@@ -3,7 +3,7 @@ import * as tsql from "../../../../dist";
 import {ISqliteWorker, SqliteAction, FromSqliteMessage, ToSqliteMessage} from "./worker.sql";
 import {AsyncQueue} from "./async-queue";
 import {sqliteSqlfier} from "../../../sqlite-sqlfier";
-import {ITable, RawExprUtil, WhereClause, DeletableTable, DeleteResult, AssignmentMap, UpdateResult} from "../../../../dist";
+import {ITable, RawExprUtil, WhereClause, DeletableTable, DeleteResult, AssignmentMap_Output, UpdateResult} from "../../../../dist";
 
 const sqlite_master = tsql.table("sqlite_master")
     .addColumns({
@@ -984,7 +984,7 @@ export class Connection {
     update<TableT extends ITable> (
         table : TableT,
         whereClause : WhereClause,
-        assignmentMap : AssignmentMap<TableT>
+        assignmentMap : AssignmentMap_Output<TableT>
     ) : Promise<UpdateResult> {
         const mutableColumnAlias = Object.keys(assignmentMap)
             .filter(columnAlias => {

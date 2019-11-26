@@ -3,7 +3,6 @@ import * as tape from "tape";
 import * as tsql from "../../../../../dist";
 import {Pool} from "../../sql-web-worker/promise.sql";
 import {SqliteWorker} from "../../sql-web-worker/worker.sql";
-import {ExprUtil} from "../../../../../dist";
 
 tape(__filename, async (t) => {
     const pool = new Pool(new SqliteWorker());
@@ -15,7 +14,7 @@ tape(__filename, async (t) => {
         })
         .setPrimaryKey(columns => [columns.testId])
         .addMutable(columns => [
-            columns.testId,
+            columns.testVal,
         ]);
 
     await pool.acquire(async (connection) => {
@@ -26,22 +25,28 @@ tape(__filename, async (t) => {
             );
 
             INSERT INTO dst(testId, testVal) VALUES
-                (1,100),
-                (2,200),
-                (3,300);
+                (2,NULL),
+                (3,NULL);
         `);
 
-        return dst.updateAndFetchZeroOrOneByCandidateKey(
+        return dst.updateAndFetchOneByCandidateKey(
             connection,
             {
                 testId : BigInt(1),
             },
-            () => {
+            columns => {
                 return {
-                    testId : ExprUtil.fromRawExpr(BigInt(123456)),
-                } as any;
+                    testVal : tsql.integer.add(
+                        tsql.coalesce(columns.testVal, BigInt(100)),
+                        BigInt(50)
+                    ),
+                };
             }
-        );
+        ).then(() => {
+            t.fail("Should not be able to update row that does not exist");
+        }).catch((err) => {
+            t.true(err instanceof tsql.RowNotFoundError);
+        });
     });
 
     await pool
@@ -59,15 +64,11 @@ tape(__filename, async (t) => {
                 [
                     {
                         testId : BigInt(2),
-                        testVal : BigInt(200),
+                        testVal : null,
                     },
                     {
                         testId : BigInt(3),
-                        testVal : BigInt(300),
-                    },
-                    {
-                        testId : BigInt(123456),
-                        testVal : BigInt(100),
+                        testVal : null,
                     },
                 ]
             );

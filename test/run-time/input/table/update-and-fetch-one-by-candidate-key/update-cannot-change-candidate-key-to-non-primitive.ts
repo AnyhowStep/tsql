@@ -41,11 +41,7 @@ tape(__filename, async (t) => {
                     testId : ExprUtil.fromRawExpr(BigInt(123456)),
                 } as any;
             }
-        ).then(() => {
-            t.fail("Should not be able to update candidate key to non-primitive");
-        }).catch(() => {
-            t.pass("Cannot update candidate key to non-primitive");
-        });
+        );
     });
 
     await pool
@@ -62,16 +58,16 @@ tape(__filename, async (t) => {
                 rows,
                 [
                     {
-                        testId : BigInt(1),
-                        testVal : BigInt(100),
-                    },
-                    {
                         testId : BigInt(2),
                         testVal : BigInt(200),
                     },
                     {
                         testId : BigInt(3),
                         testVal : BigInt(300),
+                    },
+                    {
+                        testId : BigInt(123456),
+                        testVal : BigInt(100),
                     },
                 ]
             );

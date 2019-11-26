@@ -4,7 +4,7 @@ import {InsertableTable, DeletableTable, ITable} from "../../table";
 import {InsertRow_Output} from "../../insert";
 import {InsertSelectRow} from "../../insert-select";
 import {WhereClause} from "../../where-clause";
-import {AssignmentMap} from "../../update";
+import {AssignmentMap_Output} from "../../update";
 import {SchemaMeta} from "../../schema-introspection";
 
 export interface RawQueryResult {
@@ -267,7 +267,7 @@ export interface IConnection {
     update<TableT extends ITable> (
         table : TableT,
         whereClause : WhereClause,
-        assignmentMap : AssignmentMap<TableT>
+        assignmentMap : AssignmentMap_Output<TableT>
     ) : Promise<UpdateResult>;
 
     /**
