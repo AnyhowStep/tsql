@@ -1,10 +1,31 @@
 import {ITable, TableUtil} from "../table";
-import {RawExprUsingColumnMap} from "../raw-expr";
+import {RawExprUsingColumnMap_Input, RawExprUsingColumnMap_Output} from "../raw-expr";
 
-export type AssignmentMap<TableT extends ITable> =
+export type AssignmentMap_Input<TableT extends ITable> =
     & {
         readonly [columnAlias in TableT["mutableColumns"][number]]? : (
-            RawExprUsingColumnMap<
+            RawExprUsingColumnMap_Input<
+                TableT["columns"],
+                ReturnType<
+                    TableT["columns"][columnAlias]["mapper"]
+                >
+            >
+        )
+    }
+    & {
+        readonly [
+            columnAlias in Exclude<
+                TableUtil.ColumnAlias<TableT>,
+                TableT["mutableColumns"][number]
+            >
+        ]? : undefined
+    }
+;
+
+export type AssignmentMap_Output<TableT extends ITable> =
+    & {
+        readonly [columnAlias in TableT["mutableColumns"][number]]? : (
+            RawExprUsingColumnMap_Output<
                 TableT["columns"],
                 ReturnType<
                     TableT["columns"][columnAlias]["mapper"]

@@ -775,33 +775,12 @@ export class Table<DataT extends TableData> implements ITable {
             SelectClauseUtil.ValueFromRawExpr<RawExprT>
         >
     > {
-        try {
-            return QueryUtil.newInstance()
-                .from<this>(
-                    this as (
-                        this &
-                        QueryUtil.AssertValidCurrentJoin<QueryUtil.NewInstance, this>
-                    )
-                )
-                .where(whereDelegate)
-                .selectValue(selectValueDelegate as any)
-                .fetchValue(connection) as ExecutionUtil.FetchValuePromise<any>;
-        } catch (err) {
-            const result = Promise.reject(err) as ExecutionUtil.FetchValuePromise<any>;
-            //eslint-disable-next-line @typescript-eslint/unbound-method
-            result.or = () => {
-                //To avoid `unhandled rejection` warnings
-                result.catch(() => {});
-                return Promise.reject(err);
-            };
-            //eslint-disable-next-line @typescript-eslint/unbound-method
-            result.orUndefined = () => {
-                //To avoid `unhandled rejection` warnings
-                result.catch(() => {});
-                return Promise.reject(err);
-            };
-            return result;
-        }
+        return TableUtil.fetchValue<this, RawExprT>(
+            this,
+            connection,
+            whereDelegate,
+            selectValueDelegate
+        );
     }
 
     fetchValueByCandidateKey<

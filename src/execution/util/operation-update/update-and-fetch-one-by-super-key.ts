@@ -1,9 +1,9 @@
 import {ITable, TableUtil} from "../../../table";
 import {IsolableUpdateConnection} from "../../connection";
-import {AssignmentMapDelegate, AssignmentMap, UpdateUtil} from "../../../update";
+import {AssignmentMapDelegate, AssignmentMap_Input} from "../../../update";
 import {AssertNonUnion, Identity} from "../../../type-util";
 import {updateOne} from "./update-one";
-import {RawExprUsingColumnMap} from "../../../raw-expr";
+import {RawExprUsingColumnMap_Input} from "../../../raw-expr";
 import * as ExprLib from "../../../expr-library";
 import {SuperKey_Input, SuperKeyUtil} from "../../../super-key";
 import {UpdateAndFetchOneResult} from "./update-and-fetch-one-by-candidate-key";
@@ -18,7 +18,7 @@ export type UpdateAndFetchOneBySuperKeyAssignmentMapImpl<
     Identity<
         & {
             readonly [columnAlias in Exclude<TableT["mutableColumns"][number], Extract<keyof SuperKeyT, string>>]? : (
-                RawExprUsingColumnMap<
+                RawExprUsingColumnMap_Input<
                     TableT["columns"],
                     ReturnType<
                         TableT["columns"][columnAlias]["mapper"]
@@ -56,7 +56,7 @@ export type UpdateAndFetchOneBySuperKeyAssignmentMap<
          * @todo Investigate assignability
          */
         UpdateAndFetchOneBySuperKeyAssignmentMapImpl<TableT, SuperKeyT>,
-        AssignmentMap<TableT>
+        AssignmentMap_Input<TableT>
     >
 ;
 
@@ -78,7 +78,7 @@ export function __updateAndFetchOneBySuperKeyHelper<
         `${table.alias}[superKey]`,
         superKey
     ) as any;
-    const assignmentMap = UpdateUtil.set(table, assignmentMapDelegate);
+    const assignmentMap = assignmentMapDelegate(table.columns);
 
     const newSuperKey = {} as any;
     for(const superColumnAlias of Object.keys(superKey)) {

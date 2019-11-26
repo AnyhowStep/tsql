@@ -90,8 +90,34 @@ export type RawExprNoUsedRef_Input<TypeT> =
 /**
  * We don't support subqueries because it's too complicated
  * to check their `IUsedRef`
+ *
+ * Allows custom data types
  */
-export type RawExprUsingColumnMap<
+export type RawExprUsingColumnMap_Input<
+    ColumnMapT extends ColumnMap,
+    TypeT
+> =
+    | TypeT
+    | IExpr<{
+        mapper : tm.SafeMapper<TypeT>,
+        usedRef : UsedRefUtil.FromColumnMap<ColumnMapT>,
+    }>
+    | ColumnUtil.FromColumnMap<ColumnMapT>
+    | IExprSelectItem<{
+        mapper : tm.SafeMapper<TypeT>,
+        usedRef : UsedRefUtil.FromColumnMap<ColumnMapT>,
+        tableAlias : string,
+        alias : string,
+    }>
+;
+
+/**
+ * We don't support subqueries because it's too complicated
+ * to check their `IUsedRef`
+ *
+ * Does not allow custom data types
+ */
+export type RawExprUsingColumnMap_Output<
     ColumnMapT extends ColumnMap,
     TypeT
 > =

@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {ITable, TableUtil} from "../../../table";
 import {IsolableUpdateConnection} from "../../connection";
-import {AssignmentMapDelegate, AssignmentMap} from "../../../update";
+import {AssignmentMapDelegate, AssignmentMap_Input} from "../../../update";
 import {CandidateKey_NonUnion} from "../../../candidate-key";
 import {StrictUnion, AssertNonUnion} from "../../../type-util";
 import {UpdateOneResult} from "./update-one";
@@ -15,7 +15,7 @@ export interface NotFoundUpdateAndFetchResult extends NotFoundUpdateResult {
 
 export type UpdateAndFetchZeroOrOneResult<
     TableT extends ITable,
-    AssignmentMapT extends AssignmentMap<TableT>
+    AssignmentMapT extends AssignmentMap_Input<TableT>
 > =
     | NotFoundUpdateAndFetchResult
     | UpdateAndFetchOneResult<TableT, AssignmentMapT>
@@ -31,21 +31,48 @@ export async function updateAndFetchZeroOrOneByCandidateKey<
     candidateKey : CandidateKeyT & AssertNonUnion<CandidateKeyT>,
     assignmentMapDelegate : AssignmentMapDelegate<TableT, AssignmentMapT>
 ) : Promise<UpdateAndFetchZeroOrOneResult<TableT, AssignmentMapT>> {
-    const {
-        curCandidateKey,
-        assignmentMap,
-        newCandidateKey,
-    } = __updateAndFetchOneByCandidateKeyHelper<
-        TableT,
-        CandidateKeyT,
-        AssignmentMapT
-    >(
-        table,
-        candidateKey,
-        assignmentMapDelegate
-    );
-
     return connection.transactionIfNotInOne(async (connection) : Promise<UpdateAndFetchZeroOrOneResult<TableT, AssignmentMapT>> => {
+        const helperResult = await __updateAndFetchOneByCandidateKeyHelper<
+            TableT,
+            CandidateKeyT,
+            AssignmentMapT
+        >(
+            table,
+            connection,
+            candidateKey,
+            assignmentMapDelegate
+        );
+        if (!helperResult.success) {
+            return {
+                query : {
+                    sql : helperResult.rowNotFoundError.sql,
+                },
+
+                //Alias for affectedRows
+                foundRowCount : tm.BigInt(0) as 0n,
+
+                //Alias for changedRows
+                updatedRowCount : tm.BigInt(0) as 0n,
+
+                /**
+                 * May be the duplicate row count, or some other value.
+                 */
+                warningCount : tm.BigInt(0),
+                /**
+                 * An arbitrary message.
+                 * May be an empty string.
+                 */
+                message : "",
+
+                row : undefined,
+            }
+        }
+        const {
+            curCandidateKey,
+            assignmentMap,
+            newCandidateKey,
+        } = helperResult;
+
         const updateZeroOrOneResult = await updateZeroOrOne(
             table,
             connection,

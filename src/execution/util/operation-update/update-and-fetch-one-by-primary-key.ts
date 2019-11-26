@@ -1,9 +1,9 @@
 import {TableUtil, TableWithPrimaryKey} from "../../../table";
 import {IsolableUpdateConnection} from "../../connection";
-import {AssignmentMapDelegate, AssignmentMap, UpdateUtil} from "../../../update";
+import {AssignmentMapDelegate, AssignmentMap_Input} from "../../../update";
 import {Identity} from "../../../type-util";
 import {updateOne} from "./update-one";
-import {RawExprUsingColumnMap} from "../../../raw-expr";
+import {RawExprUsingColumnMap_Input} from "../../../raw-expr";
 import * as ExprLib from "../../../expr-library";
 import {PrimaryKey_Input, PrimaryKeyUtil} from "../../../primary-key";
 import {UpdateAndFetchOneResult} from "./update-and-fetch-one-by-candidate-key";
@@ -14,7 +14,7 @@ export type UpdateAndFetchOneByPrimaryKeyAssignmentMapImpl<
     Identity<
         & {
             readonly [columnAlias in Exclude<TableT["mutableColumns"][number], TableT["primaryKey"][number]>]? : (
-                RawExprUsingColumnMap<
+                RawExprUsingColumnMap_Input<
                     TableT["columns"],
                     ReturnType<
                         TableT["columns"][columnAlias]["mapper"]
@@ -47,7 +47,7 @@ export type UpdateAndFetchOneByPrimaryKeyAssignmentMap<
          * @todo Investigate assignability
          */
         UpdateAndFetchOneByPrimaryKeyAssignmentMapImpl<TableT>,
-        AssignmentMap<TableT>
+        AssignmentMap_Input<TableT>
     >
 ;
 
@@ -68,7 +68,7 @@ export function __updateAndFetchOneByPrimaryKeyHelper<
         `${table.alias}[primaryKey]`,
         primaryKey
     ) as any;
-    const assignmentMap = UpdateUtil.set(table, assignmentMapDelegate);
+    const assignmentMap = assignmentMapDelegate(table.columns);
 
     const newPrimaryKey = {} as any;
     for(const primaryColumnAlias of Object.keys(primaryKey as any)) {
