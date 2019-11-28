@@ -9,11 +9,11 @@ import {EquatableType} from "../../equatable-type";
 
 export type NullSafeEquation1 =
     <
-        RawExprT extends RawExpr<EquatableType>
+        BuiltInExprT extends RawExpr<EquatableType>
     >(
-        rawExpr : RawExprT
+        rawExpr : BuiltInExprT
     ) => (
-        ExprUtil.Intersect<boolean, RawExprT>
+        ExprUtil.Intersect<boolean, BuiltInExprT>
     )
 ;
 
@@ -25,11 +25,11 @@ export function makeNullSafeEquation1<OperatorTypeT extends OperatorType> (
     typeHint? : TypeHint
 ) : NullSafeEquation1 {
     const result : NullSafeEquation1 = <
-        RawExprT extends RawExpr<EquatableType>
+        BuiltInExprT extends RawExpr<EquatableType>
     >(
-        rawExpr : RawExprT
+        rawExpr : BuiltInExprT
     ) : (
-        ExprUtil.Intersect<boolean, RawExprT>
+        ExprUtil.Intersect<boolean, BuiltInExprT>
     ) => {
         return ExprUtil.intersect(
             tm.mysql.boolean(),

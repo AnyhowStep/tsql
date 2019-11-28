@@ -65,17 +65,17 @@ export class Log<DataT extends LogData> implements ILog<DataT> {
         );
     }
 
-    fetchLatestValue<RawExprT extends AnyBuiltInExpr> (
+    fetchLatestValue<BuiltInExprT extends AnyBuiltInExpr> (
         connection : SelectConnection,
         primaryKey : PrimaryKey_Input<this["ownerTable"]>,
         selectValueDelegate : LogUtil.FetchLatestValueSelectValueDelegate<
             this,
-            RawExprT
+            BuiltInExprT
         >
     ) : (
-        LogUtil.FetchLatestValue<RawExprT>
+        LogUtil.FetchLatestValue<BuiltInExprT>
     ) {
-        return LogUtil.fetchLatestValue<this, RawExprT>(
+        return LogUtil.fetchLatestValue<this, BuiltInExprT>(
             this,
             connection,
             primaryKey,
@@ -183,12 +183,12 @@ export class Log<DataT extends LogData> implements ILog<DataT> {
     readonly correlatedSubquery : {
         exists : () => LogUtil.CorrelatedSubquery.Exists<ILog<DataT>>,
         latest : () => LogUtil.CorrelatedSubquery.Latest<ILog<DataT>>,
-        latestValue : <RawExprT extends AnyBuiltInExpr>(
+        latestValue : <BuiltInExprT extends AnyBuiltInExpr>(
             selectValueDelegate : LogUtil.CorrelatedSubquery.LatestValueSelectValueDelegate<
                 ILog<DataT>,
-                RawExprT
+                BuiltInExprT
             >
-        ) => LogUtil.CorrelatedSubquery.LatestValue<ILog<DataT>, RawExprT>,
+        ) => LogUtil.CorrelatedSubquery.LatestValue<ILog<DataT>, BuiltInExprT>,
         latestValueOrDefault : <
             ColumnT extends LogUtil.CorrelatedSubquery.LatestValueOrDefaultColumn<ILog<DataT>>
         >(
@@ -204,12 +204,12 @@ export class Log<DataT extends LogData> implements ILog<DataT> {
         latest : () : LogUtil.CorrelatedSubquery.Latest<ILog<DataT>> => {
             return LogUtil.CorrelatedSubquery.latest(this);
         },
-        latestValue : <RawExprT extends AnyBuiltInExpr>(
+        latestValue : <BuiltInExprT extends AnyBuiltInExpr>(
             selectValueDelegate : LogUtil.CorrelatedSubquery.LatestValueSelectValueDelegate<
                 ILog<DataT>,
-                RawExprT
+                BuiltInExprT
             >
-        ) : LogUtil.CorrelatedSubquery.LatestValue<ILog<DataT>, RawExprT> => {
+        ) : LogUtil.CorrelatedSubquery.LatestValue<ILog<DataT>, BuiltInExprT> => {
             return LogUtil.CorrelatedSubquery.latestValue(this, selectValueDelegate);
         },
         latestValueOrDefault : <

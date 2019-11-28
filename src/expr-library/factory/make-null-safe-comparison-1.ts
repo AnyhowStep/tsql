@@ -9,11 +9,11 @@ import {ComparableType} from "../../comparable-type";
 
 export type NullSafeComparison1 =
     <
-        RawExprT extends RawExpr<ComparableType>
+        BuiltInExprT extends RawExpr<ComparableType>
     >(
-        rawExpr : RawExprT
+        rawExpr : BuiltInExprT
     ) => (
-        ExprUtil.Intersect<boolean, RawExprT>
+        ExprUtil.Intersect<boolean, BuiltInExprT>
     )
 ;
 
@@ -25,11 +25,11 @@ export function makeNullSafeComparison1<OperatorTypeT extends OperatorType> (
     typeHint? : TypeHint
 ) : NullSafeComparison1 {
     const result : NullSafeComparison1 = <
-        RawExprT extends RawExpr<ComparableType>
+        BuiltInExprT extends RawExpr<ComparableType>
     >(
-        rawExpr : RawExprT
+        rawExpr : BuiltInExprT
     ) : (
-        ExprUtil.Intersect<boolean, RawExprT>
+        ExprUtil.Intersect<boolean, BuiltInExprT>
     ) => {
         return ExprUtil.intersect(
             tm.mysql.boolean(),

@@ -495,22 +495,22 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     }
 
     selectValue<
-        RawExprT extends AnyBuiltInExpr
+        BuiltInExprT extends AnyBuiltInExpr
     > (
         this : Extract<this, QueryUtil.BeforeCompoundQueryClause>,
         selectValueDelegate : QueryUtil.QuerySelectValueDelegate<
             Extract<this, QueryUtil.BeforeCompoundQueryClause>,
-            RawExprT
+            BuiltInExprT
         >
     ) : (
         QueryUtil.SelectValue<
             Extract<this, QueryUtil.BeforeCompoundQueryClause>,
-            RawExprT
+            BuiltInExprT
         >
     ) {
         return QueryUtil.selectValue<
             Extract<this, QueryUtil.BeforeCompoundQueryClause>,
-            RawExprT
+            BuiltInExprT
         >(
             this,
             selectValueDelegate

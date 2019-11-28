@@ -9,12 +9,12 @@ import {SelectValueDelegate} from "../../../select-clause";
 
 export type LatestValue<
     LogT extends ILog,
-    RawExprT extends AnyBuiltInExpr
+    BuiltInExprT extends AnyBuiltInExpr
 > = (
     Expr<{
         mapper : tm.SafeMapper<
             | null
-            | RawExprUtil.TypeOf<RawExprT>
+            | RawExprUtil.TypeOf<BuiltInExprT>
         >,
         usedRef : UsedRefUtil.FromColumnMap<LogT["ownerTable"]["columns"]>,
     }>
@@ -22,7 +22,7 @@ export type LatestValue<
 
 export type LatestValueSelectValueDelegate<
     LogT extends ILog,
-    RawExprT extends AnyBuiltInExpr
+    BuiltInExprT extends AnyBuiltInExpr
 > =
     SelectValueDelegate<
         FromClauseUtil.From<
@@ -33,16 +33,16 @@ export type LatestValueSelectValueDelegate<
             LogT["logTable"]
         >,
         undefined,
-        RawExprT
+        BuiltInExprT
     >
 ;
 
 export function latestValue<
     LogT extends ILog,
-    RawExprT extends AnyBuiltInExpr
+    BuiltInExprT extends AnyBuiltInExpr
 > (
     log : LogT,
-    selectValueDelegate : LatestValueSelectValueDelegate<LogT, RawExprT>
+    selectValueDelegate : LatestValueSelectValueDelegate<LogT, BuiltInExprT>
 ) : (
     LatestValue<LogT, AnyBuiltInExpr>
 ) {

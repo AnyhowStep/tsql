@@ -59,15 +59,15 @@ import {OperatorNodeUtil} from "../../ast";
  * ```
  */
 export function notInQuery<
-    RawExprT extends RawExpr<NonNullEquatableType>,
-    QueryT extends QueryBaseUtil.OneSelectItem<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<RawExprT>>>
+    BuiltInExprT extends RawExpr<NonNullEquatableType>,
+    QueryT extends QueryBaseUtil.OneSelectItem<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<BuiltInExprT>>>
 > (
-    rawExpr : RawExprT,
+    rawExpr : BuiltInExprT,
     query : QueryT
 ) : (
     Expr<{
         mapper : tm.SafeMapper<boolean>,
-        usedRef : RawExprUtil.IntersectUsedRef<RawExprT|QueryT>,
+        usedRef : RawExprUtil.IntersectUsedRef<BuiltInExprT|QueryT>,
     }>
 ) {
     if (!QueryBaseUtil.isOneSelectItem(query)) {

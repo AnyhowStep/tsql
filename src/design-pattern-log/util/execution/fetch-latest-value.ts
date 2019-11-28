@@ -6,14 +6,14 @@ import {FromClauseUtil} from "../../../from-clause";
 import {AnyBuiltInExpr, RawExprUtil} from "../../../raw-expr";
 import {SelectValueDelegate} from "../../../select-clause";
 
-export type FetchLatestValue<RawExprT extends AnyBuiltInExpr> =
+export type FetchLatestValue<BuiltInExprT extends AnyBuiltInExpr> =
     ExecutionUtil.FetchValuePromise<
-        RawExprUtil.TypeOf<RawExprT>
+        RawExprUtil.TypeOf<BuiltInExprT>
     >
 ;
 export type FetchLatestValueSelectValueDelegate<
     LogT extends ILog,
-    RawExprT extends AnyBuiltInExpr
+    BuiltInExprT extends AnyBuiltInExpr
 > =
     SelectValueDelegate<
         FromClauseUtil.From<
@@ -21,18 +21,18 @@ export type FetchLatestValueSelectValueDelegate<
             LogT["logTable"]
         >,
         undefined,
-        RawExprT
+        BuiltInExprT
     >
 ;
 
 export function fetchLatestValue<
     LogT extends ILog,
-    RawExprT extends AnyBuiltInExpr
+    BuiltInExprT extends AnyBuiltInExpr
 > (
     log : LogT,
     connection : SelectConnection,
     primaryKey : PrimaryKey_Input<LogT["ownerTable"]>,
-    selectValueDelegate : FetchLatestValueSelectValueDelegate<LogT, RawExprT>
+    selectValueDelegate : FetchLatestValueSelectValueDelegate<LogT, BuiltInExprT>
 ) : (
     FetchLatestValue<AnyBuiltInExpr>
 ) {

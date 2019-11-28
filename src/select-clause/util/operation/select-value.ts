@@ -9,11 +9,11 @@ import {AssertNonUnion} from "../../../type-util";
 
 export type SelectValue<
     SelectClauseT extends SelectClause|undefined,
-    RawExprT extends AnyBuiltInExpr
+    BuiltInExprT extends AnyBuiltInExpr
 > =
     Select<
         SelectClauseT,
-        ValueFromRawExpr<RawExprT>
+        ValueFromRawExpr<BuiltInExprT>
     >
 ;
 /**
@@ -32,30 +32,30 @@ export type SelectValue<
 export function selectValue<
     FromClauseT extends IFromClause,
     SelectClauseT extends SelectClause|undefined,
-    RawExprT extends AnyBuiltInExpr
+    BuiltInExprT extends AnyBuiltInExpr
 > (
     fromClause : FromClauseT,
     selectClause : SelectClauseT,
-    selectValueDelegate : SelectValueDelegate<FromClauseT, SelectClauseT, RawExprT>
+    selectValueDelegate : SelectValueDelegate<FromClauseT, SelectClauseT, BuiltInExprT>
 ) : (
     SelectValue<
         SelectClauseT,
-        RawExprT
+        BuiltInExprT
     >
 ) {
     return select<
         FromClauseT,
         SelectClauseT,
-        ValueFromRawExpr<RawExprT>
+        ValueFromRawExpr<BuiltInExprT>
     >(
         fromClause,
         selectClause,
         columns => (
-            valueFromRawExpr<RawExprT>(selectValueDelegate(columns)) as (
-                & ValueFromRawExpr<RawExprT>
-                & AssertNonUnion<ValueFromRawExpr<RawExprT>>
-                & AssertValidUsedRef<FromClauseT, ValueFromRawExpr<RawExprT>>
-                & AssertValidColumnIdentifier<SelectClauseT, ValueFromRawExpr<RawExprT>>
+            valueFromRawExpr<BuiltInExprT>(selectValueDelegate(columns)) as (
+                & ValueFromRawExpr<BuiltInExprT>
+                & AssertNonUnion<ValueFromRawExpr<BuiltInExprT>>
+                & AssertValidUsedRef<FromClauseT, ValueFromRawExpr<BuiltInExprT>>
+                & AssertValidColumnIdentifier<SelectClauseT, ValueFromRawExpr<BuiltInExprT>>
             )
         )
     );

@@ -14,14 +14,14 @@ import {IQueryBase, QueryBaseUtil} from "../../../query-base";
  * @todo Refactor this to not require conditional types?
  * Seems impossible.
  */
-export type UsedRef<RawExprT extends AnyBuiltInExpr|IQueryBase> = (
+export type UsedRef<BuiltInExprT extends AnyBuiltInExpr|IQueryBase> = (
     /**
      * This implementation is the same as the implementation commented out below.
      * For some reason, this implementation is more efficient in terms of instantiation depth used.
      */
     | Extract<
         Exclude<
-            RawExprT,
+            BuiltInExprT,
             (
                 | BuiltInValueExpr
                 | IColumn
@@ -31,50 +31,50 @@ export type UsedRef<RawExprT extends AnyBuiltInExpr|IQueryBase> = (
         IUsedRef
     >
     | (
-        RawExprT extends IColumn ?
-        UsedRefUtil.FromColumn<RawExprT> :
-        RawExprT extends IQueryBase ?
-        UsedRefUtil.FromFromClause<RawExprT["fromClause"]> :
-        RawExprT extends BuiltInValueExpr ?
+        BuiltInExprT extends IColumn ?
+        UsedRefUtil.FromColumn<BuiltInExprT> :
+        BuiltInExprT extends IQueryBase ?
+        UsedRefUtil.FromFromClause<BuiltInExprT["fromClause"]> :
+        BuiltInExprT extends BuiltInValueExpr ?
         IUsedRef<{}> :
         never
     )
-    /*RawExprT extends BuiltInValueExpr ?
+    /*BuiltInExprT extends BuiltInValueExpr ?
     IUsedRef<{}> :
-    RawExprT extends IExpr ?
-    RawExprT["usedRef"] :
-    RawExprT extends IColumn ?
-    UsedRefUtil.FromColumn<RawExprT> :
-    RawExprT extends IQueryBase ?
-    UsedRefUtil.FromFromClause<RawExprT["fromClause"]> :
-    RawExprT extends IExprSelectItem ?
-    RawExprT["usedRef"] :
+    BuiltInExprT extends IExpr ?
+    BuiltInExprT["usedRef"] :
+    BuiltInExprT extends IColumn ?
+    UsedRefUtil.FromColumn<BuiltInExprT> :
+    BuiltInExprT extends IQueryBase ?
+    UsedRefUtil.FromFromClause<BuiltInExprT["fromClause"]> :
+    BuiltInExprT extends IExprSelectItem ?
+    BuiltInExprT["usedRef"] :
     never*/
 );
-export function usedRef<RawExprT extends AnyBuiltInExpr|IQueryBase> (
-    rawExpr : RawExprT
+export function usedRef<BuiltInExprT extends AnyBuiltInExpr|IQueryBase> (
+    rawExpr : BuiltInExprT
 ) : (
-    UsedRef<RawExprT>
+    UsedRef<BuiltInExprT>
 ) {
     //Check built-in cases first
     if (BuiltInValueExprUtil.isBuiltInValueExpr(rawExpr)) {
-        return UsedRefUtil.fromColumnRef({}) as UsedRef<RawExprT>;
+        return UsedRefUtil.fromColumnRef({}) as UsedRef<BuiltInExprT>;
     }
 
     if (ExprUtil.isExpr(rawExpr)) {
-        return rawExpr.usedRef as UsedRef<RawExprT>;
+        return rawExpr.usedRef as UsedRef<BuiltInExprT>;
     }
 
     if (ColumnUtil.isColumn(rawExpr)) {
-        return UsedRefUtil.fromColumn(rawExpr) as UsedRef<RawExprT>;
+        return UsedRefUtil.fromColumn(rawExpr) as UsedRef<BuiltInExprT>;
     }
 
     if (QueryBaseUtil.isQuery(rawExpr)) {
-        return UsedRefUtil.fromFromClause(rawExpr.fromClause) as UsedRef<RawExprT>;
+        return UsedRefUtil.fromFromClause(rawExpr.fromClause) as UsedRef<BuiltInExprT>;
     }
 
     if (ExprSelectItemUtil.isExprSelectItem(rawExpr)) {
-        return rawExpr.usedRef as UsedRef<RawExprT>;
+        return rawExpr.usedRef as UsedRef<BuiltInExprT>;
     }
 
     throw new Error(`Unknown rawExpr ${tm.TypeUtil.toTypeStr(rawExpr)}`);

@@ -8,26 +8,26 @@ import {Identity} from "../type-util";
 export type SelectValueDelegateReturnType<
     FromClauseT extends IFromClause,
     SelectClauseT extends SelectClause|undefined,
-    RawExprT extends AnyBuiltInExpr
+    BuiltInExprT extends AnyBuiltInExpr
 > =
     Identity<
-        & RawExprT
+        & BuiltInExprT
         & SelectClauseUtil.AssertValidUsedRef<
             FromClauseT,
-            SelectClauseUtil.ValueFromRawExpr<RawExprT>
+            SelectClauseUtil.ValueFromRawExpr<BuiltInExprT>
         >
         & SelectClauseUtil.AssertValidColumnIdentifier<
             SelectClauseT,
-            SelectClauseUtil.ValueFromRawExpr<RawExprT>
+            SelectClauseUtil.ValueFromRawExpr<BuiltInExprT>
         >
     >
 ;
 export type SelectValueDelegate<
     FromClauseT extends IFromClause,
     SelectClauseT extends SelectClause|undefined,
-    RawExprT extends AnyBuiltInExpr
+    BuiltInExprT extends AnyBuiltInExpr
 > =
     (
         columns : SelectDelegateColumns<FromClauseT>
-    ) => SelectValueDelegateReturnType<FromClauseT, SelectClauseT, RawExprT>
+    ) => SelectValueDelegateReturnType<FromClauseT, SelectClauseT, BuiltInExprT>
 ;

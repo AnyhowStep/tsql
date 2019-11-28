@@ -8,7 +8,7 @@ import {AnyBuiltInExpr} from "../../../raw-expr";
 
 export function fetchValue<
     TableT extends ITable,
-    RawExprT extends AnyBuiltInExpr
+    BuiltInExprT extends AnyBuiltInExpr
 > (
     table : TableT,
     connection : SelectConnection,
@@ -24,7 +24,7 @@ export function fetchValue<
             TableT
         >,
         undefined,
-        RawExprT
+        BuiltInExprT
     >
 ) : ExecutionUtil.FetchValueReturnType<
     /**
@@ -36,7 +36,7 @@ export function fetchValue<
                 QueryUtil.NewInstance,
                 this
             >,
-            RawExprT
+            BuiltInExprT
         >
     */
     QueryUtil.SelectNoSelectClause<
@@ -44,7 +44,7 @@ export function fetchValue<
             QueryUtil.NewInstance,
             TableT
         >,
-        SelectClauseUtil.ValueFromRawExpr<RawExprT>
+        SelectClauseUtil.ValueFromRawExpr<BuiltInExprT>
     >
 > {
     try {

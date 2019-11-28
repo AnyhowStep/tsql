@@ -6,16 +6,16 @@ import {IColumn} from "../../../column";
 import {IExprSelectItem} from "../../../expr-select-item";
 import {QueryBaseUtil} from "../../../query-base";
 
-export type TypeOf<RawExprT extends AnyBuiltInExpr> = (
-    RawExprT extends BuiltInValueExpr ?
-    RawExprT :
-    RawExprT extends IExpr ?
-    tm.OutputOf<RawExprT["mapper"]> :
-    RawExprT extends IColumn ?
-    tm.OutputOf<RawExprT["mapper"]> :
-    RawExprT extends QueryBaseUtil.OneSelectItem<unknown> & QueryBaseUtil.ZeroOrOneRow ?
-    QueryBaseUtil.TypeOf<RawExprT> :
-    RawExprT extends IExprSelectItem ?
-    tm.OutputOf<RawExprT["mapper"]> :
+export type TypeOf<BuiltInExprT extends AnyBuiltInExpr> = (
+    BuiltInExprT extends BuiltInValueExpr ?
+    BuiltInExprT :
+    BuiltInExprT extends IExpr ?
+    tm.OutputOf<BuiltInExprT["mapper"]> :
+    BuiltInExprT extends IColumn ?
+    tm.OutputOf<BuiltInExprT["mapper"]> :
+    BuiltInExprT extends QueryBaseUtil.OneSelectItem<unknown> & QueryBaseUtil.ZeroOrOneRow ?
+    QueryBaseUtil.TypeOf<BuiltInExprT> :
+    BuiltInExprT extends IExprSelectItem ?
+    tm.OutputOf<BuiltInExprT["mapper"]> :
     never
 );

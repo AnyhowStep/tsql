@@ -62,16 +62,16 @@ export function select<
 }
 
 export function selectValue<
-    RawExprT extends AnyBuiltInExpr
+    BuiltInExprT extends AnyBuiltInExpr
 > (
     selectValueDelegate : SelectValueDelegate<
         QueryUtil.NewInstance["fromClause"],
         QueryUtil.NewInstance["selectClause"],
-        RawExprT
+        BuiltInExprT
     >
 ) : (
-    QueryUtil.SelectValue<QueryUtil.NewInstance, RawExprT>
+    QueryUtil.SelectValue<QueryUtil.NewInstance, BuiltInExprT>
 ) {
     return QueryUtil.newInstance()
-        .selectValue<RawExprT>(selectValueDelegate);
+        .selectValue<BuiltInExprT>(selectValueDelegate);
 }

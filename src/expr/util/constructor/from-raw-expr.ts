@@ -5,18 +5,18 @@ import {IAnonymousColumn} from "../../../column";
 import {DataTypeUtil} from "../../../data-type";
 import {IUsedRef} from "../../../used-ref";
 
-export type FromRawExpr<RawExprT extends AnyBuiltInExpr> = (
+export type FromRawExpr<BuiltInExprT extends AnyBuiltInExpr> = (
     Expr<{
-        mapper : RawExprUtil.Mapper<RawExprT>,
-        usedRef : RawExprUtil.UsedRef<RawExprT>,
+        mapper : RawExprUtil.Mapper<BuiltInExprT>,
+        usedRef : RawExprUtil.UsedRef<BuiltInExprT>,
     }>
 );
 export function fromRawExpr<
-    RawExprT extends AnyBuiltInExpr
+    BuiltInExprT extends AnyBuiltInExpr
 > (
-    rawExpr : RawExprT
+    rawExpr : BuiltInExprT
 ) : (
-    FromRawExpr<RawExprT>
+    FromRawExpr<BuiltInExprT>
 ) {
     if (rawExpr instanceof ExprImpl) {
         return rawExpr;
