@@ -3,7 +3,7 @@
 Null-safe equality behaves almost like "regular" equality,
 except that it returns `TRUE` when both operands are `NULL`.
 
-"Regular" equality returns `FALSE` when either (or both) operands are `NULL`.
+"Regular" equality returns `NULL` when either (or both) operands are `NULL`.
 
 -----
 

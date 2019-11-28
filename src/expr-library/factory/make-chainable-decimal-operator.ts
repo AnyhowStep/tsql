@@ -9,7 +9,7 @@ import {
 } from "../../ast";
 import {OperatorType} from "../../operator-type";
 import {LiteralValueNodeUtil, LiteralValueNode} from "../../ast/literal-value-node";
-import {PrimitiveExprUtil} from "../../primitive-expr";
+import {BuiltInValueExprUtil} from "../../built-in-value-expr";
 import {TypeHint} from "../../type-hint";
 import {Decimal} from "../../decimal";
 import {decimalMapper} from "../decimal/decimal-mapper";
@@ -18,13 +18,14 @@ function tryGetFlattenableElements (
     rawExpr : AnyRawExpr,
     operatorType : OperatorType,
     _identityElement : Decimal,
-    identityAst : LiteralValueNode
+    identityAst : LiteralValueNode,
+    identityParseResult : tm.FixedPointUtil.ParseResult
 ) : AstArray|undefined {
     if (ExprUtil.isExpr(rawExpr)) {
         return AstUtil.tryExtractAst(
             rawExpr.ast,
             ast => {
-                if (LiteralValueNodeUtil.isLiteralValueNode(ast) && PrimitiveExprUtil.isEqual(ast.literalValue, identityAst.literalValue)) {
+                if (LiteralValueNodeUtil.isLiteralValueNode(ast) && BuiltInValueExprUtil.isEqual(ast.literalValue, identityAst.literalValue)) {
                     /**
                      * Eliminate all identity elements
                      */
@@ -39,14 +40,22 @@ function tryGetFlattenableElements (
     }
 
     /**
-     * We should not see any `Decimal` primitives because JS does not have them.
+     * We should not see any `Decimal` built-ins because JS does not have them.
      */
-    //if (rawExpr === identityElement) {
-    //    /**
-    //     * Eliminate all identity elements
-    //     */
-    //    return [];
-    //}
+    const rawExprParseResult = tm.FixedPointUtil.tryParse(String(rawExpr));
+    if (
+        rawExprParseResult != undefined &&
+        tm.FixedPointUtil.isEqual(
+            rawExprParseResult,
+            identityParseResult,
+            tm.FixedPointUtil.ZeroEqualityAlgorithm.NEGATIVE_AND_POSITIVE_ZERO_ARE_EQUAL
+        )
+    ) {
+        /**
+         * Eliminate all identity elements
+         */
+        return [];
+    }
 
     return undefined;
 }
@@ -85,6 +94,10 @@ export function makeChainableDecimalOperator<
     ChainableDecimalOperator
 ) {
     const identityElement = decimalMapper("rawIdentityElement", rawIdentityElement);
+    const identityParseResult = tm.FixedPointUtil.tryParse(rawIdentityElement.toString());
+    if (identityParseResult == undefined) {
+        throw new Error(`Invalid identity element ${rawIdentityElement}`);
+    }
     let identityAst : LiteralValueNode|undefined = undefined;
 
     const result : ChainableDecimalOperator = <ArrT extends RawExpr<Decimal>[]> (
@@ -102,7 +115,7 @@ export function makeChainableDecimalOperator<
         let operands : [Ast, ...Ast[]]|undefined = undefined;
 
         for (const rawExpr of arr) {
-            const flattenableElements = tryGetFlattenableElements(rawExpr, operatorType, identityElement, identityAst);
+            const flattenableElements = tryGetFlattenableElements(rawExpr, operatorType, identityElement, identityAst, identityParseResult);
             if (flattenableElements != undefined) {
                 /**
                  * Looks like we should flatten this `rawExpr`

@@ -2,7 +2,7 @@ import * as tm from "type-mapping";
 import {ITable} from "../../table";
 import {Table} from "../../table-impl";
 import {IAnonymousColumn, ColumnUtil, IColumn, ColumnArrayUtil} from "../../../column";
-import {NonNullPrimitiveExpr} from "../../../primitive-expr";
+import {NonNullBuiltInValueExpr} from "../../../built-in-value-expr";
 import {KeyArrayUtil, KeyUtil} from "../../../key";
 import {assertValidPrimaryKey, AssertValidPrimaryKey, SetPrimaryKeyColumnMap} from "./set-primary-key";
 import {pickOwnEnumerable} from "../../../type-util";
@@ -11,7 +11,7 @@ import {ColumnIdentifierMapUtil} from "../../../column-identifier-map";
 export type SetIdColumnAlias<TableT extends Pick<ITable, "columns"|"candidateKeys">> = (
     {
         [columnAlias in Extract<keyof TableT["columns"], string>] : (
-            TableT["columns"][columnAlias] extends IAnonymousColumn<NonNullPrimitiveExpr> ?
+            TableT["columns"][columnAlias] extends IAnonymousColumn<NonNullBuiltInValueExpr> ?
             (
                 columnAlias extends TableT["candidateKeys"][number][number] ?
                 /**

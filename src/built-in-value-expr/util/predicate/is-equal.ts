@@ -1,8 +1,8 @@
 import * as tm from "type-mapping";
-import {PrimitiveExpr} from "../../primitive-expr";
+import {BuiltInValueExpr} from "../../built-in-value-expr";
 import {isDate} from "../../../date-util";
 
-export function isEqual (a : PrimitiveExpr, b : PrimitiveExpr) : boolean {
+export function isEqual (a : BuiltInValueExpr, b : BuiltInValueExpr) : boolean {
     if (a === b) {
         return true;
     }

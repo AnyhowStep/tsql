@@ -134,7 +134,7 @@ export async function __updateAndFetchOneByCandidateKeyHelper<
              * This `candidateKey` column's value will be updated.
              * We need to know what its updated value will be.
              */
-            if (RawExprUtil.isAnyNonPrimitiveRawExpr(newValue)) {
+            if (RawExprUtil.isAnyNonValueExpr(newValue)) {
                 const evaluatedNewValue = await TableUtil.fetchValue(
                     table,
                     connection,

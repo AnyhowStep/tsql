@@ -1,5 +1,5 @@
-import {PrimitiveExpr} from "../../primitive-expr";
-import {PrimitiveType} from "../query";
+import {BuiltInValueExpr} from "../../built-in-value-expr";
+import {BaseBuiltInType} from "../query";
 
 /**
  * Assuming case-insensitive equality,
@@ -18,10 +18,10 @@ import {PrimitiveType} from "../query";
  *
  */
 export type NullSafeCaseInsensitiveNarrow<
-    A extends PrimitiveExpr,
+    A extends BuiltInValueExpr,
     B extends A|null
 > = (
     Extract<A, string|Uint8Array|Date> extends never ?
     B :
-    PrimitiveType<B>
+    BaseBuiltInType<B>
 );

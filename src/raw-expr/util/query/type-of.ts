@@ -1,13 +1,13 @@
 import * as tm from "type-mapping";
 import {AnyRawExpr} from "../../raw-expr";
-import {PrimitiveExpr} from "../../../primitive-expr";
+import {BuiltInValueExpr} from "../../../built-in-value-expr";
 import {IExpr} from "../../../expr";
 import {IColumn} from "../../../column";
 import {IExprSelectItem} from "../../../expr-select-item";
 import {QueryBaseUtil} from "../../../query-base";
 
 export type TypeOf<RawExprT extends AnyRawExpr> = (
-    RawExprT extends PrimitiveExpr ?
+    RawExprT extends BuiltInValueExpr ?
     RawExprT :
     RawExprT extends IExpr ?
     tm.OutputOf<RawExprT["mapper"]> :

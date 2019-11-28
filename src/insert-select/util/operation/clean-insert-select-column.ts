@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {ITable} from "../../../table";
 import {InsertSelectRow} from "../../insert-select-row";
-import {PrimitiveExprUtil} from "../../../primitive-expr";
+import {BuiltInValueExprUtil} from "../../../built-in-value-expr";
 import {RawExprUtil} from "../../../raw-expr";
 import {QueryBaseUtil} from "../../../query-base";
 import {ExprUtil} from "../../../expr";
@@ -79,7 +79,7 @@ export function cleanInsertSelectColumn<
             throw new Error(`Invalid SELECT alias ${(value as IColumn).tableAlias}.${(value as IColumn).columnAlias}`);
         }
         return value as any;
-    } else if (PrimitiveExprUtil.isPrimitiveExpr(value)) {
+    } else if (BuiltInValueExprUtil.isBuiltInValueExpr(value)) {
         return table.columns[columnAlias].mapper(
             `${table.alias}.${columnAlias}`,
             value

@@ -40,7 +40,7 @@ export * from "./order";
 export * from "./order-by-clause";
 export * from "./partial-row";
 export * from "./primary-key";
-export * from "./primitive-expr";
+export * from "./built-in-value-expr";
 export * from "./query-base";
 export * from "./raw-expr";
 export * from "./row";

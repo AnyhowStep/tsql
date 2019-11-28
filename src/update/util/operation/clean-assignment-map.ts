@@ -36,7 +36,7 @@ export function cleanAssignmentMap<
         /**
          * @todo Clean this up
          */
-        if (RawExprUtil.isAnyNonPrimitiveRawExpr(value)) {
+        if (RawExprUtil.isAnyNonValueExpr(value)) {
             UsedRefUtil.assertAllowed(
                 allowed,
                 RawExprUtil.usedRef(value as AnyRawExpr)

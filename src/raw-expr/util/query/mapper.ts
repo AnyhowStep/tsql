@@ -15,7 +15,7 @@ export function mapper<RawExprT extends AnyRawExpr> (
 ) : (
     Mapper<RawExprT>
 ) {
-    //Check primitive cases first
+    //Check built-in cases first
     if (typeof rawExpr == "number") {
         return tm.mysql.double() as tm.AnySafeMapper as Mapper<RawExprT>;
     }

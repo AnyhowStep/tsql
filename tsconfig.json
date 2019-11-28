@@ -43,7 +43,7 @@
         "./src/compound-query/**/*",
         "./src/query/**/*",
         "./src/query-base/**/*",
-        "./src/primitive-expr/**/*",
+        "./src/built-in-value-expr/**/*",
         "./src/raw-expr/**/*",
         "./src/expr-library/**/*",
         "./src/where-clause/**/*",
@@ -71,6 +71,7 @@
         "./src/schema-introspection/**/*",
         "./src/schema-validation/**/*",
         "./src/design-pattern-log/**/*",
+        "./src/design-pattern-table-per-type/**/*",
         "./src/index.ts"
     ]
 }

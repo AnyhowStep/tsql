@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import * as DataTypeUtil from "../util";
 import {DataType} from "../data-type-impl";
-import {PrimitiveExprUtil} from "../../primitive-expr";
+import {BuiltInValueExprUtil} from "../../built-in-value-expr";
 
 export function makeDateTimeDataType (
     mapperFactory : (fractionalSecondPrecision : 0|1|2|3/*|4|5|6*/) => tm.SafeMapper<Date>
@@ -17,7 +17,7 @@ export function makeDateTimeDataType (
     ) => DataTypeUtil.makeDataType(
         mapperFactory(fractionalSecondPrecision),
         value => value,
-        (a, b) => PrimitiveExprUtil.isEqual(a, b),
+        (a, b) => BuiltInValueExprUtil.isEqual(a, b),
         extraMapper
     );
 }

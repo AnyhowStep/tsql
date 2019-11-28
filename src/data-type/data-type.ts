@@ -2,7 +2,7 @@ import * as tm from "type-mapping";
 import {RawExprNoUsedRef_Output} from "../raw-expr";
 
 /**
- * When just using `TypeT` with a `PrimitiveExpr`,
+ * When just using `TypeT` with a `BuiltInValueExpr`,
  * this `DataType<>` interface may seem useless.
  *
  * However, its real usefulness is more apparent

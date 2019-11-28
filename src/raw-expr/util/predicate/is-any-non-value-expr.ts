@@ -1,12 +1,12 @@
-import {AnyNonPrimitiveRawExpr} from "../../raw-expr";
-import {PrimitiveExprUtil} from "../../../primitive-expr";
+import {AnyNonValueExpr} from "../../raw-expr";
+import {BuiltInValueExprUtil} from "../../../built-in-value-expr";
 import {ExprUtil} from "../../../expr";
 import {ColumnUtil} from "../../../column";
 import {QueryBaseUtil} from "../../../query-base";
 import {ExprSelectItemUtil} from "../../../expr-select-item";
 
-export function isAnyNonPrimitiveRawExpr (mixed : unknown) : mixed is AnyNonPrimitiveRawExpr {
-    if (PrimitiveExprUtil.isPrimitiveExpr(mixed)) {
+export function isAnyNonValueExpr (mixed : unknown) : mixed is AnyNonValueExpr {
+    if (BuiltInValueExprUtil.isBuiltInValueExpr(mixed)) {
         return false;
     }
     if (ExprUtil.isExpr(mixed)) {

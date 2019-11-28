@@ -1,8 +1,8 @@
 import * as tm from "type-mapping";
 import {isDate} from "../../../date-util";
-import {PrimitiveExpr} from "../../primitive-expr";
+import {BuiltInValueExpr} from "../../built-in-value-expr";
 
-export function isPrimitiveExpr (raw : unknown) : raw is PrimitiveExpr {
+export function isBuiltInValueExpr (raw : unknown) : raw is BuiltInValueExpr {
     if (tm.TypeUtil.isBigInt(raw)) {
         return true;
     }

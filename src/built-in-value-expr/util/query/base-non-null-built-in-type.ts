@@ -1,6 +1,6 @@
-import {NonNullPrimitiveExpr} from "../../primitive-expr";
+import {NonNullBuiltInValueExpr} from "../../built-in-value-expr";
 
-export type NonNullPrimitiveType<T extends NonNullPrimitiveExpr> = (
+export type BaseNonNullBuiltInType<T extends NonNullBuiltInValueExpr> = (
     T extends bigint ?
     bigint :
     T extends number ?

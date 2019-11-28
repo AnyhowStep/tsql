@@ -6,8 +6,8 @@
  * + `DECIMAL` data is sent as `string` for now because
  *   there is no native arbitrary-precision-floating-point or fixed-point type in JS
  *
- * We do not consider `DECIMAL` a primitive because JS does not support it natively.
+ * We do not consider `DECIMAL` a built-in type because JS does not support it natively.
  *
  */
-export type PrimitiveExpr = bigint|number|string|boolean|Date|Uint8Array|null;
-export type NonNullPrimitiveExpr = Exclude<PrimitiveExpr, null>;
+export type BuiltInValueExpr = bigint|number|string|boolean|Date|Uint8Array|null;
+export type NonNullBuiltInValueExpr = Exclude<BuiltInValueExpr, null>;

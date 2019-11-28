@@ -9,7 +9,7 @@ tape(__filename, t => {
         });
 
     t.true(
-        tsql.RawExprUtil.isAnyNonPrimitiveRawExpr(
+        tsql.RawExprUtil.isAnyNonValueExpr(
             tsql.integer.add(
                 myTable.columns.myTableId,
                 BigInt(0)

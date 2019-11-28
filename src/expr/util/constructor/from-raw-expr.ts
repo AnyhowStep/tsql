@@ -1,19 +1,19 @@
 import * as tm from "type-mapping";
 import {Expr, ExprImpl, expr} from "../../expr-impl";
 import {RawExpr, RawExprUtil, RawExprNoUsedRef_Input} from "../../../raw-expr";
-import {PrimitiveExpr} from "../../../primitive-expr";
+import {BuiltInValueExpr} from "../../../built-in-value-expr";
 import {IAnonymousColumn} from "../../../column";
 import {DataTypeUtil} from "../../../data-type";
 import {IUsedRef} from "../../../used-ref";
 
-export type FromRawExpr<RawExprT extends RawExpr<PrimitiveExpr>> = (
+export type FromRawExpr<RawExprT extends RawExpr<BuiltInValueExpr>> = (
     Expr<{
         mapper : RawExprUtil.Mapper<RawExprT>,
         usedRef : RawExprUtil.UsedRef<RawExprT>,
     }>
 );
 export function fromRawExpr<
-    RawExprT extends RawExpr<PrimitiveExpr>
+    RawExprT extends RawExpr<BuiltInValueExpr>
 > (
     rawExpr : RawExprT
 ) : (
@@ -45,9 +45,9 @@ export function fromRawExprNoUsedRefInput<
         usedRef : IUsedRef<{}>,
     }>
 ) {
-    if (RawExprUtil.isAnyNonPrimitiveRawExpr(value)) {
+    if (RawExprUtil.isAnyNonValueExpr(value)) {
         /**
-         * Cannot map a `NonPrimitiveRawExpr`
+         * Cannot map a `NonValueExpr`
          */
         return fromRawExpr(value as any);
     } else {
