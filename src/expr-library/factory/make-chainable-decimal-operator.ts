@@ -15,6 +15,10 @@ import {Decimal} from "../../decimal";
 import {decimalMapper} from "../decimal/decimal-mapper";
 
 function tryGetFlattenableElements (
+    /**
+     * In this specific instance, we could probably have `BuiltInExpr<Decimal>`.
+     * Can't accept arbitrary `Decimal` types because they may have invalid precision/scale.
+     */
     rawExpr : AnyBuiltInExpr,
     operatorType : OperatorType,
     _identityElement : Decimal,
