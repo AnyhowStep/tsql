@@ -2,7 +2,7 @@ import * as tm from "type-mapping";
 import {ITable} from "../../table";
 import {Table} from "../../table-impl";
 import {IAnonymousColumn, ColumnUtil, IColumn, ColumnArrayUtil} from "../../../column";
-import {NonNullPrimitiveExpr} from "../../../primitive-expr";
+import {NonNullBuiltInValueExpr} from "../../../built-in-value-expr";
 import {AssertValidCandidateKey, assertValidCandidateKey} from "./add-candidate-key";
 import {KeyArrayUtil, KeyUtil} from "../../../key";
 import {pickOwnEnumerable} from "../../../type-util";
@@ -14,7 +14,7 @@ import {pickOwnEnumerable} from "../../../type-util";
 export type SetPrimaryKeyColumnAlias<TableT extends Pick<ITable, "columns">> = (
     {
         [columnAlias in Extract<keyof TableT["columns"], string>] : (
-            TableT["columns"][columnAlias] extends IAnonymousColumn<NonNullPrimitiveExpr> ?
+            TableT["columns"][columnAlias] extends IAnonymousColumn<NonNullBuiltInValueExpr> ?
             columnAlias :
             /**
              * Cannot be nullable

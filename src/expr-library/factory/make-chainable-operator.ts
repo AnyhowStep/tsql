@@ -9,7 +9,7 @@ import {
 } from "../../ast";
 import {OperatorType} from "../../operator-type";
 import {LiteralValueNodeUtil, LiteralValueNode} from "../../ast/literal-value-node";
-import {PrimitiveExprUtil} from "../../primitive-expr";
+import {BuiltInValueExprUtil} from "../../built-in-value-expr";
 import {TypeHint} from "../../type-hint";
 
 function tryGetFlattenableElements (
@@ -22,7 +22,7 @@ function tryGetFlattenableElements (
         return AstUtil.tryExtractAst(
             rawExpr.ast,
             ast => {
-                if (LiteralValueNodeUtil.isLiteralValueNode(ast) && PrimitiveExprUtil.isEqual(ast.literalValue, identityAst.literalValue)) {
+                if (LiteralValueNodeUtil.isLiteralValueNode(ast) && BuiltInValueExprUtil.isEqual(ast.literalValue, identityAst.literalValue)) {
                     /**
                      * Eliminate all identity elements
                      */
@@ -36,7 +36,10 @@ function tryGetFlattenableElements (
         );
     }
 
-    if (rawExpr === identityElement) {
+    if (
+        BuiltInValueExprUtil.isBuiltInValueExpr(rawExpr) &&
+        BuiltInValueExprUtil.isEqual(rawExpr, identityElement)
+    ) {
         /**
          * Eliminate all identity elements
          */

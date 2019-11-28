@@ -1,11 +1,11 @@
 import * as tm from "type-mapping";
 import {isDataType} from "./is-data-type";
-import {PrimitiveExprUtil} from "../../../primitive-expr";
+import {BuiltInValueExprUtil} from "../../../built-in-value-expr";
 
 /**
  * If `mapper` is `IDataType`, it uses `mapper.isNullSafeEqual()`.
  *
- * Else, it uses a fallback algorithm that works fine for `PrimitiveExpr`,
+ * Else, it uses a fallback algorithm that works fine for `BuiltInValueExpr`,
  * but may not be suitable for custom data types.
  */
 export function isNullSafeEqual<TypeT> (
@@ -16,9 +16,9 @@ export function isNullSafeEqual<TypeT> (
     if (isDataType(mapper)) {
         return mapper.isNullSafeEqual(a, b);
     } else {
-        if (PrimitiveExprUtil.isPrimitiveExpr(a)) {
-            if (PrimitiveExprUtil.isPrimitiveExpr(b)) {
-                return PrimitiveExprUtil.isEqual(a, b);
+        if (BuiltInValueExprUtil.isBuiltInValueExpr(a)) {
+            if (BuiltInValueExprUtil.isBuiltInValueExpr(b)) {
+                return BuiltInValueExprUtil.isEqual(a, b);
             } else {
                 return false;
             }

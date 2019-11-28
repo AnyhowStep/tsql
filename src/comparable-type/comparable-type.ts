@@ -1,4 +1,4 @@
-import {PrimitiveExpr} from "../primitive-expr";
+import {BuiltInValueExpr} from "../built-in-value-expr";
 import {Decimal} from "../decimal";
 
 /**
@@ -19,5 +19,5 @@ export type CustomComparableType = { dbEquatable : void, dbComparable : void };
  * + Equal to
  * + Not Equal to
  */
-export type ComparableType = PrimitiveExpr|Decimal|CustomComparableType;
+export type ComparableType = BuiltInValueExpr|Decimal|CustomComparableType;
 export type NonNullComparableType = Exclude<ComparableType, null>;

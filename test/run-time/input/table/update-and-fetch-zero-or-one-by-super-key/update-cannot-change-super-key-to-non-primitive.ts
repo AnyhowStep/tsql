@@ -42,9 +42,9 @@ tape(__filename, async (t) => {
                 } as any;
             }
         ).then(() => {
-            t.fail("Should not be able to update super key to non-primitive");
+            t.fail("Should not be able to update super key to non-isAnyNonValueExpr");
         }).catch(() => {
-            t.pass("Cannot update super key to non-primitive");
+            t.pass("Cannot update super key to non-isAnyNonValueExpr");
         });
     });
 

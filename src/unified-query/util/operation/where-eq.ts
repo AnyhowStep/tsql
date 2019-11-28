@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {FromClauseUtil} from "../../../from-clause";
 import {ColumnUtil} from "../../../column";
-import {NonNullPrimitiveExpr} from "../../../primitive-expr";
+import {NonNullBuiltInValueExpr} from "../../../built-in-value-expr";
 import {Query} from "../../query-impl";
 import {AfterFromClause} from "../helper-type";
 
@@ -16,7 +16,7 @@ export type WhereEqImpl<
         ColumnUtil.FromJoinArray<
             FromClauseT["currentJoins"]
         >,
-        NonNullPrimitiveExpr
+        NonNullBuiltInValueExpr
     >,
     ValueT extends tm.OutputOf<ColumnT["mapper"]>,
     FromClauseT extends AfterFromClause["fromClause"],
@@ -43,7 +43,7 @@ export type WhereEq<
         ColumnUtil.FromJoinArray<
             QueryT["fromClause"]["currentJoins"]
         >,
-        NonNullPrimitiveExpr
+        NonNullBuiltInValueExpr
     >,
     ValueT extends tm.OutputOf<ColumnT["mapper"]>
 > = (
@@ -64,7 +64,7 @@ export function whereEq<
         ColumnUtil.FromJoinArray<
             QueryT["fromClause"]["currentJoins"]
         >,
-        NonNullPrimitiveExpr
+        NonNullBuiltInValueExpr
     >,
     ValueT extends tm.OutputOf<ColumnT["mapper"]>
 > (
@@ -82,7 +82,7 @@ export function whereEq<
     ...args : (
         ColumnT extends ColumnUtil.ExtractWithType<
             ColumnUtil.FromJoinArray<QueryT["fromClause"]["currentJoins"]>,
-            NonNullPrimitiveExpr
+            NonNullBuiltInValueExpr
         > ?
         [
             FromClauseUtil.WhereEqDelegate<QueryT["fromClause"], ColumnT>,

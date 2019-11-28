@@ -1,4 +1,4 @@
-//import {PrimitiveExpr} from "../../primitive-expr";
+//import {BuiltInValueExpr} from "../../built-in-value-expr";
 //import * as tm from "type-mapping";
 
 export enum LiteralValueType {

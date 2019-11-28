@@ -11,7 +11,7 @@ import {RawExpr, AnyRawExpr, AnySubqueryExpr} from "../raw-expr";
 import {OnDelegate, OnClauseUtil} from "../on-clause";
 import {ITable, TableUtil, TableWithPrimaryKey, InsertableTable, DeletableTable} from "../table";
 import {ColumnUtil} from "../column";
-import {PrimitiveExpr, NonNullPrimitiveExpr} from "../primitive-expr";
+import {BuiltInValueExpr, NonNullBuiltInValueExpr} from "../built-in-value-expr";
 import {JoinArrayUtil} from "../join";
 import {SuperKey_NonUnion} from "../super-key";
 import {PrimaryKey_NonUnion} from "../primary-key";
@@ -802,7 +802,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
             ColumnUtil.FromJoinArray<
                 Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"]
             >,
-            NonNullPrimitiveExpr
+            NonNullBuiltInValueExpr
         >,
         ValueT extends tm.OutputOf<ColumnT["mapper"]>
     > (
@@ -820,7 +820,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         ...args : (
             ColumnT extends ColumnUtil.ExtractWithType<
                 ColumnUtil.FromJoinArray<Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"]>,
-                NonNullPrimitiveExpr
+                NonNullBuiltInValueExpr
             > ?
             [
                 FromClauseUtil.WhereEqDelegate<Extract<this, QueryUtil.AfterFromClause>["fromClause"], ColumnT>,
@@ -900,7 +900,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
             ColumnUtil.FromJoinArray<
                 Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"]
             >,
-            PrimitiveExpr
+            BuiltInValueExpr
         >,
         ValueT extends tm.OutputOf<ColumnT["mapper"]>|null
     > (
@@ -918,7 +918,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         ...args : (
             ColumnT extends ColumnUtil.ExtractWithType<
                 ColumnUtil.FromJoinArray<Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"]>,
-                PrimitiveExpr
+                BuiltInValueExpr
             > ?
             [
                 FromClauseUtil.WhereNullSafeEqDelegate<Extract<this, QueryUtil.AfterFromClause>["fromClause"], ColumnT>,

@@ -6764,7 +6764,7 @@ function intArrayToString(array) {
 }
 
 
-// ASM_LIBRARY EXTERN PRIMITIVES: Int8Array,Int32Array
+// ASM_LIBRARY EXTERN isAnyNonValueExprS: Int8Array,Int32Array
 
 
 function jsCall_i(index) {

@@ -1,14 +1,14 @@
 import * as tm from "type-mapping";
 import {isDataType} from "../predicate";
-import {PrimitiveExprUtil} from "../../../primitive-expr";
+import {BuiltInValueExprUtil} from "../../../built-in-value-expr";
 import {RawExprNoUsedRef_Output} from "../../../raw-expr";
 import {IAnonymousColumn, ColumnUtil} from "../../../column";
 
 /**
  * If `mapper` is `IDataType`, it uses `mapper.toRawExpr()`.
  *
- * Else, it uses a fallback algorithm that works fine for `PrimitiveExpr`.
- * If the `value` is not a `PrimitiveExpr`, an error is thrown.
+ * Else, it uses a fallback algorithm that works fine for `BuiltInValueExpr`.
+ * If the `value` is not a `BuiltInValueExpr`, an error is thrown.
  */
 export function toRawExpr<TypeT> (
     mapper : tm.SafeMapper<TypeT>|IAnonymousColumn<TypeT>,
@@ -28,7 +28,7 @@ export function toRawExpr<TypeT> (
             mapper(valueName, value)
         );
     } else {
-        if (PrimitiveExprUtil.isPrimitiveExpr(value)) {
+        if (BuiltInValueExprUtil.isBuiltInValueExpr(value)) {
             return mapper(valueName, value) as RawExprNoUsedRef_Output<TypeT>;
         } else {
             /**

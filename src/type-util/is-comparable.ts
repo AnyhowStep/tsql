@@ -1,14 +1,14 @@
-import {NonNullPrimitiveExpr, PrimitiveExprUtil} from "../primitive-expr";
+import {NonNullBuiltInValueExpr, BuiltInValueExprUtil} from "../built-in-value-expr";
 
 /**
  * Implements `tsql`'s notion of comparability.
  *
- * @todo Move this to `PrimitiveExprUtil`
+ * @todo Move this to `BuiltInValueExprUtil`
  */
-export type IsComparable<T extends NonNullPrimitiveExpr, U extends NonNullPrimitiveExpr> = (
-    [PrimitiveExprUtil.PrimitiveType<T>] extends [PrimitiveExprUtil.PrimitiveType<U>] ?
+export type IsComparable<T extends NonNullBuiltInValueExpr, U extends NonNullBuiltInValueExpr> = (
+    [BuiltInValueExprUtil.BaseBuiltInType<T>] extends [BuiltInValueExprUtil.BaseBuiltInType<U>] ?
     (
-        [PrimitiveExprUtil.PrimitiveType<U>] extends [PrimitiveExprUtil.PrimitiveType<T>] ?
+        [BuiltInValueExprUtil.BaseBuiltInType<U>] extends [BuiltInValueExprUtil.BaseBuiltInType<T>] ?
         true :
         false
     ) :

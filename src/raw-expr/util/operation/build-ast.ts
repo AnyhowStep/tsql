@@ -13,7 +13,7 @@ import {isDate} from "../../../date-util";
  * +`UNSIGNED BIGINT` is not supported by this function.
  */
 export function buildAst (rawExpr : AnyRawExpr|QueryBaseUtil.OneSelectItem<any>) : Ast {
-    //Check primitive cases first
+    //Check built-in cases first
     if (typeof rawExpr == "number") {
         return LiteralValueNodeUtil.doubleLiteralNode(rawExpr);
     }

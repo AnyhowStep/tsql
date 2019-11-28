@@ -6,7 +6,7 @@ import {AfterFromClause} from "../helper-type";
 import {WhereClause, WhereClauseUtil} from "../../../where-clause";
 import {ColumnRefUtil} from "../../../column-ref";
 import {ColumnIdentifierRefUtil} from "../../../column-identifier-ref";
-import {PrimitiveExprUtil, NonNullPrimitiveExpr} from "../../../primitive-expr";
+import {BuiltInValueExprUtil, NonNullBuiltInValueExpr} from "../../../built-in-value-expr";
 import {RawExprUtil} from "../../../raw-expr";
 import * as ExprLib from "../../../expr-library";
 
@@ -19,7 +19,7 @@ import * as ExprLib from "../../../expr-library";
 export type WhereEqImpl<
     ColumnT extends ColumnUtil.ExtractWithType<
         ColumnUtil.FromJoinArray<CurrentJoinsT>,
-        NonNullPrimitiveExpr
+        NonNullBuiltInValueExpr
     >,
     ValueT extends tm.OutputOf<ColumnT["mapper"]>,
     OuterQueryJoinsT extends AfterFromClause["outerQueryJoins"],
@@ -31,7 +31,7 @@ export type WhereEqImpl<
             CurrentJoinsT,
             ColumnT["tableAlias"],
             ColumnT["columnAlias"],
-            PrimitiveExprUtil.CaseInsensitiveNarrow<
+            BuiltInValueExprUtil.CaseInsensitiveNarrow<
                 tm.OutputOf<ColumnT["mapper"]>,
                 ValueT
             >
@@ -42,7 +42,7 @@ export type WhereEq<
     FromClauseT extends AfterFromClause,
     ColumnT extends ColumnUtil.ExtractWithType<
         ColumnUtil.FromJoinArray<FromClauseT["currentJoins"]>,
-        NonNullPrimitiveExpr
+        NonNullBuiltInValueExpr
     >,
     ValueT extends tm.OutputOf<ColumnT["mapper"]>
 > = (
@@ -62,7 +62,7 @@ export type WhereEq<
 export type WhereEqDelegateImpl<
     ColumnT extends ColumnUtil.ExtractWithType<
         ColumnUtil.FromJoinArray<CurrentJoinsT>,
-        NonNullPrimitiveExpr
+        NonNullBuiltInValueExpr
     >,
     CurrentJoinsT extends AfterFromClause["currentJoins"]
 > = (
@@ -73,7 +73,7 @@ export type WhereEqDelegateImpl<
                     ColumnRefUtil.FromColumnArray<
                         ColumnUtil.FromJoinArray<CurrentJoinsT>[]
                     >,
-                    NonNullPrimitiveExpr
+                    NonNullBuiltInValueExpr
                 >
             >
         )
@@ -83,7 +83,7 @@ export type WhereEqDelegate<
     FromClauseT extends Pick<AfterFromClause, "currentJoins">,
     ColumnT extends ColumnUtil.ExtractWithType<
         ColumnUtil.FromJoinArray<FromClauseT["currentJoins"]>,
-        NonNullPrimitiveExpr
+        NonNullBuiltInValueExpr
     >
 > = (
     WhereEqDelegateImpl<
@@ -112,7 +112,7 @@ export function whereEq<
     FromClauseT extends AfterFromClause,
     ColumnT extends ColumnUtil.ExtractWithType<
         ColumnUtil.FromJoinArray<FromClauseT["currentJoins"]>,
-        NonNullPrimitiveExpr
+        NonNullBuiltInValueExpr
     >,
     ValueT extends tm.OutputOf<ColumnT["mapper"]>
 > (
@@ -131,7 +131,7 @@ export function whereEq<
     ...args : (
         ColumnT extends ColumnUtil.ExtractWithType<
             ColumnUtil.FromJoinArray<FromClauseT["currentJoins"]>,
-            NonNullPrimitiveExpr
+            NonNullBuiltInValueExpr
         > ?
         [
             WhereEqDelegate<FromClauseT, ColumnT>,
@@ -148,7 +148,7 @@ export function whereEq<
     const whereEqDelegate = args[0];
     const value = args[1];
 
-    const columns = ColumnRefUtil.__noOp_extractWithType<NonNullPrimitiveExpr>()(
+    const columns = ColumnRefUtil.__noOp_extractWithType<NonNullBuiltInValueExpr>()(
         ColumnRefUtil.fromColumnArray(
             ColumnUtil.fromJoinArray<FromClauseT["currentJoins"]>(fromClause.currentJoins)
         )
@@ -174,7 +174,7 @@ export function whereEq<
                 FromClauseT["currentJoins"],
                 ColumnT["tableAlias"],
                 ColumnT["columnAlias"],
-                PrimitiveExprUtil.CaseInsensitiveNarrow<
+                BuiltInValueExprUtil.CaseInsensitiveNarrow<
                     tm.OutputOf<ColumnT["mapper"]>,
                     ValueT
                 >
@@ -192,7 +192,7 @@ export function whereEq<
                         RawExprUtil.mapper(value)
                     )
                 ) as (
-                    () => PrimitiveExprUtil.CaseInsensitiveNarrow<
+                    () => BuiltInValueExprUtil.CaseInsensitiveNarrow<
                         tm.OutputOf<ColumnT["mapper"]>,
                         ValueT
                     >

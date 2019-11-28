@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {AnyRawExpr} from "../../raw-expr";
-import {PrimitiveExpr, PrimitiveExprUtil} from "../../../primitive-expr";
+import {BuiltInValueExpr, BuiltInValueExprUtil} from "../../../built-in-value-expr";
 import {UsedRefUtil, IUsedRef} from "../../../used-ref";
 import {ExprUtil} from "../../../expr";
 import {IColumn, ColumnUtil} from "../../../column";
@@ -23,7 +23,7 @@ export type UsedRef<RawExprT extends AnyRawExpr|IQueryBase> = (
         Exclude<
             RawExprT,
             (
-                | PrimitiveExpr
+                | BuiltInValueExpr
                 | IColumn
                 | IQueryBase
             )
@@ -35,11 +35,11 @@ export type UsedRef<RawExprT extends AnyRawExpr|IQueryBase> = (
         UsedRefUtil.FromColumn<RawExprT> :
         RawExprT extends IQueryBase ?
         UsedRefUtil.FromFromClause<RawExprT["fromClause"]> :
-        RawExprT extends PrimitiveExpr ?
+        RawExprT extends BuiltInValueExpr ?
         IUsedRef<{}> :
         never
     )
-    /*RawExprT extends PrimitiveExpr ?
+    /*RawExprT extends BuiltInValueExpr ?
     IUsedRef<{}> :
     RawExprT extends IExpr ?
     RawExprT["usedRef"] :
@@ -56,8 +56,8 @@ export function usedRef<RawExprT extends AnyRawExpr|IQueryBase> (
 ) : (
     UsedRef<RawExprT>
 ) {
-    //Check primitive cases first
-    if (PrimitiveExprUtil.isPrimitiveExpr(rawExpr)) {
+    //Check built-in cases first
+    if (BuiltInValueExprUtil.isBuiltInValueExpr(rawExpr)) {
         return UsedRefUtil.fromColumnRef({}) as UsedRef<RawExprT>;
     }
 

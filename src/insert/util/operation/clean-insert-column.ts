@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {ITable} from "../../../table";
 import {InsertRow_Input, InsertRow_Output} from "../../insert-row";
-import {PrimitiveExprUtil} from "../../../primitive-expr";
+import {BuiltInValueExprUtil} from "../../../built-in-value-expr";
 import {RawExprUtil} from "../../../raw-expr";
 import {QueryBaseUtil} from "../../../query-base";
 import {ExprUtil} from "../../../expr";
@@ -59,7 +59,7 @@ export function cleanInsertColumn<TableT extends ITable> (
         }
     }
 
-    if (PrimitiveExprUtil.isPrimitiveExpr(value)) {
+    if (BuiltInValueExprUtil.isBuiltInValueExpr(value)) {
         return table.columns[columnAlias].mapper(
             `${table.alias}.${columnAlias}`,
             value
