@@ -15,7 +15,7 @@ import {Row_NonUnion, Row} from "../row";
 import {SelectClause, SelectDelegate, SelectValueDelegate, SelectClauseUtil} from "../select-clause";
 import {FromClauseUtil} from "../from-clause";
 import {WhereDelegate} from "../where-clause";
-import {AnyRawExpr} from "../raw-expr";
+import {AnyBuiltInExpr} from "../raw-expr";
 import {InsertRow_Input, InsertRowRequireCandidateKey_Input} from "../insert";
 import {InsertOneWithAutoIncrementReturnType, InsertIgnoreOneWithAutoIncrementReturnType, DeleteOneResult, DeleteZeroOrOneResult, UpdateOneResult, UpdateZeroOrOneResult} from "../execution/util";
 import {AssignmentMapDelegate} from "../update";
@@ -737,7 +737,7 @@ export class Table<DataT extends TableData> implements ITable {
     }
 
     fetchValue<
-        RawExprT extends AnyRawExpr
+        RawExprT extends AnyBuiltInExpr
     > (
         connection : SelectConnection,
         whereDelegate : WhereDelegate<
@@ -784,7 +784,7 @@ export class Table<DataT extends TableData> implements ITable {
     }
 
     fetchValueByCandidateKey<
-        RawExprT extends AnyRawExpr
+        RawExprT extends AnyBuiltInExpr
     > (
         connection : SelectConnection,
         candidateKey : StrictUnion<CandidateKey_NonUnion<this>>,
@@ -812,7 +812,7 @@ export class Table<DataT extends TableData> implements ITable {
         );
     }
     fetchValueByPrimaryKey<
-        RawExprT extends AnyRawExpr
+        RawExprT extends AnyBuiltInExpr
     > (
         this : Extract<this, TableWithPrimaryKey>,
         connection : SelectConnection,
@@ -841,7 +841,7 @@ export class Table<DataT extends TableData> implements ITable {
         );
     }
     fetchValueBySuperKey<
-        RawExprT extends AnyRawExpr
+        RawExprT extends AnyBuiltInExpr
     > (
         connection : SelectConnection,
         superKey : SuperKey_Input<this>,

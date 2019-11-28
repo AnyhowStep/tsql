@@ -2,7 +2,7 @@ import * as QueryUtil from "./util";
 import {IAliasedTable} from "../aliased-table";
 import {FromClauseUtil} from "../from-clause";
 import {SelectClause, SelectDelegate, SelectValueDelegate} from "../select-clause";
-import {AnyRawExpr} from "../raw-expr";
+import {AnyBuiltInExpr} from "../raw-expr";
 
 export function from<
     AliasedTableT extends IAliasedTable
@@ -62,7 +62,7 @@ export function select<
 }
 
 export function selectValue<
-    RawExprT extends AnyRawExpr
+    RawExprT extends AnyBuiltInExpr
 > (
     selectValueDelegate : SelectValueDelegate<
         QueryUtil.NewInstance["fromClause"],

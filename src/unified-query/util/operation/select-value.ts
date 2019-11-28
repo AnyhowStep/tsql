@@ -1,12 +1,12 @@
 import {SelectClauseUtil, SelectDelegateColumns, SelectValueDelegateReturnType, SelectDelegateReturnType} from "../../../select-clause";
 import {BeforeCompoundQueryClause} from "../helper-type";
-import {AnyRawExpr} from "../../../raw-expr";
+import {AnyBuiltInExpr} from "../../../raw-expr";
 import {select, Select} from "./select";
 import {Correlate} from "./correlate";
 
 export type SelectValue<
     QueryT extends BeforeCompoundQueryClause,
-    RawExprT extends AnyRawExpr
+    RawExprT extends AnyBuiltInExpr
 > = (
     Select<
         QueryT,
@@ -16,7 +16,7 @@ export type SelectValue<
 
 export type QuerySelectValueDelegate<
     QueryT extends BeforeCompoundQueryClause,
-    RawExprT extends AnyRawExpr
+    RawExprT extends AnyBuiltInExpr
 > =
     (
         columns : SelectDelegateColumns<QueryT["fromClause"]>,
@@ -26,7 +26,7 @@ export type QuerySelectValueDelegate<
 
 export function selectValue<
     QueryT extends BeforeCompoundQueryClause,
-    RawExprT extends AnyRawExpr
+    RawExprT extends AnyBuiltInExpr
 > (
     query : QueryT,
     selectValueDelegate : QuerySelectValueDelegate<QueryT, RawExprT>

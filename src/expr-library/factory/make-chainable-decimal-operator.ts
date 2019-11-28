@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {RawExpr, RawExprUtil, AnyRawExpr} from "../../raw-expr";
+import {RawExpr, RawExprUtil, AnyBuiltInExpr} from "../../raw-expr";
 import {ExprUtil} from "../../expr";
 import {
     Ast,
@@ -15,7 +15,7 @@ import {Decimal} from "../../decimal";
 import {decimalMapper} from "../decimal/decimal-mapper";
 
 function tryGetFlattenableElements (
-    rawExpr : AnyRawExpr,
+    rawExpr : AnyBuiltInExpr,
     operatorType : OperatorType,
     _identityElement : Decimal,
     identityAst : LiteralValueNode,

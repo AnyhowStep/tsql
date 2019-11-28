@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {AnyRawExpr} from "../../raw-expr";
+import {AnyBuiltInExpr} from "../../raw-expr";
 import {TypeOf} from "./type-of";
 import {ExprUtil} from "../../../expr";
 import {ColumnUtil} from "../../../column";
@@ -7,10 +7,10 @@ import {ExprSelectItemUtil} from "../../../expr-select-item";
 import {QueryBaseUtil} from "../../../query-base";
 import {isDate} from "../../../date-util";
 
-export type Mapper<RawExprT extends AnyRawExpr> = (
+export type Mapper<RawExprT extends AnyBuiltInExpr> = (
     tm.SafeMapper<TypeOf<RawExprT>>
 );
-export function mapper<RawExprT extends AnyRawExpr> (
+export function mapper<RawExprT extends AnyBuiltInExpr> (
     rawExpr : RawExprT
 ) : (
     Mapper<RawExprT>

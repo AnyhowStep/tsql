@@ -107,7 +107,7 @@ export type RawExpr<TypeT> = (
 );
 
 export type AnySubqueryExpr = (QueryBaseUtil.OneSelectItem<any> & QueryBaseUtil.ZeroOrOneRow);
-export type AnyRawExpr = (
+export type AnyBuiltInExpr = (
     | BuiltInValueExpr
     | IExpr
     | IColumn

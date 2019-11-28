@@ -1,11 +1,11 @@
-import {AnyRawExpr} from "../../../raw-expr";
+import {AnyBuiltInExpr} from "../../../raw-expr";
 import {ExprUtil} from "../../../expr";
 import {IExprSelectItem, ExprSelectItemUtil} from "../../../expr-select-item";
 import {IColumn, ColumnUtil} from "../../../column";
 
 export const SELECT_VALUE_ALIAS = "value";
 
-export type ValueFromRawExpr<RawExprT extends AnyRawExpr> =
+export type ValueFromRawExpr<RawExprT extends AnyBuiltInExpr> =
     /**
      * We could use `RawExprT extends IColumn|IExprSelectItem` but we won't.
      * This is intentional.
@@ -24,7 +24,7 @@ export type ValueFromRawExpr<RawExprT extends AnyRawExpr> =
     ]
 ;
 export function valueFromRawExpr<
-    RawExprT extends AnyRawExpr
+    RawExprT extends AnyBuiltInExpr
 > (
     rawExpr : RawExprT
 ) : (

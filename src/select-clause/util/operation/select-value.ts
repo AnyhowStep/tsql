@@ -1,6 +1,6 @@
 import {IFromClause} from "../../../from-clause";
 import {SelectClause} from "../../select-clause";
-import {AnyRawExpr} from "../../../raw-expr";
+import {AnyBuiltInExpr} from "../../../raw-expr";
 import {SelectValueDelegate} from "../../select-value-delegate";
 import {Select, select} from "./select";
 import {ValueFromRawExpr, valueFromRawExpr} from "../constructor";
@@ -9,7 +9,7 @@ import {AssertNonUnion} from "../../../type-util";
 
 export type SelectValue<
     SelectClauseT extends SelectClause|undefined,
-    RawExprT extends AnyRawExpr
+    RawExprT extends AnyBuiltInExpr
 > =
     Select<
         SelectClauseT,
@@ -32,7 +32,7 @@ export type SelectValue<
 export function selectValue<
     FromClauseT extends IFromClause,
     SelectClauseT extends SelectClause|undefined,
-    RawExprT extends AnyRawExpr
+    RawExprT extends AnyBuiltInExpr
 > (
     fromClause : FromClauseT,
     selectClause : SelectClauseT,

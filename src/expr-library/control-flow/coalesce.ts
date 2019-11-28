@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {AnyRawExpr, RawExprUtil} from "../../raw-expr";
+import {AnyBuiltInExpr, RawExprUtil} from "../../raw-expr";
 import {PopFront} from "../../tuple-util";
 import {ExprUtil} from "../../expr";
 import {IExpr} from "../../expr/expr";
@@ -9,7 +9,7 @@ import {OperatorType} from "../../operator-type";
 /**
  * `COALESCE()` with zero args is just the `NULL` constant.
  */
-export type TypeOfCoalesce<ArgsT extends readonly AnyRawExpr[], ResultT extends unknown=null> =
+export type TypeOfCoalesce<ArgsT extends readonly AnyBuiltInExpr[], ResultT extends unknown=null> =
     {
         0 : (
             /**
@@ -52,7 +52,7 @@ export type TypeOfCoalesce<ArgsT extends readonly AnyRawExpr[], ResultT extends 
         3
     ]
 ;
-export type CoalesceExpr<ArgsT extends readonly AnyRawExpr[]> =
+export type CoalesceExpr<ArgsT extends readonly AnyBuiltInExpr[]> =
     ExprUtil.Intersect<
         TypeOfCoalesce<ArgsT>,
         ArgsT[number]
@@ -69,7 +69,7 @@ export type CoalesceExpr<ArgsT extends readonly AnyRawExpr[]> =
  *
  * `COALESCE()` with zero args is just the `NULL` constant.
  */
-export function coalesce<ArgsT extends readonly AnyRawExpr[]> (
+export function coalesce<ArgsT extends readonly AnyBuiltInExpr[]> (
     ...args : ArgsT
 ) : (
     CoalesceExpr<ArgsT>

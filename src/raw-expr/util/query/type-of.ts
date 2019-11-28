@@ -1,12 +1,12 @@
 import * as tm from "type-mapping";
-import {AnyRawExpr} from "../../raw-expr";
+import {AnyBuiltInExpr} from "../../raw-expr";
 import {BuiltInValueExpr} from "../../../built-in-value-expr";
 import {IExpr} from "../../../expr";
 import {IColumn} from "../../../column";
 import {IExprSelectItem} from "../../../expr-select-item";
 import {QueryBaseUtil} from "../../../query-base";
 
-export type TypeOf<RawExprT extends AnyRawExpr> = (
+export type TypeOf<RawExprT extends AnyBuiltInExpr> = (
     RawExprT extends BuiltInValueExpr ?
     RawExprT :
     RawExprT extends IExpr ?

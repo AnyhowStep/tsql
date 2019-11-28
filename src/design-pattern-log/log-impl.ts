@@ -2,7 +2,7 @@ import {LogData, ILog} from "./log";
 import {SelectConnection, IsolableSelectConnection, IsolableInsertOneConnection} from "../execution";
 import {PrimaryKey_Input} from "../primary-key";
 import * as LogUtil from "./util";
-import {AnyRawExpr} from "../raw-expr";
+import {AnyBuiltInExpr} from "../raw-expr";
 
 export class Log<DataT extends LogData> implements ILog<DataT> {
     readonly tracked : DataT["tracked"];
@@ -65,7 +65,7 @@ export class Log<DataT extends LogData> implements ILog<DataT> {
         );
     }
 
-    fetchLatestValue<RawExprT extends AnyRawExpr> (
+    fetchLatestValue<RawExprT extends AnyBuiltInExpr> (
         connection : SelectConnection,
         primaryKey : PrimaryKey_Input<this["ownerTable"]>,
         selectValueDelegate : LogUtil.FetchLatestValueSelectValueDelegate<
@@ -183,7 +183,7 @@ export class Log<DataT extends LogData> implements ILog<DataT> {
     readonly correlatedSubquery : {
         exists : () => LogUtil.CorrelatedSubquery.Exists<ILog<DataT>>,
         latest : () => LogUtil.CorrelatedSubquery.Latest<ILog<DataT>>,
-        latestValue : <RawExprT extends AnyRawExpr>(
+        latestValue : <RawExprT extends AnyBuiltInExpr>(
             selectValueDelegate : LogUtil.CorrelatedSubquery.LatestValueSelectValueDelegate<
                 ILog<DataT>,
                 RawExprT
@@ -204,7 +204,7 @@ export class Log<DataT extends LogData> implements ILog<DataT> {
         latest : () : LogUtil.CorrelatedSubquery.Latest<ILog<DataT>> => {
             return LogUtil.CorrelatedSubquery.latest(this);
         },
-        latestValue : <RawExprT extends AnyRawExpr>(
+        latestValue : <RawExprT extends AnyBuiltInExpr>(
             selectValueDelegate : LogUtil.CorrelatedSubquery.LatestValueSelectValueDelegate<
                 ILog<DataT>,
                 RawExprT

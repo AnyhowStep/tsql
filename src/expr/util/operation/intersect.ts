@@ -1,12 +1,12 @@
 import * as tm from "type-mapping";
-import {AnyRawExpr, RawExprUtil} from "../../../raw-expr";
+import {AnyBuiltInExpr, RawExprUtil} from "../../../raw-expr";
 import {Expr, expr} from "../../expr-impl";
 import {TryReuseExistingType} from "../../../type-util";
 import {Ast} from "../../../ast";
 
 export type Intersect<
     OutputTypeT,
-    ArgsT extends AnyRawExpr
+    ArgsT extends AnyBuiltInExpr
 > =
     TryReuseExistingType<
         ArgsT,
@@ -24,7 +24,7 @@ export type Intersect<
  */
 export type __WastefulIntersect<
     OutputTypeT,
-    ArgsT extends AnyRawExpr
+    ArgsT extends AnyBuiltInExpr
 > =
     Expr<{
         mapper : tm.SafeMapper<OutputTypeT>,
@@ -35,7 +35,7 @@ export type __WastefulIntersect<
 ;
 export function intersect<
     OutputTypeT,
-    ArgsT extends AnyRawExpr
+    ArgsT extends AnyBuiltInExpr
 > (
     mapper : tm.SafeMapper<OutputTypeT>,
     args : readonly ArgsT[],

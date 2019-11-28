@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {RawExpr, RawExprUtil, AnyRawExpr} from "../../raw-expr";
+import {RawExpr, RawExprUtil, AnyBuiltInExpr} from "../../raw-expr";
 import {ExprUtil} from "../../expr";
 import {
     Ast,
@@ -13,7 +13,7 @@ import {BuiltInValueExprUtil} from "../../built-in-value-expr";
 import {TypeHint} from "../../type-hint";
 
 function tryGetFlattenableElements (
-    rawExpr : AnyRawExpr,
+    rawExpr : AnyBuiltInExpr,
     operatorType : OperatorType,
     identityElement : null|boolean|number|bigint|string|Uint8Array,
     identityAst : LiteralValueNode

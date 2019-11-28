@@ -4,11 +4,11 @@ import {FromClauseUtil} from "../../../from-clause";
 import {SelectValueDelegate, SelectClauseUtil} from "../../../select-clause";
 import {QueryUtil} from "../../../unified-query";
 import {ITable} from "../../table";
-import {AnyRawExpr} from "../../../raw-expr";
+import {AnyBuiltInExpr} from "../../../raw-expr";
 
 export function fetchValue<
     TableT extends ITable,
-    RawExprT extends AnyRawExpr
+    RawExprT extends AnyBuiltInExpr
 > (
     table : TableT,
     connection : SelectConnection,

@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {AnyRawExpr} from "../../raw-expr";
+import {AnyBuiltInExpr} from "../../raw-expr";
 import {BuiltInValueExpr, BuiltInValueExprUtil} from "../../../built-in-value-expr";
 import {UsedRefUtil, IUsedRef} from "../../../used-ref";
 import {ExprUtil} from "../../../expr";
@@ -14,7 +14,7 @@ import {IQueryBase, QueryBaseUtil} from "../../../query-base";
  * @todo Refactor this to not require conditional types?
  * Seems impossible.
  */
-export type UsedRef<RawExprT extends AnyRawExpr|IQueryBase> = (
+export type UsedRef<RawExprT extends AnyBuiltInExpr|IQueryBase> = (
     /**
      * This implementation is the same as the implementation commented out below.
      * For some reason, this implementation is more efficient in terms of instantiation depth used.
@@ -51,7 +51,7 @@ export type UsedRef<RawExprT extends AnyRawExpr|IQueryBase> = (
     RawExprT["usedRef"] :
     never*/
 );
-export function usedRef<RawExprT extends AnyRawExpr|IQueryBase> (
+export function usedRef<RawExprT extends AnyBuiltInExpr|IQueryBase> (
     rawExpr : RawExprT
 ) : (
     UsedRef<RawExprT>
