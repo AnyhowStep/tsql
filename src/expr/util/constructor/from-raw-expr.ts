@@ -1,19 +1,18 @@
 import * as tm from "type-mapping";
 import {Expr, ExprImpl, expr} from "../../expr-impl";
-import {RawExpr, RawExprUtil, RawExprNoUsedRef_Input} from "../../../raw-expr";
-import {BuiltInValueExpr} from "../../../built-in-value-expr";
+import {RawExprUtil, RawExprNoUsedRef_Input, AnyBuiltInExpr} from "../../../raw-expr";
 import {IAnonymousColumn} from "../../../column";
 import {DataTypeUtil} from "../../../data-type";
 import {IUsedRef} from "../../../used-ref";
 
-export type FromRawExpr<RawExprT extends RawExpr<BuiltInValueExpr>> = (
+export type FromRawExpr<RawExprT extends AnyBuiltInExpr> = (
     Expr<{
         mapper : RawExprUtil.Mapper<RawExprT>,
         usedRef : RawExprUtil.UsedRef<RawExprT>,
     }>
 );
 export function fromRawExpr<
-    RawExprT extends RawExpr<BuiltInValueExpr>
+    RawExprT extends AnyBuiltInExpr
 > (
     rawExpr : RawExprT
 ) : (
