@@ -12,9 +12,7 @@ export const literal3Is7 = tsql.DataTypeUtil.makeDataType(
             }
         }
     ),
-    () => {
-        throw new Error("Should not be called")
-    },
+    (a) => a,
     (a, b) => {
         if (tm.BigIntUtil.equal(a, b)) {
             return true;

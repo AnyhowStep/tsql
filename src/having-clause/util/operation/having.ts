@@ -48,7 +48,7 @@ export function having<
 
     return (
         havingClause == undefined ?
-        ExprUtil.fromRawExpr(operand) :
+        ExprUtil.fromBuiltInExpr(operand) :
         ExprLib.and(havingClause, operand)
     );
 }

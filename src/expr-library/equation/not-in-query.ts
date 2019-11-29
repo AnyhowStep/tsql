@@ -62,7 +62,7 @@ export function notInQuery<
     BuiltInExprT extends RawExpr<NonNullEquatableType>,
     QueryT extends QueryBaseUtil.OneSelectItem<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<BuiltInExprT>>>
 > (
-    rawExpr : BuiltInExprT,
+    builtInExpr : BuiltInExprT,
     query : QueryT
 ) : (
     Expr<{
@@ -80,10 +80,10 @@ export function notInQuery<
     return expr(
         {
             mapper : tm.mysql.boolean(),
-            usedRef : RawExprUtil.intersectUsedRef(rawExpr, query),
+            usedRef : RawExprUtil.intersectUsedRef(builtInExpr, query),
         },
         OperatorNodeUtil.operatorNode2(OperatorType.NOT_IN, [
-            RawExprUtil.buildAst(rawExpr),
+            RawExprUtil.buildAst(builtInExpr),
             RawExprUtil.buildAst(query)
         ], undefined)
     );

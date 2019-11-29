@@ -24,6 +24,9 @@ export type QuerySelectValueDelegate<
     ) => SelectValueDelegateReturnType<QueryT["fromClause"], QueryT["selectClause"], BuiltInExprT>
 ;
 
+/**
+ * @todo Rename to `selectScalar`?
+ */
 export function selectValue<
     QueryT extends BeforeCompoundQueryClause,
     BuiltInExprT extends AnyBuiltInExpr
@@ -39,7 +42,7 @@ export function selectValue<
     >(
         query,
         (columns, subquery) => (
-            SelectClauseUtil.valueFromRawExpr<BuiltInExprT>(selectValueDelegate(columns, subquery)) as (
+            SelectClauseUtil.valueFromBuiltInExpr<BuiltInExprT>(selectValueDelegate(columns, subquery)) as (
                 SelectDelegateReturnType<
                     QueryT["fromClause"],
                     QueryT["selectClause"],

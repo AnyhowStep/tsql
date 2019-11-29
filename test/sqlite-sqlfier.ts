@@ -589,6 +589,10 @@ export const sqliteSqlfier : Sqlfier = {
         [OperatorType.LIKE_ESCAPE] : ({operands : [expr, pattern, escapeChar]}) => [
             expr, "LIKE", pattern, "ESCAPE", escapeChar
         ],
+        [OperatorType.NOT_LIKE] : ({operands}) => insertBetween(operands, "NOT LIKE"),
+        [OperatorType.NOT_LIKE_ESCAPE] : ({operands : [expr, pattern, escapeChar]}) => [
+            expr, "NOT LIKE", pattern, "ESCAPE", escapeChar
+        ],
         [OperatorType.NOT_EQUAL] : ({operands}) => insertBetween(operands, "<>"),
 
         /*

@@ -1,25 +1,26 @@
+import * as tm from "type-mapping";
 import * as tape from "tape";
 import * as tsql from "../../../../../dist";
 import {Pool} from "../../sql-web-worker/promise.sql";
 import {SqliteWorker} from "../../sql-web-worker/worker.sql";
-import {literal3Is7} from "./literal-3-is-7";
+import {dtPoint} from "../../dt-point";
 
 export const business = tsql.table("business")
     .addColumns({
-        appId : tsql.dtBigIntSigned(),
-        businessId : tsql.dtBigIntSigned(),
+        appId : tm.mysql.bigIntSigned(),
+        businessId : tm.mysql.bigIntSigned(),
     })
     .setAutoIncrement(c => c.businessId)
     .removeAllMutable();
 
 export const businessEnabled = tsql.table("businessEnabled")
     .addColumns({
-        appId : tsql.dtBigIntSigned(),
-        businessEnabledId : tsql.dtBigIntSigned(),
-        businessId : tsql.dtBigIntSigned(),
-        enabled : literal3Is7,
-        updatedAt : tsql.dtDateTime(3),
-        updatedByExternalUserId : tsql.dtVarChar(255),
+        appId : tm.mysql.bigIntSigned(),
+        businessEnabledId : tm.mysql.bigIntSigned(),
+        businessId : tm.mysql.bigIntSigned(),
+        enabled : dtPoint,
+        updatedAt : tm.mysql.dateTime(3),
+        updatedByExternalUserId : tm.mysql.varChar(255),
     })
     .removeAllMutable()
     .setAutoIncrement(c => c.businessEnabledId)
@@ -41,7 +42,10 @@ export const businessEnabledLog = tsql.log(businessEnabled)
         );
     })
     .setTrackedDefaults({
-        enabled : BigInt(3),
+        enabled : {
+            x : 1,
+            y : 2,
+        },
     });
 
 tape(__filename, async (t) => {
@@ -58,7 +62,7 @@ tape(__filename, async (t) => {
                 appId INTEGER NOT NULL,
                 businessEnabledId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                 businessId INTEGER NOT NULL,
-                enabled INTEGER NOT NULL,
+                enabled TEXT NOT NULL,
                 updatedAt DATETIME NOT NULL DEFAULT (STRFTIME('%Y-%m-%d %H:%M:%f', 'NOW')),
                 updatedByExternalUserId VARCHAR(255) NOT NULL,
                 FOREIGN KEY (appId, businessId) REFERENCES business (appId, businessId),
@@ -87,82 +91,55 @@ tape(__filename, async (t) => {
         ]);
 
         await businessEnabledLog
-            .fetchLatestOrDefault(
+            .fetchDefault(
                 connection,
                 { businessId : BigInt(2) }
             )
-            .then((result) => {
+            .then((row) => {
                 t.deepEqual(
-                    result,
+                    row,
                     {
-                        isDefault : true,
-                        row : {
-                            appId : BigInt(1),
-                            businessId : BigInt(2),
-                            enabled : BigInt(7),
+                        appId : BigInt(1),
+                        businessId : BigInt(2),
+                        enabled : {
+                            x : 1,
+                            y : 2,
                         },
                     }
                 );
             });
-        const unsafeTrackResult = await businessEnabledLog.unsafeTrack(
-            connection,
-            { businessId : BigInt(2) },
-            {
-                enabled : BigInt(8),
-                updatedByExternalUserId : "test",
-            }
-        );
-        t.deepEqual(
-            {
-                ...unsafeTrackResult,
-                current : {
-                    ...(unsafeTrackResult as any).current,
-                    updatedAt : undefined,
-                }
-            },
-            {
-                changed : true,
-                previous : {
-                    isDefault : true,
-                    row : {
-                        appId : BigInt(1),
-                        businessId : BigInt(2),
-                        enabled : BigInt(7),
-                    },
-                },
-                current : {
-                    appId : BigInt(1),
-                    businessEnabledId : BigInt(1),
-                    businessId : BigInt(2),
-                    enabled : BigInt(8),
-                    updatedAt : undefined,
-                    updatedByExternalUserId : "test",
-                },
-            }
-        );
         await businessEnabledLog
-            .fetchLatestOrDefault(
+            .fetchDefault(
                 connection,
-                { businessId : BigInt(2) }
+                { businessId : BigInt(3) }
             )
-            .then(({isDefault, row}) => {
+            .then((row) => {
                 t.deepEqual(
+                    row,
                     {
-                        isDefault,
-                        row : {
-                            ...row,
-                            updatedAt : undefined,
+                        appId : BigInt(2),
+                        businessId : BigInt(3),
+                        enabled : {
+                            x : 1,
+                            y : 2,
                         },
-                    },
+                    }
+                );
+            });
+        await businessEnabledLog
+            .fetchDefault(
+                connection,
+                { businessId : BigInt(4) }
+            )
+            .then((row) => {
+                t.deepEqual(
+                    row,
                     {
-                        isDefault : false,
-                        row : {
-                            appId : BigInt(1),
-                            businessEnabledId : BigInt(1),
-                            businessId : BigInt(2),
-                            enabled : BigInt(8),
-                            updatedAt : undefined,
-                            updatedByExternalUserId : "test",
+                        appId : BigInt(3),
+                        businessId : BigInt(4),
+                        enabled : {
+                            x : 1,
+                            y : 2,
                         },
                     }
                 );

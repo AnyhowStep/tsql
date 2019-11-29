@@ -69,20 +69,20 @@ export function coalesceMapper<ArgsT extends readonly AnyBuiltInExpr[]> (
     ...args : ArgsT
 ) : tm.SafeMapper<TypeOfCoalesce<ArgsT>> {
 
-    const rawExprMapperArr : tm.AnySafeMapper[] = [];
+    const builtInExprMapperArr : tm.AnySafeMapper[] = [];
     let lastMapperNonNull = false;
-    for (const rawExpr of args) {
-        const rawExprMapper = RawExprUtil.mapper(rawExpr);
-        rawExprMapperArr.push(rawExprMapper);
-        if (!tm.canOutputNull(rawExprMapper)) {
+    for (const builtInExpr of args) {
+        const builtInExprMapper = RawExprUtil.mapper(builtInExpr);
+        builtInExprMapperArr.push(builtInExprMapper);
+        if (!tm.canOutputNull(builtInExprMapper)) {
             lastMapperNonNull = true;
             break;
         }
     }
     return (
         lastMapperNonNull ?
-        tm.notNull(tm.unsafeOr(...rawExprMapperArr)) as tm.SafeMapper<any> :
-        tm.unsafeOr(...rawExprMapperArr) as tm.SafeMapper<any>
+        tm.notNull(tm.unsafeOr(...builtInExprMapperArr)) as tm.SafeMapper<any> :
+        tm.unsafeOr(...builtInExprMapperArr) as tm.SafeMapper<any>
     );
 }
 
@@ -101,12 +101,12 @@ export function coalesce<ArgsT extends readonly AnyBuiltInExpr[]> (
         /**
          * `COALESCE()` with zero args is just the `NULL` constant.
          */
-        return ExprUtil.fromRawExpr(null) as IExpr as CoalesceExpr<ArgsT>;
+        return ExprUtil.fromBuiltInExpr(null) as IExpr as CoalesceExpr<ArgsT>;
     } else if (arg1 === undefined) {
         /**
          * `COALESCE(x)` is just `x`
          */
-        return ExprUtil.fromRawExpr(arg0) as IExpr as CoalesceExpr<ArgsT>;
+        return ExprUtil.fromBuiltInExpr(arg0) as IExpr as CoalesceExpr<ArgsT>;
     } else {
         return ExprUtil.intersect<TypeOfCoalesce<ArgsT>, ArgsT[number]>(
             coalesceMapper(...args),

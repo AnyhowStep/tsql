@@ -8,6 +8,7 @@ import {QueryUtil} from "../../../unified-query";
 import {KeyUtil} from "../../../key";
 import {Identity} from "../../../type-util";
 import {ExprUtil} from "../../../expr";
+import {DataTypeUtil} from "../../../data-type";
 
 export type AssertAllTrackedHasDefaultValue<LogT extends ILog> =
     Exclude<
@@ -92,7 +93,12 @@ export async function fetchDefault<
         const trackedColumnAliases = Object.keys(log.trackedDefaults);
         const selectClause = trackedColumnAliases.map((trackedColumnAlias) => {
                 const rawExprNoUsedRef = log.trackedDefaults[trackedColumnAlias];
-                return ExprUtil.fromRawExpr(rawExprNoUsedRef as any).as(trackedColumnAlias);
+                return ExprUtil.fromBuiltInExpr(
+                    DataTypeUtil.toRawExpr(
+                        log.logTable.columns[trackedColumnAlias],
+                        rawExprNoUsedRef
+                    ) as any
+                ).as(trackedColumnAlias);
             });
         const trackedDefaults = await ExecutionUtil.fetchOne(
             QueryUtil.newInstance()

@@ -11,7 +11,7 @@ export type NullSafeComparison1 =
     <
         BuiltInExprT extends RawExpr<ComparableType>
     >(
-        rawExpr : BuiltInExprT
+        builtInExpr : BuiltInExprT
     ) => (
         ExprUtil.Intersect<boolean, BuiltInExprT>
     )
@@ -27,17 +27,17 @@ export function makeNullSafeComparison1<OperatorTypeT extends OperatorType> (
     const result : NullSafeComparison1 = <
         BuiltInExprT extends RawExpr<ComparableType>
     >(
-        rawExpr : BuiltInExprT
+        builtInExpr : BuiltInExprT
     ) : (
         ExprUtil.Intersect<boolean, BuiltInExprT>
     ) => {
         return ExprUtil.intersect(
             tm.mysql.boolean(),
-            [rawExpr],
+            [builtInExpr],
             OperatorNodeUtil.operatorNode1<OperatorTypeT>(
                 operatorType,
                 [
-                    RawExprUtil.buildAst(rawExpr),
+                    RawExprUtil.buildAst(builtInExpr),
                 ],
                 typeHint
             )

@@ -2,8 +2,11 @@ import * as tm from "type-mapping";
 import {AnyBuiltInExpr} from "../../raw-expr";
 import {mapper} from "../query";
 
-export function assertNonNull (name : string, rawExpr : AnyBuiltInExpr) {
-    if (tm.canOutputNull(mapper(rawExpr))) {
+/**
+ * @todo Rename to `assertNonNullable`
+ */
+export function assertNonNull (name : string, builtInExpr : AnyBuiltInExpr) {
+    if (tm.canOutputNull(mapper(builtInExpr))) {
         throw new Error(`${name} must not be nullable`);
     }
 }

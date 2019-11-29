@@ -36,14 +36,14 @@ export function like<
     ExprT extends RawExpr<string>,
     PatternT extends RawExpr<string>
 > (
-    rawExpr : ExprT,
+    builtInExpr : ExprT,
     pattern : PatternT
 ) : (
     LikeExpr<
         RawExprUtil.IntersectUsedRef<ExprT|PatternT>
     >
 ) {
-    const result = likeImpl<ExprT, PatternT>(rawExpr, pattern) as unknown as (
+    const result = likeImpl<ExprT, PatternT>(builtInExpr, pattern) as unknown as (
         LikeExpr<
             RawExprUtil.IntersectUsedRef<ExprT|PatternT>
         >
@@ -53,7 +53,7 @@ export function like<
          * SQLite requires the `escapeChar` be exactly of length `1`
          */
         assertValidEscapeChar(escapeChar);
-        const escapedExpr = likeEscapeImpl<ExprT, PatternT, string>(rawExpr, pattern, escapeChar);
+        const escapedExpr = likeEscapeImpl<ExprT, PatternT, string>(builtInExpr, pattern, escapeChar);
         /**
          * @todo Investigate assignability
          */

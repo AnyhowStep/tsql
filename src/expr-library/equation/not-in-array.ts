@@ -57,7 +57,7 @@ export function notInArray<
          * Calling `notInArray()` with an empty array will always
          * return `true` because a value is always **not** in an array of zero elements.
          */
-        return ExprUtil.fromRawExpr(true) as Equation1ToNReturn<Arg0T, ArgsT>;
+        return ExprUtil.fromBuiltInExpr(true) as Equation1ToNReturn<Arg0T, ArgsT>;
     } else {
         return notInArrayImpl<Arg0T, ArgsT[number], ArgsT[number][]>(
             arg0, arg1, ...rest

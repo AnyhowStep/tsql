@@ -77,6 +77,7 @@ tape(__filename, async (t) => {
 
         const validationResult = await tsql.SchemaValidationUtil.validateSchema(
             [business, businessEnabled],
+            //eslint-disable-next-line @typescript-eslint/no-non-null-assertion
             (await connection.tryFetchSchemaMeta(undefined))!
         );
         t.deepEqual(validationResult.errors, []);
@@ -101,8 +102,8 @@ tape(__filename, async (t) => {
                         row : {
                             appId : BigInt(1),
                             businessId : BigInt(2),
-                            enabled : BigInt(3),
-                            enabled2 : BigInt(3),
+                            enabled : BigInt(7),
+                            enabled2 : BigInt(7),
                         },
                     }
                 );
@@ -130,10 +131,8 @@ tape(__filename, async (t) => {
                     row : {
                         appId : BigInt(1),
                         businessId : BigInt(2),
-                        enabled : BigInt(3),
-                        //This was the default value.
-                        //It is not `7` because it was not copied over.
-                        enabled2 : BigInt(3),
+                        enabled : BigInt(7),
+                        enabled2 : BigInt(7),
                     },
                 },
                 current : {
@@ -141,8 +140,6 @@ tape(__filename, async (t) => {
                     businessEnabledId : BigInt(1),
                     businessId : BigInt(2),
                     enabled : BigInt(8),
-                    //Now, it is `7` because it was copied over,
-                    //and had `.toRawExpr()` called on it
                     enabled2 : BigInt(7),
                     updatedAt : undefined,
                     updatedByExternalUserId : "test",
@@ -181,7 +178,7 @@ tape(__filename, async (t) => {
             connection,
             { businessId : BigInt(2) },
             {
-                enabled : BigInt(3),
+                enabled : BigInt(7),
                 updatedByExternalUserId : "test2",
             }
         );
@@ -218,9 +215,7 @@ tape(__filename, async (t) => {
                     appId : BigInt(1),
                     businessEnabledId : BigInt(2),
                     businessId : BigInt(2),
-                    //This value was not copied over.
-                    //So, it never had `.toRawExpr()` called on it
-                    enabled : BigInt(3),
+                    enabled : BigInt(7),
                     enabled2 : BigInt(7),
                     updatedAt : undefined,
                     updatedByExternalUserId : "test2",

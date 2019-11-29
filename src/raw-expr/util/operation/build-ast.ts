@@ -12,56 +12,56 @@ import {isDate} from "../../../date-util";
  * +`DECIMAL` is not supported by this function.
  * +`UNSIGNED BIGINT` is not supported by this function.
  */
-export function buildAst (rawExpr : AnyBuiltInExpr|QueryBaseUtil.OneSelectItem<any>) : Ast {
+export function buildAst (builtInExpr : AnyBuiltInExpr|QueryBaseUtil.OneSelectItem<any>) : Ast {
     //Check built-in cases first
-    if (typeof rawExpr == "number") {
-        return LiteralValueNodeUtil.doubleLiteralNode(rawExpr);
+    if (typeof builtInExpr == "number") {
+        return LiteralValueNodeUtil.doubleLiteralNode(builtInExpr);
     }
-    if (tm.TypeUtil.isBigInt(rawExpr)) {
-        return LiteralValueNodeUtil.signedBigIntLiteralNode(rawExpr);
+    if (tm.TypeUtil.isBigInt(builtInExpr)) {
+        return LiteralValueNodeUtil.signedBigIntLiteralNode(builtInExpr);
     }
-    if (typeof rawExpr == "string") {
-        return LiteralValueNodeUtil.stringLiteralNode(rawExpr);
+    if (typeof builtInExpr == "string") {
+        return LiteralValueNodeUtil.stringLiteralNode(builtInExpr);
     }
-    if (typeof rawExpr == "boolean") {
-        return LiteralValueNodeUtil.booleanLiteralNode(rawExpr);
+    if (typeof builtInExpr == "boolean") {
+        return LiteralValueNodeUtil.booleanLiteralNode(builtInExpr);
     }
-    if (isDate(rawExpr)) {
-        return LiteralValueNodeUtil.dateTimeLiteralNode(rawExpr);
+    if (isDate(builtInExpr)) {
+        return LiteralValueNodeUtil.dateTimeLiteralNode(builtInExpr);
     }
-    if (rawExpr instanceof Uint8Array) {
+    if (builtInExpr instanceof Uint8Array) {
         //escape(Buffer.from("hello")) == "X'68656c6c6f'"
-        return LiteralValueNodeUtil.bufferLiteralNode(rawExpr);
+        return LiteralValueNodeUtil.bufferLiteralNode(builtInExpr);
     }
-    if (rawExpr === null) {
-        return LiteralValueNodeUtil.nullLiteralNode(rawExpr);
-    }
-
-    if (ExprUtil.isExpr(rawExpr)) {
-        return rawExpr.ast;
+    if (builtInExpr === null) {
+        return LiteralValueNodeUtil.nullLiteralNode(builtInExpr);
     }
 
-    if (ColumnUtil.isColumn(rawExpr)) {
-        return ColumnUtil.buildAst(rawExpr);
+    if (ExprUtil.isExpr(builtInExpr)) {
+        return builtInExpr.ast;
     }
 
-    if (QueryBaseUtil.isOneSelectItem(rawExpr)) {
+    if (ColumnUtil.isColumn(builtInExpr)) {
+        return ColumnUtil.buildAst(builtInExpr);
+    }
+
+    if (QueryBaseUtil.isOneSelectItem(builtInExpr)) {
         /**
          * @todo Check if this is desirable
          */
-        //return rawExpr.buildExprAst();
-        return parentheses(rawExpr, false/*canUnwrap*/);
+        //return builtInExpr.buildExprAst();
+        return parentheses(builtInExpr, false/*canUnwrap*/);
     }
 
-    if (ExprSelectItemUtil.isExprSelectItem(rawExpr)) {
+    if (ExprSelectItemUtil.isExprSelectItem(builtInExpr)) {
         /**
          * @todo Check if this is desirable.
          * If anything, the `query` ast, when used as a value query,
          * should wrap an unwrappable parentheses around itself.
          */
-        //return Parentheses.Create(rawExpr.unaliasedAst, false/*canUnwrap*/);
-        return parentheses(rawExpr.unaliasedAst);
+        //return Parentheses.Create(builtInExpr.unaliasedAst, false/*canUnwrap*/);
+        return parentheses(builtInExpr.unaliasedAst);
     }
 
-    throw new Error(`Unknown rawExpr ${tm.TypeUtil.toTypeStr(rawExpr)}`);
+    throw new Error(`Unknown builtInExpr ${tm.TypeUtil.toTypeStr(builtInExpr)}`);
 }

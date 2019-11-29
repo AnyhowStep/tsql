@@ -23,19 +23,19 @@ export type ValueFromRawExpr<BuiltInExprT extends AnyBuiltInExpr> =
         >
     ]
 ;
-export function valueFromRawExpr<
+export function valueFromBuiltInExpr<
     BuiltInExprT extends AnyBuiltInExpr
 > (
-    rawExpr : BuiltInExprT
+    builtInExpr : BuiltInExprT
 ) : (
     ValueFromRawExpr<BuiltInExprT>
 ) {
-    if (ColumnUtil.isColumn(rawExpr) || ExprSelectItemUtil.isExprSelectItem(rawExpr)) {
-        return [rawExpr] as ValueFromRawExpr<BuiltInExprT>;
+    if (ColumnUtil.isColumn(builtInExpr) || ExprSelectItemUtil.isExprSelectItem(builtInExpr)) {
+        return [builtInExpr] as ValueFromRawExpr<BuiltInExprT>;
     } else {
         return [
             ExprUtil.as(
-                ExprUtil.fromRawExpr(rawExpr),
+                ExprUtil.fromBuiltInExpr(builtInExpr),
                 SELECT_VALUE_ALIAS
             )
         ] as ValueFromRawExpr<BuiltInExprT>;

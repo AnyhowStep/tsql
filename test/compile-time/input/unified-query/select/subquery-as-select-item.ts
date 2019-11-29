@@ -26,7 +26,7 @@ export const myQuery = tsql
          */
         columns.myColumn,
         columns.myColumn2.as("aliasedColumnExpression"),
-        tsql.ExprUtil.fromRawExpr("I am an aliased expression").as("aliasedLiteralValueExpression"),
+        tsql.ExprUtil.fromBuiltInExpr("I am an aliased expression").as("aliasedLiteralValueExpression"),
         tsql.concat(
             "I am another aliased expression",
             /**

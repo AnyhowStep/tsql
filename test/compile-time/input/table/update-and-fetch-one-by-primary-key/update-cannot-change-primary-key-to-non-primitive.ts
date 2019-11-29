@@ -17,7 +17,7 @@ export const p = dst.updateAndFetchOneByPrimaryKey(
     },
     () => {
         return {
-            testId : tsql.ExprUtil.fromRawExpr(BigInt(123456)),
+            testId : tsql.ExprUtil.fromBuiltInExpr(BigInt(123456)),
         };
     }
 );

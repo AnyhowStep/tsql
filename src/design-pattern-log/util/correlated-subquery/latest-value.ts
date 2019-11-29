@@ -46,7 +46,7 @@ export function latestValue<
 ) : (
     LatestValue<LogT, AnyBuiltInExpr>
 ) {
-    return ExprUtil.fromRawExpr(
+    return ExprUtil.fromBuiltInExpr(
         latest(log)
             .selectValue(selectValueDelegate as any)
     ) as any;
