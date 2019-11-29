@@ -14,11 +14,11 @@ export type SelectValueDelegateReturnType<
         & BuiltInExprT
         & SelectClauseUtil.AssertValidUsedRef<
             FromClauseT,
-            SelectClauseUtil.ValueFromRawExpr<BuiltInExprT>
+            SelectClauseUtil.ValueFromBuiltInExpr<BuiltInExprT>
         >
         & SelectClauseUtil.AssertValidColumnIdentifier<
             SelectClauseT,
-            SelectClauseUtil.ValueFromRawExpr<BuiltInExprT>
+            SelectClauseUtil.ValueFromBuiltInExpr<BuiltInExprT>
         >
     >
 ;

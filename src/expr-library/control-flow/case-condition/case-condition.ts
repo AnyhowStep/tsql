@@ -1,4 +1,4 @@
-import {RawExpr, RawExprUtil} from "../../../raw-expr";
+import {BuiltInExpr, RawExprUtil} from "../../../raw-expr";
 import {ExprImpl} from "../../../expr/expr-impl";
 import {IUsedRef, UsedRefUtil} from "../../../used-ref";
 import {UninitializedCaseConditionBuilderImpl} from "./uninitialized-case-condition-builder-impl";
@@ -9,8 +9,8 @@ export interface CaseConditionBuilder<
     UsedRefT extends IUsedRef
 > {
     when<
-        ConditionT extends RawExpr<boolean>,
-        ThenT extends RawExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
+        ConditionT extends BuiltInExpr<boolean>,
+        ThenT extends BuiltInExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
     > (
         condition : ConditionT,
         then : ThenT
@@ -37,7 +37,7 @@ export interface CaseConditionBuilder<
      */
     end () : ExprImpl<ResultT|null, UsedRefT>;
     else<
-        ElseT extends RawExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
+        ElseT extends BuiltInExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
     > (
         elseResult : ElseT
     ) : (
@@ -54,8 +54,8 @@ export interface CaseConditionBuilder<
 }
 export interface UninitializedCaseConditionBuilder {
     when<
-        ConditionT extends RawExpr<boolean>,
-        ThenT extends RawExpr<EquatableType>
+        ConditionT extends BuiltInExpr<boolean>,
+        ThenT extends BuiltInExpr<EquatableType>
     > (
         condition : ConditionT,
         then : ThenT

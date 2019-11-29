@@ -2,7 +2,7 @@ import * as tm from "type-mapping";
 import {OperatorType} from "../../../operator-type";
 import {TypeHint} from "../../../type-hint";
 import {makeOperator3, Operator2} from "../../factory";
-import {RawExpr} from "../../../raw-expr";
+import {BuiltInExpr} from "../../../raw-expr";
 import {ExprUtil} from "../../../expr";
 
 const groupConcatImpl = makeOperator3<OperatorType.AGGREGATE_GROUP_CONCAT, boolean, string, string, string|null>(
@@ -12,8 +12,8 @@ const groupConcatImpl = makeOperator3<OperatorType.AGGREGATE_GROUP_CONCAT, boole
 );
 
 export const groupConcatDistinct : Operator2<string, string, string|null> = <
-    BuiltInExprT extends RawExpr<string>,
-    PatternT extends RawExpr<string>,
+    BuiltInExprT extends BuiltInExpr<string>,
+    PatternT extends BuiltInExpr<string>,
 >(
     builtInExpr : BuiltInExprT,
     pattern : PatternT
@@ -25,8 +25,8 @@ export const groupConcatDistinct : Operator2<string, string, string|null> = <
 };
 
 export const groupConcatAll : Operator2<string, string, string|null> = <
-    BuiltInExprT extends RawExpr<string>,
-    PatternT extends RawExpr<string>,
+    BuiltInExprT extends BuiltInExpr<string>,
+    PatternT extends BuiltInExpr<string>,
 >(
     builtInExpr : BuiltInExprT,
     pattern : PatternT

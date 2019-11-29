@@ -2,7 +2,7 @@ import * as tm from "type-mapping";
 import {OperatorType} from "../../../operator-type";
 import {TypeHint} from "../../../type-hint";
 import {makeOperator2, Operator1} from "../../factory";
-import {RawExpr} from "../../../raw-expr";
+import {BuiltInExpr} from "../../../raw-expr";
 import {ExprUtil} from "../../../expr";
 
 const maxImpl = makeOperator2<OperatorType.AGGREGATE_MAX, boolean, bigint, bigint|null>(
@@ -15,7 +15,7 @@ const maxImpl = makeOperator2<OperatorType.AGGREGATE_MAX, boolean, bigint, bigin
  * @todo Figure out what the difference is between `MAX(DISTINCT x)` and `MAX(x)`
  */
 export const maxDistinct : Operator1<bigint, bigint|null> = <
-    ArgT extends RawExpr<bigint>
+    ArgT extends BuiltInExpr<bigint>
 >(
     arg : ArgT
 ) : (
@@ -25,7 +25,7 @@ export const maxDistinct : Operator1<bigint, bigint|null> = <
 };
 
 export const maxAll : Operator1<bigint, bigint|null> = <
-    ArgT extends RawExpr<bigint>
+    ArgT extends BuiltInExpr<bigint>
 >(
     arg : ArgT
 ) : (

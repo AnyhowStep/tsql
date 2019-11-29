@@ -44,7 +44,7 @@ export function fetchValue<
             QueryUtil.NewInstance,
             TableT
         >,
-        SelectClauseUtil.ValueFromRawExpr<BuiltInExprT>
+        SelectClauseUtil.ValueFromBuiltInExpr<BuiltInExprT>
     >
 > {
     try {

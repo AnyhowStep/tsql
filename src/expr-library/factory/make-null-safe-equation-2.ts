@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {ExprUtil} from "../../expr";
-import {RawExpr} from "../../raw-expr";
+import {BuiltInExpr} from "../../raw-expr";
 import {RawExprUtil} from "../../raw-expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
@@ -9,8 +9,8 @@ import {EquatableType} from "../../equatable-type";
 
 export type NullSafeEquation2 =
     <
-        LeftT extends RawExpr<EquatableType>,
-        RightT extends RawExpr<RawExprUtil.TypeOf<LeftT>|null>
+        LeftT extends BuiltInExpr<EquatableType>,
+        RightT extends BuiltInExpr<RawExprUtil.TypeOf<LeftT>|null>
     >(
         left : LeftT,
         right : RightT
@@ -28,8 +28,8 @@ export function makeNullSafeEquation2<OperatorTypeT extends OperatorType> (
     typeHint? : TypeHint
 ) : NullSafeEquation2 {
     const result : NullSafeEquation2 = <
-        LeftT extends RawExpr<EquatableType>,
-        RightT extends RawExpr<RawExprUtil.TypeOf<LeftT>|null>
+        LeftT extends BuiltInExpr<EquatableType>,
+        RightT extends BuiltInExpr<RawExprUtil.TypeOf<LeftT>|null>
     >(
         left : LeftT,
         right : RightT

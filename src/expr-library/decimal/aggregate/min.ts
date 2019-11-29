@@ -2,7 +2,7 @@ import {decimalMapper} from "../decimal-mapper";
 import {OperatorType} from "../../../operator-type";
 import {TypeHint} from "../../../type-hint";
 import {makeOperator2, Operator1} from "../../factory";
-import {RawExpr} from "../../../raw-expr";
+import {BuiltInExpr} from "../../../raw-expr";
 import {ExprUtil} from "../../../expr";
 import {Decimal} from "../../../decimal";
 
@@ -16,7 +16,7 @@ const minImpl = makeOperator2<OperatorType.AGGREGATE_MIN, boolean, Decimal, Deci
  * @todo Figure out what the difference is between `MIN(DISTINCT x)` and `MIN(x)`
  */
 export const minDistinct : Operator1<Decimal, Decimal|null> = <
-    ArgT extends RawExpr<Decimal>
+    ArgT extends BuiltInExpr<Decimal>
 >(
     arg : ArgT
 ) : (
@@ -26,7 +26,7 @@ export const minDistinct : Operator1<Decimal, Decimal|null> = <
 };
 
 export const minAll : Operator1<Decimal, Decimal|null> = <
-    ArgT extends RawExpr<Decimal>
+    ArgT extends BuiltInExpr<Decimal>
 >(
     arg : ArgT
 ) : (

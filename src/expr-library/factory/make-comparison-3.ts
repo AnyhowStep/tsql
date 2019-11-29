@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {ExprUtil} from "../../expr";
-import {RawExpr} from "../../raw-expr";
+import {BuiltInExpr} from "../../raw-expr";
 import {NonNullComparableType, ComparableTypeUtil} from "../../comparable-type";
 import {RawExprUtil} from "../../raw-expr";
 import {OperatorNodeUtil} from "../../ast";
@@ -8,9 +8,9 @@ import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
 export type Comparison3Return<
-    LeftT extends RawExpr<NonNullComparableType>,
-    MidT extends RawExpr<ComparableTypeUtil.BaseNonNullComparableType<RawExprUtil.TypeOf<LeftT>>>,
-    RightT extends RawExpr<ComparableTypeUtil.BaseNonNullComparableType<RawExprUtil.TypeOf<LeftT>>>
+    LeftT extends BuiltInExpr<NonNullComparableType>,
+    MidT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<RawExprUtil.TypeOf<LeftT>>>,
+    RightT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<RawExprUtil.TypeOf<LeftT>>>
 > =
     ExprUtil.Intersect<
         boolean,
@@ -19,15 +19,15 @@ export type Comparison3Return<
 ;
 export type Comparison3 =
     <
-        LeftT extends RawExpr<NonNullComparableType>,
-        MidT extends RawExpr<ComparableTypeUtil.BaseNonNullComparableType<RawExprUtil.TypeOf<LeftT>>>,
+        LeftT extends BuiltInExpr<NonNullComparableType>,
+        MidT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<RawExprUtil.TypeOf<LeftT>>>,
         /**
          * https://github.com/microsoft/TypeScript/issues/33002#issuecomment-523651736
          *
          * @todo Investigate
          */
-        //RightT extends RawExpr<RawExprUtil.TypeOf<LeftT>>
-        RightT extends RawExpr<ComparableTypeUtil.BaseNonNullComparableType<RawExprUtil.TypeOf<LeftT>>>
+        //RightT extends BuiltInExpr<RawExprUtil.TypeOf<LeftT>>
+        RightT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<RawExprUtil.TypeOf<LeftT>>>
     >(
         left : LeftT,
         mid : MidT,
@@ -47,9 +47,9 @@ export function makeComparison3<OperatorTypeT extends OperatorType> (
     typeHint? : TypeHint
 ) : Comparison3 {
     const result : Comparison3 = <
-        LeftT extends RawExpr<NonNullComparableType>,
-        MidT extends RawExpr<ComparableTypeUtil.BaseNonNullComparableType<RawExprUtil.TypeOf<LeftT>>>,
-        RightT extends RawExpr<ComparableTypeUtil.BaseNonNullComparableType<RawExprUtil.TypeOf<LeftT>>>
+        LeftT extends BuiltInExpr<NonNullComparableType>,
+        MidT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<RawExprUtil.TypeOf<LeftT>>>,
+        RightT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<RawExprUtil.TypeOf<LeftT>>>
     >(left : LeftT, mid : MidT, right : RightT) : (
         ExprUtil.Intersect<
             boolean,

@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {RawExpr, RawExprUtil, AnyBuiltInExpr} from "../../raw-expr";
+import {BuiltInExpr, RawExprUtil, AnyBuiltInExpr} from "../../raw-expr";
 import {ExprUtil} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
@@ -24,9 +24,9 @@ export type Operator2ToN<
     OutputTypeT
 > =
     <
-        Arg0T extends RawExpr<InputType0T>,
-        Arg1T extends RawExpr<InputType1T>,
-        ArgsT extends readonly RawExpr<InputTypeRestT>[]
+        Arg0T extends BuiltInExpr<InputType0T>,
+        Arg1T extends BuiltInExpr<InputType1T>,
+        ArgsT extends readonly BuiltInExpr<InputTypeRestT>[]
     > (
         arg0 : Arg0T,
         arg1 : Arg1T,
@@ -91,9 +91,9 @@ export function makeOperator2ToN<
     const result : (
         Operator2ToN<InputType0T, InputType1T, InputTypeRestT, OutputTypeT>
     ) = <
-        Arg0T extends RawExpr<InputType0T>,
-        Arg1T extends RawExpr<InputType1T>,
-        ArgsT extends readonly RawExpr<InputTypeRestT>[]
+        Arg0T extends BuiltInExpr<InputType0T>,
+        Arg1T extends BuiltInExpr<InputType1T>,
+        ArgsT extends readonly BuiltInExpr<InputTypeRestT>[]
     > (
         arg0 : Arg0T,
         arg1 : Arg1T,

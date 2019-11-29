@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {RawExpr, RawExprUtil, AnyBuiltInExpr} from "../../raw-expr";
+import {BuiltInExpr, RawExprUtil, AnyBuiltInExpr} from "../../raw-expr";
 import {ExprUtil} from "../../expr";
 import {
     Ast,
@@ -50,7 +50,7 @@ function tryGetFlattenableElements (
 }
 export type ChainableOperatorReturn<
     TypeT,
-    ArrT extends RawExpr<TypeT>[]
+    ArrT extends BuiltInExpr<TypeT>[]
 > =
     /**
      * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-521819804
@@ -79,7 +79,7 @@ export type ChainableOperatorReturn<
     >
 ;
 export type ChainableOperator<TypeT extends null|boolean|number|bigint|string|Uint8Array> =
-    <ArrT extends RawExpr<TypeT>[]> (
+    <ArrT extends BuiltInExpr<TypeT>[]> (
         ...arr : ArrT
     ) => (
         ChainableOperatorReturn<TypeT, ArrT>
@@ -98,7 +98,7 @@ export function makeChainableOperator<
 ) {
     let identityAst : LiteralValueNode|undefined = undefined;
 
-    const result : ChainableOperator<TypeT> = <ArrT extends RawExpr<TypeT>[]> (
+    const result : ChainableOperator<TypeT> = <ArrT extends BuiltInExpr<TypeT>[]> (
         ...arr : ArrT
     ) : (
         ExprUtil.Intersect<

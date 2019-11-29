@@ -3,7 +3,7 @@ import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 import {makeOperator2} from "../factory";
 import {makeOperator3} from "../factory/make-operator-3";
-import {RawExpr, RawExprUtil} from "../../raw-expr";
+import {BuiltInExpr, RawExprUtil} from "../../raw-expr";
 import {ExprImpl} from "../../expr/expr-impl";
 import {IUsedRef} from "../../used-ref";
 
@@ -33,8 +33,8 @@ export interface LikeExpr<UsedRefT extends IUsedRef> extends ExprImpl<boolean, U
     escape : (escapeChar : string) => ExprImpl<boolean, UsedRefT>;
 }
 export function like<
-    ExprT extends RawExpr<string>,
-    PatternT extends RawExpr<string>
+    ExprT extends BuiltInExpr<string>,
+    PatternT extends BuiltInExpr<string>
 > (
     builtInExpr : ExprT,
     pattern : PatternT

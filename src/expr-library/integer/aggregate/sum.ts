@@ -1,7 +1,7 @@
 import {OperatorType} from "../../../operator-type";
 import {TypeHint} from "../../../type-hint";
 import {makeOperator2, Operator1} from "../../factory";
-import {RawExpr} from "../../../raw-expr";
+import {BuiltInExpr} from "../../../raw-expr";
 import {ExprUtil} from "../../../expr";
 import {Decimal} from "../../../decimal";
 import {decimalMapper} from "../../decimal/decimal-mapper";
@@ -16,7 +16,7 @@ const sumImpl = makeOperator2<OperatorType.AGGREGATE_SUM, boolean, bigint, Decim
 );
 
 export const sumDistinct : Operator1<bigint, Decimal|null> = <
-    ArgT extends RawExpr<bigint>
+    ArgT extends BuiltInExpr<bigint>
 >(
     arg : ArgT
 ) : (
@@ -26,7 +26,7 @@ export const sumDistinct : Operator1<bigint, Decimal|null> = <
 };
 
 export const sumAll : Operator1<bigint, Decimal|null> = <
-    ArgT extends RawExpr<bigint>
+    ArgT extends BuiltInExpr<bigint>
 >(
     arg : ArgT
 ) : (

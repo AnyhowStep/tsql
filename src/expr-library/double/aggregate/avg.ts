@@ -2,7 +2,7 @@ import * as tm from "type-mapping";
 import {OperatorType} from "../../../operator-type";
 import {TypeHint} from "../../../type-hint";
 import {makeOperator2, Operator1} from "../../factory";
-import {RawExpr} from "../../../raw-expr";
+import {BuiltInExpr} from "../../../raw-expr";
 import {ExprUtil} from "../../../expr";
 
 const avgImpl = makeOperator2<OperatorType.AGGREGATE_AVERAGE, boolean, number, number|null>(
@@ -12,7 +12,7 @@ const avgImpl = makeOperator2<OperatorType.AGGREGATE_AVERAGE, boolean, number, n
 );
 
 export const avgDistinct : Operator1<number, number|null> = <
-    ArgT extends RawExpr<number>
+    ArgT extends BuiltInExpr<number>
 >(
     arg : ArgT
 ) : (
@@ -22,7 +22,7 @@ export const avgDistinct : Operator1<number, number|null> = <
 };
 
 export const avgAll : Operator1<number, number|null> = <
-    ArgT extends RawExpr<number>
+    ArgT extends BuiltInExpr<number>
 >(
     arg : ArgT
 ) : (

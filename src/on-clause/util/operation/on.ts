@@ -3,14 +3,14 @@ import {allowedColumnRef} from "../query";
 import {IAliasedTable} from "../../../aliased-table";
 import {OnDelegate} from "../../on-delegate";
 import {OnClause} from "../../on-clause";
-import {RawExpr} from "../../../raw-expr";
+import {BuiltInExpr} from "../../../raw-expr";
 import {assertValidUsedRef} from "../predicate";
 import {ExprUtil} from "../../../expr";
 
 export function on<
     FromClauseT extends FromClauseUtil.AfterFromClause,
     AliasedTableT extends IAliasedTable,
-    RawOnClauseT extends RawExpr<boolean>
+    RawOnClauseT extends BuiltInExpr<boolean>
 > (
     fromClause : FromClauseT,
     aliasedTable : AliasedTableT,

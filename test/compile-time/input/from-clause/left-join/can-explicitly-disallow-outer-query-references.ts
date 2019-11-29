@@ -39,7 +39,7 @@ declare const otherTable : tsql.AliasedTable<{
 export function leftJoinNoOuterQueryReference<
     FromClauseT extends tsql.FromClauseUtil.AfterFromClause,
     AliasedTableT extends tsql.IAliasedTable,
-    RawOnClauseT extends tsql.RawExpr<boolean>
+    RawOnClauseT extends tsql.BuiltInExpr<boolean>
 > (
     fromClause : FromClauseT,
     aliasedTable : (

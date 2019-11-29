@@ -1,7 +1,7 @@
 import * as tm from "type-mapping/fluent";
 import {OperatorType} from "../../operator-type";
 import {Decimal} from "../../decimal";
-import {RawExpr, RawExprUtil} from "../../raw-expr";
+import {BuiltInExpr, RawExprUtil} from "../../raw-expr";
 import {Expr, expr} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
 
@@ -131,7 +131,7 @@ export type NonNullDecimalCastableType = Exclude<DecimalCastableType, null>;
  * + null       = NULL
  */
 export function castAsDecimal<
-    ArgT extends RawExpr<NonNullDecimalCastableType|Decimal>,
+    ArgT extends BuiltInExpr<NonNullDecimalCastableType|Decimal>,
 > (
     arg : ArgT,
     /**
@@ -155,7 +155,7 @@ export function castAsDecimal<
     }>
 );
 export function castAsDecimal<
-    ArgT extends RawExpr<DecimalCastableType|Decimal>,
+    ArgT extends BuiltInExpr<DecimalCastableType|Decimal>,
 > (
     arg : ArgT,
     /**
@@ -179,7 +179,7 @@ export function castAsDecimal<
     }>
 );
 export function castAsDecimal<
-    ArgT extends RawExpr<DecimalCastableType|Decimal>,
+    ArgT extends BuiltInExpr<DecimalCastableType|Decimal>,
 > (
     arg : ArgT,
     /**

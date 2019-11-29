@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {RawExpr, RawExprUtil} from "../../raw-expr";
+import {BuiltInExpr, RawExprUtil} from "../../raw-expr";
 import {ExprUtil} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
@@ -12,8 +12,8 @@ export type Operator2<
     OutputTypeT
 > =
     <
-        LeftT extends RawExpr<LeftTypeT>,
-        RightT extends RawExpr<RightTypeT>
+        LeftT extends BuiltInExpr<LeftTypeT>,
+        RightT extends BuiltInExpr<RightTypeT>
     > (
         left : LeftT,
         right : RightT
@@ -66,8 +66,8 @@ export function makeOperator2<
     Operator2<any, any, OutputTypeT>
 ) {
     const result : Operator2<LeftTypeT, RightTypeT, OutputTypeT> = <
-        LeftT extends RawExpr<LeftTypeT>,
-        RightT extends RawExpr<RightTypeT>
+        LeftT extends BuiltInExpr<LeftTypeT>,
+        RightT extends BuiltInExpr<RightTypeT>
     > (
         left : LeftT,
         right : RightT
