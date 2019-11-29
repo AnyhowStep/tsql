@@ -772,7 +772,7 @@ export class Table<DataT extends TableData> implements ITable {
                 QueryUtil.NewInstance,
                 this
             >,
-            SelectClauseUtil.ValueFromRawExpr<BuiltInExprT>
+            SelectClauseUtil.ValueFromBuiltInExpr<BuiltInExprT>
         >
     > {
         return TableUtil.fetchValue<this, BuiltInExprT>(
@@ -802,7 +802,7 @@ export class Table<DataT extends TableData> implements ITable {
                 QueryUtil.NewInstance,
                 this
             >,
-            SelectClauseUtil.ValueFromRawExpr<BuiltInExprT>
+            SelectClauseUtil.ValueFromBuiltInExpr<BuiltInExprT>
         >
     > {
         return this.fetchValue(
@@ -831,7 +831,7 @@ export class Table<DataT extends TableData> implements ITable {
                 QueryUtil.NewInstance,
                 Extract<this, TableWithPrimaryKey>
             >,
-            SelectClauseUtil.ValueFromRawExpr<BuiltInExprT>
+            SelectClauseUtil.ValueFromBuiltInExpr<BuiltInExprT>
         >
     > {
         return this.fetchValue(
@@ -859,7 +859,7 @@ export class Table<DataT extends TableData> implements ITable {
                 QueryUtil.NewInstance,
                 this
             >,
-            SelectClauseUtil.ValueFromRawExpr<BuiltInExprT>
+            SelectClauseUtil.ValueFromBuiltInExpr<BuiltInExprT>
         >
     > {
         return this.fetchValue(

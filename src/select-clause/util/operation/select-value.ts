@@ -3,7 +3,7 @@ import {SelectClause} from "../../select-clause";
 import {AnyBuiltInExpr} from "../../../raw-expr";
 import {SelectValueDelegate} from "../../select-value-delegate";
 import {Select, select} from "./select";
-import {ValueFromRawExpr, valueFromBuiltInExpr} from "../constructor";
+import {ValueFromBuiltInExpr, valueFromBuiltInExpr} from "../constructor";
 import {AssertValidUsedRef, AssertValidColumnIdentifier} from "../predicate";
 import {AssertNonUnion} from "../../../type-util";
 
@@ -13,7 +13,7 @@ export type SelectValue<
 > =
     Select<
         SelectClauseT,
-        ValueFromRawExpr<BuiltInExprT>
+        ValueFromBuiltInExpr<BuiltInExprT>
     >
 ;
 /**
@@ -46,16 +46,16 @@ export function selectValue<
     return select<
         FromClauseT,
         SelectClauseT,
-        ValueFromRawExpr<BuiltInExprT>
+        ValueFromBuiltInExpr<BuiltInExprT>
     >(
         fromClause,
         selectClause,
         columns => (
             valueFromBuiltInExpr<BuiltInExprT>(selectValueDelegate(columns)) as (
-                & ValueFromRawExpr<BuiltInExprT>
-                & AssertNonUnion<ValueFromRawExpr<BuiltInExprT>>
-                & AssertValidUsedRef<FromClauseT, ValueFromRawExpr<BuiltInExprT>>
-                & AssertValidColumnIdentifier<SelectClauseT, ValueFromRawExpr<BuiltInExprT>>
+                & ValueFromBuiltInExpr<BuiltInExprT>
+                & AssertNonUnion<ValueFromBuiltInExpr<BuiltInExprT>>
+                & AssertValidUsedRef<FromClauseT, ValueFromBuiltInExpr<BuiltInExprT>>
+                & AssertValidColumnIdentifier<SelectClauseT, ValueFromBuiltInExpr<BuiltInExprT>>
             )
         )
     );

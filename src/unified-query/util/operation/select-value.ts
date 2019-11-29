@@ -10,7 +10,7 @@ export type SelectValue<
 > = (
     Select<
         QueryT,
-        SelectClauseUtil.ValueFromRawExpr<BuiltInExprT>
+        SelectClauseUtil.ValueFromBuiltInExpr<BuiltInExprT>
     >
 );
 
@@ -38,7 +38,7 @@ export function selectValue<
 ) {
     return select<
         QueryT,
-        SelectClauseUtil.ValueFromRawExpr<BuiltInExprT>
+        SelectClauseUtil.ValueFromBuiltInExpr<BuiltInExprT>
     >(
         query,
         (columns, subquery) => (
@@ -46,7 +46,7 @@ export function selectValue<
                 SelectDelegateReturnType<
                     QueryT["fromClause"],
                     QueryT["selectClause"],
-                    SelectClauseUtil.ValueFromRawExpr<BuiltInExprT>
+                    SelectClauseUtil.ValueFromBuiltInExpr<BuiltInExprT>
                 >
             )
         )

@@ -5,7 +5,7 @@ import {IColumn, ColumnUtil} from "../../../column";
 
 export const SELECT_VALUE_ALIAS = "value";
 
-export type ValueFromRawExpr<BuiltInExprT extends AnyBuiltInExpr> =
+export type ValueFromBuiltInExpr<BuiltInExprT extends AnyBuiltInExpr> =
     /**
      * We could use `BuiltInExprT extends IColumn|IExprSelectItem` but we won't.
      * This is intentional.
@@ -18,7 +18,7 @@ export type ValueFromRawExpr<BuiltInExprT extends AnyBuiltInExpr> =
     [BuiltInExprT] :
     [
         ExprUtil.As<
-            ExprUtil.FromRawExpr<BuiltInExprT>,
+            ExprUtil.FromBuiltInExpr<BuiltInExprT>,
             typeof SELECT_VALUE_ALIAS
         >
     ]
@@ -28,16 +28,16 @@ export function valueFromBuiltInExpr<
 > (
     builtInExpr : BuiltInExprT
 ) : (
-    ValueFromRawExpr<BuiltInExprT>
+    ValueFromBuiltInExpr<BuiltInExprT>
 ) {
     if (ColumnUtil.isColumn(builtInExpr) || ExprSelectItemUtil.isExprSelectItem(builtInExpr)) {
-        return [builtInExpr] as ValueFromRawExpr<BuiltInExprT>;
+        return [builtInExpr] as ValueFromBuiltInExpr<BuiltInExprT>;
     } else {
         return [
             ExprUtil.as(
                 ExprUtil.fromBuiltInExpr(builtInExpr),
                 SELECT_VALUE_ALIAS
             )
-        ] as ValueFromRawExpr<BuiltInExprT>;
+        ] as ValueFromBuiltInExpr<BuiltInExprT>;
     }
 }

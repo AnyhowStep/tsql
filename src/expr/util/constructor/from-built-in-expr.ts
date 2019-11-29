@@ -5,7 +5,7 @@ import {IAnonymousColumn} from "../../../column";
 import {DataTypeUtil} from "../../../data-type";
 import {IUsedRef} from "../../../used-ref";
 
-export type FromRawExpr<BuiltInExprT extends AnyBuiltInExpr> = (
+export type FromBuiltInExpr<BuiltInExprT extends AnyBuiltInExpr> = (
     Expr<{
         mapper : RawExprUtil.Mapper<BuiltInExprT>,
         usedRef : RawExprUtil.UsedRef<BuiltInExprT>,
@@ -16,7 +16,7 @@ export function fromBuiltInExpr<
 > (
     builtInExpr : BuiltInExprT
 ) : (
-    FromRawExpr<BuiltInExprT>
+    FromBuiltInExpr<BuiltInExprT>
 ) {
     if (builtInExpr instanceof ExprImpl) {
         return builtInExpr;
