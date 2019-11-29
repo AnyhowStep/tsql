@@ -3,17 +3,17 @@ import {PrimaryKey_Input} from "../../../primary-key";
 import {latestByPrimaryKey} from "./latest-by-primary-key";
 import {ExecutionUtil, SelectConnection} from "../../../execution";
 import {FromClauseUtil} from "../../../from-clause";
-import {AnyRawExpr, RawExprUtil} from "../../../raw-expr";
+import {AnyBuiltInExpr, RawExprUtil} from "../../../raw-expr";
 import {SelectValueDelegate} from "../../../select-clause";
 
-export type FetchLatestValue<RawExprT extends AnyRawExpr> =
+export type FetchLatestValue<BuiltInExprT extends AnyBuiltInExpr> =
     ExecutionUtil.FetchValuePromise<
-        RawExprUtil.TypeOf<RawExprT>
+        RawExprUtil.TypeOf<BuiltInExprT>
     >
 ;
 export type FetchLatestValueSelectValueDelegate<
     LogT extends ILog,
-    RawExprT extends AnyRawExpr
+    BuiltInExprT extends AnyBuiltInExpr
 > =
     SelectValueDelegate<
         FromClauseUtil.From<
@@ -21,20 +21,20 @@ export type FetchLatestValueSelectValueDelegate<
             LogT["logTable"]
         >,
         undefined,
-        RawExprT
+        BuiltInExprT
     >
 ;
 
 export function fetchLatestValue<
     LogT extends ILog,
-    RawExprT extends AnyRawExpr
+    BuiltInExprT extends AnyBuiltInExpr
 > (
     log : LogT,
     connection : SelectConnection,
     primaryKey : PrimaryKey_Input<LogT["ownerTable"]>,
-    selectValueDelegate : FetchLatestValueSelectValueDelegate<LogT, RawExprT>
+    selectValueDelegate : FetchLatestValueSelectValueDelegate<LogT, BuiltInExprT>
 ) : (
-    FetchLatestValue<AnyRawExpr>
+    FetchLatestValue<AnyBuiltInExpr>
 ) {
     const result : (
         ExecutionUtil.FetchValuePromise<any>

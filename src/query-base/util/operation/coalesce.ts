@@ -1,15 +1,15 @@
-import {AnySubqueryExpr, AnyRawExpr} from "../../../raw-expr";
+import {AnySubqueryExpr, AnyBuiltInExpr} from "../../../raw-expr";
 import * as ExprLib from "../../../expr-library";
 
 export type Coalesce<
     QueryT extends AnySubqueryExpr,
-    DefaultValueT extends AnyRawExpr
+    DefaultValueT extends AnyBuiltInExpr
 > =
     ExprLib.CoalesceExpr<[QueryT, DefaultValueT]>
 ;
 export function coalesce<
     QueryT extends AnySubqueryExpr,
-    DefaultValueT extends AnyRawExpr
+    DefaultValueT extends AnyBuiltInExpr
 > (
     query : QueryT,
     defaultValue : DefaultValueT

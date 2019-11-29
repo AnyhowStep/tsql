@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {AnyRawExpr} from "../../raw-expr";
+import {AnyBuiltInExpr} from "../../raw-expr";
 import {TypeOf} from "./type-of";
 import {ExprUtil} from "../../../expr";
 import {ColumnUtil} from "../../../column";
@@ -7,23 +7,23 @@ import {ExprSelectItemUtil} from "../../../expr-select-item";
 import {QueryBaseUtil} from "../../../query-base";
 import {isDate} from "../../../date-util";
 
-export type Mapper<RawExprT extends AnyRawExpr> = (
-    tm.SafeMapper<TypeOf<RawExprT>>
+export type Mapper<BuiltInExprT extends AnyBuiltInExpr> = (
+    tm.SafeMapper<TypeOf<BuiltInExprT>>
 );
-export function mapper<RawExprT extends AnyRawExpr> (
-    rawExpr : RawExprT
+export function mapper<BuiltInExprT extends AnyBuiltInExpr> (
+    rawExpr : BuiltInExprT
 ) : (
-    Mapper<RawExprT>
+    Mapper<BuiltInExprT>
 ) {
     //Check built-in cases first
     if (typeof rawExpr == "number") {
-        return tm.mysql.double() as tm.AnySafeMapper as Mapper<RawExprT>;
+        return tm.mysql.double() as tm.AnySafeMapper as Mapper<BuiltInExprT>;
     }
     if (tm.TypeUtil.isBigInt(rawExpr)) {
-        return tm.toBigInt() as tm.AnySafeMapper as Mapper<RawExprT>;
+        return tm.toBigInt() as tm.AnySafeMapper as Mapper<BuiltInExprT>;
     }
     if (typeof rawExpr == "string") {
-        return tm.string() as tm.AnySafeMapper as Mapper<RawExprT>;
+        return tm.string() as tm.AnySafeMapper as Mapper<BuiltInExprT>;
     }
     if (typeof rawExpr == "boolean") {
         return (
@@ -31,35 +31,35 @@ export function mapper<RawExprT extends AnyRawExpr> (
             rawExpr ?
                 tm.mysql.true() :
                 tm.mysql.false()
-        ) as tm.AnySafeMapper as Mapper<RawExprT>;
+        ) as tm.AnySafeMapper as Mapper<BuiltInExprT>;
     }
     if (isDate(rawExpr)) {
-        return tm.mysql.dateTime(3) as tm.AnySafeMapper as Mapper<RawExprT>;
+        return tm.mysql.dateTime(3) as tm.AnySafeMapper as Mapper<BuiltInExprT>;
     }
     if (rawExpr instanceof Uint8Array) {
-        return tm.instanceOfUint8Array() as tm.AnySafeMapper as Mapper<RawExprT>;
+        return tm.instanceOfUint8Array() as tm.AnySafeMapper as Mapper<BuiltInExprT>;
     }
     if (rawExpr === null) {
-        return tm.null() as tm.AnySafeMapper as Mapper<RawExprT>;
+        return tm.null() as tm.AnySafeMapper as Mapper<BuiltInExprT>;
     }
 
     if (ExprUtil.isExpr(rawExpr)) {
-        return rawExpr.mapper as tm.AnySafeMapper as Mapper<RawExprT>;
+        return rawExpr.mapper as tm.AnySafeMapper as Mapper<BuiltInExprT>;
     }
 
     if (ColumnUtil.isColumn(rawExpr)) {
-        return rawExpr.mapper as tm.AnySafeMapper as Mapper<RawExprT>;
+        return rawExpr.mapper as tm.AnySafeMapper as Mapper<BuiltInExprT>;
     }
 
     if (
         QueryBaseUtil.isOneSelectItem(rawExpr) &&
         QueryBaseUtil.isZeroOrOneRow(rawExpr)
     ) {
-        return QueryBaseUtil.mapper(rawExpr) as tm.AnySafeMapper as Mapper<RawExprT>;
+        return QueryBaseUtil.mapper(rawExpr) as tm.AnySafeMapper as Mapper<BuiltInExprT>;
     }
 
     if (ExprSelectItemUtil.isExprSelectItem(rawExpr)) {
-        return rawExpr.mapper as tm.AnySafeMapper as Mapper<RawExprT>;
+        return rawExpr.mapper as tm.AnySafeMapper as Mapper<BuiltInExprT>;
     }
 
     throw new Error(`Unknown rawExpr ${tm.TypeUtil.toTypeStr(rawExpr)}`);

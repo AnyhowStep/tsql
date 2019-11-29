@@ -1,43 +1,43 @@
-import {AnyRawExpr} from "../../../raw-expr";
+import {AnyBuiltInExpr} from "../../../raw-expr";
 import {ExprUtil} from "../../../expr";
 import {IExprSelectItem, ExprSelectItemUtil} from "../../../expr-select-item";
 import {IColumn, ColumnUtil} from "../../../column";
 
 export const SELECT_VALUE_ALIAS = "value";
 
-export type ValueFromRawExpr<RawExprT extends AnyRawExpr> =
+export type ValueFromRawExpr<BuiltInExprT extends AnyBuiltInExpr> =
     /**
-     * We could use `RawExprT extends IColumn|IExprSelectItem` but we won't.
+     * We could use `BuiltInExprT extends IColumn|IExprSelectItem` but we won't.
      * This is intentional.
      *
      * The `IColumn|IExprSelectItem` may have different aliases and we want to be sure to check that.
      */
-    RawExprT extends IColumn ?
-    [RawExprT] :
-    RawExprT extends IExprSelectItem ?
-    [RawExprT] :
+    BuiltInExprT extends IColumn ?
+    [BuiltInExprT] :
+    BuiltInExprT extends IExprSelectItem ?
+    [BuiltInExprT] :
     [
         ExprUtil.As<
-            ExprUtil.FromRawExpr<RawExprT>,
+            ExprUtil.FromRawExpr<BuiltInExprT>,
             typeof SELECT_VALUE_ALIAS
         >
     ]
 ;
 export function valueFromRawExpr<
-    RawExprT extends AnyRawExpr
+    BuiltInExprT extends AnyBuiltInExpr
 > (
-    rawExpr : RawExprT
+    rawExpr : BuiltInExprT
 ) : (
-    ValueFromRawExpr<RawExprT>
+    ValueFromRawExpr<BuiltInExprT>
 ) {
     if (ColumnUtil.isColumn(rawExpr) || ExprSelectItemUtil.isExprSelectItem(rawExpr)) {
-        return [rawExpr] as ValueFromRawExpr<RawExprT>;
+        return [rawExpr] as ValueFromRawExpr<BuiltInExprT>;
     } else {
         return [
             ExprUtil.as(
                 ExprUtil.fromRawExpr(rawExpr),
                 SELECT_VALUE_ALIAS
             )
-        ] as ValueFromRawExpr<RawExprT>;
+        ] as ValueFromRawExpr<BuiltInExprT>;
     }
 }

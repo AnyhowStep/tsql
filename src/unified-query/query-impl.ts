@@ -7,7 +7,7 @@ import {OrderByClause} from "../order-by-clause";
 import {IAliasedTable} from "../aliased-table";
 import {FromClauseUtil} from "../from-clause";
 import {SelectClause} from "../select-clause";
-import {RawExpr, AnyRawExpr, AnySubqueryExpr} from "../raw-expr";
+import {RawExpr, AnyBuiltInExpr, AnySubqueryExpr} from "../raw-expr";
 import {OnDelegate, OnClauseUtil} from "../on-clause";
 import {ITable, TableUtil, TableWithPrimaryKey, InsertableTable, DeletableTable} from "../table";
 import {ColumnUtil} from "../column";
@@ -495,22 +495,22 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     }
 
     selectValue<
-        RawExprT extends AnyRawExpr
+        BuiltInExprT extends AnyBuiltInExpr
     > (
         this : Extract<this, QueryUtil.BeforeCompoundQueryClause>,
         selectValueDelegate : QueryUtil.QuerySelectValueDelegate<
             Extract<this, QueryUtil.BeforeCompoundQueryClause>,
-            RawExprT
+            BuiltInExprT
         >
     ) : (
         QueryUtil.SelectValue<
             Extract<this, QueryUtil.BeforeCompoundQueryClause>,
-            RawExprT
+            BuiltInExprT
         >
     ) {
         return QueryUtil.selectValue<
             Extract<this, QueryUtil.BeforeCompoundQueryClause>,
-            RawExprT
+            BuiltInExprT
         >(
             this,
             selectValueDelegate
@@ -994,7 +994,7 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
      * ```
      */
     coalesce<
-        DefaultValueT extends AnyRawExpr
+        DefaultValueT extends AnyBuiltInExpr
     > (
         this : Extract<this, AnySubqueryExpr>,
         defaultValue : DefaultValueT

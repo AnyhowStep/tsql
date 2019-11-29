@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {AnyRawExpr, RawExprUtil} from "../../raw-expr";
+import {AnyBuiltInExpr, RawExprUtil} from "../../raw-expr";
 import {PopFront} from "../../tuple-util";
 import {ExprUtil} from "../../expr";
 import {IExpr} from "../../expr/expr";
@@ -9,7 +9,7 @@ import {OperatorType} from "../../operator-type";
 /**
  * `COALESCE()` with zero args is just the `NULL` constant.
  */
-export type TypeOfCoalesce<ArgsT extends readonly AnyRawExpr[], ResultT extends unknown=null> =
+export type TypeOfCoalesce<ArgsT extends readonly AnyBuiltInExpr[], ResultT extends unknown=null> =
     {
         0 : (
             /**
@@ -52,7 +52,7 @@ export type TypeOfCoalesce<ArgsT extends readonly AnyRawExpr[], ResultT extends 
         3
     ]
 ;
-export type CoalesceExpr<ArgsT extends readonly AnyRawExpr[]> =
+export type CoalesceExpr<ArgsT extends readonly AnyBuiltInExpr[]> =
     ExprUtil.Intersect<
         TypeOfCoalesce<ArgsT>,
         ArgsT[number]
@@ -64,12 +64,34 @@ export type CoalesceExpr<ArgsT extends readonly AnyRawExpr[]> =
     }>
     */
 ;
+
+export function coalesceMapper<ArgsT extends readonly AnyBuiltInExpr[]> (
+    ...args : ArgsT
+) : tm.SafeMapper<TypeOfCoalesce<ArgsT>> {
+
+    const rawExprMapperArr : tm.AnySafeMapper[] = [];
+    let lastMapperNonNull = false;
+    for (const rawExpr of args) {
+        const rawExprMapper = RawExprUtil.mapper(rawExpr);
+        rawExprMapperArr.push(rawExprMapper);
+        if (!tm.canOutputNull(rawExprMapper)) {
+            lastMapperNonNull = true;
+            break;
+        }
+    }
+    return (
+        lastMapperNonNull ?
+        tm.notNull(tm.unsafeOr(...rawExprMapperArr)) as tm.SafeMapper<any> :
+        tm.unsafeOr(...rawExprMapperArr) as tm.SafeMapper<any>
+    );
+}
+
 /**
  * https://dev.mysql.com/doc/refman/8.0/en/comparison-operators.html#function_coalesce
  *
  * `COALESCE()` with zero args is just the `NULL` constant.
  */
-export function coalesce<ArgsT extends readonly AnyRawExpr[]> (
+export function coalesce<ArgsT extends readonly AnyBuiltInExpr[]> (
     ...args : ArgsT
 ) : (
     CoalesceExpr<ArgsT>
@@ -87,7 +109,7 @@ export function coalesce<ArgsT extends readonly AnyRawExpr[]> (
         return ExprUtil.fromRawExpr(arg0) as IExpr as CoalesceExpr<ArgsT>;
     } else {
         return ExprUtil.intersect<TypeOfCoalesce<ArgsT>, ArgsT[number]>(
-            tm.unsafeOr(...args.map(RawExprUtil.mapper)) as tm.SafeMapper<any>,
+            coalesceMapper(...args),
             args,
             operatorNode2ToN(
                 OperatorType.COALESCE,

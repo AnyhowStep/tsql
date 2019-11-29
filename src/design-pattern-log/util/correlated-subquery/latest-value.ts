@@ -3,18 +3,18 @@ import {ILog} from "../../log";
 import {latest} from "./latest";
 import {Expr, ExprUtil} from "../../../expr";
 import {UsedRefUtil} from "../../../used-ref";
-import {AnyRawExpr, RawExprUtil} from "../../../raw-expr";
+import {AnyBuiltInExpr, RawExprUtil} from "../../../raw-expr";
 import {FromClauseUtil} from "../../../from-clause";
 import {SelectValueDelegate} from "../../../select-clause";
 
 export type LatestValue<
     LogT extends ILog,
-    RawExprT extends AnyRawExpr
+    BuiltInExprT extends AnyBuiltInExpr
 > = (
     Expr<{
         mapper : tm.SafeMapper<
             | null
-            | RawExprUtil.TypeOf<RawExprT>
+            | RawExprUtil.TypeOf<BuiltInExprT>
         >,
         usedRef : UsedRefUtil.FromColumnMap<LogT["ownerTable"]["columns"]>,
     }>
@@ -22,7 +22,7 @@ export type LatestValue<
 
 export type LatestValueSelectValueDelegate<
     LogT extends ILog,
-    RawExprT extends AnyRawExpr
+    BuiltInExprT extends AnyBuiltInExpr
 > =
     SelectValueDelegate<
         FromClauseUtil.From<
@@ -33,18 +33,18 @@ export type LatestValueSelectValueDelegate<
             LogT["logTable"]
         >,
         undefined,
-        RawExprT
+        BuiltInExprT
     >
 ;
 
 export function latestValue<
     LogT extends ILog,
-    RawExprT extends AnyRawExpr
+    BuiltInExprT extends AnyBuiltInExpr
 > (
     log : LogT,
-    selectValueDelegate : LatestValueSelectValueDelegate<LogT, RawExprT>
+    selectValueDelegate : LatestValueSelectValueDelegate<LogT, BuiltInExprT>
 ) : (
-    LatestValue<LogT, AnyRawExpr>
+    LatestValue<LogT, AnyBuiltInExpr>
 ) {
     return ExprUtil.fromRawExpr(
         latest(log)

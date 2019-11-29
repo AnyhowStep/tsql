@@ -1,7 +1,7 @@
 import {ITable} from "../../../table";
 import {AssignmentMap_Input, AssignmentMap_Output} from "../../assignment-map";
 import {UsedRefUtil} from "../../../used-ref";
-import {RawExprUtil, AnyRawExpr} from "../../../raw-expr";
+import {RawExprUtil, AnyBuiltInExpr} from "../../../raw-expr";
 import {DataTypeUtil} from "../../../data-type";
 
 export function cleanAssignmentMap<
@@ -39,7 +39,7 @@ export function cleanAssignmentMap<
         if (RawExprUtil.isAnyNonValueExpr(value)) {
             UsedRefUtil.assertAllowed(
                 allowed,
-                RawExprUtil.usedRef(value as AnyRawExpr)
+                RawExprUtil.usedRef(value as AnyBuiltInExpr)
             );
             result[columnAlias as keyof typeof raw] = RawExprUtil.mapRawExprInput(
                 table.columns[columnAlias],

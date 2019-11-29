@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {AnyRawExpr} from "../../raw-expr";
+import {AnyBuiltInExpr} from "../../raw-expr";
 import {Ast, parentheses, LiteralValueNodeUtil} from "../../../ast";
 import {ExprUtil} from "../../../expr";
 import {ColumnUtil} from "../../../column";
@@ -12,7 +12,7 @@ import {isDate} from "../../../date-util";
  * +`DECIMAL` is not supported by this function.
  * +`UNSIGNED BIGINT` is not supported by this function.
  */
-export function buildAst (rawExpr : AnyRawExpr|QueryBaseUtil.OneSelectItem<any>) : Ast {
+export function buildAst (rawExpr : AnyBuiltInExpr|QueryBaseUtil.OneSelectItem<any>) : Ast {
     //Check built-in cases first
     if (typeof rawExpr == "number") {
         return LiteralValueNodeUtil.doubleLiteralNode(rawExpr);

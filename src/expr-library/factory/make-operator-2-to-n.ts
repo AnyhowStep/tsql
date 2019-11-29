@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {RawExpr, RawExprUtil, AnyRawExpr} from "../../raw-expr";
+import {RawExpr, RawExprUtil, AnyBuiltInExpr} from "../../raw-expr";
 import {ExprUtil} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
@@ -8,9 +8,9 @@ import {AssertNonNever} from "../../type-util";
 
 export type Operator2ToNReturn<
     OutputTypeT,
-    Arg0T extends AnyRawExpr,
-    Arg1T extends AnyRawExpr,
-    ArgsT extends readonly AnyRawExpr[]
+    Arg0T extends AnyBuiltInExpr,
+    Arg1T extends AnyBuiltInExpr,
+    ArgsT extends readonly AnyBuiltInExpr[]
 > =
     ExprUtil.Intersect<
         OutputTypeT,

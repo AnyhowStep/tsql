@@ -1,4 +1,4 @@
-import {AnyRawExpr} from "../../raw-expr";
+import {AnyBuiltInExpr} from "../../raw-expr";
 import {usedRef, UsedRef} from "../query";
 import {UsedRefUtil} from "../../../used-ref";
 import {IQueryBase} from "../../../query-base";
@@ -16,7 +16,7 @@ import {IExprSelectItem} from "../../../expr-select-item";
  * Seems impossible.
  */
 export type IntersectUsedRef<
-    U extends AnyRawExpr|IQueryBase
+    U extends AnyBuiltInExpr|IQueryBase
 > =
     TryReuseExistingType<
         Extract<U, IExpr|IExprSelectItem>["usedRef"],
@@ -27,7 +27,7 @@ export type IntersectUsedRef<
 ;
 
 export function intersectUsedRef<
-    ArrT extends readonly (AnyRawExpr|IQueryBase)[]
+    ArrT extends readonly (AnyBuiltInExpr|IQueryBase)[]
 > (
     ...arr : ArrT
 ) : (

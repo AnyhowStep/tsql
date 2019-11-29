@@ -4,7 +4,7 @@ import {AssignmentMapDelegate, AssignmentMap_Input} from "../../../update";
 import {CandidateKey_NonUnion, CandidateKeyUtil, CandidateKey_Input} from "../../../candidate-key";
 import {StrictUnion, AssertNonUnion, Identity} from "../../../type-util";
 import {UpdateOneResult, updateOne} from "./update-one";
-import {AnyRawExpr, RawExprUtil, RawExprUsingColumnMap_Input} from "../../../raw-expr";
+import {RawExprUtil, RawExprUsingColumnMap_Input} from "../../../raw-expr";
 import * as ExprLib from "../../../expr-library";
 import {RowNotFoundError} from "../../../error";
 
@@ -16,14 +16,14 @@ export type UpdatedAndFetchedRow<
         readonly [columnAlias in TableUtil.ColumnAlias<TableT>] : (
             columnAlias extends keyof AssignmentMapT ?
             (
-                AssignmentMapT[columnAlias] extends AnyRawExpr ?
+                undefined extends AssignmentMapT[columnAlias] ?
+                TableUtil.ColumnType<TableT, columnAlias> :
                 RawExprUtil.TypeOf<
                     /**
                      * @todo Investigate assignability issue
                      */
                     Exclude<AssignmentMapT[columnAlias], undefined>
-                > :
-                TableUtil.ColumnType<TableT, columnAlias>
+                >
             ) :
             TableUtil.ColumnType<TableT, columnAlias>
         )
