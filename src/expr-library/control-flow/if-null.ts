@@ -1,6 +1,6 @@
-import * as tm from "type-mapping";
+//import * as tm from "type-mapping";
 import {AnyBuiltInExpr, RawExprUtil} from "../../raw-expr";
-import {CoalesceExpr, TypeOfCoalesce} from "./coalesce";
+import {CoalesceExpr, TypeOfCoalesce, coalesceMapper} from "./coalesce";
 import {ExprUtil} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
@@ -15,10 +15,7 @@ export function ifNull<
     CoalesceExpr<[Arg0T, Arg1T]>
 ) {
     return ExprUtil.intersect<TypeOfCoalesce<[Arg0T, Arg1T]>, Arg0T|Arg1T>(
-        tm.unsafeOr(
-            RawExprUtil.mapper(arg0),
-            RawExprUtil.mapper(arg1)
-        ) as tm.SafeMapper<any>,
+        coalesceMapper(arg0, arg1),
         [arg0, arg1],
         OperatorNodeUtil.operatorNode2(
             OperatorType.IF_NULL,

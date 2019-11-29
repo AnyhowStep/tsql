@@ -64,6 +64,28 @@ export type CoalesceExpr<ArgsT extends readonly AnyBuiltInExpr[]> =
     }>
     */
 ;
+
+export function coalesceMapper<ArgsT extends readonly AnyBuiltInExpr[]> (
+    ...args : ArgsT
+) : tm.SafeMapper<TypeOfCoalesce<ArgsT>> {
+
+    const rawExprMapperArr : tm.AnySafeMapper[] = [];
+    let lastMapperNonNull = false;
+    for (const rawExpr of args) {
+        const rawExprMapper = RawExprUtil.mapper(rawExpr);
+        rawExprMapperArr.push(rawExprMapper);
+        if (!tm.canOutputNull(rawExprMapper)) {
+            lastMapperNonNull = true;
+            break;
+        }
+    }
+    return (
+        lastMapperNonNull ?
+        tm.notNull(tm.unsafeOr(...rawExprMapperArr)) as tm.SafeMapper<any> :
+        tm.unsafeOr(...rawExprMapperArr) as tm.SafeMapper<any>
+    );
+}
+
 /**
  * https://dev.mysql.com/doc/refman/8.0/en/comparison-operators.html#function_coalesce
  *
@@ -87,7 +109,7 @@ export function coalesce<ArgsT extends readonly AnyBuiltInExpr[]> (
         return ExprUtil.fromRawExpr(arg0) as IExpr as CoalesceExpr<ArgsT>;
     } else {
         return ExprUtil.intersect<TypeOfCoalesce<ArgsT>, ArgsT[number]>(
-            tm.unsafeOr(...args.map(RawExprUtil.mapper)) as tm.SafeMapper<any>,
+            coalesceMapper(...args),
             args,
             operatorNode2ToN(
                 OperatorType.COALESCE,
