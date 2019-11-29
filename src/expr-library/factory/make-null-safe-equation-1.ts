@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {ExprUtil} from "../../expr";
-import {BuiltInExpr} from "../../raw-expr";
-import {RawExprUtil} from "../../raw-expr";
+import {BuiltInExpr} from "../../built-in-expr";
+import {BuiltInExprUtil} from "../../built-in-expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
@@ -37,7 +37,7 @@ export function makeNullSafeEquation1<OperatorTypeT extends OperatorType> (
             OperatorNodeUtil.operatorNode1<OperatorTypeT>(
                 operatorType,
                 [
-                    RawExprUtil.buildAst(builtInExpr),
+                    BuiltInExprUtil.buildAst(builtInExpr),
                 ],
                 typeHint
             )

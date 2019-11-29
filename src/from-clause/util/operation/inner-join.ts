@@ -5,7 +5,7 @@ import {assertAfterFromClause, assertValidCurrentJoinBase, AssertValidCurrentJoi
 import {JoinArrayUtil, JoinUtil, JoinType} from "../../../join";
 import {AssertNonUnion} from "../../../type-util";
 import {OnDelegate, OnClauseUtil} from "../../../on-clause";
-import {BuiltInExpr} from "../../../raw-expr";
+import {BuiltInExpr} from "../../../built-in-expr";
 
 /**
  * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966

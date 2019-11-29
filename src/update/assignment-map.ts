@@ -1,5 +1,5 @@
 import {ITable, TableUtil} from "../table";
-import {RawExprUsingColumnMap_Input, RawExprUsingColumnMap_Output} from "../raw-expr";
+import {RawExprUsingColumnMap_Input, RawExprUsingColumnMap_Output} from "../built-in-expr";
 
 export type AssignmentMap_Input<TableT extends ITable> =
     & {

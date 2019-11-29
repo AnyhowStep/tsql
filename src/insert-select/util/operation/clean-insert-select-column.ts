@@ -2,7 +2,7 @@ import * as tm from "type-mapping";
 import {ITable} from "../../../table";
 import {InsertSelectRow} from "../../insert-select-row";
 import {BuiltInValueExprUtil} from "../../../built-in-value-expr";
-import {RawExprUtil} from "../../../raw-expr";
+import {BuiltInExprUtil} from "../../../built-in-expr";
 import {QueryBaseUtil} from "../../../query-base";
 import {ExprUtil} from "../../../expr";
 import {ExprSelectItemUtil} from "../../../expr-select-item";
@@ -84,7 +84,7 @@ export function cleanInsertSelectColumn<
             `${table.alias}.${columnAlias}`,
             value
         );
-    } else if (RawExprUtil.isAnySubqueryExpr(value)) {
+    } else if (BuiltInExprUtil.isAnySubqueryExpr(value)) {
         /**
          * Can't really perform many checks here.
          * We can, however, check for `NULL`s.

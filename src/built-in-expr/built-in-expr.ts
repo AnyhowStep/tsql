@@ -69,7 +69,7 @@
  *   + Used for `INSERT` statements; at output positions
  *   + Does not allow `CustomValueExpr`
  *
- * + `RawExpr_NonCorrelated<TypeT>` (Originally `RawExprNoUsedRef_Input<TypeT>`)
+ * + `CustomExpr_NonCorrelated<TypeT>` (Originally `RawExprNoUsedRef_Input<TypeT>`)
  *   + Used for `INSERT` statements; at input positions
  *   + Allows `CustomValueExpr`, requires `IDataType` to handle correctly
  *
@@ -77,7 +77,7 @@
  *   + Used for `UPDATE` statements; at output positions
  *   + Does not allow `CustomValueExpr`
  *
- * + `RawExpr_MapCorrelated<TypeT, ColumnMapT>` (Originally `RawExprUsingColumnMap_Input<ColumnMapT, TypeT>`)
+ * + `CustomExpr_MapCorrelated<TypeT, ColumnMapT>` (Originally `RawExprUsingColumnMap_Input<ColumnMapT, TypeT>`)
  *   + Used for `UPDATE` statements; at input positions
  *   + Allows `CustomValueExpr`, requires `IDataType` to handle correctly
  */
@@ -151,9 +151,6 @@ export type AnyBuiltInExpr_NonCorrelated =
     | NonValueExpr_NonCorrelated<any>
 ;
 
-/**
- * Custom data types **not** allowed
- */
 export type BuiltInExpr_NonCorrelated<TypeT> =
     | (
         TypeT extends BuiltInValueExpr ?
@@ -163,10 +160,7 @@ export type BuiltInExpr_NonCorrelated<TypeT> =
     | NonValueExpr_NonCorrelated<TypeT>
 ;
 
-/**
- * Custom data types allowed
- */
-export type RawExprNoUsedRef_Input<TypeT> =
+export type CustomExpr_NonCorrelated<TypeT> =
     | TypeT
     | NonValueExpr_NonCorrelated<TypeT>
 ;
@@ -174,8 +168,6 @@ export type RawExprNoUsedRef_Input<TypeT> =
 /**
  * We don't support subqueries because it's too complicated
  * to check their `IUsedRef`
- *
- * Allows custom data types
  */
 export type RawExprUsingColumnMap_Input<
     ColumnMapT extends ColumnMap,
@@ -198,8 +190,6 @@ export type RawExprUsingColumnMap_Input<
 /**
  * We don't support subqueries because it's too complicated
  * to check their `IUsedRef`
- *
- * Does not allow custom data types
  */
 export type RawExprUsingColumnMap_Output<
     ColumnMapT extends ColumnMap,

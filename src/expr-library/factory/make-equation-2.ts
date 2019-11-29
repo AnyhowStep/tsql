@@ -1,15 +1,15 @@
 import * as tm from "type-mapping";
 import {ExprUtil} from "../../expr";
-import {BuiltInExpr} from "../../raw-expr";
+import {BuiltInExpr} from "../../built-in-expr";
 import {NonNullEquatableType, EquatableTypeUtil} from "../../equatable-type";
-import {RawExprUtil} from "../../raw-expr";
+import {BuiltInExprUtil} from "../../built-in-expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
 export type Equation2Return<
     LeftT extends BuiltInExpr<NonNullEquatableType>,
-    RightT extends BuiltInExpr<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<LeftT>>>
+    RightT extends BuiltInExpr<EquatableTypeUtil.BaseNonNullEquatableType<BuiltInExprUtil.TypeOf<LeftT>>>
 > =
     ExprUtil.Intersect<
         boolean,
@@ -24,8 +24,8 @@ export type Equation2 =
          *
          * @todo Investigate
          */
-        //RightT extends BuiltInExpr<RawExprUtil.TypeOf<LeftT>>
-        RightT extends BuiltInExpr<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<LeftT>>>
+        //RightT extends BuiltInExpr<BuiltInExprUtil.TypeOf<LeftT>>
+        RightT extends BuiltInExpr<EquatableTypeUtil.BaseNonNullEquatableType<BuiltInExprUtil.TypeOf<LeftT>>>
     >(
         left : LeftT,
         right : RightT
@@ -45,20 +45,20 @@ export function makeEquation2<OperatorTypeT extends OperatorType> (
 ) : Equation2 {
     const result : Equation2 = <
         LeftT extends BuiltInExpr<NonNullEquatableType>,
-        RightT extends BuiltInExpr<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<LeftT>>>
+        RightT extends BuiltInExpr<EquatableTypeUtil.BaseNonNullEquatableType<BuiltInExprUtil.TypeOf<LeftT>>>
     >(left : LeftT, right : RightT) : (
         Equation2Return<LeftT, RightT>
     ) => {
-        RawExprUtil.assertNonNull("LHS", left);
-        RawExprUtil.assertNonNull("RHS", left);
+        BuiltInExprUtil.assertNonNull("LHS", left);
+        BuiltInExprUtil.assertNonNull("RHS", left);
         return ExprUtil.intersect<boolean, LeftT|RightT>(
             tm.mysql.boolean(),
             [left, right],
             OperatorNodeUtil.operatorNode2<OperatorTypeT>(
                 operatorType,
                 [
-                    RawExprUtil.buildAst(left),
-                    RawExprUtil.buildAst(right),
+                    BuiltInExprUtil.buildAst(left),
+                    BuiltInExprUtil.buildAst(right),
                 ],
                 typeHint
             )

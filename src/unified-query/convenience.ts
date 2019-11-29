@@ -2,7 +2,7 @@ import * as QueryUtil from "./util";
 import {IAliasedTable} from "../aliased-table";
 import {FromClauseUtil} from "../from-clause";
 import {SelectClause, SelectDelegate, SelectValueDelegate} from "../select-clause";
-import {AnyBuiltInExpr} from "../raw-expr";
+import {AnyBuiltInExpr} from "../built-in-expr";
 
 export function from<
     AliasedTableT extends IAliasedTable

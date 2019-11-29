@@ -1,4 +1,4 @@
-import {BuiltInExpr, RawExprUtil} from "../../../raw-expr";
+import {BuiltInExpr, BuiltInExprUtil} from "../../../built-in-expr";
 import {CaseConditionBuilder, UninitializedCaseConditionBuilder} from "./case-condition";
 import {CaseConditionBuilderImpl} from "./case-condition-builder-impl";
 import {EquatableType} from "../../../equatable-type";
@@ -15,16 +15,16 @@ export class UninitializedCaseConditionBuilderImpl implements UninitializedCaseC
         then : ThenT
     ) : (
         CaseConditionBuilder<
-            RawExprUtil.TypeOf<ThenT>,
-            RawExprUtil.IntersectUsedRef<ConditionT|ThenT>
+            BuiltInExprUtil.TypeOf<ThenT>,
+            BuiltInExprUtil.IntersectUsedRef<ConditionT|ThenT>
         >
     ) {
         return new CaseConditionBuilderImpl<
-            RawExprUtil.TypeOf<ThenT>,
-            RawExprUtil.IntersectUsedRef<ConditionT|ThenT>
+            BuiltInExprUtil.TypeOf<ThenT>,
+            BuiltInExprUtil.IntersectUsedRef<ConditionT|ThenT>
         >(
-            [RawExprUtil.mapper(then)],
-            RawExprUtil.intersectUsedRef<(ConditionT|ThenT)[]>(
+            [BuiltInExprUtil.mapper(then)],
+            BuiltInExprUtil.intersectUsedRef<(ConditionT|ThenT)[]>(
                 condition,
                 then
             ),
@@ -32,8 +32,8 @@ export class UninitializedCaseConditionBuilderImpl implements UninitializedCaseC
                 type : "CaseCondition",
                 branches : [
                     [
-                        RawExprUtil.buildAst(condition),
-                        RawExprUtil.buildAst(then)
+                        BuiltInExprUtil.buildAst(condition),
+                        BuiltInExprUtil.buildAst(then)
                     ]
                 ],
                 else : undefined,

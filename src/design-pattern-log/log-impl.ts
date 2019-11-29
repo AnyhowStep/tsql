@@ -2,7 +2,7 @@ import {LogData, ILog} from "./log";
 import {SelectConnection, IsolableSelectConnection, IsolableInsertOneConnection} from "../execution";
 import {PrimaryKey_Input} from "../primary-key";
 import * as LogUtil from "./util";
-import {AnyBuiltInExpr} from "../raw-expr";
+import {AnyBuiltInExpr} from "../built-in-expr";
 
 export class Log<DataT extends LogData> implements ILog<DataT> {
     readonly tracked : DataT["tracked"];

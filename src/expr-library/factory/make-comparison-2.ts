@@ -1,15 +1,15 @@
 import * as tm from "type-mapping";
 import {ExprUtil} from "../../expr";
-import {BuiltInExpr} from "../../raw-expr";
+import {BuiltInExpr} from "../../built-in-expr";
 import {NonNullComparableType, ComparableTypeUtil} from "../../comparable-type";
-import {RawExprUtil} from "../../raw-expr";
+import {BuiltInExprUtil} from "../../built-in-expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
 export type Comparison2Return<
     LeftT extends BuiltInExpr<NonNullComparableType>,
-    RightT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<RawExprUtil.TypeOf<LeftT>>>
+    RightT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<BuiltInExprUtil.TypeOf<LeftT>>>
 > =
     ExprUtil.Intersect<
         boolean,
@@ -24,8 +24,8 @@ export type Comparison2 =
          *
          * @todo Investigate
          */
-        //RightT extends BuiltInExpr<RawExprUtil.TypeOf<LeftT>>
-        RightT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<RawExprUtil.TypeOf<LeftT>>>
+        //RightT extends BuiltInExpr<BuiltInExprUtil.TypeOf<LeftT>>
+        RightT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<BuiltInExprUtil.TypeOf<LeftT>>>
     >(
         left : LeftT,
         right : RightT
@@ -45,20 +45,20 @@ export function makeComparison2<OperatorTypeT extends OperatorType> (
 ) : Comparison2 {
     const result : Comparison2 = <
         LeftT extends BuiltInExpr<NonNullComparableType>,
-        RightT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<RawExprUtil.TypeOf<LeftT>>>
+        RightT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<BuiltInExprUtil.TypeOf<LeftT>>>
     >(left : LeftT, right : RightT) : (
         Comparison2Return<LeftT, RightT>
     ) => {
-        RawExprUtil.assertNonNull("LHS", left);
-        RawExprUtil.assertNonNull("RHS", left);
+        BuiltInExprUtil.assertNonNull("LHS", left);
+        BuiltInExprUtil.assertNonNull("RHS", left);
         return ExprUtil.intersect<boolean, LeftT|RightT>(
             tm.mysql.boolean(),
             [left, right],
             OperatorNodeUtil.operatorNode2<OperatorTypeT>(
                 operatorType,
                 [
-                    RawExprUtil.buildAst(left),
-                    RawExprUtil.buildAst(right),
+                    BuiltInExprUtil.buildAst(left),
+                    BuiltInExprUtil.buildAst(right),
                 ],
                 typeHint
             )

@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {AnyBuiltInExpr, RawExprUtil} from "../../raw-expr";
+import {AnyBuiltInExpr, BuiltInExprUtil} from "../../built-in-expr";
 import {PopFront} from "../../tuple-util";
 import {ExprUtil} from "../../expr";
 import {IExpr} from "../../expr/expr";
@@ -15,7 +15,7 @@ export type TypeOfCoalesce<ArgsT extends readonly AnyBuiltInExpr[], ResultT exte
             /**
              * Can't perform fancy computation with a regular array
              */
-            RawExprUtil.TypeOf<ArgsT[number]>
+            BuiltInExprUtil.TypeOf<ArgsT[number]>
         ),
         1 : (
             /**
@@ -32,7 +32,7 @@ export type TypeOfCoalesce<ArgsT extends readonly AnyBuiltInExpr[], ResultT exte
                 PopFront<ArgsT>,
                 (
                     | ResultT
-                    | RawExprUtil.TypeOf<ArgsT[0]>
+                    | BuiltInExprUtil.TypeOf<ArgsT[0]>
                 )
             >
         ),
@@ -40,14 +40,14 @@ export type TypeOfCoalesce<ArgsT extends readonly AnyBuiltInExpr[], ResultT exte
             /**
              * We have found our non-nullable argument
              */
-            RawExprUtil.TypeOf<ArgsT[0]>|Exclude<ResultT, null>
+            BuiltInExprUtil.TypeOf<ArgsT[0]>|Exclude<ResultT, null>
         ),
     }[
         number extends ArgsT["length"] ?
         0 :
         0 extends ArgsT["length"] ?
         1 :
-        null extends RawExprUtil.TypeOf<ArgsT[0]> ?
+        null extends BuiltInExprUtil.TypeOf<ArgsT[0]> ?
         2 :
         3
     ]
@@ -60,7 +60,7 @@ export type CoalesceExpr<ArgsT extends readonly AnyBuiltInExpr[]> =
     /*
     Expr<{
         mapper : tm.SafeMapper<TypeOfCoalesce<ArgsT>>,
-        usedRef : RawExprUtil.IntersectUsedRef<ArgsT[number]>,
+        usedRef : BuiltInExprUtil.IntersectUsedRef<ArgsT[number]>,
     }>
     */
 ;
@@ -72,7 +72,7 @@ export function coalesceMapper<ArgsT extends readonly AnyBuiltInExpr[]> (
     const builtInExprMapperArr : tm.AnySafeMapper[] = [];
     let lastMapperNonNull = false;
     for (const builtInExpr of args) {
-        const builtInExprMapper = RawExprUtil.mapper(builtInExpr);
+        const builtInExprMapper = BuiltInExprUtil.mapper(builtInExpr);
         builtInExprMapperArr.push(builtInExprMapper);
         if (!tm.canOutputNull(builtInExprMapper)) {
             lastMapperNonNull = true;
@@ -114,9 +114,9 @@ export function coalesce<ArgsT extends readonly AnyBuiltInExpr[]> (
             operatorNode2ToN(
                 OperatorType.COALESCE,
                 [
-                    RawExprUtil.buildAst(arg0),
-                    RawExprUtil.buildAst(arg1),
-                    ...argRest.map(RawExprUtil.buildAst)
+                    BuiltInExprUtil.buildAst(arg0),
+                    BuiltInExprUtil.buildAst(arg1),
+                    ...argRest.map(BuiltInExprUtil.buildAst)
                 ],
                 undefined
             )

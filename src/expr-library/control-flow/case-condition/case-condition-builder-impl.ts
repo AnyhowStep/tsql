@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {BuiltInExpr, RawExprUtil} from "../../../raw-expr";
+import {BuiltInExpr, BuiltInExprUtil} from "../../../built-in-expr";
 import {ExprImpl, expr} from "../../../expr/expr-impl";
 import {IUsedRef, UsedRefUtil} from "../../../used-ref";
 import {CaseConditionNode} from "../../../ast";
@@ -32,27 +32,27 @@ export class CaseConditionBuilderImpl<
         then : ThenT
     ) : (
         CaseConditionBuilder<
-            ResultT|RawExprUtil.TypeOf<ThenT>,
+            ResultT|BuiltInExprUtil.TypeOf<ThenT>,
             UsedRefUtil.IntersectTryReuseExistingType<
                 | UsedRefT
-                | RawExprUtil.IntersectUsedRef<ConditionT|ThenT>
+                | BuiltInExprUtil.IntersectUsedRef<ConditionT|ThenT>
             >
         >
     ) {
         return new CaseConditionBuilderImpl<
-            ResultT|RawExprUtil.TypeOf<ThenT>,
+            ResultT|BuiltInExprUtil.TypeOf<ThenT>,
             UsedRefUtil.IntersectTryReuseExistingType<
                 | UsedRefT
-                | RawExprUtil.IntersectUsedRef<ConditionT|ThenT>
+                | BuiltInExprUtil.IntersectUsedRef<ConditionT|ThenT>
             >
         >(
-            [...this.resultMappers, RawExprUtil.mapper(then)],
+            [...this.resultMappers, BuiltInExprUtil.mapper(then)],
             UsedRefUtil.intersect<
                 | UsedRefT
-                | RawExprUtil.IntersectUsedRef<ConditionT|ThenT>
+                | BuiltInExprUtil.IntersectUsedRef<ConditionT|ThenT>
             >(
                 this.usedRef,
-                RawExprUtil.intersectUsedRef<
+                BuiltInExprUtil.intersectUsedRef<
                     (ConditionT|ThenT)[]
                 >(condition, then)
             ) as any,
@@ -62,8 +62,8 @@ export class CaseConditionBuilderImpl<
                  * https://github.com/microsoft/TypeScript/issues/33573
                  */
                 branches : this.ast.branches.concat([
-                    RawExprUtil.buildAst(condition),
-                    RawExprUtil.buildAst(then)
+                    BuiltInExprUtil.buildAst(condition),
+                    BuiltInExprUtil.buildAst(then)
                 ]),
                 else : this.ast.else,
             }
@@ -72,10 +72,10 @@ export class CaseConditionBuilderImpl<
              * @todo Investigate type instantiation exessively deep error
              */
             CaseConditionBuilder<
-                ResultT|RawExprUtil.TypeOf<ThenT>,
+                ResultT|BuiltInExprUtil.TypeOf<ThenT>,
                 UsedRefUtil.IntersectTryReuseExistingType<
                     | UsedRefT
-                    | RawExprUtil.IntersectUsedRef<ConditionT|ThenT>
+                    | BuiltInExprUtil.IntersectUsedRef<ConditionT|ThenT>
                 >
             >
         );
@@ -96,30 +96,30 @@ export class CaseConditionBuilderImpl<
     ) : (
         {
             end () : ExprImpl<
-                ResultT|RawExprUtil.TypeOf<ElseT>,
+                ResultT|BuiltInExprUtil.TypeOf<ElseT>,
                 UsedRefUtil.Intersect<
                     | UsedRefT
-                    | RawExprUtil.UsedRef<ElseT>
+                    | BuiltInExprUtil.UsedRef<ElseT>
                 >
             >
         }
     ) {
         const end = () : ExprImpl<
-            ResultT|RawExprUtil.TypeOf<ElseT>,
+            ResultT|BuiltInExprUtil.TypeOf<ElseT>,
             UsedRefUtil.Intersect<
                 | UsedRefT
-                | RawExprUtil.UsedRef<ElseT>
+                | BuiltInExprUtil.UsedRef<ElseT>
             >
         > => {
             return expr(
                 {
-                    mapper : tm.unsafeOr(...this.resultMappers, RawExprUtil.mapper(elseResult)),
+                    mapper : tm.unsafeOr(...this.resultMappers, BuiltInExprUtil.mapper(elseResult)),
                     usedRef : UsedRefUtil.intersect<
                         | UsedRefT
-                        | RawExprUtil.UsedRef<ElseT>
+                        | BuiltInExprUtil.UsedRef<ElseT>
                     >(
                         this.usedRef,
-                        RawExprUtil.usedRef(elseResult)
+                        BuiltInExprUtil.usedRef(elseResult)
                     ),
                 },
                 this.ast

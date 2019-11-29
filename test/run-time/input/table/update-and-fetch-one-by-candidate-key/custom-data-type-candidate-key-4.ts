@@ -3,7 +3,7 @@ import * as tsql from "../../../../../dist";
 import {Pool} from "../../sql-web-worker/promise.sql";
 import {SqliteWorker} from "../../sql-web-worker/worker.sql";
 import {dtPoint} from "../../dt-point";
-import {RawExprUtil} from "../../../../../dist";
+import {BuiltInExprUtil} from "../../../../../dist";
 
 tape(__filename, async (t) => {
     const pool = new Pool(new SqliteWorker());
@@ -38,13 +38,13 @@ tape(__filename, async (t) => {
             return tsql.expr(
                 {
                     mapper : dtPoint,
-                    usedRef : RawExprUtil.intersectUsedRef(arg, newX),
+                    usedRef : BuiltInExprUtil.intersectUsedRef(arg, newX),
                 },
                 tsql.functionCall(
                     "replaceX",
                     [
-                        RawExprUtil.buildAst(arg),
-                        RawExprUtil.buildAst(newX),
+                        BuiltInExprUtil.buildAst(arg),
+                        BuiltInExprUtil.buildAst(newX),
                     ]
                 )
             );

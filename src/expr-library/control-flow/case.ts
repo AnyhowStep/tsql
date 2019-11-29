@@ -1,4 +1,4 @@
-import {RawExprUtil, BuiltInExpr} from "../../raw-expr";
+import {BuiltInExprUtil, BuiltInExpr} from "../../built-in-expr";
 import {UninitializedCaseValueBuilder, caseValue} from "./case-value";
 import {NonNullEquatableType, EquatableTypeUtil} from "../../equatable-type";
 import {UninitializedCaseConditionBuilder, caseCondition} from "./case-condition";
@@ -9,8 +9,8 @@ function caseConstructor<
     valueExpr : ValueExprT
 ) : (
     UninitializedCaseValueBuilder<
-        EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<ValueExprT>>,
-        RawExprUtil.UsedRef<ValueExprT>
+        EquatableTypeUtil.BaseNonNullEquatableType<BuiltInExprUtil.TypeOf<ValueExprT>>,
+        BuiltInExprUtil.UsedRef<ValueExprT>
     >
 );
 function caseConstructor () : (

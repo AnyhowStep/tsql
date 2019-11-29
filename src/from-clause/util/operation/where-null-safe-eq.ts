@@ -8,7 +8,7 @@ import {ColumnRefUtil} from "../../../column-ref";
 import * as ExprLib from "../../../expr-library";
 import {ColumnIdentifierRefUtil} from "../../../column-identifier-ref";
 import {BuiltInValueExprUtil, BuiltInValueExpr} from "../../../built-in-value-expr";
-import {RawExprUtil} from "../../../raw-expr";
+import {BuiltInExprUtil} from "../../../built-in-expr";
 
 /**
  * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966
@@ -186,10 +186,10 @@ export function whereNullSafeEq<
                  * Cast to the type of `ValueT`
                  */
                 tm.or(
-                    RawExprUtil.mapper(value),
+                    BuiltInExprUtil.mapper(value),
                     tm.pipe(
                         column.mapper,
-                        RawExprUtil.mapper(value)
+                        BuiltInExprUtil.mapper(value)
                     )
                 ) as (
                     () => BuiltInValueExprUtil.NullSafeCaseInsensitiveNarrow<

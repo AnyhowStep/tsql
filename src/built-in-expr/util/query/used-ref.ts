@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {AnyBuiltInExpr} from "../../raw-expr";
+import {AnyBuiltInExpr} from "../../built-in-expr";
 import {BuiltInValueExpr, BuiltInValueExprUtil} from "../../../built-in-value-expr";
 import {UsedRefUtil, IUsedRef} from "../../../used-ref";
 import {ExprUtil} from "../../../expr";

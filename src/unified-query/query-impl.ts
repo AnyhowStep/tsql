@@ -7,7 +7,7 @@ import {OrderByClause} from "../order-by-clause";
 import {IAliasedTable} from "../aliased-table";
 import {FromClauseUtil} from "../from-clause";
 import {SelectClause} from "../select-clause";
-import {BuiltInExpr, AnyBuiltInExpr, AnySubqueryExpr} from "../raw-expr";
+import {BuiltInExpr, AnyBuiltInExpr, AnySubqueryExpr} from "../built-in-expr";
 import {OnDelegate, OnClauseUtil} from "../on-clause";
 import {ITable, TableUtil, TableWithPrimaryKey, InsertableTable, DeletableTable} from "../table";
 import {ColumnUtil} from "../column";

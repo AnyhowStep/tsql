@@ -1,4 +1,4 @@
-import {AnyBuiltInExpr} from "../../raw-expr";
+import {AnyBuiltInExpr} from "../../built-in-expr";
 import {usedRef, UsedRef} from "../query";
 import {UsedRefUtil} from "../../../used-ref";
 import {IQueryBase} from "../../../query-base";

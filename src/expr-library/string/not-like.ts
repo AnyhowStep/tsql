@@ -7,7 +7,7 @@ import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 import {makeOperator2} from "../factory";
 import {makeOperator3} from "../factory/make-operator-3";
-import {BuiltInExpr, RawExprUtil} from "../../raw-expr";
+import {BuiltInExpr, BuiltInExprUtil} from "../../built-in-expr";
 import {ExprImpl} from "../../expr/expr-impl";
 import {IUsedRef} from "../../used-ref";
 import {assertValidEscapeChar} from "./like";
@@ -38,12 +38,12 @@ export function notLike<
     pattern : PatternT
 ) : (
     NotLikeExpr<
-        RawExprUtil.IntersectUsedRef<ExprT|PatternT>
+        BuiltInExprUtil.IntersectUsedRef<ExprT|PatternT>
     >
 ) {
     const result = notLikeImpl<ExprT, PatternT>(builtInExpr, pattern) as unknown as (
         NotLikeExpr<
-            RawExprUtil.IntersectUsedRef<ExprT|PatternT>
+            BuiltInExprUtil.IntersectUsedRef<ExprT|PatternT>
         >
     );
     result.escape = (escapeChar : string) : ReturnType<typeof result.escape> => {

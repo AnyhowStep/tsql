@@ -2,7 +2,7 @@ import {OperatorType} from "../../../operator-type";
 import {TypeHint} from "../../../type-hint";
 import {makeOperator2, Operator1} from "../../factory";
 import {Decimal} from "../../../decimal";
-import {BuiltInExpr} from "../../../raw-expr";
+import {BuiltInExpr} from "../../../built-in-expr";
 import {ExprUtil} from "../../../expr";
 import {decimalMapper} from "../../decimal/decimal-mapper";
 

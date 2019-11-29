@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {AnyBuiltInExpr, RawExprUtil} from "../../raw-expr";
+import {AnyBuiltInExpr, BuiltInExprUtil} from "../../built-in-expr";
 import {ExprUtil} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
@@ -12,18 +12,18 @@ export function nullIf<
     arg1 : Arg1T
 ) : (
     ExprUtil.Intersect<
-        RawExprUtil.TypeOf<Arg0T>|null,
+        BuiltInExprUtil.TypeOf<Arg0T>|null,
         Arg0T|Arg1T
     >
 )  {
-    return ExprUtil.intersect<RawExprUtil.TypeOf<Arg0T>|null, Arg0T|Arg1T>(
-        tm.orNull(RawExprUtil.mapper(arg0)),
+    return ExprUtil.intersect<BuiltInExprUtil.TypeOf<Arg0T>|null, Arg0T|Arg1T>(
+        tm.orNull(BuiltInExprUtil.mapper(arg0)),
         [arg0, arg1],
         OperatorNodeUtil.operatorNode2(
             OperatorType.NULL_IF_EQUAL,
             [
-                RawExprUtil.buildAst(arg0),
-                RawExprUtil.buildAst(arg1)
+                BuiltInExprUtil.buildAst(arg0),
+                BuiltInExprUtil.buildAst(arg1)
             ],
             undefined
         )

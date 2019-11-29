@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {BuiltInExpr, RawExprUtil, AnyBuiltInExpr} from "../../raw-expr";
+import {BuiltInExpr, BuiltInExprUtil, AnyBuiltInExpr} from "../../built-in-expr";
 import {ExprUtil} from "../../expr";
 import {
     Ast,
@@ -58,7 +58,7 @@ export type ChainableOperatorReturn<
     /*
     Expr<{
         mapper : tm.SafeMapper<TypeT>,
-        usedRef : RawExprUtil.IntersectUsedRef<ArrT[number]>,
+        usedRef : BuiltInExprUtil.IntersectUsedRef<ArrT[number]>,
     }>
     */
     /*
@@ -68,7 +68,7 @@ export type ChainableOperatorReturn<
             mapper : tm.SafeMapper<TypeT>,
             usedRef : TryReuseExistingType<
                 Extract<ArrT[number], IExpr|IExprSelectItem>["usedRef"],
-                RawExprUtil.IntersectUsedRef<ArrT[number]>
+                BuiltInExprUtil.IntersectUsedRef<ArrT[number]>
             >,
         }>
     >
@@ -107,7 +107,7 @@ export function makeChainableOperator<
         >
     ) => {
         if (identityAst == undefined) {
-            const newIdentityAst = RawExprUtil.buildAst(identityElement);
+            const newIdentityAst = BuiltInExprUtil.buildAst(identityElement);
             if (!LiteralValueNodeUtil.isLiteralValueNode(newIdentityAst)) {
                 throw new Error(`Invalid identity element`);
             }
@@ -135,9 +135,9 @@ export function makeChainableOperator<
                  * Can't flatten this `builtInExpr`
                  */
                 if (operands == undefined) {
-                    operands = [RawExprUtil.buildAst(builtInExpr)];
+                    operands = [BuiltInExprUtil.buildAst(builtInExpr)];
                 } else {
-                    operands.push(RawExprUtil.buildAst(builtInExpr));
+                    operands.push(BuiltInExprUtil.buildAst(builtInExpr));
                 }
             }
         }

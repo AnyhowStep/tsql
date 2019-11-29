@@ -2,7 +2,7 @@ import {ILog} from "../../log";
 import {IsolableInsertOneConnection, ExecutionUtil, SelectConnection} from "../../../execution";
 import {PrimaryKey_Input} from "../../../primary-key";
 import {TableUtil} from "../../../table";
-import {RawExprNoUsedRef_Input} from "../../../raw-expr";
+import {CustomExpr_NonCorrelated} from "../../../built-in-expr";
 import {fetchLatestOrDefault} from "./fetch-latest-or-default";
 import {DefaultRow} from "./fetch-default";
 import {escapeIdentifierWithDoubleQuotes} from "../../../sqlstring";
@@ -20,7 +20,7 @@ export type TrackRow<LogT extends ILog> =
      */
     & {
         readonly [columnAlias in LogT["trackedWithDefaultValue"][number]]? : (
-            RawExprNoUsedRef_Input<TableUtil.ColumnType<LogT["logTable"], columnAlias>>
+            CustomExpr_NonCorrelated<TableUtil.ColumnType<LogT["logTable"], columnAlias>>
         )
     }
     /**
@@ -42,7 +42,7 @@ export type TrackRow<LogT extends ILog> =
             LogT["trackedWithDefaultValue"][number]
         >] : (
             | undefined
-            | RawExprNoUsedRef_Input<TableUtil.ColumnType<LogT["logTable"], columnAlias>>
+            | CustomExpr_NonCorrelated<TableUtil.ColumnType<LogT["logTable"], columnAlias>>
         )
     }
     /**
@@ -53,7 +53,7 @@ export type TrackRow<LogT extends ILog> =
             LogT["doNotCopy"][number],
             TableUtil.RequiredColumnAlias<LogT["logTable"]>
         >] : (
-            RawExprNoUsedRef_Input<TableUtil.ColumnType<LogT["logTable"], columnAlias>>
+            CustomExpr_NonCorrelated<TableUtil.ColumnType<LogT["logTable"], columnAlias>>
         )
     }
     /**
@@ -66,7 +66,7 @@ export type TrackRow<LogT extends ILog> =
             LogT["doNotCopy"][number],
             TableUtil.OptionalColumnAlias<LogT["logTable"]>
         >]? : (
-            RawExprNoUsedRef_Input<TableUtil.ColumnType<LogT["logTable"], columnAlias>>
+            CustomExpr_NonCorrelated<TableUtil.ColumnType<LogT["logTable"], columnAlias>>
         )
     }
 ;

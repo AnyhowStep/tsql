@@ -1,4 +1,4 @@
-import {BuiltInExpr, RawExprUtil} from "../../../raw-expr";
+import {BuiltInExpr, BuiltInExprUtil} from "../../../built-in-expr";
 import {IUsedRef, UsedRefUtil} from "../../../used-ref";
 import {Ast} from "../../../ast";
 import {CaseValueBuilder, UninitializedCaseValueBuilder} from "./case-value";
@@ -26,28 +26,28 @@ export class UninitializedCaseValueBuilderImpl<
     ) : (
         CaseValueBuilder<
             ValueT,
-            RawExprUtil.TypeOf<ThenT>,
+            BuiltInExprUtil.TypeOf<ThenT>,
             UsedRefUtil.Intersect<
                 | UsedRefT
-                | RawExprUtil.IntersectUsedRef<CompareValueT|ThenT>
+                | BuiltInExprUtil.IntersectUsedRef<CompareValueT|ThenT>
             >
         >
     ) {
         return new CaseValueBuilderImpl<
             ValueT,
-            RawExprUtil.TypeOf<ThenT>,
+            BuiltInExprUtil.TypeOf<ThenT>,
             UsedRefUtil.Intersect<
                 | UsedRefT
-                | RawExprUtil.IntersectUsedRef<CompareValueT|ThenT>
+                | BuiltInExprUtil.IntersectUsedRef<CompareValueT|ThenT>
             >
         >(
-            [RawExprUtil.mapper(then)],
+            [BuiltInExprUtil.mapper(then)],
             UsedRefUtil.intersect<
                 | UsedRefT
-                | RawExprUtil.IntersectUsedRef<CompareValueT|ThenT>
+                | BuiltInExprUtil.IntersectUsedRef<CompareValueT|ThenT>
             >(
                 this.usedRef,
-                RawExprUtil.intersectUsedRef<
+                BuiltInExprUtil.intersectUsedRef<
                     (CompareValueT|ThenT)[]
                 >(compareValue, then)
             ),
@@ -56,8 +56,8 @@ export class UninitializedCaseValueBuilderImpl<
                 value : this.valueAst,
                 cases : [
                     [
-                        RawExprUtil.buildAst(compareValue),
-                        RawExprUtil.buildAst(then)
+                        BuiltInExprUtil.buildAst(compareValue),
+                        BuiltInExprUtil.buildAst(then)
                     ]
                 ],
                 else : undefined,
@@ -68,10 +68,10 @@ export class UninitializedCaseValueBuilderImpl<
              */
             CaseValueBuilder<
                 ValueT,
-                RawExprUtil.TypeOf<ThenT>,
+                BuiltInExprUtil.TypeOf<ThenT>,
                 UsedRefUtil.Intersect<
                     | UsedRefT
-                    | RawExprUtil.IntersectUsedRef<CompareValueT|ThenT>
+                    | BuiltInExprUtil.IntersectUsedRef<CompareValueT|ThenT>
                 >
             >
         );

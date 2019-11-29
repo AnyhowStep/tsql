@@ -1,4 +1,4 @@
-import {AnyNonValueExpr} from "../../raw-expr";
+import {AnyNonValueExpr} from "../../built-in-expr";
 import {BuiltInValueExprUtil} from "../../../built-in-value-expr";
 import {ExprUtil} from "../../../expr";
 import {ColumnUtil} from "../../../column";

@@ -1,4 +1,4 @@
-import {AnySubqueryExpr} from "../../../raw-expr";
+import {AnySubqueryExpr} from "../../../built-in-expr";
 import {SortDirection} from "../../../sort-direction";
 import {Coalesce, coalesce} from "./coalesce";
 

@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {BuiltInExpr, RawExprUtil, AnyBuiltInExpr} from "../../raw-expr";
+import {BuiltInExpr, BuiltInExprUtil, AnyBuiltInExpr} from "../../built-in-expr";
 import {ExprUtil} from "../../expr";
 import {
     Ast,
@@ -72,7 +72,7 @@ export type ChainableDecimalOperatorReturn<
     /*
     Expr<{
         mapper : tm.SafeMapper<Decimal>,
-        usedRef : RawExprUtil.IntersectUsedRef<ArrT[number]>,
+        usedRef : BuiltInExprUtil.IntersectUsedRef<ArrT[number]>,
     }>
     */
     ExprUtil.Intersect<Decimal, ArrT[number]>
@@ -138,9 +138,9 @@ export function makeChainableDecimalOperator<
                  * Can't flatten this `builtInExpr`
                  */
                 if (operands == undefined) {
-                    operands = [RawExprUtil.buildAst(builtInExpr)];
+                    operands = [BuiltInExprUtil.buildAst(builtInExpr)];
                 } else {
-                    operands.push(RawExprUtil.buildAst(builtInExpr));
+                    operands.push(BuiltInExprUtil.buildAst(builtInExpr));
                 }
             }
         }

@@ -3,7 +3,7 @@ import {allowedColumnRef} from "../query";
 import {IAliasedTable} from "../../../aliased-table";
 import {OnDelegate} from "../../on-delegate";
 import {OnClause} from "../../on-clause";
-import {BuiltInExpr} from "../../../raw-expr";
+import {BuiltInExpr} from "../../../built-in-expr";
 import {assertValidUsedRef} from "../predicate";
 import {ExprUtil} from "../../../expr";
 

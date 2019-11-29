@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {IAnonymousColumn, ColumnUtil} from "../../../column";
 import {isAnyNonValueExpr} from "../predicate";
-import {RawExprNoUsedRef_Input} from "../../raw-expr";
+import {CustomExpr_NonCorrelated} from "../../built-in-expr";
 
 /**
  * If `value` is `AnyNonValueExpr`, we don't bother checking.
@@ -10,10 +10,10 @@ import {RawExprNoUsedRef_Input} from "../../raw-expr";
  * Else, we return `mapper(, value)`,
  * which will throw an error if `value` is invalid.
  */
-export function mapRawExprInput<TypeT> (
+export function mapCustomExpr_NonCorrelated<TypeT> (
     mapper : tm.SafeMapper<TypeT>|IAnonymousColumn<TypeT>,
-    value : RawExprNoUsedRef_Input<TypeT>
-) : RawExprNoUsedRef_Input<TypeT> {
+    value : CustomExpr_NonCorrelated<TypeT>
+) : CustomExpr_NonCorrelated<TypeT> {
     let valueName = "literal-value";
 
     if (ColumnUtil.isColumn(mapper)) {

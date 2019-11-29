@@ -3,7 +3,7 @@ import {TableUtil} from "../../../table";
 import {Identity} from "../../../type-util";
 import {IsolableSelectConnection} from "../../../execution";
 import {PrimaryKey_Input, PrimaryKeyUtil} from "../../../primary-key";
-import {RawExprNoUsedRef_Input, RawExprUtil} from "../../../raw-expr";
+import {CustomExpr_NonCorrelated, BuiltInExprUtil} from "../../../built-in-expr";
 import {UsedRefUtil} from "../../../used-ref";
 import {LogMustSetTrackedDefaults} from "./06-set-tracked-defaults";
 import {DataTypeUtil} from "../../../data-type";
@@ -32,7 +32,7 @@ export type CopyDefaults<
                 TableUtil.RequiredColumnAlias<DataT["logTable"]>,
                 DataT["copy"][number]
             >] : (
-                RawExprNoUsedRef_Input<
+                CustomExpr_NonCorrelated<
                     TableUtil.ColumnType<DataT["logTable"], columnAlias>
                 >
             )
@@ -46,7 +46,7 @@ export type CopyDefaults<
                  * Makes things more explicit by forcing `undefined`
                  */
                 | undefined
-                | RawExprNoUsedRef_Input<
+                | CustomExpr_NonCorrelated<
                     TableUtil.ColumnType<DataT["logTable"], columnAlias>
                 >
             )
@@ -116,7 +116,7 @@ export function setCopyDefaultsDelegate<
             if (rawValue === undefined) {
                 throw new Error(`Expected a value for ${log.logTable.alias}.${columnAlias}`);
             }
-            const usedRef = RawExprUtil.usedRef(rawValue);
+            const usedRef = BuiltInExprUtil.usedRef(rawValue);
             UsedRefUtil.assertAllowed(allowedRef, usedRef);
 
             result[columnAlias] = await DataTypeUtil.evaluateExpr(
@@ -130,7 +130,7 @@ export function setCopyDefaultsDelegate<
             if (rawValue === undefined) {
                 continue;
             }
-            const usedRef = RawExprUtil.usedRef(rawValue);
+            const usedRef = BuiltInExprUtil.usedRef(rawValue);
             UsedRefUtil.assertAllowed(allowedRef, usedRef);
 
             result[columnAlias] = await DataTypeUtil.evaluateExpr(

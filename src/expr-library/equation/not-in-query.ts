@@ -6,7 +6,7 @@ import * as tm from "type-mapping";
 import {QueryBaseUtil} from "../../query-base";
 import {Expr, expr} from "../../expr";
 import {OperatorType} from "../../operator-type";
-import {BuiltInExpr, RawExprUtil} from "../../raw-expr";
+import {BuiltInExpr, BuiltInExprUtil} from "../../built-in-expr";
 import {NonNullEquatableType, EquatableTypeUtil} from "../../equatable-type";
 import {OperatorNodeUtil} from "../../ast";
 
@@ -60,14 +60,14 @@ import {OperatorNodeUtil} from "../../ast";
  */
 export function notInQuery<
     BuiltInExprT extends BuiltInExpr<NonNullEquatableType>,
-    QueryT extends QueryBaseUtil.OneSelectItem<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<BuiltInExprT>>>
+    QueryT extends QueryBaseUtil.OneSelectItem<EquatableTypeUtil.BaseNonNullEquatableType<BuiltInExprUtil.TypeOf<BuiltInExprT>>>
 > (
     builtInExpr : BuiltInExprT,
     query : QueryT
 ) : (
     Expr<{
         mapper : tm.SafeMapper<boolean>,
-        usedRef : RawExprUtil.IntersectUsedRef<BuiltInExprT|QueryT>,
+        usedRef : BuiltInExprUtil.IntersectUsedRef<BuiltInExprT|QueryT>,
     }>
 ) {
     if (!QueryBaseUtil.isOneSelectItem(query)) {
@@ -80,11 +80,11 @@ export function notInQuery<
     return expr(
         {
             mapper : tm.mysql.boolean(),
-            usedRef : RawExprUtil.intersectUsedRef(builtInExpr, query),
+            usedRef : BuiltInExprUtil.intersectUsedRef(builtInExpr, query),
         },
         OperatorNodeUtil.operatorNode2(OperatorType.NOT_IN, [
-            RawExprUtil.buildAst(builtInExpr),
-            RawExprUtil.buildAst(query)
+            BuiltInExprUtil.buildAst(builtInExpr),
+            BuiltInExprUtil.buildAst(query)
         ], undefined)
     );
 }

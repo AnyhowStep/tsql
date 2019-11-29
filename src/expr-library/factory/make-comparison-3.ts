@@ -1,16 +1,16 @@
 import * as tm from "type-mapping";
 import {ExprUtil} from "../../expr";
-import {BuiltInExpr} from "../../raw-expr";
+import {BuiltInExpr} from "../../built-in-expr";
 import {NonNullComparableType, ComparableTypeUtil} from "../../comparable-type";
-import {RawExprUtil} from "../../raw-expr";
+import {BuiltInExprUtil} from "../../built-in-expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
 export type Comparison3Return<
     LeftT extends BuiltInExpr<NonNullComparableType>,
-    MidT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<RawExprUtil.TypeOf<LeftT>>>,
-    RightT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<RawExprUtil.TypeOf<LeftT>>>
+    MidT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<BuiltInExprUtil.TypeOf<LeftT>>>,
+    RightT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<BuiltInExprUtil.TypeOf<LeftT>>>
 > =
     ExprUtil.Intersect<
         boolean,
@@ -20,14 +20,14 @@ export type Comparison3Return<
 export type Comparison3 =
     <
         LeftT extends BuiltInExpr<NonNullComparableType>,
-        MidT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<RawExprUtil.TypeOf<LeftT>>>,
+        MidT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<BuiltInExprUtil.TypeOf<LeftT>>>,
         /**
          * https://github.com/microsoft/TypeScript/issues/33002#issuecomment-523651736
          *
          * @todo Investigate
          */
-        //RightT extends BuiltInExpr<RawExprUtil.TypeOf<LeftT>>
-        RightT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<RawExprUtil.TypeOf<LeftT>>>
+        //RightT extends BuiltInExpr<BuiltInExprUtil.TypeOf<LeftT>>
+        RightT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<BuiltInExprUtil.TypeOf<LeftT>>>
     >(
         left : LeftT,
         mid : MidT,
@@ -48,26 +48,26 @@ export function makeComparison3<OperatorTypeT extends OperatorType> (
 ) : Comparison3 {
     const result : Comparison3 = <
         LeftT extends BuiltInExpr<NonNullComparableType>,
-        MidT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<RawExprUtil.TypeOf<LeftT>>>,
-        RightT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<RawExprUtil.TypeOf<LeftT>>>
+        MidT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<BuiltInExprUtil.TypeOf<LeftT>>>,
+        RightT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<BuiltInExprUtil.TypeOf<LeftT>>>
     >(left : LeftT, mid : MidT, right : RightT) : (
         ExprUtil.Intersect<
             boolean,
             LeftT|MidT|RightT
         >
     ) => {
-        RawExprUtil.assertNonNull("LHS", left);
-        RawExprUtil.assertNonNull("MHS", mid);
-        RawExprUtil.assertNonNull("RHS", left);
+        BuiltInExprUtil.assertNonNull("LHS", left);
+        BuiltInExprUtil.assertNonNull("MHS", mid);
+        BuiltInExprUtil.assertNonNull("RHS", left);
         return ExprUtil.intersect<boolean, LeftT|MidT|RightT>(
             tm.mysql.boolean(),
             [left, mid, right],
             OperatorNodeUtil.operatorNode3<OperatorTypeT>(
                 operatorType,
                 [
-                    RawExprUtil.buildAst(left),
-                    RawExprUtil.buildAst(mid),
-                    RawExprUtil.buildAst(right),
+                    BuiltInExprUtil.buildAst(left),
+                    BuiltInExprUtil.buildAst(mid),
+                    BuiltInExprUtil.buildAst(right),
                 ],
                 typeHint
             )

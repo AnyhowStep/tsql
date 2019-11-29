@@ -4,7 +4,7 @@ import {AssignmentMapDelegate, AssignmentMap_Input} from "../../../update";
 import {CandidateKey_NonUnion, CandidateKeyUtil, CandidateKey_Input} from "../../../candidate-key";
 import {StrictUnion, AssertNonUnion, Identity} from "../../../type-util";
 import {UpdateOneResult, updateOne} from "./update-one";
-import {RawExprUtil, RawExprUsingColumnMap_Input} from "../../../raw-expr";
+import {BuiltInExprUtil, RawExprUsingColumnMap_Input} from "../../../built-in-expr";
 import * as ExprLib from "../../../expr-library";
 import {RowNotFoundError} from "../../../error";
 
@@ -18,7 +18,7 @@ export type UpdatedAndFetchedRow<
             (
                 undefined extends AssignmentMapT[columnAlias] ?
                 TableUtil.ColumnType<TableT, columnAlias> :
-                RawExprUtil.TypeOf<
+                BuiltInExprUtil.TypeOf<
                     /**
                      * @todo Investigate assignability issue
                      */
@@ -134,7 +134,7 @@ export async function __updateAndFetchOneByCandidateKeyHelper<
              * This `candidateKey` column's value will be updated.
              * We need to know what its updated value will be.
              */
-            if (RawExprUtil.isAnyNonValueExpr(newValue)) {
+            if (BuiltInExprUtil.isAnyNonValueExpr(newValue)) {
                 const evaluatedNewValue = await TableUtil.fetchValue(
                     table,
                     connection,

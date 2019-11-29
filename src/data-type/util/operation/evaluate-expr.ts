@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {IAnonymousColumn} from "../../../column";
-import {RawExprNoUsedRef_Input} from "../../../raw-expr";
+import {CustomExpr_NonCorrelated} from "../../../built-in-expr";
 import {SelectConnection} from "../../../execution";
 import {QueryUtil} from "../../../unified-query";
 
@@ -16,7 +16,7 @@ import {QueryUtil} from "../../../unified-query";
 export async function evaluateExpr<T> (
     column : IAnonymousColumn<T>,
     connection : SelectConnection,
-    rawValue : RawExprNoUsedRef_Input<T>
+    rawValue : CustomExpr_NonCorrelated<T>
 ) : Promise<T> {
     const valueResult = tm.tryMapHandled(
         column.mapper,

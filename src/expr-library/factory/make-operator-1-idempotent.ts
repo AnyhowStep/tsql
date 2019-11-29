@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {BuiltInExpr, RawExprUtil} from "../../raw-expr";
+import {BuiltInExpr, BuiltInExprUtil} from "../../built-in-expr";
 import {ExprUtil} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
 import {Operator1} from "./make-operator-1";
@@ -35,7 +35,7 @@ export function makeOperator1Idempotent<
             mapper,
             [arg],
             tryExtractAstOr(
-                RawExprUtil.buildAst(arg),
+                BuiltInExprUtil.buildAst(arg),
                 operand => OperatorNodeUtil.isOperatorNode(operand) && operand.operatorType == operatorType,
                 operand => OperatorNodeUtil.operatorNode1<OperatorTypeT>(
                     operatorType,

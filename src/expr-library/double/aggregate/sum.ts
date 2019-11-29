@@ -2,7 +2,7 @@ import * as tm from "type-mapping";
 import {OperatorType} from "../../../operator-type";
 import {TypeHint} from "../../../type-hint";
 import {makeOperator2, Operator1} from "../../factory";
-import {BuiltInExpr} from "../../../raw-expr";
+import {BuiltInExpr} from "../../../built-in-expr";
 import {ExprUtil} from "../../../expr";
 
 const sumImpl = makeOperator2<OperatorType.AGGREGATE_SUM, boolean, number, number|null>(

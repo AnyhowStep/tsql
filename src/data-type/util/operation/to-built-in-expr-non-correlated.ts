@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {isDataType} from "../predicate";
 import {BuiltInValueExprUtil} from "../../../built-in-value-expr";
-import {BuiltInExpr_NonCorrelated} from "../../../raw-expr";
+import {BuiltInExpr_NonCorrelated} from "../../../built-in-expr";
 import {IAnonymousColumn, ColumnUtil} from "../../../column";
 
 /**

@@ -1,7 +1,7 @@
 import {ILog, LogData} from "../../log";
 import {Log} from "../../log-impl";
 import {TableUtil} from "../../../table";
-import {RawExprNoUsedRef_Input, RawExprUtil} from "../../../raw-expr";
+import {CustomExpr_NonCorrelated, BuiltInExprUtil} from "../../../built-in-expr";
 import {UsedRefUtil} from "../../../used-ref";
 import {Identity} from "../../../type-util";
 import {ExprUtil} from "../../../expr";
@@ -29,7 +29,7 @@ export type TrackedDefaults<
             DataT["tracked"][number]
         )] : (
             | undefined
-            | RawExprNoUsedRef_Input<
+            | CustomExpr_NonCorrelated<
                 TableUtil.ColumnType<DataT["logTable"], columnAlias>
             >
         )
@@ -86,7 +86,7 @@ export function setTrackedDefaults<
         }
 
 
-        const usedRef = RawExprUtil.usedRef(
+        const usedRef = BuiltInExprUtil.usedRef(
             ExprUtil.fromRawExprNoUsedRefInput(
                 log.logTable.columns[columnAlias],
                 rawValue
@@ -94,7 +94,7 @@ export function setTrackedDefaults<
         );
         UsedRefUtil.assertAllowed(allowedRef, usedRef);
 
-        const value = RawExprUtil.mapRawExprInput(
+        const value = BuiltInExprUtil.mapCustomExpr_NonCorrelated(
             log.logTable.columns[columnAlias],
             rawValue
         );

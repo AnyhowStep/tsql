@@ -1,4 +1,4 @@
-import {AnySubqueryExpr, AnyBuiltInExpr} from "../../../raw-expr";
+import {AnySubqueryExpr, AnyBuiltInExpr} from "../../../built-in-expr";
 import * as ExprLib from "../../../expr-library";
 
 export type Coalesce<

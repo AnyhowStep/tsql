@@ -1,7 +1,7 @@
 import {IFromClause} from "../from-clause";
 import {SelectClause} from "./select-clause";
 import * as SelectClauseUtil from "./util";
-import {AnyBuiltInExpr} from "../raw-expr";
+import {AnyBuiltInExpr} from "../built-in-expr";
 import {SelectDelegateColumns} from "./select-delegate";
 import {Identity} from "../type-util";
 

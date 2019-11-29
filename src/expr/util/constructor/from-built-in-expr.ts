@@ -1,14 +1,14 @@
 import * as tm from "type-mapping";
 import {Expr, ExprImpl, expr} from "../../expr-impl";
-import {RawExprUtil, RawExprNoUsedRef_Input, AnyBuiltInExpr} from "../../../raw-expr";
+import {BuiltInExprUtil, CustomExpr_NonCorrelated, AnyBuiltInExpr} from "../../../built-in-expr";
 import {IAnonymousColumn} from "../../../column";
 import {DataTypeUtil} from "../../../data-type";
 import {IUsedRef} from "../../../used-ref";
 
 export type FromBuiltInExpr<BuiltInExprT extends AnyBuiltInExpr> = (
     Expr<{
-        mapper : RawExprUtil.Mapper<BuiltInExprT>,
-        usedRef : RawExprUtil.UsedRef<BuiltInExprT>,
+        mapper : BuiltInExprUtil.Mapper<BuiltInExprT>,
+        usedRef : BuiltInExprUtil.UsedRef<BuiltInExprT>,
     }>
 );
 export function fromBuiltInExpr<
@@ -21,9 +21,9 @@ export function fromBuiltInExpr<
     if (builtInExpr instanceof ExprImpl) {
         return builtInExpr;
     }
-    const mapper = RawExprUtil.mapper(builtInExpr);
-    const usedRef = RawExprUtil.usedRef(builtInExpr);
-    const ast = RawExprUtil.buildAst(builtInExpr);
+    const mapper = BuiltInExprUtil.mapper(builtInExpr);
+    const usedRef = BuiltInExprUtil.usedRef(builtInExpr);
+    const ast = BuiltInExprUtil.buildAst(builtInExpr);
     return expr(
         {
             mapper,
@@ -37,14 +37,14 @@ export function fromRawExprNoUsedRefInput<
     TypeT
 > (
     mapper : tm.SafeMapper<TypeT>|IAnonymousColumn<TypeT>,
-    value : RawExprNoUsedRef_Input<TypeT>
+    value : CustomExpr_NonCorrelated<TypeT>
 ) : (
     Expr<{
         mapper : tm.SafeMapper<TypeT>,
         usedRef : IUsedRef<{}>,
     }>
 ) {
-    if (RawExprUtil.isAnyNonValueExpr(value)) {
+    if (BuiltInExprUtil.isAnyNonValueExpr(value)) {
         /**
          * Cannot map a `NonValueExpr`
          */

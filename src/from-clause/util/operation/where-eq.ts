@@ -7,7 +7,7 @@ import {WhereClause, WhereClauseUtil} from "../../../where-clause";
 import {ColumnRefUtil} from "../../../column-ref";
 import {ColumnIdentifierRefUtil} from "../../../column-identifier-ref";
 import {BuiltInValueExprUtil, NonNullBuiltInValueExpr} from "../../../built-in-value-expr";
-import {RawExprUtil} from "../../../raw-expr";
+import {BuiltInExprUtil} from "../../../built-in-expr";
 import * as ExprLib from "../../../expr-library";
 
 /**
@@ -186,10 +186,10 @@ export function whereEq<
                  * Cast to the type of `ValueT`
                  */
                 tm.or(
-                    RawExprUtil.mapper(value),
+                    BuiltInExprUtil.mapper(value),
                     tm.pipe(
                         column.mapper,
-                        RawExprUtil.mapper(value)
+                        BuiltInExprUtil.mapper(value)
                     )
                 ) as (
                     () => BuiltInValueExprUtil.CaseInsensitiveNarrow<

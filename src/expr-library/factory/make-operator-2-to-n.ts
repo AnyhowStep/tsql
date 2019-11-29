@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {BuiltInExpr, RawExprUtil, AnyBuiltInExpr} from "../../raw-expr";
+import {BuiltInExpr, BuiltInExprUtil, AnyBuiltInExpr} from "../../built-in-expr";
 import {ExprUtil} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
@@ -110,9 +110,9 @@ export function makeOperator2ToN<
             OperatorNodeUtil.operatorNode2ToN<OperatorTypeT>(
                 operatorType,
                 [
-                    RawExprUtil.buildAst(arg0),
-                    RawExprUtil.buildAst(arg1),
-                    ...args.map(RawExprUtil.buildAst),
+                    BuiltInExprUtil.buildAst(arg0),
+                    BuiltInExprUtil.buildAst(arg1),
+                    ...args.map(BuiltInExprUtil.buildAst),
                 ],
                 typeHint
             )

@@ -1,6 +1,6 @@
 import {FromClauseUtil} from "../../../from-clause";
 import {IAliasedTable} from "../../../aliased-table";
-import {BuiltInExpr, RawExprUtil} from "../../../raw-expr";
+import {BuiltInExpr, BuiltInExprUtil} from "../../../built-in-expr";
 import {AllowedUsedRef, allowedUsedRef} from "../query";
 import {UsedRefUtil} from "../../../used-ref";
 
@@ -11,7 +11,7 @@ export type AssertValidUsedRef<
 > = (
     UsedRefUtil.AssertAllowed<
         AllowedUsedRef<FromClauseT, AliasedTableT>,
-        RawExprUtil.UsedRef<RawOnClauseT>
+        BuiltInExprUtil.UsedRef<RawOnClauseT>
     >
 );
 
@@ -22,6 +22,6 @@ export function assertValidUsedRef (
 ) {
     UsedRefUtil.assertAllowed(
         allowedUsedRef(fromClause, aliasedTable),
-        RawExprUtil.usedRef(rawOnClause)
+        BuiltInExprUtil.usedRef(rawOnClause)
     );
 }

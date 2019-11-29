@@ -5,7 +5,7 @@
 import {makeEquation2ToN, Equation2ToN, Equation1ToNReturn} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {NonNullEquatableType, EquatableTypeUtil} from "../../equatable-type";
-import {BuiltInExpr, RawExprUtil} from "../../raw-expr";
+import {BuiltInExpr, BuiltInExprUtil} from "../../built-in-expr";
 import {ExprUtil} from "../../expr";
 
 const notInArrayImpl : Equation2ToN = makeEquation2ToN<OperatorType.NOT_IN>(
@@ -44,7 +44,7 @@ const notInArrayImpl : Equation2ToN = makeEquation2ToN<OperatorType.NOT_IN>(
  */
 export function notInArray<
     Arg0T extends BuiltInExpr<NonNullEquatableType>,
-    ArgsT extends readonly BuiltInExpr<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<Arg0T>>>[]
+    ArgsT extends readonly BuiltInExpr<EquatableTypeUtil.BaseNonNullEquatableType<BuiltInExprUtil.TypeOf<Arg0T>>>[]
 > (
     arg0 : Arg0T,
     args : ArgsT

@@ -4,7 +4,7 @@ import * as tsql from "../../../../../dist";
 
 tape(__filename, t => {
     t.deepEqual(
-        tsql.RawExprUtil.buildAst(
+        tsql.BuiltInExprUtil.buildAst(
             {
                 mapper : () => null,
                 tableAlias : "",
@@ -17,7 +17,7 @@ tape(__filename, t => {
     );
     t.deepEqual(
         {
-            ...tsql.RawExprUtil.buildAst(
+            ...tsql.BuiltInExprUtil.buildAst(
                 {
                     mapper : () => null,
                     tableAlias : "",

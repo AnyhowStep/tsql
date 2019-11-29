@@ -1,5 +1,5 @@
 //import * as tm from "type-mapping";
-import {AnyBuiltInExpr, RawExprUtil} from "../../raw-expr";
+import {AnyBuiltInExpr, BuiltInExprUtil} from "../../built-in-expr";
 import {CoalesceExpr, TypeOfCoalesce, coalesceMapper} from "./coalesce";
 import {ExprUtil} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
@@ -20,8 +20,8 @@ export function ifNull<
         OperatorNodeUtil.operatorNode2(
             OperatorType.IF_NULL,
             [
-                RawExprUtil.buildAst(arg0),
-                RawExprUtil.buildAst(arg1)
+                BuiltInExprUtil.buildAst(arg0),
+                BuiltInExprUtil.buildAst(arg1)
             ],
             undefined
         )

@@ -3,7 +3,7 @@ import {IsolableUpdateConnection} from "../../connection";
 import {AssignmentMapDelegate, AssignmentMap_Input} from "../../../update";
 import {AssertNonUnion, Identity} from "../../../type-util";
 import {updateOne} from "./update-one";
-import {RawExprUsingColumnMap_Input} from "../../../raw-expr";
+import {RawExprUsingColumnMap_Input} from "../../../built-in-expr";
 import * as ExprLib from "../../../expr-library";
 import {SuperKey_Input, SuperKeyUtil} from "../../../super-key";
 import {UpdateAndFetchOneResult} from "./update-and-fetch-one-by-candidate-key";
