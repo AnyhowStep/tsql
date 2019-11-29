@@ -51,7 +51,7 @@ export function fromRawExprNoUsedRefInput<
         return fromBuiltInExpr(value as any);
     } else {
         return fromBuiltInExpr(
-            DataTypeUtil.toRawExpr(
+            DataTypeUtil.toBuiltInExpr_NonCorrelated(
                 mapper,
                 value
             ) as any

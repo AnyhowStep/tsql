@@ -1,19 +1,19 @@
 import * as tm from "type-mapping";
 import {isDataType} from "../predicate";
 import {BuiltInValueExprUtil} from "../../../built-in-value-expr";
-import {RawExprNoUsedRef_Output} from "../../../raw-expr";
+import {BuiltInExpr_NonCorrelated} from "../../../raw-expr";
 import {IAnonymousColumn, ColumnUtil} from "../../../column";
 
 /**
- * If `mapper` is `IDataType`, it uses `mapper.toRawExpr()`.
+ * If `mapper` is `IDataType`, it uses `mapper.toBuiltInExpr_NonCorrelated()`.
  *
  * Else, it uses a fallback algorithm that works fine for `BuiltInValueExpr`.
  * If the `value` is not a `BuiltInValueExpr`, an error is thrown.
  */
-export function toRawExpr<TypeT> (
+export function toBuiltInExpr_NonCorrelated<TypeT> (
     mapper : tm.SafeMapper<TypeT>|IAnonymousColumn<TypeT>,
     value : TypeT
-) : RawExprNoUsedRef_Output<TypeT> {
+) : BuiltInExpr_NonCorrelated<TypeT> {
     let valueName = "literal-value";
 
     if (ColumnUtil.isColumn(mapper)) {
@@ -21,7 +21,7 @@ export function toRawExpr<TypeT> (
         mapper = mapper.mapper;
     }
     if (isDataType(mapper)) {
-        return mapper.toRawExpr(
+        return mapper.toBuiltInExpr_NonCorrelated(
             /**
              * Validate the incoming value again, just to be sure...
              */
@@ -29,7 +29,7 @@ export function toRawExpr<TypeT> (
         );
     } else {
         if (BuiltInValueExprUtil.isBuiltInValueExpr(value)) {
-            return mapper(valueName, value) as RawExprNoUsedRef_Output<TypeT>;
+            return mapper(valueName, value) as BuiltInExpr_NonCorrelated<TypeT>;
         } else {
             /**
              * @todo Custom `Error` type

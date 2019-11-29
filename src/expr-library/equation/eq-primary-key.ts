@@ -68,7 +68,7 @@ export function eqPrimaryKey<
          */
         const expr = eq(
             table.columns[columnAlias],
-            DataTypeUtil.toRawExpr(
+            DataTypeUtil.toBuiltInExpr_NonCorrelated(
                 table.columns[columnAlias],
                 primaryKey[columnAlias as keyof PrimaryKey_Output<TableT>]
             )

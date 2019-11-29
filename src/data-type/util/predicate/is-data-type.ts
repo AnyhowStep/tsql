@@ -11,14 +11,14 @@ export function isDataType (raw : unknown) : raw is IDataType<unknown> {
     if (!isObjectWithOwnEnumerableKeys<IDataType<unknown>>()(
         raw,
         [
-            "toRawExpr",
+            "toBuiltInExpr_NonCorrelated",
             "isNullSafeEqual",
         ]
     )) {
         return false;
     }
     return (
-        (typeof raw.toRawExpr == "function") &&
+        (typeof raw.toBuiltInExpr_NonCorrelated == "function") &&
         (typeof raw.isNullSafeEqual == "function")
     );
 }

@@ -90,7 +90,7 @@ export const eqCandidateKey : EqCandidateKey = (
         const arr = Object.keys(candidateKey).sort().map((columnAlias) => {
             const expr = nullSafeEq(
                 table.columns[columnAlias],
-                DataTypeUtil.toRawExpr(
+                DataTypeUtil.toBuiltInExpr_NonCorrelated(
                     table.columns[columnAlias],
                     candidateKey[columnAlias as keyof CandidateKey_Output<TableT>]
                 )

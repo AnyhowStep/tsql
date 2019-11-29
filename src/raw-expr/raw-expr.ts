@@ -145,7 +145,8 @@ export type NonValueExpr_NonCorrelated<TypeT> =
         usedRef : IUsedRef<{}>,
     }>
 ;
-export type AnyRawExprNoUsedRef =
+
+export type AnyBuiltInExpr_NonCorrelated =
     | BuiltInValueExpr
     | NonValueExpr_NonCorrelated<any>
 ;
@@ -153,7 +154,7 @@ export type AnyRawExprNoUsedRef =
 /**
  * Custom data types **not** allowed
  */
-export type RawExprNoUsedRef_Output<TypeT> =
+export type BuiltInExpr_NonCorrelated<TypeT> =
     | (
         TypeT extends BuiltInValueExpr ?
         TypeT :

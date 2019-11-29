@@ -5,7 +5,7 @@ import * as tsql from "../../../../../../../dist";
 tape(__filename, async (t) => {
 
     try {
-        tsql.DataTypeUtil.toRawExpr(
+        tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
             tsql.dtVarChar(2, 5),
             "" as any
         );
@@ -26,7 +26,7 @@ tape(__filename, async (t) => {
         );
     }
     try {
-        tsql.DataTypeUtil.toRawExpr(
+        tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
             tsql.dtVarChar(2, 5),
             "a" as any
         );
@@ -48,7 +48,7 @@ tape(__filename, async (t) => {
     }
     t.deepEqual(
         (
-            tsql.DataTypeUtil.toRawExpr(
+            tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
                 tsql.dtVarChar(2, 5),
                 "ab" as any
             )
@@ -57,7 +57,7 @@ tape(__filename, async (t) => {
     );
     t.deepEqual(
         (
-            tsql.DataTypeUtil.toRawExpr(
+            tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
                 tsql.dtVarChar(2, 5),
                 "abc" as any
             )
@@ -66,7 +66,7 @@ tape(__filename, async (t) => {
     );
     t.deepEqual(
         (
-            tsql.DataTypeUtil.toRawExpr(
+            tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
                 tsql.dtVarChar(2, 5),
                 "abcd" as any
             )
@@ -75,7 +75,7 @@ tape(__filename, async (t) => {
     );
     t.deepEqual(
         (
-            tsql.DataTypeUtil.toRawExpr(
+            tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
                 tsql.dtVarChar(2, 5),
                 "abcde" as any
             )
@@ -84,7 +84,7 @@ tape(__filename, async (t) => {
     );
 
     try {
-        tsql.DataTypeUtil.toRawExpr(
+        tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
             tsql.dtVarChar(2, 5),
             "abcdef" as any
         );

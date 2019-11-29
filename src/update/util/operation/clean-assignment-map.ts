@@ -46,7 +46,7 @@ export function cleanAssignmentMap<
                 value
             );
         } else {
-            result[columnAlias as keyof typeof raw] = DataTypeUtil.toRawExpr(
+            result[columnAlias as keyof typeof raw] = DataTypeUtil.toBuiltInExpr_NonCorrelated(
                 table.columns[columnAlias],
                 value
             );
