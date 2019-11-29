@@ -86,7 +86,7 @@ export const eqSuperKey : EqSuperKey = (
             .map((columnAlias) => {
                 const expr = nullSafeEq(
                     table.columns[columnAlias],
-                    DataTypeUtil.toRawExpr(
+                    DataTypeUtil.toBuiltInExpr_NonCorrelated(
                         table.columns[columnAlias],
                         superKey[columnAlias as keyof SuperKey_Output<TableT>]
                     )

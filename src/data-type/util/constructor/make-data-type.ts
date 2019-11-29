@@ -1,11 +1,11 @@
 import * as tm from "type-mapping";
 import {IDataType} from "../../data-type";
-import {RawExprNoUsedRef_Output} from "../../../raw-expr";
+import {BuiltInExpr_NonCorrelated} from "../../../raw-expr";
 import {DataType} from "../../data-type-impl";
 
 export function makeDataType<TypeT>(
     mapper : tm.SafeMapper<TypeT>,
-    toRawExpr : (value : TypeT) => RawExprNoUsedRef_Output<TypeT>,
+    toBuiltInExpr_NonCorrelated : (value : TypeT) => BuiltInExpr_NonCorrelated<TypeT>,
     isNullSafeEqual : (a : TypeT, b : TypeT) => boolean,
     extraMapper? : tm.Mapper<TypeT, TypeT>
 ) : DataType<TypeT> {
@@ -17,17 +17,17 @@ export function makeDataType<TypeT>(
     function dataType (name : string, mixed : unknown) : TypeT {
         return myMapper(name, mixed);
     }
-    dataType.toRawExpr = toRawExpr;
+    dataType.toBuiltInExpr_NonCorrelated = toBuiltInExpr_NonCorrelated;
     dataType.isNullSafeEqual = isNullSafeEqual;
     dataType.orNull = () : IDataType<TypeT|null> => {
         return makeDataType(
             tm.orNull(myMapper),
-            (value : TypeT|null) : RawExprNoUsedRef_Output<TypeT|null> => {
+            (value : TypeT|null) : BuiltInExpr_NonCorrelated<TypeT|null> => {
                 if (value === null) {
                     return null;
                 } else {
-                    const rawExpr : RawExprNoUsedRef_Output<TypeT> = toRawExpr(value);
-                    return rawExpr as RawExprNoUsedRef_Output<TypeT|null>;
+                    const rawExpr : BuiltInExpr_NonCorrelated<TypeT> = toBuiltInExpr_NonCorrelated(value);
+                    return rawExpr as BuiltInExpr_NonCorrelated<TypeT|null>;
                 }
             },
             (a : TypeT|null, b : TypeT|null) : boolean => {

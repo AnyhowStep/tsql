@@ -1,5 +1,5 @@
 import {ITable, TableUtil} from "../table";
-import {RawExprNoUsedRef_Output, RawExprNoUsedRef_Input} from "../raw-expr";
+import {BuiltInExpr_NonCorrelated, RawExprNoUsedRef_Input} from "../raw-expr";
 import {Key} from "../key";
 import {Identity} from "../type-util";
 
@@ -92,14 +92,14 @@ export type InsertRow_Output<TableT extends ITable> =
     Identity<
         & {
             readonly [columnAlias in TableUtil.RequiredColumnAlias<TableT>] : (
-                RawExprNoUsedRef_Output<
+                BuiltInExpr_NonCorrelated<
                     ReturnType<TableT["columns"][columnAlias]["mapper"]>
                 >
             )
         }
         & {
             readonly [columnAlias in TableUtil.OptionalColumnAlias<TableT>]? : (
-                RawExprNoUsedRef_Output<
+                BuiltInExpr_NonCorrelated<
                     ReturnType<TableT["columns"][columnAlias]["mapper"]>
                 >
             )

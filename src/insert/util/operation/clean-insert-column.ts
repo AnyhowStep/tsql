@@ -98,7 +98,7 @@ export function cleanInsertColumn<TableT extends ITable> (
         /**
          * Maybe a custom data type?
          */
-        return DataTypeUtil.toRawExpr(
+        return DataTypeUtil.toBuiltInExpr_NonCorrelated(
             table.columns[columnAlias],
             value
         );

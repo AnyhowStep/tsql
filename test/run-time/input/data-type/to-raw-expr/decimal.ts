@@ -5,7 +5,7 @@ import * as tsql from "../../../../../dist";
 tape(__filename, async (t) => {
     t.deepEqual(
         (
-            tsql.DataTypeUtil.toRawExpr(
+            tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
                 tsql.dtDecimal(10, 5),
                 "123.456" as any
             ) as tsql.IExpr
@@ -21,7 +21,7 @@ tape(__filename, async (t) => {
 
     t.deepEqual(
         (
-            tsql.DataTypeUtil.toRawExpr(
+            tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
                 tsql.dtDecimal(10, 5),
                 "123.456e-1" as any
             ) as tsql.IExpr
@@ -37,7 +37,7 @@ tape(__filename, async (t) => {
 
     t.deepEqual(
         (
-            tsql.DataTypeUtil.toRawExpr(
+            tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
                 tsql.dtDecimal(10, 5),
                 "123.456e-2" as any
             ) as tsql.IExpr
@@ -53,7 +53,7 @@ tape(__filename, async (t) => {
 
     t.deepEqual(
         (
-            tsql.DataTypeUtil.toRawExpr(
+            tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
                 tsql.dtDecimal(10, 5),
                 "123.456e+2" as any
             ) as tsql.IExpr
@@ -69,7 +69,7 @@ tape(__filename, async (t) => {
 
     t.deepEqual(
         (
-            tsql.DataTypeUtil.toRawExpr(
+            tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
                 tsql.dtDecimal(10, 5),
                 "123.4567891e+2" as any
             ) as tsql.IExpr
@@ -84,7 +84,7 @@ tape(__filename, async (t) => {
     );
 
     try {
-        tsql.DataTypeUtil.toRawExpr(
+        tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
             tsql.dtDecimal(10, 5),
             "123.456e-3" as any
         );
@@ -102,7 +102,7 @@ tape(__filename, async (t) => {
     }
 
     try {
-        tsql.DataTypeUtil.toRawExpr(
+        tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
             tsql.dtDecimal(10, 5),
             "123450.67891" as any
         );

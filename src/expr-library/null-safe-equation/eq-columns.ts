@@ -83,7 +83,7 @@ export const eqColumns : EqColumns = (
             .map((columnAlias) => {
                 const expr = nullSafeEq(
                     table.columns[columnAlias],
-                    DataTypeUtil.toRawExpr(
+                    DataTypeUtil.toBuiltInExpr_NonCorrelated(
                         table.columns[columnAlias],
                         columns[columnAlias as keyof PartialRow_Output<TableT>]
                     )

@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {RawExprNoUsedRef_Output} from "../raw-expr";
+import {BuiltInExpr_NonCorrelated} from "../raw-expr";
 
 /**
  * When just using `TypeT` with a `BuiltInValueExpr`,
@@ -29,9 +29,9 @@ export interface IDataType<TypeT> extends tm.SafeMapper<TypeT> {
      *   it fetches the row, and may use those values
      *   when inserting rows to derived tables.
      *
-     * @param value - The value to convert to a `RawExpr`
+     * @param value - The value to convert to a `BuiltInExpr_NonCorrelated`
      */
-    toRawExpr (value : TypeT) : RawExprNoUsedRef_Output<TypeT>;
+    toBuiltInExpr_NonCorrelated (value : TypeT) : BuiltInExpr_NonCorrelated<TypeT>;
 
     /**
      * At the moment, this is specifically used by `Log.track()`

@@ -5,7 +5,7 @@ import * as tsql from "../../../../../../../dist";
 tape(__filename, async (t) => {
     t.deepEqual(
         (
-            tsql.DataTypeUtil.toRawExpr(
+            tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
                 tsql.dtVarChar(tm.subStringBlacklist(["*"])),
                 "" as any
             )
@@ -14,7 +14,7 @@ tape(__filename, async (t) => {
     );
     t.deepEqual(
         (
-            tsql.DataTypeUtil.toRawExpr(
+            tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
                 tsql.dtVarChar(tm.subStringBlacklist(["*"])),
                 "a" as any
             )
@@ -23,7 +23,7 @@ tape(__filename, async (t) => {
     );
     t.deepEqual(
         (
-            tsql.DataTypeUtil.toRawExpr(
+            tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
                 tsql.dtVarChar(tm.subStringBlacklist(["*"])),
                 "ab" as any
             )
@@ -32,7 +32,7 @@ tape(__filename, async (t) => {
     );
     t.deepEqual(
         (
-            tsql.DataTypeUtil.toRawExpr(
+            tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
                 tsql.dtVarChar(tm.subStringBlacklist(["*"])),
                 "abc" as any
             )
@@ -41,7 +41,7 @@ tape(__filename, async (t) => {
     );
     t.deepEqual(
         (
-            tsql.DataTypeUtil.toRawExpr(
+            tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
                 tsql.dtVarChar(),
                 "z".repeat(65535) as any
             )
@@ -50,7 +50,7 @@ tape(__filename, async (t) => {
     );
 
     try {
-        tsql.DataTypeUtil.toRawExpr(
+        tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
             tsql.dtVarChar(tm.subStringBlacklist(["*"])),
             "z".repeat(65535+1) as any
         );
@@ -72,7 +72,7 @@ tape(__filename, async (t) => {
     }
 
     try {
-        tsql.DataTypeUtil.toRawExpr(
+        tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
             tsql.dtVarChar(tm.subStringBlacklist(["*"])),
             "*" as any
         );
@@ -86,7 +86,7 @@ tape(__filename, async (t) => {
     }
 
     try {
-        tsql.DataTypeUtil.toRawExpr(
+        tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
             tsql.dtVarChar(tm.subStringBlacklist(["*"])),
             "a**" as any
         );

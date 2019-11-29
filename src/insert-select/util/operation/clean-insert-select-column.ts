@@ -118,7 +118,7 @@ export function cleanInsertSelectColumn<
         /**
          * Maybe a custom data type?
          */
-        return DataTypeUtil.toRawExpr(
+        return DataTypeUtil.toBuiltInExpr_NonCorrelated(
             table.columns[columnAlias],
             value
         );
