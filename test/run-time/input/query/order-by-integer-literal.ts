@@ -5,7 +5,7 @@ import {compareSqlPretty} from "../../../compare-sql-pretty";
 tape(__filename, t => {
     const query = tsql.select(() => [tsql.double.pi().as("pi")])
         .orderBy(() => [
-            tsql.ExprUtil.fromRawExpr(BigInt(1))
+            tsql.ExprUtil.fromBuiltInExpr(BigInt(1))
         ]);
 
     compareSqlPretty(__filename, t, query);

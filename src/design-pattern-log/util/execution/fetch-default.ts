@@ -93,7 +93,7 @@ export async function fetchDefault<
         const trackedColumnAliases = Object.keys(log.trackedDefaults);
         const selectClause = trackedColumnAliases.map((trackedColumnAlias) => {
                 const rawExprNoUsedRef = log.trackedDefaults[trackedColumnAlias];
-                return ExprUtil.fromRawExpr(
+                return ExprUtil.fromBuiltInExpr(
                     DataTypeUtil.toRawExpr(
                         log.logTable.columns[trackedColumnAlias],
                         rawExprNoUsedRef

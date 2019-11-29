@@ -38,7 +38,7 @@ tape(__filename, async (t) => {
             },
             () => {
                 return {
-                    testId : ExprUtil.fromRawExpr(BigInt(123456)),
+                    testId : ExprUtil.fromBuiltInExpr(BigInt(123456)),
                 } as any;
             }
         );

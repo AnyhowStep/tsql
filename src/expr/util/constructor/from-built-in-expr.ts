@@ -11,19 +11,19 @@ export type FromRawExpr<BuiltInExprT extends AnyBuiltInExpr> = (
         usedRef : RawExprUtil.UsedRef<BuiltInExprT>,
     }>
 );
-export function fromRawExpr<
+export function fromBuiltInExpr<
     BuiltInExprT extends AnyBuiltInExpr
 > (
-    rawExpr : BuiltInExprT
+    builtInExpr : BuiltInExprT
 ) : (
     FromRawExpr<BuiltInExprT>
 ) {
-    if (rawExpr instanceof ExprImpl) {
-        return rawExpr;
+    if (builtInExpr instanceof ExprImpl) {
+        return builtInExpr;
     }
-    const mapper = RawExprUtil.mapper(rawExpr);
-    const usedRef = RawExprUtil.usedRef(rawExpr);
-    const ast = RawExprUtil.buildAst(rawExpr);
+    const mapper = RawExprUtil.mapper(builtInExpr);
+    const usedRef = RawExprUtil.usedRef(builtInExpr);
+    const ast = RawExprUtil.buildAst(builtInExpr);
     return expr(
         {
             mapper,
@@ -48,9 +48,9 @@ export function fromRawExprNoUsedRefInput<
         /**
          * Cannot map a `NonValueExpr`
          */
-        return fromRawExpr(value as any);
+        return fromBuiltInExpr(value as any);
     } else {
-        return fromRawExpr(
+        return fromBuiltInExpr(
             DataTypeUtil.toRawExpr(
                 mapper,
                 value

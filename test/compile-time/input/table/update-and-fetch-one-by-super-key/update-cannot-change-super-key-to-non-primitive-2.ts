@@ -20,7 +20,7 @@ export const p = dst.updateAndFetchOneBySuperKey(
     () => {
         return {
             testId : BigInt(123456),
-            testVal : tsql.ExprUtil.fromRawExpr(BigInt(654321)),
+            testVal : tsql.ExprUtil.fromBuiltInExpr(BigInt(654321)),
         };
     }
 );

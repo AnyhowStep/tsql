@@ -13,7 +13,7 @@ export const p = tsql.ExecutionUtil.insertIgnoreOne(
     test,
     null as any,
     {
-        testId : tsql.ExprUtil.fromRawExpr(BigInt(5)),
+        testId : tsql.ExprUtil.fromBuiltInExpr(BigInt(5)),
         testVal : BigInt(400),
     }
 );

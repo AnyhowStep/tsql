@@ -27,5 +27,5 @@ export function on<
         rawOnClause
     );
 
-    return ExprUtil.fromRawExpr(rawOnClause);
+    return ExprUtil.fromBuiltInExpr(rawOnClause);
 }

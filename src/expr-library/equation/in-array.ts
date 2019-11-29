@@ -53,7 +53,7 @@ export function inArray<
          * Calling `inArray()` with an empty array will always
          * return `false` because a value is never in an array of zero elements.
          */
-        return ExprUtil.fromRawExpr(false) as Equation1ToNReturn<Arg0T, ArgsT>;
+        return ExprUtil.fromBuiltInExpr(false) as Equation1ToNReturn<Arg0T, ArgsT>;
     } else {
         return inArrayImpl<Arg0T, ArgsT[number], ArgsT[number][]>(
             arg0, arg1, ...rest

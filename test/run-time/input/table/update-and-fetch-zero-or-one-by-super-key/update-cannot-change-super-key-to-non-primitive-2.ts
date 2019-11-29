@@ -40,7 +40,7 @@ tape(__filename, async (t) => {
             () => {
                 return {
                     testId : BigInt(123456),
-                    testVal : tsql.ExprUtil.fromRawExpr(BigInt(654321)),
+                    testVal : tsql.ExprUtil.fromBuiltInExpr(BigInt(654321)),
                 } as any;
             }
         ).then(() => {

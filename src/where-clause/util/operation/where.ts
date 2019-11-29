@@ -42,7 +42,7 @@ export function where<
 
     const result : WhereClause = (
         whereClause == undefined ?
-        ExprUtil.fromRawExpr(operand) :
+        ExprUtil.fromBuiltInExpr(operand) :
         ExprLib.and(whereClause, operand)
     );
     return result;

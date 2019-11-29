@@ -35,7 +35,7 @@ export function valueFromBuiltInExpr<
     } else {
         return [
             ExprUtil.as(
-                ExprUtil.fromRawExpr(builtInExpr),
+                ExprUtil.fromBuiltInExpr(builtInExpr),
                 SELECT_VALUE_ALIAS
             )
         ] as ValueFromRawExpr<BuiltInExprT>;

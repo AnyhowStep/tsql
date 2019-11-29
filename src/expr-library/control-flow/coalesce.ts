@@ -101,12 +101,12 @@ export function coalesce<ArgsT extends readonly AnyBuiltInExpr[]> (
         /**
          * `COALESCE()` with zero args is just the `NULL` constant.
          */
-        return ExprUtil.fromRawExpr(null) as IExpr as CoalesceExpr<ArgsT>;
+        return ExprUtil.fromBuiltInExpr(null) as IExpr as CoalesceExpr<ArgsT>;
     } else if (arg1 === undefined) {
         /**
          * `COALESCE(x)` is just `x`
          */
-        return ExprUtil.fromRawExpr(arg0) as IExpr as CoalesceExpr<ArgsT>;
+        return ExprUtil.fromBuiltInExpr(arg0) as IExpr as CoalesceExpr<ArgsT>;
     } else {
         return ExprUtil.intersect<TypeOfCoalesce<ArgsT>, ArgsT[number]>(
             coalesceMapper(...args),
