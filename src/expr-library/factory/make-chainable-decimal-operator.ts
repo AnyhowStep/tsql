@@ -19,15 +19,15 @@ function tryGetFlattenableElements (
      * In this specific instance, we could probably have `BuiltInExpr<Decimal>`.
      * Can't accept arbitrary `Decimal` types because they may have invalid precision/scale.
      */
-    rawExpr : AnyBuiltInExpr,
+    builtInExpr : AnyBuiltInExpr,
     operatorType : OperatorType,
     _identityElement : Decimal,
     identityAst : LiteralValueNode,
     identityParseResult : tm.FixedPointUtil.ParseResult
 ) : AstArray|undefined {
-    if (ExprUtil.isExpr(rawExpr)) {
+    if (ExprUtil.isExpr(builtInExpr)) {
         return AstUtil.tryExtractAst(
-            rawExpr.ast,
+            builtInExpr.ast,
             ast => {
                 if (LiteralValueNodeUtil.isLiteralValueNode(ast) && BuiltInValueExprUtil.isEqual(ast.literalValue, identityAst.literalValue)) {
                     /**
@@ -46,11 +46,11 @@ function tryGetFlattenableElements (
     /**
      * We should not see any `Decimal` built-ins because JS does not have them.
      */
-    const rawExprParseResult = tm.FixedPointUtil.tryParse(String(rawExpr));
+    const builtInExprParseResult = tm.FixedPointUtil.tryParse(String(builtInExpr));
     if (
-        rawExprParseResult != undefined &&
+        builtInExprParseResult != undefined &&
         tm.FixedPointUtil.isEqual(
-            rawExprParseResult,
+            builtInExprParseResult,
             identityParseResult,
             tm.FixedPointUtil.ZeroEqualityAlgorithm.NEGATIVE_AND_POSITIVE_ZERO_ARE_EQUAL
         )
@@ -118,11 +118,11 @@ export function makeChainableDecimalOperator<
         }
         let operands : [Ast, ...Ast[]]|undefined = undefined;
 
-        for (const rawExpr of arr) {
-            const flattenableElements = tryGetFlattenableElements(rawExpr, operatorType, identityElement, identityAst, identityParseResult);
+        for (const builtInExpr of arr) {
+            const flattenableElements = tryGetFlattenableElements(builtInExpr, operatorType, identityElement, identityAst, identityParseResult);
             if (flattenableElements != undefined) {
                 /**
-                 * Looks like we should flatten this `rawExpr`
+                 * Looks like we should flatten this `builtInExpr`
                  */
                 if (flattenableElements.length == 0) {
                     continue;
@@ -135,12 +135,12 @@ export function makeChainableDecimalOperator<
                 }
             } else {
                 /**
-                 * Can't flatten this `rawExpr`
+                 * Can't flatten this `builtInExpr`
                  */
                 if (operands == undefined) {
-                    operands = [RawExprUtil.buildAst(rawExpr)];
+                    operands = [RawExprUtil.buildAst(builtInExpr)];
                 } else {
-                    operands.push(RawExprUtil.buildAst(rawExpr));
+                    operands.push(RawExprUtil.buildAst(builtInExpr));
                 }
             }
         }

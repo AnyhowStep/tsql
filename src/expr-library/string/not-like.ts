@@ -34,14 +34,14 @@ export function notLike<
     ExprT extends RawExpr<string>,
     PatternT extends RawExpr<string>
 > (
-    rawExpr : ExprT,
+    builtInExpr : ExprT,
     pattern : PatternT
 ) : (
     NotLikeExpr<
         RawExprUtil.IntersectUsedRef<ExprT|PatternT>
     >
 ) {
-    const result = notLikeImpl<ExprT, PatternT>(rawExpr, pattern) as unknown as (
+    const result = notLikeImpl<ExprT, PatternT>(builtInExpr, pattern) as unknown as (
         NotLikeExpr<
             RawExprUtil.IntersectUsedRef<ExprT|PatternT>
         >
@@ -51,7 +51,7 @@ export function notLike<
          * SQLite requires the `escapeChar` be exactly of length `1`
          */
         assertValidEscapeChar(escapeChar);
-        const escapedExpr = notLikeEscapeImpl<ExprT, PatternT, string>(rawExpr, pattern, escapeChar);
+        const escapedExpr = notLikeEscapeImpl<ExprT, PatternT, string>(builtInExpr, pattern, escapeChar);
         /**
          * @todo Investigate assignability
          */

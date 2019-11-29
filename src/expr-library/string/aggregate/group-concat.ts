@@ -15,12 +15,12 @@ export const groupConcatDistinct : Operator2<string, string, string|null> = <
     BuiltInExprT extends RawExpr<string>,
     PatternT extends RawExpr<string>,
 >(
-    rawExpr : BuiltInExprT,
+    builtInExpr : BuiltInExprT,
     pattern : PatternT
 ) : (
     ExprUtil.Intersect<string|null, BuiltInExprT|PatternT>
 ) => {
-    const result = groupConcatImpl<true, BuiltInExprT, PatternT>(true, rawExpr, pattern);
+    const result = groupConcatImpl<true, BuiltInExprT, PatternT>(true, builtInExpr, pattern);
     return result as ExprUtil.Intersect<string|null, BuiltInExprT|PatternT>;
 };
 
@@ -28,11 +28,11 @@ export const groupConcatAll : Operator2<string, string, string|null> = <
     BuiltInExprT extends RawExpr<string>,
     PatternT extends RawExpr<string>,
 >(
-    rawExpr : BuiltInExprT,
+    builtInExpr : BuiltInExprT,
     pattern : PatternT
 ) : (
     ExprUtil.Intersect<string|null, BuiltInExprT|PatternT>
 ) => {
-    const result = groupConcatImpl<false, BuiltInExprT, PatternT>(false, rawExpr, pattern);
+    const result = groupConcatImpl<false, BuiltInExprT, PatternT>(false, builtInExpr, pattern);
     return result as ExprUtil.Intersect<string|null, BuiltInExprT|PatternT>;
 };

@@ -13,14 +13,14 @@ import {BuiltInValueExprUtil} from "../../built-in-value-expr";
 import {TypeHint} from "../../type-hint";
 
 function tryGetFlattenableElements (
-    rawExpr : AnyBuiltInExpr,
+    builtInExpr : AnyBuiltInExpr,
     operatorType : OperatorType,
     identityElement : null|boolean|number|bigint|string|Uint8Array,
     identityAst : LiteralValueNode
 ) : AstArray|undefined {
-    if (ExprUtil.isExpr(rawExpr)) {
+    if (ExprUtil.isExpr(builtInExpr)) {
         return AstUtil.tryExtractAst(
-            rawExpr.ast,
+            builtInExpr.ast,
             ast => {
                 if (LiteralValueNodeUtil.isLiteralValueNode(ast) && BuiltInValueExprUtil.isEqual(ast.literalValue, identityAst.literalValue)) {
                     /**
@@ -37,8 +37,8 @@ function tryGetFlattenableElements (
     }
 
     if (
-        BuiltInValueExprUtil.isBuiltInValueExpr(rawExpr) &&
-        BuiltInValueExprUtil.isEqual(rawExpr, identityElement)
+        BuiltInValueExprUtil.isBuiltInValueExpr(builtInExpr) &&
+        BuiltInValueExprUtil.isEqual(builtInExpr, identityElement)
     ) {
         /**
          * Eliminate all identity elements
@@ -115,11 +115,11 @@ export function makeChainableOperator<
         }
         let operands : [Ast, ...Ast[]]|undefined = undefined;
 
-        for (const rawExpr of arr) {
-            const flattenableElements = tryGetFlattenableElements(rawExpr, operatorType, identityElement, identityAst);
+        for (const builtInExpr of arr) {
+            const flattenableElements = tryGetFlattenableElements(builtInExpr, operatorType, identityElement, identityAst);
             if (flattenableElements != undefined) {
                 /**
-                 * Looks like we should flatten this `rawExpr`
+                 * Looks like we should flatten this `builtInExpr`
                  */
                 if (flattenableElements.length == 0) {
                     continue;
@@ -132,12 +132,12 @@ export function makeChainableOperator<
                 }
             } else {
                 /**
-                 * Can't flatten this `rawExpr`
+                 * Can't flatten this `builtInExpr`
                  */
                 if (operands == undefined) {
-                    operands = [RawExprUtil.buildAst(rawExpr)];
+                    operands = [RawExprUtil.buildAst(builtInExpr)];
                 } else {
-                    operands.push(RawExprUtil.buildAst(rawExpr));
+                    operands.push(RawExprUtil.buildAst(builtInExpr));
                 }
             }
         }
