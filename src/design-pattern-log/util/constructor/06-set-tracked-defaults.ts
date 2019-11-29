@@ -4,6 +4,7 @@ import {TableUtil} from "../../../table";
 import {RawExprNoUsedRef_Input, RawExprUtil} from "../../../raw-expr";
 import {UsedRefUtil} from "../../../used-ref";
 import {Identity} from "../../../type-util";
+import {ExprUtil} from "../../../expr";
 
 export type LogMustSetTrackedDefaultsData =
     & Pick<
@@ -84,7 +85,13 @@ export function setTrackedDefaults<
             continue;
         }
 
-        const usedRef = RawExprUtil.usedRef(rawValue);
+
+        const usedRef = RawExprUtil.usedRef(
+            ExprUtil.fromRawExprNoUsedRefInput(
+                log.logTable.columns[columnAlias],
+                rawValue
+            )
+        );
         UsedRefUtil.assertAllowed(allowedRef, usedRef);
 
         const value = RawExprUtil.mapRawExprInput(

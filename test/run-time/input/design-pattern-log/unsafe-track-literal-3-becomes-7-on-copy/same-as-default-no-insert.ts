@@ -98,7 +98,7 @@ tape(__filename, async (t) => {
                         row : {
                             appId : BigInt(1),
                             businessId : BigInt(2),
-                            enabled : BigInt(3),
+                            enabled : BigInt(7),
                         },
                     }
                 );
@@ -120,7 +120,7 @@ tape(__filename, async (t) => {
                     row : {
                         appId : BigInt(1),
                         businessId : BigInt(2),
-                        enabled : BigInt(3),
+                        enabled : BigInt(7),
                     },
                 },
             }
@@ -138,7 +138,7 @@ tape(__filename, async (t) => {
                         row : {
                             appId : BigInt(1),
                             businessId : BigInt(2),
-                            enabled : BigInt(3),
+                            enabled : BigInt(7),
                         },
                     }
                 );

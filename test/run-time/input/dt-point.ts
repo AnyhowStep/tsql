@@ -6,7 +6,18 @@ export const dtPoint = tsql.DataTypeUtil.makeDataType(
         x : tm.finiteNumber(),
         y : tm.finiteNumber(),
     }),
-    value => JSON.stringify(value) as any,
+    value => tsql.expr(
+        {
+            mapper : tm.object({
+                x : tm.finiteNumber(),
+                y : tm.finiteNumber(),
+            }),
+            usedRef : tsql.UsedRefUtil.fromColumnRef({}),
+        },
+        tsql.LiteralValueNodeUtil.stringLiteralNode(
+            JSON.stringify(value)
+        )
+    ),
     (a, b) => {
         return (
             a.x === b.x &&
