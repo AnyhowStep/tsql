@@ -52,30 +52,30 @@ export type UsedRef<BuiltInExprT extends AnyBuiltInExpr|IQueryBase> = (
     never*/
 );
 export function usedRef<BuiltInExprT extends AnyBuiltInExpr|IQueryBase> (
-    rawExpr : BuiltInExprT
+    builtInExpr : BuiltInExprT
 ) : (
     UsedRef<BuiltInExprT>
 ) {
     //Check built-in cases first
-    if (BuiltInValueExprUtil.isBuiltInValueExpr(rawExpr)) {
+    if (BuiltInValueExprUtil.isBuiltInValueExpr(builtInExpr)) {
         return UsedRefUtil.fromColumnRef({}) as UsedRef<BuiltInExprT>;
     }
 
-    if (ExprUtil.isExpr(rawExpr)) {
-        return rawExpr.usedRef as UsedRef<BuiltInExprT>;
+    if (ExprUtil.isExpr(builtInExpr)) {
+        return builtInExpr.usedRef as UsedRef<BuiltInExprT>;
     }
 
-    if (ColumnUtil.isColumn(rawExpr)) {
-        return UsedRefUtil.fromColumn(rawExpr) as UsedRef<BuiltInExprT>;
+    if (ColumnUtil.isColumn(builtInExpr)) {
+        return UsedRefUtil.fromColumn(builtInExpr) as UsedRef<BuiltInExprT>;
     }
 
-    if (QueryBaseUtil.isQuery(rawExpr)) {
-        return UsedRefUtil.fromFromClause(rawExpr.fromClause) as UsedRef<BuiltInExprT>;
+    if (QueryBaseUtil.isQuery(builtInExpr)) {
+        return UsedRefUtil.fromFromClause(builtInExpr.fromClause) as UsedRef<BuiltInExprT>;
     }
 
-    if (ExprSelectItemUtil.isExprSelectItem(rawExpr)) {
-        return rawExpr.usedRef as UsedRef<BuiltInExprT>;
+    if (ExprSelectItemUtil.isExprSelectItem(builtInExpr)) {
+        return builtInExpr.usedRef as UsedRef<BuiltInExprT>;
     }
 
-    throw new Error(`Unknown rawExpr ${tm.TypeUtil.toTypeStr(rawExpr)}`);
+    throw new Error(`Unknown builtInExpr ${tm.TypeUtil.toTypeStr(builtInExpr)}`);
 }
