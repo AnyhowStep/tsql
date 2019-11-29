@@ -1,10 +1,10 @@
-import {RawExprUtil, RawExpr} from "../../raw-expr";
+import {RawExprUtil, BuiltInExpr} from "../../raw-expr";
 import {UninitializedCaseValueBuilder, caseValue} from "./case-value";
 import {NonNullEquatableType, EquatableTypeUtil} from "../../equatable-type";
 import {UninitializedCaseConditionBuilder, caseCondition} from "./case-condition";
 
 function caseConstructor<
-    ValueExprT extends RawExpr<NonNullEquatableType>
+    ValueExprT extends BuiltInExpr<NonNullEquatableType>
 > (
     valueExpr : ValueExprT
 ) : (

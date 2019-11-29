@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {RawExpr, RawExprUtil} from "../../raw-expr";
+import {BuiltInExpr, RawExprUtil} from "../../raw-expr";
 import {ExprUtil} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
@@ -10,7 +10,7 @@ export type Operator1<
     OutputTypeT
 > =
     <
-        ArgT extends RawExpr<InputTypeT>
+        ArgT extends BuiltInExpr<InputTypeT>
     > (
         arg : ArgT
     ) => (
@@ -29,7 +29,7 @@ export function makeOperator1<
     Operator1<InputTypeT, OutputTypeT>
 ) {
     const result : Operator1<InputTypeT, OutputTypeT> = <
-        ArgT extends RawExpr<InputTypeT>
+        ArgT extends BuiltInExpr<InputTypeT>
     > (
         arg : ArgT
     ) : (

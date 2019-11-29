@@ -1,4 +1,4 @@
-import {RawExpr, RawExprUtil} from "../../../raw-expr";
+import {BuiltInExpr, RawExprUtil} from "../../../raw-expr";
 import {IUsedRef, UsedRefUtil} from "../../../used-ref";
 import {Ast} from "../../../ast";
 import {CaseValueBuilder, UninitializedCaseValueBuilder} from "./case-value";
@@ -18,8 +18,8 @@ export class UninitializedCaseValueBuilderImpl<
     }
 
     when<
-        CompareValueT extends RawExpr<ValueT>,
-        ThenT extends RawExpr<EquatableType>
+        CompareValueT extends BuiltInExpr<ValueT>,
+        ThenT extends BuiltInExpr<EquatableType>
     > (
         compareValue : CompareValueT,
         then : ThenT

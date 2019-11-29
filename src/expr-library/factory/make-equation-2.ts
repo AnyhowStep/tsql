@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {ExprUtil} from "../../expr";
-import {RawExpr} from "../../raw-expr";
+import {BuiltInExpr} from "../../raw-expr";
 import {NonNullEquatableType, EquatableTypeUtil} from "../../equatable-type";
 import {RawExprUtil} from "../../raw-expr";
 import {OperatorNodeUtil} from "../../ast";
@@ -8,8 +8,8 @@ import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
 export type Equation2Return<
-    LeftT extends RawExpr<NonNullEquatableType>,
-    RightT extends RawExpr<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<LeftT>>>
+    LeftT extends BuiltInExpr<NonNullEquatableType>,
+    RightT extends BuiltInExpr<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<LeftT>>>
 > =
     ExprUtil.Intersect<
         boolean,
@@ -18,14 +18,14 @@ export type Equation2Return<
 ;
 export type Equation2 =
     <
-        LeftT extends RawExpr<NonNullEquatableType>,
+        LeftT extends BuiltInExpr<NonNullEquatableType>,
         /**
          * https://github.com/microsoft/TypeScript/issues/33002#issuecomment-523651736
          *
          * @todo Investigate
          */
-        //RightT extends RawExpr<RawExprUtil.TypeOf<LeftT>>
-        RightT extends RawExpr<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<LeftT>>>
+        //RightT extends BuiltInExpr<RawExprUtil.TypeOf<LeftT>>
+        RightT extends BuiltInExpr<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<LeftT>>>
     >(
         left : LeftT,
         right : RightT
@@ -44,8 +44,8 @@ export function makeEquation2<OperatorTypeT extends OperatorType> (
     typeHint? : TypeHint
 ) : Equation2 {
     const result : Equation2 = <
-        LeftT extends RawExpr<NonNullEquatableType>,
-        RightT extends RawExpr<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<LeftT>>>
+        LeftT extends BuiltInExpr<NonNullEquatableType>,
+        RightT extends BuiltInExpr<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<LeftT>>>
     >(left : LeftT, right : RightT) : (
         Equation2Return<LeftT, RightT>
     ) => {

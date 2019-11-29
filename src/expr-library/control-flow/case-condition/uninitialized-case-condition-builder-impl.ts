@@ -1,4 +1,4 @@
-import {RawExpr, RawExprUtil} from "../../../raw-expr";
+import {BuiltInExpr, RawExprUtil} from "../../../raw-expr";
 import {CaseConditionBuilder, UninitializedCaseConditionBuilder} from "./case-condition";
 import {CaseConditionBuilderImpl} from "./case-condition-builder-impl";
 import {EquatableType} from "../../../equatable-type";
@@ -8,8 +8,8 @@ export class UninitializedCaseConditionBuilderImpl implements UninitializedCaseC
     }
 
     when<
-        ConditionT extends RawExpr<boolean>,
-        ThenT extends RawExpr<EquatableType>
+        ConditionT extends BuiltInExpr<boolean>,
+        ThenT extends BuiltInExpr<EquatableType>
     > (
         condition : ConditionT,
         then : ThenT

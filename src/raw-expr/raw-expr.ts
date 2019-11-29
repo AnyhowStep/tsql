@@ -90,7 +90,7 @@ import {QueryBaseUtil} from "../query-base";
 import {IUsedRef, UsedRefUtil} from "../used-ref";
 import {ColumnMap} from "../column-map";
 
-export type RawExpr<TypeT> = (
+export type BuiltInExpr<TypeT> = (
     | (
         TypeT extends BuiltInValueExpr ?
         TypeT :

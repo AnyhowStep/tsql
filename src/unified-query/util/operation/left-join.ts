@@ -1,7 +1,7 @@
 import {IAliasedTable} from "../../../aliased-table";
 import {FromClauseUtil} from "../../../from-clause";
 import * as TypeUtil from "../../../type-util";
-import {RawExpr} from "../../../raw-expr";
+import {BuiltInExpr} from "../../../raw-expr";
 import {OnDelegate, OnClauseUtil} from "../../../on-clause";
 import {Query} from "../../query-impl";
 import {assertValidJoinTarget, AssertValidCurrentJoin} from "../predicate";
@@ -47,7 +47,7 @@ export type LeftJoin<QueryT extends AfterFromClause, AliasedTableT extends IAlia
 export function leftJoin<
     QueryT extends AfterFromClause,
     AliasedTableT extends IAliasedTable,
-    RawOnClauseT extends RawExpr<boolean>
+    RawOnClauseT extends BuiltInExpr<boolean>
 > (
     query : QueryT,
     aliasedTable : (

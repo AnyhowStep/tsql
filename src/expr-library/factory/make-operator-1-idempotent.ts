@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {RawExpr, RawExprUtil} from "../../raw-expr";
+import {BuiltInExpr, RawExprUtil} from "../../raw-expr";
 import {ExprUtil} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
 import {Operator1} from "./make-operator-1";
@@ -25,7 +25,7 @@ export function makeOperator1Idempotent<
     Operator1<InputTypeT, OutputTypeT>
 ) {
     const result : Operator1<InputTypeT, OutputTypeT> = <
-        ArgT extends RawExpr<InputTypeT>
+        ArgT extends BuiltInExpr<InputTypeT>
     > (
         arg : ArgT
     ) : (

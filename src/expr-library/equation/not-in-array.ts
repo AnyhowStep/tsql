@@ -5,7 +5,7 @@
 import {makeEquation2ToN, Equation2ToN, Equation1ToNReturn} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {NonNullEquatableType, EquatableTypeUtil} from "../../equatable-type";
-import {RawExpr, RawExprUtil} from "../../raw-expr";
+import {BuiltInExpr, RawExprUtil} from "../../raw-expr";
 import {ExprUtil} from "../../expr";
 
 const notInArrayImpl : Equation2ToN = makeEquation2ToN<OperatorType.NOT_IN>(
@@ -43,8 +43,8 @@ const notInArrayImpl : Equation2ToN = makeEquation2ToN<OperatorType.NOT_IN>(
  * https://dev.mysql.com/doc/refman/8.0/en/any-in-some-subqueries.html
  */
 export function notInArray<
-    Arg0T extends RawExpr<NonNullEquatableType>,
-    ArgsT extends readonly RawExpr<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<Arg0T>>>[]
+    Arg0T extends BuiltInExpr<NonNullEquatableType>,
+    ArgsT extends readonly BuiltInExpr<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<Arg0T>>>[]
 > (
     arg0 : Arg0T,
     args : ArgsT

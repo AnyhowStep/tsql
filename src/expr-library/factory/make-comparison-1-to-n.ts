@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {RawExpr, RawExprUtil} from "../../raw-expr";
+import {BuiltInExpr, RawExprUtil} from "../../raw-expr";
 import {ExprUtil} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
@@ -8,8 +8,8 @@ import {NonNullComparableType, ComparableTypeUtil} from "../../comparable-type";
 import {makeOperator1ToN} from "./make-operator-1-to-n";
 
 export type Comparison1ToNReturn<
-    Arg0T extends RawExpr<NonNullComparableType>,
-    ArgsT extends readonly RawExpr<ComparableTypeUtil.BaseNonNullComparableType<RawExprUtil.TypeOf<Arg0T>>>[]
+    Arg0T extends BuiltInExpr<NonNullComparableType>,
+    ArgsT extends readonly BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<RawExprUtil.TypeOf<Arg0T>>>[]
 > =
     ExprUtil.Intersect<
         boolean,
@@ -18,8 +18,8 @@ export type Comparison1ToNReturn<
 ;
 export type Comparison1ToN =
     <
-        Arg0T extends RawExpr<NonNullComparableType>,
-        ArgsT extends readonly RawExpr<ComparableTypeUtil.BaseNonNullComparableType<RawExprUtil.TypeOf<Arg0T>>>[]
+        Arg0T extends BuiltInExpr<NonNullComparableType>,
+        ArgsT extends readonly BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<RawExprUtil.TypeOf<Arg0T>>>[]
     > (
         arg0 : Arg0T,
         ...args : ArgsT

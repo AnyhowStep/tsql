@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {RawExpr, RawExprUtil} from "../../../raw-expr";
+import {BuiltInExpr, RawExprUtil} from "../../../raw-expr";
 import {ExprImpl, expr} from "../../../expr/expr-impl";
 import {IUsedRef, UsedRefUtil} from "../../../used-ref";
 import {CaseValueNode} from "../../../ast";
@@ -45,8 +45,8 @@ export class CaseValueBuilderImpl<
     }
 
     when<
-        CompareValueT extends RawExpr<ValueT>,
-        ThenT extends RawExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
+        CompareValueT extends BuiltInExpr<ValueT>,
+        ThenT extends BuiltInExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
     > (
         compareValue : CompareValueT,
         then : ThenT
@@ -114,7 +114,7 @@ export class CaseValueBuilderImpl<
         );
     }
     else<
-        ElseT extends RawExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
+        ElseT extends BuiltInExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
     > (
         elseResult : ElseT
     ) : (

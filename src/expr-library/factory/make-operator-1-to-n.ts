@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {RawExpr, RawExprUtil} from "../../raw-expr";
+import {BuiltInExpr, RawExprUtil} from "../../raw-expr";
 import {ExprUtil} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
@@ -8,8 +8,8 @@ import {TypeHint} from "../../type-hint";
 export type Operator1ToNReturn<
     InputTypeT,
     OutputTypeT,
-    Arg0T extends RawExpr<InputTypeT>,
-    ArgsT extends readonly RawExpr<InputTypeT>[]
+    Arg0T extends BuiltInExpr<InputTypeT>,
+    ArgsT extends readonly BuiltInExpr<InputTypeT>[]
 > =
     ExprUtil.Intersect<
         OutputTypeT,
@@ -21,8 +21,8 @@ export type Operator1ToN<
     OutputTypeT
 > =
     <
-        Arg0T extends RawExpr<InputTypeT>,
-        ArgsT extends readonly RawExpr<InputTypeT>[]
+        Arg0T extends BuiltInExpr<InputTypeT>,
+        ArgsT extends readonly BuiltInExpr<InputTypeT>[]
     > (
         arg0 : Arg0T,
         ...args : ArgsT
@@ -42,8 +42,8 @@ export function makeOperator1ToN<
     Operator1ToN<InputTypeT, OutputTypeT>
 ) {
     const result : Operator1ToN<InputTypeT, OutputTypeT> = <
-        Arg0T extends RawExpr<InputTypeT>,
-        ArgsT extends readonly RawExpr<InputTypeT>[]
+        Arg0T extends BuiltInExpr<InputTypeT>,
+        ArgsT extends readonly BuiltInExpr<InputTypeT>[]
     > (
         arg0 : Arg0T,
         ...args : ArgsT

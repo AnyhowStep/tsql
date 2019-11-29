@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {RawExpr, RawExprUtil} from "../../../raw-expr";
+import {BuiltInExpr, RawExprUtil} from "../../../raw-expr";
 import {ExprImpl, expr} from "../../../expr/expr-impl";
 import {IUsedRef, UsedRefUtil} from "../../../used-ref";
 import {CaseConditionNode} from "../../../ast";
@@ -25,8 +25,8 @@ export class CaseConditionBuilderImpl<
     }
 
     when<
-        ConditionT extends RawExpr<boolean>,
-        ThenT extends RawExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
+        ConditionT extends BuiltInExpr<boolean>,
+        ThenT extends BuiltInExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
     > (
         condition : ConditionT,
         then : ThenT
@@ -90,7 +90,7 @@ export class CaseConditionBuilderImpl<
         );
     }
     else<
-        ElseT extends RawExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
+        ElseT extends BuiltInExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
     > (
         elseResult : ElseT
     ) : (

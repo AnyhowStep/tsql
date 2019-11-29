@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {ExprUtil} from "../../expr";
-import {RawExpr} from "../../raw-expr";
+import {BuiltInExpr} from "../../raw-expr";
 import {RawExprUtil} from "../../raw-expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
@@ -9,7 +9,7 @@ import {ComparableType} from "../../comparable-type";
 
 export type NullSafeComparison1 =
     <
-        BuiltInExprT extends RawExpr<ComparableType>
+        BuiltInExprT extends BuiltInExpr<ComparableType>
     >(
         builtInExpr : BuiltInExprT
     ) => (
@@ -25,7 +25,7 @@ export function makeNullSafeComparison1<OperatorTypeT extends OperatorType> (
     typeHint? : TypeHint
 ) : NullSafeComparison1 {
     const result : NullSafeComparison1 = <
-        BuiltInExprT extends RawExpr<ComparableType>
+        BuiltInExprT extends BuiltInExpr<ComparableType>
     >(
         builtInExpr : BuiltInExprT
     ) : (

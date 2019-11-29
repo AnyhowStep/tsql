@@ -29,8 +29,8 @@ tape(__filename, async (t) => {
         });
 
         function replaceX<
-            ArgT extends tsql.RawExpr<{ x:number, y:number }>,
-            NewXT extends tsql.RawExpr<number>
+            ArgT extends tsql.BuiltInExpr<{ x:number, y:number }>,
+            NewXT extends tsql.BuiltInExpr<number>
         > (
             arg : ArgT,
             newX : NewXT

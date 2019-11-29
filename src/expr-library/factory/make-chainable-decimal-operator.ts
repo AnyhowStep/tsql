@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {RawExpr, RawExprUtil, AnyBuiltInExpr} from "../../raw-expr";
+import {BuiltInExpr, RawExprUtil, AnyBuiltInExpr} from "../../raw-expr";
 import {ExprUtil} from "../../expr";
 import {
     Ast,
@@ -64,7 +64,7 @@ function tryGetFlattenableElements (
     return undefined;
 }
 export type ChainableDecimalOperatorReturn<
-    ArrT extends RawExpr<Decimal>[]
+    ArrT extends BuiltInExpr<Decimal>[]
 > =
     /**
      * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-521819804
@@ -78,7 +78,7 @@ export type ChainableDecimalOperatorReturn<
     ExprUtil.Intersect<Decimal, ArrT[number]>
 ;
 export type ChainableDecimalOperator =
-    <ArrT extends RawExpr<Decimal>[]> (
+    <ArrT extends BuiltInExpr<Decimal>[]> (
         ...arr : ArrT
     ) => (
         ChainableDecimalOperatorReturn<ArrT>
@@ -104,7 +104,7 @@ export function makeChainableDecimalOperator<
     }
     let identityAst : LiteralValueNode|undefined = undefined;
 
-    const result : ChainableDecimalOperator = <ArrT extends RawExpr<Decimal>[]> (
+    const result : ChainableDecimalOperator = <ArrT extends BuiltInExpr<Decimal>[]> (
         ...arr : ArrT
     ) : (
         ExprUtil.Intersect<Decimal, ArrT[number]>
