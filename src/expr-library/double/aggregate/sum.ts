@@ -30,3 +30,5 @@ export const sumAll : Operator1<number, number|null> = <
 ) => {
     return sumImpl(false, arg);
 };
+
+export const sum = sumAll;

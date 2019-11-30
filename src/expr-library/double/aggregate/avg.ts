@@ -30,3 +30,5 @@ export const avgAll : Operator1<number, number|null> = <
 ) => {
     return avgImpl(false, arg);
 };
+
+export const avg = avgAll;

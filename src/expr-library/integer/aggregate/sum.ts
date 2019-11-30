@@ -34,3 +34,5 @@ export const sumAll : Operator1<bigint, Decimal|null> = <
 ) => {
     return sumImpl(false, arg);
 };
+
+export const sum = sumAll;

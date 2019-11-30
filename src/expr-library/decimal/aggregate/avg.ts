@@ -31,3 +31,5 @@ export const avgAll : Operator1<Decimal, Decimal|null> = <
 ) => {
     return avgImpl(false, arg);
 };
+
+export const avg = avgAll;
