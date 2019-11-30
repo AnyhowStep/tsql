@@ -1,6 +1,6 @@
 import {IFromClause} from "../../../from-clause";
 import {SelectClause} from "../../select-clause";
-import {AnyBuiltInExpr} from "../../../raw-expr";
+import {AnyBuiltInExpr} from "../../../built-in-expr";
 import {SelectValueDelegate} from "../../select-value-delegate";
 import {Select, select} from "./select";
 import {ValueFromBuiltInExpr, valueFromBuiltInExpr} from "../constructor";

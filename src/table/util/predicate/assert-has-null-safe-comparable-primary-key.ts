@@ -1,9 +1,9 @@
 import {ColumnMap, ColumnMapUtil} from "../../../column-map";
 import {TableWithPrimaryKey} from "../../table";
 import {HasNullSafeComparablePrimaryKey, hasNullSafeComparablePrimaryKey as hasNullSafeComparablePrimaryKey} from "./has-null-safe-comparable-primary-key";
-import {CompileError} from "../../../compile-error";
+import {CompileError, CompileOk} from "../../../compile-error";
 import {TypeMapUtil} from "../../../type-map";
-import {Writable, DistributePick} from "../../../type-util";
+import {Writable, DistributePick, ToUnknownIfCompileOk} from "../../../type-util";
 
 /**
  * Returns `unknown` if all primary key columns of `TableT`
@@ -14,23 +14,29 @@ import {Writable, DistributePick} from "../../../type-util";
 export type AssertHasNullSafeComparablePrimaryKey<
     TableT extends Pick<TableWithPrimaryKey, "columns"|"primaryKey">,
     ColumnMapT extends ColumnMap
-> = (
-    HasNullSafeComparablePrimaryKey<TableT, ColumnMapT> extends true ?
-    unknown :
-    CompileError<[
-        Writable<
-            TypeMapUtil.FromColumnMap<
-                DistributePick<TableT["columns"], TableT["primaryKey"][number]>
-            >
-        >,
-        "is not null-safe comparable to",
-        Writable<
-            TypeMapUtil.FromColumnMap<
-                Pick<ColumnMapT, Extract<TableT["primaryKey"][number], keyof ColumnMapT>>
-            >
-        >
-    ]>
-);
+> =
+    ToUnknownIfCompileOk<
+        TableT extends Pick<TableWithPrimaryKey, "columns"|"primaryKey"> ?
+        (
+            HasNullSafeComparablePrimaryKey<TableT, ColumnMapT> extends true ?
+            CompileOk :
+            CompileError<[
+                Writable<
+                    TypeMapUtil.FromColumnMap<
+                        DistributePick<TableT["columns"], TableT["primaryKey"][number]>
+                    >
+                >,
+                "is not null-safe comparable to",
+                Writable<
+                    TypeMapUtil.FromColumnMap<
+                        Pick<ColumnMapT, Extract<TableT["primaryKey"][number], keyof ColumnMapT>>
+                    >
+                >
+            ]>
+        ) :
+        never
+    >
+;
 
 export function assertHasNullSafeComparablePrimaryKey (
     table : Pick<TableWithPrimaryKey, "columns"|"primaryKey">,

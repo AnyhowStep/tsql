@@ -2,13 +2,14 @@ import {ILog} from "../../log";
 import {IsolableInsertOneConnection, ExecutionUtil, SelectConnection} from "../../../execution";
 import {PrimaryKey_Input} from "../../../primary-key";
 import {TableUtil} from "../../../table";
-import {RawExprNoUsedRef_Input} from "../../../raw-expr";
+import {CustomExpr_NonCorrelated} from "../../../custom-expr";
 import {fetchLatestOrDefault} from "./fetch-latest-or-default";
 import {DefaultRow} from "./fetch-default";
 import {escapeIdentifierWithDoubleQuotes} from "../../../sqlstring";
 import {Row} from "../../../row";
 import {TrackResult} from "./track-result";
 import {DataTypeUtil} from "../../../data-type";
+import {BuiltInExprUtil} from "../../../built-in-expr";
 
 export type TrackRow<LogT extends ILog> =
     /**
@@ -20,7 +21,7 @@ export type TrackRow<LogT extends ILog> =
      */
     & {
         readonly [columnAlias in LogT["trackedWithDefaultValue"][number]]? : (
-            RawExprNoUsedRef_Input<TableUtil.ColumnType<LogT["logTable"], columnAlias>>
+            CustomExpr_NonCorrelated<TableUtil.ColumnType<LogT["logTable"], columnAlias>>
         )
     }
     /**
@@ -42,7 +43,7 @@ export type TrackRow<LogT extends ILog> =
             LogT["trackedWithDefaultValue"][number]
         >] : (
             | undefined
-            | RawExprNoUsedRef_Input<TableUtil.ColumnType<LogT["logTable"], columnAlias>>
+            | CustomExpr_NonCorrelated<TableUtil.ColumnType<LogT["logTable"], columnAlias>>
         )
     }
     /**
@@ -53,7 +54,7 @@ export type TrackRow<LogT extends ILog> =
             LogT["doNotCopy"][number],
             TableUtil.RequiredColumnAlias<LogT["logTable"]>
         >] : (
-            RawExprNoUsedRef_Input<TableUtil.ColumnType<LogT["logTable"], columnAlias>>
+            CustomExpr_NonCorrelated<TableUtil.ColumnType<LogT["logTable"], columnAlias>>
         )
     }
     /**
@@ -66,7 +67,7 @@ export type TrackRow<LogT extends ILog> =
             LogT["doNotCopy"][number],
             TableUtil.OptionalColumnAlias<LogT["logTable"]>
         >]? : (
-            RawExprNoUsedRef_Input<TableUtil.ColumnType<LogT["logTable"], columnAlias>>
+            CustomExpr_NonCorrelated<TableUtil.ColumnType<LogT["logTable"], columnAlias>>
         )
     }
 ;
@@ -83,9 +84,10 @@ async function toInsertRow<LogT extends ILog> (
      * Copy `prvRow`'s primary key
      */
     for (const primaryKeyColumnAlias of log.ownerTable.primaryKey) {
-        result[primaryKeyColumnAlias] = DataTypeUtil.toBuiltInExpr_NonCorrelated(
+        const prvValueExpr = prvRow[primaryKeyColumnAlias as keyof typeof prvRow];
+        result[primaryKeyColumnAlias] = BuiltInExprUtil.fromValueExpr(
             log.logTable.columns[primaryKeyColumnAlias],
-            prvRow[primaryKeyColumnAlias as keyof typeof prvRow]
+            prvValueExpr
         );
     }
     /**
@@ -93,32 +95,32 @@ async function toInsertRow<LogT extends ILog> (
      */
     let changed = false;
     for (const trackedColumnAlias of log.tracked) {
-        const rawNewValue = newRow[trackedColumnAlias as keyof typeof newRow];
-        const prvValue = prvRow[trackedColumnAlias as keyof typeof prvRow];
-        if (rawNewValue === undefined) {
-            if (prvValue === undefined) {
+        const newCustomExpr = newRow[trackedColumnAlias as keyof typeof newRow];
+        const prvValueExpr = prvRow[trackedColumnAlias as keyof typeof prvRow];
+        if (newCustomExpr === undefined) {
+            if (prvValueExpr === undefined) {
                 throw new Error(`No new or previous value for ${escapeIdentifierWithDoubleQuotes(log.logTable.alias)}.${escapeIdentifierWithDoubleQuotes(trackedColumnAlias)} was found`);
             } else {
                 /**
                  * Use the previous value, since we don't have a new value.
                  */
-                result[trackedColumnAlias] = DataTypeUtil.toBuiltInExpr_NonCorrelated(
+                result[trackedColumnAlias] = BuiltInExprUtil.fromValueExpr(
                     log.logTable.columns[trackedColumnAlias],
-                    prvValue
+                    prvValueExpr
                 );
             }
         } else {
-            const newValue = await DataTypeUtil.evaluateExpr(
+            const newValueExpr = await DataTypeUtil.evaluateCustomExpr(
                 log.logTable.columns[trackedColumnAlias],
                 connection,
-                rawNewValue
+                newCustomExpr
             );
-            result[trackedColumnAlias] = newValue;
+            result[trackedColumnAlias] = newValueExpr;
 
             if (!DataTypeUtil.isNullSafeEqual(
                 log.logTable.columns[trackedColumnAlias].mapper,
-                newValue,
-                prvValue
+                newValueExpr,
+                prvValueExpr
             )) {
                 /**
                  * New value is used, we consider this a change.
@@ -131,28 +133,29 @@ async function toInsertRow<LogT extends ILog> (
      * We expect new values for all required `doNotCopy` columns
      */
     for (const doNotCopyColumnAlias of log.doNotCopy) {
-        const rawNewValue = newRow[doNotCopyColumnAlias as keyof typeof newRow];
-        if (rawNewValue === undefined) {
+        const newCustomExpr = newRow[doNotCopyColumnAlias as keyof typeof newRow];
+        if (newCustomExpr === undefined) {
             if (TableUtil.isRequiredColumnAlias(log.logTable, doNotCopyColumnAlias)) {
                 throw new Error(`Expected a new value for ${escapeIdentifierWithDoubleQuotes(log.logTable.alias)}.${escapeIdentifierWithDoubleQuotes(doNotCopyColumnAlias)}`);
             } else {
                 continue;
             }
         }
-        const newValue = await DataTypeUtil.evaluateExpr(
+        const newValueExpr = await DataTypeUtil.evaluateCustomExpr(
             log.logTable.columns[doNotCopyColumnAlias],
             connection,
-            rawNewValue
+            newCustomExpr
         );
-        result[doNotCopyColumnAlias] = newValue;
+        result[doNotCopyColumnAlias] = newValueExpr;
     }
     /**
      * Copy the previous row's `copy`
      */
     for (const copyColumnAlias of log.copy) {
-        result[copyColumnAlias] = DataTypeUtil.toBuiltInExpr_NonCorrelated(
+        const prvValueExpr = prvRow[copyColumnAlias as keyof typeof prvRow];
+        result[copyColumnAlias] = BuiltInExprUtil.fromValueExpr(
             log.logTable.columns[copyColumnAlias],
-            prvRow[copyColumnAlias as keyof typeof prvRow]
+            prvValueExpr
         );
     }
 

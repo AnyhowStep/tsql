@@ -15,7 +15,7 @@ import {Row_NonUnion, Row} from "../row";
 import {SelectClause, SelectDelegate, SelectValueDelegate, SelectClauseUtil} from "../select-clause";
 import {FromClauseUtil} from "../from-clause";
 import {WhereDelegate} from "../where-clause";
-import {AnyBuiltInExpr} from "../raw-expr";
+import {AnyBuiltInExpr} from "../built-in-expr";
 import {InsertRow_Input, InsertRowRequireCandidateKey_Input} from "../insert";
 import {InsertOneWithAutoIncrementReturnType, InsertIgnoreOneWithAutoIncrementReturnType, DeleteOneResult, DeleteZeroOrOneResult, UpdateOneResult, UpdateZeroOrOneResult} from "../execution/util";
 import {AssignmentMapDelegate} from "../update";
@@ -31,7 +31,7 @@ import {SuperKey, SuperKeyUtil} from "../super-key";*/
 } from "../execution";
 import {QueryUtil} from "../query";
 import {Row} from "../row";
-import {RawExprUtil} from "../raw-expr";
+import {BuiltInExprUtil} from "../built-in-expr";
 import {InsertRow, InsertUtil} from "../insert";
 import {UpdateUtil} from "../update";
 import {DeleteUtil} from "../delete";*/

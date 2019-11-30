@@ -6,7 +6,7 @@ import {and} from "../logical";
 import {SuperKey_Input, SuperKeyUtil, SuperKey_Output} from "../../super-key";
 import {ColumnMapUtil} from "../../column-map";
 import {nullSafeEq} from "./null-safe-eq";
-import {DataTypeUtil} from "../../data-type";
+import {BuiltInExprUtil} from "../../built-in-expr";
 
 /**
  * Convenience function for,
@@ -86,7 +86,7 @@ export const eqSuperKey : EqSuperKey = (
             .map((columnAlias) => {
                 const expr = nullSafeEq(
                     table.columns[columnAlias],
-                    DataTypeUtil.toBuiltInExpr_NonCorrelated(
+                    BuiltInExprUtil.fromValueExpr(
                         table.columns[columnAlias],
                         superKey[columnAlias as keyof SuperKey_Output<TableT>]
                     )

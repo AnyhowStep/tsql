@@ -1,5 +1,6 @@
 import {ITable, TableUtil} from "../table";
-import {BuiltInExpr_NonCorrelated, RawExprNoUsedRef_Input} from "../raw-expr";
+import {BuiltInExpr_NonCorrelated} from "../built-in-expr";
+import {CustomExpr_NonCorrelated} from "../custom-expr";
 import {Key} from "../key";
 import {Identity} from "../type-util";
 
@@ -10,14 +11,14 @@ export type InsertRowRequireCandidateKey_NonUnion<
     Identity<
         & {
             readonly [columnAlias in Exclude<TableUtil.RequiredColumnAlias<TableT>, CandidateKeyT[number]>] : (
-                RawExprNoUsedRef_Input<
+                CustomExpr_NonCorrelated<
                     ReturnType<TableT["columns"][columnAlias]["mapper"]>
                 >
             )
         }
         & {
             readonly [columnAlias in Exclude<TableUtil.OptionalColumnAlias<TableT>, CandidateKeyT[number]>]? : (
-                RawExprNoUsedRef_Input<
+                CustomExpr_NonCorrelated<
                     ReturnType<TableT["columns"][columnAlias]["mapper"]>
                 >
             )
@@ -27,7 +28,7 @@ export type InsertRowRequireCandidateKey_NonUnion<
          */
         & {
             readonly [candidateKeyColumnAlias in CandidateKeyT[number]] : (
-                RawExprNoUsedRef_Input<
+                CustomExpr_NonCorrelated<
                     ReturnType<TableT["columns"][candidateKeyColumnAlias]["mapper"]>
                 >
             )
@@ -56,14 +57,14 @@ export type InsertRow_Input<TableT extends ITable> =
     Identity<
         & {
             readonly [columnAlias in TableUtil.RequiredColumnAlias<TableT>] : (
-                RawExprNoUsedRef_Input<
+                CustomExpr_NonCorrelated<
                     ReturnType<TableT["columns"][columnAlias]["mapper"]>
                 >
             )
         }
         & {
             readonly [columnAlias in TableUtil.OptionalColumnAlias<TableT>]? : (
-                RawExprNoUsedRef_Input<
+                CustomExpr_NonCorrelated<
                     ReturnType<TableT["columns"][columnAlias]["mapper"]>
                 >
             )

@@ -1,4 +1,4 @@
-import {BuiltInExpr, RawExprUtil} from "../../../raw-expr";
+import {BuiltInExpr, BuiltInExprUtil} from "../../../built-in-expr";
 import {ExprImpl} from "../../../expr/expr-impl";
 import {IUsedRef, UsedRefUtil} from "../../../used-ref";
 import {UninitializedCaseConditionBuilderImpl} from "./uninitialized-case-condition-builder-impl";
@@ -16,7 +16,7 @@ export interface CaseConditionBuilder<
         then : ThenT
     ) : (
         CaseConditionBuilder<
-            ResultT|RawExprUtil.TypeOf<ThenT>,
+            ResultT|BuiltInExprUtil.TypeOf<ThenT>,
             /**
              * This is needed to chain many `.when()` calls.
              *
@@ -27,7 +27,7 @@ export interface CaseConditionBuilder<
              */
             UsedRefUtil.IntersectTryReuseExistingType<
                 | UsedRefT
-                | RawExprUtil.IntersectUsedRef<ConditionT|ThenT>
+                | BuiltInExprUtil.IntersectUsedRef<ConditionT|ThenT>
             >
         >
     );
@@ -43,10 +43,10 @@ export interface CaseConditionBuilder<
     ) : (
         {
             end () : ExprImpl<
-                ResultT|RawExprUtil.TypeOf<ElseT>,
+                ResultT|BuiltInExprUtil.TypeOf<ElseT>,
                 UsedRefUtil.Intersect<
                     | UsedRefT
-                    | RawExprUtil.UsedRef<ElseT>
+                    | BuiltInExprUtil.UsedRef<ElseT>
                 >
             >
         }
@@ -61,8 +61,8 @@ export interface UninitializedCaseConditionBuilder {
         then : ThenT
     ) : (
         CaseConditionBuilder<
-            RawExprUtil.TypeOf<ThenT>,
-            RawExprUtil.IntersectUsedRef<ConditionT|ThenT>
+            BuiltInExprUtil.TypeOf<ThenT>,
+            BuiltInExprUtil.IntersectUsedRef<ConditionT|ThenT>
         >
     );
 }

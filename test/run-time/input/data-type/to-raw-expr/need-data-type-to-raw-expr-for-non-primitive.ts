@@ -3,7 +3,7 @@ import * as tsql from "../../../../../dist";
 
 tape(__filename, async (t) => {
     t.throws(() => {
-        tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
+        tsql.BuiltInExprUtil.fromValueExpr(
             () => ({ x : "hi" }),
             { x : "hi" }
         )

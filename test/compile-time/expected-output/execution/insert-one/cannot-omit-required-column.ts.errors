@@ -1,11 +1,11 @@
 [
   {
     "messageText": {
-      "messageText": "Argument of type '{ testId: bigint; }' is not assignable to parameter of type '{ readonly testId: RawExprNoUsedRef_Input<bigint>; readonly testVal: RawExprNoUsedRef_Input<bigint>; } & {}'.",
+      "messageText": "Argument of type '{ testId: bigint; }' is not assignable to parameter of type '{ readonly testId: CustomExpr_NonCorrelated<bigint>; readonly testVal: CustomExpr_NonCorrelated<bigint>; } & {}'.",
       "category": 1,
       "code": 2345,
       "next": {
-        "messageText": "Property 'testVal' is missing in type '{ testId: bigint; }' but required in type '{ readonly testId: RawExprNoUsedRef_Input<bigint>; readonly testVal: RawExprNoUsedRef_Input<bigint>; }'.",
+        "messageText": "Property 'testVal' is missing in type '{ testId: bigint; }' but required in type '{ readonly testId: CustomExpr_NonCorrelated<bigint>; readonly testVal: CustomExpr_NonCorrelated<bigint>; }'.",
         "category": 1,
         "code": 2741
       }
@@ -17,11 +17,11 @@
   },
   {
     "messageText": {
-      "messageText": "Argument of type '{ testVal: bigint; }' is not assignable to parameter of type '{ readonly testId: RawExprNoUsedRef_Input<bigint>; readonly testVal: RawExprNoUsedRef_Input<bigint>; } & {}'.",
+      "messageText": "Argument of type '{ testVal: bigint; }' is not assignable to parameter of type '{ readonly testId: CustomExpr_NonCorrelated<bigint>; readonly testVal: CustomExpr_NonCorrelated<bigint>; } & {}'.",
       "category": 1,
       "code": 2345,
       "next": {
-        "messageText": "Property 'testId' is missing in type '{ testVal: bigint; }' but required in type '{ readonly testId: RawExprNoUsedRef_Input<bigint>; readonly testVal: RawExprNoUsedRef_Input<bigint>; }'.",
+        "messageText": "Property 'testId' is missing in type '{ testVal: bigint; }' but required in type '{ readonly testId: CustomExpr_NonCorrelated<bigint>; readonly testVal: CustomExpr_NonCorrelated<bigint>; }'.",
         "category": 1,
         "code": 2741
       }

@@ -2,7 +2,7 @@ import * as tm from "type-mapping";
 import {ITable} from "../../../table";
 import {InsertSelectRow} from "../../insert-select-row";
 import {BuiltInValueExprUtil} from "../../../built-in-value-expr";
-import {RawExprUtil} from "../../../raw-expr";
+import {BuiltInExprUtil} from "../../../built-in-expr";
 import {QueryBaseUtil} from "../../../query-base";
 import {ExprUtil} from "../../../expr";
 import {ExprSelectItemUtil} from "../../../expr-select-item";
@@ -10,7 +10,6 @@ import {MissingRequiredInsertColumnError, NullableRequiredInsertColumnError} fro
 import {ColumnUtil, IColumn} from "../../../column";
 import {ColumnRefUtil} from "../../../column-ref";
 import {ColumnIdentifierRefUtil} from "../../../column-identifier-ref";
-import {DataTypeUtil} from "../../../data-type";
 
 export function cleanInsertSelectColumn<
     QueryT extends QueryBaseUtil.AfterSelectClause,
@@ -84,7 +83,7 @@ export function cleanInsertSelectColumn<
             `${table.alias}.${columnAlias}`,
             value
         );
-    } else if (RawExprUtil.isAnySubqueryExpr(value)) {
+    } else if (BuiltInExprUtil.isAnySubqueryExpr(value)) {
         /**
          * Can't really perform many checks here.
          * We can, however, check for `NULL`s.
@@ -118,7 +117,7 @@ export function cleanInsertSelectColumn<
         /**
          * Maybe a custom data type?
          */
-        return DataTypeUtil.toBuiltInExpr_NonCorrelated(
+        return BuiltInExprUtil.fromValueExpr(
             table.columns[columnAlias],
             value
         );

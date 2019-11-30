@@ -1,4 +1,4 @@
-import {BuiltInExpr, RawExprUtil} from "../../../raw-expr";
+import {BuiltInExpr, BuiltInExprUtil} from "../../../built-in-expr";
 import {ExprImpl} from "../../../expr/expr-impl";
 import {IUsedRef, UsedRefUtil} from "../../../used-ref";
 import {UninitializedCaseValueBuilderImpl} from "./uninitialized-case-value-builder-impl";
@@ -18,7 +18,7 @@ export interface CaseValueBuilder<
     ) : (
         CaseValueBuilder<
             ValueT,
-            ResultT|RawExprUtil.TypeOf<ThenT>,
+            ResultT|BuiltInExprUtil.TypeOf<ThenT>,
             /**
              * This is needed to chain many `.when()` calls.
              *
@@ -29,7 +29,7 @@ export interface CaseValueBuilder<
              */
             UsedRefUtil.IntersectTryReuseExistingType<
                 | UsedRefT
-                | RawExprUtil.IntersectUsedRef<CompareValueT|ThenT>
+                | BuiltInExprUtil.IntersectUsedRef<CompareValueT|ThenT>
             >
         >
     );
@@ -45,10 +45,10 @@ export interface CaseValueBuilder<
     ) : (
         {
             end () : ExprImpl<
-                ResultT|RawExprUtil.TypeOf<ElseT>,
+                ResultT|BuiltInExprUtil.TypeOf<ElseT>,
                 UsedRefUtil.Intersect<
                     | UsedRefT
-                    | RawExprUtil.UsedRef<ElseT>
+                    | BuiltInExprUtil.UsedRef<ElseT>
                 >
             >
         }
@@ -64,10 +64,10 @@ export interface UninitializedCaseValueBuilder<ValueT extends NonNullEquatableTy
     ) : (
         CaseValueBuilder<
             ValueT,
-            RawExprUtil.TypeOf<ThenT>,
+            BuiltInExprUtil.TypeOf<ThenT>,
             UsedRefUtil.Intersect<
                 | UsedRefT
-                | RawExprUtil.IntersectUsedRef<CompareValueT|ThenT>
+                | BuiltInExprUtil.IntersectUsedRef<CompareValueT|ThenT>
             >
         >
     );
@@ -78,23 +78,23 @@ export function caseValue<
     valueExpr : ValueExprT
 ) : (
     UninitializedCaseValueBuilder<
-        EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<ValueExprT>>,
-        RawExprUtil.UsedRef<ValueExprT>
+        EquatableTypeUtil.BaseNonNullEquatableType<BuiltInExprUtil.TypeOf<ValueExprT>>,
+        BuiltInExprUtil.UsedRef<ValueExprT>
     >
 ) {
     return new UninitializedCaseValueBuilderImpl<
-        EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<ValueExprT>>,
-        RawExprUtil.UsedRef<ValueExprT>
+        EquatableTypeUtil.BaseNonNullEquatableType<BuiltInExprUtil.TypeOf<ValueExprT>>,
+        BuiltInExprUtil.UsedRef<ValueExprT>
     >(
-        RawExprUtil.usedRef<ValueExprT>(valueExpr),
-        RawExprUtil.buildAst(valueExpr)
+        BuiltInExprUtil.usedRef<ValueExprT>(valueExpr),
+        BuiltInExprUtil.buildAst(valueExpr)
     ) as (
         /**
          * @todo Investigate type instantiation exessively deep error
          */
         UninitializedCaseValueBuilder<
-            EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<ValueExprT>>,
-            RawExprUtil.UsedRef<ValueExprT>
+            EquatableTypeUtil.BaseNonNullEquatableType<BuiltInExprUtil.TypeOf<ValueExprT>>,
+            BuiltInExprUtil.UsedRef<ValueExprT>
         >
     );
 }

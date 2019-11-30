@@ -1,7 +1,7 @@
 import {OperatorType} from "../../../operator-type";
 import {TypeHint} from "../../../type-hint";
 import {makeOperator2, Operator1} from "../../factory";
-import {BuiltInExpr} from "../../../raw-expr";
+import {BuiltInExpr} from "../../../built-in-expr";
 import {ExprUtil} from "../../../expr";
 import {Decimal} from "../../../decimal";
 import {decimalMapper} from "../../decimal/decimal-mapper";
@@ -34,3 +34,5 @@ export const sumAll : Operator1<bigint, Decimal|null> = <
 ) => {
     return sumImpl(false, arg);
 };
+
+export const sum = sumAll;

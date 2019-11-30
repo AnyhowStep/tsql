@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {BuiltInExpr_NonCorrelated} from "../raw-expr";
+import {BuiltInExpr_NonCorrelated} from "../built-in-expr";
 
 /**
  * When just using `TypeT` with a `BuiltInValueExpr`,

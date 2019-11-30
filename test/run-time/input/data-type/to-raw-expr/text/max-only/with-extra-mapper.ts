@@ -5,7 +5,7 @@ import * as tsql from "../../../../../../../dist";
 tape(__filename, async (t) => {
     t.deepEqual(
         (
-            tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
+            tsql.BuiltInExprUtil.fromValueExpr(
                 tsql.dtVarChar(3, tm.subStringBlacklist(["*"])),
                 "" as any
             )
@@ -14,7 +14,7 @@ tape(__filename, async (t) => {
     );
     t.deepEqual(
         (
-            tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
+            tsql.BuiltInExprUtil.fromValueExpr(
                 tsql.dtVarChar(3, tm.subStringBlacklist(["*"])),
                 "a" as any
             )
@@ -23,7 +23,7 @@ tape(__filename, async (t) => {
     );
     t.deepEqual(
         (
-            tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
+            tsql.BuiltInExprUtil.fromValueExpr(
                 tsql.dtVarChar(3, tm.subStringBlacklist(["*"])),
                 "ab" as any
             )
@@ -32,7 +32,7 @@ tape(__filename, async (t) => {
     );
     t.deepEqual(
         (
-            tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
+            tsql.BuiltInExprUtil.fromValueExpr(
                 tsql.dtVarChar(3, tm.subStringBlacklist(["*"])),
                 "abc" as any
             )
@@ -41,7 +41,7 @@ tape(__filename, async (t) => {
     );
 
     try {
-        tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
+        tsql.BuiltInExprUtil.fromValueExpr(
             tsql.dtVarChar(3, tm.subStringBlacklist(["*"])),
             "abcd" as any
         );
@@ -63,7 +63,7 @@ tape(__filename, async (t) => {
     }
 
     try {
-        tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
+        tsql.BuiltInExprUtil.fromValueExpr(
             tsql.dtVarChar(3, tm.subStringBlacklist(["*"])),
             "*" as any
         );
@@ -77,7 +77,7 @@ tape(__filename, async (t) => {
     }
 
     try {
-        tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
+        tsql.BuiltInExprUtil.fromValueExpr(
             tsql.dtVarChar(3, tm.subStringBlacklist(["*"])),
             "a**" as any
         );

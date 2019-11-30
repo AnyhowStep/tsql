@@ -1,6 +1,6 @@
 import {SelectClauseUtil, SelectDelegateColumns, SelectValueDelegateReturnType, SelectDelegateReturnType} from "../../../select-clause";
 import {BeforeCompoundQueryClause} from "../helper-type";
-import {AnyBuiltInExpr} from "../../../raw-expr";
+import {AnyBuiltInExpr} from "../../../built-in-expr";
 import {select, Select} from "./select";
 import {Correlate} from "./correlate";
 

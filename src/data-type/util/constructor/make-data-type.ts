@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {IDataType} from "../../data-type";
-import {BuiltInExpr_NonCorrelated} from "../../../raw-expr";
+import {BuiltInExpr_NonCorrelated} from "../../../built-in-expr";
 import {DataType} from "../../data-type-impl";
 
 export function makeDataType<TypeT>(

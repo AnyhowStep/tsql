@@ -1,7 +1,7 @@
 import {IAliasedTable} from "../../../aliased-table";
 import {FromClauseUtil} from "../../../from-clause";
 import * as TypeUtil from "../../../type-util";
-import {BuiltInExpr} from "../../../raw-expr";
+import {BuiltInExpr} from "../../../built-in-expr";
 import {OnDelegate, OnClauseUtil} from "../../../on-clause";
 import {Query} from "../../query-impl";
 import {assertValidJoinTarget, AssertValidCurrentJoin} from "../predicate";

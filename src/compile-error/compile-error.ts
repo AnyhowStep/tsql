@@ -21,3 +21,10 @@ export interface CompileError<_ErrorMessageT> {
      */
     readonly __compileError : never;
 }
+
+export interface CompileOk {
+    /**
+     * There should never be a value of this type
+     */
+    readonly __compileOk : never;
+}

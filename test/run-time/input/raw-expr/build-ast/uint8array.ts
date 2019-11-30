@@ -4,7 +4,7 @@ import * as tsql from "../../../../../dist";
 
 tape(__filename, t => {
     t.deepEqual(
-        tsql.RawExprUtil.buildAst(
+        tsql.BuiltInExprUtil.buildAst(
             Buffer.from("hello, world")
         ),
         tsql.LiteralValueNodeUtil.bufferLiteralNode(
@@ -12,7 +12,7 @@ tape(__filename, t => {
         )
     );
     t.deepEqual(
-        tsql.RawExprUtil.buildAst(
+        tsql.BuiltInExprUtil.buildAst(
             new Uint8Array([1,2,3,4])
         ),
         tsql.LiteralValueNodeUtil.bufferLiteralNode(

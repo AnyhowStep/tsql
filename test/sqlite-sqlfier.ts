@@ -764,12 +764,89 @@ export const sqliteSqlfier : Sqlfier = {
 
         [OperatorType.CAST_AS_DOUBLE] : ({operands}, toSql) => functionCall("CAST", [`${toSql(operands)} AS DOUBLE`]),
 
+        [OperatorType.CAST_AS_SIGNED_BIG_INTEGER] : ({operands}, toSql) => functionCall("CAST", [`${toSql(operands)} AS BIGINT`]),
+
         /*
             Aggregate (GROUP BY) Function Descriptions
             https://dev.mysql.com/doc/refman/8.0/en/group-by-functions.html
         */
 
         [OperatorType.AGGREGATE_COUNT_ALL] : () => functionCall("COUNT", ["*"]),
+        [OperatorType.AGGREGATE_COUNT_EXPR] : ({operands, operatorType}) => {
+            if (operands.length == 2) {
+                const [isDistinct, expr] = operands;
+                if (
+                    LiteralValueNodeUtil.isLiteralValueNode(isDistinct) &&
+                    isDistinct.literalValue === true
+                ) {
+                    return functionCall("COUNT", [["DISTINCT", expr]]);
+                } else {
+                    return functionCall("COUNT", [expr]);
+                }
+            } else {
+                throw new Error(`${operatorType} only implemented for 2 args`);
+            }
+        },
+        [OperatorType.AGGREGATE_AVERAGE] : ({operands, operatorType}) => {
+            if (operands.length == 2) {
+                const [isDistinct, expr] = operands;
+                if (
+                    LiteralValueNodeUtil.isLiteralValueNode(isDistinct) &&
+                    isDistinct.literalValue === true
+                ) {
+                    return functionCall("AVG", [["DISTINCT", expr]]);
+                } else {
+                    return functionCall("AVG", [expr]);
+                }
+            } else {
+                throw new Error(`${operatorType} only implemented for 2 args`);
+            }
+        },
+        [OperatorType.AGGREGATE_MAX] : ({operands, operatorType}) => {
+            if (operands.length == 2) {
+                const [isDistinct, expr] = operands;
+                if (
+                    LiteralValueNodeUtil.isLiteralValueNode(isDistinct) &&
+                    isDistinct.literalValue === true
+                ) {
+                    return functionCall("MAX", [["DISTINCT", expr]]);
+                } else {
+                    return functionCall("MAX", [expr]);
+                }
+            } else {
+                throw new Error(`${operatorType} only implemented for 2 args`);
+            }
+        },
+        [OperatorType.AGGREGATE_MIN] : ({operands, operatorType}) => {
+            if (operands.length == 2) {
+                const [isDistinct, expr] = operands;
+                if (
+                    LiteralValueNodeUtil.isLiteralValueNode(isDistinct) &&
+                    isDistinct.literalValue === true
+                ) {
+                    return functionCall("MIN", [["DISTINCT", expr]]);
+                } else {
+                    return functionCall("MIN", [expr]);
+                }
+            } else {
+                throw new Error(`${operatorType} only implemented for 2 args`);
+            }
+        },
+        [OperatorType.AGGREGATE_SUM] : ({operands, operatorType}) => {
+            if (operands.length == 2) {
+                const [isDistinct, expr] = operands;
+                if (
+                    LiteralValueNodeUtil.isLiteralValueNode(isDistinct) &&
+                    isDistinct.literalValue === true
+                ) {
+                    return functionCall("SUM", [["DISTINCT", expr]]);
+                } else {
+                    return functionCall("SUM", [expr]);
+                }
+            } else {
+                throw new Error(`${operatorType} only implemented for 2 args`);
+            }
+        },
 
         [OperatorType.EXISTS] : ({operands : [query]}, toSql) => {
             if (QueryBaseUtil.isAfterFromClause(query)) {

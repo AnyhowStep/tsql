@@ -5,7 +5,7 @@ import {ColumnRefUtil} from "../../../column-ref";
 import * as ExprLib from "../../../expr-library";
 import {allowedColumnRef} from "../query";
 import {UsedRefUtil} from "../../../used-ref";
-import {RawExprUtil} from "../../../raw-expr";
+import {BuiltInExprUtil} from "../../../built-in-expr";
 import {ExprUtil, IAnonymousExpr} from "../../../expr";
 import {IAnonymousColumn} from "../../../column";
 
@@ -37,7 +37,7 @@ export function where<
 
     UsedRefUtil.assertAllowed(
         { columns },
-        RawExprUtil.usedRef(operand)
+        BuiltInExprUtil.usedRef(operand)
     );
 
     const result : WhereClause = (

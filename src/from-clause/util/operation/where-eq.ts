@@ -6,9 +6,9 @@ import {AfterFromClause} from "../helper-type";
 import {WhereClause, WhereClauseUtil} from "../../../where-clause";
 import {ColumnRefUtil} from "../../../column-ref";
 import {ColumnIdentifierRefUtil} from "../../../column-identifier-ref";
-import {BuiltInValueExprUtil, NonNullBuiltInValueExpr} from "../../../built-in-value-expr";
-import {RawExprUtil} from "../../../raw-expr";
 import * as ExprLib from "../../../expr-library";
+import {BuiltInExprUtil} from "../../../built-in-expr";
+import {ValueExprUtil} from "../../../value-expr";
 
 /**
  * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966
@@ -17,9 +17,8 @@ import * as ExprLib from "../../../expr-library";
  * to trigger max depth/max count errors.
  */
 export type WhereEqImpl<
-    ColumnT extends ColumnUtil.ExtractWithType<
-        ColumnUtil.FromJoinArray<CurrentJoinsT>,
-        NonNullBuiltInValueExpr
+    ColumnT extends ColumnUtil.ExtractNonNullable<
+        ColumnUtil.FromJoinArray<CurrentJoinsT>
     >,
     ValueT extends tm.OutputOf<ColumnT["mapper"]>,
     OuterQueryJoinsT extends AfterFromClause["outerQueryJoins"],
@@ -31,7 +30,7 @@ export type WhereEqImpl<
             CurrentJoinsT,
             ColumnT["tableAlias"],
             ColumnT["columnAlias"],
-            BuiltInValueExprUtil.CaseInsensitiveNarrow<
+            ValueExprUtil.CaseInsensitiveNarrow<
                 tm.OutputOf<ColumnT["mapper"]>,
                 ValueT
             >
@@ -40,9 +39,8 @@ export type WhereEqImpl<
 );
 export type WhereEq<
     FromClauseT extends AfterFromClause,
-    ColumnT extends ColumnUtil.ExtractWithType<
-        ColumnUtil.FromJoinArray<FromClauseT["currentJoins"]>,
-        NonNullBuiltInValueExpr
+    ColumnT extends ColumnUtil.ExtractNonNullable<
+        ColumnUtil.FromJoinArray<FromClauseT["currentJoins"]>
     >,
     ValueT extends tm.OutputOf<ColumnT["mapper"]>
 > = (
@@ -60,20 +58,18 @@ export type WhereEq<
  * to trigger max depth/max count errors.
  */
 export type WhereEqDelegateImpl<
-    ColumnT extends ColumnUtil.ExtractWithType<
-        ColumnUtil.FromJoinArray<CurrentJoinsT>,
-        NonNullBuiltInValueExpr
+    ColumnT extends ColumnUtil.ExtractNonNullable<
+        ColumnUtil.FromJoinArray<CurrentJoinsT>
     >,
     CurrentJoinsT extends AfterFromClause["currentJoins"]
 > = (
     (
         columns : (
             ColumnRefUtil.TryFlatten<
-                ColumnRefUtil.ExtractWithType<
+                ColumnRefUtil.ExtractNonNullable<
                     ColumnRefUtil.FromColumnArray<
                         ColumnUtil.FromJoinArray<CurrentJoinsT>[]
-                    >,
-                    NonNullBuiltInValueExpr
+                    >
                 >
             >
         )
@@ -81,9 +77,8 @@ export type WhereEqDelegateImpl<
 );
 export type WhereEqDelegate<
     FromClauseT extends Pick<AfterFromClause, "currentJoins">,
-    ColumnT extends ColumnUtil.ExtractWithType<
-        ColumnUtil.FromJoinArray<FromClauseT["currentJoins"]>,
-        NonNullBuiltInValueExpr
+    ColumnT extends ColumnUtil.ExtractNonNullable<
+        ColumnUtil.FromJoinArray<FromClauseT["currentJoins"]>
     >
 > = (
     WhereEqDelegateImpl<
@@ -110,9 +105,8 @@ export type WhereEqDelegate<
  */
 export function whereEq<
     FromClauseT extends AfterFromClause,
-    ColumnT extends ColumnUtil.ExtractWithType<
-        ColumnUtil.FromJoinArray<FromClauseT["currentJoins"]>,
-        NonNullBuiltInValueExpr
+    ColumnT extends ColumnUtil.ExtractNonNullable<
+        ColumnUtil.FromJoinArray<FromClauseT["currentJoins"]>
     >,
     ValueT extends tm.OutputOf<ColumnT["mapper"]>
 > (
@@ -129,9 +123,8 @@ export function whereEq<
      * https://github.com/microsoft/TypeScript/issues/32804#issuecomment-520201877
      */
     ...args : (
-        ColumnT extends ColumnUtil.ExtractWithType<
-            ColumnUtil.FromJoinArray<FromClauseT["currentJoins"]>,
-            NonNullBuiltInValueExpr
+        ColumnT extends ColumnUtil.ExtractNonNullable<
+            ColumnUtil.FromJoinArray<FromClauseT["currentJoins"]>
         > ?
         [
             WhereEqDelegate<FromClauseT, ColumnT>,
@@ -148,7 +141,7 @@ export function whereEq<
     const whereEqDelegate = args[0];
     const value = args[1];
 
-    const columns = ColumnRefUtil.__noOp_extractWithType<NonNullBuiltInValueExpr>()(
+    const columns = ColumnRefUtil.extractNonNullable(
         ColumnRefUtil.fromColumnArray(
             ColumnUtil.fromJoinArray<FromClauseT["currentJoins"]>(fromClause.currentJoins)
         )
@@ -174,7 +167,7 @@ export function whereEq<
                 FromClauseT["currentJoins"],
                 ColumnT["tableAlias"],
                 ColumnT["columnAlias"],
-                BuiltInValueExprUtil.CaseInsensitiveNarrow<
+                ValueExprUtil.CaseInsensitiveNarrow<
                     tm.OutputOf<ColumnT["mapper"]>,
                     ValueT
                 >
@@ -185,14 +178,16 @@ export function whereEq<
                 /**
                  * Cast to the type of `ValueT`
                  */
+                /*
                 tm.or(
-                    RawExprUtil.mapper(value),
+                    BuiltInExprUtil.mapper(value),
                     tm.pipe(
                         column.mapper,
-                        RawExprUtil.mapper(value)
+                        BuiltInExprUtil.mapper(value)
                     )
-                ) as (
-                    () => BuiltInValueExprUtil.CaseInsensitiveNarrow<
+                )*/
+                column.mapper as (
+                    () => ValueExprUtil.CaseInsensitiveNarrow<
                         tm.OutputOf<ColumnT["mapper"]>,
                         ValueT
                     >
@@ -207,7 +202,7 @@ export function whereEq<
              */
             () => ExprLib.eq(
                 column,
-                value
+                BuiltInExprUtil.fromValueExpr(column, value)
             ) as any
         ),
     };

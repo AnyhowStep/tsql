@@ -3,7 +3,7 @@ import * as tsql from "../../../../dist";
 import {ISqliteWorker, SqliteAction, FromSqliteMessage, ToSqliteMessage} from "./worker.sql";
 import {AsyncQueue} from "./async-queue";
 import {sqliteSqlfier} from "../../../sqlite-sqlfier";
-import {ITable, RawExprUtil, WhereClause, DeletableTable, DeleteResult, AssignmentMap_Output, UpdateResult} from "../../../../dist";
+import {ITable, BuiltInExprUtil, WhereClause, DeletableTable, DeleteResult, AssignmentMap_Output, UpdateResult} from "../../../../dist";
 
 const sqlite_master = tsql.table("sqlite_master")
     .addColumns({
@@ -249,7 +249,7 @@ export class Connection {
             .sort();
 
         const values = columnAliases
-            .map(columnAlias => RawExprUtil.buildAst(
+            .map(columnAlias => BuiltInExprUtil.buildAst(
                 row[columnAlias as unknown as keyof typeof row]
             ))
             .reduce<tsql.Ast[]>(
@@ -610,7 +610,7 @@ export class Connection {
                             return "NULL";
                         }
                     } else {
-                        return RawExprUtil.buildAst(
+                        return BuiltInExprUtil.buildAst(
                             value
                         );
                     }
@@ -810,7 +810,7 @@ export class Connection {
                             `${(value as tsql.IColumn).tableAlias}${tsql.SEPARATOR}${(value as tsql.IColumn).columnAlias}`
                         );
                     } else {
-                        return RawExprUtil.buildAst(
+                        return BuiltInExprUtil.buildAst(
                             value
                         );
                     }
@@ -1023,7 +1023,7 @@ export class Connection {
                 const assignment = [
                     tsql.escapeIdentifierWithDoubleQuotes(columnAlias),
                     "=",
-                    tsql.RawExprUtil.buildAst(value as Exclude<typeof value, undefined>)
+                    tsql.BuiltInExprUtil.buildAst(value as Exclude<typeof value, undefined>)
                 ];
 
                 if (ast.length > 0) {

@@ -13,7 +13,7 @@
           "category": 1,
           "code": 2719,
           "next": {
-            "messageText": "Property '__compileError' is missing in type 'Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly userId: Column<{ tableAlias: \"myTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>; readonly computerId: Column<{ tableAlias: \"myTable\"; columnAlias: \"computerId\"; mapper: Mapper<...>; }>; readonly createdAt: Column<...>; }; ... 10 more ...' but required in type 'CompileError<[{ userId: bigint; computerId: string; } | { userId2: bigint; computerId2: string; }, \"is not null-safe comparable to\", { userId: bigint; computerId: string; userId2: bigint; }]>'.",
+            "messageText": "Property '__compileError' is missing in type 'Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly userId: Column<{ tableAlias: \"myTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>; readonly computerId: Column<{ tableAlias: \"myTable\"; columnAlias: \"computerId\"; mapper: Mapper<...>; }>; readonly createdAt: Column<...>; }; ... 10 more ...' but required in type 'CompileError<[{ userId2: bigint; computerId2: string; }, \"is not null-safe comparable to\", { userId2: bigint; }]>'.",
             "category": 1,
             "code": 2741
           }

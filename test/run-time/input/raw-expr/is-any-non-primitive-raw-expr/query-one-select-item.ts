@@ -14,7 +14,7 @@ tape(__filename, t => {
         });
 
     t.true(
-        tsql.RawExprUtil.isAnyNonValueExpr(
+        tsql.BuiltInExprUtil.isAnyNonValueExpr(
             tsql
                 .requireOuterQueryJoins(somethingElse)
                 .from(myTable)

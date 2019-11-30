@@ -6,7 +6,7 @@ tape(__filename, t => {
     t.deepEqual(
 
         {
-            ...tsql.RawExprUtil.usedRef(
+            ...tsql.BuiltInExprUtil.usedRef(
                 Buffer.from("hello, world")
             ),
             __contravarianceMarker : undefined,
@@ -18,7 +18,7 @@ tape(__filename, t => {
     );
     t.deepEqual(
         {
-            ...tsql.RawExprUtil.usedRef(
+            ...tsql.BuiltInExprUtil.usedRef(
                 new Uint8Array([1,2,3,4])
             ),
             __contravarianceMarker : undefined,

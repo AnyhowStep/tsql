@@ -1,7 +1,7 @@
 import {makeEquation2ToN, Equation2ToN, Equation1ToNReturn} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {NonNullEquatableType, EquatableTypeUtil} from "../../equatable-type";
-import {BuiltInExpr, RawExprUtil} from "../../raw-expr";
+import {BuiltInExpr, BuiltInExprUtil} from "../../built-in-expr";
 import {ExprUtil} from "../../expr";
 
 const inArrayImpl : Equation2ToN = makeEquation2ToN<OperatorType.IN>(
@@ -40,7 +40,7 @@ const inArrayImpl : Equation2ToN = makeEquation2ToN<OperatorType.IN>(
  */
 export function inArray<
     Arg0T extends BuiltInExpr<NonNullEquatableType>,
-    ArgsT extends readonly BuiltInExpr<EquatableTypeUtil.BaseNonNullEquatableType<RawExprUtil.TypeOf<Arg0T>>>[]
+    ArgsT extends readonly BuiltInExpr<EquatableTypeUtil.BaseNonNullEquatableType<BuiltInExprUtil.TypeOf<Arg0T>>>[]
 > (
     arg0 : Arg0T,
     args : ArgsT

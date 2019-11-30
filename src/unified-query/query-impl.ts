@@ -7,11 +7,11 @@ import {OrderByClause} from "../order-by-clause";
 import {IAliasedTable} from "../aliased-table";
 import {FromClauseUtil} from "../from-clause";
 import {SelectClause} from "../select-clause";
-import {BuiltInExpr, AnyBuiltInExpr, AnySubqueryExpr} from "../raw-expr";
+import {BuiltInExpr, AnyBuiltInExpr, AnySubqueryExpr} from "../built-in-expr";
 import {OnDelegate, OnClauseUtil} from "../on-clause";
 import {ITable, TableUtil, TableWithPrimaryKey, InsertableTable, DeletableTable} from "../table";
 import {ColumnUtil} from "../column";
-import {BuiltInValueExpr, NonNullBuiltInValueExpr} from "../built-in-value-expr";
+import {BuiltInValueExpr} from "../built-in-value-expr";
 import {JoinArrayUtil} from "../join";
 import {SuperKey_NonUnion} from "../super-key";
 import {PrimaryKey_NonUnion} from "../primary-key";
@@ -798,11 +798,10 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     }
 
     whereEq<
-        ColumnT extends ColumnUtil.ExtractWithType<
+        ColumnT extends ColumnUtil.ExtractNonNullable<
             ColumnUtil.FromJoinArray<
                 Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"]
-            >,
-            NonNullBuiltInValueExpr
+            >
         >,
         ValueT extends tm.OutputOf<ColumnT["mapper"]>
     > (
@@ -818,9 +817,8 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
          * https://github.com/microsoft/TypeScript/issues/32804#issuecomment-520201877
          */
         ...args : (
-            ColumnT extends ColumnUtil.ExtractWithType<
-                ColumnUtil.FromJoinArray<Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"]>,
-                NonNullBuiltInValueExpr
+            ColumnT extends ColumnUtil.ExtractNonNullable<
+                ColumnUtil.FromJoinArray<Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"]>
             > ?
             [
                 FromClauseUtil.WhereEqDelegate<Extract<this, QueryUtil.AfterFromClause>["fromClause"], ColumnT>,

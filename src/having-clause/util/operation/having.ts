@@ -7,7 +7,7 @@ import {allowedColumnRef} from "../query";
 import {UsedRefUtil} from "../../../used-ref";
 import {IAnonymousColumn} from "../../../column";
 import {IAnonymousExpr, ExprUtil} from "../../../expr";
-import {RawExprUtil} from "../../../raw-expr";
+import {BuiltInExprUtil} from "../../../built-in-expr";
 
 /**
  * Returns the MySQL equivalent of `havingClause AND havingDelegate(columns)`
@@ -43,7 +43,7 @@ export function having<
 
     UsedRefUtil.assertAllowed(
         { columns },
-        RawExprUtil.usedRef(operand)
+        BuiltInExprUtil.usedRef(operand)
     );
 
     return (

@@ -3,7 +3,7 @@ import {ILog} from "../../log";
 import {latest} from "./latest";
 import {Expr, ExprUtil} from "../../../expr";
 import {UsedRefUtil} from "../../../used-ref";
-import {AnyBuiltInExpr, RawExprUtil} from "../../../raw-expr";
+import {AnyBuiltInExpr, BuiltInExprUtil} from "../../../built-in-expr";
 import {FromClauseUtil} from "../../../from-clause";
 import {SelectValueDelegate} from "../../../select-clause";
 
@@ -14,7 +14,7 @@ export type LatestValue<
     Expr<{
         mapper : tm.SafeMapper<
             | null
-            | RawExprUtil.TypeOf<BuiltInExprT>
+            | BuiltInExprUtil.TypeOf<BuiltInExprT>
         >,
         usedRef : UsedRefUtil.FromColumnMap<LogT["ownerTable"]["columns"]>,
     }>

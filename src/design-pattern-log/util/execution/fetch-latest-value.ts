@@ -3,12 +3,12 @@ import {PrimaryKey_Input} from "../../../primary-key";
 import {latestByPrimaryKey} from "./latest-by-primary-key";
 import {ExecutionUtil, SelectConnection} from "../../../execution";
 import {FromClauseUtil} from "../../../from-clause";
-import {AnyBuiltInExpr, RawExprUtil} from "../../../raw-expr";
+import {AnyBuiltInExpr, BuiltInExprUtil} from "../../../built-in-expr";
 import {SelectValueDelegate} from "../../../select-clause";
 
 export type FetchLatestValue<BuiltInExprT extends AnyBuiltInExpr> =
     ExecutionUtil.FetchValuePromise<
-        RawExprUtil.TypeOf<BuiltInExprT>
+        BuiltInExprUtil.TypeOf<BuiltInExprT>
     >
 ;
 export type FetchLatestValueSelectValueDelegate<

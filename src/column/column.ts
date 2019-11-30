@@ -4,6 +4,9 @@ import {Ast} from "../ast";
 export interface ColumnData {
     readonly tableAlias : string;
     readonly columnAlias : string;
+    /**
+     * @todo Change this to `unknown` and fix errors
+     */
     readonly mapper : tm.SafeMapper<any>;
 }
 export interface IColumn<DataT extends ColumnData=ColumnData> {

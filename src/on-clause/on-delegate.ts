@@ -3,7 +3,7 @@ import {FromClauseUtil} from "../from-clause";
 import {IAliasedTable} from "../aliased-table";
 //import {IExpr} from "../expr";
 import * as OnClauseUtil from "./util";
-import {BuiltInExpr} from "../raw-expr";
+import {BuiltInExpr} from "../built-in-expr";
 import {AssertValidUsedRef} from "./util";
 
 export type OnDelegate<

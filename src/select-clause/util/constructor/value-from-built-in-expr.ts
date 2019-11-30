@@ -1,4 +1,4 @@
-import {AnyBuiltInExpr} from "../../../raw-expr";
+import {AnyBuiltInExpr} from "../../../built-in-expr";
 import {ExprUtil} from "../../../expr";
 import {IExprSelectItem, ExprSelectItemUtil} from "../../../expr-select-item";
 import {IColumn, ColumnUtil} from "../../../column";

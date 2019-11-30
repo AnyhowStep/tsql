@@ -9,7 +9,7 @@ tape(__filename, t => {
         });
 
     t.true(
-        tsql.RawExprUtil.isAnyNonValueExpr(
+        tsql.BuiltInExprUtil.isAnyNonValueExpr(
             tsql
                 .from(myTable)
                 .select(c => [

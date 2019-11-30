@@ -1,7 +1,7 @@
 import * as tm from "type-mapping/fluent";
 import {OperatorType} from "../../operator-type";
 import {Decimal} from "../../decimal";
-import {BuiltInExpr, RawExprUtil} from "../../raw-expr";
+import {BuiltInExpr, BuiltInExprUtil} from "../../built-in-expr";
 import {Expr, expr} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
 
@@ -151,7 +151,7 @@ export function castAsDecimal<
         /**
          * @todo Use `TryReuseExistingType<>` hack to fight off depth limit
          */
-        usedRef : RawExprUtil.UsedRef<ArgT>,
+        usedRef : BuiltInExprUtil.UsedRef<ArgT>,
     }>
 );
 export function castAsDecimal<
@@ -175,7 +175,7 @@ export function castAsDecimal<
         /**
          * @todo Use `TryReuseExistingType<>` hack to fight off depth limit
          */
-        usedRef : RawExprUtil.UsedRef<ArgT>,
+        usedRef : BuiltInExprUtil.UsedRef<ArgT>,
     }>
 );
 export function castAsDecimal<
@@ -199,24 +199,24 @@ export function castAsDecimal<
         /**
          * @todo Use `TryReuseExistingType<>` hack to fight off depth limit
          */
-        usedRef : RawExprUtil.UsedRef<ArgT>,
+        usedRef : BuiltInExprUtil.UsedRef<ArgT>,
     }>
 ) {
-    const argMapper = RawExprUtil.mapper(arg);
+    const argMapper = BuiltInExprUtil.mapper(arg);
     const decimalDefinition = assertValidDecimalPrecisionAndScale(precision, scale);
     return expr(
         {
             mapper : tm.canOutputNull(argMapper) ?
                 tm.mysql.decimal(precision, scale).orNull() :
                 tm.mysql.decimal(precision, scale),
-            usedRef : RawExprUtil.usedRef(arg),
+            usedRef : BuiltInExprUtil.usedRef(arg),
         },
         OperatorNodeUtil.operatorNode3(
             OperatorType.CAST_AS_DECIMAL,
             [
-                RawExprUtil.buildAst(arg),
-                RawExprUtil.buildAst(decimalDefinition.precision),
-                RawExprUtil.buildAst(decimalDefinition.scale),
+                BuiltInExprUtil.buildAst(arg),
+                BuiltInExprUtil.buildAst(decimalDefinition.precision),
+                BuiltInExprUtil.buildAst(decimalDefinition.scale),
             ],
             undefined
         )

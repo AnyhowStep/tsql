@@ -4,7 +4,7 @@ import {FromClauseUtil} from "../../../from-clause";
 import {SelectValueDelegate, SelectClauseUtil} from "../../../select-clause";
 import {QueryUtil} from "../../../unified-query";
 import {ITable} from "../../table";
-import {AnyBuiltInExpr} from "../../../raw-expr";
+import {AnyBuiltInExpr} from "../../../built-in-expr";
 
 export function fetchValue<
     TableT extends ITable,

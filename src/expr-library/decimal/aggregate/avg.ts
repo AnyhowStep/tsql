@@ -3,7 +3,7 @@ import {OperatorType} from "../../../operator-type";
 import {TypeHint} from "../../../type-hint";
 import {makeOperator2, Operator1} from "../../factory";
 import {Decimal} from "../../../decimal";
-import {BuiltInExpr} from "../../../raw-expr";
+import {BuiltInExpr} from "../../../built-in-expr";
 import {ExprUtil} from "../../../expr";
 
 const avgImpl = makeOperator2<OperatorType.AGGREGATE_AVERAGE, boolean, Decimal, Decimal|null>(
@@ -31,3 +31,5 @@ export const avgAll : Operator1<Decimal, Decimal|null> = <
 ) => {
     return avgImpl(false, arg);
 };
+
+export const avg = avgAll;

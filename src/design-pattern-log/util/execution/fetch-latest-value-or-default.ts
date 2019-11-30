@@ -74,7 +74,7 @@ export async function fetchLatestValueOrDefault<
                 primaryKey
             ) as any
         );
-        return DataTypeUtil.evaluateExpr(
+        return DataTypeUtil.evaluateCustomExpr(
             log.logTable.columns[column.columnAlias],
             connection,
             log.trackedDefaults[column.columnAlias]

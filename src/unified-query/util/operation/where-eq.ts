@@ -1,7 +1,6 @@
 import * as tm from "type-mapping";
 import {FromClauseUtil} from "../../../from-clause";
 import {ColumnUtil} from "../../../column";
-import {NonNullBuiltInValueExpr} from "../../../built-in-value-expr";
 import {Query} from "../../query-impl";
 import {AfterFromClause} from "../helper-type";
 
@@ -12,11 +11,10 @@ import {AfterFromClause} from "../helper-type";
  * to trigger max depth/max count errors.
  */
 export type WhereEqImpl<
-    ColumnT extends ColumnUtil.ExtractWithType<
+    ColumnT extends ColumnUtil.ExtractNonNullable<
         ColumnUtil.FromJoinArray<
             FromClauseT["currentJoins"]
-        >,
-        NonNullBuiltInValueExpr
+        >
     >,
     ValueT extends tm.OutputOf<ColumnT["mapper"]>,
     FromClauseT extends AfterFromClause["fromClause"],
@@ -39,11 +37,10 @@ export type WhereEqImpl<
 );
 export type WhereEq<
     QueryT extends AfterFromClause,
-    ColumnT extends ColumnUtil.ExtractWithType<
+    ColumnT extends ColumnUtil.ExtractNonNullable<
         ColumnUtil.FromJoinArray<
             QueryT["fromClause"]["currentJoins"]
-        >,
-        NonNullBuiltInValueExpr
+        >
     >,
     ValueT extends tm.OutputOf<ColumnT["mapper"]>
 > = (
@@ -60,11 +57,10 @@ export type WhereEq<
 );
 export function whereEq<
     QueryT extends AfterFromClause,
-    ColumnT extends ColumnUtil.ExtractWithType<
+    ColumnT extends ColumnUtil.ExtractNonNullable<
         ColumnUtil.FromJoinArray<
             QueryT["fromClause"]["currentJoins"]
-        >,
-        NonNullBuiltInValueExpr
+        >
     >,
     ValueT extends tm.OutputOf<ColumnT["mapper"]>
 > (
@@ -80,9 +76,8 @@ export function whereEq<
      * https://github.com/microsoft/TypeScript/issues/32804#issuecomment-520201877
      */
     ...args : (
-        ColumnT extends ColumnUtil.ExtractWithType<
-            ColumnUtil.FromJoinArray<QueryT["fromClause"]["currentJoins"]>,
-            NonNullBuiltInValueExpr
+        ColumnT extends ColumnUtil.ExtractNonNullable<
+            ColumnUtil.FromJoinArray<QueryT["fromClause"]["currentJoins"]>
         > ?
         [
             FromClauseUtil.WhereEqDelegate<QueryT["fromClause"], ColumnT>,

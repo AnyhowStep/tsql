@@ -1,7 +1,7 @@
 import {CompileError} from "../../../compile-error";
 import {UsedRefUtil} from "../../../used-ref";
 import {IFromClause, FromClauseUtil} from "../../../from-clause";
-import {BuiltInExpr, RawExprUtil} from "../../../raw-expr";
+import {BuiltInExpr, BuiltInExprUtil} from "../../../built-in-expr";
 
 /**
  * Problem: `ON` clause cannot reference outer query tables
@@ -58,14 +58,14 @@ export type AssertNoOuterQueryUsedRef<
     RawOnClauseT extends BuiltInExpr<boolean>
 > = (
     Extract<
-        UsedRefUtil.TableAlias<RawExprUtil.UsedRef<RawOnClauseT>>,
+        UsedRefUtil.TableAlias<BuiltInExprUtil.UsedRef<RawOnClauseT>>,
         FromClauseUtil.OuterQueryTableAlias<FromClauseT>
     > extends never ?
     unknown :
     CompileError<[
         "ON clause must not reference outer query tables",
         Extract<
-            UsedRefUtil.TableAlias<RawExprUtil.UsedRef<RawOnClauseT>>,
+            UsedRefUtil.TableAlias<BuiltInExprUtil.UsedRef<RawOnClauseT>>,
             FromClauseUtil.OuterQueryTableAlias<FromClauseT>
         >
     ]>
@@ -75,7 +75,7 @@ export function assertNoOuterQueryUsedRef (
     rawOnClause : BuiltInExpr<boolean>
 ) {
     const outerQueryTableAliases : string[] = FromClauseUtil.outerQueryTableAlias(fromClause);
-    const usedOuterQueryTableAliases = Object.keys(RawExprUtil.usedRef(rawOnClause).columns)
+    const usedOuterQueryTableAliases = Object.keys(BuiltInExprUtil.usedRef(rawOnClause).columns)
         .filter(usedTableAlias => {
             return outerQueryTableAliases.includes(usedTableAlias);
         });
