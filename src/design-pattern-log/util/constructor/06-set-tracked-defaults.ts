@@ -1,10 +1,8 @@
 import {ILog, LogData} from "../../log";
 import {Log} from "../../log-impl";
 import {TableUtil} from "../../../table";
-import {CustomExpr_NonCorrelated, BuiltInExprUtil} from "../../../built-in-expr";
-import {UsedRefUtil} from "../../../used-ref";
+import {CustomExpr_NonCorrelated, CustomExprUtil} from "../../../custom-expr";
 import {Identity} from "../../../type-util";
-import {ExprUtil} from "../../../expr";
 
 export type LogMustSetTrackedDefaultsData =
     & Pick<
@@ -73,30 +71,16 @@ export function setTrackedDefaults<
         TrackedDefaultsT
     >
 ) {
-    /**
-     * Nothing is allowed
-     */
-    const allowedRef = UsedRefUtil.fromColumnRef({});
-
     const trackedDefaults : any = {};
     for (const columnAlias of log.tracked) {
-        const rawValue = (rawTrackedDefaults as any)[columnAlias];
-        if (rawValue === undefined) {
+        const customExpr : unknown = (rawTrackedDefaults as any)[columnAlias];
+        if (customExpr === undefined) {
             continue;
         }
 
-
-        const usedRef = BuiltInExprUtil.usedRef(
-            ExprUtil.fromRawExprNoUsedRefInput(
-                log.logTable.columns[columnAlias],
-                rawValue
-            )
-        );
-        UsedRefUtil.assertAllowed(allowedRef, usedRef);
-
-        const value = BuiltInExprUtil.mapCustomExpr_NonCorrelated(
+        const value = CustomExprUtil.mapNonCorrelated(
             log.logTable.columns[columnAlias],
-            rawValue
+            customExpr
         );
 
         trackedDefaults[columnAlias] = value;

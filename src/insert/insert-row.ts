@@ -1,5 +1,6 @@
 import {ITable, TableUtil} from "../table";
-import {BuiltInExpr_NonCorrelated, CustomExpr_NonCorrelated} from "../built-in-expr";
+import {BuiltInExpr_NonCorrelated} from "../built-in-expr";
+import {CustomExpr_NonCorrelated} from "../custom-expr";
 import {Key} from "../key";
 import {Identity} from "../type-util";
 

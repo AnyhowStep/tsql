@@ -3,7 +3,7 @@ import {TableUtil} from "../../../table";
 import {Identity} from "../../../type-util";
 import {IsolableSelectConnection} from "../../../execution";
 import {PrimaryKey_Input, PrimaryKeyUtil} from "../../../primary-key";
-import {CustomExpr_NonCorrelated, BuiltInExprUtil} from "../../../built-in-expr";
+import {CustomExpr_NonCorrelated, CustomExprUtil} from "../../../custom-expr";
 import {UsedRefUtil} from "../../../used-ref";
 import {LogMustSetTrackedDefaults} from "./06-set-tracked-defaults";
 import {DataTypeUtil} from "../../../data-type";
@@ -103,43 +103,43 @@ export function setCopyDefaultsDelegate<
         ));
 
     const copyDefaults : CopyDefaultsDelegate<DataT> = async (args) => {
-        const rawResult = await rawCopyDefaultsDelegate({
+        const customExprResult = await rawCopyDefaultsDelegate({
             ...args,
             ownerPrimaryKey : PrimaryKeyUtil.mapper(log.ownerTable)(
                 `${log.ownerTable.alias} PRIMARY KEY`,
                 args.ownerPrimaryKey
             ) as any,
         });
-        const result : any = {};
+        const valueExprResult : any = {};
         for (const columnAlias of requiredColumnAliases) {
-            const rawValue = rawResult[columnAlias];
-            if (rawValue === undefined) {
+            const customExpr : unknown = customExprResult[columnAlias];
+            if (customExpr === undefined) {
                 throw new Error(`Expected a value for ${log.logTable.alias}.${columnAlias}`);
             }
-            const usedRef = BuiltInExprUtil.usedRef(rawValue);
+            const usedRef = CustomExprUtil.usedRef(customExpr);
             UsedRefUtil.assertAllowed(allowedRef, usedRef);
 
-            result[columnAlias] = await DataTypeUtil.evaluateExpr(
+            valueExprResult[columnAlias] = await DataTypeUtil.evaluateCustomExpr(
                 log.logTable.columns[columnAlias],
                 args.connection,
-                rawValue
+                customExpr
             );
         }
         for (const columnAlias of optionalColumnAliases) {
-            const rawValue = rawResult[columnAlias];
-            if (rawValue === undefined) {
+            const customExpr : unknown = customExprResult[columnAlias];
+            if (customExpr === undefined) {
                 continue;
             }
-            const usedRef = BuiltInExprUtil.usedRef(rawValue);
+            const usedRef = CustomExprUtil.usedRef(customExpr);
             UsedRefUtil.assertAllowed(allowedRef, usedRef);
 
-            result[columnAlias] = await DataTypeUtil.evaluateExpr(
+            valueExprResult[columnAlias] = await DataTypeUtil.evaluateCustomExpr(
                 log.logTable.columns[columnAlias],
                 args.connection,
-                rawValue
+                customExpr
             );
         }
-        return result;
+        return valueExprResult;
     };
     const {
         logTable,

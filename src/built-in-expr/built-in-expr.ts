@@ -160,38 +160,11 @@ export type BuiltInExpr_NonCorrelated<TypeT> =
     | NonValueExpr_NonCorrelated<TypeT>
 ;
 
-export type CustomExpr_NonCorrelated<TypeT> =
-    | TypeT
-    | NonValueExpr_NonCorrelated<TypeT>
-;
-
 /**
  * We don't support subqueries because it's too complicated
  * to check their `IUsedRef`
  */
-export type RawExprUsingColumnMap_Input<
-    ColumnMapT extends ColumnMap,
-    TypeT
-> =
-    | TypeT
-    | IExpr<{
-        mapper : tm.SafeMapper<TypeT>,
-        usedRef : UsedRefUtil.FromColumnMap<ColumnMapT>,
-    }>
-    | ColumnUtil.FromColumnMap<ColumnMapT>
-    | IExprSelectItem<{
-        mapper : tm.SafeMapper<TypeT>,
-        usedRef : UsedRefUtil.FromColumnMap<ColumnMapT>,
-        tableAlias : string,
-        alias : string,
-    }>
-;
-
-/**
- * We don't support subqueries because it's too complicated
- * to check their `IUsedRef`
- */
-export type RawExprUsingColumnMap_Output<
+export type BuiltInExpr_MapCorrelated<
     ColumnMapT extends ColumnMap,
     TypeT
 > =

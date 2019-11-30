@@ -6,7 +6,7 @@ import {UsedRefUtil} from "../../used-ref";
 import {eq} from "./eq";
 import {and} from "../logical";
 import {ColumnMapUtil} from "../../column-map";
-import {DataTypeUtil} from "../../data-type";
+import {BuiltInExprUtil} from "../../built-in-expr";
 
 /**
  * Convenience function for,
@@ -68,7 +68,7 @@ export function eqPrimaryKey<
          */
         const expr = eq(
             table.columns[columnAlias],
-            DataTypeUtil.toBuiltInExpr_NonCorrelated(
+            BuiltInExprUtil.fromValueExpr(
                 table.columns[columnAlias],
                 primaryKey[columnAlias as keyof PrimaryKey_Output<TableT>]
             )

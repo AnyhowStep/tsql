@@ -1,10 +1,11 @@
 import {ITable, TableUtil} from "../table";
-import {RawExprUsingColumnMap_Input, RawExprUsingColumnMap_Output} from "../built-in-expr";
+import {BuiltInExpr_MapCorrelated} from "../built-in-expr";
+import {CustomExpr_MapCorrelated} from "../custom-expr";
 
 export type AssignmentMap_Input<TableT extends ITable> =
     & {
         readonly [columnAlias in TableT["mutableColumns"][number]]? : (
-            RawExprUsingColumnMap_Input<
+            CustomExpr_MapCorrelated<
                 TableT["columns"],
                 ReturnType<
                     TableT["columns"][columnAlias]["mapper"]
@@ -25,7 +26,7 @@ export type AssignmentMap_Input<TableT extends ITable> =
 export type AssignmentMap_Output<TableT extends ITable> =
     & {
         readonly [columnAlias in TableT["mutableColumns"][number]]? : (
-            RawExprUsingColumnMap_Output<
+            BuiltInExpr_MapCorrelated<
                 TableT["columns"],
                 ReturnType<
                     TableT["columns"][columnAlias]["mapper"]

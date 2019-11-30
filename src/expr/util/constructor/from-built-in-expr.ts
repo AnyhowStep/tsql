@@ -1,8 +1,8 @@
 import * as tm from "type-mapping";
 import {Expr, ExprImpl, expr} from "../../expr-impl";
-import {BuiltInExprUtil, CustomExpr_NonCorrelated, AnyBuiltInExpr} from "../../../built-in-expr";
+import {BuiltInExprUtil, AnyBuiltInExpr} from "../../../built-in-expr";
+import {CustomExpr_NonCorrelated} from "../../../custom-expr";
 import {IAnonymousColumn} from "../../../column";
-import {DataTypeUtil} from "../../../data-type";
 import {IUsedRef} from "../../../used-ref";
 
 export type FromBuiltInExpr<BuiltInExprT extends AnyBuiltInExpr> = (
@@ -51,7 +51,7 @@ export function fromRawExprNoUsedRefInput<
         return fromBuiltInExpr(value as any);
     } else {
         return fromBuiltInExpr(
-            DataTypeUtil.toBuiltInExpr_NonCorrelated(
+            BuiltInExprUtil.fromValueExpr(
                 mapper,
                 value
             ) as any

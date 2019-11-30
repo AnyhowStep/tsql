@@ -3,19 +3,14 @@ import {ColumnMapUtil} from "../../../column-map";
 import {KeyUtil} from "../../../key";
 import {UnionToIntersection, PickMulti, pickOwnEnumerable} from "../../../type-util";
 import {CompileError} from "../../../compile-error";
+import {IColumn} from "../../../column";
 
-/**
- * + Assumes `SrcT` may be a union
- * + Assumes `DstT` may be a union
- * + Assumes `SrcColumnsT` may be a union
- * + Assumes `SrcColumnsT` is only ever built by using the arguments of `EqCandidateKeyOfTableDelegate`
- */
-export type AssertNullSafeComparableToCandidateKeysOfTable<
+export type AssertNullSafeComparableToCandidateKeysOfTableImpl<
     SrcT extends Pick<ITable, "columns">,
     DstT extends Pick<ITable, "columns"|"candidateKeys">,
-    SrcColumnsT extends TableUtil.ColumnArraysFromCandidateKeys<SrcT, DstT>
+    SrcColumnsT extends readonly IColumn[]//TableUtil.ColumnArraysFromCandidateKeys<SrcT, DstT>
 > =
-    & KeyUtil.ExcludeIfInKeyArray<
+    KeyUtil.ExcludeIfInKeyArray<
         KeyUtil.FromColumnArray<SrcColumnsT>,
         TableUtil.ExtractCandidateKeysWithColumnAliasInOneOfColumnArray<
             DstT,
@@ -69,6 +64,20 @@ export type AssertNullSafeComparableToCandidateKeysOfTable<
             TableUtil.ExtractCandidateKeysWithColumnAliasInTable_Input<DstT, SrcT>
         >
     ]>
+;
+
+/**
+ * + Assumes `SrcT` may be a union
+ * + Assumes `DstT` may be a union
+ * + Assumes `SrcColumnsT` may be a union
+ * + Assumes `SrcColumnsT` is only ever built by using the arguments of `EqCandidateKeyOfTableDelegate`
+ */
+export type AssertNullSafeComparableToCandidateKeysOfTable<
+    SrcT extends Pick<ITable, "columns">,
+    DstT extends Pick<ITable, "columns"|"candidateKeys">,
+    SrcColumnsT extends TableUtil.ColumnArraysFromCandidateKeys<SrcT, DstT>
+> =
+    AssertNullSafeComparableToCandidateKeysOfTableImpl<SrcT, DstT, SrcColumnsT>
 ;
 
 export function assertNullSafeComparableToCandidateKeysOfTable<

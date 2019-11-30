@@ -45,6 +45,7 @@
         "./src/query-base/**/*",
         "./src/built-in-value-expr/**/*",
         "./src/built-in-expr/**/*",
+        "./src/value-expr/**/*",
         "./src/custom-expr/**/*",
         "./src/expr-library/**/*",
         "./src/where-clause/**/*",

@@ -1,8 +1,8 @@
 import * as tm from "type-mapping";
-import {isDataType} from "../predicate";
 import {BuiltInValueExprUtil} from "../../../built-in-value-expr";
 import {BuiltInExpr_NonCorrelated} from "../../../built-in-expr";
 import {IAnonymousColumn, ColumnUtil} from "../../../column";
+import {DataTypeUtil} from "../../../data-type";
 
 /**
  * If `mapper` is `IDataType`, it uses `mapper.toBuiltInExpr_NonCorrelated()`.
@@ -10,7 +10,7 @@ import {IAnonymousColumn, ColumnUtil} from "../../../column";
  * Else, it uses a fallback algorithm that works fine for `BuiltInValueExpr`.
  * If the `value` is not a `BuiltInValueExpr`, an error is thrown.
  */
-export function toBuiltInExpr_NonCorrelated<TypeT> (
+export function fromValueExpr<TypeT> (
     mapper : tm.SafeMapper<TypeT>|IAnonymousColumn<TypeT>,
     value : TypeT
 ) : BuiltInExpr_NonCorrelated<TypeT> {
@@ -20,7 +20,7 @@ export function toBuiltInExpr_NonCorrelated<TypeT> (
         valueName = `${mapper.tableAlias}${mapper.columnAlias}`;
         mapper = mapper.mapper;
     }
-    if (isDataType(mapper)) {
+    if (DataTypeUtil.isDataType(mapper)) {
         return mapper.toBuiltInExpr_NonCorrelated(
             /**
              * Validate the incoming value again, just to be sure...

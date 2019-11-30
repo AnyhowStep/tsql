@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {ITable} from "../../../table";
 import {Identity} from "../../../type-util";
-import {CustomExpr_NonCorrelated} from "../../../built-in-expr";
+import {CustomExpr_NonCorrelated} from "../../../custom-expr";
 import {SelectConnection, ExecutionUtil} from "../../../execution";
 import {QueryUtil} from "../../../unified-query";
 import {ExprUtil} from "../../../expr";

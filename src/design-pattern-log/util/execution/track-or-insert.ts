@@ -2,7 +2,7 @@ import {ILog} from "../../log";
 import {IsolableInsertOneConnection} from "../../../execution";
 import {PrimaryKey_Input} from "../../../primary-key";
 import {TableUtil} from "../../../table";
-import {CustomExpr_NonCorrelated} from "../../../built-in-expr";
+import {CustomExpr_NonCorrelated} from "../../../custom-expr";
 import {Track, unsafeTrack} from "./unsafe-track";
 
 export type TrackOrInsertRow<LogT extends ILog> =

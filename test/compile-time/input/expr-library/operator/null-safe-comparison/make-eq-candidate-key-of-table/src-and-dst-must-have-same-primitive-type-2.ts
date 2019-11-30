@@ -12,6 +12,9 @@ const myTable = tsql.table("myTable")
 const childTable = tsql.table("childTable")
     .addColumns({
         userId : tm.mysql.bigIntSigned().orNull(),
+        /**
+         * Realistically, will this ever be a thing?
+         */
         computerId : tm.mysql.varChar().orNull().or(tm.mysql.boolean()),
         accessedAt : tm.mysql.dateTime(),
     });

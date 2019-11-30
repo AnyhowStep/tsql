@@ -6,7 +6,7 @@ import {and} from "../logical";
 import {ColumnMapUtil} from "../../column-map";
 import {PartialRow_Input, PartialRowUtil, PartialRow_Output} from "../../partial-row";
 import {nullSafeEq} from "./null-safe-eq";
-import {DataTypeUtil} from "../../data-type";
+import {BuiltInExprUtil} from "../../built-in-expr";
 
 /**
  * Convenience function for,
@@ -83,7 +83,7 @@ export const eqColumns : EqColumns = (
             .map((columnAlias) => {
                 const expr = nullSafeEq(
                     table.columns[columnAlias],
-                    DataTypeUtil.toBuiltInExpr_NonCorrelated(
+                    BuiltInExprUtil.fromValueExpr(
                         table.columns[columnAlias],
                         columns[columnAlias as keyof PartialRow_Output<TableT>]
                     )

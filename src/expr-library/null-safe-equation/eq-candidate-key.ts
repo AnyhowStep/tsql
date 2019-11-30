@@ -7,7 +7,7 @@ import {CandidateKey_Input, CandidateKeyUtil, CandidateKey_Output} from "../../c
 import {ColumnMapUtil} from "../../column-map";
 import {StrictUnion} from "../../type-util";
 import {nullSafeEq} from "./null-safe-eq";
-import {DataTypeUtil} from "../../data-type";
+import {BuiltInExprUtil} from "../../built-in-expr";
 
 /**
  * Convenience function for,
@@ -90,7 +90,7 @@ export const eqCandidateKey : EqCandidateKey = (
         const arr = Object.keys(candidateKey).sort().map((columnAlias) => {
             const expr = nullSafeEq(
                 table.columns[columnAlias],
-                DataTypeUtil.toBuiltInExpr_NonCorrelated(
+                BuiltInExprUtil.fromValueExpr(
                     table.columns[columnAlias],
                     candidateKey[columnAlias as keyof CandidateKey_Output<TableT>]
                 )

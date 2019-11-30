@@ -1,8 +1,7 @@
 import {ITable} from "../../../table";
 import {AssignmentMap_Input, AssignmentMap_Output} from "../../assignment-map";
 import {UsedRefUtil} from "../../../used-ref";
-import {BuiltInExprUtil, AnyBuiltInExpr} from "../../../built-in-expr";
-import {DataTypeUtil} from "../../../data-type";
+import {BuiltInExprUtil} from "../../../built-in-expr";
 
 export function cleanAssignmentMap<
     TableT extends ITable
@@ -15,8 +14,8 @@ export function cleanAssignmentMap<
     const allowed = UsedRefUtil.fromColumnMap(table.columns);
 
     for (const columnAlias of Object.keys(raw)) {
-        const value = raw[columnAlias as keyof typeof raw];
-        if (value === undefined) {
+        const customExpr = raw[columnAlias as keyof typeof raw];
+        if (customExpr === undefined) {
             continue;
         }
         if (table.mutableColumns.indexOf(columnAlias) < 0) {
@@ -33,24 +32,11 @@ export function cleanAssignmentMap<
             }
         }
 
-        /**
-         * @todo Clean this up
-         */
-        if (BuiltInExprUtil.isAnyNonValueExpr(value)) {
-            UsedRefUtil.assertAllowed(
-                allowed,
-                BuiltInExprUtil.usedRef(value as AnyBuiltInExpr)
-            );
-            result[columnAlias as keyof typeof raw] = BuiltInExprUtil.mapCustomExpr_NonCorrelated(
-                table.columns[columnAlias],
-                value
-            );
-        } else {
-            result[columnAlias as keyof typeof raw] = DataTypeUtil.toBuiltInExpr_NonCorrelated(
-                table.columns[columnAlias],
-                value
-            );
-        }
+        result[columnAlias as keyof typeof raw] = BuiltInExprUtil.fromCustomExpr_MapCorrelated(
+            table.columns[columnAlias],
+            allowed,
+            customExpr
+        );
     }
 
     /*

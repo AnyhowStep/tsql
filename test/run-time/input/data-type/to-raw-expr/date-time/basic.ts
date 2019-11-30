@@ -3,28 +3,28 @@ import * as tsql from "../../../../../../dist";
 
 tape(__filename, async (t) => {
     t.deepEqual(
-        tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
+        tsql.BuiltInExprUtil.fromValueExpr(
             tsql.dtDateTime(3),
             new Date(0)
         ),
         new Date(0)
     );
     t.deepEqual(
-        tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
+        tsql.BuiltInExprUtil.fromValueExpr(
             tsql.dtDateTime(3),
             new Date(-1)
         ),
         new Date(-1)
     );
     t.deepEqual(
-        tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
+        tsql.BuiltInExprUtil.fromValueExpr(
             tsql.dtDateTime(3),
             new Date(1)
         ),
         new Date(1)
     );
     t.deepEqual(
-        tsql.DataTypeUtil.toBuiltInExpr_NonCorrelated(
+        tsql.BuiltInExprUtil.fromValueExpr(
             tsql.dtDateTime(3),
             new Date(1000)
         ),

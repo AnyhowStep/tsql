@@ -4,7 +4,8 @@ import {AssignmentMapDelegate, AssignmentMap_Input} from "../../../update";
 import {CandidateKey_NonUnion, CandidateKeyUtil, CandidateKey_Input} from "../../../candidate-key";
 import {StrictUnion, AssertNonUnion, Identity} from "../../../type-util";
 import {UpdateOneResult, updateOne} from "./update-one";
-import {BuiltInExprUtil, RawExprUsingColumnMap_Input} from "../../../built-in-expr";
+import {BuiltInExprUtil} from "../../../built-in-expr";
+import {CustomExpr_MapCorrelated, CustomExprUtil} from "../../../custom-expr";
 import * as ExprLib from "../../../expr-library";
 import {RowNotFoundError} from "../../../error";
 
@@ -18,11 +19,8 @@ export type UpdatedAndFetchedRow<
             (
                 undefined extends AssignmentMapT[columnAlias] ?
                 TableUtil.ColumnType<TableT, columnAlias> :
-                BuiltInExprUtil.TypeOf<
-                    /**
-                     * @todo Investigate assignability issue
-                     */
-                    Exclude<AssignmentMapT[columnAlias], undefined>
+                CustomExprUtil.TypeOf<
+                    AssignmentMapT[columnAlias]
                 >
             ) :
             TableUtil.ColumnType<TableT, columnAlias>
@@ -52,7 +50,7 @@ export type UpdateAndFetchOneByCandidateKeyAssignmentMapImpl<
     Identity<
         & {
             readonly [columnAlias in TableT["mutableColumns"][number]]? : (
-                RawExprUsingColumnMap_Input<
+                CustomExpr_MapCorrelated<
                     TableT["columns"],
                     ReturnType<
                         TableT["columns"][columnAlias]["mapper"]
@@ -123,8 +121,8 @@ export async function __updateAndFetchOneByCandidateKeyHelper<
 
     const newCandidateKey = {} as any;
     for(const candidateColumnAlias of Object.keys(candidateKey)) {
-        const newValue = assignmentMap[candidateColumnAlias as keyof typeof assignmentMap];
-        if (newValue === undefined) {
+        const newCustomExpr = assignmentMap[candidateColumnAlias as keyof typeof assignmentMap];
+        if (newCustomExpr === undefined) {
             /**
              * This `candidateKey` column's value will not be updated.
              */
@@ -134,7 +132,7 @@ export async function __updateAndFetchOneByCandidateKeyHelper<
              * This `candidateKey` column's value will be updated.
              * We need to know what its updated value will be.
              */
-            if (BuiltInExprUtil.isAnyNonValueExpr(newValue)) {
+            if (BuiltInExprUtil.isAnyNonValueExpr(newCustomExpr)) {
                 const evaluatedNewValue = await TableUtil.fetchValue(
                     table,
                     connection,
@@ -142,7 +140,7 @@ export async function __updateAndFetchOneByCandidateKeyHelper<
                         table,
                         candidateKey as any
                     ) as any,
-                    () => newValue as any
+                    () => newCustomExpr as any
                 ).catch((err) => {
                     if (err instanceof RowNotFoundError) {
                         return err;
@@ -163,7 +161,7 @@ export async function __updateAndFetchOneByCandidateKeyHelper<
             } else {
                 newCandidateKey[candidateColumnAlias] = table.columns[candidateColumnAlias].mapper(
                     `${table.alias}.${candidateColumnAlias}[newValue]`,
-                    newValue
+                    newCustomExpr
                 );
             }
             /**

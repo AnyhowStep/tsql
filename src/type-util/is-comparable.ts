@@ -1,16 +1,12 @@
-import {NonNullBuiltInValueExpr, BuiltInValueExprUtil} from "../built-in-value-expr";
+import {IsNullSafeComparableImpl} from "./is-null-safe-comparable";
 
 /**
  * Implements `tsql`'s notion of comparability.
- *
- * @todo Move this to `BuiltInValueExprUtil`
  */
-export type IsComparable<T extends NonNullBuiltInValueExpr, U extends NonNullBuiltInValueExpr> = (
-    [BuiltInValueExprUtil.BaseBuiltInType<T>] extends [BuiltInValueExprUtil.BaseBuiltInType<U>] ?
-    (
-        [BuiltInValueExprUtil.BaseBuiltInType<U>] extends [BuiltInValueExprUtil.BaseBuiltInType<T>] ?
-        true :
-        false
-    ) :
-    false
-);
+export type IsComparable<T extends unknown, U extends unknown> =
+    null extends T ?
+    false :
+    null extends U ?
+    false :
+    IsNullSafeComparableImpl<T, U>
+;

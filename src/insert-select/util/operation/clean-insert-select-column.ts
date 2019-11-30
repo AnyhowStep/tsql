@@ -10,7 +10,6 @@ import {MissingRequiredInsertColumnError, NullableRequiredInsertColumnError} fro
 import {ColumnUtil, IColumn} from "../../../column";
 import {ColumnRefUtil} from "../../../column-ref";
 import {ColumnIdentifierRefUtil} from "../../../column-identifier-ref";
-import {DataTypeUtil} from "../../../data-type";
 
 export function cleanInsertSelectColumn<
     QueryT extends QueryBaseUtil.AfterSelectClause,
@@ -118,7 +117,7 @@ export function cleanInsertSelectColumn<
         /**
          * Maybe a custom data type?
          */
-        return DataTypeUtil.toBuiltInExpr_NonCorrelated(
+        return BuiltInExprUtil.fromValueExpr(
             table.columns[columnAlias],
             value
         );

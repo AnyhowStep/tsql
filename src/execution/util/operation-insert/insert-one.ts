@@ -55,15 +55,18 @@ export async function insertOne<
 ) {
     TableUtil.assertInsertEnabled(table);
 
+    /**
+     * Should contain only `BuiltInExpr` now
+     */
     row = InsertUtil.cleanInsertRow(table, row);
 
     if (table.autoIncrement == undefined) {
         return connection.insertOne(table, row);
     }
 
-    let explicitAutoIncrementValue = (row as { [k:string]:unknown })[table.autoIncrement];
+    let explicitAutoIncrementBuiltInExpr = (row as { [k:string]:unknown })[table.autoIncrement];
 
-    if (explicitAutoIncrementValue === undefined) {
+    if (explicitAutoIncrementBuiltInExpr === undefined) {
         const insertResult = await connection.insertOne(table, row);
 
         if (insertResult.autoIncrementId != undefined) {
@@ -79,20 +82,26 @@ export async function insertOne<
         throw new Error(`Successful insertOne() to ${table.alias} should return autoIncrementId`);
     }
 
-    explicitAutoIncrementValue = await DataTypeUtil.evaluateExpr(
+    explicitAutoIncrementBuiltInExpr = await DataTypeUtil.evaluateCustomExpr(
         table.columns[table.autoIncrement],
         connection,
-        explicitAutoIncrementValue
+        explicitAutoIncrementBuiltInExpr
     );
+
+    const autoIncrementBigInt = tm.BigInt(explicitAutoIncrementBuiltInExpr as any);
 
     const insertResult = await connection.insertOne(
         table,
         {
             ...row,
-            [table.autoIncrement] : explicitAutoIncrementValue,
+            [table.autoIncrement] : explicitAutoIncrementBuiltInExpr,
         }
     );
 
+    /**
+     * We defer to the `autoIncrementId` of the `insertResult`.
+     * We assume the `connection` always knows best.
+     */
     if (insertResult.autoIncrementId != undefined) {
         return {
             ...insertResult,
@@ -100,14 +109,13 @@ export async function insertOne<
         };
     }
 
-    const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
     /**
      * User supplied an explicit value for the `AUTO_INCREMENT`/`SERIAL` column, for whatever reason.
      * Use it.
      */
     return {
         ...insertResult,
-        autoIncrementId : BigInt(explicitAutoIncrementValue as any),
-        [table.autoIncrement] : BigInt(explicitAutoIncrementValue as any),
+        autoIncrementId : autoIncrementBigInt,
+        [table.autoIncrement] : autoIncrementBigInt,
     };
 }

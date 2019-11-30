@@ -7,7 +7,6 @@ import {QueryBaseUtil} from "../../../query-base";
 import {ExprUtil} from "../../../expr";
 import {ExprSelectItemUtil} from "../../../expr-select-item";
 import {MissingRequiredInsertColumnError, NullableRequiredInsertColumnError} from "../../../error";
-import {DataTypeUtil} from "../../../data-type";
 
 export function cleanInsertColumn<TableT extends ITable> (
     table : TableT,
@@ -27,7 +26,7 @@ export function cleanInsertColumn<TableT extends ITable> (
     columnAlias : keyof InsertRow_Input<TableT>,
     required : boolean
 ) : InsertRow_Output<TableT>[keyof InsertRow_Output<TableT>]|undefined {
-    const value = (
+    const customExpr = (
         /**
          * This is just safer.
          *
@@ -47,7 +46,7 @@ export function cleanInsertColumn<TableT extends ITable> (
         row[columnAlias] :
         undefined
     );
-    if (value === undefined) {
+    if (customExpr === undefined) {
         if (required) {
             throw new MissingRequiredInsertColumnError(
                 `Expected value for ${table.alias}.${columnAlias}; received undefined`,
@@ -59,18 +58,18 @@ export function cleanInsertColumn<TableT extends ITable> (
         }
     }
 
-    if (BuiltInValueExprUtil.isBuiltInValueExpr(value)) {
+    if (BuiltInValueExprUtil.isBuiltInValueExpr(customExpr)) {
         return table.columns[columnAlias].mapper(
             `${table.alias}.${columnAlias}`,
-            value
+            customExpr
         );
-    } else if (BuiltInExprUtil.isAnySubqueryExpr(value)) {
+    } else if (BuiltInExprUtil.isAnySubqueryExpr(customExpr)) {
         /**
          * Can't really perform many checks here.
          * We can, however, check for `NULL`s.
          */
         if (
-            QueryBaseUtil.isZeroOrOneRow(value) &&
+            QueryBaseUtil.isZeroOrOneRow(customExpr) &&
             !tm.canOutputNull(table.columns[columnAlias].mapper)
         ) {
             throw new NullableRequiredInsertColumnError(
@@ -79,28 +78,28 @@ export function cleanInsertColumn<TableT extends ITable> (
                 columnAlias
             );
         }
-        return value as any;
+        return customExpr as any;
     } else {
         /**
          * Could be an `IExpr`, `IExprSelectItem`, or a custom data type
          */
         if (
-            ExprUtil.isExpr(value) ||
-            ExprSelectItemUtil.isExprSelectItem(value)
+            ExprUtil.isExpr(customExpr) ||
+            ExprSelectItemUtil.isExprSelectItem(customExpr)
         ) {
             /**
              * @todo Should we validate these?
              * How would one even do that?
              */
-            return value as any;
+            return customExpr as any;
         }
 
         /**
          * Maybe a custom data type?
          */
-        return DataTypeUtil.toBuiltInExpr_NonCorrelated(
+        return BuiltInExprUtil.fromValueExpr(
             table.columns[columnAlias],
-            value
+            customExpr
         );
     }
 }
