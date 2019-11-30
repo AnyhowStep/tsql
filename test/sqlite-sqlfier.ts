@@ -772,6 +772,36 @@ export const sqliteSqlfier : Sqlfier = {
         */
 
         [OperatorType.AGGREGATE_COUNT_ALL] : () => functionCall("COUNT", ["*"]),
+        [OperatorType.AGGREGATE_COUNT_EXPR] : ({operands, operatorType}) => {
+            if (operands.length == 2) {
+                const [isDistinct, expr] = operands;
+                if (
+                    LiteralValueNodeUtil.isLiteralValueNode(isDistinct) &&
+                    isDistinct.literalValue === true
+                ) {
+                    return functionCall("COUNT", [["DISTINCT", expr]]);
+                } else {
+                    return functionCall("COUNT", [expr]);
+                }
+            } else {
+                throw new Error(`${operatorType} only implemented for 2 args`);
+            }
+        },
+        [OperatorType.AGGREGATE_AVERAGE] : ({operands, operatorType}) => {
+            if (operands.length == 2) {
+                const [isDistinct, expr] = operands;
+                if (
+                    LiteralValueNodeUtil.isLiteralValueNode(isDistinct) &&
+                    isDistinct.literalValue === true
+                ) {
+                    return functionCall("AVG", [["DISTINCT", expr]]);
+                } else {
+                    return functionCall("AVG", [expr]);
+                }
+            } else {
+                throw new Error(`${operatorType} only implemented for 2 args`);
+            }
+        },
         [OperatorType.AGGREGATE_MAX] : ({operands, operatorType}) => {
             if (operands.length == 2) {
                 const [isDistinct, expr] = operands;

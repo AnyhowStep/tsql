@@ -32,3 +32,5 @@ export const countExprAll : Operator1<EquatableType, bigint> = <
 ) => {
     return countExprImpl(false, arg);
 };
+
+export const countExpr = countExprAll;
