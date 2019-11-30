@@ -62,8 +62,10 @@ export class CaseConditionBuilderImpl<
                  * https://github.com/microsoft/TypeScript/issues/33573
                  */
                 branches : this.ast.branches.concat([
-                    BuiltInExprUtil.buildAst(condition),
-                    BuiltInExprUtil.buildAst(then)
+                    [
+                        BuiltInExprUtil.buildAst(condition),
+                        BuiltInExprUtil.buildAst(then)
+                    ]
                 ]),
                 else : this.ast.else,
             }
@@ -122,7 +124,10 @@ export class CaseConditionBuilderImpl<
                         BuiltInExprUtil.usedRef(elseResult)
                     ),
                 },
-                this.ast
+                {
+                    ...this.ast,
+                    else : BuiltInExprUtil.buildAst(elseResult),
+                }
             );
         };
         return {

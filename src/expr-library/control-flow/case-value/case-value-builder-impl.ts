@@ -85,8 +85,10 @@ export class CaseValueBuilderImpl<
                  * https://github.com/microsoft/TypeScript/issues/33573
                  */
                 cases : this.ast.cases.concat([
-                    BuiltInExprUtil.buildAst(compareValue),
-                    BuiltInExprUtil.buildAst(then)
+                    [
+                        BuiltInExprUtil.buildAst(compareValue),
+                        BuiltInExprUtil.buildAst(then)
+                    ]
                 ]),
                 else : this.ast.else,
             }
@@ -146,7 +148,10 @@ export class CaseValueBuilderImpl<
                         BuiltInExprUtil.usedRef(elseResult)
                     ),
                 },
-                this.ast
+                {
+                    ...this.ast,
+                    else : BuiltInExprUtil.buildAst(elseResult),
+                }
             );
         };
         return {
