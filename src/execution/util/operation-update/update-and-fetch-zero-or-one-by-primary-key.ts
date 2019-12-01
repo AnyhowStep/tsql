@@ -18,20 +18,25 @@ export async function updateAndFetchZeroOrOneByPrimaryKey<
     primaryKey : PrimaryKey_Input<TableT>,
     assignmentMapDelegate : AssignmentMapDelegate<TableT, AssignmentMapT>
 ) : Promise<UpdateAndFetchZeroOrOneResult<TableT, AssignmentMapT>> {
-    const {
-        curPrimaryKey,
-        assignmentMap,
-        newPrimaryKey,
-    } = __updateAndFetchOneByPrimaryKeyHelper<
-        TableT,
-        AssignmentMapT
-    >(
-        table,
-        primaryKey,
-        assignmentMapDelegate
-    );
-
     return connection.transactionIfNotInOne(async (connection) : Promise<UpdateAndFetchZeroOrOneResult<TableT, AssignmentMapT>> => {
+        const helperResult = await __updateAndFetchOneByPrimaryKeyHelper<
+            TableT,
+            AssignmentMapT
+        >(
+            table,
+            connection,
+            primaryKey,
+            assignmentMapDelegate
+        );
+        if (!helperResult.success) {
+            throw helperResult.rowNotFoundError;
+        }
+        const {
+            curPrimaryKey,
+            assignmentMap,
+            newPrimaryKey,
+        } = helperResult;
+
         const updateZeroOrOneResult = await updateZeroOrOne(
             table,
             connection,

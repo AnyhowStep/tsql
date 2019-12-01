@@ -24,7 +24,7 @@ export type UpdateAndFetchZeroOrOneResult<
 export async function updateAndFetchZeroOrOneByCandidateKey<
     TableT extends ITable,
     CandidateKeyT extends StrictUnion<CandidateKey_NonUnion<TableT>>,
-    AssignmentMapT extends UpdateAndFetchOneByCandidateKeyAssignmentMap<TableT, CandidateKeyT>
+    AssignmentMapT extends UpdateAndFetchOneByCandidateKeyAssignmentMap<TableT>
 > (
     table : TableT,
     connection : IsolableUpdateConnection,
@@ -65,7 +65,7 @@ export async function updateAndFetchZeroOrOneByCandidateKey<
                 message : "",
 
                 row : undefined,
-            }
+            };
         }
         const {
             curCandidateKey,

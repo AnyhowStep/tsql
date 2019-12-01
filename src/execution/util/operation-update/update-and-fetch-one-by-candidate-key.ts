@@ -41,11 +41,7 @@ export type UpdateAndFetchOneResult<
 ;
 
 export type UpdateAndFetchOneByCandidateKeyAssignmentMapImpl<
-    TableT extends ITable,
-    /**
-     * Assumes this is not a union
-     */
-    _CandidateKeyT extends StrictUnion<CandidateKey_NonUnion<TableT>>
+    TableT extends ITable
 > =
     Identity<
         & {
@@ -70,17 +66,13 @@ export type UpdateAndFetchOneByCandidateKeyAssignmentMapImpl<
 ;
 
 export type UpdateAndFetchOneByCandidateKeyAssignmentMap<
-    TableT extends ITable,
-    /**
-     * Assumes this is not a union
-     */
-    CandidateKeyT extends StrictUnion<CandidateKey_NonUnion<TableT>>
+    TableT extends ITable
 > =
     Extract<
         /**
          * @todo Investigate assignability
          */
-        UpdateAndFetchOneByCandidateKeyAssignmentMapImpl<TableT, CandidateKeyT>,
+        UpdateAndFetchOneByCandidateKeyAssignmentMapImpl<TableT>,
         AssignmentMap_Input<TableT>
     >
 ;
@@ -93,7 +85,7 @@ export type UpdateAndFetchOneByCandidateKeyAssignmentMap<
 export async function __updateAndFetchOneByCandidateKeyHelper<
     TableT extends ITable,
     CandidateKeyT extends StrictUnion<CandidateKey_NonUnion<TableT>>,
-    AssignmentMapT extends UpdateAndFetchOneByCandidateKeyAssignmentMap<TableT, CandidateKeyT>
+    AssignmentMapT extends UpdateAndFetchOneByCandidateKeyAssignmentMap<TableT>
 > (
     table : TableT,
     connection : SelectConnection,
@@ -107,7 +99,7 @@ export async function __updateAndFetchOneByCandidateKeyHelper<
     | {
         success : true,
         curCandidateKey : StrictUnion<CandidateKey_Input<TableT>>,
-        assignmentMap : UpdateAndFetchOneByCandidateKeyAssignmentMap<TableT, CandidateKeyT>,
+        assignmentMap : UpdateAndFetchOneByCandidateKeyAssignmentMap<TableT>,
         newCandidateKey : StrictUnion<CandidateKey_Input<TableT>>,
     }
 > {
@@ -116,7 +108,7 @@ export async function __updateAndFetchOneByCandidateKeyHelper<
         candidateKey
     ) as any;
     const assignmentMap : (
-        UpdateAndFetchOneByCandidateKeyAssignmentMap<TableT, CandidateKeyT>
+        UpdateAndFetchOneByCandidateKeyAssignmentMap<TableT>
     ) = assignmentMapDelegate(table.columns);
 
     const newCandidateKey = {} as any;
@@ -184,7 +176,7 @@ export async function __updateAndFetchOneByCandidateKeyHelper<
 export async function updateAndFetchOneByCandidateKey<
     TableT extends ITable,
     CandidateKeyT extends StrictUnion<CandidateKey_NonUnion<TableT>>,
-    AssignmentMapT extends UpdateAndFetchOneByCandidateKeyAssignmentMap<TableT, CandidateKeyT>
+    AssignmentMapT extends UpdateAndFetchOneByCandidateKeyAssignmentMap<TableT>
 > (
     table : TableT,
     connection : IsolableUpdateConnection,
