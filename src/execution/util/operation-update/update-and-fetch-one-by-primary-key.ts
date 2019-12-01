@@ -1,6 +1,6 @@
 import {TableUtil, TableWithPrimaryKey} from "../../../table";
 import {IsolableUpdateConnection, SelectConnection} from "../../connection";
-import {AssignmentMapDelegate, AssignmentMap_Input} from "../../../update";
+import {AssignmentMapDelegate, CustomAssignmentMap} from "../../../update";
 import {Identity} from "../../../type-util";
 import {updateOne} from "./update-one";
 import {CustomExpr_MapCorrelated} from "../../../custom-expr";
@@ -42,7 +42,7 @@ export type UpdateAndFetchOneByPrimaryKeyAssignmentMap<
          * @todo Investigate assignability
          */
         UpdateAndFetchOneByPrimaryKeyAssignmentMapImpl<TableT>,
-        AssignmentMap_Input<TableT>
+        CustomAssignmentMap<TableT>
     >
 ;
 

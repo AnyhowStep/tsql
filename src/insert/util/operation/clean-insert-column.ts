@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {ITable} from "../../../table";
-import {InsertRow_Input, InsertRow_Output} from "../../insert-row";
+import {CustomInsertRow, BuiltInInsertRow} from "../../insert-row";
 import {BuiltInValueExprUtil} from "../../../built-in-value-expr";
 import {BuiltInExprUtil} from "../../../built-in-expr";
 import {QueryBaseUtil} from "../../../query-base";
@@ -10,22 +10,22 @@ import {MissingRequiredInsertColumnError, NullableRequiredInsertColumnError} fro
 
 export function cleanInsertColumn<TableT extends ITable> (
     table : TableT,
-    row : InsertRow_Input<TableT>,
-    columnAlias : keyof InsertRow_Input<TableT>,
+    row : CustomInsertRow<TableT>,
+    columnAlias : keyof CustomInsertRow<TableT>,
     required : true
-) : InsertRow_Output<TableT>[keyof InsertRow_Output<TableT>];
+) : BuiltInInsertRow<TableT>[keyof BuiltInInsertRow<TableT>];
 export function cleanInsertColumn<TableT extends ITable> (
     table : TableT,
-    row : InsertRow_Input<TableT>,
-    columnAlias : keyof InsertRow_Input<TableT>,
+    row : CustomInsertRow<TableT>,
+    columnAlias : keyof CustomInsertRow<TableT>,
     required : false
-) : InsertRow_Output<TableT>[keyof InsertRow_Output<TableT>]|undefined;
+) : BuiltInInsertRow<TableT>[keyof BuiltInInsertRow<TableT>]|undefined;
 export function cleanInsertColumn<TableT extends ITable> (
     table : TableT,
-    row : InsertRow_Input<TableT>,
-    columnAlias : keyof InsertRow_Input<TableT>,
+    row : CustomInsertRow<TableT>,
+    columnAlias : keyof CustomInsertRow<TableT>,
     required : boolean
-) : InsertRow_Output<TableT>[keyof InsertRow_Output<TableT>]|undefined {
+) : BuiltInInsertRow<TableT>[keyof BuiltInInsertRow<TableT>]|undefined {
     const customExpr = (
         /**
          * This is just safer.

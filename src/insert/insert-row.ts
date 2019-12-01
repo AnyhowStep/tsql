@@ -1,10 +1,10 @@
 import {ITable, TableUtil} from "../table";
 import {BuiltInExpr_NonCorrelated} from "../built-in-expr";
 import {CustomExpr_NonCorrelated} from "../custom-expr";
-import {Key} from "../key";
+import {Key, KeyUtil} from "../key";
 import {Identity} from "../type-util";
 
-export type InsertRowRequireCandidateKey_NonUnion<
+export type CustomInsertRowWithCandidateKey_NonUnion<
     TableT extends ITable,
     CandidateKeyT extends Key
 > =
@@ -35,16 +35,20 @@ export type InsertRowRequireCandidateKey_NonUnion<
         }
     >
 ;
-export type InsertRowRequireCandidateKey_InputImpl<
+export type CustomInsertRowWithCandidateKeyImpl<
     TableT extends ITable,
     CandidateKeyT extends Key
 > =
     CandidateKeyT extends Key ?
-    InsertRowRequireCandidateKey_NonUnion<TableT, CandidateKeyT> :
+    (
+        KeyUtil.IsSubKey<CandidateKeyT, TableUtil.InsertableColumnAlias<TableT>[]> extends true ?
+        CustomInsertRowWithCandidateKey_NonUnion<TableT, CandidateKeyT> :
+        never
+    ) :
     never
 ;
-export type InsertRowRequireCandidateKey_Input<TableT extends ITable> =
-    InsertRowRequireCandidateKey_InputImpl<
+export type CustomInsertRowWithCandidateKey<TableT extends ITable> =
+    CustomInsertRowWithCandidateKeyImpl<
         TableT,
         TableT["candidateKeys"][number]
     >
@@ -53,7 +57,7 @@ export type InsertRowRequireCandidateKey_Input<TableT extends ITable> =
 /**
  * This allows custom data types
  */
-export type InsertRow_Input<TableT extends ITable> =
+export type CustomInsertRow<TableT extends ITable> =
     Identity<
         & {
             readonly [columnAlias in TableUtil.RequiredColumnAlias<TableT>] : (
@@ -71,7 +75,7 @@ export type InsertRow_Input<TableT extends ITable> =
         }
     >
 ;
-export type InsertRowLiteral<TableT extends ITable> =
+export type ValueInsertRow<TableT extends ITable> =
     Identity<
         {
             readonly [columnAlias in TableUtil.RequiredColumnAlias<TableT>] : (
@@ -89,7 +93,7 @@ export type InsertRowLiteral<TableT extends ITable> =
 /**
  * This **does not** allow custom data types
  */
-export type InsertRow_Output<TableT extends ITable> =
+export type BuiltInInsertRow<TableT extends ITable> =
     Identity<
         & {
             readonly [columnAlias in TableUtil.RequiredColumnAlias<TableT>] : (

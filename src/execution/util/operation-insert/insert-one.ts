@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {ITable, TableWithAutoIncrement, TableWithoutAutoIncrement, InsertableTable, TableUtil} from "../../../table";
 import {InsertOneConnection, InsertOneResult} from "../../connection";
-import {InsertRow_Input, InsertUtil} from "../../../insert";
+import {CustomInsertRow, InsertUtil} from "../../../insert";
 import {DataTypeUtil} from "../../../data-type";
 
 export type InsertOneResultWithAutoIncrement<
@@ -31,7 +31,7 @@ export async function insertOne<
 > (
     table : TableT,
     connection : InsertOneConnection,
-    row : InsertRow_Input<TableT>
+    row : CustomInsertRow<TableT>
 ) : (
     Promise<InsertOneWithAutoIncrementReturnType<TableT>>
 );
@@ -40,7 +40,7 @@ export async function insertOne<
 > (
     table : TableT,
     connection : InsertOneConnection,
-    row : InsertRow_Input<TableT>
+    row : CustomInsertRow<TableT>
 ) : (
     Promise<InsertOneResult>
 );
@@ -49,7 +49,7 @@ export async function insertOne<
 > (
     table : TableT,
     connection : InsertOneConnection,
-    row : InsertRow_Input<TableT>
+    row : CustomInsertRow<TableT>
 ) : (
     Promise<InsertOneResult>
 ) {

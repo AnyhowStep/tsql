@@ -1,6 +1,6 @@
 import {ITable, TableUtil} from "../../../table";
 import {IsolableUpdateConnection, SelectConnection} from "../../connection";
-import {AssignmentMapDelegate, AssignmentMap_Input} from "../../../update";
+import {AssignmentMapDelegate, CustomAssignmentMap} from "../../../update";
 import {AssertNonUnion, Identity} from "../../../type-util";
 import {updateOne} from "./update-one";
 import {CustomExpr_MapCorrelated} from "../../../custom-expr";
@@ -43,7 +43,7 @@ export type UpdateAndFetchOneBySuperKeyAssignmentMap<
          * @todo Investigate assignability
          */
         UpdateAndFetchOneBySuperKeyAssignmentMapImpl<TableT>,
-        AssignmentMap_Input<TableT>
+        CustomAssignmentMap<TableT>
     >
 ;
 

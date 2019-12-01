@@ -1,9 +1,9 @@
 import {ITable} from "../table";
-import {AssignmentMap_Input} from "./assignment-map";
+import {CustomAssignmentMap} from "./assignment-map";
 
 export type AssignmentMapDelegate<
     TableT extends ITable,
-    AssignmentMapT extends AssignmentMap_Input<TableT> = AssignmentMap_Input<TableT>
+    AssignmentMapT extends CustomAssignmentMap<TableT> = CustomAssignmentMap<TableT>
 > =
     (
         columns : TableT["columns"]

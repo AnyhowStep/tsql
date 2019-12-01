@@ -1,0 +1,16 @@
+[
+  {
+    "messageText": "The 'this' context of type 'Table<{ isLateral: false; alias: \"test\"; columns: { readonly testId: Column<{ tableAlias: \"test\"; columnAlias: \"testId\"; mapper: Mapper<unknown, bigint>; }>; readonly testVal: Column<{ tableAlias: \"test\"; columnAlias: \"testVal\"; mapper: Mapper<...>; }>; }; ... 10 more ...; mutableColumns: readonly never[]; }>' is not assignable to method's 'this' of type 'never'.",
+    "code": 2684,
+    "category": 1,
+    "length": 4,
+    "start": 429
+  },
+  {
+    "messageText": "The 'this' context of type 'Table<{ isLateral: false; alias: \"test\"; columns: { readonly testId: Column<{ tableAlias: \"test\"; columnAlias: \"testId\"; mapper: Mapper<unknown, bigint>; }>; readonly testVal: Column<{ tableAlias: \"test\"; columnAlias: \"testVal\"; mapper: Mapper<...>; }>; }; ... 10 more ...; mutableColumns: readonly never[]; }>' is not assignable to method's 'this' of type 'never'.",
+    "code": 2684,
+    "category": 1,
+    "length": 4,
+    "start": 620
+  }
+]

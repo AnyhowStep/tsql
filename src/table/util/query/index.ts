@@ -4,5 +4,6 @@ export * from "./column-type";
 export * from "./extract-candidate-keys-in-common";
 export * from "./extract-candidate-keys-with-column-alias-in-one-of-column-array";
 export * from "./extract-candidate-keys-with-column-alias-in-table";
+export * from "./insertable-column-alias";
 export * from "./optional-column-alias";
 export * from "./required-column-alias";

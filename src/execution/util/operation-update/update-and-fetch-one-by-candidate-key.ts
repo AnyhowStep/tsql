@@ -1,6 +1,6 @@
 import {ITable, TableUtil} from "../../../table";
 import {IsolableUpdateConnection, SelectConnection} from "../../connection";
-import {AssignmentMapDelegate, AssignmentMap_Input} from "../../../update";
+import {AssignmentMapDelegate, CustomAssignmentMap} from "../../../update";
 import {CandidateKey_NonUnion, CandidateKeyUtil, CandidateKey_Input} from "../../../candidate-key";
 import {StrictUnion, AssertNonUnion, Identity} from "../../../type-util";
 import {UpdateOneResult, updateOne} from "./update-one";
@@ -11,7 +11,7 @@ import {RowNotFoundError} from "../../../error";
 
 export type UpdatedAndFetchedRow<
     TableT extends ITable,
-    AssignmentMapT extends AssignmentMap_Input<TableT>
+    AssignmentMapT extends CustomAssignmentMap<TableT>
 > =
     Identity<{
         readonly [columnAlias in TableUtil.ColumnAlias<TableT>] : (
@@ -30,7 +30,7 @@ export type UpdatedAndFetchedRow<
 
 export type UpdateAndFetchOneResult<
     TableT extends ITable,
-    AssignmentMapT extends AssignmentMap_Input<TableT>
+    AssignmentMapT extends CustomAssignmentMap<TableT>
 > =
     Identity<
         & UpdateOneResult
@@ -73,7 +73,7 @@ export type UpdateAndFetchOneByCandidateKeyAssignmentMap<
          * @todo Investigate assignability
          */
         UpdateAndFetchOneByCandidateKeyAssignmentMapImpl<TableT>,
-        AssignmentMap_Input<TableT>
+        CustomAssignmentMap<TableT>
     >
 ;
 

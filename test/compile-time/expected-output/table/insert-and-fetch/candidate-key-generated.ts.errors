@@ -1,0 +1,9 @@
+[
+  {
+    "messageText": "Type 'bigint' is not assignable to type 'never'.",
+    "code": 2322,
+    "category": 1,
+    "length": 6,
+    "start": 573
+  }
+]
