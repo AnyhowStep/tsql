@@ -11,7 +11,6 @@ import {BuiltInExpr, AnyBuiltInExpr, AnySubqueryExpr} from "../built-in-expr";
 import {OnDelegate, OnClauseUtil} from "../on-clause";
 import {ITable, TableUtil, TableWithPrimaryKey, InsertableTable, DeletableTable} from "../table";
 import {ColumnUtil} from "../column";
-import {BuiltInValueExpr} from "../built-in-value-expr";
 import {JoinArrayUtil} from "../join";
 import {SuperKey_NonUnion} from "../super-key";
 import {PrimaryKey_NonUnion} from "../primary-key";
@@ -894,11 +893,8 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     }
 
     whereNullSafeEq<
-        ColumnT extends ColumnUtil.ExtractWithType<
-            ColumnUtil.FromJoinArray<
-                Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"]
-            >,
-            BuiltInValueExpr
+        ColumnT extends ColumnUtil.FromJoinArray<
+            Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"]
         >,
         ValueT extends tm.OutputOf<ColumnT["mapper"]>|null
     > (
@@ -914,9 +910,8 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
          * https://github.com/microsoft/TypeScript/issues/32804#issuecomment-520201877
          */
         ...args : (
-            ColumnT extends ColumnUtil.ExtractWithType<
-                ColumnUtil.FromJoinArray<Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"]>,
-                BuiltInValueExpr
+            ColumnT extends ColumnUtil.FromJoinArray<
+                Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"]
             > ?
             [
                 FromClauseUtil.WhereNullSafeEqDelegate<Extract<this, QueryUtil.AfterFromClause>["fromClause"], ColumnT>,

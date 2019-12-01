@@ -7,8 +7,8 @@ import {WhereClause, WhereClauseUtil} from "../../../where-clause";
 import {ColumnRefUtil} from "../../../column-ref";
 import * as ExprLib from "../../../expr-library";
 import {ColumnIdentifierRefUtil} from "../../../column-identifier-ref";
-import {BuiltInValueExprUtil, BuiltInValueExpr} from "../../../built-in-value-expr";
 import {BuiltInExprUtil} from "../../../built-in-expr";
+import {ValueExprUtil} from "../../../value-expr";
 
 /**
  * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966
@@ -17,10 +17,7 @@ import {BuiltInExprUtil} from "../../../built-in-expr";
  * to trigger max depth/max count errors.
  */
 export type WhereNullSafeEqImpl<
-    ColumnT extends ColumnUtil.ExtractWithType<
-        ColumnUtil.FromJoinArray<CurrentJoinsT>,
-        BuiltInValueExpr
-    >,
+    ColumnT extends ColumnUtil.FromJoinArray<CurrentJoinsT>,
     ValueT extends tm.OutputOf<ColumnT["mapper"]>|null,
     OuterQueryJoinsT extends AfterFromClause["outerQueryJoins"],
     CurrentJoinsT extends AfterFromClause["currentJoins"],
@@ -31,7 +28,7 @@ export type WhereNullSafeEqImpl<
             CurrentJoinsT,
             ColumnT["tableAlias"],
             ColumnT["columnAlias"],
-            BuiltInValueExprUtil.NullSafeCaseInsensitiveNarrow<
+            ValueExprUtil.NullSafeCaseInsensitiveNarrow<
                 tm.OutputOf<ColumnT["mapper"]>,
                 ValueT
             >
@@ -40,10 +37,7 @@ export type WhereNullSafeEqImpl<
 );
 export type WhereNullSafeEq<
     FromClauseT extends AfterFromClause,
-    ColumnT extends ColumnUtil.ExtractWithType<
-        ColumnUtil.FromJoinArray<FromClauseT["currentJoins"]>,
-        BuiltInValueExpr
-    >,
+    ColumnT extends ColumnUtil.FromJoinArray<FromClauseT["currentJoins"]>,
     ValueT extends tm.OutputOf<ColumnT["mapper"]>|null
 > = (
     WhereNullSafeEqImpl<
@@ -60,20 +54,14 @@ export type WhereNullSafeEq<
  * to trigger max depth/max count errors.
  */
 export type WhereNullSafeEqDelegateImpl<
-    ColumnT extends ColumnUtil.ExtractWithType<
-        ColumnUtil.FromJoinArray<CurrentJoinsT>,
-        BuiltInValueExpr
-    >,
+    ColumnT extends ColumnUtil.FromJoinArray<CurrentJoinsT>,
     CurrentJoinsT extends AfterFromClause["currentJoins"]
 > = (
     (
         columns : (
             ColumnRefUtil.TryFlatten<
-                ColumnRefUtil.ExtractWithType<
-                    ColumnRefUtil.FromColumnArray<
-                        ColumnUtil.FromJoinArray<CurrentJoinsT>[]
-                    >,
-                    BuiltInValueExpr
+                ColumnRefUtil.FromColumnArray<
+                    ColumnUtil.FromJoinArray<CurrentJoinsT>[]
                 >
             >
         )
@@ -81,10 +69,7 @@ export type WhereNullSafeEqDelegateImpl<
 );
 export type WhereNullSafeEqDelegate<
     FromClauseT extends Pick<AfterFromClause, "currentJoins">,
-    ColumnT extends ColumnUtil.ExtractWithType<
-        ColumnUtil.FromJoinArray<FromClauseT["currentJoins"]>,
-        BuiltInValueExpr
-    >
+    ColumnT extends ColumnUtil.FromJoinArray<FromClauseT["currentJoins"]>
 > = (
     WhereNullSafeEqDelegateImpl<
         ColumnT,
@@ -110,10 +95,7 @@ export type WhereNullSafeEqDelegate<
  */
 export function whereNullSafeEq<
     FromClauseT extends AfterFromClause,
-    ColumnT extends ColumnUtil.ExtractWithType<
-        ColumnUtil.FromJoinArray<FromClauseT["currentJoins"]>,
-        BuiltInValueExpr
-    >,
+    ColumnT extends ColumnUtil.FromJoinArray<FromClauseT["currentJoins"]>,
     ValueT extends tm.OutputOf<ColumnT["mapper"]>|null
 > (
     fromClause : FromClauseT,
@@ -129,10 +111,7 @@ export function whereNullSafeEq<
      * https://github.com/microsoft/TypeScript/issues/32804#issuecomment-520201877
      */
     ...args : (
-        ColumnT extends ColumnUtil.ExtractWithType<
-            ColumnUtil.FromJoinArray<FromClauseT["currentJoins"]>,
-            BuiltInValueExpr
-        > ?
+        ColumnT extends ColumnUtil.FromJoinArray<FromClauseT["currentJoins"]> ?
         [
             WhereNullSafeEqDelegate<FromClauseT, ColumnT>,
             ValueT
@@ -148,10 +127,8 @@ export function whereNullSafeEq<
     const whereNullSafeEqDelegate = args[0];
     const value = args[1];
 
-    const columns = ColumnRefUtil.__noOp_extractWithType<BuiltInValueExpr>()(
-        ColumnRefUtil.fromColumnArray(
-            ColumnUtil.fromJoinArray<FromClauseT["currentJoins"]>(fromClause.currentJoins)
-        )
+    const columns = ColumnRefUtil.fromColumnArray(
+        ColumnUtil.fromJoinArray<FromClauseT["currentJoins"]>(fromClause.currentJoins)
     );
     const column = whereNullSafeEqDelegate(
         ColumnRefUtil.tryFlatten(columns)
@@ -174,7 +151,7 @@ export function whereNullSafeEq<
                 FromClauseT["currentJoins"],
                 ColumnT["tableAlias"],
                 ColumnT["columnAlias"],
-                BuiltInValueExprUtil.NullSafeCaseInsensitiveNarrow<
+                ValueExprUtil.NullSafeCaseInsensitiveNarrow<
                     tm.OutputOf<ColumnT["mapper"]>,
                     ValueT
                 >
@@ -185,14 +162,16 @@ export function whereNullSafeEq<
                 /**
                  * Cast to the type of `ValueT`
                  */
+                /*
                 tm.or(
                     BuiltInExprUtil.mapper(value),
                     tm.pipe(
                         column.mapper,
                         BuiltInExprUtil.mapper(value)
                     )
-                ) as (
-                    () => BuiltInValueExprUtil.NullSafeCaseInsensitiveNarrow<
+                )*/
+                column.mapper as (
+                    () => ValueExprUtil.NullSafeCaseInsensitiveNarrow<
                         tm.OutputOf<ColumnT["mapper"]>,
                         ValueT
                     >
@@ -207,7 +186,10 @@ export function whereNullSafeEq<
              */
             () => ExprLib.nullSafeEq(
                 column,
-                value
+                BuiltInExprUtil.fromValueExpr(
+                    ColumnUtil.toNullable(column),
+                    value
+                )
             ) as any
         ),
     };
