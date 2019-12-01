@@ -29,7 +29,29 @@ export async function updateAndFetchZeroOrOneByPrimaryKey<
             assignmentMapDelegate
         );
         if (!helperResult.success) {
-            throw helperResult.rowNotFoundError;
+            return {
+                query : {
+                    sql : helperResult.rowNotFoundError.sql,
+                },
+
+                //Alias for affectedRows
+                foundRowCount : tm.BigInt(0) as 0n,
+
+                //Alias for changedRows
+                updatedRowCount : tm.BigInt(0) as 0n,
+
+                /**
+                 * May be the duplicate row count, or some other value.
+                 */
+                warningCount : tm.BigInt(0),
+                /**
+                 * An arbitrary message.
+                 * May be an empty string.
+                 */
+                message : "",
+
+                row : undefined,
+            };
         }
         const {
             curPrimaryKey,
