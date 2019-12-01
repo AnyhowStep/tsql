@@ -113,13 +113,23 @@ export async function __updateAndFetchOneByCandidateKeyHelper<
 
     const newCandidateKey = {} as any;
     for(const candidateColumnAlias of Object.keys(candidateKey)) {
-        const newCustomExpr = assignmentMap[candidateColumnAlias as keyof typeof assignmentMap];
+        const newCustomExpr = (
+            (
+                Object.prototype.hasOwnProperty.call(assignmentMap, candidateColumnAlias) &&
+                Object.prototype.propertyIsEnumerable.call(assignmentMap, candidateColumnAlias)
+            ) ?
+            assignmentMap[candidateColumnAlias as keyof typeof assignmentMap] :
+            undefined
+        );
         if (newCustomExpr === undefined) {
             /**
              * This `candidateKey` column's value will not be updated.
              */
             newCandidateKey[candidateColumnAlias] = candidateKey[candidateColumnAlias];
         } else {
+            if (table.mutableColumns.indexOf(candidateColumnAlias) < 0) {
+                throw new Error(`${table.alias}.${candidateColumnAlias} is not a mutable candidate key column`);
+            }
             /**
              * This `candidateKey` column's value will be updated.
              * We need to know what its updated value will be.

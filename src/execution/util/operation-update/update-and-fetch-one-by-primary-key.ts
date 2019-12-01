@@ -79,13 +79,23 @@ export async function __updateAndFetchOneByPrimaryKeyHelper<
 
     const newPrimaryKey = {} as any;
     for(const primaryColumnAlias of Object.keys(primaryKey as any)) {
-        const newCustomExpr = assignmentMap[primaryColumnAlias as keyof typeof assignmentMap];
+        const newCustomExpr = (
+            (
+                Object.prototype.hasOwnProperty.call(assignmentMap, primaryColumnAlias) &&
+                Object.prototype.propertyIsEnumerable.call(assignmentMap, primaryColumnAlias)
+            ) ?
+            assignmentMap[primaryColumnAlias as keyof typeof assignmentMap] :
+            undefined
+        );
         if (newCustomExpr === undefined) {
             /**
              * This `primaryKey` column's value will not be updated.
              */
             newPrimaryKey[primaryColumnAlias] = primaryKey[primaryColumnAlias as keyof typeof primaryKey];
         } else {
+            if (table.mutableColumns.indexOf(primaryColumnAlias) < 0) {
+                throw new Error(`${table.alias}.${primaryColumnAlias} is not a mutable primary key column`);
+            }
             /**
              * This `primaryKey` column's value will be updated.
              * We need to know what its updated value will be.
