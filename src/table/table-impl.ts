@@ -1287,7 +1287,7 @@ export class Table<DataT extends TableData> implements ITable {
 
     updateAndFetchOneBySuperKey<
         SuperKeyT extends SuperKey_Input<this>,
-        AssignmentMapT extends ExecutionUtil.UpdateAndFetchOneBySuperKeyAssignmentMap<this, SuperKeyT>
+        AssignmentMapT extends ExecutionUtil.UpdateAndFetchOneBySuperKeyAssignmentMap<this>
     > (
         connection : IsolableUpdateConnection,
         superKey : SuperKeyT & AssertNonUnion<SuperKeyT>,
@@ -1356,7 +1356,7 @@ export class Table<DataT extends TableData> implements ITable {
 
     updateAndFetchZeroOrOneBySuperKey<
         SuperKeyT extends SuperKey_Input<this>,
-        AssignmentMapT extends ExecutionUtil.UpdateAndFetchOneBySuperKeyAssignmentMap<this, SuperKeyT>
+        AssignmentMapT extends ExecutionUtil.UpdateAndFetchOneBySuperKeyAssignmentMap<this>
     > (
         connection : IsolableUpdateConnection,
         superKey : SuperKeyT & AssertNonUnion<SuperKeyT>,

@@ -13,28 +13,55 @@ import {updateZeroOrOne, NotFoundUpdateResult} from "./update-zero-or-one";
 export async function updateAndFetchZeroOrOneBySuperKey<
     TableT extends ITable,
     SuperKeyT extends SuperKey_Input<TableT>,
-    AssignmentMapT extends UpdateAndFetchOneBySuperKeyAssignmentMap<TableT, SuperKeyT>
+    AssignmentMapT extends UpdateAndFetchOneBySuperKeyAssignmentMap<TableT>
 > (
     table : TableT,
     connection : IsolableUpdateConnection,
     superKey : SuperKeyT & AssertNonUnion<SuperKeyT>,
     assignmentMapDelegate : AssignmentMapDelegate<TableT, AssignmentMapT>
 ) : Promise<UpdateAndFetchZeroOrOneResult<TableT, AssignmentMapT>> {
-    const {
-        curSuperKey,
-        assignmentMap,
-        newSuperKey,
-    } = __updateAndFetchOneBySuperKeyHelper<
-        TableT,
-        SuperKeyT,
-        AssignmentMapT
-    >(
-        table,
-        superKey,
-        assignmentMapDelegate
-    );
-
     return connection.transactionIfNotInOne(async (connection) : Promise<UpdateAndFetchZeroOrOneResult<TableT, AssignmentMapT>> => {
+        const helperResult = await __updateAndFetchOneBySuperKeyHelper<
+            TableT,
+            SuperKeyT,
+            AssignmentMapT
+        >(
+            table,
+            connection,
+            superKey,
+            assignmentMapDelegate
+        );
+        if (!helperResult.success) {
+            return {
+                query : {
+                    sql : helperResult.rowNotFoundError.sql,
+                },
+
+                //Alias for affectedRows
+                foundRowCount : tm.BigInt(0) as 0n,
+
+                //Alias for changedRows
+                updatedRowCount : tm.BigInt(0) as 0n,
+
+                /**
+                 * May be the duplicate row count, or some other value.
+                 */
+                warningCount : tm.BigInt(0),
+                /**
+                 * An arbitrary message.
+                 * May be an empty string.
+                 */
+                message : "",
+
+                row : undefined,
+            };
+        }
+        const {
+            curSuperKey,
+            assignmentMap,
+            newSuperKey,
+        } = helperResult;
+
         const updateZeroOrOneResult = await updateZeroOrOne(
             table,
             connection,
