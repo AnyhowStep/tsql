@@ -1,0 +1,23 @@
+[
+  {
+    "messageText": "Type 'bigint' is not assignable to type 'never'.",
+    "code": 2322,
+    "category": 1,
+    "length": 6,
+    "start": 590
+  },
+  {
+    "messageText": "Type 'bigint' is not assignable to type 'never'.",
+    "code": 2322,
+    "category": 1,
+    "length": 6,
+    "start": 781
+  },
+  {
+    "messageText": "Type 'bigint' is not assignable to type 'never'.",
+    "code": 2322,
+    "category": 1,
+    "length": 7,
+    "start": 802
+  }
+]

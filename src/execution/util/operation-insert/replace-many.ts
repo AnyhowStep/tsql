@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {InsertableTable, TableUtil, DeletableTable} from "../../../table";
 import {ReplaceManyConnection, ReplaceManyResult} from "../../connection";
-import {InsertRow_Input, InsertRow_Output, InsertUtil} from "../../../insert";
+import {CustomInsertRow, BuiltInInsertRow, InsertUtil} from "../../../insert";
 
 /**
  * Inserts/Replaces zero-to-many rows
@@ -17,7 +17,7 @@ export async function replaceMany<
 > (
     table : TableT,
     connection : ReplaceManyConnection,
-    rows : readonly InsertRow_Input<TableT>[]
+    rows : readonly CustomInsertRow<TableT>[]
 ) : (
     Promise<ReplaceManyResult>
 ) {
@@ -46,6 +46,6 @@ export async function replaceMany<
         table,
         rows.map(
             row => InsertUtil.cleanInsertRow(table, row)
-        ) as [InsertRow_Output<TableT>, ...InsertRow_Output<TableT>[]]
+        ) as [BuiltInInsertRow<TableT>, ...BuiltInInsertRow<TableT>[]]
     );
 }

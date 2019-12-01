@@ -1,12 +1,11 @@
 import {ITable, TableWithAutoIncrement, TableWithoutAutoIncrement, InsertableTable, TableUtil} from "../../../table";
 import {IsolableInsertOneConnection} from "../../connection";
-import {InsertRow_Input, InsertRowRequireCandidateKey_Input} from "../../../insert";
+import {CustomInsertRow, CustomInsertRowWithCandidateKey} from "../../../insert";
 import {Row} from "../../../row";
 import {insertOne} from "./insert-one";
 import * as ExprLib from "../../../expr-library";
 import {DataTypeUtil} from "../../../data-type";
 import {TryEvaluateColumnsResult} from "../../../data-type/util";
-import {KeyArrayUtil} from "../../../key";
 
 /**
  * Convenience method for
@@ -22,7 +21,7 @@ export async function insertAndFetch<
 > (
     table : TableT,
     connection : IsolableInsertOneConnection,
-    row : InsertRow_Input<TableT>
+    row : CustomInsertRow<TableT>
 ) : (
     Promise<Row<TableT>>
 );
@@ -31,7 +30,7 @@ export async function insertAndFetch<
 > (
     table : TableT,
     connection : IsolableInsertOneConnection,
-    row : InsertRowRequireCandidateKey_Input<TableT>
+    row : CustomInsertRowWithCandidateKey<TableT>
 ) : (
     Promise<Row<TableT>>
 );
@@ -40,7 +39,7 @@ export async function insertAndFetch<
 > (
     table : TableT,
     connection : IsolableInsertOneConnection,
-    row : InsertRow_Input<TableT>
+    row : CustomInsertRow<TableT>
 ) : (
     Promise<Row<TableT>>
 ) {
@@ -49,16 +48,11 @@ export async function insertAndFetch<
 
     return connection.transactionIfNotInOne(async (connection) : Promise<Row<TableT>> => {
         if (
-            table.autoIncrement == undefined ||
-            /**
-             * With some databases, it's possible for the `autoIncrement` column
-             * to not be a candidate key at all!
-             */
-            !KeyArrayUtil.hasKey(table.candidateKeys, [table.autoIncrement])
+            table.autoIncrement == undefined
         ) {
             const candidateKeyResult : (
                 TryEvaluateColumnsResult<TableT, any>
-            ) = await DataTypeUtil.tryEvaluateCandidateKeyPreferPrimaryKey(
+            ) = await DataTypeUtil.tryEvaluateInsertableCandidateKeyPreferPrimaryKey(
                 table,
                 connection,
                 row as any
@@ -88,8 +82,10 @@ export async function insertAndFetch<
                  * We use this instead of `eqPrimaryKey()` because it's possible
                  * for an `AUTO_INCREMENT` column to not be a primary key
                  * with some databases...
+                 *
+                 * It's also possible for it to not be a candidate key!
                  */
-                () => ExprLib.eqCandidateKey(
+                () => ExprLib.eqColumns(
                     table,
                     {
                         [table.autoIncrement as string] : insertResult.autoIncrementId,

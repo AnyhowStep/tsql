@@ -2,7 +2,7 @@ import {ITable, TableUtil} from "../table";
 import {BuiltInExpr_MapCorrelated} from "../built-in-expr";
 import {CustomExpr_MapCorrelated} from "../custom-expr";
 
-export type AssignmentMap_Input<TableT extends ITable> =
+export type CustomAssignmentMap<TableT extends ITable> =
     & {
         readonly [columnAlias in TableT["mutableColumns"][number]]? : (
             CustomExpr_MapCorrelated<
@@ -23,7 +23,7 @@ export type AssignmentMap_Input<TableT extends ITable> =
     }
 ;
 
-export type AssignmentMap_Output<TableT extends ITable> =
+export type BuiltInAssignmentMap<TableT extends ITable> =
     & {
         readonly [columnAlias in TableT["mutableColumns"][number]]? : (
             BuiltInExpr_MapCorrelated<

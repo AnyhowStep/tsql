@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {ITable, TableUtil} from "../../../table";
 import {IsolableUpdateConnection} from "../../connection";
-import {AssignmentMapDelegate, AssignmentMap_Input} from "../../../update";
+import {AssignmentMapDelegate, CustomAssignmentMap} from "../../../update";
 import {CandidateKey_NonUnion} from "../../../candidate-key";
 import {StrictUnion, AssertNonUnion} from "../../../type-util";
 import {UpdateOneResult} from "./update-one";
@@ -15,7 +15,7 @@ export interface NotFoundUpdateAndFetchResult extends NotFoundUpdateResult {
 
 export type UpdateAndFetchZeroOrOneResult<
     TableT extends ITable,
-    AssignmentMapT extends AssignmentMap_Input<TableT>
+    AssignmentMapT extends CustomAssignmentMap<TableT>
 > =
     | NotFoundUpdateAndFetchResult
     | UpdateAndFetchOneResult<TableT, AssignmentMapT>

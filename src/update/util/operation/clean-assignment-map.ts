@@ -1,5 +1,5 @@
 import {ITable} from "../../../table";
-import {AssignmentMap_Input, AssignmentMap_Output} from "../../assignment-map";
+import {CustomAssignmentMap, BuiltInAssignmentMap} from "../../assignment-map";
 import {UsedRefUtil} from "../../../used-ref";
 import {BuiltInExprUtil} from "../../../built-in-expr";
 
@@ -7,9 +7,9 @@ export function cleanAssignmentMap<
     TableT extends ITable
 > (
     table : TableT,
-    raw : AssignmentMap_Input<TableT>
-) : AssignmentMap_Output<TableT> {
-    const result = {} as AssignmentMap_Output<TableT>;
+    raw : CustomAssignmentMap<TableT>
+) : BuiltInAssignmentMap<TableT> {
+    const result = {} as BuiltInAssignmentMap<TableT>;
 
     const allowed = UsedRefUtil.fromColumnMap(table.columns);
 

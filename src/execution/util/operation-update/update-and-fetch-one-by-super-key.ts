@@ -1,6 +1,6 @@
 import {ITable, TableUtil} from "../../../table";
 import {IsolableUpdateConnection, SelectConnection} from "../../connection";
-import {AssignmentMapDelegate, AssignmentMap_Input} from "../../../update";
+import {AssignmentMapDelegate, CustomAssignmentMap} from "../../../update";
 import {AssertNonUnion, Identity} from "../../../type-util";
 import {updateOne} from "./update-one";
 import {CustomExpr_MapCorrelated} from "../../../custom-expr";
@@ -43,7 +43,7 @@ export type UpdateAndFetchOneBySuperKeyAssignmentMap<
          * @todo Investigate assignability
          */
         UpdateAndFetchOneBySuperKeyAssignmentMapImpl<TableT>,
-        AssignmentMap_Input<TableT>
+        CustomAssignmentMap<TableT>
     >
 ;
 
@@ -84,13 +84,24 @@ export async function __updateAndFetchOneBySuperKeyHelper<
         if (superKey[superColumnAlias] === undefined) {
             continue;
         }
-        const newCustomExpr = assignmentMap[superColumnAlias as keyof typeof assignmentMap];
+
+        const newCustomExpr = (
+            (
+                Object.prototype.hasOwnProperty.call(assignmentMap, superColumnAlias) &&
+                Object.prototype.propertyIsEnumerable.call(assignmentMap, superColumnAlias)
+            ) ?
+            assignmentMap[superColumnAlias as keyof typeof assignmentMap] :
+            undefined
+        );
         if (newCustomExpr === undefined) {
             /**
              * This `superKey` column's value will not be updated.
              */
             newSuperKey[superColumnAlias] = superKey[superColumnAlias];
         } else {
+            if (table.mutableColumns.indexOf(superColumnAlias) < 0) {
+                throw new Error(`${table.alias}.${superColumnAlias} is not a mutable super key column`);
+            }
             /**
              * This `superKey` column's value will be updated.
              * We need to know what its updated value will be.

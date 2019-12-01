@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Argument of type '{ testId: bigint; }' is not assignable to parameter of type '{} & {} & { readonly testVal: CustomExpr_NonCorrelated<bigint>; }'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Object literal may only specify known properties, and 'testId' does not exist in type '{} & {} & { readonly testVal: CustomExpr_NonCorrelated<bigint>; }'.",
+        "category": 1,
+        "code": 2353
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 11,
+    "start": 624
+  }
+]

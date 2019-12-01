@@ -1,10 +1,10 @@
 import {TransactionCallback} from "../pool";
 import {IQueryBase, QueryBaseUtil} from "../../query-base";
 import {InsertableTable, DeletableTable, ITable} from "../../table";
-import {InsertRow_Output} from "../../insert";
+import {BuiltInInsertRow} from "../../insert";
 import {InsertSelectRow} from "../../insert-select";
 import {WhereClause} from "../../where-clause";
-import {AssignmentMap_Output} from "../../update";
+import {BuiltInAssignmentMap} from "../../update";
 import {SchemaMeta} from "../../schema-introspection";
 
 export interface RawQueryResult {
@@ -216,26 +216,26 @@ export interface IConnection {
      * This does not allow custom data types.
      * All custom data types must be wrapped by an expression.
      */
-    insertOne<TableT extends InsertableTable> (table : TableT, row : InsertRow_Output<TableT>) : Promise<InsertOneResult>;
+    insertOne<TableT extends InsertableTable> (table : TableT, row : BuiltInInsertRow<TableT>) : Promise<InsertOneResult>;
     /**
      * This does not allow custom data types.
      * All custom data types must be wrapped by an expression.
      */
-    insertMany<TableT extends InsertableTable> (table : TableT, rows : readonly [InsertRow_Output<TableT>, ...InsertRow_Output<TableT>[]]) : Promise<InsertManyResult>;
+    insertMany<TableT extends InsertableTable> (table : TableT, rows : readonly [BuiltInInsertRow<TableT>, ...BuiltInInsertRow<TableT>[]]) : Promise<InsertManyResult>;
 
     /**
      * This does not allow custom data types.
      * All custom data types must be wrapped by an expression.
      */
-    insertIgnoreOne<TableT extends InsertableTable> (table : TableT, row : InsertRow_Output<TableT>) : Promise<InsertIgnoreOneResult>;
+    insertIgnoreOne<TableT extends InsertableTable> (table : TableT, row : BuiltInInsertRow<TableT>) : Promise<InsertIgnoreOneResult>;
     /**
      * This does not allow custom data types.
      * All custom data types must be wrapped by an expression.
      */
-    insertIgnoreMany<TableT extends InsertableTable> (table : TableT, rows : readonly [InsertRow_Output<TableT>, ...InsertRow_Output<TableT>[]]) : Promise<InsertIgnoreManyResult>;
+    insertIgnoreMany<TableT extends InsertableTable> (table : TableT, rows : readonly [BuiltInInsertRow<TableT>, ...BuiltInInsertRow<TableT>[]]) : Promise<InsertIgnoreManyResult>;
 
-    replaceOne<TableT extends InsertableTable & DeletableTable> (table : TableT, row : InsertRow_Output<TableT>) : Promise<ReplaceOneResult>;
-    replaceMany<TableT extends InsertableTable & DeletableTable> (table : TableT, rows : readonly [InsertRow_Output<TableT>, ...InsertRow_Output<TableT>[]]) : Promise<ReplaceManyResult>;
+    replaceOne<TableT extends InsertableTable & DeletableTable> (table : TableT, row : BuiltInInsertRow<TableT>) : Promise<ReplaceOneResult>;
+    replaceMany<TableT extends InsertableTable & DeletableTable> (table : TableT, rows : readonly [BuiltInInsertRow<TableT>, ...BuiltInInsertRow<TableT>[]]) : Promise<ReplaceManyResult>;
 
     insertSelect<
         QueryT extends QueryBaseUtil.AfterSelectClause,
@@ -267,7 +267,7 @@ export interface IConnection {
     update<TableT extends ITable> (
         table : TableT,
         whereClause : WhereClause,
-        assignmentMap : AssignmentMap_Output<TableT>
+        assignmentMap : BuiltInAssignmentMap<TableT>
     ) : Promise<UpdateResult>;
 
     /**

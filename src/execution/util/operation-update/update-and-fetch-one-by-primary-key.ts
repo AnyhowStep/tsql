@@ -1,6 +1,6 @@
 import {TableUtil, TableWithPrimaryKey} from "../../../table";
 import {IsolableUpdateConnection, SelectConnection} from "../../connection";
-import {AssignmentMapDelegate, AssignmentMap_Input} from "../../../update";
+import {AssignmentMapDelegate, CustomAssignmentMap} from "../../../update";
 import {Identity} from "../../../type-util";
 import {updateOne} from "./update-one";
 import {CustomExpr_MapCorrelated} from "../../../custom-expr";
@@ -42,7 +42,7 @@ export type UpdateAndFetchOneByPrimaryKeyAssignmentMap<
          * @todo Investigate assignability
          */
         UpdateAndFetchOneByPrimaryKeyAssignmentMapImpl<TableT>,
-        AssignmentMap_Input<TableT>
+        CustomAssignmentMap<TableT>
     >
 ;
 
@@ -79,13 +79,23 @@ export async function __updateAndFetchOneByPrimaryKeyHelper<
 
     const newPrimaryKey = {} as any;
     for(const primaryColumnAlias of Object.keys(primaryKey as any)) {
-        const newCustomExpr = assignmentMap[primaryColumnAlias as keyof typeof assignmentMap];
+        const newCustomExpr = (
+            (
+                Object.prototype.hasOwnProperty.call(assignmentMap, primaryColumnAlias) &&
+                Object.prototype.propertyIsEnumerable.call(assignmentMap, primaryColumnAlias)
+            ) ?
+            assignmentMap[primaryColumnAlias as keyof typeof assignmentMap] :
+            undefined
+        );
         if (newCustomExpr === undefined) {
             /**
              * This `primaryKey` column's value will not be updated.
              */
             newPrimaryKey[primaryColumnAlias] = primaryKey[primaryColumnAlias as keyof typeof primaryKey];
         } else {
+            if (table.mutableColumns.indexOf(primaryColumnAlias) < 0) {
+                throw new Error(`${table.alias}.${primaryColumnAlias} is not a mutable primary key column`);
+            }
             /**
              * This `primaryKey` column's value will be updated.
              * We need to know what its updated value will be.
