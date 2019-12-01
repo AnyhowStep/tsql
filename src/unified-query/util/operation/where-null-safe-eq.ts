@@ -1,7 +1,6 @@
 import * as tm from "type-mapping";
 import {FromClauseUtil} from "../../../from-clause";
 import {ColumnUtil} from "../../../column";
-import {BuiltInValueExpr} from "../../../built-in-value-expr";
 import {Query} from "../../query-impl";
 import {AfterFromClause} from "../helper-type";
 
@@ -12,11 +11,8 @@ import {AfterFromClause} from "../helper-type";
  * to trigger max depth/max count errors.
  */
 export type WhereNullSafeEqImpl<
-    ColumnT extends ColumnUtil.ExtractWithType<
-        ColumnUtil.FromJoinArray<
-            FromClauseT["currentJoins"]
-        >,
-        BuiltInValueExpr
+    ColumnT extends ColumnUtil.FromJoinArray<
+        FromClauseT["currentJoins"]
     >,
     ValueT extends tm.OutputOf<ColumnT["mapper"]>|null,
     FromClauseT extends AfterFromClause["fromClause"],
@@ -39,11 +35,8 @@ export type WhereNullSafeEqImpl<
 );
 export type WhereNullSafeEq<
     QueryT extends AfterFromClause,
-    ColumnT extends ColumnUtil.ExtractWithType<
-        ColumnUtil.FromJoinArray<
-            QueryT["fromClause"]["currentJoins"]
-        >,
-        BuiltInValueExpr
+    ColumnT extends ColumnUtil.FromJoinArray<
+        QueryT["fromClause"]["currentJoins"]
     >,
     ValueT extends tm.OutputOf<ColumnT["mapper"]>|null
 > = (
@@ -60,11 +53,8 @@ export type WhereNullSafeEq<
 );
 export function whereNullSafeEq<
     QueryT extends AfterFromClause,
-    ColumnT extends ColumnUtil.ExtractWithType<
-        ColumnUtil.FromJoinArray<
-            QueryT["fromClause"]["currentJoins"]
-        >,
-        BuiltInValueExpr
+    ColumnT extends ColumnUtil.FromJoinArray<
+        QueryT["fromClause"]["currentJoins"]
     >,
     ValueT extends tm.OutputOf<ColumnT["mapper"]>|null
 > (
@@ -80,10 +70,7 @@ export function whereNullSafeEq<
      * https://github.com/microsoft/TypeScript/issues/32804#issuecomment-520201877
      */
     ...args : (
-        ColumnT extends ColumnUtil.ExtractWithType<
-            ColumnUtil.FromJoinArray<QueryT["fromClause"]["currentJoins"]>,
-            BuiltInValueExpr
-        > ?
+        ColumnT extends ColumnUtil.FromJoinArray<QueryT["fromClause"]["currentJoins"]> ?
         [
             FromClauseUtil.WhereNullSafeEqDelegate<QueryT["fromClause"], ColumnT>,
             ValueT
