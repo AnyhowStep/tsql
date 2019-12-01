@@ -1238,7 +1238,7 @@ export class Table<DataT extends TableData> implements ITable {
 
     updateAndFetchOneByCandidateKey<
         CandidateKeyT extends StrictUnion<CandidateKey_NonUnion<this>>,
-        AssignmentMapT extends ExecutionUtil.UpdateAndFetchOneByCandidateKeyAssignmentMap<this, CandidateKeyT>
+        AssignmentMapT extends ExecutionUtil.UpdateAndFetchOneByCandidateKeyAssignmentMap<this>
     > (
         connection : IsolableUpdateConnection,
         candidateKey : CandidateKeyT & AssertNonUnion<CandidateKeyT>,
@@ -1307,7 +1307,7 @@ export class Table<DataT extends TableData> implements ITable {
 
     updateAndFetchZeroOrOneByCandidateKey<
         CandidateKeyT extends StrictUnion<CandidateKey_NonUnion<this>>,
-        AssignmentMapT extends ExecutionUtil.UpdateAndFetchOneByCandidateKeyAssignmentMap<this, CandidateKeyT>
+        AssignmentMapT extends ExecutionUtil.UpdateAndFetchOneByCandidateKeyAssignmentMap<this>
     > (
         connection : IsolableUpdateConnection,
         candidateKey : CandidateKeyT & AssertNonUnion<CandidateKeyT>,

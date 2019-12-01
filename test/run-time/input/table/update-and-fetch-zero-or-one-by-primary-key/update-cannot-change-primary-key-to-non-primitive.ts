@@ -39,13 +39,9 @@ tape(__filename, async (t) => {
             () => {
                 return {
                     testId : ExprUtil.fromBuiltInExpr(BigInt(123456)),
-                } as any;
+                };
             }
-        ).then(() => {
-            t.fail("Should not be able to update primary key to non-isAnyNonValueExpr");
-        }).catch(() => {
-            t.pass("Cannot update primary key to non-isAnyNonValueExpr");
-        });
+        );
     });
 
     await pool
@@ -62,16 +58,16 @@ tape(__filename, async (t) => {
                 rows,
                 [
                     {
-                        testId : BigInt(1),
-                        testVal : BigInt(100),
-                    },
-                    {
                         testId : BigInt(2),
                         testVal : BigInt(200),
                     },
                     {
                         testId : BigInt(3),
                         testVal : BigInt(300),
+                    },
+                    {
+                        testId : BigInt(123456),
+                        testVal : BigInt(100),
                     },
                 ]
             );

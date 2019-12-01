@@ -18,20 +18,47 @@ export async function updateAndFetchZeroOrOneByPrimaryKey<
     primaryKey : PrimaryKey_Input<TableT>,
     assignmentMapDelegate : AssignmentMapDelegate<TableT, AssignmentMapT>
 ) : Promise<UpdateAndFetchZeroOrOneResult<TableT, AssignmentMapT>> {
-    const {
-        curPrimaryKey,
-        assignmentMap,
-        newPrimaryKey,
-    } = __updateAndFetchOneByPrimaryKeyHelper<
-        TableT,
-        AssignmentMapT
-    >(
-        table,
-        primaryKey,
-        assignmentMapDelegate
-    );
-
     return connection.transactionIfNotInOne(async (connection) : Promise<UpdateAndFetchZeroOrOneResult<TableT, AssignmentMapT>> => {
+        const helperResult = await __updateAndFetchOneByPrimaryKeyHelper<
+            TableT,
+            AssignmentMapT
+        >(
+            table,
+            connection,
+            primaryKey,
+            assignmentMapDelegate
+        );
+        if (!helperResult.success) {
+            return {
+                query : {
+                    sql : helperResult.rowNotFoundError.sql,
+                },
+
+                //Alias for affectedRows
+                foundRowCount : tm.BigInt(0) as 0n,
+
+                //Alias for changedRows
+                updatedRowCount : tm.BigInt(0) as 0n,
+
+                /**
+                 * May be the duplicate row count, or some other value.
+                 */
+                warningCount : tm.BigInt(0),
+                /**
+                 * An arbitrary message.
+                 * May be an empty string.
+                 */
+                message : "",
+
+                row : undefined,
+            };
+        }
+        const {
+            curPrimaryKey,
+            assignmentMap,
+            newPrimaryKey,
+        } = helperResult;
+
         const updateZeroOrOneResult = await updateZeroOrOne(
             table,
             connection,
