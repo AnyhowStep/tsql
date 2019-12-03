@@ -275,9 +275,6 @@ http://lokijs.org/
 
 + Table-Per-Type Utils
 + Emulated `FULL OUTER JOIN` (MySQL does not have it)
-+ Make `type-mapping` fit the `tsql` use case better.
-  + Prefer `tm.db.bigIntSigned()` over `tm.mysql.bigIntSigned()` or something
-+ Database events
 
 -----
 
