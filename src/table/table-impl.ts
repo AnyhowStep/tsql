@@ -870,23 +870,18 @@ export class Table<DataT extends TableData> implements ITable {
     }
 
     insertOne (
-        this : Extract<this, TableWithAutoIncrement & InsertableTable>,
+        this : Extract<this, InsertableTable>,
         connection : InsertOneConnection,
-        row : CustomInsertRow<Extract<this, TableWithAutoIncrement & InsertableTable>>
-    ) : Promise<InsertOneWithAutoIncrementReturnType<Extract<this, TableWithAutoIncrement & InsertableTable>>>;
-    insertOne (
-        this : Extract<this, TableWithoutAutoIncrement & InsertableTable>,
-        connection : InsertOneConnection,
-        row : CustomInsertRow<Extract<this, TableWithoutAutoIncrement & InsertableTable>>
-    ) : Promise<InsertOneResult>;
-    insertOne (
-        connection : InsertOneConnection,
-        row : any
-    ) : Promise<InsertOneResult> {
-        return ExecutionUtil.insertOne(
-            this as any,
+        row : CustomInsertRow<Extract<this, InsertableTable>>
+    ) : Promise<
+        this extends TableWithAutoIncrement ?
+        InsertOneWithAutoIncrementReturnType<Extract<this, TableWithAutoIncrement>> :
+        InsertOneResult
+    > {
+        return ExecutionUtil.insertOne<Extract<this, InsertableTable>>(
+            this,
             connection,
-            row as any
+            row
         );
     }
 

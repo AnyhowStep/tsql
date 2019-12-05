@@ -7,8 +7,11 @@ export function tablePerType<ChildTableT extends ITable> (
     childTable : ChildTableT,
     parentTables : readonly [],
 }> {
-    return new TablePerType({
-        childTable,
-        parentTables : [],
-    });
+    return new TablePerType(
+        {
+            childTable,
+            parentTables : [],
+        },
+        [],
+    );
 }

@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {ITable, TableWithAutoIncrement, TableWithoutAutoIncrement, InsertableTable, TableUtil} from "../../../table";
+import {ITable, TableWithAutoIncrement, InsertableTable, TableUtil} from "../../../table";
 import {InsertOneConnection, InsertOneResult} from "../../connection";
 import {CustomInsertRow, InsertUtil} from "../../../insert";
 import {DataTypeUtil} from "../../../data-type";
@@ -27,31 +27,17 @@ export type InsertOneWithAutoIncrementReturnType<
  * ```
  */
 export async function insertOne<
-    TableT extends TableWithAutoIncrement & InsertableTable
-> (
-    table : TableT,
-    connection : InsertOneConnection,
-    row : CustomInsertRow<TableT>
-) : (
-    Promise<InsertOneWithAutoIncrementReturnType<TableT>>
-);
-export async function insertOne<
-    TableT extends TableWithoutAutoIncrement & InsertableTable
-> (
-    table : TableT,
-    connection : InsertOneConnection,
-    row : CustomInsertRow<TableT>
-) : (
-    Promise<InsertOneResult>
-);
-export async function insertOne<
     TableT extends ITable & InsertableTable
 > (
     table : TableT,
     connection : InsertOneConnection,
     row : CustomInsertRow<TableT>
 ) : (
-    Promise<InsertOneResult>
+    Promise<
+        TableT extends TableWithAutoIncrement ?
+        InsertOneWithAutoIncrementReturnType<TableT> :
+        InsertOneResult
+    >
 ) {
     TableUtil.assertInsertEnabled(table);
 
@@ -61,7 +47,7 @@ export async function insertOne<
     row = InsertUtil.cleanInsertRow(table, row);
 
     if (table.autoIncrement == undefined) {
-        return connection.insertOne(table, row);
+        return connection.insertOne(table, row) as any;
     }
 
     let explicitAutoIncrementBuiltInExpr = (row as { [k:string]:unknown })[table.autoIncrement];
@@ -73,7 +59,7 @@ export async function insertOne<
             return {
                 ...insertResult,
                 [table.autoIncrement] : insertResult.autoIncrementId,
-            };
+            } as any;
         }
 
         /**
@@ -106,7 +92,7 @@ export async function insertOne<
         return {
             ...insertResult,
             [table.autoIncrement] : insertResult.autoIncrementId,
-        };
+        } as any;
     }
 
     /**
@@ -117,5 +103,5 @@ export async function insertOne<
         ...insertResult,
         autoIncrementId : autoIncrementBigInt,
         [table.autoIncrement] : autoIncrementBigInt,
-    };
+    } as any;
 }

@@ -18,4 +18,33 @@ export interface ITablePerType<DataT extends TablePerTypeData=TablePerTypeData> 
      * All other tables higher up the inheritance hierarchy.
      */
     readonly parentTables : DataT["parentTables"];
+
+    /**
+     * An array of 2-tuples containing table aliases.
+     *
+     * It will tell us how to construct `INNER JOIN`s to
+     * efficiently query all columns for the `childTable`.
+     *
+     * We have to be mindful of the following possible
+     * inheritance subgraphs,
+     *
+     * + Linear inheritance
+     *   + D extends C extends B extends A
+     *
+     * + Diamond inheritance
+     *   + D extends B extends A
+     *   + D extends C extends A
+     *
+     * + Tree inheritance
+     *   + D extends B extends A
+     *   + D extends C
+     */
+    readonly joins : readonly (
+        readonly [
+            //fromTable
+            string,
+            //toTable
+            string
+        ]
+    )[];
 }

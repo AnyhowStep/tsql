@@ -5,6 +5,7 @@ export * from "./extract-all-tables-with-column-alias";
 export * from "./extract-child-table";
 export * from "./extract-parent-tables";
 export * from "./extract-table-with-alias";
+export * from "./find-last-join-to-table";
 export * from "./generated-column-alias";
 export * from "./mutable-column-alias";
 export * from "./non-generated-column-alias";

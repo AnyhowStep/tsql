@@ -35,12 +35,16 @@ export type FromAliasedTableImpl<
         /**
          * Needed for multi-table `DELETE` statements.
          * We need to know which tables we can delete rows from.
+         *
+         * @todo If we are not implementing multi-table `DELETE` statements, this should be removed.
          */
         deleteEnabled : AliasedTableUtil.DeleteEnabled<AliasedTableT>,
 
         /**
          * Needed for multi-table `UPDATE` statements.
          * We need to know which columns are mutable.
+         *
+         * @todo If we are not implementing multi-table `UPDATE` statements, this should be removed.
          */
         mutableColumns : AliasedTableUtil.MutableColumns<AliasedTableT>;
     }>

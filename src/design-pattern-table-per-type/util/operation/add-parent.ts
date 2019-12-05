@@ -1,8 +1,9 @@
 import {ITablePerType} from "../../table-per-type";
-import {ITable} from "../../../table";
+import {ITable, TableUtil} from "../../../table";
 import {ExtractParentTables, ExtractChildTable, extractParentTables, extractChildTable} from "../query";
 import {TablePerType} from "../../table-per-type-impl";
 import {removeDuplicateParents} from "./remove-duplicate-parents";
+import {isTablePerType} from "../predicate";
 
 export type AddParent<
     TablePerTypeT extends ITablePerType,
@@ -19,20 +20,51 @@ export type AddParent<
 ;
 
 export function addParent<
-    TablePerTypeT extends ITablePerType,
-    ParentTableT extends ITable|ITablePerType
+    TptT extends ITablePerType,
+    ParentT extends ITable|ITablePerType
 > (
-    tablePerType : TablePerTypeT,
-    parentTable : ParentTableT
+    tpt : TptT,
+    parent : ParentT
 ) : (
-    AddParent<TablePerTypeT, ParentTableT>
+    AddParent<TptT, ParentT>
 ) {
-    return new TablePerType({
-        childTable : tablePerType.childTable,
-        parentTables : removeDuplicateParents([
-            ...tablePerType.parentTables,
-            ...extractParentTables(parentTable),
-            extractChildTable(parentTable),
-        ]),
-    });
+    let joins : ITablePerType["joins"] | undefined = undefined;
+    if (TableUtil.isTable(parent)) {
+        joins = [
+            ...tpt.joins,
+            [
+                tpt.childTable.alias,
+                parent.alias,
+            ],
+        ];
+    } else if (isTablePerType(parent)) {
+        joins = [
+            ...tpt.joins,
+            ...parent.joins,
+            [
+                tpt.childTable.alias,
+                parent.childTable.alias,
+            ],
+        ];
+    } else {
+        throw new Error(`Expected ITable or ITablePerType for parent`);
+    }
+    return new TablePerType<{
+        childTable : TptT["childTable"],
+        parentTables : readonly (
+            | TptT["parentTables"][number]
+            | ExtractParentTables<ParentT>
+            | ExtractChildTable<ParentT>
+        )[],
+    }>(
+        {
+            childTable : tpt.childTable,
+            parentTables : removeDuplicateParents([
+                ...tpt.parentTables,
+                ...extractParentTables(parent),
+                extractChildTable(parent),
+            ]),
+        },
+        joins
+    );
 }
