@@ -1,8 +1,10 @@
 export * from "./column-alias";
+export * from "./column-type";
 export * from "./explicit-default-value-column-alias";
 export * from "./extract-all-tables-with-column-alias";
 export * from "./extract-child-table";
 export * from "./extract-parent-tables";
+export * from "./extract-table-with-alias";
 export * from "./generated-column-alias";
 export * from "./mutable-column-alias";
 export * from "./non-generated-column-alias";
@@ -10,3 +12,4 @@ export * from "./nullable-column-alias";
 export * from "./optional-column-alias";
 export * from "./parent-column-alias";
 export * from "./required-column-alias";
+export * from "./row";

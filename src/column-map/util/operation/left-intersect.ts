@@ -1,6 +1,7 @@
 import * as tm from "type-mapping";
 import {ColumnMap, WritableColumnMap} from "../../column-map";
 import {Column, ColumnUtil} from "../../../column";
+import {DataTypeUtil} from "../../../data-type";
 
 //Take the intersection and the "left" columnMap
 export type LeftIntersect<
@@ -40,7 +41,7 @@ export function leftIntersect<
                 {
                     tableAlias : columnA.tableAlias,
                     columnAlias : columnA.columnAlias,
-                    mapper : tm.deepMerge(
+                    mapper : DataTypeUtil.intersect(
                         columnA.mapper,
                         mapB[columnAlias].mapper
                     ),

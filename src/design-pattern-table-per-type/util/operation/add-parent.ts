@@ -2,6 +2,7 @@ import {ITablePerType} from "../../table-per-type";
 import {ITable} from "../../../table";
 import {ExtractParentTables, ExtractChildTable, extractParentTables, extractChildTable} from "../query";
 import {TablePerType} from "../../table-per-type-impl";
+import {removeDuplicateParents} from "./remove-duplicate-parents";
 
 export type AddParent<
     TablePerTypeT extends ITablePerType,
@@ -28,10 +29,10 @@ export function addParent<
 ) {
     return new TablePerType({
         childTable : tablePerType.childTable,
-        parentTables : [
+        parentTables : removeDuplicateParents([
             ...tablePerType.parentTables,
             ...extractParentTables(parentTable),
             extractChildTable(parentTable),
-        ],
+        ]),
     });
 }
