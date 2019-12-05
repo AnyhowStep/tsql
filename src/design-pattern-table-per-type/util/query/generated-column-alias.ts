@@ -1,5 +1,5 @@
 import {ITablePerType} from "../../table-per-type";
-import {KeyUtil} from "../../../key";
+import {columnAliases} from "./column-alias";
 
 export type GeneratedColumnAlias<TptT extends ITablePerType> =
     (
@@ -8,16 +8,32 @@ export type GeneratedColumnAlias<TptT extends ITablePerType> =
     )["generatedColumns"][number]
 ;
 
+export function isGeneratedColumnAlias<TptT extends ITablePerType> (
+    tpt : TptT,
+    columnAlias : string
+) : columnAlias is GeneratedColumnAlias<TptT> {
+    if (tpt.childTable.generatedColumns.includes(columnAlias)) {
+        return true;
+    }
+
+    for (const parentTable of tpt.parentTables) {
+        if (parentTable.generatedColumns.includes(columnAlias)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 export function generatedColumnAliases<TptT extends ITablePerType> (
     tpt : TptT
 ) : GeneratedColumnAlias<TptT>[] {
-    const result : string[] = [
-        ...tpt.childTable.generatedColumns,
-    ];
+    const result : string[] = [];
 
-    for (const parentTable of tpt.parentTables) {
-        result.push(...parentTable.generatedColumns);
+    for (const columnAlias of columnAliases(tpt)) {
+        if (isGeneratedColumnAlias(tpt, columnAlias)) {
+            result.push(columnAlias);
+        }
     }
 
-    return KeyUtil.removeDuplicates(result) as GeneratedColumnAlias<TptT>[];
+    return result as GeneratedColumnAlias<TptT>[];
 }

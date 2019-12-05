@@ -3,33 +3,28 @@ import {TableUtil} from "../../../table";
 import {KeyUtil} from "../../../key";
 import {ColumnMapUtil} from "../../../column-map";
 
-export type ColumnAlias<TptT extends ITablePerType> =
+export type ParentColumnAlias<TptT extends ITablePerType> =
     TableUtil.ColumnAlias<
-        | TptT["childTable"]
         | TptT["parentTables"][number]
     >
 ;
 
-export function columnAliases<TptT extends ITablePerType> (
+export function parentColumnAliases<TptT extends ITablePerType> (
     tpt : TptT
-) : ColumnAlias<TptT>[] {
-    const result : string[] = TableUtil.columnAlias(tpt.childTable);
+) : ParentColumnAlias<TptT>[] {
+    const result : string[] = [];
 
     for (const parentTable of tpt.parentTables) {
         result.push(...TableUtil.columnAlias(parentTable));
     }
 
-    return KeyUtil.removeDuplicates(result) as ColumnAlias<TptT>[];
+    return KeyUtil.removeDuplicates(result) as ParentColumnAlias<TptT>[];
 }
 
-export function isColumnAlias<TptT extends ITablePerType> (
+export function isParentColumnAlias<TptT extends ITablePerType> (
     tpt : TptT,
     columnAlias : string
-) : columnAlias is ColumnAlias<TptT> {
-    if (ColumnMapUtil.hasColumnAlias(tpt.childTable.columns, columnAlias)) {
-        return true;
-    }
-
+) : columnAlias is ParentColumnAlias<TptT> {
     for (const parentTable of tpt.parentTables) {
         if (ColumnMapUtil.hasColumnAlias(parentTable.columns, columnAlias)) {
             return true;

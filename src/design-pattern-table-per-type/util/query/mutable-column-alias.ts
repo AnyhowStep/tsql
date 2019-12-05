@@ -1,6 +1,6 @@
 import {ITablePerType} from "../../table-per-type";
 import {TableUtil} from "../../../table";
-import {ColumnAlias, columnAliases} from "./column-alias";
+import {ColumnAlias, columnAliases, isColumnAlias} from "./column-alias";
 import {ExtractAllTablesWithColumnAlias} from "./extract-all-tables-with-column-alias";
 import {ColumnMapUtil} from "../../../column-map";
 
@@ -38,7 +38,7 @@ export function isMutableColumnAlias<TptT extends ITablePerType> (
             return false;
         }
     }
-    return true;
+    return isColumnAlias(tpt, columnAlias);
 }
 
 export function mutableColumnAliases<TptT extends ITablePerType> (

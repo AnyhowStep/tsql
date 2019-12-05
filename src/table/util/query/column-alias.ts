@@ -4,6 +4,10 @@ import {ColumnMapUtil} from "../../../column-map";
 export type ColumnAlias<TableT extends ITable> =
     ColumnMapUtil.ColumnAlias<TableT["columns"]>
 ;
+/**
+ * @todo Pluralize this and others where relevant?
+ * Be more consistent with pluralization.
+ */
 export function columnAlias<TableT extends ITable> (
     table : TableT
 ) : ColumnAlias<TableT>[] {
