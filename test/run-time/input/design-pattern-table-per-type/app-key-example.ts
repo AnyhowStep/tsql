@@ -50,6 +50,11 @@ export const serverAppKey = tsql.table("serverAppKey")
         c.trustProxy
     ]);
 
+/**
+ * Degenerate case; no parents.
+ */
+export const appKeyTpt = tsql.tablePerType(appKey);
+
 export const browserAppKeyTpt = tsql.tablePerType(browserAppKey)
     .addParent(appKey);
 
