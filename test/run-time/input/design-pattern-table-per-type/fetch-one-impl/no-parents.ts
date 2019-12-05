@@ -2,7 +2,7 @@ import * as tape from "tape";
 import * as tsql from "../../../../../dist";
 import {Pool} from "../../sql-web-worker/promise.sql";
 import {SqliteWorker} from "../../sql-web-worker/worker.sql";
-import {appKey, createAppKeyTableSql, serverAppKey, serverAppKeyTpt} from "../app-key-example";
+import {appKey, createAppKeyTableSql, appKeyTpt} from "../app-key-example";
 
 tape(__filename, async (t) => {
     const pool = new Pool(new SqliteWorker());
@@ -10,7 +10,7 @@ tape(__filename, async (t) => {
     const fetchOneResult = await pool.acquire(async (connection) => {
         await connection.exec(createAppKeyTableSql);
 
-        const serverBase = await appKey.insertOne(
+        await appKey.insertOne(
             connection,
             {
                 appId : BigInt(1),
@@ -20,31 +20,22 @@ tape(__filename, async (t) => {
                 disabledAt : new Date(2),
             }
         );
-        await serverAppKey.insertOne(
-            connection,
-            {
-                appKeyId : serverBase.appKeyId,
-                ipAddress : "ip",
-                trustProxy : false,
-            }
-        );
 
-        return serverAppKeyTpt.fetchOne(
+        return tsql.TablePerTypeUtil.fetchOneImpl(
+            appKeyTpt,
             connection,
             (columns) => tsql.eq(
-                columns.serverAppKey.appKeyId,
+                columns.appKeyId,
                 BigInt(1)
             )
-        ).orUndefined();
+        );
     });
 
     t.deepEqual(
-        fetchOneResult,
+        fetchOneResult.row,
         {
             appKeyId: BigInt(1),
             appKeyTypeId: BigInt(1),
-            ipAddress : "ip",
-            trustProxy : false,
             appId: BigInt(1),
             key: "server",
             createdAt: new Date(1),

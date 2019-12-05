@@ -35,7 +35,7 @@ tape(__filename, async (t) => {
                 columns.serverAppKey.appKeyId,
                 BigInt(1)
             )
-        ).orUndefined();
+        );
     });
 
     t.deepEqual(

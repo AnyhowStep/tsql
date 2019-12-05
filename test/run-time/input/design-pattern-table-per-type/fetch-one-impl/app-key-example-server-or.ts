@@ -29,27 +29,19 @@ tape(__filename, async (t) => {
             }
         );
 
-        return serverAppKeyTpt.fetchOne(
+        return tsql.TablePerTypeUtil.fetchOneImpl(
+            serverAppKeyTpt,
             connection,
             (columns) => tsql.eq(
                 columns.serverAppKey.appKeyId,
-                BigInt(1)
+                BigInt(2)
             )
-        ).orUndefined();
+        ).or("not-found");
     });
 
     t.deepEqual(
-        fetchOneResult,
-        {
-            appKeyId: BigInt(1),
-            appKeyTypeId: BigInt(1),
-            ipAddress : "ip",
-            trustProxy : false,
-            appId: BigInt(1),
-            key: "server",
-            createdAt: new Date(1),
-            disabledAt: new Date(2),
-        }
+        fetchOneResult.row,
+        "not-found"
     );
 
     t.end();

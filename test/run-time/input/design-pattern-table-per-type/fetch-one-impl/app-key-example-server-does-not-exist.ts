@@ -7,7 +7,7 @@ import {appKey, createAppKeyTableSql, serverAppKey, serverAppKeyTpt} from "../ap
 tape(__filename, async (t) => {
     const pool = new Pool(new SqliteWorker());
 
-    const fetchOneResult = await pool.acquire(async (connection) => {
+    await pool.acquire(async (connection) => {
         await connection.exec(createAppKeyTableSql);
 
         const serverBase = await appKey.insertOne(
@@ -29,28 +29,19 @@ tape(__filename, async (t) => {
             }
         );
 
-        return serverAppKeyTpt.fetchOne(
+        return tsql.TablePerTypeUtil.fetchOneImpl(
+            serverAppKeyTpt,
             connection,
             (columns) => tsql.eq(
                 columns.serverAppKey.appKeyId,
-                BigInt(1)
+                BigInt(2)
             )
-        ).orUndefined();
+        ).then(() => {
+            t.fail("Expected RowNotFound");
+        }).catch((err) => {
+            t.true(err instanceof tsql.RowNotFoundError);
+        });
     });
-
-    t.deepEqual(
-        fetchOneResult,
-        {
-            appKeyId: BigInt(1),
-            appKeyTypeId: BigInt(1),
-            ipAddress : "ip",
-            trustProxy : false,
-            appId: BigInt(1),
-            key: "server",
-            createdAt: new Date(1),
-            disabledAt: new Date(2),
-        }
-    );
 
     t.end();
 });

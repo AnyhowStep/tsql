@@ -29,7 +29,8 @@ tape(__filename, async (t) => {
             }
         );
 
-        return serverAppKeyTpt.fetchOne(
+        return tsql.TablePerTypeUtil.fetchOneImpl(
+            serverAppKeyTpt,
             connection,
             (columns) => tsql.eq(
                 columns.serverAppKey.appKeyId,
@@ -39,7 +40,7 @@ tape(__filename, async (t) => {
     });
 
     t.deepEqual(
-        fetchOneResult,
+        fetchOneResult.row,
         {
             appKeyId: BigInt(1),
             appKeyTypeId: BigInt(1),
