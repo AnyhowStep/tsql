@@ -45,3 +45,18 @@ export type PrimaryKey_Input<TableT extends Pick<TableWithPrimaryKey, "columns"|
         PrimaryKey_Output<TableT>
     >
 );
+
+/**
+ * Represents a primary key of the table, when retrieved from the database.
+ *
+ * An alias of `PrimaryKey_NonUnion<>` for convenience reasons.
+ *
+ * -----
+ *
+ * Assumes `TableT` is not a union.
+ *
+ * If it is a union, use `PrimaryKey_Output/Input<U>` instead.
+ */
+export type PrimaryKey<TableT extends Pick<TableWithPrimaryKey, "columns"|"primaryKey">> =
+    PrimaryKey_NonUnion<TableT>
+;

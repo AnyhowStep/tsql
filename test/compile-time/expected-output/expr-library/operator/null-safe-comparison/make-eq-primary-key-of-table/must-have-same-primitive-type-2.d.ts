@@ -5,14 +5,14 @@ import * as tsql from "../../../../../../../dist";
  * This should always be `FALSE`.
  */
 export declare const expr: tsql.ExprImpl<boolean, tsql.IUsedRef<{
-    readonly myTable: {
-        readonly userId: bigint;
-        readonly computerId: "hi";
-        readonly createdAt: Date;
-    };
     readonly childTable: {
         readonly userId: bigint;
         readonly computerId: "bye";
         readonly accessedAt: Date;
+    };
+    readonly myTable: {
+        readonly userId: bigint;
+        readonly computerId: "hi";
+        readonly createdAt: Date;
     };
 }>>;

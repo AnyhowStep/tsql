@@ -3,5 +3,8 @@ export * from "./assert-has-candidate-key";
 export * from "./assert-has-column-identifiers";
 export * from "./assert-has-null-safe-comparable-primary-key";
 export * from "./assert-insert-enabled";
+export * from "./has-explicit-default-value";
 export * from "./has-null-safe-comparable-primary-key";
+export * from "./is-nullable";
+export * from "./is-mutable";
 export * from "./is-table";

@@ -1,0 +1,7 @@
+import {ITablePerType} from "../../table-per-type";
+
+export type ValueInsertRow<T extends ITablePerType> =
+    {
+
+    }
+;

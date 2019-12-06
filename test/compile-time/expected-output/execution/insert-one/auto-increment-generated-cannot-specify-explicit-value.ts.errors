@@ -1,28 +1,18 @@
 [
   {
     "messageText": {
-      "messageText": "Argument of type 'Table<{ isLateral: false; alias: \"test\"; columns: { readonly testId: Column<{ tableAlias: \"test\"; columnAlias: \"testId\"; mapper: Mapper<unknown, bigint>; }>; readonly testVal: Column<{ tableAlias: \"test\"; columnAlias: \"testVal\"; mapper: Mapper<...>; }>; }; ... 10 more ...; mutableColumns: readonly never[]; }>' is not assignable to parameter of type 'ITable<TableData> & { autoIncrement: undefined; } & { insertEnabled: true; }'.",
+      "messageText": "Argument of type '{ testId: bigint; testVal: bigint; }' is not assignable to parameter of type '{ readonly testVal: CustomExpr_NonCorrelated<bigint>; } & {}'.",
       "category": 1,
       "code": 2345,
       "next": {
-        "messageText": "Type 'Table<{ isLateral: false; alias: \"test\"; columns: { readonly testId: Column<{ tableAlias: \"test\"; columnAlias: \"testId\"; mapper: Mapper<unknown, bigint>; }>; readonly testVal: Column<{ tableAlias: \"test\"; columnAlias: \"testVal\"; mapper: Mapper<...>; }>; }; ... 10 more ...; mutableColumns: readonly never[]; }>' is not assignable to type '{ autoIncrement: undefined; }'.",
+        "messageText": "Object literal may only specify known properties, and 'testId' does not exist in type '{ readonly testVal: CustomExpr_NonCorrelated<bigint>; } & {}'.",
         "category": 1,
-        "code": 2322,
-        "next": {
-          "messageText": "Types of property 'autoIncrement' are incompatible.",
-          "category": 1,
-          "code": 2326,
-          "next": {
-            "messageText": "Type '\"testId\"' is not assignable to type 'undefined'.",
-            "category": 1,
-            "code": 2322
-          }
-        }
+        "code": 2353
       }
     },
     "code": 2345,
     "category": 1,
-    "length": 4,
-    "start": 330
+    "length": 18,
+    "start": 367
   }
 ]

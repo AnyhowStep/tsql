@@ -6,27 +6,32 @@ import {ensureOne} from "./ensure-one";
 import {ensureOneOr} from "./ensure-one-or";
 
 export interface FetchOneImplPromise<
-    QueryT extends QueryBaseUtil.AfterSelectClause & QueryBaseUtil.NonCorrelated
+    RowT extends unknown
 > extends Promise<{
     sql : string,
-    row : FetchedRow<QueryT>,
+    row : RowT,
 }> {
     or<DefaultValueT> (defaultValue : DefaultValueT) : Promise<{
         sql : string,
-        row : FetchedRow<QueryT>|DefaultValueT,
+        row : RowT|DefaultValueT,
     }>;
     orUndefined () : Promise<{
         sql : string,
-        row : FetchedRow<QueryT>|undefined,
+        row : RowT|undefined,
     }>;
 }
+export type FetchOneImplResult<
+    QueryT extends QueryBaseUtil.AfterSelectClause & QueryBaseUtil.NonCorrelated
+> =
+    FetchOneImplPromise<FetchedRow<QueryT>>
+;
 export function fetchOneImpl<
     QueryT extends QueryBaseUtil.AfterSelectClause & QueryBaseUtil.NonCorrelated
 >(
     query : QueryT,
     connection : FetchAllConnection<QueryT>
 ) : (
-    FetchOneImplPromise<QueryT>
+    FetchOneImplResult<QueryT>
 ) {
     try {
         const limitedQuery = trySetLimit2(query);
@@ -38,7 +43,7 @@ export function fetchOneImpl<
                     sql : fetched.sql,
                     row : ensureOne(limitedQuery, fetched),
                 };
-            }) as FetchOneImplPromise<QueryT>;
+            }) as FetchOneImplResult<QueryT>;
 
         //eslint-disable-next-line @typescript-eslint/unbound-method
         result.or = <DefaultValueT>(defaultValue : DefaultValueT) : Promise<{
@@ -66,7 +71,7 @@ export function fetchOneImpl<
 
         return result;
     } catch (err) {
-        const result = Promise.reject(err) as FetchOneImplPromise<QueryT>;
+        const result = Promise.reject(err) as FetchOneImplResult<QueryT>;
         //eslint-disable-next-line @typescript-eslint/unbound-method
         result.or = () => {
             //To avoid `unhandled rejection` warnings

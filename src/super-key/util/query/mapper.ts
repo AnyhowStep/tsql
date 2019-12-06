@@ -14,6 +14,13 @@ export function mapper<TableT extends Pick<ITable, "columns"|"candidateKeys">> (
 ) {
     return tm.unsafeOr(
         ...table.candidateKeys.map((candidateKey) => {
+            /**
+             * This usage of `tm.deepMerge()` is safe.
+             * This is not true, in general.
+             *
+             * The two objects we'll be deep merging do not share any
+             * properties.
+             */
             return tm.deepMerge(
                 ColumnMapUtil.mapper(
                     pickOwnEnumerable(table.columns, candidateKey)
