@@ -88,11 +88,11 @@ tape(__filename, async (t) => {
     t.deepEqual(
         fetchOneResult,
         {
-            a1Id: 1n,
-            a2Id: 1n,
-            a3Id: 1n,
-            a4Id: 1n,
-            b1Id: 1n,
+            a1Id: BigInt(1),
+            a2Id: BigInt(1),
+            a3Id: BigInt(1),
+            a4Id: BigInt(1),
+            b1Id: BigInt(1),
             b1Name: 'b1',
             b2Name: 'b2',
             a1Name: 'a1',
