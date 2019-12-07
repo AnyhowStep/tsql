@@ -72,11 +72,13 @@ export * from "./type-hint";
 
 import * as DateTimeUtil from "./date-time-util";
 import * as FormatUtil from "./formatter";
+import * as PromiseUtil from "./promise-util";
 import * as TupleUtil from "./tuple-util";
 import * as TypeUtil from "./type-util";
 export {
     DateTimeUtil,
     FormatUtil,
+    PromiseUtil,
     TupleUtil,
     TypeUtil,
 };
