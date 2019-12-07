@@ -63,6 +63,7 @@ export * from "./used-ref";
 export * from "./value-expr";
 export * from "./where-clause";
 
+export * from "./async-queue";
 export * from "./constants";
 export * from "./error";
 export * from "./operator-type";
