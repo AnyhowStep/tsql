@@ -3,7 +3,7 @@ import * as tsql from "../../../../../dist";
 import {browserAppKeyTpt, serverAppKeyTpt} from "../app-key-example";
 
 tape(__filename, async (t) => {
-    t.true(
+    t.false(
         tsql.TablePerTypeUtil.isGeneratedColumnAlias(
             browserAppKeyTpt,
             "appKeyId"

@@ -8,7 +8,7 @@ tape(__filename, async (t) => {
             tsql.TablePerTypeUtil.generatedColumnAliases(
                 browserAppKeyTpt
             ),
-            ["appKeyId", "appKeyTypeId"]
+            ["appKeyTypeId"]
         )
     );
 
@@ -17,7 +17,7 @@ tape(__filename, async (t) => {
             tsql.TablePerTypeUtil.generatedColumnAliases(
                 serverAppKeyTpt
             ),
-            ["appKeyId", "appKeyTypeId"]
+            ["appKeyTypeId"]
         )
     );
 
