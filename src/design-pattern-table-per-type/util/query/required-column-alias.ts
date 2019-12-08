@@ -4,9 +4,6 @@ import {NullableColumnAlias, isNullableColumnAlias} from "./nullable-column-alia
 import {GeneratedColumnAlias, isGeneratedColumnAlias} from "./generated-column-alias";
 import {columnAliases, ColumnAlias, isColumnAlias} from "./column-alias";
 
-/**
- * @todo Can we somehow handle `autoIncrement`?
- */
 export type RequiredColumnAlias<TptT extends ITablePerType> =
     Exclude<
         ColumnAlias<TptT>,
