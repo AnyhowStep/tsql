@@ -69,6 +69,8 @@ export type RemoveMutable<
             TableT["mutableColumns"],
             KeyUtil.FromColumnArray<ColumnsT>
         >,
+
+        explicitAutoIncrementValueEnabled : TableT["explicitAutoIncrementValueEnabled"],
     }>
 );
 /**
@@ -129,6 +131,8 @@ export function removeMutable<
         nullableColumns,
         explicitDefaultValueColumns,
         //mutableColumns,
+
+        explicitAutoIncrementValueEnabled,
     } = table;
 
 
@@ -151,6 +155,8 @@ export function removeMutable<
             nullableColumns,
             explicitDefaultValueColumns,
             mutableColumns,
+
+            explicitAutoIncrementValueEnabled,
         },
         table.unaliasedAst
     );

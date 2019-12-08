@@ -7,7 +7,7 @@ const test = tsql.table("test")
         testVal : tm.mysql.bigIntUnsigned(),
     })
     .setAutoIncrement(columns => columns.testId)
-    //.removeGenerated(columns => [columns.testId])
+    //.enableExplicitAutoIncrementValue()
     .addExplicitDefaultValue(columns => [
         columns.testVal,
     ]);

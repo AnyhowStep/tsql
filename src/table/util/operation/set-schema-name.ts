@@ -21,6 +21,8 @@ export type SetSchemaName<TableT extends ITable> = (
         nullableColumns : TableT["nullableColumns"],
         explicitDefaultValueColumns : TableT["explicitDefaultValueColumns"],
         mutableColumns : TableT["mutableColumns"],
+
+        explicitAutoIncrementValueEnabled : TableT["explicitAutoIncrementValueEnabled"],
     }>
 );
 /**
@@ -65,6 +67,8 @@ export function setSchemaName<TableT extends ITable> (
         nullableColumns,
         explicitDefaultValueColumns,
         mutableColumns,
+
+        explicitAutoIncrementValueEnabled,
     } = table;
 
     return new Table(
@@ -86,6 +90,8 @@ export function setSchemaName<TableT extends ITable> (
             nullableColumns,
             explicitDefaultValueColumns,
             mutableColumns,
+
+            explicitAutoIncrementValueEnabled,
         },
         identifierNode(
             newSchemaName,

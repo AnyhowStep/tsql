@@ -1,16 +1,16 @@
 import {ITable} from "../../table";
 import {columnAlias} from "./column-alias";
+import {ExplicitAutoIncrement, isExplicitAutoIncrement} from "./explicit-auto-increment";
 
 export type OptionalColumnAlias<TableT extends ITable> =
-    Exclude<
+    | ExplicitAutoIncrement<TableT>
+    | Exclude<
         (
             | TableT["nullableColumns"][number]
             | TableT["explicitDefaultValueColumns"][number]
-            | TableT["autoIncrement"]
         ),
         (
             | TableT["generatedColumns"][number]
-            | undefined
         )
     >
 ;
@@ -19,12 +19,14 @@ export function isOptionalColumnAlias<TableT extends ITable> (
     columnAlias : string
 ) : columnAlias is OptionalColumnAlias<TableT> {
     return (
+        isExplicitAutoIncrement(table, columnAlias) ||
         (
-            table.nullableColumns.indexOf(columnAlias) >= 0 ||
-            table.explicitDefaultValueColumns.indexOf(columnAlias) >= 0 ||
-            table.autoIncrement === columnAlias
-        ) &&
-        table.generatedColumns.indexOf(columnAlias) < 0
+            (
+                table.nullableColumns.indexOf(columnAlias) >= 0 ||
+                table.explicitDefaultValueColumns.indexOf(columnAlias) >= 0
+            ) &&
+            table.generatedColumns.indexOf(columnAlias) < 0
+        )
     );
 }
 export function optionalColumnAlias<TableT extends ITable> (

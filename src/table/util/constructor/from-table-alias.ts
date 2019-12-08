@@ -23,6 +23,8 @@ export type FromTableAlias<
         nullableColumns : readonly [],
         explicitDefaultValueColumns : readonly [],
         mutableColumns : readonly [],
+
+        explicitAutoIncrementValueEnabled : false,
     }>
 );
 /**
@@ -56,6 +58,8 @@ export function fromTableAlias<
             nullableColumns : [],
             explicitDefaultValueColumns : [],
             mutableColumns : [],
+
+            explicitAutoIncrementValueEnabled : false,
         } as const,
         identifierNode(tableAlias)
     );

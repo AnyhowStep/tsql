@@ -1,12 +1,14 @@
 import {ITable} from "../../table";
 import {ColumnMapUtil} from "../../../column-map";
 import {columnAlias} from "./column-alias";
+import {ImplicitAutoIncrement, isImplicitAutoIncrement} from "./explicit-auto-increment";
 
 export type InsertableColumnAlias<TableT extends ITable> =
     Exclude<
         ColumnMapUtil.ColumnAlias<TableT["columns"]>,
         (
-            TableT["generatedColumns"][number]
+            | TableT["generatedColumns"][number]
+            | ImplicitAutoIncrement<TableT>
         )
     >
 ;
@@ -18,7 +20,8 @@ export function isInsertableColumnAlias<TableT extends ITable> (
     return (
         Object.prototype.hasOwnProperty.call(table.columns, columnAlias) &&
         Object.prototype.propertyIsEnumerable.call(table.columns, columnAlias) &&
-        table.generatedColumns.indexOf(columnAlias) < 0
+        !table.generatedColumns.includes(columnAlias) &&
+        !isImplicitAutoIncrement(table, columnAlias)
     );
 }
 export function insertableColumnAlias<TableT extends ITable> (

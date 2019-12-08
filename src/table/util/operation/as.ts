@@ -26,6 +26,8 @@ export type AsImpl<
     NullableColumnsT extends ITable["nullableColumns"],
     ExplicitDefaultValueColumnsT extends ITable["explicitDefaultValueColumns"],
     MutableColumnsT extends ITable["mutableColumns"],
+
+    AllowExplicitAutoIncrementValueT extends ITable["explicitAutoIncrementValueEnabled"],
 > =
     Table<{
         isLateral : IsLateralT,
@@ -48,6 +50,8 @@ export type AsImpl<
         nullableColumns : NullableColumnsT,
         explicitDefaultValueColumns : ExplicitDefaultValueColumnsT,
         mutableColumns : MutableColumnsT,
+
+        explicitAutoIncrementValueEnabled : AllowExplicitAutoIncrementValueT,
     }>
 ;
 export type As<TableT extends ITable, NewTableAliasT extends string> =
@@ -68,7 +72,9 @@ export type As<TableT extends ITable, NewTableAliasT extends string> =
         TableT["generatedColumns"],
         TableT["nullableColumns"],
         TableT["explicitDefaultValueColumns"],
-        TableT["mutableColumns"]
+        TableT["mutableColumns"],
+
+        TableT["explicitAutoIncrementValueEnabled"]
     >
 ;
 /**
@@ -105,6 +111,8 @@ export function as<TableT extends ITable, NewTableAliasT extends string> (
         nullableColumns,
         explicitDefaultValueColumns,
         mutableColumns,
+
+        explicitAutoIncrementValueEnabled,
     } = table;
 
     const result : As<TableT, NewTableAliasT> = new Table(
@@ -129,6 +137,8 @@ export function as<TableT extends ITable, NewTableAliasT extends string> (
             nullableColumns,
             explicitDefaultValueColumns,
             mutableColumns,
+
+            explicitAutoIncrementValueEnabled,
         },
         table.unaliasedAst
     );

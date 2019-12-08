@@ -4,20 +4,23 @@ import {ColumnUtil, ColumnArrayUtil} from "../../../column";
 import {KeyUtil} from "../../../key";
 import {pickOwnEnumerable} from "../../../type-util";
 import {ColumnIdentifierMapUtil} from "../../../column-identifier-map";
+import {ImplicitAutoIncrement, isImplicitAutoIncrement} from "../query";
 
 /**
- * Generated columns cannot be mutable.
+ * + Generated columns cannot be mutable.
+ * + Auto-increment columns marked implicit cannot be mutable.
  */
-export type AddMutableColumnAlias<TableT extends Pick<ITable, "columns"|"generatedColumns"|"mutableColumns">> = (
+export type AddMutableColumnAlias<TableT extends Pick<ITable, "columns"|"generatedColumns"|"mutableColumns"|"autoIncrement"|"explicitAutoIncrementValueEnabled">> = (
     Exclude<
         Extract<keyof TableT["columns"], string>,
         (
             | TableT["generatedColumns"][number]
             | TableT["mutableColumns"][number]
+            | ImplicitAutoIncrement<TableT>
         )
     >
 );
-export type AddMutableColumnMap<TableT extends Pick<ITable, "columns"|"generatedColumns"|"mutableColumns">> = (
+export type AddMutableColumnMap<TableT extends Pick<ITable, "columns"|"generatedColumns"|"mutableColumns"|"autoIncrement"|"explicitAutoIncrementValueEnabled">> = (
     {
         readonly [columnAlias in AddMutableColumnAlias<TableT>] : (
             TableT["columns"][columnAlias]
@@ -25,7 +28,7 @@ export type AddMutableColumnMap<TableT extends Pick<ITable, "columns"|"generated
     }
 );
 export function addMutableColumnMap<
-    TableT extends Pick<ITable, "columns"|"generatedColumns"|"mutableColumns">
+    TableT extends Pick<ITable, "columns"|"generatedColumns"|"mutableColumns"|"autoIncrement"|"explicitAutoIncrementValueEnabled">
 > (
     table : TableT
 ) : (
@@ -37,7 +40,8 @@ export function addMutableColumnMap<
             .filter(column => {
                 return (
                     !table.generatedColumns.includes(column.columnAlias) &&
-                    !table.mutableColumns.includes(column.columnAlias)
+                    !table.mutableColumns.includes(column.columnAlias) &&
+                    !isImplicitAutoIncrement(table, column.columnAlias)
                 );
             })
             .map(column => column.columnAlias)
@@ -45,7 +49,7 @@ export function addMutableColumnMap<
     return result;
 }
 export type AddMutableDelegate<
-    TableT extends Pick<ITable, "columns"|"generatedColumns"|"mutableColumns">,
+    TableT extends Pick<ITable, "columns"|"generatedColumns"|"mutableColumns"|"autoIncrement"|"explicitAutoIncrementValueEnabled">,
     ColumnsT extends readonly ColumnUtil.FromColumnMap<AddMutableColumnMap<TableT>>[]
 > = (
     (columnMap : AddMutableColumnMap<TableT>) => ColumnsT
@@ -79,6 +83,8 @@ export type AddMutable<
             TableT["mutableColumns"],
             KeyUtil.FromColumnArray<ColumnsT>
         >,
+
+        explicitAutoIncrementValueEnabled : TableT["explicitAutoIncrementValueEnabled"],
     }>
 );
 /**
@@ -137,6 +143,8 @@ export function addMutable<
         nullableColumns,
         explicitDefaultValueColumns,
         //mutableColumns,
+
+        explicitAutoIncrementValueEnabled,
     } = table;
 
 
@@ -159,6 +167,8 @@ export function addMutable<
             nullableColumns,
             explicitDefaultValueColumns,
             mutableColumns,
+
+            explicitAutoIncrementValueEnabled,
         },
         table.unaliasedAst
     );

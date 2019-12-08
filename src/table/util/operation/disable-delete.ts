@@ -25,6 +25,8 @@ export type DisableDelete<
         nullableColumns : TableT["nullableColumns"],
         explicitDefaultValueColumns : TableT["explicitDefaultValueColumns"],
         mutableColumns : TableT["mutableColumns"],
+
+        explicitAutoIncrementValueEnabled : TableT["explicitAutoIncrementValueEnabled"],
     }>
 );
 /**
@@ -59,6 +61,8 @@ export function disableDelete<
         nullableColumns,
         explicitDefaultValueColumns,
         mutableColumns,
+
+        explicitAutoIncrementValueEnabled,
     } = table;
 
 
@@ -81,6 +85,8 @@ export function disableDelete<
             nullableColumns,
             explicitDefaultValueColumns,
             mutableColumns,
+
+            explicitAutoIncrementValueEnabled,
         },
         table.unaliasedAst
     );

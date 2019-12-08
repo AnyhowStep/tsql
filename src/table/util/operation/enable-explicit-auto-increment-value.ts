@@ -1,7 +1,7 @@
 import {ITable} from "../../table";
 import {Table} from "../../table-impl";
 
-export type RemoveAllMutable<
+export type EnableExplicitAutoIncrementValue<
     TableT extends ITable
 > = (
     Table<{
@@ -21,28 +21,22 @@ export type RemoveAllMutable<
         generatedColumns : TableT["generatedColumns"],
         nullableColumns : TableT["nullableColumns"],
         explicitDefaultValueColumns : TableT["explicitDefaultValueColumns"],
-        /**
-         * No columns are mutable
-         */
-        mutableColumns : readonly [],
+        mutableColumns : TableT["mutableColumns"],
 
-        explicitAutoIncrementValueEnabled : TableT["explicitAutoIncrementValueEnabled"],
+        explicitAutoIncrementValueEnabled : true,
     }>
 );
+
 /**
- * Makes all columns immutable.
- *
- * @param table
+ * Allows explicit values for auto-increment columns.
  */
-export function removeAllMutable<
+export function enableExplicitAutoIncrementValue<
     TableT extends ITable
 > (
     table : TableT
 ) : (
-    RemoveAllMutable<TableT>
+    EnableExplicitAutoIncrementValue<TableT>
 ) {
-    const mutableColumns : readonly [] = [];
-
     const {
         isLateral,
         alias,
@@ -60,13 +54,13 @@ export function removeAllMutable<
         generatedColumns,
         nullableColumns,
         explicitDefaultValueColumns,
-        //mutableColumns,
+        mutableColumns,
 
-        explicitAutoIncrementValueEnabled,
+        //explicitAutoIncrementValueEnabled,
     } = table;
 
 
-    const result : RemoveAllMutable<TableT> = new Table(
+    const result : EnableExplicitAutoIncrementValue<TableT> = new Table(
         {
             isLateral,
             alias,
@@ -86,7 +80,7 @@ export function removeAllMutable<
             explicitDefaultValueColumns,
             mutableColumns,
 
-            explicitAutoIncrementValueEnabled,
+            explicitAutoIncrementValueEnabled : true,
         },
         table.unaliasedAst
     );

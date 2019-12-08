@@ -25,6 +25,8 @@ export type SetTableAlias<TableT extends ITable, NewTableAliasT extends string> 
         nullableColumns : TableT["nullableColumns"],
         explicitDefaultValueColumns : TableT["explicitDefaultValueColumns"],
         mutableColumns : TableT["mutableColumns"],
+
+        explicitAutoIncrementValueEnabled : TableT["explicitAutoIncrementValueEnabled"],
     }>
 );
 /**
@@ -68,6 +70,8 @@ export function setTableAlias<TableT extends ITable, NewTableAliasT extends stri
         nullableColumns,
         explicitDefaultValueColumns,
         mutableColumns,
+
+        explicitAutoIncrementValueEnabled,
     } = table;
 
     return new Table(
@@ -92,6 +96,8 @@ export function setTableAlias<TableT extends ITable, NewTableAliasT extends stri
             nullableColumns,
             explicitDefaultValueColumns,
             mutableColumns,
+
+            explicitAutoIncrementValueEnabled,
         },
         identifierNode(newTableAlias)
     );

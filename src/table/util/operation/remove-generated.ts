@@ -73,6 +73,8 @@ export type RemoveGenerated<
          * mutable by using `.addMutable()`
          */
         mutableColumns : TableT["mutableColumns"],
+
+        explicitAutoIncrementValueEnabled : TableT["explicitAutoIncrementValueEnabled"],
     }>
 );
 /**
@@ -131,6 +133,8 @@ export function removeGenerated<
         nullableColumns,
         explicitDefaultValueColumns,
         mutableColumns,
+
+        explicitAutoIncrementValueEnabled,
     } = table;
 
 
@@ -153,6 +157,8 @@ export function removeGenerated<
             nullableColumns,
             explicitDefaultValueColumns,
             mutableColumns,
+
+            explicitAutoIncrementValueEnabled,
         },
         table.unaliasedAst
     );

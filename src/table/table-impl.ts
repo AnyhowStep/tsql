@@ -57,6 +57,8 @@ export class Table<DataT extends TableData> implements ITable {
     readonly explicitDefaultValueColumns : DataT["explicitDefaultValueColumns"];
     readonly mutableColumns : DataT["mutableColumns"];
 
+    readonly explicitAutoIncrementValueEnabled : DataT["explicitAutoIncrementValueEnabled"];
+
     /**
      * You should never need to explicitly instantiate a `Table`.
      * Use `table()` instead.
@@ -87,6 +89,8 @@ export class Table<DataT extends TableData> implements ITable {
         this.nullableColumns = data.nullableColumns;
         this.explicitDefaultValueColumns = data.explicitDefaultValueColumns;
         this.mutableColumns = data.mutableColumns;
+
+        this.explicitAutoIncrementValueEnabled = data.explicitAutoIncrementValueEnabled;
     }
 
     /**
@@ -337,6 +341,12 @@ export class Table<DataT extends TableData> implements ITable {
         TableUtil.SetAutoIncrement<this, AutoIncrementT>
     ) {
         return TableUtil.setAutoIncrement<this, AutoIncrementT>(this, delegate);
+    }
+
+    enableExplicitAutoIncrementValue () : (
+        TableUtil.EnableExplicitAutoIncrementValue<this>
+    ) {
+        return TableUtil.enableExplicitAutoIncrementValue(this);
     }
 
     /**

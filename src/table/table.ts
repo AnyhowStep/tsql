@@ -28,6 +28,8 @@ export interface TableData extends AliasedTableData {
     readonly nullableColumns : readonly string[];
     readonly explicitDefaultValueColumns : readonly string[];
     readonly mutableColumns : readonly string[];
+
+    readonly explicitAutoIncrementValueEnabled : boolean;
 }
 
 export interface ITable<DataT extends TableData=TableData> extends IAliasedTable<DataT> {
@@ -170,6 +172,15 @@ export interface ITable<DataT extends TableData=TableData> extends IAliasedTable
      * + Generated columns cannot be mutable.
      */
     readonly mutableColumns : DataT["mutableColumns"];
+
+    /**
+     * Defaults to `false`.
+     *
+     * If `true`,
+     * + Users can specify auto-increment values for `INSERT` statements.
+     * + Users can mark the auto-increment column as mutable.
+     */
+    readonly explicitAutoIncrementValueEnabled : DataT["explicitAutoIncrementValueEnabled"];
 
     /**
      * @todo Refactor and move to a different directory

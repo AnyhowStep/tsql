@@ -107,6 +107,8 @@ export type SetPrimaryKey<
         nullableColumns : TableT["nullableColumns"],
         explicitDefaultValueColumns : TableT["explicitDefaultValueColumns"],
         mutableColumns : TableT["mutableColumns"],
+
+        explicitAutoIncrementValueEnabled : TableT["explicitAutoIncrementValueEnabled"],
     }>
 );
 /**
@@ -174,6 +176,8 @@ export function setPrimaryKey<
         nullableColumns,
         explicitDefaultValueColumns,
         mutableColumns,
+
+        explicitAutoIncrementValueEnabled,
     } = table;
 
     const result : SetPrimaryKey<TableT, KeyT> = new Table(
@@ -195,6 +199,8 @@ export function setPrimaryKey<
             nullableColumns,
             explicitDefaultValueColumns,
             mutableColumns,
+
+            explicitAutoIncrementValueEnabled,
         },
         table.unaliasedAst
     );
