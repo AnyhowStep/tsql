@@ -5,6 +5,7 @@ import {TablePerType} from "../../table-per-type-impl";
 import {removeDuplicateParents} from "./remove-duplicate-parents";
 import {isTablePerType} from "../predicate";
 import {KeyUtil} from "../../../key";
+import {Identity} from "../../../type-util";
 
 type ExtractAutoIncrement<
     T extends ITable|ITablePerType
@@ -83,10 +84,12 @@ type AddParentAutoIncrement<
     TablePerTypeT extends ITablePerType,
     ParentT extends ITable|ITablePerType
 > =
-    | ExtractAutoIncrement<ParentT>
-    | Exclude<
-        TablePerTypeT["autoIncrement"][number],
-        ExtractColumnAlias<ParentT>
+    Identity<
+        | ExtractAutoIncrement<ParentT>
+        | Exclude<
+            TablePerTypeT["autoIncrement"][number],
+            ExtractColumnAlias<ParentT>
+        >
     >
 ;
 
@@ -110,17 +113,19 @@ type AddParentExplicitAutoIncrementValueEnabled<
     TablePerTypeT extends ITablePerType,
     ParentT extends ITable|ITablePerType
 > =
-    | Extract<
-        ExtractExplicitAutoIncrementValueEnabled<ParentT>,
-        TablePerTypeT["explicitAutoIncrementValueEnabled"][number]
-    >
-    | Exclude<
-        ExtractExplicitAutoIncrementValueEnabled<ParentT>,
-        TablePerTypeT["autoIncrement"][number]
-    >
-    | Exclude<
-        TablePerTypeT["explicitAutoIncrementValueEnabled"][number],
-        ExtractColumnAlias<ParentT>
+    Identity<
+        | Extract<
+            ExtractExplicitAutoIncrementValueEnabled<ParentT>,
+            TablePerTypeT["explicitAutoIncrementValueEnabled"][number]
+        >
+        | Exclude<
+            ExtractExplicitAutoIncrementValueEnabled<ParentT>,
+            TablePerTypeT["autoIncrement"][number]
+        >
+        | Exclude<
+            TablePerTypeT["explicitAutoIncrementValueEnabled"][number],
+            ExtractColumnAlias<ParentT>
+        >
     >
 ;
 
