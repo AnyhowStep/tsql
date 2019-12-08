@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {TableData, ITable, TableWithPrimaryKey, DeletableTable, InsertableTable, TableWithoutAutoIncrement, TableWithAutoIncrement} from "./table";
+import {TableData, ITable, TableWithPrimaryKey, DeletableTable, InsertableTable, TableWithAutoIncrement} from "./table";
 import * as TableUtil from "./util";
 import {MapperMap} from "../mapper-map";
 import {Ast} from "../ast";
@@ -16,7 +16,7 @@ import {SelectClause, SelectDelegate, SelectValueDelegate, SelectClauseUtil} fro
 import {FromClauseUtil} from "../from-clause";
 import {WhereDelegate} from "../where-clause";
 import {AnyBuiltInExpr} from "../built-in-expr";
-import {CustomInsertRow, CustomInsertRowWithCandidateKey} from "../insert";
+import {CustomInsertRow} from "../insert";
 import {InsertOneWithAutoIncrementReturnType, InsertIgnoreOneWithAutoIncrementReturnType, DeleteOneResult, DeleteZeroOrOneResult, UpdateOneResult, UpdateZeroOrOneResult} from "../execution/util";
 import {AssignmentMapDelegate} from "../update";
 /*import {PrimaryKey, PrimaryKeyUtil} from "../primary-key";
@@ -908,23 +908,18 @@ export class Table<DataT extends TableData> implements ITable {
     }
 
     insertIgnoreOne (
-        this : Extract<this, TableWithAutoIncrement & InsertableTable>,
+        this : Extract<this, InsertableTable>,
         connection : InsertIgnoreOneConnection,
-        row : CustomInsertRow<Extract<this, TableWithAutoIncrement & InsertableTable>>
-    ) : Promise<InsertIgnoreOneWithAutoIncrementReturnType<Extract<this, TableWithAutoIncrement & InsertableTable>>>;
-    insertIgnoreOne (
-        this : Extract<this, TableWithoutAutoIncrement & InsertableTable>,
-        connection : InsertIgnoreOneConnection,
-        row : CustomInsertRow<Extract<this, TableWithoutAutoIncrement & InsertableTable>>
-    ) : Promise<InsertIgnoreOneResult>;
-    insertIgnoreOne (
-        connection : InsertIgnoreOneConnection,
-        row : any
-    ) : Promise<InsertIgnoreOneResult> {
-        return ExecutionUtil.insertIgnoreOne(
-            this as any,
+        row : CustomInsertRow<Extract<this, InsertableTable>>
+    ) : Promise<
+        this extends TableWithAutoIncrement ?
+        InsertIgnoreOneWithAutoIncrementReturnType<Extract<this, TableWithAutoIncrement>> :
+        InsertIgnoreOneResult
+    > {
+        return ExecutionUtil.insertIgnoreOne<Extract<this, InsertableTable>>(
+            this,
             connection,
-            row as any
+            row
         );
     }
 
@@ -1219,25 +1214,16 @@ export class Table<DataT extends TableData> implements ITable {
     }
 
     insertAndFetch (
-        this : Extract<this, TableWithAutoIncrement & InsertableTable>,
+        this : Extract<this, InsertableTable>,
         connection : IsolableInsertOneConnection,
-        row : CustomInsertRow<Extract<this, TableWithAutoIncrement & InsertableTable>>
-    ) : Promise<Row<Extract<this, TableWithAutoIncrement & InsertableTable>>>;
-    insertAndFetch (
-        this : Extract<this, TableWithoutAutoIncrement & InsertableTable>,
-        connection : IsolableInsertOneConnection,
-        row : CustomInsertRowWithCandidateKey<
-            Extract<this, TableWithoutAutoIncrement & InsertableTable>
+        row : ExecutionUtil.InsertAndFetchRow<
+            Extract<this, InsertableTable>
         >
-    ) : Promise<Row<Extract<this, TableWithoutAutoIncrement & InsertableTable>>>;
-    insertAndFetch (
-        connection : IsolableInsertOneConnection,
-        row : any
-    ) : Promise<any> {
-        return ExecutionUtil.insertAndFetch(
-            this as any,
+    ) : Promise<Row<Extract<this, InsertableTable>>> {
+        return ExecutionUtil.insertAndFetch<Extract<this, InsertableTable>>(
+            this,
             connection,
-            row as any
+            row
         );
     }
 

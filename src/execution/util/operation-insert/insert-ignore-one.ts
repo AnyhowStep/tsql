@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {ITable, TableWithAutoIncrement, TableWithoutAutoIncrement, InsertableTable, TableUtil} from "../../../table";
+import {ITable, TableWithAutoIncrement, InsertableTable, TableUtil} from "../../../table";
 import {IgnoredInsertOneResult, InsertIgnoreOneResult, InsertIgnoreOneConnection} from "../../connection";
 import {CustomInsertRow, InsertUtil} from "../../../insert";
 import {InsertOneResultWithAutoIncrement} from "./insert-one";
@@ -41,38 +41,24 @@ function isIgnoredResult (result : InsertIgnoreOneResult) : result is IgnoredIns
  * ```
  */
 export async function insertIgnoreOne<
-    TableT extends TableWithAutoIncrement & InsertableTable
-> (
-    table : TableT,
-    connection : InsertIgnoreOneConnection,
-    row : CustomInsertRow<TableT>
-) : (
-    Promise<InsertIgnoreOneWithAutoIncrementReturnType<TableT>>
-);
-export async function insertIgnoreOne<
-    TableT extends TableWithoutAutoIncrement & InsertableTable
-> (
-    table : TableT,
-    connection : InsertIgnoreOneConnection,
-    row : CustomInsertRow<TableT>
-) : (
-    Promise<InsertIgnoreOneResult>
-);
-export async function insertIgnoreOne<
     TableT extends ITable & InsertableTable
 > (
     table : TableT,
     connection : InsertIgnoreOneConnection,
     row : CustomInsertRow<TableT>
 ) : (
-    Promise<InsertIgnoreOneResult>
+    Promise<
+        TableT extends TableWithAutoIncrement ?
+        InsertIgnoreOneWithAutoIncrementReturnType<TableT> :
+        InsertIgnoreOneResult
+    >
 ) {
     TableUtil.assertInsertEnabled(table);
 
     row = InsertUtil.cleanInsertRow(table, row);
 
     if (table.autoIncrement == undefined) {
-        return connection.insertIgnoreOne(table, row);
+        return connection.insertIgnoreOne(table, row) as any;
     }
 
     const explicitAutoIncrementValue = (row as { [k:string]:unknown })[table.autoIncrement];
@@ -84,14 +70,14 @@ export async function insertIgnoreOne<
             return {
                 ...insertIgnoreResult,
                 [table.autoIncrement] : insertIgnoreResult.autoIncrementId,
-            };
+            } as any;
         }
 
         if (insertIgnoreResult.autoIncrementId != undefined) {
             return {
                 ...insertIgnoreResult,
                 [table.autoIncrement] : insertIgnoreResult.autoIncrementId,
-            };
+            } as any;
         }
 
         /**
@@ -117,14 +103,14 @@ export async function insertIgnoreOne<
         return {
             ...insertIgnoreResult,
             [table.autoIncrement] : insertIgnoreResult.autoIncrementId,
-        };
+        } as any;
     }
 
     if (insertIgnoreResult.autoIncrementId != undefined) {
         return {
             ...insertIgnoreResult,
             [table.autoIncrement] : insertIgnoreResult.autoIncrementId,
-        };
+        } as any;
     }
 
     const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
@@ -136,5 +122,5 @@ export async function insertIgnoreOne<
         ...insertIgnoreResult,
         autoIncrementId : BigInt(explicitAutoIncrementValue),
         [table.autoIncrement] : BigInt(explicitAutoIncrementValue),
-    };
+    } as any;
 }

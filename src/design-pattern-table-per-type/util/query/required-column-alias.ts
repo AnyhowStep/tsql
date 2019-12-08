@@ -14,6 +14,7 @@ export type RequiredColumnAlias<TptT extends ITablePerType> =
             | GeneratedColumnAlias<TptT>
             | NullableColumnAlias<TptT>
             | ExplicitDefaultValueColumnAlias<TptT>
+            | TptT["autoIncrement"][number]
         )
     >
 ;
@@ -27,7 +28,8 @@ export function isRequiredColumnAlias<TptT extends ITablePerType> (
         !(
             isGeneratedColumnAlias(tpt, columnAlias) ||
             isNullableColumnAlias(tpt, columnAlias) ||
-            isExplicitDefaultValueColumnAlias(tpt, columnAlias)
+            isExplicitDefaultValueColumnAlias(tpt, columnAlias) ||
+            tpt.autoIncrement.includes(columnAlias)
         )
     );
 }

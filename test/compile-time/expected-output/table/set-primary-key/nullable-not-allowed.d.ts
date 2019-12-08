@@ -41,4 +41,5 @@ export declare const t: o.Table<{
     nullableColumns: "y"[];
     explicitDefaultValueColumns: readonly [];
     mutableColumns: readonly [];
+    explicitAutoIncrementValueEnabled: false;
 }>;

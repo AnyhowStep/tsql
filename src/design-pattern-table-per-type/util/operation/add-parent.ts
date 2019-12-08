@@ -1,9 +1,66 @@
 import {ITablePerType} from "../../table-per-type";
 import {ITable, TableUtil} from "../../../table";
-import {ExtractParentTables, ExtractChildTable, extractParentTables, extractChildTable} from "../query";
+import {ExtractParentTables, ExtractChildTable, extractParentTables, extractChildTable, ColumnAlias} from "../query";
 import {TablePerType} from "../../table-per-type-impl";
 import {removeDuplicateParents} from "./remove-duplicate-parents";
 import {isTablePerType} from "../predicate";
+
+type ExtractAutoIncrement<
+    T extends ITable|ITablePerType
+> =
+    T extends ITablePerType ?
+    T["autoIncrement"][number] :
+    Extract<T["autoIncrement"], string>
+;
+
+type ExtractExplicitAutoIncrementValueEnabled<
+    T extends ITable|ITablePerType
+> =
+    T extends ITablePerType ?
+    T["explicitAutoIncrementValueEnabled"][number] :
+    T extends ITable ?
+    TableUtil.ExplicitAutoIncrement<T> :
+    never
+;
+
+type ExtractColumnAlias<
+    T extends ITable|ITablePerType
+> =
+    T extends ITablePerType ?
+    ColumnAlias<T> :
+    T extends ITable ?
+    TableUtil.ColumnAlias<T> :
+    never
+;
+
+type AddParentAutoIncrement<
+    TablePerTypeT extends ITablePerType,
+    ParentTableT extends ITable|ITablePerType
+> =
+    | ExtractAutoIncrement<ParentTableT>
+    | Exclude<
+        TablePerTypeT["autoIncrement"][number],
+        ExtractColumnAlias<ParentTableT>
+    >
+;
+
+type AddParentExplicitAutoIncrementValueEnabled<
+    TablePerTypeT extends ITablePerType,
+    ParentTableT extends ITable|ITablePerType
+> =
+    | Extract<
+        ExtractExplicitAutoIncrementValueEnabled<ParentTableT>,
+        TablePerTypeT["explicitAutoIncrementValueEnabled"][number]
+    >
+    | Exclude<
+        ExtractExplicitAutoIncrementValueEnabled<ParentTableT>,
+        TablePerTypeT["autoIncrement"][number]
+    >
+    | Exclude<
+        TablePerTypeT["explicitAutoIncrementValueEnabled"][number],
+        ExtractAutoIncrement<ParentTableT>
+    >
+;
 
 export type AddParent<
     TablePerTypeT extends ITablePerType,
@@ -16,6 +73,14 @@ export type AddParent<
             | ExtractParentTables<ParentTableT>
             | ExtractChildTable<ParentTableT>
         )[],
+        autoIncrement : readonly AddParentAutoIncrement<
+            TablePerTypeT,
+            ParentTableT
+        >[],
+        explicitAutoIncrementValueEnabled : readonly AddParentExplicitAutoIncrementValueEnabled<
+            TablePerTypeT,
+            ParentTableT
+        >[],
     }>
 ;
 
@@ -56,6 +121,14 @@ export function addParent<
             | ExtractParentTables<ParentT>
             | ExtractChildTable<ParentT>
         )[],
+        autoIncrement : readonly AddParentAutoIncrement<
+            TptT,
+            ParentT
+        >[],
+        explicitAutoIncrementValueEnabled : readonly AddParentExplicitAutoIncrementValueEnabled<
+            TptT,
+            ParentT
+        >[],
     }>(
         {
             childTable : tpt.childTable,
@@ -64,6 +137,14 @@ export function addParent<
                 ...extractParentTables(parent),
                 extractChildTable(parent),
             ]),
+            /**
+             * @todo
+             */
+            autoIncrement : null as any,
+            /**
+             * @todo
+             */
+            explicitAutoIncrementValueEnabled : null as any,
         },
         joins
     );

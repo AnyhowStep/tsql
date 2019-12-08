@@ -1,11 +1,11 @@
 [
   {
     "messageText": {
-      "messageText": "Argument of type 'Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly myTableId: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>; }; usedRef: IUsedRef<{}>; autoIncrement: undefined; ... 8 more ...; mutableColumns: readonly []; }>' is not assignable to parameter of type 'Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly myTableId: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>; }; usedRef: IUsedRef<{}>; ... 9 more ...; mutableColumns: readonly []; }> & { ...; } & CompileError<...>'.",
+      "messageText": "Argument of type 'Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly myTableId: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>; }; usedRef: IUsedRef<{}>; autoIncrement: undefined; ... 9 more ...; explicitAutoIncrementValueEnabled: false; }>' is not assignable to parameter of type 'Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly myTableId: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>; }; usedRef: IUsedRef<{}>; ... 10 more ...; explicitAutoIncrementValueEnabled: false; }> & { ...; } & CompileError<...>'.",
       "category": 1,
       "code": 2345,
       "next": {
-        "messageText": "Property '__compileError' is missing in type 'Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly myTableId: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>; }; usedRef: IUsedRef<{}>; autoIncrement: undefined; ... 8 more ...; mutableColumns: readonly []; }>' but required in type 'CompileError<[\"Table alias\", \"myTable\", \"already used in current query JOINs\", \"myTable\"]>'.",
+        "messageText": "Property '__compileError' is missing in type 'Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly myTableId: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>; }; usedRef: IUsedRef<{}>; autoIncrement: undefined; ... 9 more ...; explicitAutoIncrementValueEnabled: false; }>' but required in type 'CompileError<[\"Table alias\", \"myTable\", \"already used in current query JOINs\", \"myTable\"]>'.",
         "category": 1,
         "code": 2741
       }

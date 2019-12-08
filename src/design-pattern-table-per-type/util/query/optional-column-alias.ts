@@ -3,17 +3,18 @@ import {ExplicitDefaultValueColumnAlias, isExplicitDefaultValueColumnAlias} from
 import {NullableColumnAlias, isNullableColumnAlias} from "./nullable-column-alias";
 import {GeneratedColumnAlias, isGeneratedColumnAlias} from "./generated-column-alias";
 import {columnAliases} from "./column-alias";
+import {Identity} from "../../../type-util";
 
-/**
- * @todo Can we somehow handle `autoIncrement`?
- */
 export type OptionalColumnAlias<TptT extends ITablePerType> =
-    Exclude<
-        (
-            | NullableColumnAlias<TptT>
-            | ExplicitDefaultValueColumnAlias<TptT>
-        ),
-        GeneratedColumnAlias<TptT>
+    Identity<
+        | TptT["explicitAutoIncrementValueEnabled"][number]
+        | Exclude<
+            (
+                | NullableColumnAlias<TptT>
+                | ExplicitDefaultValueColumnAlias<TptT>
+            ),
+            GeneratedColumnAlias<TptT>
+        >
     >
 ;
 
@@ -22,11 +23,14 @@ export function isOptionalColumnAlias<TptT extends ITablePerType> (
     columnAlias : string
 ) : columnAlias is OptionalColumnAlias<TptT> {
     return (
+        tpt.explicitAutoIncrementValueEnabled.includes(columnAlias) ||
         (
-            isNullableColumnAlias(tpt, columnAlias) ||
-            isExplicitDefaultValueColumnAlias(tpt, columnAlias)
-        ) &&
-        !isGeneratedColumnAlias(tpt, columnAlias)
+            (
+                isNullableColumnAlias(tpt, columnAlias) ||
+                isExplicitDefaultValueColumnAlias(tpt, columnAlias)
+            ) &&
+            !isGeneratedColumnAlias(tpt, columnAlias)
+        )
     );
 }
 

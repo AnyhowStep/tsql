@@ -21,6 +21,7 @@ export declare const bTpt: tsql.TablePerType<{
         nullableColumns: "x"[];
         explicitDefaultValueColumns: readonly [];
         mutableColumns: readonly "x"[];
+        explicitAutoIncrementValueEnabled: false;
     }>;
     parentTables: readonly tsql.Table<{
         isLateral: false;
@@ -43,7 +44,10 @@ export declare const bTpt: tsql.TablePerType<{
         nullableColumns: "x"[];
         explicitDefaultValueColumns: readonly [];
         mutableColumns: readonly "x"[];
+        explicitAutoIncrementValueEnabled: false;
     }>[];
+    autoIncrement: readonly never[];
+    explicitAutoIncrementValueEnabled: readonly never[];
 }>;
 export declare const cTpt: tsql.TablePerType<{
     childTable: tsql.Table<{
@@ -67,6 +71,7 @@ export declare const cTpt: tsql.TablePerType<{
         nullableColumns: never[];
         explicitDefaultValueColumns: readonly [];
         mutableColumns: readonly "x"[];
+        explicitAutoIncrementValueEnabled: false;
     }>;
     parentTables: readonly (tsql.Table<{
         isLateral: false;
@@ -89,6 +94,7 @@ export declare const cTpt: tsql.TablePerType<{
         nullableColumns: "x"[];
         explicitDefaultValueColumns: readonly [];
         mutableColumns: readonly "x"[];
+        explicitAutoIncrementValueEnabled: false;
     }> | tsql.Table<{
         isLateral: false;
         alias: "atwcmbmB";
@@ -110,7 +116,10 @@ export declare const cTpt: tsql.TablePerType<{
         nullableColumns: "x"[];
         explicitDefaultValueColumns: readonly [];
         mutableColumns: readonly "x"[];
+        explicitAutoIncrementValueEnabled: false;
     }>)[];
+    autoIncrement: readonly never[];
+    explicitAutoIncrementValueEnabled: readonly never[];
 }>;
 export declare const bNullable: "x"[];
 export declare const cNullable: never[];

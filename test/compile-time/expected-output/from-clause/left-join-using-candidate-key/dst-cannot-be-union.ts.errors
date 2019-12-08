@@ -1,11 +1,11 @@
 [
   {
     "messageText": {
-      "messageText": "Argument of type 'Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly userId: Column<{ tableAlias: \"myTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>; readonly computerId: Column<{ tableAlias: \"myTable\"; columnAlias: \"computerId\"; mapper: Mapper<...>; }>; readonly createdAt: Column<...>; }; ... 10 more ...' is not assignable to parameter of type '(Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly userId: Column<{ tableAlias: \"myTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>; readonly computerId: Column<{ tableAlias: \"myTable\"; columnAlias: \"computerId\"; mapper: Mapper<...>; }>; readonly createdAt: Column<...>; }; ... 10 more...'.",
+      "messageText": "Argument of type 'Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly userId: Column<{ tableAlias: \"myTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>; readonly computerId: Column<{ tableAlias: \"myTable\"; columnAlias: \"computerId\"; mapper: Mapper<...>; }>; readonly createdAt: Column<...>; }; ... 11 more ...' is not assignable to parameter of type '(Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly userId: Column<{ tableAlias: \"myTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>; readonly computerId: Column<{ tableAlias: \"myTable\"; columnAlias: \"computerId\"; mapper: Mapper<...>; }>; readonly createdAt: Column<...>; }; ... 11 more...'.",
       "category": 1,
       "code": 2345,
       "next": {
-        "messageText": "Type 'Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly userId: Column<{ tableAlias: \"myTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>; readonly computerId: Column<{ tableAlias: \"myTable\"; columnAlias: \"computerId\"; mapper: Mapper<...>; }>; readonly createdAt: Column<...>; }; ... 10 more ...' is not assignable to type '(Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly userId: Column<{ tableAlias: \"myTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>; readonly computerId: Column<{ tableAlias: \"myTable\"; columnAlias: \"computerId\"; mapper: Mapper<...>; }>; readonly createdAt: Column<...>; }; ... 10 more...'.",
+        "messageText": "Type 'Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly userId: Column<{ tableAlias: \"myTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>; readonly computerId: Column<{ tableAlias: \"myTable\"; columnAlias: \"computerId\"; mapper: Mapper<...>; }>; readonly createdAt: Column<...>; }; ... 11 more ...' is not assignable to type '(Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly userId: Column<{ tableAlias: \"myTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>; readonly computerId: Column<{ tableAlias: \"myTable\"; columnAlias: \"computerId\"; mapper: Mapper<...>; }>; readonly createdAt: Column<...>; }; ... 11 more...'.",
         "category": 1,
         "code": 2322,
         "next": {
@@ -13,7 +13,7 @@
           "category": 1,
           "code": 2719,
           "next": {
-            "messageText": "Property '__compileError' is missing in type 'Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly userId: Column<{ tableAlias: \"myTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>; readonly computerId: Column<{ tableAlias: \"myTable\"; columnAlias: \"computerId\"; mapper: Mapper<...>; }>; readonly createdAt: Column<...>; }; ... 10 more ...' but required in type 'CompileError<[\"Union type not allowed\"]>'.",
+            "messageText": "Property '__compileError' is missing in type 'Table<{ isLateral: false; alias: \"myTable\"; columns: { readonly userId: Column<{ tableAlias: \"myTable\"; columnAlias: \"userId\"; mapper: Mapper<unknown, bigint>; }>; readonly computerId: Column<{ tableAlias: \"myTable\"; columnAlias: \"computerId\"; mapper: Mapper<...>; }>; readonly createdAt: Column<...>; }; ... 11 more ...' but required in type 'CompileError<[\"Union type not allowed\"]>'.",
             "category": 1,
             "code": 2741
           }

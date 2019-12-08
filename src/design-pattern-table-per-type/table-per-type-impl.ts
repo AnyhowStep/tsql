@@ -9,6 +9,10 @@ export class TablePerType<DataT extends TablePerTypeData> implements ITablePerTy
 
     readonly parentTables : DataT["parentTables"];
 
+    readonly autoIncrement : DataT["autoIncrement"];
+
+    readonly explicitAutoIncrementValueEnabled : DataT["explicitAutoIncrementValueEnabled"];
+
     readonly joins : ITablePerType["joins"];
 
     constructor (
@@ -17,6 +21,8 @@ export class TablePerType<DataT extends TablePerTypeData> implements ITablePerTy
     ) {
         this.childTable = data.childTable;
         this.parentTables = data.parentTables;
+        this.autoIncrement = data.autoIncrement;
+        this.explicitAutoIncrementValueEnabled = data.explicitAutoIncrementValueEnabled;
 
         this.joins = joins;
     }

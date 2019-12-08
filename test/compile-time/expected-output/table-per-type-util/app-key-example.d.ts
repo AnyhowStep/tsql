@@ -46,10 +46,11 @@ export declare const appKey: tsql.Table<{
     candidateKeys: readonly (readonly "appKeyId"[] | readonly "key"[])[];
     insertEnabled: true;
     deleteEnabled: true;
-    generatedColumns: readonly "appKeyId"[];
+    generatedColumns: readonly never[];
     nullableColumns: "disabledAt"[];
     explicitDefaultValueColumns: readonly "createdAt"[];
     mutableColumns: readonly ("key" | "disabledAt")[];
+    explicitAutoIncrementValueEnabled: false;
 }>;
 export declare const browserAppKey: tsql.Table<{
     isLateral: false;
@@ -82,6 +83,7 @@ export declare const browserAppKey: tsql.Table<{
     nullableColumns: "referer"[];
     explicitDefaultValueColumns: readonly never[];
     mutableColumns: readonly "referer"[];
+    explicitAutoIncrementValueEnabled: false;
 }>;
 export declare const serverAppKey: tsql.Table<{
     isLateral: false;
@@ -119,6 +121,7 @@ export declare const serverAppKey: tsql.Table<{
     nullableColumns: "ipAddress"[];
     explicitDefaultValueColumns: readonly "trustProxy"[];
     mutableColumns: readonly ("ipAddress" | "trustProxy")[];
+    explicitAutoIncrementValueEnabled: false;
 }>;
 export declare const browserAppKeyTpt: tsql.TablePerType<{
     childTable: tsql.Table<{
@@ -152,6 +155,7 @@ export declare const browserAppKeyTpt: tsql.TablePerType<{
         nullableColumns: "referer"[];
         explicitDefaultValueColumns: readonly never[];
         mutableColumns: readonly "referer"[];
+        explicitAutoIncrementValueEnabled: false;
     }>;
     parentTables: readonly tsql.Table<{
         isLateral: false;
@@ -195,11 +199,14 @@ export declare const browserAppKeyTpt: tsql.TablePerType<{
         candidateKeys: readonly (readonly "appKeyId"[] | readonly "key"[])[];
         insertEnabled: true;
         deleteEnabled: true;
-        generatedColumns: readonly "appKeyId"[];
+        generatedColumns: readonly never[];
         nullableColumns: "disabledAt"[];
         explicitDefaultValueColumns: readonly "createdAt"[];
         mutableColumns: readonly ("key" | "disabledAt")[];
+        explicitAutoIncrementValueEnabled: false;
     }>[];
+    autoIncrement: readonly "appKeyId"[];
+    explicitAutoIncrementValueEnabled: readonly never[];
 }>;
 export declare const serverAppKeyTpt: tsql.TablePerType<{
     childTable: tsql.Table<{
@@ -238,6 +245,7 @@ export declare const serverAppKeyTpt: tsql.TablePerType<{
         nullableColumns: "ipAddress"[];
         explicitDefaultValueColumns: readonly "trustProxy"[];
         mutableColumns: readonly ("ipAddress" | "trustProxy")[];
+        explicitAutoIncrementValueEnabled: false;
     }>;
     parentTables: readonly tsql.Table<{
         isLateral: false;
@@ -281,9 +289,12 @@ export declare const serverAppKeyTpt: tsql.TablePerType<{
         candidateKeys: readonly (readonly "appKeyId"[] | readonly "key"[])[];
         insertEnabled: true;
         deleteEnabled: true;
-        generatedColumns: readonly "appKeyId"[];
+        generatedColumns: readonly never[];
         nullableColumns: "disabledAt"[];
         explicitDefaultValueColumns: readonly "createdAt"[];
         mutableColumns: readonly ("key" | "disabledAt")[];
+        explicitAutoIncrementValueEnabled: false;
     }>[];
+    autoIncrement: readonly "appKeyId"[];
+    explicitAutoIncrementValueEnabled: readonly never[];
 }>;
