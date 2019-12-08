@@ -74,6 +74,8 @@
         "./src/schema-validation/**/*",
         "./src/design-pattern-log/**/*",
         "./src/design-pattern-table-per-type/**/*",
+        "./src/promise-util/**/*",
+        "./src/async-queue.ts",
         "./src/index.ts"
     ]
 }

@@ -1,19 +1,26 @@
 import {SelectConnection, DeleteConnection, UpdateConnection, InsertOneConnection} from "./connection";
 
+export type IsolableLockCallback<T, ResultT> = (
+    (connection : T & IsolableConnection<T>) => Promise<ResultT>
+);
 /**
  * A callback containing an isolated connection.
  */
-export type IsolatedCallback<K, ResultT> = (
-    (connection : K & IsolatedConnection<K>) => Promise<ResultT>
+export type IsolatedCallback<T, ResultT> = (
+    (connection : T & IsolatedConnection<T>) => Promise<ResultT>
 );
 /**
  * Allows you to use transactions for isolating queries.
  */
-export interface IsolableConnection<K> {
+export interface IsolableConnection<T> {
+    lock<ResultT> (
+        callback : IsolableLockCallback<T, ResultT>
+    ) : Promise<ResultT>;
+
     /**
      * Tells you if this connection is in a transaction.
      */
-    isInTransaction () : this is IsolatedConnection<K>;
+    isInTransaction () : this is IsolatedConnection<T>;
     /**
      * Enters a transaction.
      *
@@ -21,14 +28,14 @@ export interface IsolableConnection<K> {
      * Nesting transactions is not allowed.
      */
     transaction<ResultT> (
-        callback : IsolatedCallback<K, ResultT>
+        callback : IsolatedCallback<T, ResultT>
     ) : Promise<ResultT>;
     /**
      * Enters a transaction, if not already in one.
      * If already in a transaction, it uses the current transaction.
      */
     transactionIfNotInOne<ResultT> (
-        callback : IsolatedCallback<K, ResultT>
+        callback : IsolatedCallback<T, ResultT>
     ) : Promise<ResultT>;
 }
 /**

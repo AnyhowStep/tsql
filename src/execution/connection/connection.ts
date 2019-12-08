@@ -200,7 +200,14 @@ export interface UpdateResult {
     message : string;
 }
 
+export type LockCallback<ResultT> = (
+    (connection : IConnection) => Promise<ResultT>
+);
 export interface IConnection {
+    lock<ResultT> (
+        callback : LockCallback<ResultT>
+    ) : Promise<ResultT>;
+
     isInTransaction () : this is ITransactionConnection;
     transaction<ResultT> (
         callback : TransactionCallback<ResultT>
@@ -281,62 +288,77 @@ export interface ITransactionConnection extends IConnection {
     commit () : Promise<void>;
 }
 
+export type RestrictedLockCallback<T, ResultT> =
+    (connection : T & RestrictedLockableConnection<T>) => Promise<ResultT>
+;
+
+export interface RestrictedLockableConnection<T> {
+    lock<ResultT> (
+        callback : RestrictedLockCallback<T, ResultT>
+    ) : Promise<ResultT>
+}
+
+export type RestrictedConnection<K extends keyof IConnection> =
+    & Pick<IConnection, K>
+    & RestrictedLockableConnection<Pick<IConnection, K>>
+;
+
 /**
  * Only `SELECT` statements can be executed by this connection.
  */
-export type SelectConnection = Pick<IConnection, "select">;
+export type SelectConnection = RestrictedConnection<"select">;
 
 /**
  * `INSERT` and `SELECT` statements can be executed by this connection.
  */
-export type InsertOneConnection = Pick<IConnection, "select"|"insertOne">;
+export type InsertOneConnection = RestrictedConnection<"select"|"insertOne">;
 
 /**
  * `INSERT` and `SELECT` statements can be executed by this connection.
  */
-export type InsertManyConnection = Pick<IConnection, "select"|"insertMany">;
+export type InsertManyConnection = RestrictedConnection<"select"|"insertMany">;
 
 /**
  * `INSERT` and `SELECT` statements can be executed by this connection.
  */
-export type InsertIgnoreOneConnection = Pick<IConnection, "select"|"insertIgnoreOne">;
+export type InsertIgnoreOneConnection = RestrictedConnection<"select"|"insertIgnoreOne">;
 
 /**
  * `INSERT` and `SELECT` statements can be executed by this connection.
  */
-export type InsertIgnoreManyConnection = Pick<IConnection, "select"|"insertIgnoreMany">;
+export type InsertIgnoreManyConnection = RestrictedConnection<"select"|"insertIgnoreMany">;
 
 /**
  * `INSERT` and `SELECT` statements can be executed by this connection.
  */
-export type ReplaceOneConnection = Pick<IConnection, "select"|"replaceOne">;
+export type ReplaceOneConnection = RestrictedConnection<"select"|"replaceOne">;
 
 /**
  * `INSERT` and `SELECT` statements can be executed by this connection.
  */
-export type ReplaceManyConnection = Pick<IConnection, "select"|"replaceMany">;
+export type ReplaceManyConnection = RestrictedConnection<"select"|"replaceMany">;
 
 /**
  * `INSERT` and `SELECT` statements can be executed by this connection.
  */
-export type InsertSelectConnection = Pick<IConnection, "select"|"insertSelect">;
+export type InsertSelectConnection = RestrictedConnection<"select"|"insertSelect">;
 
 /**
  * `INSERT` and `SELECT` statements can be executed by this connection.
  */
-export type InsertIgnoreSelectConnection = Pick<IConnection, "select"|"insertIgnoreSelect">;
+export type InsertIgnoreSelectConnection = RestrictedConnection<"select"|"insertIgnoreSelect">;
 
 /**
  * `INSERT` and `SELECT` statements can be executed by this connection.
  */
-export type ReplaceSelectConnection = Pick<IConnection, "select"|"replaceSelect">;
+export type ReplaceSelectConnection = RestrictedConnection<"select"|"replaceSelect">;
 
 /**
  * `DELETE` and `SELECT` statements can be executed by this connection.
  */
-export type DeleteConnection = Pick<IConnection, "select"|"delete">;
+export type DeleteConnection = RestrictedConnection<"select"|"delete">;
 
 /**
  * `UPDATE` and `SELECT` statements can be executed by this connection.
  */
-export type UpdateConnection = Pick<IConnection, "select"|"update">;
+export type UpdateConnection = RestrictedConnection<"select"|"update">;

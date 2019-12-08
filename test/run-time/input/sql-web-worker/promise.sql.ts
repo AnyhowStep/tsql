@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import * as tsql from "../../../../dist";
 import {ISqliteWorker, SqliteAction, FromSqliteMessage, ToSqliteMessage} from "./worker.sql";
-import {AsyncQueue} from "./async-queue";
+import {AsyncQueue} from "../../../../dist";
 import {sqliteSqlfier} from "../../../sqlite-sqlfier";
 import {ITable, BuiltInExprUtil, WhereClause, DeletableTable, DeleteResult, BuiltInAssignmentMap, UpdateResult} from "../../../../dist";
 
@@ -81,18 +81,39 @@ function postMessage<ActionT extends SqliteAction, ResultT> (
     });
 }
 
+interface TransactionInformation {
+    /**
+     * mutable
+     */
+    isInTransaction : boolean;
+}
+
 /**
  * Only one operation can be running at any point in time.
  */
 export class Connection {
     private readonly idAllocator : IdAllocator;
     private readonly asyncQueue : AsyncQueue<ISqliteWorker>;
+    private readonly transactionInfo : TransactionInformation;
 
-    constructor (worker : ISqliteWorker, idAllocator : IdAllocator) {
+    constructor (
+        worker : ISqliteWorker|AsyncQueue<ISqliteWorker>,
+        idAllocator : IdAllocator,
+        transactionInfo : TransactionInformation
+    ) {
         this.idAllocator = idAllocator;
-        this.asyncQueue = new AsyncQueue<ISqliteWorker>(
-            () => worker
-        );
+        this.transactionInfo = transactionInfo;
+
+        this.asyncQueue = worker instanceof AsyncQueue ?
+            worker :
+            new AsyncQueue<ISqliteWorker>(
+                () => {
+                    return {
+                        item : worker,
+                        deallocate : async () => {}
+                    };
+                }
+            );
     }
     deallocate () {
         return this.asyncQueue.stop();
@@ -102,7 +123,7 @@ export class Connection {
         return this.idAllocator.allocateId();
     }
     open (dbFile? : Uint8Array) {
-        return this.asyncQueue.acquire((worker) => {
+        return this.asyncQueue.enqueue((worker) => {
             return postMessage(
                 worker,
                 this.allocateId(),
@@ -115,7 +136,7 @@ export class Connection {
         });
     }
     exec (sql : string) {
-        return this.asyncQueue.acquire((worker) => {
+        return this.asyncQueue.enqueue((worker) => {
             return postMessage(
                 worker,
                 this.allocateId(),
@@ -130,7 +151,7 @@ export class Connection {
         });
     }
     export () {
-        return this.asyncQueue.acquire((worker) => {
+        return this.asyncQueue.enqueue((worker) => {
             return postMessage(
                 worker,
                 this.allocateId(),
@@ -141,7 +162,7 @@ export class Connection {
         });
     }
     close () {
-        return this.asyncQueue.acquire((worker) => {
+        return this.asyncQueue.enqueue((worker) => {
             return postMessage(
                 worker,
                 this.allocateId(),
@@ -162,7 +183,7 @@ export class Connection {
      * Also, you really shouldn't pass user input to this method.
      */
     createFunction (functionName : string, impl : (...args : unknown[]) => unknown) {
-        return this.asyncQueue.acquire((worker) => {
+        return this.asyncQueue.enqueue((worker) => {
             return postMessage(
                 worker,
                 this.allocateId(),
@@ -181,7 +202,7 @@ export class Connection {
         step : (state : StateT, ...args : unknown[]) => void,
         finalize : (state : StateT) => unknown
     ) {
-        return this.asyncQueue.acquire((worker) => {
+        return this.asyncQueue.enqueue((worker) => {
             return postMessage(
                 worker,
                 this.allocateId(),
@@ -193,6 +214,21 @@ export class Connection {
                     finalize : finalize.toString(),
                 },
                 () => {},
+            );
+        });
+    }
+
+    async lock<ResultT> (
+        callback : tsql.LockCallback<ResultT>
+    ) : Promise<ResultT> {
+        return this.asyncQueue.lock((nestedAsyncQueue) => {
+            const nestedConnection = new Connection(
+                nestedAsyncQueue,
+                this.idAllocator,
+                this.transactionInfo
+            );
+            return callback(
+                nestedConnection as unknown as tsql.IConnection
             );
         });
     }
@@ -289,54 +325,57 @@ export class Connection {
 
     insertOne<TableT extends ITable> (table : TableT, row : tsql.BuiltInInsertRow<TableT>) : Promise<tsql.InsertOneResult> {
         const sql = this.insertOneSqlString(table, row, "");
-        return this.exec(sql)
-            .then(async (result) => {
-                if (result.execResult.length != 0) {
-                    throw new Error(`insertOne() should have no result set; found ${result.execResult.length}`);
-                }
-                if (result.rowsModified != 1) {
-                    throw new Error(`insertOne() should modify one row`);
-                }
+        return this.lock((rawNestedConnection) => {
+            const nestedConnection = (rawNestedConnection as unknown as Connection);
+            return nestedConnection.exec(sql)
+                .then(async (result) => {
+                    if (result.execResult.length != 0) {
+                        throw new Error(`insertOne() should have no result set; found ${result.execResult.length}`);
+                    }
+                    if (result.rowsModified != 1) {
+                        throw new Error(`insertOne() should modify one row`);
+                    }
 
-                const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
+                    const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
 
-                const autoIncrementId = (
-                    (table.autoIncrement == undefined) ?
-                    undefined :
-                    (row[table.autoIncrement as keyof typeof row] === undefined) ?
-                    await tsql
-                        .selectValue(() => tsql.expr(
-                            {
-                                mapper : tm.mysql.bigIntSigned(),
-                                usedRef : tsql.UsedRefUtil.fromColumnRef({}),
-                            },
-                            "LAST_INSERT_ROWID()"
-                        ))
-                        .fetchValue(this) :
-                    /**
-                     * Emulate MySQL behaviour
-                     */
-                    BigInt(0)
-                );
-
-                return {
-                    query : { sql, },
-                    insertedRowCount : BigInt(1) as 1n,
-                    autoIncrementId : (
-                        autoIncrementId == undefined ?
+                    const autoIncrementId = (
+                        (table.autoIncrement == undefined) ?
                         undefined :
-                        tm.BigIntUtil.equal(autoIncrementId, BigInt(0)) ?
-                        undefined :
-                        autoIncrementId
-                    ),
-                    warningCount : BigInt(0),
-                    message : "ok",
-                };
-            })
-            .catch((err) => {
-                //console.error("error encountered", sql);
-                throw err;
-            });
+                        (row[table.autoIncrement as keyof typeof row] === undefined) ?
+                        await tsql
+                            .selectValue(() => tsql.expr(
+                                {
+                                    mapper : tm.mysql.bigIntSigned(),
+                                    usedRef : tsql.UsedRefUtil.fromColumnRef({}),
+                                },
+                                "LAST_INSERT_ROWID()"
+                            ))
+                            .fetchValue(nestedConnection) :
+                        /**
+                         * Emulate MySQL behaviour
+                         */
+                        BigInt(0)
+                    );
+
+                    return {
+                        query : { sql, },
+                        insertedRowCount : BigInt(1) as 1n,
+                        autoIncrementId : (
+                            autoIncrementId == undefined ?
+                            undefined :
+                            tm.BigIntUtil.equal(autoIncrementId, BigInt(0)) ?
+                            undefined :
+                            autoIncrementId
+                        ),
+                        warningCount : BigInt(0),
+                        message : "ok",
+                    };
+                })
+                .catch((err) => {
+                    //console.error("error encountered", sql);
+                    throw err;
+                });
+        });
     }
 
     replaceOne<TableT extends ITable> (table : TableT, row : tsql.BuiltInInsertRow<TableT>) : Promise<tsql.ReplaceOneResult> {
@@ -367,64 +406,67 @@ export class Connection {
 
     insertIgnoreOne<TableT extends ITable> (table : TableT, row : tsql.BuiltInInsertRow<TableT>) : Promise<tsql.InsertIgnoreOneResult> {
         const sql = this.insertOneSqlString(table, row, "OR IGNORE");
-        return this.exec(sql)
-            .then(async (result) => {
-                if (result.execResult.length != 0) {
-                    throw new Error(`insertIgnoreOne() should have no result set; found ${result.execResult.length}`);
-                }
-                if (result.rowsModified != 0 && result.rowsModified != 1) {
-                    throw new Error(`insertIgnoreOne() should modify zero or one row`);
-                }
+        return this.lock((rawNestedConnection) => {
+            const nestedConnection = (rawNestedConnection as unknown as Connection);
+            return nestedConnection.exec(sql)
+                .then(async (result) => {
+                    if (result.execResult.length != 0) {
+                        throw new Error(`insertIgnoreOne() should have no result set; found ${result.execResult.length}`);
+                    }
+                    if (result.rowsModified != 0 && result.rowsModified != 1) {
+                        throw new Error(`insertIgnoreOne() should modify zero or one row`);
+                    }
 
-                const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
+                    const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
 
-                if (result.rowsModified == 0) {
+                    if (result.rowsModified == 0) {
+                        return {
+                            query : { sql, },
+                            insertedRowCount : BigInt(result.rowsModified) as 0n,
+                            autoIncrementId : undefined,
+                            warningCount : BigInt(0),
+                            message : "ok",
+                        };
+                    }
+
+                    const autoIncrementId = (
+                        (table.autoIncrement == undefined) ?
+                        undefined :
+                        (row[table.autoIncrement as keyof typeof row] === undefined) ?
+                        await tsql
+                            .selectValue(() => tsql.expr(
+                                {
+                                    mapper : tm.mysql.bigIntSigned(),
+                                    usedRef : tsql.UsedRefUtil.fromColumnRef({}),
+                                },
+                                "LAST_INSERT_ROWID()"
+                            ))
+                            .fetchValue(nestedConnection) :
+                        /**
+                         * Emulate MySQL behaviour
+                         */
+                        BigInt(0)
+                    );
+
                     return {
                         query : { sql, },
-                        insertedRowCount : BigInt(result.rowsModified) as 0n,
-                        autoIncrementId : undefined,
+                        insertedRowCount : BigInt(result.rowsModified) as 1n,
+                        autoIncrementId : (
+                            autoIncrementId == undefined ?
+                            undefined :
+                            tm.BigIntUtil.equal(autoIncrementId, BigInt(0)) ?
+                            undefined :
+                            autoIncrementId
+                        ),
                         warningCount : BigInt(0),
                         message : "ok",
                     };
-                }
-
-                const autoIncrementId = (
-                    (table.autoIncrement == undefined) ?
-                    undefined :
-                    (row[table.autoIncrement as keyof typeof row] === undefined) ?
-                    await tsql
-                        .selectValue(() => tsql.expr(
-                            {
-                                mapper : tm.mysql.bigIntSigned(),
-                                usedRef : tsql.UsedRefUtil.fromColumnRef({}),
-                            },
-                            "LAST_INSERT_ROWID()"
-                        ))
-                        .fetchValue(this) :
-                    /**
-                     * Emulate MySQL behaviour
-                     */
-                    BigInt(0)
-                );
-
-                return {
-                    query : { sql, },
-                    insertedRowCount : BigInt(result.rowsModified) as 1n,
-                    autoIncrementId : (
-                        autoIncrementId == undefined ?
-                        undefined :
-                        tm.BigIntUtil.equal(autoIncrementId, BigInt(0)) ?
-                        undefined :
-                        autoIncrementId
-                    ),
-                    warningCount : BigInt(0),
-                    message : "ok",
-                };
-            })
-            .catch((err) => {
-                //console.error("error encountered", sql);
-                throw err;
-            });
+                })
+                .catch((err) => {
+                    //console.error("error encountered", sql);
+                    throw err;
+                });
+        });
     }
 
     private async fetchTableStructure (tableName : string) {
@@ -1075,7 +1117,7 @@ export class Connection {
         }
         return this.exec("ROLLBACK")
             .then(() => {
-                this.inTransaction = false;
+                this.transactionInfo.isInTransaction = false;
             });
     }
     commit () : Promise<void> {
@@ -1084,21 +1126,20 @@ export class Connection {
         }
         return this.exec("COMMIT")
             .then(() => {
-                this.inTransaction = false;
+                this.transactionInfo.isInTransaction = false;
             });
     }
 
-    private inTransaction = false;
     isInTransaction () : this is tsql.ITransactionConnection {
-        return this.inTransaction;
+        return this.transactionInfo.isInTransaction;
     }
-    transaction<ResultT> (
+    private transactionImpl<ResultT> (
         callback : tsql.TransactionCallback<ResultT>
     ) : Promise<ResultT> {
-        if (this.inTransaction) {
+        if (this.transactionInfo.isInTransaction) {
             return Promise.reject(new Error(`Transaction already started`));
         }
-        this.inTransaction = true;
+        this.transactionInfo.isInTransaction = true;
 
         return new Promise<ResultT>((resolve, reject) => {
             this.exec("BEGIN TRANSACTION")
@@ -1143,18 +1184,27 @@ export class Connection {
                 });
         });
     }
+    transaction<ResultT> (
+        callback : tsql.TransactionCallback<ResultT>
+    ) : Promise<ResultT> {
+        return this.lock(async (nestedConnection) => {
+            return (nestedConnection as unknown as Connection).transactionImpl(callback);
+        });
+    }
     transactionIfNotInOne<ResultT> (
         callback : tsql.TransactionCallback<ResultT>
     ) : Promise<ResultT> {
-        if (this.isInTransaction()) {
-            try {
-                return callback(this);
-            } catch (err) {
-                return Promise.reject(err);
+        return this.lock(async (nestedConnection) => {
+            if (nestedConnection.isInTransaction()) {
+                try {
+                    return callback(nestedConnection);
+                } catch (err) {
+                    return Promise.reject(err);
+                }
+            } else {
+                return (nestedConnection as unknown as Connection).transactionImpl(callback);
             }
-        } else {
-            return this.transaction(callback);
-        }
+        });
     }
 
     private async fetchTableMeta (tableAlias : string) : Promise<tsql.TableMeta> {
@@ -1205,17 +1255,28 @@ export class Connection {
 export class Pool {
     private readonly worker : ISqliteWorker;
     private readonly idAllocator : IdAllocator;
+    private readonly transactionInfo : TransactionInformation = {
+        isInTransaction : false,
+    };
     private readonly asyncQueue : AsyncQueue<Connection>;
     constructor (worker : ISqliteWorker) {
         this.worker = worker;
         this.idAllocator = new IdAllocator();
         this.asyncQueue = new AsyncQueue<Connection>(
-            () => new Connection(this.worker, this.idAllocator)
+            () => {
+                const connection = new Connection(this.worker, this.idAllocator, this.transactionInfo);
+                return {
+                    item : connection,
+                    deallocate : () => {
+                        return connection.deallocate();
+                    },
+                };
+            }
         );
-        this.acquire = this.asyncQueue.acquire;
+        this.acquire = this.asyncQueue.enqueue;
     }
 
-    readonly acquire : AsyncQueue<Connection>["acquire"];
+    readonly acquire : AsyncQueue<Connection>["enqueue"];
     disconnect () : Promise<void> {
         return this.asyncQueue.stop();
     }
