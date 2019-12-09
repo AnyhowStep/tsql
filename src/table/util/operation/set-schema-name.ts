@@ -1,6 +1,6 @@
 import {ITable} from "../../table";
 import {Table} from "../../table-impl";
-import {identifierNode} from "../../../ast";
+import {identifierNode, isIdentifierNode} from "../../../ast";
 
 export type SetSchemaName<TableT extends ITable> = (
     Table<{
@@ -93,9 +93,17 @@ export function setSchemaName<TableT extends ITable> (
 
             explicitAutoIncrementValueEnabled,
         },
-        identifierNode(
-            newSchemaName,
-            alias
+        (
+            isIdentifierNode(table.unaliasedAst) ?
+            identifierNode(
+                newSchemaName,
+                //The table alias on the database
+                table.unaliasedAst.identifiers[table.unaliasedAst.identifiers.length-1]
+            ) :
+            identifierNode(
+                newSchemaName,
+                alias
+            )
         )
     );
 }
