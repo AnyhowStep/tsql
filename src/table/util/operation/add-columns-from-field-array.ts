@@ -42,6 +42,8 @@ export type AddColumnsFromFieldArray<
  *
  * @param table
  * @param fields
+ *
+ * @deprecated
  */
 export function addColumnsFromFieldArray<
     TableT extends ITable,

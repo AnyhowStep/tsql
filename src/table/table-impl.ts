@@ -138,12 +138,17 @@ export class Table<DataT extends TableData> implements ITable {
 
     /**
      * Adds columns to the table
+     *
+     * @deprecated
      */
     addColumns<FieldsT extends tm.AnyField[]> (
         fields : FieldsT
     ) : (
         TableUtil.AddColumnsFromFieldArray<this, FieldsT>
     );
+    /**
+     * Adds columns to the table
+     */
     addColumns<MapperMapT extends MapperMap> (
         mapperMap : MapperMapT
     ) : (
