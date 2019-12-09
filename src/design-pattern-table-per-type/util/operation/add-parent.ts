@@ -1,10 +1,10 @@
 import {ITablePerType} from "../../table-per-type";
-import {ITable, TableUtil} from "../../../table";
+import {ITable, TableUtil, TableWithAutoIncrement} from "../../../table";
 import {ExtractParentTables, ExtractChildTable, extractParentTables, extractChildTable, ColumnAlias, columnAliases} from "../query";
 import {TablePerType} from "../../table-per-type-impl";
 import {removeDuplicateParents} from "./remove-duplicate-parents";
 import {isTablePerType} from "../predicate";
-import {KeyUtil} from "../../../key";
+import {KeyUtil, Key} from "../../../key";
 import {Identity} from "../../../type-util";
 
 type ExtractAutoIncrement<
@@ -81,61 +81,61 @@ function extractColumnAlias<
 }
 
 type AddParentAutoIncrement<
-    TablePerTypeT extends ITablePerType,
+    TptT extends ITablePerType,
     ParentT extends ITable|ITablePerType
 > =
     Identity<
         | ExtractAutoIncrement<ParentT>
         | Exclude<
-            TablePerTypeT["autoIncrement"][number],
+            TptT["autoIncrement"][number],
             ExtractColumnAlias<ParentT>
         >
     >
 ;
 
 function addParentAutoIncrement<
-    TablePerTypeT extends ITablePerType,
+    TptT extends ITablePerType,
     ParentT extends ITable|ITablePerType
 > (
-    tpt : TablePerTypeT,
+    tpt : TptT,
     parent : ParentT
-) : AddParentAutoIncrement<TablePerTypeT, ParentT>[] {
+) : AddParentAutoIncrement<TptT, ParentT>[] {
     const parentColumnAliases = extractColumnAlias(parent);
     return KeyUtil.removeDuplicates([
         ...extractAutoIncrement(parent),
         ...tpt.autoIncrement.filter(
             columnAlias => !parentColumnAliases.includes(columnAlias as any)
         ),
-    ]) as AddParentAutoIncrement<TablePerTypeT, ParentT>[];
+    ]) as AddParentAutoIncrement<TptT, ParentT>[];
 }
 
 type AddParentExplicitAutoIncrementValueEnabled<
-    TablePerTypeT extends ITablePerType,
+    TptT extends ITablePerType,
     ParentT extends ITable|ITablePerType
 > =
     Identity<
         | Extract<
             ExtractExplicitAutoIncrementValueEnabled<ParentT>,
-            TablePerTypeT["explicitAutoIncrementValueEnabled"][number]
+            TptT["explicitAutoIncrementValueEnabled"][number]
         >
         | Exclude<
             ExtractExplicitAutoIncrementValueEnabled<ParentT>,
-            TablePerTypeT["autoIncrement"][number]
+            TptT["autoIncrement"][number]
         >
         | Exclude<
-            TablePerTypeT["explicitAutoIncrementValueEnabled"][number],
+            TptT["explicitAutoIncrementValueEnabled"][number],
             ExtractColumnAlias<ParentT>
         >
     >
 ;
 
 function addParentExplicitAutoIncrementValueEnabled<
-    TablePerTypeT extends ITablePerType,
+    TptT extends ITablePerType,
     ParentT extends ITable|ITablePerType
 > (
-    tpt : TablePerTypeT,
+    tpt : TptT,
     parent : ParentT
-) : AddParentExplicitAutoIncrementValueEnabled<TablePerTypeT, ParentT>[] {
+) : AddParentExplicitAutoIncrementValueEnabled<TptT, ParentT>[] {
     const parentColumnAliases = extractColumnAlias(parent);
 
     return KeyUtil.removeDuplicates([
@@ -148,28 +148,104 @@ function addParentExplicitAutoIncrementValueEnabled<
         ...tpt.explicitAutoIncrementValueEnabled.filter(
             columnAlias => !parentColumnAliases.includes(columnAlias as any)
         ),
-    ]) as AddParentExplicitAutoIncrementValueEnabled<TablePerTypeT, ParentT>[];
+    ]) as AddParentExplicitAutoIncrementValueEnabled<TptT, ParentT>[];
 }
 
 export type AddParent<
-    TablePerTypeT extends ITablePerType,
+    TptT extends ITablePerType,
     ParentT extends ITable|ITablePerType
 > =
     TablePerType<{
-        childTable : TablePerTypeT["childTable"],
+        childTable : TptT["childTable"],
         parentTables : readonly (
-            | TablePerTypeT["parentTables"][number]
+            | TptT["parentTables"][number]
             | ExtractParentTables<ParentT>
             | ExtractChildTable<ParentT>
         )[],
         autoIncrement : readonly AddParentAutoIncrement<
-            TablePerTypeT,
+            TptT,
             ParentT
         >[],
         explicitAutoIncrementValueEnabled : readonly AddParentExplicitAutoIncrementValueEnabled<
-            TablePerTypeT,
+            TptT,
             ParentT
         >[],
+        childInsertAndFetchCandidateKeys : (
+            TptT["childInsertAndFetchCandidateKeys"] extends undefined ?
+            undefined :
+            TptT["childInsertAndFetchCandidateKeys"] extends readonly never[] ?
+            readonly never[] :
+            TptT["childInsertAndFetchCandidateKeys"] extends readonly Key[] ?
+            (
+                KeyUtil.SubtractDistribute<
+                    TptT["childInsertAndFetchCandidateKeys"][number],
+                    readonly ExtractColumnAlias<ParentT>[]
+                > extends readonly never[] ?
+                undefined :
+                readonly KeyUtil.SubtractDistribute<
+                    TptT["childInsertAndFetchCandidateKeys"][number],
+                    readonly ExtractColumnAlias<ParentT>[]
+                >[]
+            ) :
+            never
+        ),
+        parentInsertAndFetchCandidateKeys : (
+            ParentT extends ITablePerType ?
+            (
+                ParentT["childInsertAndFetchCandidateKeys"] extends undefined ?
+                (
+                    ParentT["parentInsertAndFetchCandidateKeys"] extends undefined ?
+                    undefined :
+                    ParentT["parentInsertAndFetchCandidateKeys"] extends readonly never[] ?
+                    readonly never[] :
+                    ParentT["parentInsertAndFetchCandidateKeys"] extends readonly Key[] ?
+                    readonly (
+                        Extract<
+                            ParentT["parentInsertAndFetchCandidateKeys"],
+                            readonly Key[]
+                        >[number]
+                    )[] :
+                    never
+                ) :
+                ParentT["childInsertAndFetchCandidateKeys"] extends readonly never[] ?
+                readonly never[] :
+                ParentT["childInsertAndFetchCandidateKeys"] extends readonly Key[] ?
+                (
+                    ParentT["parentInsertAndFetchCandidateKeys"] extends undefined ?
+                    readonly (
+                        Extract<
+                            ParentT["childInsertAndFetchCandidateKeys"],
+                            readonly Key[]
+                        >[number]
+                    )[] :
+                    ParentT["parentInsertAndFetchCandidateKeys"] extends readonly never[] ?
+                    readonly never[] :
+                    ParentT["parentInsertAndFetchCandidateKeys"] extends readonly Key[] ?
+                    readonly KeyUtil.ConcatDistribute<
+                        KeyUtil.SubtractDistribute<
+                            Extract<
+                                ParentT["childInsertAndFetchCandidateKeys"],
+                                readonly Key[]
+                            >[number],
+                            readonly ExtractColumnAlias<ParentT>[]
+                        >,
+                        Extract<
+                            ParentT["parentInsertAndFetchCandidateKeys"],
+                            readonly Key[]
+                        >[number]
+                    >[] :
+                    never
+                ) :
+                never
+            ) :
+            ParentT extends ITable ?
+            (
+                ParentT extends TableWithAutoIncrement ?
+                undefined :
+                readonly (ParentT["candidateKeys"][number])[]
+            ) :
+            never
+        ),
     }>
 ;
 
@@ -230,6 +306,82 @@ export function addParent<
             TptT,
             ParentT
         >[],
+        childInsertAndFetchCandidateKeys : (
+            TptT["childInsertAndFetchCandidateKeys"] extends undefined ?
+            undefined :
+            TptT["childInsertAndFetchCandidateKeys"] extends readonly never[] ?
+            readonly never[] :
+            TptT["childInsertAndFetchCandidateKeys"] extends readonly Key[] ?
+            (
+                KeyUtil.SubtractDistribute<
+                    TptT["childInsertAndFetchCandidateKeys"][number],
+                    readonly ExtractColumnAlias<ParentT>[]
+                > extends readonly never[] ?
+                undefined :
+                readonly KeyUtil.SubtractDistribute<
+                    TptT["childInsertAndFetchCandidateKeys"][number],
+                    readonly ExtractColumnAlias<ParentT>[]
+                >[]
+            ) :
+            never
+        ),
+        parentInsertAndFetchCandidateKeys : (
+            ParentT extends ITablePerType ?
+            (
+                ParentT["childInsertAndFetchCandidateKeys"] extends undefined ?
+                (
+                    ParentT["parentInsertAndFetchCandidateKeys"] extends undefined ?
+                    undefined :
+                    ParentT["parentInsertAndFetchCandidateKeys"] extends readonly never[] ?
+                    readonly never[] :
+                    ParentT["parentInsertAndFetchCandidateKeys"] extends readonly Key[] ?
+                    readonly (
+                        Extract<
+                            ParentT["parentInsertAndFetchCandidateKeys"],
+                            readonly Key[]
+                        >[number]
+                    )[] :
+                    never
+                ) :
+                ParentT["childInsertAndFetchCandidateKeys"] extends readonly never[] ?
+                readonly never[] :
+                ParentT["childInsertAndFetchCandidateKeys"] extends readonly Key[] ?
+                (
+                    ParentT["parentInsertAndFetchCandidateKeys"] extends undefined ?
+                    readonly (
+                        Extract<
+                            ParentT["childInsertAndFetchCandidateKeys"],
+                            readonly Key[]
+                        >[number]
+                    )[] :
+                    ParentT["parentInsertAndFetchCandidateKeys"] extends readonly never[] ?
+                    readonly never[] :
+                    ParentT["parentInsertAndFetchCandidateKeys"] extends readonly Key[] ?
+                    readonly KeyUtil.ConcatDistribute<
+                        KeyUtil.SubtractDistribute<
+                            Extract<
+                                ParentT["childInsertAndFetchCandidateKeys"],
+                                readonly Key[]
+                            >[number],
+                            readonly ExtractColumnAlias<ParentT>[]
+                        >,
+                        Extract<
+                            ParentT["parentInsertAndFetchCandidateKeys"],
+                            readonly Key[]
+                        >[number]
+                    >[] :
+                    never
+                ) :
+                never
+            ) :
+            ParentT extends ITable ?
+            (
+                ParentT extends TableWithAutoIncrement ?
+                undefined :
+                readonly (ParentT["candidateKeys"][number])[]
+            ) :
+            never
+        ),
     }>(
         {
             childTable : tpt.childTable,
@@ -240,6 +392,14 @@ export function addParent<
             ]),
             autoIncrement : addParentAutoIncrement(tpt, parent),
             explicitAutoIncrementValueEnabled : addParentExplicitAutoIncrementValueEnabled(tpt, parent),
+            /**
+             * @todo
+             */
+            childInsertAndFetchCandidateKeys : null as any,
+            /**
+             * @todo
+             */
+            parentInsertAndFetchCandidateKeys : null as any,
         },
         joins
     );

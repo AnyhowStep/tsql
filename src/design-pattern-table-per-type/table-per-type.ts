@@ -1,4 +1,5 @@
 import {ITable} from "../table";
+import {Key} from "../key";
 
 export interface TablePerTypeData {
     readonly childTable : ITable,
@@ -8,6 +9,23 @@ export interface TablePerTypeData {
     readonly autoIncrement : readonly string[],
 
     readonly explicitAutoIncrementValueEnabled : readonly string[],
+
+    /**
+     * Some `parentTables` may not have an `autoIncrement` column.
+     *
+     * When such a `parentTable` is encountered and
+     * we call `TablePerTypeUtil.insertAndFetch()`,
+     * we need to provide explicit values for at least one candidate key
+     * of the `parentTable`.
+     *
+     * A value of `undefined` indicates that we do not need
+     * to specify any candidate keys.
+     *
+     * A valud of `readonly never[]` indicates
+     * we cannot specify any candidate keys (and cannot perform `.insertAndFetch()`)
+     */
+    readonly childInsertAndFetchCandidateKeys : (readonly Key[])|undefined,
+    readonly parentInsertAndFetchCandidateKeys : (readonly Key[])|undefined,
 }
 
 export interface ITablePerType<DataT extends TablePerTypeData=TablePerTypeData> {
@@ -29,6 +47,9 @@ export interface ITablePerType<DataT extends TablePerTypeData=TablePerTypeData> 
     readonly autoIncrement : DataT["autoIncrement"];
 
     readonly explicitAutoIncrementValueEnabled : DataT["explicitAutoIncrementValueEnabled"];
+
+    readonly childInsertAndFetchCandidateKeys : DataT["childInsertAndFetchCandidateKeys"];
+    readonly parentInsertAndFetchCandidateKeys : DataT["parentInsertAndFetchCandidateKeys"];
 
     /**
      * An array of 2-tuples containing table aliases.
@@ -59,3 +80,19 @@ export interface ITablePerType<DataT extends TablePerTypeData=TablePerTypeData> 
         ]
     )[];
 }
+
+export type InsertableTablePerType =
+    & ITablePerType
+    & {
+        childTable : { insertEnabled : true },
+        parentTables : { insertEnabled : true }[],
+    }
+;
+
+export type TablePerTypeWithInsertAndFetchCandidateKeys =
+    & ITablePerType
+    & {
+        childInsertAndFetchCandidateKeys : readonly Key[],
+        parentInsertAndFetchCandidateKeys : readonly Key[],
+    }
+;

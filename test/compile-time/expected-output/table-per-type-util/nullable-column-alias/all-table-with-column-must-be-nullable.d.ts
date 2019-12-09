@@ -48,6 +48,8 @@ export declare const bTpt: tsql.TablePerType<{
     }>[];
     autoIncrement: readonly never[];
     explicitAutoIncrementValueEnabled: readonly never[];
+    childInsertAndFetchCandidateKeys: readonly never[];
+    parentInsertAndFetchCandidateKeys: readonly never[];
 }>;
 export declare const cTpt: tsql.TablePerType<{
     childTable: tsql.Table<{
@@ -120,6 +122,8 @@ export declare const cTpt: tsql.TablePerType<{
     }>)[];
     autoIncrement: readonly never[];
     explicitAutoIncrementValueEnabled: readonly never[];
+    childInsertAndFetchCandidateKeys: readonly never[];
+    parentInsertAndFetchCandidateKeys: readonly never[];
 }>;
 export declare const bNullable: "x"[];
 export declare const cNullable: never[];

@@ -1,4 +1,4 @@
-import {ITable, TableUtil} from "../../../table";
+import {ITable, TableUtil, TableWithAutoIncrement} from "../../../table";
 import {TablePerType} from "../../table-per-type-impl";
 
 export function tablePerType<ChildTableT extends ITable> (
@@ -8,12 +8,24 @@ export function tablePerType<ChildTableT extends ITable> (
     parentTables : readonly [],
     autoIncrement : readonly Extract<ChildTableT["autoIncrement"], string>[],
     explicitAutoIncrementValueEnabled : readonly TableUtil.ExplicitAutoIncrement<ChildTableT>[],
+    childInsertAndFetchCandidateKeys : (
+        ChildTableT extends TableWithAutoIncrement ?
+        undefined :
+        readonly (ChildTableT["candidateKeys"][number])[]
+    ),
+    parentInsertAndFetchCandidateKeys : undefined,
 }> {
     return new TablePerType<{
         childTable : ChildTableT,
         parentTables : readonly [],
         autoIncrement : readonly Extract<ChildTableT["autoIncrement"], string>[],
         explicitAutoIncrementValueEnabled : readonly TableUtil.ExplicitAutoIncrement<ChildTableT>[],
+        childInsertAndFetchCandidateKeys : (
+            ChildTableT extends TableWithAutoIncrement ?
+            undefined :
+            readonly (ChildTableT["candidateKeys"][number])[]
+        ),
+        parentInsertAndFetchCandidateKeys : undefined,
     }>(
         {
             childTable,
@@ -30,6 +42,16 @@ export function tablePerType<ChildTableT extends ITable> (
                 [childTable.autoIncrement] :
                 []
             ),
+            childInsertAndFetchCandidateKeys : (
+                childTable.autoIncrement == undefined ?
+                [...childTable.candidateKeys] :
+                undefined
+            ) as (
+                ChildTableT extends TableWithAutoIncrement ?
+                undefined :
+                readonly (ChildTableT["candidateKeys"][number])[]
+            ),
+            parentInsertAndFetchCandidateKeys : undefined,
         },
         [],
     );

@@ -13,6 +13,9 @@ export class TablePerType<DataT extends TablePerTypeData> implements ITablePerTy
 
     readonly explicitAutoIncrementValueEnabled : DataT["explicitAutoIncrementValueEnabled"];
 
+    readonly childInsertAndFetchCandidateKeys : DataT["childInsertAndFetchCandidateKeys"];
+    readonly parentInsertAndFetchCandidateKeys : DataT["parentInsertAndFetchCandidateKeys"];
+
     readonly joins : ITablePerType["joins"];
 
     constructor (
@@ -23,6 +26,8 @@ export class TablePerType<DataT extends TablePerTypeData> implements ITablePerTy
         this.parentTables = data.parentTables;
         this.autoIncrement = data.autoIncrement;
         this.explicitAutoIncrementValueEnabled = data.explicitAutoIncrementValueEnabled;
+        this.childInsertAndFetchCandidateKeys = data.childInsertAndFetchCandidateKeys;
+        this.parentInsertAndFetchCandidateKeys = data.parentInsertAndFetchCandidateKeys;
 
         this.joins = joins;
     }
