@@ -1,6 +1,6 @@
 import {ITable} from "../../table";
 import {Table} from "../../table-impl";
-import {identifierNode} from "../../../ast";
+import {identifierNode, isIdentifierNode} from "../../../ast";
 
 export type SetSchemaName<TableT extends ITable> = (
     Table<{
@@ -21,6 +21,8 @@ export type SetSchemaName<TableT extends ITable> = (
         nullableColumns : TableT["nullableColumns"],
         explicitDefaultValueColumns : TableT["explicitDefaultValueColumns"],
         mutableColumns : TableT["mutableColumns"],
+
+        explicitAutoIncrementValueEnabled : TableT["explicitAutoIncrementValueEnabled"],
     }>
 );
 /**
@@ -65,6 +67,8 @@ export function setSchemaName<TableT extends ITable> (
         nullableColumns,
         explicitDefaultValueColumns,
         mutableColumns,
+
+        explicitAutoIncrementValueEnabled,
     } = table;
 
     return new Table(
@@ -86,10 +90,20 @@ export function setSchemaName<TableT extends ITable> (
             nullableColumns,
             explicitDefaultValueColumns,
             mutableColumns,
+
+            explicitAutoIncrementValueEnabled,
         },
-        identifierNode(
-            newSchemaName,
-            alias
+        (
+            isIdentifierNode(table.unaliasedAst) ?
+            identifierNode(
+                newSchemaName,
+                //The table alias on the database
+                table.unaliasedAst.identifiers[table.unaliasedAst.identifiers.length-1]
+            ) :
+            identifierNode(
+                newSchemaName,
+                alias
+            )
         )
     );
 }

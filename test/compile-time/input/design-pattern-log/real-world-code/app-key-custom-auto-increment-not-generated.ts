@@ -27,7 +27,7 @@ export const appKeyCustom = tsql.table("appKeyCustom")
     .addCandidateKey(c => [c.appKeyId, c.rwc_akc_updatedAt])
     .addExplicitDefaultValue(c => [c.rwc_akc_updatedAt])
     .removeAllMutable()
-    .removeGenerated(c => [c.appKeyCustomId]);
+    .enableExplicitAutoIncrementValue();
 
 export const appKeyCustomLog = tsql.log(appKeyCustom)
     .setOwner(appKey)

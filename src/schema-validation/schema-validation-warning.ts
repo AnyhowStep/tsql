@@ -17,7 +17,6 @@ export enum SchemaValidationWarningType {
     COLUMN_NULLABLE_ON_APPLICATION_ONLY_INSERT_AND_UPDATE_DISABLED = "COLUMN_NULLABLE_ON_APPLICATION_ONLY_INSERT_AND_UPDATE_DISABLED",
 
     COLUMN_GENERATED_ON_DATABASE_ONLY_INSERT_AND_UPDATE_DISABLED = "COLUMN_GENERATED_ON_DATABASE_ONLY_INSERT_AND_UPDATE_DISABLED",
-    COLUMN_GENERATED_ON_APPLICATION_ONLY_AUTO_INCREMENT_MISMATCH_INSERT_DISABLED = "COLUMN_GENERATED_ON_APPLICATION_ONLY_AUTO_INCREMENT_MISMATCH_INSERT_DISABLED",
     COLUMN_GENERATED_ON_APPLICATION_ONLY_USING_DATABASE_DEFAULT_VALUE = "COLUMN_GENERATED_ON_APPLICATION_ONLY_USING_DATABASE_DEFAULT_VALUE",
     COLUMN_GENERATED_ON_APPLICATION_ONLY_INSERT_DISABLED = "COLUMN_GENERATED_ON_APPLICATION_ONLY_INSERT_DISABLED",
 
@@ -109,12 +108,6 @@ export interface ColumnGeneratedOnDatabaseOnlyInsertAndUpdateDisabledWarning {
     tableAlias : string,
     columnAlias : string,
 }
-export interface ColumnGeneratedOnApplicationOnlyAutoIncrementMismatchInsertDisabledWarning {
-    type : SchemaValidationWarningType.COLUMN_GENERATED_ON_APPLICATION_ONLY_AUTO_INCREMENT_MISMATCH_INSERT_DISABLED,
-    description : string,
-    tableAlias : string,
-    applicationColumnAlias : string,
-}
 export interface ColumnGeneratedOnApplicationOnlyUsingDatabaseDefaultValueWarning {
     type : SchemaValidationWarningType.COLUMN_GENERATED_ON_APPLICATION_ONLY_USING_DATABASE_DEFAULT_VALUE,
     description : string,
@@ -170,7 +163,6 @@ export type SchemaValidationWarning =
     | ColumnNullableOnApplicationOnlyInsertAndUpdateDisabledWarning
 
     | ColumnGeneratedOnDatabaseOnlyInsertAndUpdateDisabledWarning
-    | ColumnGeneratedOnApplicationOnlyAutoIncrementMismatchInsertDisabledWarning
     | ColumnGeneratedOnApplicationOnlyUsingDatabaseDefaultValueWarning
     | ColumnGeneratedOnApplicationOnlyInsertDisabledWarning
 

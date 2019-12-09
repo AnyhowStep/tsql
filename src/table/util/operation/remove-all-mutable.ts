@@ -25,6 +25,8 @@ export type RemoveAllMutable<
          * No columns are mutable
          */
         mutableColumns : readonly [],
+
+        explicitAutoIncrementValueEnabled : TableT["explicitAutoIncrementValueEnabled"],
     }>
 );
 /**
@@ -59,6 +61,8 @@ export function removeAllMutable<
         nullableColumns,
         explicitDefaultValueColumns,
         //mutableColumns,
+
+        explicitAutoIncrementValueEnabled,
     } = table;
 
 
@@ -81,6 +85,8 @@ export function removeAllMutable<
             nullableColumns,
             explicitDefaultValueColumns,
             mutableColumns,
+
+            explicitAutoIncrementValueEnabled,
         },
         table.unaliasedAst
     );

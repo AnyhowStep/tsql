@@ -1,16 +1,34 @@
 [
   {
-    "messageText": "The 'this' context of type 'Table<{ isLateral: false; alias: \"test\"; columns: { readonly testId: Column<{ tableAlias: \"test\"; columnAlias: \"testId\"; mapper: Mapper<unknown, bigint>; }>; readonly testVal: Column<{ tableAlias: \"test\"; columnAlias: \"testVal\"; mapper: Mapper<...>; }>; }; ... 10 more ...; mutableColumns: readonly never[]; }>' is not assignable to method's 'this' of type 'never'.",
-    "code": 2684,
+    "messageText": {
+      "messageText": "Argument of type '{ testId: bigint; }' is not assignable to parameter of type '{} & { readonly testVal?: bigint | IExpr<{ mapper: Mapper<unknown, bigint>; usedRef: IUsedRef<{}>; }> | IExprSelectItem<{ mapper: Mapper<unknown, bigint>; tableAlias: string; alias: string; usedRef: IUsedRef<{}>; }> | (IQueryBase<...> & ... 1 more ... & IQueryBase<...>) | undefined; }'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Object literal may only specify known properties, and 'testId' does not exist in type '{} & { readonly testVal?: bigint | IExpr<{ mapper: Mapper<unknown, bigint>; usedRef: IUsedRef<{}>; }> | IExprSelectItem<{ mapper: Mapper<unknown, bigint>; tableAlias: string; alias: string; usedRef: IUsedRef<{}>; }> | (IQueryBase<...> & ... 1 more ... & IQueryBase<...>) | undefined; }'.",
+        "category": 1,
+        "code": 2353
+      }
+    },
+    "code": 2345,
     "category": 1,
-    "length": 4,
-    "start": 429
+    "length": 11,
+    "start": 569
   },
   {
-    "messageText": "The 'this' context of type 'Table<{ isLateral: false; alias: \"test\"; columns: { readonly testId: Column<{ tableAlias: \"test\"; columnAlias: \"testId\"; mapper: Mapper<unknown, bigint>; }>; readonly testVal: Column<{ tableAlias: \"test\"; columnAlias: \"testVal\"; mapper: Mapper<...>; }>; }; ... 10 more ...; mutableColumns: readonly never[]; }>' is not assignable to method's 'this' of type 'never'.",
-    "code": 2684,
+    "messageText": {
+      "messageText": "Argument of type '{ testId: bigint; testVal: bigint; }' is not assignable to parameter of type '{} & { readonly testVal?: bigint | IExpr<{ mapper: Mapper<unknown, bigint>; usedRef: IUsedRef<{}>; }> | IExprSelectItem<{ mapper: Mapper<unknown, bigint>; tableAlias: string; alias: string; usedRef: IUsedRef<{}>; }> | (IQueryBase<...> & ... 1 more ... & IQueryBase<...>) | undefined; }'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Object literal may only specify known properties, and 'testId' does not exist in type '{} & { readonly testVal?: bigint | IExpr<{ mapper: Mapper<unknown, bigint>; usedRef: IUsedRef<{}>; }> | IExprSelectItem<{ mapper: Mapper<unknown, bigint>; tableAlias: string; alias: string; usedRef: IUsedRef<{}>; }> | (IQueryBase<...> & ... 1 more ... & IQueryBase<...>) | undefined; }'.",
+        "category": 1,
+        "code": 2353
+      }
+    },
+    "code": 2345,
     "category": 1,
-    "length": 4,
-    "start": 620
+    "length": 11,
+    "start": 760
   }
 ]

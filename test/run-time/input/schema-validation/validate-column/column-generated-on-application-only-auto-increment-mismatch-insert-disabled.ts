@@ -36,7 +36,7 @@ tape(__filename, async (t) => {
             test,
             schemaMeta.tables[0]
         );
-        t.deepEqual(result.warnings.length, 2);
+        t.deepEqual(result.warnings.length, 1);
         t.deepEqual(result.errors, []);
         t.deepEqual(
             result.warnings[0],
@@ -46,15 +46,6 @@ tape(__filename, async (t) => {
                 tableAlias : "test",
                 applicationColumnAlias : "testId",
                 databaseColumnAlias : "testVal",
-            }
-        );
-        t.deepEqual(
-            result.warnings[1],
-            {
-                type : tsql.SchemaValidationWarningType.COLUMN_GENERATED_ON_APPLICATION_ONLY_AUTO_INCREMENT_MISMATCH_INSERT_DISABLED,
-                description : `Column "test"."testId" is auto-increment and generated on application, not on database; INSERTs will fail but INSERTs are disabled`,
-                tableAlias : "test",
-                applicationColumnAlias : "testId",
             }
         );
     });

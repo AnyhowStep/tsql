@@ -15,7 +15,7 @@ tape(__filename, async (t) => {
         })
         .setAutoIncrement(columns => columns.testVal)
         .setPrimaryKey(columns => [columns.testId])
-        .removeGenerated(columns => [columns.testVal]);
+        .enableExplicitAutoIncrementValue();
 
     await pool.acquire(async (connection) => {
         await connection.exec(`

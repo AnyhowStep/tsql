@@ -5,13 +5,17 @@ import {KeyUtil} from "../../../key";
 import {pickOwnEnumerable} from "../../../type-util";
 import {ColumnIdentifierMapUtil} from "../../../column-identifier-map";
 
-export type AddGeneratedColumnAlias<TableT extends Pick<ITable, "columns"|"generatedColumns">> = (
+export type AddGeneratedColumnAlias<TableT extends Pick<ITable, "columns"|"generatedColumns"|"autoIncrement">> = (
     Exclude<
         Extract<keyof TableT["columns"], string>,
-        TableT["generatedColumns"][number]
+        | TableT["generatedColumns"][number]
+        /**
+         * A column cannot be both auto-increment and generated
+         */
+        | TableT["autoIncrement"]
     >
 );
-export type AddGeneratedColumnMap<TableT extends Pick<ITable, "columns"|"generatedColumns">> = (
+export type AddGeneratedColumnMap<TableT extends Pick<ITable, "columns"|"generatedColumns"|"autoIncrement">> = (
     {
         readonly [columnAlias in AddGeneratedColumnAlias<TableT>] : (
             TableT["columns"][columnAlias]
@@ -19,7 +23,7 @@ export type AddGeneratedColumnMap<TableT extends Pick<ITable, "columns"|"generat
     }
 );
 export function addGeneratedColumnMap<
-    TableT extends Pick<ITable, "columns"|"generatedColumns">
+    TableT extends Pick<ITable, "columns"|"generatedColumns"|"autoIncrement">
 > (
     table : TableT
 ) : (
@@ -30,7 +34,8 @@ export function addGeneratedColumnMap<
         ColumnArrayUtil.fromColumnMap(table.columns)
             .filter(column => {
                 return (
-                    !table.generatedColumns.includes(column.columnAlias)
+                    !table.generatedColumns.includes(column.columnAlias) &&
+                    column.columnAlias != table.autoIncrement
                 );
             })
             .map(column => column.columnAlias)
@@ -38,7 +43,7 @@ export function addGeneratedColumnMap<
     return result;
 }
 export type AddGeneratedDelegate<
-    TableT extends Pick<ITable, "columns"|"generatedColumns">,
+    TableT extends Pick<ITable, "columns"|"generatedColumns"|"autoIncrement">,
     ColumnsT extends readonly ColumnUtil.FromColumnMap<AddGeneratedColumnMap<TableT>>[]
 > = (
     (columnMap : AddGeneratedColumnMap<TableT>) => ColumnsT
@@ -86,6 +91,8 @@ export type AddGenerated<
             TableT["mutableColumns"],
             KeyUtil.FromColumnArray<ColumnsT>
         >,
+
+        explicitAutoIncrementValueEnabled : TableT["explicitAutoIncrementValueEnabled"],
     }>
 );
 /**
@@ -165,6 +172,8 @@ export function addGenerated<
         nullableColumns,
         //explicitDefaultValueColumns,
         //mutableColumns,
+
+        explicitAutoIncrementValueEnabled,
     } = table;
 
 
@@ -187,6 +196,8 @@ export function addGenerated<
             nullableColumns,
             explicitDefaultValueColumns,
             mutableColumns,
+
+            explicitAutoIncrementValueEnabled,
         },
         table.unaliasedAst
     );

@@ -216,7 +216,16 @@ function fromClauseToSql (
             result.push(join.joinType, "JOIN");
         }
         if (isIdentifierNode(join.tableAst)) {
-            result.push(toSql(join.tableAst));
+            const lastIdentifier = join.tableAst.identifiers[join.tableAst.identifiers.length-1];
+            if (lastIdentifier == join.tableAlias) {
+                result.push(toSql(join.tableAst));
+            } else {
+                result.push(
+                    toSql(join.tableAst),
+                    "AS",
+                    escapeIdentifierWithDoubleQuotes(join.tableAlias)
+                );
+            }
         } else if (QueryBaseUtil.isQuery(join.tableAst)) {
             result.push("(", queryToSql(join.tableAst, toSql, true), ")");
             result.push("AS");

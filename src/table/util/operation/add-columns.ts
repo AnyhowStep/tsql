@@ -6,6 +6,8 @@ import {AddColumnsFromMapperMap, addColumnsFromMapperMap} from "./add-columns-fr
 
 /**
  * Adds columns to the table
+ *
+ * @deprecated
  */
 export function addColumns<
     TableT extends ITable,
@@ -16,6 +18,9 @@ export function addColumns<
 ) : (
     AddColumnsFromFieldArray<TableT, FieldsT>
 );
+/**
+ * Adds columns to the table
+ */
 export function addColumns<
     TableT extends ITable,
     MapperMapT extends MapperMap

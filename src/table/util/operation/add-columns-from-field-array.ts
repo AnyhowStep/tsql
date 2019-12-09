@@ -33,6 +33,8 @@ export type AddColumnsFromFieldArray<
         >[],
         explicitDefaultValueColumns : TableT["explicitDefaultValueColumns"],
         mutableColumns : TableT["mutableColumns"],
+
+        explicitAutoIncrementValueEnabled : TableT["explicitAutoIncrementValueEnabled"],
     }>
 );
 /**
@@ -40,6 +42,8 @@ export type AddColumnsFromFieldArray<
  *
  * @param table
  * @param fields
+ *
+ * @deprecated
  */
 export function addColumnsFromFieldArray<
     TableT extends ITable,

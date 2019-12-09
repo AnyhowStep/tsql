@@ -14,7 +14,7 @@ tape(__filename, async (t) => {
             testVal2 : tm.mysql.bigIntUnsigned(),
         })
         .setAutoIncrement(columns => columns.testId)
-        .removeGenerated(columns => [columns.testId])
+        .enableExplicitAutoIncrementValue()
         .disableInsert();
 
     await pool.acquire(async (connection) => {

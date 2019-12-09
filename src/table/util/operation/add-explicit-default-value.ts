@@ -89,6 +89,8 @@ export type AddExplicitDefaultValue<
             KeyUtil.FromColumnArray<ColumnsT>
         >,
         mutableColumns : TableT["mutableColumns"],
+
+        explicitAutoIncrementValueEnabled : TableT["explicitAutoIncrementValueEnabled"],
     }>
 );
 /**
@@ -159,6 +161,8 @@ export function addExplicitDefaultValue<
         nullableColumns,
         //explicitDefaultValueColumns,
         mutableColumns,
+
+        explicitAutoIncrementValueEnabled,
     } = table;
 
 
@@ -181,6 +185,8 @@ export function addExplicitDefaultValue<
             nullableColumns,
             explicitDefaultValueColumns,
             mutableColumns,
+
+            explicitAutoIncrementValueEnabled,
         },
         table.unaliasedAst
     );

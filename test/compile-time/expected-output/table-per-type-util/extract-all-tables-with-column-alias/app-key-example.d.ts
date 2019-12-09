@@ -41,10 +41,11 @@ export declare const browser_appKeyId: tsql.Table<{
     candidateKeys: readonly (readonly "appKeyId"[] | readonly "key"[])[];
     insertEnabled: true;
     deleteEnabled: true;
-    generatedColumns: readonly "appKeyId"[];
+    generatedColumns: readonly never[];
     nullableColumns: "disabledAt"[];
     explicitDefaultValueColumns: readonly "createdAt"[];
     mutableColumns: readonly ("key" | "disabledAt")[];
+    explicitAutoIncrementValueEnabled: false;
 }> | tsql.Table<{
     isLateral: false;
     alias: "browserAppKey";
@@ -76,6 +77,7 @@ export declare const browser_appKeyId: tsql.Table<{
     nullableColumns: "referer"[];
     explicitDefaultValueColumns: readonly never[];
     mutableColumns: readonly "referer"[];
+    explicitAutoIncrementValueEnabled: false;
 }>;
 export declare const server_appKeyId: tsql.Table<{
     isLateral: false;
@@ -119,10 +121,11 @@ export declare const server_appKeyId: tsql.Table<{
     candidateKeys: readonly (readonly "appKeyId"[] | readonly "key"[])[];
     insertEnabled: true;
     deleteEnabled: true;
-    generatedColumns: readonly "appKeyId"[];
+    generatedColumns: readonly never[];
     nullableColumns: "disabledAt"[];
     explicitDefaultValueColumns: readonly "createdAt"[];
     mutableColumns: readonly ("key" | "disabledAt")[];
+    explicitAutoIncrementValueEnabled: false;
 }> | tsql.Table<{
     isLateral: false;
     alias: "serverAppKey";
@@ -159,6 +162,7 @@ export declare const server_appKeyId: tsql.Table<{
     nullableColumns: "ipAddress"[];
     explicitDefaultValueColumns: readonly "trustProxy"[];
     mutableColumns: readonly ("ipAddress" | "trustProxy")[];
+    explicitAutoIncrementValueEnabled: false;
 }>;
 export declare const browser_createdAt: tsql.Table<{
     isLateral: false;
@@ -202,10 +206,11 @@ export declare const browser_createdAt: tsql.Table<{
     candidateKeys: readonly (readonly "appKeyId"[] | readonly "key"[])[];
     insertEnabled: true;
     deleteEnabled: true;
-    generatedColumns: readonly "appKeyId"[];
+    generatedColumns: readonly never[];
     nullableColumns: "disabledAt"[];
     explicitDefaultValueColumns: readonly "createdAt"[];
     mutableColumns: readonly ("key" | "disabledAt")[];
+    explicitAutoIncrementValueEnabled: false;
 }>;
 export declare const server_createdAt: tsql.Table<{
     isLateral: false;
@@ -249,10 +254,11 @@ export declare const server_createdAt: tsql.Table<{
     candidateKeys: readonly (readonly "appKeyId"[] | readonly "key"[])[];
     insertEnabled: true;
     deleteEnabled: true;
-    generatedColumns: readonly "appKeyId"[];
+    generatedColumns: readonly never[];
     nullableColumns: "disabledAt"[];
     explicitDefaultValueColumns: readonly "createdAt"[];
     mutableColumns: readonly ("key" | "disabledAt")[];
+    explicitAutoIncrementValueEnabled: false;
 }>;
 export declare const browser_referer: tsql.Table<{
     isLateral: false;
@@ -285,6 +291,7 @@ export declare const browser_referer: tsql.Table<{
     nullableColumns: "referer"[];
     explicitDefaultValueColumns: readonly never[];
     mutableColumns: readonly "referer"[];
+    explicitAutoIncrementValueEnabled: false;
 }>;
 export declare const server_trustProxy: tsql.Table<{
     isLateral: false;
@@ -322,6 +329,7 @@ export declare const server_trustProxy: tsql.Table<{
     nullableColumns: "ipAddress"[];
     explicitDefaultValueColumns: readonly "trustProxy"[];
     mutableColumns: readonly ("ipAddress" | "trustProxy")[];
+    explicitAutoIncrementValueEnabled: false;
 }>;
 export declare const browser_doesNotExist: never;
 export declare const server_doesNotExist: never;

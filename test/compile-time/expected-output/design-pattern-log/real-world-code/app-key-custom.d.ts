@@ -32,10 +32,11 @@ export declare const appKey: tsql.Table<{
     candidateKeys: readonly (readonly "appKeyId"[] | readonly "key"[])[];
     insertEnabled: true;
     deleteEnabled: true;
-    generatedColumns: readonly "appKeyId"[];
+    generatedColumns: readonly never[];
     nullableColumns: "disabledAt"[];
     explicitDefaultValueColumns: readonly "rwc_akc_createdAt"[];
     mutableColumns: readonly ("key" | "disabledAt")[];
+    explicitAutoIncrementValueEnabled: false;
 }>;
 export declare const appKeyCustom: tsql.Table<{
     isLateral: false;
@@ -69,10 +70,11 @@ export declare const appKeyCustom: tsql.Table<{
     candidateKeys: readonly (readonly "appKeyCustomId"[] | readonly ("appKeyId" | "rwc_akc_updatedAt")[])[];
     insertEnabled: true;
     deleteEnabled: true;
-    generatedColumns: readonly "appKeyCustomId"[];
+    generatedColumns: readonly never[];
     nullableColumns: never[];
     explicitDefaultValueColumns: readonly "rwc_akc_updatedAt"[];
     mutableColumns: readonly [];
+    explicitAutoIncrementValueEnabled: false;
 }>;
 export declare const appKeyCustomLog: tsql.Log<{
     tracked: readonly "custom"[];
@@ -111,10 +113,11 @@ export declare const appKeyCustomLog: tsql.Log<{
         candidateKeys: readonly (readonly "appKeyCustomId"[] | readonly ("appKeyId" | "rwc_akc_updatedAt")[])[];
         insertEnabled: true;
         deleteEnabled: true;
-        generatedColumns: readonly "appKeyCustomId"[];
+        generatedColumns: readonly never[];
         nullableColumns: never[];
         explicitDefaultValueColumns: readonly "rwc_akc_updatedAt"[];
         mutableColumns: readonly [];
+        explicitAutoIncrementValueEnabled: false;
     }>;
     ownerTable: tsql.Table<{
         isLateral: false;
@@ -148,10 +151,11 @@ export declare const appKeyCustomLog: tsql.Log<{
         candidateKeys: readonly (readonly "appKeyId"[] | readonly "key"[])[];
         insertEnabled: true;
         deleteEnabled: true;
-        generatedColumns: readonly "appKeyId"[];
+        generatedColumns: readonly never[];
         nullableColumns: "disabledAt"[];
         explicitDefaultValueColumns: readonly "rwc_akc_createdAt"[];
         mutableColumns: readonly ("key" | "disabledAt")[];
+        explicitAutoIncrementValueEnabled: false;
     }>;
     latestOrder: readonly [tsql.Column<{
         tableAlias: "appKeyCustom";

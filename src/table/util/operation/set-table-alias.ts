@@ -1,7 +1,7 @@
 import {ITable} from "../../table";
 import {Table} from "../../table-impl";
 import {ColumnMapUtil} from "../../../column-map";
-import {identifierNode} from "../../../ast";
+import {identifierNode, isIdentifierNode} from "../../../ast";
 
 export type SetTableAlias<TableT extends ITable, NewTableAliasT extends string> = (
     Table<{
@@ -25,6 +25,8 @@ export type SetTableAlias<TableT extends ITable, NewTableAliasT extends string> 
         nullableColumns : TableT["nullableColumns"],
         explicitDefaultValueColumns : TableT["explicitDefaultValueColumns"],
         mutableColumns : TableT["mutableColumns"],
+
+        explicitAutoIncrementValueEnabled : TableT["explicitAutoIncrementValueEnabled"],
     }>
 );
 /**
@@ -68,6 +70,8 @@ export function setTableAlias<TableT extends ITable, NewTableAliasT extends stri
         nullableColumns,
         explicitDefaultValueColumns,
         mutableColumns,
+
+        explicitAutoIncrementValueEnabled,
     } = table;
 
     return new Table(
@@ -92,7 +96,20 @@ export function setTableAlias<TableT extends ITable, NewTableAliasT extends stri
             nullableColumns,
             explicitDefaultValueColumns,
             mutableColumns,
+
+            explicitAutoIncrementValueEnabled,
         },
-        identifierNode(newTableAlias)
+        (
+            (
+                isIdentifierNode(table.unaliasedAst) &&
+                table.unaliasedAst.identifiers.length == 2
+            ) ?
+            identifierNode(
+                //The `schemaName`
+                table.unaliasedAst.identifiers[0],
+                newTableAlias
+            ) :
+            identifierNode(newTableAlias)
+        )
     );
 }

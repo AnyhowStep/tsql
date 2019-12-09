@@ -50,10 +50,11 @@ export declare const lightbulbStateLog: tsql.Log<{
         candidateKeys: readonly (readonly "lightbulbStateId"[] | readonly ("lightbulbId" | "loggedAt")[])[];
         insertEnabled: true;
         deleteEnabled: true;
-        generatedColumns: readonly "lightbulbStateId"[];
+        generatedColumns: readonly never[];
         nullableColumns: never[];
         explicitDefaultValueColumns: readonly "loggedAt"[];
         mutableColumns: readonly never[];
+        explicitAutoIncrementValueEnabled: false;
     }>;
     ownerTable: tsql.Table<{
         isLateral: false;
@@ -82,10 +83,11 @@ export declare const lightbulbStateLog: tsql.Log<{
         candidateKeys: readonly (readonly "lightbulbId"[])[];
         insertEnabled: true;
         deleteEnabled: true;
-        generatedColumns: readonly "lightbulbId"[];
+        generatedColumns: readonly never[];
         nullableColumns: never[];
         explicitDefaultValueColumns: readonly never[];
         mutableColumns: readonly never[];
+        explicitAutoIncrementValueEnabled: false;
     }>;
     latestOrder: readonly [tsql.Column<{
         tableAlias: "lightbulbState";

@@ -24,7 +24,7 @@ export enum SchemaValidationErrorType {
 
     COLUMN_GENERATED_ON_DATABASE_ONLY_INSERT_WILL_FAIL = "COLUMN_GENERATED_ON_DATABASE_ONLY_INSERT_WILL_FAIL",
     COLUMN_GENERATED_ON_DATABASE_ONLY_UPDATE_WILL_FAIL = "COLUMN_GENERATED_ON_DATABASE_ONLY_UPDATE_WILL_FAIL",
-    COLUMN_GENERATED_ON_APPLICATION_ONLY_AUTO_INCREMENT_MISMATCH_INSERT_WILL_FAIL = "COLUMN_GENERATED_ON_APPLICATION_ONLY_AUTO_INCREMENT_MISMATCH_INSERT_WILL_FAIL",
+    COLUMN_GENERATED_AND_AUTO_INCREMENT_ON_APPLICATION = "COLUMN_GENERATED_AND_AUTO_INCREMENT_ON_APPLICATION",
     COLUMN_GENERATED_ON_APPLICATION_ONLY_INSERT_WILL_FAIL = "COLUMN_GENERATED_ON_APPLICATION_ONLY_INSERT_WILL_FAIL",
 
     COLUMN_EXPLICIT_DEFAULT_VALUE_ON_APPLICATION_ONLY_INSERT_WILL_FAIL = "COLUMN_EXPLICIT_DEFAULT_VALUE_ON_APPLICATION_ONLY_INSERT_WILL_FAIL",
@@ -144,8 +144,8 @@ export interface ColumnGeneratedOnDatabaseOnlyUpdateWillFailError {
     tableAlias : string,
     columnAlias : string,
 }
-export interface ColumnGeneratedOnApplicationOnlyAutoIncrementMismatchInsertWillFailError {
-    type : SchemaValidationErrorType.COLUMN_GENERATED_ON_APPLICATION_ONLY_AUTO_INCREMENT_MISMATCH_INSERT_WILL_FAIL,
+export interface ColumnGeneratedAndAutoIncrementOnApplicationError {
+    type : SchemaValidationErrorType.COLUMN_GENERATED_AND_AUTO_INCREMENT_ON_APPLICATION,
     description : string,
     tableAlias : string,
     applicationColumnAlias : string,
@@ -189,7 +189,7 @@ export type SchemaValidationError =
 
     | ColumnGeneratedOnDatabaseOnlyInsertWillFailError
     | ColumnGeneratedOnDatabaseOnlyUpdateWillFailError
-    | ColumnGeneratedOnApplicationOnlyAutoIncrementMismatchInsertWillFailError
+    | ColumnGeneratedAndAutoIncrementOnApplicationError
     | ColumnGeneratedOnApplicationOnlyInsertWillFailError
 
     | ColumnExplicitDefaultValueOnApplicationOnlyInsertWillFailError

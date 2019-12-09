@@ -22,10 +22,11 @@ export declare const business: tsql.Table<{
     candidateKeys: readonly (readonly "businessId"[])[];
     insertEnabled: true;
     deleteEnabled: true;
-    generatedColumns: readonly "businessId"[];
+    generatedColumns: readonly never[];
     nullableColumns: never[];
     explicitDefaultValueColumns: readonly never[];
     mutableColumns: readonly [];
+    explicitAutoIncrementValueEnabled: false;
 }>;
 export declare const businessEnabled: tsql.Table<{
     isLateral: false;
@@ -69,10 +70,11 @@ export declare const businessEnabled: tsql.Table<{
     candidateKeys: readonly (readonly "businessEnabledId"[] | readonly ("businessId" | "updatedAt")[])[];
     insertEnabled: true;
     deleteEnabled: true;
-    generatedColumns: readonly "businessEnabledId"[];
+    generatedColumns: readonly never[];
     nullableColumns: never[];
     explicitDefaultValueColumns: readonly ("appId" | "updatedAt")[];
     mutableColumns: readonly never[];
+    explicitAutoIncrementValueEnabled: false;
 }>;
 export declare const businessEnabledLog: tsql.Log<{
     tracked: readonly "enabled"[];
@@ -121,10 +123,11 @@ export declare const businessEnabledLog: tsql.Log<{
         candidateKeys: readonly (readonly "businessEnabledId"[] | readonly ("businessId" | "updatedAt")[])[];
         insertEnabled: true;
         deleteEnabled: true;
-        generatedColumns: readonly "businessEnabledId"[];
+        generatedColumns: readonly never[];
         nullableColumns: never[];
         explicitDefaultValueColumns: readonly ("appId" | "updatedAt")[];
         mutableColumns: readonly never[];
+        explicitAutoIncrementValueEnabled: false;
     }>;
     ownerTable: tsql.Table<{
         isLateral: false;
@@ -148,10 +151,11 @@ export declare const businessEnabledLog: tsql.Log<{
         candidateKeys: readonly (readonly "businessId"[])[];
         insertEnabled: true;
         deleteEnabled: true;
-        generatedColumns: readonly "businessId"[];
+        generatedColumns: readonly never[];
         nullableColumns: never[];
         explicitDefaultValueColumns: readonly never[];
         mutableColumns: readonly [];
+        explicitAutoIncrementValueEnabled: false;
     }>;
     latestOrder: readonly [tsql.Column<{
         tableAlias: "businessEnabled";

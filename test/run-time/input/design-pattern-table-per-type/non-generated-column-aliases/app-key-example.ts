@@ -10,6 +10,7 @@ tape(__filename, async (t) => {
             ),
             [
                 "appId",
+                "appKeyId",
                 "key",
                 "createdAt",
                 "disabledAt",
@@ -25,6 +26,7 @@ tape(__filename, async (t) => {
             ),
             [
                 "appId",
+                "appKeyId",
                 "key",
                 "createdAt",
                 "disabledAt",

@@ -71,6 +71,7 @@ export declare const aliasedTable: tsql.Table<{
     nullableColumns: never[];
     explicitDefaultValueColumns: readonly [];
     mutableColumns: readonly [];
+    explicitAutoIncrementValueEnabled: false;
 }>;
 /**
  * The type of `columns.column0.columnAlias` is all messed up.
@@ -158,4 +159,5 @@ export declare const aliasedTable2: tsql.Table<{
     nullableColumns: never[];
     explicitDefaultValueColumns: readonly [];
     mutableColumns: readonly [];
+    explicitAutoIncrementValueEnabled: false;
 }>;

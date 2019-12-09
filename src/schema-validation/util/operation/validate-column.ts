@@ -166,46 +166,12 @@ export function validateColumn (
                 applicationTable.autoIncrement != undefined &&
                 applicationTable.autoIncrement == applicationColumn.columnAlias
             ) {
-                /**
-                 * On application code, we implicitly add auto-increment columns
-                 * to the list of generated columns, even though they're not really
-                 * generated columns...
-                 */
-                if (columnMeta.isAutoIncrement) {
-                    /**
-                     * + Attempts to `SELECT` are fine.
-                     * + Attempts to `INSERT` are fine; the auto-increment modifier matches.
-                     * + Attempts to `UPDATE` won't set the value because we say it is generated.
-                     * + Attempts to `DELETE` are fine.
-                     * + Attempts to use as expression are fine.
-                     */
-                    /**
-                     * OK
-                     */
-                } else {
-                    /**
-                     * + Attempts to `SELECT` are fine.
-                     * + Attempts to `INSERT` will fail; the auto-increment modifiers don't match.
-                     * + Attempts to `UPDATE` won't set the value because we say it is generated.
-                     * + Attempts to `DELETE` are fine.
-                     * + Attempts to use as expression are fine.
-                     */
-                    if (applicationTable.insertEnabled) {
-                        result.errors.push({
-                            type : SchemaValidationErrorType.COLUMN_GENERATED_ON_APPLICATION_ONLY_AUTO_INCREMENT_MISMATCH_INSERT_WILL_FAIL,
-                            description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} is auto-increment and generated on application, not on database; INSERTs will fail`,
-                            tableAlias : applicationTable.alias,
-                            applicationColumnAlias : applicationTable.autoIncrement,
-                        });
-                    } else {
-                        result.warnings.push({
-                            type : SchemaValidationWarningType.COLUMN_GENERATED_ON_APPLICATION_ONLY_AUTO_INCREMENT_MISMATCH_INSERT_DISABLED,
-                            description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} is auto-increment and generated on application, not on database; INSERTs will fail but INSERTs are disabled`,
-                            tableAlias : applicationTable.alias,
-                            applicationColumnAlias : applicationTable.autoIncrement,
-                        });
-                    }
-                }
+                result.errors.push({
+                    type : SchemaValidationErrorType.COLUMN_GENERATED_AND_AUTO_INCREMENT_ON_APPLICATION,
+                    description : `Column ${escapeIdentifierWithDoubleQuotes(applicationTable.alias)}.${escapeIdentifierWithDoubleQuotes(applicationColumn.columnAlias)} cannot be generated and auto-increment at the same time`,
+                    tableAlias : applicationTable.alias,
+                    applicationColumnAlias : applicationTable.autoIncrement,
+                });
             } else {
                 if (
                     columnMeta.isNullable ||

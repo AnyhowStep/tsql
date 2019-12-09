@@ -25,6 +25,7 @@ export function isTable (mixed : unknown) : mixed is ITable {
             "nullableColumns",
             "explicitDefaultValueColumns",
             "mutableColumns",
+            "explicitAutoIncrementValueEnabled",
         ]
     );
 }

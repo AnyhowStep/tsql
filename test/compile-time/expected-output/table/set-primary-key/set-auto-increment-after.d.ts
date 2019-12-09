@@ -37,8 +37,9 @@ export declare const ai: o.Table<{
     candidateKeys: readonly (readonly "b"[] | readonly "y"[] | readonly ("c" | "d")[])[];
     insertEnabled: true;
     deleteEnabled: true;
-    generatedColumns: readonly "b"[];
+    generatedColumns: readonly never[];
     nullableColumns: never[];
     explicitDefaultValueColumns: readonly never[];
     mutableColumns: readonly never[];
+    explicitAutoIncrementValueEnabled: false;
 }>;

@@ -4,6 +4,10 @@ export interface TablePerTypeData {
     readonly childTable : ITable,
 
     readonly parentTables : readonly ITable[],
+
+    readonly autoIncrement : readonly string[],
+
+    readonly explicitAutoIncrementValueEnabled : readonly string[],
 }
 
 export interface ITablePerType<DataT extends TablePerTypeData=TablePerTypeData> {
@@ -18,6 +22,13 @@ export interface ITablePerType<DataT extends TablePerTypeData=TablePerTypeData> 
      * All other tables higher up the inheritance hierarchy.
      */
     readonly parentTables : DataT["parentTables"];
+
+    /**
+     * Multiple columns may be `autoIncrement` in a table-per-type hierarchy.
+     */
+    readonly autoIncrement : DataT["autoIncrement"];
+
+    readonly explicitAutoIncrementValueEnabled : DataT["explicitAutoIncrementValueEnabled"];
 
     /**
      * An array of 2-tuples containing table aliases.

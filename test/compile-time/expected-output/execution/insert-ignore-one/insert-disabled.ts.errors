@@ -1,11 +1,11 @@
 [
   {
     "messageText": {
-      "messageText": "Argument of type 'Table<{ isLateral: false; alias: \"test\"; columns: { readonly testId: Column<{ tableAlias: \"test\"; columnAlias: \"testId\"; mapper: Mapper<unknown, bigint>; }>; readonly testVal: Column<{ tableAlias: \"test\"; columnAlias: \"testVal\"; mapper: Mapper<...>; }>; }; ... 10 more ...; mutableColumns: readonly []; }>' is not assignable to parameter of type 'ITable<TableData> & { autoIncrement: undefined; } & { insertEnabled: true; }'.",
+      "messageText": "Argument of type 'Table<{ isLateral: false; alias: \"test\"; columns: { readonly testId: Column<{ tableAlias: \"test\"; columnAlias: \"testId\"; mapper: Mapper<unknown, bigint>; }>; readonly testVal: Column<{ tableAlias: \"test\"; columnAlias: \"testVal\"; mapper: Mapper<...>; }>; }; ... 11 more ...; explicitAutoIncrementValueEnabled: false; }>' is not assignable to parameter of type 'ITable<TableData> & { insertEnabled: true; }'.",
       "category": 1,
       "code": 2345,
       "next": {
-        "messageText": "Type 'Table<{ isLateral: false; alias: \"test\"; columns: { readonly testId: Column<{ tableAlias: \"test\"; columnAlias: \"testId\"; mapper: Mapper<unknown, bigint>; }>; readonly testVal: Column<{ tableAlias: \"test\"; columnAlias: \"testVal\"; mapper: Mapper<...>; }>; }; ... 10 more ...; mutableColumns: readonly []; }>' is not assignable to type '{ insertEnabled: true; }'.",
+        "messageText": "Type 'Table<{ isLateral: false; alias: \"test\"; columns: { readonly testId: Column<{ tableAlias: \"test\"; columnAlias: \"testId\"; mapper: Mapper<unknown, bigint>; }>; readonly testVal: Column<{ tableAlias: \"test\"; columnAlias: \"testVal\"; mapper: Mapper<...>; }>; }; ... 11 more ...; explicitAutoIncrementValueEnabled: false; }>' is not assignable to type '{ insertEnabled: true; }'.",
         "category": 1,
         "code": 2322,
         "next": {
