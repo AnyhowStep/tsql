@@ -8,7 +8,7 @@ tape(__filename, async (t) => {
             testId : tm.mysql.bigIntUnsigned(),
             testVal : tm.mysql.bigIntUnsigned(),
         })
-        .setPrimaryKey(columns => [columns.testId]);
+        .setAutoIncrement(columns => columns.testId);
 
     t.true(tsql.TableUtil.isImplicitAutoIncrement(
         test,
