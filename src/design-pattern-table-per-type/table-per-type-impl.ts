@@ -1,6 +1,6 @@
 import {ITablePerType, TablePerTypeData} from "./table-per-type";
 import * as TablePerTypeUtil from "./util";
-import {ITable} from "../table";
+import {TableWithPrimaryKey} from "../table";
 import {SelectConnection, ExecutionUtil} from "../execution";
 import {WhereDelegate} from "../where-clause";
 
@@ -13,8 +13,7 @@ export class TablePerType<DataT extends TablePerTypeData> implements ITablePerTy
 
     readonly explicitAutoIncrementValueEnabled : DataT["explicitAutoIncrementValueEnabled"];
 
-    readonly childInsertAndFetchCandidateKeys : DataT["childInsertAndFetchCandidateKeys"];
-    readonly parentInsertAndFetchCandidateKeys : DataT["parentInsertAndFetchCandidateKeys"];
+    readonly insertAndFetchPrimaryKey : DataT["insertAndFetchPrimaryKey"];
 
     readonly joins : ITablePerType["joins"];
 
@@ -26,14 +25,13 @@ export class TablePerType<DataT extends TablePerTypeData> implements ITablePerTy
         this.parentTables = data.parentTables;
         this.autoIncrement = data.autoIncrement;
         this.explicitAutoIncrementValueEnabled = data.explicitAutoIncrementValueEnabled;
-        this.childInsertAndFetchCandidateKeys = data.childInsertAndFetchCandidateKeys;
-        this.parentInsertAndFetchCandidateKeys = data.parentInsertAndFetchCandidateKeys;
+        this.insertAndFetchPrimaryKey = data.insertAndFetchPrimaryKey;
 
         this.joins = joins;
     }
 
     addParent<
-        ParentTableT extends ITable|ITablePerType
+        ParentTableT extends TableWithPrimaryKey|ITablePerType
     > (
         parentTable : ParentTableT
     ) : (

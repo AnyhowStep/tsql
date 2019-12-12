@@ -13,8 +13,8 @@ export declare const bTpt: tsql.TablePerType<{
         usedRef: tsql.IUsedRef<{}>;
         autoIncrement: undefined;
         id: undefined;
-        primaryKey: undefined;
-        candidateKeys: readonly [];
+        primaryKey: readonly "x"[];
+        candidateKeys: readonly (readonly "x"[])[];
         insertEnabled: true;
         deleteEnabled: true;
         generatedColumns: readonly [];
@@ -36,8 +36,8 @@ export declare const bTpt: tsql.TablePerType<{
         usedRef: tsql.IUsedRef<{}>;
         autoIncrement: undefined;
         id: undefined;
-        primaryKey: undefined;
-        candidateKeys: readonly [];
+        primaryKey: readonly "x"[];
+        candidateKeys: readonly (readonly "x"[])[];
         insertEnabled: true;
         deleteEnabled: true;
         generatedColumns: readonly [];
@@ -48,8 +48,7 @@ export declare const bTpt: tsql.TablePerType<{
     }>[];
     autoIncrement: readonly never[];
     explicitAutoIncrementValueEnabled: readonly never[];
-    childInsertAndFetchCandidateKeys: readonly never[];
-    parentInsertAndFetchCandidateKeys: readonly never[];
+    insertAndFetchPrimaryKey: readonly "x"[];
 }>;
 export declare const cTpt: tsql.TablePerType<{
     childTable: tsql.Table<{
@@ -65,8 +64,8 @@ export declare const cTpt: tsql.TablePerType<{
         usedRef: tsql.IUsedRef<{}>;
         autoIncrement: undefined;
         id: undefined;
-        primaryKey: undefined;
-        candidateKeys: readonly [];
+        primaryKey: readonly "x"[];
+        candidateKeys: readonly (readonly "x"[])[];
         insertEnabled: true;
         deleteEnabled: true;
         generatedColumns: readonly [];
@@ -88,8 +87,8 @@ export declare const cTpt: tsql.TablePerType<{
         usedRef: tsql.IUsedRef<{}>;
         autoIncrement: undefined;
         id: undefined;
-        primaryKey: undefined;
-        candidateKeys: readonly [];
+        primaryKey: readonly "x"[];
+        candidateKeys: readonly (readonly "x"[])[];
         insertEnabled: true;
         deleteEnabled: true;
         generatedColumns: readonly [];
@@ -110,8 +109,8 @@ export declare const cTpt: tsql.TablePerType<{
         usedRef: tsql.IUsedRef<{}>;
         autoIncrement: undefined;
         id: undefined;
-        primaryKey: undefined;
-        candidateKeys: readonly [];
+        primaryKey: readonly "x"[];
+        candidateKeys: readonly (readonly "x"[])[];
         insertEnabled: true;
         deleteEnabled: true;
         generatedColumns: readonly [];
@@ -122,8 +121,7 @@ export declare const cTpt: tsql.TablePerType<{
     }>)[];
     autoIncrement: readonly never[];
     explicitAutoIncrementValueEnabled: readonly never[];
-    childInsertAndFetchCandidateKeys: readonly never[];
-    parentInsertAndFetchCandidateKeys: readonly never[];
+    insertAndFetchPrimaryKey: readonly "x"[];
 }>;
 export declare const bMutable: "x"[];
 export declare const cMutable: never[];

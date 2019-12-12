@@ -1,6 +1,6 @@
 import {ITable, TableUtil} from "../table";
-import {BuiltInExpr_NonCorrelated} from "../built-in-expr";
-import {CustomExpr_NonCorrelated} from "../custom-expr";
+import {BuiltInExpr_NonCorrelated, BuiltInExpr_NonCorrelatedOrUndefined} from "../built-in-expr";
+import {CustomExpr_NonCorrelated, CustomExpr_NonCorrelatedOrUndefined} from "../custom-expr";
 import {Key, KeyUtil} from "../key";
 import {Identity} from "../type-util";
 
@@ -18,7 +18,7 @@ export type CustomInsertRowWithCandidateKey_NonUnion<
         }
         & {
             readonly [columnAlias in Exclude<TableUtil.OptionalColumnAlias<TableT>, CandidateKeyT[number]>]? : (
-                CustomExpr_NonCorrelated<
+                CustomExpr_NonCorrelatedOrUndefined<
                     ReturnType<TableT["columns"][columnAlias]["mapper"]>
                 >
             )
@@ -68,7 +68,7 @@ export type CustomInsertRow<TableT extends ITable> =
         }
         & {
             readonly [columnAlias in TableUtil.OptionalColumnAlias<TableT>]? : (
-                CustomExpr_NonCorrelated<
+                CustomExpr_NonCorrelatedOrUndefined<
                     ReturnType<TableT["columns"][columnAlias]["mapper"]>
                 >
             )
@@ -104,7 +104,7 @@ export type BuiltInInsertRow<TableT extends ITable> =
         }
         & {
             readonly [columnAlias in TableUtil.OptionalColumnAlias<TableT>]? : (
-                BuiltInExpr_NonCorrelated<
+                BuiltInExpr_NonCorrelatedOrUndefined<
                     ReturnType<TableT["columns"][columnAlias]["mapper"]>
                 >
             )

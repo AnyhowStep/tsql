@@ -9,12 +9,17 @@ export declare const bTpt: tsql.TablePerType<{
                 columnAlias: "x";
                 mapper: import("type-mapping").Mapper<unknown, bigint | null>;
             }>;
+            readonly atwcmbmX: tsql.Column<{
+                tableAlias: "atwcmbmB";
+                columnAlias: "atwcmbmX";
+                mapper: import("type-mapping").Mapper<unknown, bigint>;
+            }>;
         };
         usedRef: tsql.IUsedRef<{}>;
         autoIncrement: undefined;
         id: undefined;
-        primaryKey: undefined;
-        candidateKeys: readonly [];
+        primaryKey: readonly "atwcmbmX"[];
+        candidateKeys: readonly (readonly "atwcmbmX"[])[];
         insertEnabled: true;
         deleteEnabled: true;
         generatedColumns: readonly [];
@@ -32,12 +37,17 @@ export declare const bTpt: tsql.TablePerType<{
                 columnAlias: "x";
                 mapper: import("type-mapping").Mapper<unknown, bigint | null>;
             }>;
+            readonly atwcmbmX: tsql.Column<{
+                tableAlias: "atwcmbmA";
+                columnAlias: "atwcmbmX";
+                mapper: import("type-mapping").Mapper<unknown, bigint>;
+            }>;
         };
         usedRef: tsql.IUsedRef<{}>;
         autoIncrement: undefined;
         id: undefined;
-        primaryKey: undefined;
-        candidateKeys: readonly [];
+        primaryKey: readonly "atwcmbmX"[];
+        candidateKeys: readonly (readonly "atwcmbmX"[])[];
         insertEnabled: true;
         deleteEnabled: true;
         generatedColumns: readonly [];
@@ -48,8 +58,7 @@ export declare const bTpt: tsql.TablePerType<{
     }>[];
     autoIncrement: readonly never[];
     explicitAutoIncrementValueEnabled: readonly never[];
-    childInsertAndFetchCandidateKeys: readonly never[];
-    parentInsertAndFetchCandidateKeys: readonly never[];
+    insertAndFetchPrimaryKey: readonly "atwcmbmX"[];
 }>;
 export declare const cTpt: tsql.TablePerType<{
     childTable: tsql.Table<{
@@ -61,12 +70,17 @@ export declare const cTpt: tsql.TablePerType<{
                 columnAlias: "x";
                 mapper: import("type-mapping").Mapper<unknown, bigint>;
             }>;
+            readonly atwcmbmX: tsql.Column<{
+                tableAlias: "atwcmbmC";
+                columnAlias: "atwcmbmX";
+                mapper: import("type-mapping").Mapper<unknown, bigint>;
+            }>;
         };
         usedRef: tsql.IUsedRef<{}>;
         autoIncrement: undefined;
         id: undefined;
-        primaryKey: undefined;
-        candidateKeys: readonly [];
+        primaryKey: readonly "atwcmbmX"[];
+        candidateKeys: readonly (readonly "atwcmbmX"[])[];
         insertEnabled: true;
         deleteEnabled: true;
         generatedColumns: readonly [];
@@ -84,12 +98,17 @@ export declare const cTpt: tsql.TablePerType<{
                 columnAlias: "x";
                 mapper: import("type-mapping").Mapper<unknown, bigint | null>;
             }>;
+            readonly atwcmbmX: tsql.Column<{
+                tableAlias: "atwcmbmA";
+                columnAlias: "atwcmbmX";
+                mapper: import("type-mapping").Mapper<unknown, bigint>;
+            }>;
         };
         usedRef: tsql.IUsedRef<{}>;
         autoIncrement: undefined;
         id: undefined;
-        primaryKey: undefined;
-        candidateKeys: readonly [];
+        primaryKey: readonly "atwcmbmX"[];
+        candidateKeys: readonly (readonly "atwcmbmX"[])[];
         insertEnabled: true;
         deleteEnabled: true;
         generatedColumns: readonly [];
@@ -106,12 +125,17 @@ export declare const cTpt: tsql.TablePerType<{
                 columnAlias: "x";
                 mapper: import("type-mapping").Mapper<unknown, bigint | null>;
             }>;
+            readonly atwcmbmX: tsql.Column<{
+                tableAlias: "atwcmbmB";
+                columnAlias: "atwcmbmX";
+                mapper: import("type-mapping").Mapper<unknown, bigint>;
+            }>;
         };
         usedRef: tsql.IUsedRef<{}>;
         autoIncrement: undefined;
         id: undefined;
-        primaryKey: undefined;
-        candidateKeys: readonly [];
+        primaryKey: readonly "atwcmbmX"[];
+        candidateKeys: readonly (readonly "atwcmbmX"[])[];
         insertEnabled: true;
         deleteEnabled: true;
         generatedColumns: readonly [];
@@ -122,8 +146,7 @@ export declare const cTpt: tsql.TablePerType<{
     }>)[];
     autoIncrement: readonly never[];
     explicitAutoIncrementValueEnabled: readonly never[];
-    childInsertAndFetchCandidateKeys: readonly never[];
-    parentInsertAndFetchCandidateKeys: readonly never[];
+    insertAndFetchPrimaryKey: readonly "atwcmbmX"[];
 }>;
 export declare const bNullable: "x"[];
 export declare const cNullable: never[];

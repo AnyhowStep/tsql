@@ -207,8 +207,7 @@ export declare const browserAppKeyTpt: tsql.TablePerType<{
     }>[];
     autoIncrement: readonly "appKeyId"[];
     explicitAutoIncrementValueEnabled: readonly never[];
-    childInsertAndFetchCandidateKeys: undefined;
-    parentInsertAndFetchCandidateKeys: undefined;
+    insertAndFetchPrimaryKey: readonly never[];
 }>;
 export declare const serverAppKeyTpt: tsql.TablePerType<{
     childTable: tsql.Table<{
@@ -299,6 +298,5 @@ export declare const serverAppKeyTpt: tsql.TablePerType<{
     }>[];
     autoIncrement: readonly "appKeyId"[];
     explicitAutoIncrementValueEnabled: readonly never[];
-    childInsertAndFetchCandidateKeys: undefined;
-    parentInsertAndFetchCandidateKeys: undefined;
+    insertAndFetchPrimaryKey: readonly never[];
 }>;

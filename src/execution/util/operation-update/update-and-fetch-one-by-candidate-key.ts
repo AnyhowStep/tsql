@@ -5,7 +5,7 @@ import {CandidateKey_NonUnion, CandidateKeyUtil, CandidateKey_Input} from "../..
 import {StrictUnion, AssertNonUnion, Identity} from "../../../type-util";
 import {UpdateOneResult, updateOne} from "./update-one";
 import {BuiltInExprUtil} from "../../../built-in-expr";
-import {CustomExpr_MapCorrelated, CustomExprUtil} from "../../../custom-expr";
+import {CustomExprUtil, CustomExpr_MapCorrelatedOrUndefined} from "../../../custom-expr";
 import * as ExprLib from "../../../expr-library";
 import {RowNotFoundError} from "../../../error";
 
@@ -46,7 +46,7 @@ export type UpdateAndFetchOneByCandidateKeyAssignmentMapImpl<
     Identity<
         & {
             readonly [columnAlias in TableT["mutableColumns"][number]]? : (
-                CustomExpr_MapCorrelated<
+                CustomExpr_MapCorrelatedOrUndefined<
                     TableT["columns"],
                     ReturnType<
                         TableT["columns"][columnAlias]["mapper"]

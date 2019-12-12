@@ -13,6 +13,15 @@ export type CustomExpr_NonCorrelated<TypeT> =
 ;
 
 /**
+ * Workaround,
+ * https://github.com/microsoft/TypeScript/issues/35616#issuecomment-564894944
+ */
+export type CustomExpr_NonCorrelatedOrUndefined<TypeT> =
+    | CustomExpr_NonCorrelated<TypeT>
+    | undefined
+;
+
+/**
  * We don't support subqueries because it's too complicated
  * to check their `IUsedRef`... For now.
  */
@@ -32,4 +41,19 @@ export type CustomExpr_MapCorrelated<
         tableAlias : string,
         alias : string,
     }>
+;
+
+/**
+ * Workaround,
+ * https://github.com/microsoft/TypeScript/issues/35616#issuecomment-564894944
+ *
+ * We don't support subqueries because it's too complicated
+ * to check their `IUsedRef`... For now.
+ */
+export type CustomExpr_MapCorrelatedOrUndefined<
+    ColumnMapT extends ColumnMap,
+    TypeT
+> =
+    | CustomExpr_MapCorrelated<ColumnMapT, TypeT>
+    | undefined
 ;

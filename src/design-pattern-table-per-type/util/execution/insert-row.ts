@@ -1,8 +1,8 @@
-import {ITablePerType, TablePerTypeWithInsertAndFetchCandidateKeys} from "../../table-per-type";
+import {ITablePerType} from "../../table-per-type";
 import {ColumnType, RequiredColumnAlias, OptionalColumnAlias, InsertableColumnAlias} from "../query";
 import {Identity} from "../../../type-util";
-import {CustomExpr_NonCorrelated} from "../../../custom-expr";
-import {BuiltInExpr_NonCorrelated} from "../../../built-in-expr";
+import {CustomExpr_NonCorrelated, CustomExpr_NonCorrelatedOrUndefined} from "../../../custom-expr";
+import {BuiltInExpr_NonCorrelated, BuiltInExpr_NonCorrelatedOrUndefined} from "../../../built-in-expr";
 import {Key, KeyUtil} from "../../../key";
 
 export type ValueInsertRow<TptT extends ITablePerType> =
@@ -31,7 +31,7 @@ export type CustomInsertRow<TptT extends ITablePerType> =
         }
         & {
             readonly [columnAlias in OptionalColumnAlias<TptT>]? : (
-                CustomExpr_NonCorrelated<
+                CustomExpr_NonCorrelatedOrUndefined<
                     ColumnType<TptT, columnAlias>
                 >
             )
@@ -50,7 +50,7 @@ export type BuiltInInsertRow<TptT extends ITablePerType> =
         }
         & {
             readonly [columnAlias in OptionalColumnAlias<TptT>]? : (
-                BuiltInExpr_NonCorrelated<
+                BuiltInExpr_NonCorrelatedOrUndefined<
                     ColumnType<TptT, columnAlias>
                 >
             )
@@ -58,30 +58,30 @@ export type BuiltInInsertRow<TptT extends ITablePerType> =
     >
 ;
 
-export type CustomInsertRowWithCandidateKey_NonUnion<
+export type CustomInsertRowWithPrimaryKey_NonUnion<
     TptT extends ITablePerType,
-    CandidateKeyT extends Key
+    PrimaryKeyT extends Key
 > =
     Identity<
         & {
-            readonly [columnAlias in Exclude<RequiredColumnAlias<TptT>, CandidateKeyT[number]>] : (
+            readonly [columnAlias in Exclude<RequiredColumnAlias<TptT>, PrimaryKeyT[number]>] : (
                 CustomExpr_NonCorrelated<
                     ColumnType<TptT, columnAlias>
                 >
             )
         }
         & {
-            readonly [columnAlias in Exclude<OptionalColumnAlias<TptT>, CandidateKeyT[number]>]? : (
-                CustomExpr_NonCorrelated<
+            readonly [columnAlias in Exclude<OptionalColumnAlias<TptT>, PrimaryKeyT[number]>]? : (
+                CustomExpr_NonCorrelatedOrUndefined<
                     ColumnType<TptT, columnAlias>
                 >
             )
         }
         /**
-         * This Candidate key is required.
+         * This primary key is required.
          */
         & {
-            readonly [candidateKeyColumnAlias in CandidateKeyT[number]] : (
+            readonly [candidateKeyColumnAlias in PrimaryKeyT[number]] : (
                 CustomExpr_NonCorrelated<
                     ColumnType<TptT, candidateKeyColumnAlias>
                 >
@@ -89,30 +89,23 @@ export type CustomInsertRowWithCandidateKey_NonUnion<
         }
     >
 ;
-export type CustomInsertRowWithCandidateKeyImpl<
+export type CustomInsertRowWithPrimaryKeyImpl<
     TptT extends ITablePerType,
-    CandidateKeyT extends Key
+    PrimaryKeyT extends Key
 > =
-    CandidateKeyT extends Key ?
+    PrimaryKeyT extends Key ?
     (
-        KeyUtil.IsSubKey<CandidateKeyT, InsertableColumnAlias<TptT>[]> extends true ?
-        CustomInsertRowWithCandidateKey_NonUnion<TptT, CandidateKeyT> :
+        KeyUtil.IsSubKey<PrimaryKeyT, InsertableColumnAlias<TptT>[]> extends true ?
+        CustomInsertRowWithPrimaryKey_NonUnion<TptT, PrimaryKeyT> :
         never
     ) :
     never
 ;
-export type CustomInsertRowWithCandidateKey<
-    TptT extends TablePerTypeWithInsertAndFetchCandidateKeys
+export type CustomInsertRowWithPrimaryKey<
+    TptT extends ITablePerType
 > =
-    TptT["childInsertAndFetchCandidateKeys"] extends readonly never[] ?
-    never :
-    TptT["parentInsertAndFetchCandidateKeys"] extends readonly never[] ?
-    never :
-    CustomInsertRowWithCandidateKeyImpl<
+    CustomInsertRowWithPrimaryKeyImpl<
         TptT,
-        KeyUtil.ConcatDistribute<
-            TptT["childInsertAndFetchCandidateKeys"][number],
-            TptT["parentInsertAndFetchCandidateKeys"][number]
-        >
+        TptT["insertAndFetchPrimaryKey"]
     >
 ;

@@ -1,10 +1,10 @@
-import {ITable} from "../table";
+import {TableWithPrimaryKey} from "../table";
 import {Key} from "../key";
 
 export interface TablePerTypeData {
-    readonly childTable : ITable,
+    readonly childTable : TableWithPrimaryKey,
 
-    readonly parentTables : readonly ITable[],
+    readonly parentTables : readonly TableWithPrimaryKey[],
 
     readonly autoIncrement : readonly string[],
 
@@ -15,17 +15,13 @@ export interface TablePerTypeData {
      *
      * When such a `parentTable` is encountered and
      * we call `TablePerTypeUtil.insertAndFetch()`,
-     * we need to provide explicit values for at least one candidate key
+     * we need to provide explicit values for the primary key
      * of the `parentTable`.
      *
-     * A value of `undefined` indicates that we do not need
-     * to specify any candidate keys.
-     *
-     * A valud of `readonly never[]` indicates
-     * we cannot specify any candidate keys (and cannot perform `.insertAndFetch()`)
+     * A value of `readonly never[]` indicates
+     * we do not need to specify any primary key.
      */
-    readonly childInsertAndFetchCandidateKeys : (readonly Key[])|undefined,
-    readonly parentInsertAndFetchCandidateKeys : (readonly Key[])|undefined,
+    readonly insertAndFetchPrimaryKey : Key,
 }
 
 export interface ITablePerType<DataT extends TablePerTypeData=TablePerTypeData> {
@@ -48,8 +44,7 @@ export interface ITablePerType<DataT extends TablePerTypeData=TablePerTypeData> 
 
     readonly explicitAutoIncrementValueEnabled : DataT["explicitAutoIncrementValueEnabled"];
 
-    readonly childInsertAndFetchCandidateKeys : DataT["childInsertAndFetchCandidateKeys"];
-    readonly parentInsertAndFetchCandidateKeys : DataT["parentInsertAndFetchCandidateKeys"];
+    readonly insertAndFetchPrimaryKey : DataT["insertAndFetchPrimaryKey"];
 
     /**
      * An array of 2-tuples containing table aliases.
@@ -85,14 +80,6 @@ export type InsertableTablePerType =
     & ITablePerType
     & {
         childTable : { insertEnabled : true },
-        parentTables : { insertEnabled : true }[],
-    }
-;
-
-export type TablePerTypeWithInsertAndFetchCandidateKeys =
-    & ITablePerType
-    & {
-        childInsertAndFetchCandidateKeys : readonly Key[],
-        parentInsertAndFetchCandidateKeys : readonly Key[],
+        parentTables : readonly { insertEnabled : true }[],
     }
 ;

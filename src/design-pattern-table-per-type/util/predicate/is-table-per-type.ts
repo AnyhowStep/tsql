@@ -15,8 +15,7 @@ export function isTablePerType (mixed : unknown) : mixed is ITablePerType {
             "parentTables",
             "autoIncrement",
             "explicitAutoIncrementValueEnabled",
-            "childInsertAndFetchCandidateKeys",
-            "parentInsertAndFetchCandidateKeys",
+            "insertAndFetchPrimaryKey",
             "joins"
         ]
     )) {
@@ -37,19 +36,9 @@ export function isTablePerType (mixed : unknown) : mixed is ITablePerType {
          */
         (mixed.explicitAutoIncrementValueEnabled instanceof Array) &&
         /**
-         * Does not check if all elements are `string[]`
+         * Does not check if all elements are `string`
          */
-        (
-            mixed.childInsertAndFetchCandidateKeys == undefined ||
-            (mixed.childInsertAndFetchCandidateKeys instanceof Array)
-        ) &&
-        /**
-         * Does not check if all elements are `string[]`
-         */
-        (
-            mixed.parentInsertAndFetchCandidateKeys == undefined ||
-            (mixed.parentInsertAndFetchCandidateKeys instanceof Array)
-        ) &&
+        (mixed.insertAndFetchPrimaryKey instanceof Array) &&
         /**
          * Does not check if all elements are `string`
          */

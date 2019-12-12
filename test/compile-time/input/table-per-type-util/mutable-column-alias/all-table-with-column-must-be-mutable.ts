@@ -4,16 +4,19 @@ const atwcmbmA = tsql.table("atwcmbmA")
     .addColumns({
         x : tsql.dtBigIntSigned(),
     })
-    .addMutable(columns => [columns.x]);
+    .addMutable(columns => [columns.x])
+    .setPrimaryKey(columns => [columns.x]);
 const atwcmbmB = tsql.table("atwcmbmB")
     .addColumns({
         x : tsql.dtBigIntSigned(),
     })
-    .addMutable(columns => [columns.x]);
+    .addMutable(columns => [columns.x])
+    .setPrimaryKey(columns => [columns.x]);
 const atwcmbmC = tsql.table("atwcmbmC")
     .addColumns({
         x : tsql.dtBigIntSigned(),
-    });
+    })
+    .setPrimaryKey(columns => [columns.x]);
     //.addMutable(columns => [columns.x]);
 
 export const bTpt = tsql.tablePerType(atwcmbmB)

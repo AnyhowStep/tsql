@@ -2,7 +2,7 @@ import {ILog} from "../../log";
 import {IsolableInsertOneConnection, ExecutionUtil, SelectConnection} from "../../../execution";
 import {PrimaryKey_Input} from "../../../primary-key";
 import {TableUtil} from "../../../table";
-import {CustomExpr_NonCorrelated} from "../../../custom-expr";
+import {CustomExpr_NonCorrelated, CustomExpr_NonCorrelatedOrUndefined} from "../../../custom-expr";
 import {fetchLatestOrDefault} from "./fetch-latest-or-default";
 import {DefaultRow} from "./fetch-default";
 import {escapeIdentifierWithDoubleQuotes} from "../../../sqlstring";
@@ -21,7 +21,9 @@ export type TrackRow<LogT extends ILog> =
      */
     & {
         readonly [columnAlias in LogT["trackedWithDefaultValue"][number]]? : (
-            CustomExpr_NonCorrelated<TableUtil.ColumnType<LogT["logTable"], columnAlias>>
+            CustomExpr_NonCorrelatedOrUndefined<
+                TableUtil.ColumnType<LogT["logTable"], columnAlias>
+            >
         )
     }
     /**
@@ -67,7 +69,9 @@ export type TrackRow<LogT extends ILog> =
             LogT["doNotCopy"][number],
             TableUtil.OptionalColumnAlias<LogT["logTable"]>
         >]? : (
-            CustomExpr_NonCorrelated<TableUtil.ColumnType<LogT["logTable"], columnAlias>>
+            CustomExpr_NonCorrelatedOrUndefined<
+                TableUtil.ColumnType<LogT["logTable"], columnAlias>
+            >
         )
     }
 ;

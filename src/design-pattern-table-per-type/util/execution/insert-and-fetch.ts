@@ -1,10 +1,8 @@
-import {InsertableTablePerType, TablePerTypeWithInsertAndFetchCandidateKeys} from "../../table-per-type";
-import {CustomInsertRow, CustomInsertRowWithCandidateKey} from "./insert-row";
+import {InsertableTablePerType} from "../../table-per-type";
+import {CustomInsertRowWithPrimaryKey} from "./insert-row";
 
 export type InsertAndFetchRow<
     TptT extends InsertableTablePerType
 > =
-    TptT extends TablePerTypeWithInsertAndFetchCandidateKeys ?
-    CustomInsertRowWithCandidateKey<TptT> :
-    CustomInsertRow<TptT>
+    CustomInsertRowWithPrimaryKey<TptT>
 ;
