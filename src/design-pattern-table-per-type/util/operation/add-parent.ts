@@ -183,20 +183,20 @@ export function addParent<
     let joins : ITablePerType["joins"] | undefined = undefined;
     if (TableUtil.isTable(parent)) {
         joins = [
-            ...tpt.joins,
             [
                 tpt.childTable.alias,
                 parent.alias,
             ],
+            ...tpt.joins,
         ];
     } else if (isTablePerType(parent)) {
         joins = [
-            ...tpt.joins,
             ...parent.joins,
             [
                 tpt.childTable.alias,
                 parent.childTable.alias,
             ],
+            ...tpt.joins,
         ];
     } else {
         throw new Error(`Expected ITable or ITablePerType for parent`);
