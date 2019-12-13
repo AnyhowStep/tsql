@@ -10,10 +10,10 @@ import {ColumnUtil, ColumnArrayUtil} from "../../../column";
 import {from} from "../execution-impl";
 import * as ExprLib from "../../../expr-library";
 import {BuiltInExprUtil} from "../../../built-in-expr";
-import {DataTypeUtil} from "../../../data-type";
 import {ExprUtil, expr} from "../../../expr";
 import {TableWithPrimaryKey} from "../../../table";
 import {UpdateOneResult} from "../../../execution/util";
+import {absorbRow} from "./absorb-row";
 
 export type CustomAssignmentMap<
     TptT extends ITablePerType
@@ -256,65 +256,8 @@ export async function updateAndFetchOneByCandidateKey<
                 warningCount,
                 updateAndFetchParentResult.warningCount
             );
-            const row = updateAndFetchParentResult.row;
 
-            for (const columnAlias of Object.keys(row)) {
-                /**
-                 * This is guaranteed to be a value expression.
-                 */
-                const newValue = row[columnAlias];
-
-                if (Object.prototype.hasOwnProperty.call(result, columnAlias)) {
-                    /**
-                     * This `curValue` could be a non-value expression.
-                     * We only want value expressions.
-                     */
-                    const curValue = result[columnAlias];
-
-                    if (BuiltInExprUtil.isAnyNonValueExpr(curValue)) {
-                        /**
-                         * Add this new value to the `result`
-                         * so we can use it to update rows of tables
-                         * further down the inheritance hierarchy.
-                         */
-                        result[columnAlias] = newValue;
-                        continue;
-                    }
-
-                    if (curValue === newValue) {
-                        /**
-                         * They are equal, do nothing.
-                         */
-                        continue;
-                    }
-                    /**
-                     * We need some custom equality checking logic
-                     */
-                    if (!DataTypeUtil.isNullSafeEqual(
-                        parentTable.columns[columnAlias],
-                        /**
-                         * This may throw
-                         */
-                        parentTable.columns[columnAlias].mapper(
-                            `${parentTable.alias}.${columnAlias}`,
-                            curValue
-                        ),
-                        newValue
-                    )) {
-                        /**
-                         * @todo Custom `Error` type
-                         */
-                        throw new Error(`All columns with the same name in an inheritance hierarchy must have the same value; mismatch found for ${parentTable.alias}.${columnAlias}`);
-                    }
-                } else {
-                    /**
-                     * Add this new value to the `result`
-                     * so we can use it to update rows of tables
-                     * further down the inheritance hierarchy.
-                     */
-                    result[columnAlias] = newValue;
-                }
-            }
+            absorbRow(result, parentTable, updateAndFetchParentResult.row);
         }
 
         return {
