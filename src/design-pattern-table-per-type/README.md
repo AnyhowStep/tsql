@@ -16,6 +16,15 @@ Adds table-per-type inheritance.
 
 -----
 
+### Unsoundness
+
++ This utility is unsound!
+  + It is possible for `insertAndFetch()` to fail during run-time,
+    if your inheritance hierarchy does not make sense to the library.
+
+
+-----
+
 ### Notes
 
 + https://stackoverflow.com/questions/3579079/how-can-you-represent-inheritance-in-a-database

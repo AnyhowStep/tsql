@@ -1,35 +1,36 @@
-import {ITable, TableUtil} from "../../../table";
+import {TableWithPrimaryKey} from "../../../table";
 import {TablePerType} from "../../table-per-type-impl";
+import {
+    ExtractAutoIncrement,
+    ExtractExplicitAutoIncrementValueEnabled,
+    ExtractInsertAndFetchPrimaryKey,
+    extractAutoIncrement,
+    extractExplicitAutoIncrementValueEnabled,
+    extractInsertAndFetchPrimaryKey
+} from "../query";
 
-export function tablePerType<ChildTableT extends ITable> (
+export function tablePerType<ChildTableT extends TableWithPrimaryKey> (
     childTable : ChildTableT
 ) : TablePerType<{
     childTable : ChildTableT,
     parentTables : readonly [],
-    autoIncrement : readonly Extract<ChildTableT["autoIncrement"], string>[],
-    explicitAutoIncrementValueEnabled : readonly TableUtil.ExplicitAutoIncrement<ChildTableT>[],
+    autoIncrement : readonly ExtractAutoIncrement<ChildTableT>[],
+    explicitAutoIncrementValueEnabled : readonly ExtractExplicitAutoIncrementValueEnabled<ChildTableT>[],
+    insertAndFetchPrimaryKey : readonly ExtractInsertAndFetchPrimaryKey<ChildTableT>[],
 }> {
     return new TablePerType<{
         childTable : ChildTableT,
         parentTables : readonly [],
-        autoIncrement : readonly Extract<ChildTableT["autoIncrement"], string>[],
-        explicitAutoIncrementValueEnabled : readonly TableUtil.ExplicitAutoIncrement<ChildTableT>[],
+        autoIncrement : readonly ExtractAutoIncrement<ChildTableT>[],
+        explicitAutoIncrementValueEnabled : readonly ExtractExplicitAutoIncrementValueEnabled<ChildTableT>[],
+        insertAndFetchPrimaryKey : readonly ExtractInsertAndFetchPrimaryKey<ChildTableT>[],
     }>(
         {
             childTable,
             parentTables : [],
-            autoIncrement : (
-                childTable.autoIncrement == undefined ?
-                [] :
-                [childTable.autoIncrement as Extract<ChildTableT["autoIncrement"], string>]
-            ),
-            explicitAutoIncrementValueEnabled : (
-                childTable.autoIncrement == undefined ?
-                [] :
-                TableUtil.isExplicitAutoIncrement(childTable, childTable.autoIncrement) ?
-                [childTable.autoIncrement] :
-                []
-            ),
+            autoIncrement : extractAutoIncrement(childTable),
+            explicitAutoIncrementValueEnabled : extractExplicitAutoIncrementValueEnabled(childTable),
+            insertAndFetchPrimaryKey : extractInsertAndFetchPrimaryKey(childTable),
         },
         [],
     );

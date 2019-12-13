@@ -11,6 +11,22 @@ export type Concat<
     )[]
 );
 
+export type ConcatDistribute<
+    A extends Key,
+    B extends Key
+> = (
+    A extends Key ?
+    (
+        B extends Key ?
+        readonly (
+            A[number] |
+            B[number]
+        )[] :
+        never
+    ) :
+    never
+);
+
 export function concat<
     A extends Key,
     B extends Key

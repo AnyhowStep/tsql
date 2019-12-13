@@ -1,13 +1,27 @@
-import {ITable} from "../table";
+import {TableWithPrimaryKey} from "../table";
+import {Key} from "../key";
 
 export interface TablePerTypeData {
-    readonly childTable : ITable,
+    readonly childTable : TableWithPrimaryKey,
 
-    readonly parentTables : readonly ITable[],
+    readonly parentTables : readonly TableWithPrimaryKey[],
 
     readonly autoIncrement : readonly string[],
 
     readonly explicitAutoIncrementValueEnabled : readonly string[],
+
+    /**
+     * Some `parentTables` may not have an `autoIncrement` column.
+     *
+     * When such a `parentTable` is encountered and
+     * we call `TablePerTypeUtil.insertAndFetch()`,
+     * we need to provide explicit values for the primary key
+     * of the `parentTable`.
+     *
+     * A value of `readonly never[]` indicates
+     * we do not need to specify any primary key.
+     */
+    readonly insertAndFetchPrimaryKey : Key,
 }
 
 export interface ITablePerType<DataT extends TablePerTypeData=TablePerTypeData> {
@@ -29,6 +43,8 @@ export interface ITablePerType<DataT extends TablePerTypeData=TablePerTypeData> 
     readonly autoIncrement : DataT["autoIncrement"];
 
     readonly explicitAutoIncrementValueEnabled : DataT["explicitAutoIncrementValueEnabled"];
+
+    readonly insertAndFetchPrimaryKey : DataT["insertAndFetchPrimaryKey"];
 
     /**
      * An array of 2-tuples containing table aliases.
@@ -58,4 +74,15 @@ export interface ITablePerType<DataT extends TablePerTypeData=TablePerTypeData> 
             string
         ]
     )[];
+}
+
+type InsertableTablePerTypeImpl =
+    & Omit<ITablePerType, "parentTables">
+    & {
+        childTable : { insertEnabled : true },
+        parentTables : readonly (TableWithPrimaryKey & { insertEnabled : true })[],
+    }
+;
+export interface InsertableTablePerType extends InsertableTablePerTypeImpl {
+
 }

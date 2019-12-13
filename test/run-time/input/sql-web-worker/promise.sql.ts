@@ -1247,6 +1247,32 @@ export class Connection {
             tables,
         };
     }
+
+    tryFetchGeneratedColumnExpression (
+        _schemaAlias : string|undefined,
+        tableAlias : string,
+        columnAlias : string
+    ) : Promise<string|undefined> {
+        if (columnAlias.startsWith("__GENERATED_COLUMN_HACK__")) {
+            /**
+             * This lets us test generated columns...
+             * Even though SQLite does not support it.
+             */
+            return Promise.resolve(
+                columnAlias.replace("__GENERATED_COLUMN_HACK__", "")
+            );
+        }
+        if (tableAlias == "serverAppKey" && columnAlias == "appKeyTypeId") {
+            return Promise.resolve("1");
+        }
+        if (tableAlias == "browserAppKey" && columnAlias == "appKeyTypeId") {
+            return Promise.resolve("2");
+        }
+        if (tableAlias == "mid" && columnAlias == "generated") {
+            return Promise.resolve("9001");
+        }
+        return Promise.resolve(undefined);
+    }
 }
 
 /**

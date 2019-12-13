@@ -17,6 +17,12 @@ export interface IsolableConnection<T> {
         callback : IsolableLockCallback<T, ResultT>
     ) : Promise<ResultT>;
 
+    tryFetchGeneratedColumnExpression (
+        schemaAlias : string|undefined,
+        tableAlias : string,
+        columnAlias : string
+    ) : Promise<string|undefined>;
+
     /**
      * Tells you if this connection is in a transaction.
      */

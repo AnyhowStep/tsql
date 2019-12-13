@@ -8,6 +8,15 @@ export type Subtract<
     readonly Exclude<A[number], B[number]>[]
 );
 
+export type SubtractDistribute<
+    A extends Key,
+    B extends Key
+> =
+    A extends Key ?
+    readonly Exclude<A[number], B[number]>[] :
+    never
+;
+
 export function subtract<
     A extends Key,
     B extends Key

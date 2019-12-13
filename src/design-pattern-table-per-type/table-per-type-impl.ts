@@ -1,8 +1,9 @@
-import {ITablePerType, TablePerTypeData} from "./table-per-type";
+import {ITablePerType, TablePerTypeData, InsertableTablePerType} from "./table-per-type";
 import * as TablePerTypeUtil from "./util";
-import {ITable} from "../table";
-import {SelectConnection, ExecutionUtil} from "../execution";
+import {TableWithPrimaryKey} from "../table";
+import {SelectConnection, ExecutionUtil, IsolableInsertOneConnection} from "../execution";
 import {WhereDelegate} from "../where-clause";
+import {OnlyKnownProperties} from "../type-util";
 
 export class TablePerType<DataT extends TablePerTypeData> implements ITablePerType<DataT> {
     readonly childTable : DataT["childTable"];
@@ -12,6 +13,8 @@ export class TablePerType<DataT extends TablePerTypeData> implements ITablePerTy
     readonly autoIncrement : DataT["autoIncrement"];
 
     readonly explicitAutoIncrementValueEnabled : DataT["explicitAutoIncrementValueEnabled"];
+
+    readonly insertAndFetchPrimaryKey : DataT["insertAndFetchPrimaryKey"];
 
     readonly joins : ITablePerType["joins"];
 
@@ -23,12 +26,13 @@ export class TablePerType<DataT extends TablePerTypeData> implements ITablePerTy
         this.parentTables = data.parentTables;
         this.autoIncrement = data.autoIncrement;
         this.explicitAutoIncrementValueEnabled = data.explicitAutoIncrementValueEnabled;
+        this.insertAndFetchPrimaryKey = data.insertAndFetchPrimaryKey;
 
         this.joins = joins;
     }
 
     addParent<
-        ParentTableT extends ITable|ITablePerType
+        ParentTableT extends TableWithPrimaryKey|ITablePerType
     > (
         parentTable : ParentTableT
     ) : (
@@ -45,6 +49,34 @@ export class TablePerType<DataT extends TablePerTypeData> implements ITablePerTy
             this,
             connection,
             whereDelegate
+        );
+    }
+
+    insertAndFetch<
+        RowT extends TablePerTypeUtil.InsertAndFetchRow<
+            Extract<this, InsertableTablePerType>
+        >
+    > (
+        this : Extract<this, InsertableTablePerType>,
+        connection : IsolableInsertOneConnection,
+        row : OnlyKnownProperties<
+            RowT,
+            TablePerTypeUtil.InsertAndFetchRow<
+                Extract<this, InsertableTablePerType>
+            >
+        >
+    ) : (
+        Promise<
+            TablePerTypeUtil.InsertedAndFetchedRow<
+                Extract<this, InsertableTablePerType>,
+                RowT
+            >
+        >
+    ) {
+        return TablePerTypeUtil.insertAndFetch(
+            this,
+            connection,
+            row
         );
     }
 }

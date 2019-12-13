@@ -282,6 +282,20 @@ export interface IConnection {
      * @param schemaAlias - If `undefined`, it uses the implied schema of the connection
      */
     tryFetchSchemaMeta (schemaAlias : string|undefined) : Promise<SchemaMeta|undefined>;
+
+    /**
+     *
+     * @param schemaAlias - If `undefined`, it uses the implied schema of the connection
+     * @param tableAlias
+     * @param columnAlias
+     *
+     * @returns A SQL string that is the generated column's expression
+     */
+    tryFetchGeneratedColumnExpression (
+        schemaAlias : string|undefined,
+        tableAlias : string,
+        columnAlias : string
+    ) : Promise<string|undefined>;
 }
 export interface ITransactionConnection extends IConnection {
     rollback () : Promise<void>;
@@ -295,7 +309,13 @@ export type RestrictedLockCallback<T, ResultT> =
 export interface RestrictedLockableConnection<T> {
     lock<ResultT> (
         callback : RestrictedLockCallback<T, ResultT>
-    ) : Promise<ResultT>
+    ) : Promise<ResultT>;
+
+    tryFetchGeneratedColumnExpression (
+        schemaAlias : string|undefined,
+        tableAlias : string,
+        columnAlias : string
+    ) : Promise<string|undefined>;
 }
 
 export type RestrictedConnection<K extends keyof IConnection> =

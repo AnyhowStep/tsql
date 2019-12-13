@@ -3,7 +3,7 @@ import {IsolableUpdateConnection, SelectConnection} from "../../connection";
 import {AssignmentMapDelegate, CustomAssignmentMap} from "../../../update";
 import {AssertNonUnion, Identity} from "../../../type-util";
 import {updateOne} from "./update-one";
-import {CustomExpr_MapCorrelated} from "../../../custom-expr";
+import {CustomExpr_MapCorrelatedOrUndefined} from "../../../custom-expr";
 import * as ExprLib from "../../../expr-library";
 import {SuperKey_Input, SuperKeyUtil} from "../../../super-key";
 import {UpdateAndFetchOneResult} from "./update-and-fetch-one-by-candidate-key";
@@ -16,7 +16,7 @@ export type UpdateAndFetchOneBySuperKeyAssignmentMapImpl<
     Identity<
         & {
             readonly [columnAlias in TableT["mutableColumns"][number]]? : (
-                CustomExpr_MapCorrelated<
+                CustomExpr_MapCorrelatedOrUndefined<
                     TableT["columns"],
                     ReturnType<
                         TableT["columns"][columnAlias]["mapper"]
