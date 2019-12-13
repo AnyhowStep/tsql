@@ -148,45 +148,52 @@ export async function updateAndFetchOneByCandidateKey<
      * or even columns at all.
      */
     const rawAssignmentMap = assignmentMapDelegate(columns);
-    const query = from(tpt)
-        .where(() => ExprLib.eqCandidateKey(
-            tpt.childTable,
-            candidateKey
-        ) as any)
-        .select(() => Object
-            .keys(rawAssignmentMap)
-            .filter(columnAlias => isMutableColumnAlias(tpt, columnAlias))
-            .map(columnAlias => {
-                const customExpr = rawAssignmentMap[columnAlias as keyof typeof rawAssignmentMap] as any;
-                if (BuiltInExprUtil.isAnyNonValueExpr(customExpr)) {
-                    /**
-                     * We have a non-value expression
-                     */
-                    return expr(
-                        {
-                            mapper : columnMapper(tpt, columnAlias),
-                            usedRef : BuiltInExprUtil.usedRef(customExpr),
-                        },
-                        BuiltInExprUtil.buildAst(customExpr)
-                    ).as(columnAlias);
-                } else {
-                    /**
-                     * We have a value expression
-                     */
-                    return ExprUtil.fromRawExprNoUsedRefInput(
-                        columnMapper(tpt, columnAlias),
-                        customExpr
-                    ).as(columnAlias);
-                }
-            }) as any
-        );
-    /**
-     * Should only contain value expressions now.
-     */
-    const cleanedAssignmentMap = await ExecutionUtil.fetchOne(
-        query as any,
-        connection
-    ) as Record<string, unknown>;
+    let processedAssignmentMap : Record<string, unknown>|undefined = undefined;
+    if (Object.keys(rawAssignmentMap).length == 0) {
+        processedAssignmentMap = {};
+    } else {
+        const query = from(tpt)
+            .where(() => ExprLib.eqCandidateKey(
+                tpt.childTable,
+                candidateKey
+            ) as any)
+            .select(() => Object
+                .keys(rawAssignmentMap)
+                .filter(columnAlias => isMutableColumnAlias(tpt, columnAlias))
+                .map(columnAlias => {
+                    const customExpr = rawAssignmentMap[columnAlias as keyof typeof rawAssignmentMap] as any;
+                    if (BuiltInExprUtil.isAnyNonValueExpr(customExpr)) {
+                        /**
+                         * We have a non-value expression
+                         */
+                        return expr(
+                            {
+                                mapper : columnMapper(tpt, columnAlias),
+                                usedRef : BuiltInExprUtil.usedRef(customExpr),
+                            },
+                            BuiltInExprUtil.buildAst(customExpr)
+                        ).as(columnAlias);
+                    } else {
+                        /**
+                         * We have a value expression
+                         */
+                        return ExprUtil.fromRawExprNoUsedRefInput(
+                            columnMapper(tpt, columnAlias),
+                            customExpr
+                        ).as(columnAlias);
+                    }
+                }) as any
+            );
+        /**
+         * Should only contain value expressions now.
+         */
+        processedAssignmentMap = await ExecutionUtil.fetchOne(
+            query as any,
+            connection
+        ) as Record<string, unknown>;
+    }
+
+    const cleanedAssignmentMap = processedAssignmentMap;
 
     /**
      * @todo If `result` contains any primaryKey values,
