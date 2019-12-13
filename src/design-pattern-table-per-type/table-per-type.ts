@@ -76,10 +76,13 @@ export interface ITablePerType<DataT extends TablePerTypeData=TablePerTypeData> 
     )[];
 }
 
-export type InsertableTablePerType =
-    & ITablePerType
+type InsertableTablePerTypeImpl =
+    & Omit<ITablePerType, "parentTables">
     & {
         childTable : { insertEnabled : true },
-        parentTables : readonly { insertEnabled : true }[],
+        parentTables : readonly (TableWithPrimaryKey & { insertEnabled : true })[],
     }
 ;
+export interface InsertableTablePerType extends InsertableTablePerTypeImpl {
+
+}

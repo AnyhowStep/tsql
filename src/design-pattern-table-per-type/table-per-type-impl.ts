@@ -1,8 +1,9 @@
-import {ITablePerType, TablePerTypeData} from "./table-per-type";
+import {ITablePerType, TablePerTypeData, InsertableTablePerType} from "./table-per-type";
 import * as TablePerTypeUtil from "./util";
 import {TableWithPrimaryKey} from "../table";
-import {SelectConnection, ExecutionUtil} from "../execution";
+import {SelectConnection, ExecutionUtil, IsolableInsertOneConnection} from "../execution";
 import {WhereDelegate} from "../where-clause";
+import {OnlyKnownProperties} from "../type-util";
 
 export class TablePerType<DataT extends TablePerTypeData> implements ITablePerType<DataT> {
     readonly childTable : DataT["childTable"];
@@ -48,6 +49,34 @@ export class TablePerType<DataT extends TablePerTypeData> implements ITablePerTy
             this,
             connection,
             whereDelegate
+        );
+    }
+
+    insertAndFetch<
+        RowT extends TablePerTypeUtil.InsertAndFetchRow<
+            Extract<this, InsertableTablePerType>
+        >
+    > (
+        this : Extract<this, InsertableTablePerType>,
+        connection : IsolableInsertOneConnection,
+        row : OnlyKnownProperties<
+            RowT,
+            TablePerTypeUtil.InsertAndFetchRow<
+                Extract<this, InsertableTablePerType>
+            >
+        >
+    ) : (
+        Promise<
+            TablePerTypeUtil.InsertedAndFetchedRow<
+                Extract<this, InsertableTablePerType>,
+                RowT
+            >
+        >
+    ) {
+        return TablePerTypeUtil.insertAndFetch(
+            this,
+            connection,
+            row
         );
     }
 }

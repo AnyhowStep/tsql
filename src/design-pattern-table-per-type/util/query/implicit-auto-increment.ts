@@ -6,3 +6,13 @@ export type ImplicitAutoIncrement<TptT extends ITablePerType> =
         TptT["explicitAutoIncrementValueEnabled"][number]
     >
 ;
+
+export function implicitAutoIncrement<
+    TptT extends ITablePerType
+> (
+    tpt : TptT
+) : ImplicitAutoIncrement<TptT>[] {
+    return tpt.autoIncrement.filter(columnAlias => {
+        return !tpt.explicitAutoIncrementValueEnabled.includes(columnAlias);
+    }) as ImplicitAutoIncrement<TptT>[];
+}
