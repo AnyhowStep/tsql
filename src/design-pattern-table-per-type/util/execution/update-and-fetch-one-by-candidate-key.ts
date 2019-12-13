@@ -1,4 +1,3 @@
-import * as tm from "type-mapping";
 import {ITablePerType} from "../../table-per-type";
 import {CandidateKey_NonUnion} from "../../../candidate-key";
 import {StrictUnion, Identity, pickOwnEnumerable} from "../../../type-util";
@@ -11,9 +10,7 @@ import {from} from "../execution-impl";
 import * as ExprLib from "../../../expr-library";
 import {BuiltInExprUtil} from "../../../built-in-expr";
 import {ExprUtil, expr} from "../../../expr";
-import {TableWithPrimaryKey} from "../../../table";
-import {UpdateOneResult} from "../../../execution/util";
-import {absorbRow} from "./absorb-row";
+import {updateAndFetchOneImpl, UpdateAndFetchOneResult} from "./update-and-fetch-one-impl";
 
 export type CustomAssignmentMap<
     TptT extends ITablePerType
@@ -73,34 +70,6 @@ export type UpdatedAndFetchedRow<
         )
     }>
 ;
-
-export interface UpdateAndFetchOneResult<RowT> {
-    updateOneResults : (
-        & UpdateOneResult
-        & {
-            table : TableWithPrimaryKey,
-        }
-    )[],
-
-    //Alias for affectedRows
-    foundRowCount : bigint;
-
-    /**
-     * You cannot trust this number for SQLite.
-     * SQLite thinks that all found rows are updated, even if you set `x = x`.
-     *
-     * @todo Consider renaming this to `unreliableUpdatedRowCount`?
-     */
-    //Alias for changedRows
-    updatedRowCount : bigint;
-
-    /**
-     * May be the duplicate row count, or some other value.
-     */
-    warningCount : bigint;
-
-    row : RowT,
-}
 
 export type UpdateAndFetchOneReturnType<
     TptT extends ITablePerType,
@@ -216,61 +185,11 @@ export async function updateAndFetchOneByCandidateKey<
                 tpt.childTable.mutableColumns
             )
         );
-        const updateOneResults : UpdateAndFetchOneResult<any>["updateOneResults"] = [
-            {
-                ...updateAndFetchChildResult,
-                table : tpt.childTable,
-            },
-        ];
-        let updatedRowCount : bigint = updateAndFetchChildResult.updatedRowCount;
-        let warningCount : bigint = updateAndFetchChildResult.warningCount;
-
-        const result : Record<string, unknown> = updateAndFetchChildResult.row;
-
-        /**
-         * We use `.reverse()` here to `UPDATE` the parents
-         * as we go up the inheritance hierarchy.
-         */
-        for(const parentTable of [...tpt.parentTables].reverse()) {
-            const updateAndFetchParentResult = await ExecutionUtil.updateAndFetchOneByPrimaryKey(
-                parentTable,
-                connection,
-                /**
-                 * The `result` should contain the primary key values we are interested in
-                 */
-                result,
-                () => pickOwnEnumerable(
-                    cleanedAssignmentMap,
-                    parentTable.mutableColumns
-                )
-            );
-            updateOneResults.push({
-                ...updateAndFetchParentResult,
-                table : parentTable,
-            });
-            updatedRowCount = tm.BigIntUtil.add(
-                updatedRowCount,
-                updateAndFetchParentResult.updatedRowCount
-            );
-            warningCount = tm.BigIntUtil.add(
-                warningCount,
-                updateAndFetchParentResult.warningCount
-            );
-
-            absorbRow(result, parentTable, updateAndFetchParentResult.row);
-        }
-
-        return {
-            updateOneResults,
-            /**
-             * +1 for the `childTable`.
-             */
-            foundRowCount : tm.BigInt(tpt.parentTables.length + 1),
-            updatedRowCount,
-
-            warningCount,
-
-            row : result as UpdatedAndFetchedRow<TptT, AssignmentMapT>,
-        };
+        return updateAndFetchOneImpl(
+            tpt,
+            connection,
+            cleanedAssignmentMap,
+            updateAndFetchChildResult
+        ) as Promise<UpdateAndFetchOneReturnType<TptT, AssignmentMapT>>;
     });
 }
