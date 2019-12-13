@@ -1268,6 +1268,9 @@ export class Connection {
         if (tableAlias == "browserAppKey" && columnAlias == "appKeyTypeId") {
             return Promise.resolve("2");
         }
+        if (tableAlias == "mid" && columnAlias == "generated") {
+            return Promise.resolve("9001");
+        }
         return Promise.resolve(undefined);
     }
 }

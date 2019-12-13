@@ -13,7 +13,7 @@ export type ExtractAllTablesWithGeneratedColumnAlias<TptT extends ITablePerType,
 
 /**
  * Goes up the inheritance hierarchy, starting from `childTable`,
- * to look for a table with `columnAlias` as
+ * to look for a table with `columnAlias` as a generated column
  */
 export function findTableWithGeneratedColumnAlias<
     TptT extends ITablePerType,
