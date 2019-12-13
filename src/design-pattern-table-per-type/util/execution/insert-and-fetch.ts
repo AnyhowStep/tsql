@@ -132,7 +132,7 @@ export async function insertAndFetch<
 
                     if (BuiltInExprUtil.isAnyNonValueExpr(curValue)) {
                         /**
-                         * Add this new value to the `rawInsertRow`
+                         * Add this new value to the `result`
                          * so we can use it to insert rows to tables
                          * further down the inheritance hierarchy.
                          */
@@ -167,7 +167,7 @@ export async function insertAndFetch<
                     }
                 } else {
                     /**
-                     * Add this new value to the `rawInsertRow`
+                     * Add this new value to the `result`
                      * so we can use it to insert rows to tables
                      * further down the inheritance hierarchy.
                      */
