@@ -1,57 +1,11 @@
 import * as tm from "type-mapping";
 import {AnyBuiltInExpr, BuiltInExprUtil} from "../../built-in-expr";
-import {PopFront} from "../../tuple-util";
 import {ExprUtil} from "../../expr";
 import {IExpr} from "../../expr/expr";
 import {operatorNode2ToN} from "../../ast/operator-node/util";
 import {OperatorType} from "../../operator-type";
+import {TypeOfCoalesce} from "./type-of-coalesce";
 
-/**
- * `COALESCE()` with zero args is just the `NULL` constant.
- */
-export type TypeOfCoalesce<ArgsT extends readonly AnyBuiltInExpr[], ResultT extends unknown=null> =
-    {
-        0 : (
-            /**
-             * Can't perform fancy computation with a regular array
-             */
-            BuiltInExprUtil.TypeOf<ArgsT[number]>
-        ),
-        1 : (
-            /**
-             * Either the tuple started empty or we have exhausted
-             * all elements and not found a non-nullable arg.
-             */
-            ResultT
-        ),
-        2 : (
-            /**
-             * This argument is nullable, keep looking
-             */
-            TypeOfCoalesce<
-                PopFront<ArgsT>,
-                (
-                    | ResultT
-                    | BuiltInExprUtil.TypeOf<ArgsT[0]>
-                )
-            >
-        ),
-        3 : (
-            /**
-             * We have found our non-nullable argument
-             */
-            BuiltInExprUtil.TypeOf<ArgsT[0]>|Exclude<ResultT, null>
-        ),
-    }[
-        number extends ArgsT["length"] ?
-        0 :
-        0 extends ArgsT["length"] ?
-        1 :
-        null extends BuiltInExprUtil.TypeOf<ArgsT[0]> ?
-        2 :
-        3
-    ]
-;
 export type CoalesceExpr<ArgsT extends readonly AnyBuiltInExpr[]> =
     ExprUtil.Intersect<
         TypeOfCoalesce<ArgsT>,

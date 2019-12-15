@@ -36,6 +36,7 @@ import {
     TypeHint,
     Parentheses,
     pascalStyleEscapeString,
+    parentheses,
 } from "../dist";
 import {LiteralValueType, LiteralValueNodeUtil} from "../dist/ast/literal-value-node";
 
@@ -737,6 +738,30 @@ export const sqliteSqlfier : Sqlfier = {
             Date and Time Functions
             https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html
         */
+        [OperatorType.TIMESTAMPADD_MILLISECOND] : ({operands}) => functionCall(
+            "strftime",
+            [
+                pascalStyleEscapeString("%Y-%m-%d %H:%M:%f"),
+                operands[0],
+                insertBetween(
+                    [
+                        parentheses(
+                            insertBetween(
+                                [
+                                    operands[1],
+                                    "1000e0"
+                                ],
+                                "/"
+                            ),
+                            //canUnwrap
+                            false
+                        ),
+                        pascalStyleEscapeString(" second")
+                    ],
+                    "||"
+                )
+            ]
+        ),
         [OperatorType.TIMESTAMPADD_DAY] : ({operands}) => functionCall(
             "strftime",
             [

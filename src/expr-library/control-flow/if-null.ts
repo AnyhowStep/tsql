@@ -1,9 +1,10 @@
 //import * as tm from "type-mapping";
 import {AnyBuiltInExpr, BuiltInExprUtil} from "../../built-in-expr";
-import {CoalesceExpr, TypeOfCoalesce, coalesceMapper} from "./coalesce";
+import {CoalesceExpr, coalesceMapper} from "./coalesce";
 import {ExprUtil} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
+import {TypeOfCoalesce} from "./type-of-coalesce";
 
 export function ifNull<
     Arg0T extends AnyBuiltInExpr,
