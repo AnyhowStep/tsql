@@ -60,7 +60,7 @@ tape(__filename, async (t) => {
         });
 
 
-        await serverAppKeyTpt.updateAndFetchOneByCandidateKey(
+        await serverAppKeyTpt.updateAndFetchZeroOrOneByPrimaryKey(
             connection,
             {
                 appKeyId : BigInt(1),
@@ -88,7 +88,6 @@ tape(__filename, async (t) => {
                 };
             }
         ).then((updateAndFetchOneResult) => {
-            //console.log(updateAndFetchOneResult.updateOneResults);
             t.deepEqual(
                 updateAndFetchOneResult.row,
                 {

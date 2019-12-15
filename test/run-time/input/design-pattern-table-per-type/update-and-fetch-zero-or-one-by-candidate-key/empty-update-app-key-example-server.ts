@@ -60,46 +60,32 @@ tape(__filename, async (t) => {
         });
 
 
-        await serverAppKeyTpt.updateAndFetchOneByCandidateKey(
+        await serverAppKeyTpt.updateAndFetchZeroOrOneByCandidateKey(
             connection,
             {
                 appKeyId : BigInt(1),
             },
-            columns => {
+            () => {
                 return {
-                    ipAddress : tsql.concat(
-                        tsql.coalesce(columns.serverAppKey.ipAddress, ""),
-                        "-x"
-                    ),
-                    trustProxy : tsql.not(columns.serverAppKey.trustProxy),
-                    key : tsql.concat(
-                        tsql.coalesce(columns.serverAppKey.ipAddress, ""),
-                        "-",
-                        columns.appKey.key,
-                        "-y"
-                    ),
-                    disabledAt : tsql.timestampAddMillisecond(
-                        tsql.coalesce(
-                            columns.appKey.disabledAt,
-                            new Date(0)
-                        ),
-                        5
-                    ),
                 };
             }
         ).then((updateAndFetchOneResult) => {
             //console.log(updateAndFetchOneResult.updateOneResults);
             t.deepEqual(
+                updateAndFetchOneResult.updatedRowCount,
+                BigInt(0)
+            );
+            t.deepEqual(
                 updateAndFetchOneResult.row,
                 {
                     appKeyId: BigInt(1),
                     appKeyTypeId: BigInt(1),
-                    ipAddress : "ip-x",
-                    trustProxy : true,
+                    ipAddress : "ip",
+                    trustProxy : false,
                     appId: BigInt(1),
-                    key: "ip-server-y",
+                    key: "server",
                     createdAt: new Date(1),
-                    disabledAt: new Date(7),
+                    disabledAt: new Date(2),
                 }
             );
         });

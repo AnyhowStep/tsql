@@ -1,4 +1,5 @@
 export * from "./emulated-cursor";
+export * from "./impl";
 export * from "./paginate";
 
 export * from "./assert-exists";

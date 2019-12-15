@@ -60,31 +60,16 @@ tape(__filename, async (t) => {
         });
 
 
-        await serverAppKeyTpt.updateAndFetchOneByCandidateKey(
+        await serverAppKeyTpt.updateAndFetchZeroOrOneByPrimaryKey(
             connection,
             {
                 appKeyId : BigInt(1),
             },
-            columns => {
+            () => {
                 return {
-                    ipAddress : tsql.concat(
-                        tsql.coalesce(columns.serverAppKey.ipAddress, ""),
-                        "-x"
-                    ),
-                    trustProxy : tsql.not(columns.serverAppKey.trustProxy),
-                    key : tsql.concat(
-                        tsql.coalesce(columns.serverAppKey.ipAddress, ""),
-                        "-",
-                        columns.appKey.key,
-                        "-y"
-                    ),
-                    disabledAt : tsql.timestampAddMillisecond(
-                        tsql.coalesce(
-                            columns.appKey.disabledAt,
-                            new Date(0)
-                        ),
-                        5
-                    ),
+                    ipAddress : null,
+                    key : "server2",
+                    disabledAt : new Date(4),
                 };
             }
         ).then((updateAndFetchOneResult) => {
@@ -94,12 +79,12 @@ tape(__filename, async (t) => {
                 {
                     appKeyId: BigInt(1),
                     appKeyTypeId: BigInt(1),
-                    ipAddress : "ip-x",
-                    trustProxy : true,
+                    ipAddress : null,
+                    trustProxy : false,
                     appId: BigInt(1),
-                    key: "ip-server-y",
+                    key: "server2",
                     createdAt: new Date(1),
-                    disabledAt: new Date(7),
+                    disabledAt: new Date(4),
                 }
             );
         });
