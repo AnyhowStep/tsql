@@ -49,6 +49,9 @@ export async function insertAndFetch<
 ) : (
     Promise<InsertedAndFetchedRow<TptT, RowT>>
 ) {
+    /**
+     * @todo Add `assertInsertable()` or something
+     */
     return connection.transactionIfNotInOne(async (connection) : Promise<InsertedAndFetchedRow<TptT, RowT>> => {
         const generated = generatedColumnAliases(tpt);
 

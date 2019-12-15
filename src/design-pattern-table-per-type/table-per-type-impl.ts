@@ -1,7 +1,7 @@
-import {ITablePerType, TablePerTypeData, InsertableTablePerType} from "./table-per-type";
+import {ITablePerType, TablePerTypeData, InsertableTablePerType, DeletableTablePerType} from "./table-per-type";
 import * as TablePerTypeUtil from "./util";
 import {TableWithPrimaryKey} from "../table";
-import {SelectConnection, ExecutionUtil, IsolableInsertOneConnection, IsolableUpdateConnection} from "../execution";
+import {SelectConnection, ExecutionUtil, IsolableInsertOneConnection, IsolableUpdateConnection, IsolableDeleteConnection} from "../execution";
 import {WhereDelegate} from "../where-clause";
 import {OnlyKnownProperties, StrictUnion} from "../type-util";
 import {CandidateKey_NonUnion} from "../candidate-key";
@@ -149,6 +149,24 @@ export class TablePerType<DataT extends TablePerTypeData> implements ITablePerTy
             connection,
             primaryKey,
             assignmentMapDelegate
+        );
+    }
+
+    deleteOneByCandidateKey<
+        CandidateKeyT extends StrictUnion<CandidateKey_NonUnion<this["childTable"]>>
+    > (
+        this : Extract<this, DeletableTablePerType>,
+        connection : IsolableDeleteConnection,
+        /**
+         * @todo Try and recall why I wanted `AssertNonUnion<>`
+         * I didn't write compile-time tests for it...
+         */
+        candidateKey : CandidateKeyT,// & AssertNonUnion<CandidateKeyT>,
+    ) : Promise<TablePerTypeUtil.DeleteOneResult> {
+        return TablePerTypeUtil.deleteOneByCandidateKey(
+            this,
+            connection,
+            candidateKey
         );
     }
 }
