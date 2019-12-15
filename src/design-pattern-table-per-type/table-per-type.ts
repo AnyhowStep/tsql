@@ -83,6 +83,25 @@ type InsertableTablePerTypeImpl =
         parentTables : readonly (TableWithPrimaryKey & { insertEnabled : true })[],
     }
 ;
+/**
+ * + https://github.com/microsoft/TypeScript/issues/34777#issuecomment-551993933
+ * + https://github.com/microsoft/TypeScript/issues/35654
+ */
 export interface InsertableTablePerType extends InsertableTablePerTypeImpl {
+
+}
+
+type DeletableTablePerTypeImpl =
+    & Omit<ITablePerType, "parentTables">
+    & {
+        childTable : { deleteEnabled : true },
+        parentTables : readonly (TableWithPrimaryKey & { deleteEnabled : true })[],
+    }
+;
+/**
+ * + https://github.com/microsoft/TypeScript/issues/34777#issuecomment-551993933
+ * + https://github.com/microsoft/TypeScript/issues/35654
+ */
+export interface DeletableTablePerType extends DeletableTablePerTypeImpl {
 
 }
