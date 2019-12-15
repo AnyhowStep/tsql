@@ -1,9 +1,10 @@
 import {ITablePerType, TablePerTypeData, InsertableTablePerType} from "./table-per-type";
 import * as TablePerTypeUtil from "./util";
 import {TableWithPrimaryKey} from "../table";
-import {SelectConnection, ExecutionUtil, IsolableInsertOneConnection} from "../execution";
+import {SelectConnection, ExecutionUtil, IsolableInsertOneConnection, IsolableUpdateConnection} from "../execution";
 import {WhereDelegate} from "../where-clause";
-import {OnlyKnownProperties} from "../type-util";
+import {OnlyKnownProperties, StrictUnion} from "../type-util";
+import {CandidateKey_NonUnion} from "../candidate-key";
 
 export class TablePerType<DataT extends TablePerTypeData> implements ITablePerType<DataT> {
     readonly childTable : DataT["childTable"];
@@ -77,6 +78,26 @@ export class TablePerType<DataT extends TablePerTypeData> implements ITablePerTy
             this,
             connection,
             row
+        );
+    }
+
+    updateAndFetchOneByCandidateKey<
+        CandidateKeyT extends StrictUnion<CandidateKey_NonUnion<this["childTable"]>>,
+        AssignmentMapT extends TablePerTypeUtil.CustomAssignmentMap<this>
+    > (
+        connection : IsolableUpdateConnection,
+        /**
+         * @todo Try and recall why I wanted `AssertNonUnion<>`
+         * I didn't write compile-time tests for it...
+         */
+        candidateKey : CandidateKeyT,// & AssertNonUnion<CandidateKeyT>,
+        assignmentMapDelegate : TablePerTypeUtil.AssignmentMapDelegate<this, AssignmentMapT>
+    ) : Promise<TablePerTypeUtil.UpdateAndFetchOneReturnType<this, AssignmentMapT>> {
+        return TablePerTypeUtil.updateAndFetchOneByCandidateKey(
+            this,
+            connection,
+            candidateKey,
+            assignmentMapDelegate
         );
     }
 }

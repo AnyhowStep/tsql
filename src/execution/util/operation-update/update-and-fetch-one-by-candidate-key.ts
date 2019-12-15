@@ -2,7 +2,7 @@ import {ITable, TableUtil} from "../../../table";
 import {IsolableUpdateConnection, SelectConnection} from "../../connection";
 import {AssignmentMapDelegate, CustomAssignmentMap} from "../../../update";
 import {CandidateKey_NonUnion, CandidateKeyUtil, CandidateKey_Input} from "../../../candidate-key";
-import {StrictUnion, AssertNonUnion, Identity} from "../../../type-util";
+import {StrictUnion, Identity} from "../../../type-util";
 import {UpdateOneResult, updateOne} from "./update-one";
 import {BuiltInExprUtil} from "../../../built-in-expr";
 import {CustomExprUtil, CustomExpr_MapCorrelatedOrUndefined} from "../../../custom-expr";
@@ -89,7 +89,7 @@ export async function __updateAndFetchOneByCandidateKeyHelper<
 > (
     table : TableT,
     connection : SelectConnection,
-    candidateKey : CandidateKeyT & AssertNonUnion<CandidateKeyT>,
+    candidateKey : CandidateKeyT,// & AssertNonUnion<CandidateKeyT>,
     assignmentMapDelegate : AssignmentMapDelegate<TableT, AssignmentMapT>
 ) : Promise<
     | {
@@ -190,7 +190,7 @@ export async function updateAndFetchOneByCandidateKey<
 > (
     table : TableT,
     connection : IsolableUpdateConnection,
-    candidateKey : CandidateKeyT & AssertNonUnion<CandidateKeyT>,
+    candidateKey : CandidateKeyT,// & AssertNonUnion<CandidateKeyT>,
     assignmentMapDelegate : AssignmentMapDelegate<TableT, AssignmentMapT>
 ) : Promise<UpdateAndFetchOneResult<TableT, AssignmentMapT>> {
     return connection.transactionIfNotInOne(async (connection) : Promise<UpdateAndFetchOneResult<TableT, AssignmentMapT>> => {

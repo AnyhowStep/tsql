@@ -3,7 +3,7 @@ import {ITable, TableUtil} from "../../../table";
 import {IsolableUpdateConnection} from "../../connection";
 import {AssignmentMapDelegate, CustomAssignmentMap} from "../../../update";
 import {CandidateKey_NonUnion} from "../../../candidate-key";
-import {StrictUnion, AssertNonUnion} from "../../../type-util";
+import {StrictUnion} from "../../../type-util";
 import {UpdateOneResult} from "./update-one";
 import * as ExprLib from "../../../expr-library";
 import {NotFoundUpdateResult, updateZeroOrOne} from "./update-zero-or-one";
@@ -28,7 +28,7 @@ export async function updateAndFetchZeroOrOneByCandidateKey<
 > (
     table : TableT,
     connection : IsolableUpdateConnection,
-    candidateKey : CandidateKeyT & AssertNonUnion<CandidateKeyT>,
+    candidateKey : CandidateKeyT,// & AssertNonUnion<CandidateKeyT>,
     assignmentMapDelegate : AssignmentMapDelegate<TableT, AssignmentMapT>
 ) : Promise<UpdateAndFetchZeroOrOneResult<TableT, AssignmentMapT>> {
     return connection.transactionIfNotInOne(async (connection) : Promise<UpdateAndFetchZeroOrOneResult<TableT, AssignmentMapT>> => {

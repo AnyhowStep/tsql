@@ -4,11 +4,10 @@ import {IsolableInsertOneConnection, ExecutionUtil} from "../../../execution";
 import {Identity, OnlyKnownProperties, omitOwnEnumerable} from "../../../type-util";
 import {ColumnAlias, ColumnType, implicitAutoIncrement, generatedColumnAliases, findTableWithGeneratedColumnAlias} from "../query";
 import {CustomExprUtil} from "../../../custom-expr";
-import {DataTypeUtil} from "../../../data-type";
-import {BuiltInExprUtil} from "../../../built-in-expr";
 import {TableUtil} from "../../../table";
 import {expr} from "../../../expr";
 import {UsedRefUtil} from "../../../used-ref";
+import {absorbRow} from "./absorb-row";
 
 export type InsertAndFetchRow<
     TptT extends InsertableTablePerType
@@ -117,63 +116,7 @@ export async function insertAndFetch<
                 connection,
                 result as never
             );
-            for (const columnAlias of Object.keys(fetchedRow)) {
-                /**
-                 * This is guaranteed to be a value expression.
-                 */
-                const newValue = fetchedRow[columnAlias];
-
-                if (Object.prototype.hasOwnProperty.call(result, columnAlias)) {
-                    /**
-                     * This `curValue` could be a non-value expression.
-                     * We only want value expressions.
-                     */
-                    const curValue = result[columnAlias];
-
-                    if (BuiltInExprUtil.isAnyNonValueExpr(curValue)) {
-                        /**
-                         * Add this new value to the `rawInsertRow`
-                         * so we can use it to insert rows to tables
-                         * further down the inheritance hierarchy.
-                         */
-                        result[columnAlias] = newValue;
-                        continue;
-                    }
-
-                    if (curValue === newValue) {
-                        /**
-                         * They are equal, do nothing.
-                         */
-                        continue;
-                    }
-                    /**
-                     * We need some custom equality checking logic
-                     */
-                    if (!DataTypeUtil.isNullSafeEqual(
-                        table.columns[columnAlias],
-                        /**
-                         * This may throw
-                         */
-                        table.columns[columnAlias].mapper(
-                            `${table.alias}.${columnAlias}`,
-                            curValue
-                        ),
-                        newValue
-                    )) {
-                        /**
-                         * @todo Custom `Error` type
-                         */
-                        throw new Error(`All columns with the same name in an inheritance hierarchy must have the same value; mismatch found for ${table.alias}.${columnAlias}`);
-                    }
-                } else {
-                    /**
-                     * Add this new value to the `rawInsertRow`
-                     * so we can use it to insert rows to tables
-                     * further down the inheritance hierarchy.
-                     */
-                    result[columnAlias] = newValue;
-                }
-            }
+            absorbRow(result, table, fetchedRow);
         }
 
         return result;

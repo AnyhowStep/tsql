@@ -6,3 +6,4 @@ export * from "./coalesce";
 export * from "./if-null";
 export * from "./if";
 export * from "./null-if";
+export * from "./type-of-coalesce";

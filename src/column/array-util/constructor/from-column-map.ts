@@ -21,3 +21,19 @@ export function fromColumnMap<
     }
     return result as FromColumnMap<ColumnMapT>;
 }
+
+export function fromColumnMapArray<
+    ColumnMapT extends ColumnMap
+> (
+    columnMapArr : readonly ColumnMapT[]
+) : (
+    FromColumnMap<ColumnMapT>
+) {
+    const result : IColumn[] = [];
+    for (const columnMap of columnMapArr) {
+        for (const columnAlias of Object.keys(columnMap)) {
+            result.push(columnMap[columnAlias]);
+        }
+    }
+    return result as FromColumnMap<ColumnMapT>;
+}
