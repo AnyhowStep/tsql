@@ -169,4 +169,16 @@ export class TablePerType<DataT extends TablePerTypeData> implements ITablePerTy
             candidateKey
         );
     }
+
+    deleteOneByPrimaryKey (
+        this : Extract<this, DeletableTablePerType>,
+        connection : IsolableDeleteConnection,
+        primaryKey : PrimaryKey_Input<Extract<this, DeletableTablePerType>["childTable"]>
+    ) : Promise<TablePerTypeUtil.DeleteOneResult> {
+        return TablePerTypeUtil.deleteOneByPrimaryKey<Extract<this, DeletableTablePerType>>(
+            this,
+            connection,
+            primaryKey
+        );
+    }
 }

@@ -1,4 +1,5 @@
 export * from "./delete-one-by-candidate-key";
+export * from "./delete-one-by-primary-key";
 export * from "./fetch-one";
 export * from "./insert-and-fetch";
 export * from "./insert-row";
