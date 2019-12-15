@@ -60,31 +60,32 @@ tape(__filename, async (t) => {
         });
 
 
-        await serverAppKeyTpt.updateAndFetchOneByPrimaryKey(
+        await serverAppKeyTpt.updateAndFetchOneByCandidateKey(
             connection,
             {
                 appKeyId : BigInt(1),
             },
             () => {
                 return {
-                    ipAddress : null,
-                    key : "server2",
-                    disabledAt : new Date(4),
                 };
             }
         ).then((updateAndFetchOneResult) => {
             //console.log(updateAndFetchOneResult.updateOneResults);
             t.deepEqual(
+                updateAndFetchOneResult.updatedRowCount,
+                BigInt(0)
+            );
+            t.deepEqual(
                 updateAndFetchOneResult.row,
                 {
                     appKeyId: BigInt(1),
                     appKeyTypeId: BigInt(1),
-                    ipAddress : null,
+                    ipAddress : "ip",
                     trustProxy : false,
                     appId: BigInt(1),
-                    key: "server2",
+                    key: "server",
                     createdAt: new Date(1),
-                    disabledAt: new Date(4),
+                    disabledAt: new Date(2),
                 }
             );
         });
