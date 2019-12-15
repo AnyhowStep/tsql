@@ -88,7 +88,7 @@ tape(__filename, async (t) => {
                 };
             }
         ).then((updateAndFetchOneResult) => {
-            console.log(updateAndFetchOneResult.updateOneResults);
+            //console.log(updateAndFetchOneResult.updateOneResults);
             t.deepEqual(
                 updateAndFetchOneResult.row,
                 {

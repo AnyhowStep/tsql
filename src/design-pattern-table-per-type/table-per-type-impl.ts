@@ -116,4 +116,39 @@ export class TablePerType<DataT extends TablePerTypeData> implements ITablePerTy
             assignmentMapDelegate
         );
     }
+
+    updateAndFetchZeroOrOneByCandidateKey<
+        CandidateKeyT extends StrictUnion<CandidateKey_NonUnion<this["childTable"]>>,
+        AssignmentMapT extends TablePerTypeUtil.CustomAssignmentMap<this>
+    > (
+        connection : IsolableUpdateConnection,
+        /**
+         * @todo Try and recall why I wanted `AssertNonUnion<>`
+         * I didn't write compile-time tests for it...
+         */
+        candidateKey : CandidateKeyT,// & AssertNonUnion<CandidateKeyT>,
+        assignmentMapDelegate : TablePerTypeUtil.AssignmentMapDelegate<this, AssignmentMapT>
+    ) : Promise<TablePerTypeUtil.UpdateAndFetchZeroOrOneReturnType<this, AssignmentMapT>> {
+        return TablePerTypeUtil.updateAndFetchZeroOrOneByCandidateKey(
+            this,
+            connection,
+            candidateKey,
+            assignmentMapDelegate
+        );
+    }
+
+    updateAndFetchZeroOrOneByPrimaryKey<
+        AssignmentMapT extends TablePerTypeUtil.CustomAssignmentMap<this>
+    > (
+        connection : IsolableUpdateConnection,
+        primaryKey : PrimaryKey_Input<this["childTable"]>,
+        assignmentMapDelegate : TablePerTypeUtil.AssignmentMapDelegate<this, AssignmentMapT>
+    ) : Promise<TablePerTypeUtil.UpdateAndFetchZeroOrOneReturnType<this, AssignmentMapT>> {
+        return TablePerTypeUtil.updateAndFetchZeroOrOneByPrimaryKey(
+            this,
+            connection,
+            primaryKey,
+            assignmentMapDelegate
+        );
+    }
 }

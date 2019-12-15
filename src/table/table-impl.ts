@@ -534,15 +534,11 @@ export class Table<DataT extends TableData> implements ITable {
     ) : (
         Promise<boolean>
     ) {
-        return QueryUtil.newInstance()
-            .from<this>(
-                this as (
-                    this &
-                    QueryUtil.AssertValidCurrentJoin<QueryUtil.NewInstance, this>
-                )
-            )
-            .where(whereDelegate)
-            .exists(connection);
+        return TableUtil.exists(
+            this,
+            connection,
+            whereDelegate
+        );
     }
     async existsByCandidateKey (
         connection : SelectConnection,
