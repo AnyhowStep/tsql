@@ -60,7 +60,7 @@ tape(__filename, async (t) => {
         });
 
 
-        await serverAppKeyTpt.updateAndFetchOneByCandidateKey(
+        await serverAppKeyTpt.updateAndFetchOneByPrimaryKey(
             connection,
             {
                 appKeyId : BigInt(1),

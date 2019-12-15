@@ -60,14 +60,15 @@ tape(__filename, async (t) => {
         });
 
 
-        await serverAppKeyTpt.updateAndFetchOneByPrimaryKey(
+        await serverAppKeyTpt.updateAndFetchOneByCandidateKey(
             connection,
             {
                 appKeyId : BigInt(1),
             },
             () => {
                 return {
-                    ipAddress : null,
+                    ipAddress : "ip2",
+                    trustProxy : true,
                     key : "server2",
                     disabledAt : new Date(4),
                 };
@@ -79,8 +80,8 @@ tape(__filename, async (t) => {
                 {
                     appKeyId: BigInt(1),
                     appKeyTypeId: BigInt(1),
-                    ipAddress : null,
-                    trustProxy : false,
+                    ipAddress : "ip2",
+                    trustProxy : true,
                     appId: BigInt(1),
                     key: "server2",
                     createdAt: new Date(1),

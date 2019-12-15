@@ -60,31 +60,46 @@ tape(__filename, async (t) => {
         });
 
 
-        await serverAppKeyTpt.updateAndFetchOneByPrimaryKey(
+        await serverAppKeyTpt.updateAndFetchOneByCandidateKey(
             connection,
             {
                 appKeyId : BigInt(1),
             },
-            () => {
+            columns => {
                 return {
-                    ipAddress : null,
-                    key : "server2",
-                    disabledAt : new Date(4),
+                    ipAddress : tsql.concat(
+                        tsql.coalesce(columns.serverAppKey.ipAddress, ""),
+                        "-x"
+                    ),
+                    trustProxy : tsql.not(columns.serverAppKey.trustProxy),
+                    key : tsql.concat(
+                        tsql.coalesce(columns.serverAppKey.ipAddress, ""),
+                        "-",
+                        columns.appKey.key,
+                        "-y"
+                    ),
+                    disabledAt : tsql.timestampAddMillisecond(
+                        tsql.coalesce(
+                            columns.appKey.disabledAt,
+                            new Date(0)
+                        ),
+                        5
+                    ),
                 };
             }
         ).then((updateAndFetchOneResult) => {
-            //console.log(updateAndFetchOneResult.updateOneResults);
+            console.log(updateAndFetchOneResult.updateOneResults);
             t.deepEqual(
                 updateAndFetchOneResult.row,
                 {
                     appKeyId: BigInt(1),
                     appKeyTypeId: BigInt(1),
-                    ipAddress : null,
-                    trustProxy : false,
+                    ipAddress : "ip-x",
+                    trustProxy : true,
                     appId: BigInt(1),
-                    key: "server2",
+                    key: "ip-server-y",
                     createdAt: new Date(1),
-                    disabledAt: new Date(4),
+                    disabledAt: new Date(7),
                 }
             );
         });

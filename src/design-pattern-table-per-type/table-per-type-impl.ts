@@ -5,6 +5,7 @@ import {SelectConnection, ExecutionUtil, IsolableInsertOneConnection, IsolableUp
 import {WhereDelegate} from "../where-clause";
 import {OnlyKnownProperties, StrictUnion} from "../type-util";
 import {CandidateKey_NonUnion} from "../candidate-key";
+import {PrimaryKey_Input} from "../primary-key";
 
 export class TablePerType<DataT extends TablePerTypeData> implements ITablePerType<DataT> {
     readonly childTable : DataT["childTable"];
@@ -97,6 +98,21 @@ export class TablePerType<DataT extends TablePerTypeData> implements ITablePerTy
             this,
             connection,
             candidateKey,
+            assignmentMapDelegate
+        );
+    }
+
+    updateAndFetchOneByPrimaryKey<
+        AssignmentMapT extends TablePerTypeUtil.CustomAssignmentMap<this>
+    > (
+        connection : IsolableUpdateConnection,
+        primaryKey : PrimaryKey_Input<this["childTable"]>,
+        assignmentMapDelegate : TablePerTypeUtil.AssignmentMapDelegate<this, AssignmentMapT>
+    ) : Promise<TablePerTypeUtil.UpdateAndFetchOneReturnType<this, AssignmentMapT>> {
+        return TablePerTypeUtil.updateAndFetchOneByPrimaryKey(
+            this,
+            connection,
+            primaryKey,
             assignmentMapDelegate
         );
     }
