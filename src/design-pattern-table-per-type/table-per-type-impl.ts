@@ -117,6 +117,21 @@ export class TablePerType<DataT extends TablePerTypeData> implements ITablePerTy
         );
     }
 
+    updateAndFetchOneBySuperKey<
+        AssignmentMapT extends TablePerTypeUtil.CustomAssignmentMap<this>
+    > (
+        connection : IsolableUpdateConnection,
+        superKey : TablePerTypeUtil.SuperKey<this>,
+        assignmentMapDelegate : TablePerTypeUtil.AssignmentMapDelegate<this, AssignmentMapT>
+    ) : Promise<TablePerTypeUtil.UpdateAndFetchOneReturnType<this, AssignmentMapT>> {
+        return TablePerTypeUtil.updateAndFetchOneBySuperKey(
+            this,
+            connection,
+            superKey,
+            assignmentMapDelegate
+        );
+    }
+
     updateAndFetchZeroOrOneByCandidateKey<
         CandidateKeyT extends StrictUnion<CandidateKey_NonUnion<this["childTable"]>>,
         AssignmentMapT extends TablePerTypeUtil.CustomAssignmentMap<this>
@@ -148,6 +163,21 @@ export class TablePerType<DataT extends TablePerTypeData> implements ITablePerTy
             this,
             connection,
             primaryKey,
+            assignmentMapDelegate
+        );
+    }
+
+    updateAndFetchZeroOrOneBySuperKey<
+        AssignmentMapT extends TablePerTypeUtil.CustomAssignmentMap<this>
+    > (
+        connection : IsolableUpdateConnection,
+        superKey : TablePerTypeUtil.SuperKey<this>,
+        assignmentMapDelegate : TablePerTypeUtil.AssignmentMapDelegate<this, AssignmentMapT>
+    ) : Promise<TablePerTypeUtil.UpdateAndFetchZeroOrOneReturnType<this, AssignmentMapT>> {
+        return TablePerTypeUtil.updateAndFetchZeroOrOneBySuperKey(
+            this,
+            connection,
+            superKey,
             assignmentMapDelegate
         );
     }

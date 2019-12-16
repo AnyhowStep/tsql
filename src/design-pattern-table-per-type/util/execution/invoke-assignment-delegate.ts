@@ -48,6 +48,13 @@ export async function invokeAssignmentDelegate<
 
     const columnAliasArr = Object.keys(rawAssignmentMap);
     if (columnAliasArr.length == 0) {
+        /**
+         * @todo Perform an exists check, if the row does not exist,
+         * throw rowNotFound, for early-exit.
+         *
+         * At the moment, this isn't so important because we have
+         * other methods downstream that will throw it.
+         */
         return {};
     }
 
