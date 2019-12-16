@@ -314,4 +314,52 @@ export class TablePerType<DataT extends TablePerTypeData> implements ITablePerTy
             ) as any
         ).then(result => result.exists);
     }
+
+    assertExistsByCandidateKey<
+        CandidateKeyT extends StrictUnion<CandidateKey_NonUnion<this["childTable"]>>
+    > (
+        connection : SelectConnection,
+        /**
+         * @todo Try and recall why I wanted `AssertNonUnion<>`
+         * I didn't write compile-time tests for it...
+         */
+        candidateKey : CandidateKeyT,// & AssertNonUnion<CandidateKeyT>,
+    ) : Promise<void> {
+        return TablePerTypeUtil.assertExistsImpl(
+            this,
+            connection,
+            () => ExprLib.eqCandidateKey(
+                this.childTable,
+                candidateKey
+            ) as any
+        );
+    }
+
+    assertExistsByPrimaryKey (
+        connection : SelectConnection,
+        primaryKey : PrimaryKey_Input<this["childTable"]>
+    ) : Promise<void> {
+        return TablePerTypeUtil.assertExistsImpl(
+            this,
+            connection,
+            () => ExprLib.eqPrimaryKey(
+                this.childTable,
+                primaryKey
+            ) as any
+        );
+    }
+
+    assertExistsBySuperKey (
+        connection : SelectConnection,
+        superKey : TablePerTypeUtil.SuperKey<this>
+    ) : Promise<void> {
+        return TablePerTypeUtil.assertExistsImpl(
+            this,
+            connection,
+            () => TablePerTypeUtil.eqSuperKey(
+                this,
+                superKey
+            ) as any
+        );
+    }
 }
