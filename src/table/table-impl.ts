@@ -19,22 +19,6 @@ import {AnyBuiltInExpr} from "../built-in-expr";
 import {CustomInsertRow} from "../insert";
 import {InsertOneWithAutoIncrementReturnType, InsertIgnoreOneWithAutoIncrementReturnType, DeleteOneResult, DeleteZeroOrOneResult, UpdateOneResult, UpdateZeroOrOneResult} from "../execution/util";
 import {AssignmentMapDelegate} from "../update";
-/*import {PrimaryKey, PrimaryKeyUtil} from "../primary-key";
-import {CandidateKey, CandidateKeyUtil} from "../candidate-key";
-import {SuperKey, SuperKeyUtil} from "../super-key";*/
-/*import {
-    IConnection,
-    UpdateOneResult,
-    UpdateZeroOrOneResult,
-    DeleteOneResult,
-    DeleteZeroOrOneResult,
-} from "../execution";
-import {QueryUtil} from "../query";
-import {Row} from "../row";
-import {BuiltInExprUtil} from "../built-in-expr";
-import {InsertRow, InsertUtil} from "../insert";
-import {UpdateUtil} from "../update";
-import {DeleteUtil} from "../delete";*/
 
 export class Table<DataT extends TableData> implements ITable {
     readonly isLateral : DataT["isLateral"];

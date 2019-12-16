@@ -6,6 +6,7 @@ import {WhereDelegate} from "../where-clause";
 import {OnlyKnownProperties, StrictUnion} from "../type-util";
 import {CandidateKey_NonUnion} from "../candidate-key";
 import {PrimaryKey_Input} from "../primary-key";
+import * as ExprLib from "../expr-library";
 
 export class TablePerType<DataT extends TablePerTypeData> implements ITablePerType<DataT> {
     readonly childTable : DataT["childTable"];
@@ -264,5 +265,53 @@ export class TablePerType<DataT extends TablePerTypeData> implements ITablePerTy
             connection,
             superKey
         );
+    }
+
+    existsByCandidateKey<
+        CandidateKeyT extends StrictUnion<CandidateKey_NonUnion<this["childTable"]>>
+    > (
+        connection : SelectConnection,
+        /**
+         * @todo Try and recall why I wanted `AssertNonUnion<>`
+         * I didn't write compile-time tests for it...
+         */
+        candidateKey : CandidateKeyT,// & AssertNonUnion<CandidateKeyT>,
+    ) : Promise<boolean> {
+        return TablePerTypeUtil.existsImpl(
+            this,
+            connection,
+            () => ExprLib.eqCandidateKey(
+                this.childTable,
+                candidateKey
+            ) as any
+        ).then(result => result.exists);
+    }
+
+    existsByPrimaryKey (
+        connection : SelectConnection,
+        primaryKey : PrimaryKey_Input<this["childTable"]>
+    ) : Promise<boolean> {
+        return TablePerTypeUtil.existsImpl(
+            this,
+            connection,
+            () => ExprLib.eqPrimaryKey(
+                this.childTable,
+                primaryKey
+            ) as any
+        ).then(result => result.exists);
+    }
+
+    existsBySuperKey (
+        connection : SelectConnection,
+        superKey : TablePerTypeUtil.SuperKey<this>
+    ) : Promise<boolean> {
+        return TablePerTypeUtil.existsImpl(
+            this,
+            connection,
+            () => TablePerTypeUtil.eqSuperKey(
+                this,
+                superKey
+            ) as any
+        ).then(result => result.exists);
     }
 }
