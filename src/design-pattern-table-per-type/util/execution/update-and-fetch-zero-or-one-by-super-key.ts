@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {ITablePerType} from "../../table-per-type";
-import {IsolableUpdateConnection, ExecutionUtil} from "../../../execution";
+import {IsolableUpdateConnection} from "../../../execution";
 import {
     CustomAssignmentMap,
     AssignmentMapDelegate,
@@ -9,7 +9,7 @@ import {UpdateAndFetchZeroOrOneReturnType} from "./update-and-fetch-zero-or-one-
 import {SuperKey} from "../query";
 import {eqSuperKey} from "../operation";
 import {updateAndFetchOneBySuperKey} from "./update-and-fetch-one-by-super-key";
-import {from} from "../execution-impl";
+import {existsImpl} from "../execution-impl";
 
 export async function updateAndFetchZeroOrOneBySuperKey<
     TptT extends ITablePerType,
@@ -21,13 +21,13 @@ export async function updateAndFetchZeroOrOneBySuperKey<
     assignmentMapDelegate : AssignmentMapDelegate<TptT, AssignmentMapT>
 ) : Promise<UpdateAndFetchZeroOrOneReturnType<TptT, AssignmentMapT>> {
     return connection.transactionIfNotInOne(async (connection) : Promise<UpdateAndFetchZeroOrOneReturnType<TptT, AssignmentMapT>> => {
-        const existsResult = await ExecutionUtil.existsImpl(
-            from(tpt)
-                .where(() => eqSuperKey(
-                    tpt,
-                    superKey
-                ) as any),
-            connection
+        const existsResult = await existsImpl(
+            tpt,
+            connection,
+            () => eqSuperKey(
+                tpt,
+                superKey
+            ) as any
         );
 
         if (!existsResult.exists) {

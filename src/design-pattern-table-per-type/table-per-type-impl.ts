@@ -223,4 +223,46 @@ export class TablePerType<DataT extends TablePerTypeData> implements ITablePerTy
             superKey
         );
     }
+
+    deleteZeroOrOneByCandidateKey<
+        CandidateKeyT extends StrictUnion<CandidateKey_NonUnion<this["childTable"]>>
+    > (
+        this : Extract<this, DeletableTablePerType>,
+        connection : IsolableDeleteConnection,
+        /**
+         * @todo Try and recall why I wanted `AssertNonUnion<>`
+         * I didn't write compile-time tests for it...
+         */
+        candidateKey : CandidateKeyT,// & AssertNonUnion<CandidateKeyT>,
+    ) : Promise<TablePerTypeUtil.DeleteZeroOrOneResult> {
+        return TablePerTypeUtil.deleteZeroOrOneByCandidateKey(
+            this,
+            connection,
+            candidateKey
+        );
+    }
+
+    deleteZeroOrOneByPrimaryKey (
+        this : Extract<this, DeletableTablePerType>,
+        connection : IsolableDeleteConnection,
+        primaryKey : PrimaryKey_Input<Extract<this, DeletableTablePerType>["childTable"]>
+    ) : Promise<TablePerTypeUtil.DeleteZeroOrOneResult> {
+        return TablePerTypeUtil.deleteZeroOrOneByPrimaryKey<Extract<this, DeletableTablePerType>>(
+            this,
+            connection,
+            primaryKey
+        );
+    }
+
+    deleteZeroOrOneBySuperKey (
+        this : Extract<this, DeletableTablePerType>,
+        connection : IsolableDeleteConnection,
+        superKey : TablePerTypeUtil.SuperKey<Extract<this, DeletableTablePerType>>
+    ) : Promise<TablePerTypeUtil.DeleteZeroOrOneResult> {
+        return TablePerTypeUtil.deleteZeroOrOneBySuperKey<Extract<this, DeletableTablePerType>>(
+            this,
+            connection,
+            superKey
+        );
+    }
 }
