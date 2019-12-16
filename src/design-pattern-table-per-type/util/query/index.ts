@@ -26,3 +26,4 @@ export * from "./parent-column-alias";
 export * from "./primary-key-column-alias";
 export * from "./required-column-alias";
 export * from "./row";
+export * from "./super-key-mapper";
