@@ -2,14 +2,10 @@ import {ITablePerType} from "../../table-per-type";
 import {pickOwnEnumerable} from "../../../type-util";
 import {IsolableUpdateConnection, ExecutionUtil} from "../../../execution";
 import * as ExprLib from "../../../expr-library";
-import {updateAndFetchOneImpl} from "./update-and-fetch-one-impl";
-import {invokeAssignmentDelegate} from "./invoke-assignment-delegate";
 import {PrimaryKey_Input} from "../../../primary-key";
-import {
-    CustomAssignmentMap,
-    AssignmentMapDelegate,
-    UpdateAndFetchOneReturnType,
-} from "./update-and-fetch-one-by-candidate-key";
+import {UpdateAndFetchOneReturnType} from "./update-and-fetch-one-by-candidate-key";
+import {invokeAssignmentDelegate, updateAndFetchOneImpl} from "../execution-impl";
+import {CustomAssignmentMap, AssignmentMapDelegate} from "./assignment-map";
 
 export async function updateAndFetchOneByPrimaryKey<
     TptT extends ITablePerType,

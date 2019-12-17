@@ -3,13 +3,10 @@ import {ITablePerType} from "../../table-per-type";
 import {IsolableUpdateConnection, ExecutionUtil} from "../../../execution";
 import * as ExprLib from "../../../expr-library";
 import {PrimaryKey_Input} from "../../../primary-key";
-import {
-    CustomAssignmentMap,
-    AssignmentMapDelegate,
-} from "./update-and-fetch-one-by-candidate-key";
 import {UpdateAndFetchZeroOrOneReturnType} from "./update-and-fetch-zero-or-one-by-candidate-key";
 import {QueryUtil} from "../../../unified-query";
 import {updateAndFetchOneByPrimaryKey} from "./update-and-fetch-one-by-primary-key";
+import {CustomAssignmentMap, AssignmentMapDelegate} from "./assignment-map";
 
 export async function updateAndFetchZeroOrOneByPrimaryKey<
     TptT extends ITablePerType,

@@ -7,7 +7,7 @@ import {CustomExprUtil} from "../../../custom-expr";
 import {TableUtil} from "../../../table";
 import {expr} from "../../../expr";
 import {UsedRefUtil} from "../../../used-ref";
-import {absorbRow} from "./absorb-row";
+import {absorbRow} from "../execution-impl";
 
 export type InsertAndFetchRow<
     TptT extends InsertableTablePerType

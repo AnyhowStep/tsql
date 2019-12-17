@@ -1,15 +1,12 @@
 import * as tm from "type-mapping";
 import {ITablePerType} from "../../table-per-type";
 import {IsolableUpdateConnection} from "../../../execution";
-import {
-    CustomAssignmentMap,
-    AssignmentMapDelegate,
-} from "./update-and-fetch-one-by-candidate-key";
 import {UpdateAndFetchZeroOrOneReturnType} from "./update-and-fetch-zero-or-one-by-candidate-key";
 import {SuperKey} from "../query";
 import {eqSuperKey} from "../operation";
 import {updateAndFetchOneBySuperKey} from "./update-and-fetch-one-by-super-key";
 import {existsImpl} from "../execution-impl";
+import {CustomAssignmentMap, AssignmentMapDelegate} from "./assignment-map";
 
 export async function updateAndFetchZeroOrOneBySuperKey<
     TptT extends ITablePerType,

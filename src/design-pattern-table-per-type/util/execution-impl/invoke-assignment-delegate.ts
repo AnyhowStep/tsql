@@ -1,5 +1,5 @@
 import {ITablePerType} from "../../table-per-type";
-import {CustomAssignmentMap, AssignmentMapDelegate} from "./update-and-fetch-one-by-candidate-key";
+import {CustomAssignmentMap, AssignmentMapDelegate} from "../execution";
 import {IsolableSelectConnection, ExecutionUtil} from "../../../execution";
 import {ColumnRefUtil} from "../../../column-ref";
 import {ColumnUtil, ColumnArrayUtil} from "../../../column";
