@@ -4,10 +4,11 @@ import {CandidateKey_NonUnion} from "../../../candidate-key";
 import {StrictUnion, Identity} from "../../../type-util";
 import {IsolableUpdateConnection, ExecutionUtil} from "../../../execution";
 import * as ExprLib from "../../../expr-library";
-import {UpdateAndFetchOneResult} from "./update-and-fetch-one-impl";
-import {UpdatedAndFetchedRow, CustomAssignmentMap, AssignmentMapDelegate, updateAndFetchOneByCandidateKey} from "./update-and-fetch-one-by-candidate-key";
+import {UpdatedAndFetchedRow, updateAndFetchOneByCandidateKey} from "./update-and-fetch-one-by-candidate-key";
 import {NotFoundUpdateAndFetchResult} from "../../../execution/util";
 import {QueryUtil} from "../../../unified-query";
+import {UpdateAndFetchOneResult} from "../execution-impl";
+import {CustomAssignmentMap, AssignmentMapDelegate} from "./assignment-map";
 
 export type UpdateAndFetchZeroOrOneReturnType<
     TptT extends ITablePerType,

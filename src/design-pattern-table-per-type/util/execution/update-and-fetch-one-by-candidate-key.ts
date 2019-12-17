@@ -2,53 +2,15 @@ import {ITablePerType} from "../../table-per-type";
 import {CandidateKey_NonUnion} from "../../../candidate-key";
 import {StrictUnion, Identity, pickOwnEnumerable} from "../../../type-util";
 import {IsolableUpdateConnection, ExecutionUtil} from "../../../execution";
-import {MutableColumnAlias, ColumnType, ColumnAlias} from "../query";
-import {CustomExpr_MapCorrelatedOrUndefined, CustomExprUtil} from "../../../custom-expr";
-import {ColumnRefUtil} from "../../../column-ref";
-import {ColumnUtil} from "../../../column";
+import {ColumnType, ColumnAlias} from "../query";
+import {CustomExprUtil} from "../../../custom-expr";
 import * as ExprLib from "../../../expr-library";
-import {updateAndFetchOneImpl, UpdateAndFetchOneResult} from "./update-and-fetch-one-impl";
-import {invokeAssignmentDelegate} from "./invoke-assignment-delegate";
-
-export type CustomAssignmentMap<
-    TptT extends ITablePerType
-> =
-    Identity<
-        & {
-            readonly [columnAlias in MutableColumnAlias<TptT>]? : (
-                CustomExpr_MapCorrelatedOrUndefined<
-                    (
-                        | TptT["childTable"]["columns"]
-                        | TptT["parentTables"][number]["columns"]
-                    ),
-                    ColumnType<TptT, columnAlias>
-                >
-            )
-        }
-        & {
-            readonly [
-                columnAlias in Exclude<
-                    ColumnAlias<TptT>,
-                    MutableColumnAlias<TptT>
-                >
-            ]? : undefined
-        }
-    >
-;
-
-export type AssignmentMapDelegate<
-    TptT extends ITablePerType,
-    AssignmentMapT extends CustomAssignmentMap<TptT>
-> =
-    (
-        columns : ColumnRefUtil.FromColumnArray<
-            ColumnUtil.FromColumnMap<
-                | TptT["childTable"]["columns"]
-                | TptT["parentTables"][number]["columns"]
-            >[]
-        >
-    ) => AssignmentMapT
-;
+import {
+    invokeAssignmentDelegate,
+    updateAndFetchOneImpl,
+    UpdateAndFetchOneResult,
+} from "../execution-impl";
+import {CustomAssignmentMap, AssignmentMapDelegate} from "./assignment-map";
 
 export type UpdatedAndFetchedRow<
     TptT extends ITablePerType,

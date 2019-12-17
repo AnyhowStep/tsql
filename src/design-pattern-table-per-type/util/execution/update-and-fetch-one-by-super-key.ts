@@ -1,15 +1,11 @@
 import {ITablePerType} from "../../table-per-type";
 import {pickOwnEnumerable} from "../../../type-util";
 import {IsolableUpdateConnection, ExecutionUtil} from "../../../execution";
-import {updateAndFetchOneImpl} from "./update-and-fetch-one-impl";
-import {invokeAssignmentDelegate} from "./invoke-assignment-delegate";
-import {
-    CustomAssignmentMap,
-    AssignmentMapDelegate,
-    UpdateAndFetchOneReturnType,
-} from "./update-and-fetch-one-by-candidate-key";
+import {UpdateAndFetchOneReturnType} from "./update-and-fetch-one-by-candidate-key";
 import {SuperKey} from "../query";
 import {eqSuperKey} from "../operation";
+import {invokeAssignmentDelegate, updateAndFetchOneImpl} from "../execution-impl";
+import {CustomAssignmentMap, AssignmentMapDelegate} from "./assignment-map";
 
 export async function updateAndFetchOneBySuperKey<
     TptT extends ITablePerType,
