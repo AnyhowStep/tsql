@@ -83,6 +83,8 @@ export interface EventHandler<EventT extends IEventBase> {
 export interface IPoolEventEmitter<EventT extends IEventBase> {
     addHandler (handler : EventHandler<EventT>) : void;
     removeHandler (handler : EventHandler<EventT>) : void;
+
+    getHandlers () : readonly EventHandler<EventT>[];
 }
 
 export class PoolEventEmitter<EventT extends IEventBase> implements IPoolEventEmitter<EventT> {
@@ -107,17 +109,8 @@ export class PoolEventEmitter<EventT extends IEventBase> implements IPoolEventEm
             ];
         }
     }
-    /**
-     * This may throw
-     */
-    private invoke = async (event : EventT) : Promise<void> => {
-        for (const handler of this.handlers) {
-            await handler(event);
-        }
-    };
-
-    createConnectionEventEmitter () : ConnectionEventEmitter<EventT> {
-        return new ConnectionEventEmitter<EventT>(this.invoke);
+    getHandlers () : readonly EventHandler<EventT>[] {
+        return this.handlers;
     }
 }
 
@@ -126,55 +119,23 @@ export interface IConnectionEventEmitter<EventT extends IEventBase> {
 }
 
 export class ConnectionEventEmitter<EventT extends IEventBase> implements IConnectionEventEmitter<EventT> {
-    private readonly invokeImpl : (event : EventT) => Promise<void>;
+    private readonly poolEventEmitter : IPoolEventEmitter<EventT>;
+    private readonly addEventImpl : (event : OnCommitOrRollbackListenerCollection) => void;
     constructor (
-        invokeImpl : (event : EventT) => Promise<void>
+        poolEventEmitter : IPoolEventEmitter<EventT>,
+        addEventImpl : (event : OnCommitOrRollbackListenerCollection) => void
     ) {
-        this.invokeImpl = invokeImpl;
+        this.poolEventEmitter = poolEventEmitter;
+        this.addEventImpl = addEventImpl;
     }
-    /**
-     * We want to avoid mutating arrays because it may mess up our loops.
-     * We might add/remove events while invoking a handler.
-     */
-    private events : readonly (OnCommitOrRollbackListenerCollection)[] = [];
 
     /**
      * This may throw
      */
     async invoke (event : (EventT & OnCommitOrRollbackListenerCollection)) : Promise<void> {
-        this.events = [...this.events, event];
-        return this.invokeImpl(event);
-    }
-
-    /**
-     * This should not throw
-     */
-    flushOnCommit () : { syncErrors : unknown[] } {
-        const syncErrors : unknown[] = [];
-        const events = this.events;
-        this.events = [];
-        for (const event of events) {
-            const invokeResult = event.invokeOnCommitListeners();
-            syncErrors.push(
-                ...invokeResult.syncErrors
-            );
+        this.addEventImpl(event);
+        for (const handler of this.poolEventEmitter.getHandlers()) {
+            await handler(event);
         }
-        return { syncErrors };
-    }
-
-    /**
-     * This should not throw
-     */
-    flushOnRollback () : { syncErrors : unknown[] } {
-        const syncErrors : unknown[] = [];
-        const events = this.events;
-        this.events = [];
-        for (const event of events) {
-            const invokeResult = event.invokeOnRollbackListeners();
-            syncErrors.push(
-                ...invokeResult.syncErrors
-            );
-        }
-        return { syncErrors };
     }
 }

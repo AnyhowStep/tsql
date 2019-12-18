@@ -88,10 +88,6 @@ interface TransactionInformation {
     isInTransaction : boolean;
 }
 
-interface ConnectionEventEmitterCollection {
-    readonly onInsertOne : tsql.ConnectionEventEmitter<tsql.IInsertOneEvent<tsql.ITable>>;
-}
-
 /**
  * Only one operation can be running at any point in time.
  */
@@ -101,14 +97,14 @@ export class Connection {
     private readonly asyncQueue : AsyncQueue<ISqliteWorker>;
     private readonly transactionInfo : TransactionInformation;
 
-    private readonly eventEmitters : ConnectionEventEmitterCollection;
+    private readonly eventEmitters : tsql.IConnectionEventEmitterCollection;
 
     constructor (
         pool : IPool,
         worker : ISqliteWorker|AsyncQueue<ISqliteWorker>,
         idAllocator : IdAllocator,
         transactionInfo : TransactionInformation,
-        eventEmitters : ConnectionEventEmitterCollection
+        eventEmitters : tsql.IConnectionEventEmitterCollection
     ) {
         this.pool = pool;
         this.idAllocator = idAllocator;
@@ -132,7 +128,7 @@ export class Connection {
          * @todo Handle sync errors somehow.
          * Maybe propagate them to `IPool` and have an `onError` handler or something
          */
-        this.eventEmitters.onInsertOne.flushOnCommit();
+        this.eventEmitters.flushOnCommit();
     }
 
     allocateId () {
@@ -1155,7 +1151,7 @@ export class Connection {
                  * @todo Handle sync errors somehow.
                  * Maybe propagate them to `IPool` and have an `onError` handler or something
                  */
-                this.eventEmitters.onInsertOne.flushOnRollback();
+                this.eventEmitters.flushOnRollback();
             });
     }
     commit () : Promise<void> {
@@ -1169,7 +1165,7 @@ export class Connection {
                  * @todo Handle sync errors somehow.
                  * Maybe propagate them to `IPool` and have an `onError` handler or something
                  */
-                this.eventEmitters.onInsertOne.flushOnCommit();
+                this.eventEmitters.flushOnCommit();
             });
     }
 
@@ -1191,7 +1187,7 @@ export class Connection {
                      * @todo Handle sync errors somehow.
                      * Maybe propagate them to `IPool` and have an `onError` handler or something
                      */
-                    this.eventEmitters.onInsertOne.flushOnCommit();
+                    this.eventEmitters.flushOnCommit();
                     if (!this.isInTransaction()) {
                         /**
                          * Why did one of the `OnCommit` listeners call `commit()` or `rollback()`?
@@ -1349,9 +1345,7 @@ export class Pool implements tsql.IPool {
                     this.worker,
                     this.idAllocator,
                     this.transactionInfo,
-                    {
-                        onInsertOne : this.onInsertOne.createConnectionEventEmitter(),
-                    }
+                    new tsql.ConnectionEventEmitterCollection(this)
                 );
                 return {
                     item : connection,
