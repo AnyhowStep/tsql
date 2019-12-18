@@ -1,9 +1,11 @@
 import * as tm from "type-mapping";
 import {InsertOneResult, IPool, IConnection} from "../execution";
-import {ITable} from "../table";
+import {ITable, TableUtil} from "../table";
 import {BuiltInInsertRow} from "../insert";
 import {CandidateKey_Output, CandidateKeyUtil} from "../candidate-key";
 import {IEventBase, EventBase} from "./pool-event-emitter";
+import {Row_Output} from "../row";
+import * as ExprLib from "../expr-library";
 
 export interface IInsertOneEvent<TableT extends ITable> extends IEventBase {
     readonly table : TableT;
@@ -21,6 +23,22 @@ export interface IInsertOneEvent<TableT extends ITable> extends IEventBase {
         Record<string, unknown> :
         CandidateKey_Output<TableT>
     );
+
+    /**
+     * This may throw for a number of reasons,
+     * + `candidateKey` is `undefined` (cannot be derived from `insertRow`)
+     * + Row was updated to a different `candidateKey` value before initial fetch
+     * + Connection released
+     * + etc.
+     *
+     * First call to `getOrFetch()` fetches the row.
+     * Subsequent calls return a cached copy of the row.
+     */
+    getOrFetch () : Promise<(
+        ITable extends TableT ?
+        Record<string, unknown> :
+        Row_Output<TableT>
+    )>;
 
     /**
      * Internally, it does a `this.table === table` check.
@@ -64,7 +82,37 @@ export class InsertOneEvent<TableT extends ITable> extends EventBase implements 
                 undefined;
         }
         return this.candidateKeyCache;
+    }
 
+    private fetchPromise : undefined|Promise<(
+        ITable extends TableT ?
+        Record<string, unknown> :
+        Row_Output<TableT>
+    )>;
+    async getOrFetch () : Promise<(
+        ITable extends TableT ?
+        Record<string, unknown> :
+        Row_Output<TableT>
+    )> {
+        if (this.fetchPromise == undefined) {
+            const candidateKey = this.candidateKey;
+            if (candidateKey == undefined) {
+                throw new Error(`Could not derive candidateKey from insertRow`);
+            }
+            this.fetchPromise = TableUtil.fetchOne(
+                this.table,
+                this.connection,
+                () => ExprLib.eqCandidateKey(
+                    this.table,
+                    candidateKey as any
+                ) as any
+            ) as Promise<unknown> as Promise<(
+                ITable extends TableT ?
+                Record<string, unknown> :
+                Row_Output<TableT>
+            )>;
+        }
+        return this.fetchPromise;
     }
 
     constructor (args : {
