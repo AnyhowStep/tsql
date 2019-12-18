@@ -24,6 +24,7 @@ export * from "./derived-table-select-item";
 export * from "./design-pattern-log";
 export * from "./design-pattern-table-per-type";
 export * from "./equatable-type";
+export * from "./event";
 export * from "./execution";
 export * from "./expr";
 export * from "./expr-library";

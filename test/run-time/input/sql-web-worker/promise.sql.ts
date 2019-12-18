@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import * as tsql from "../../../../dist";
 import {ISqliteWorker, SqliteAction, FromSqliteMessage, ToSqliteMessage} from "./worker.sql";
-import {AsyncQueue} from "../../../../dist";
+import {AsyncQueue, PoolEventEmitter, IPool} from "../../../../dist";
 import {sqliteSqlfier} from "../../../sqlite-sqlfier";
 import {ITable, BuiltInExprUtil, WhereClause, DeletableTable, DeleteResult, BuiltInAssignmentMap, UpdateResult} from "../../../../dist";
 
@@ -88,21 +88,32 @@ interface TransactionInformation {
     isInTransaction : boolean;
 }
 
+interface ConnectionEventEmitterCollection {
+    readonly onInsertOne : tsql.ConnectionEventEmitter<tsql.IInsertOneEvent<tsql.ITable>>;
+}
+
 /**
  * Only one operation can be running at any point in time.
  */
 export class Connection {
+    private readonly pool : IPool;
     private readonly idAllocator : IdAllocator;
     private readonly asyncQueue : AsyncQueue<ISqliteWorker>;
     private readonly transactionInfo : TransactionInformation;
 
+    private readonly eventEmitters : ConnectionEventEmitterCollection;
+
     constructor (
+        pool : IPool,
         worker : ISqliteWorker|AsyncQueue<ISqliteWorker>,
         idAllocator : IdAllocator,
-        transactionInfo : TransactionInformation
+        transactionInfo : TransactionInformation,
+        eventEmitters : ConnectionEventEmitterCollection
     ) {
+        this.pool = pool;
         this.idAllocator = idAllocator;
         this.transactionInfo = transactionInfo;
+        this.eventEmitters = eventEmitters;
 
         this.asyncQueue = worker instanceof AsyncQueue ?
             worker :
@@ -115,8 +126,13 @@ export class Connection {
                 }
             );
     }
-    deallocate () {
-        return this.asyncQueue.stop();
+    async deallocate () {
+        await this.asyncQueue.stop();
+        /**
+         * @todo Handle sync errors somehow.
+         * Maybe propagate them to `IPool` and have an `onError` handler or something
+         */
+        this.eventEmitters.onInsertOne.flushOnCommit();
     }
 
     allocateId () {
@@ -223,9 +239,11 @@ export class Connection {
     ) : Promise<ResultT> {
         return this.asyncQueue.lock((nestedAsyncQueue) => {
             const nestedConnection = new Connection(
+                this.pool,
                 nestedAsyncQueue,
                 this.idAllocator,
-                this.transactionInfo
+                this.transactionInfo,
+                this.eventEmitters
             );
             return callback(
                 nestedConnection as unknown as tsql.IConnection
@@ -357,7 +375,7 @@ export class Connection {
                         BigInt(0)
                     );
 
-                    return {
+                    const insertOneResult : tsql.InsertOneResult = {
                         query : { sql, },
                         insertedRowCount : BigInt(1) as 1n,
                         autoIncrementId : (
@@ -370,6 +388,21 @@ export class Connection {
                         warningCount : BigInt(0),
                         message : "ok",
                     };
+                    await nestedConnection.eventEmitters.onInsertOne.invoke(new tsql.InsertOneEvent({
+                        pool : nestedConnection.pool,
+                        connection : nestedConnection as unknown as tsql.IConnection,
+                        table,
+                        insertResult : insertOneResult,
+                        insertRow : (
+                            table.autoIncrement == undefined ?
+                            row :
+                            {
+                                ...row,
+                                [table.autoIncrement] : autoIncrementId,
+                            }
+                        ),
+                    }));
+                    return insertOneResult;
                 })
                 .catch((err) => {
                     //console.error("error encountered", sql);
@@ -1118,6 +1151,11 @@ export class Connection {
         return this.exec("ROLLBACK")
             .then(() => {
                 this.transactionInfo.isInTransaction = false;
+                /**
+                 * @todo Handle sync errors somehow.
+                 * Maybe propagate them to `IPool` and have an `onError` handler or something
+                 */
+                this.eventEmitters.onInsertOne.flushOnRollback();
             });
     }
     commit () : Promise<void> {
@@ -1127,6 +1165,11 @@ export class Connection {
         return this.exec("COMMIT")
             .then(() => {
                 this.transactionInfo.isInTransaction = false;
+                /**
+                 * @todo Handle sync errors somehow.
+                 * Maybe propagate them to `IPool` and have an `onError` handler or something
+                 */
+                this.eventEmitters.onInsertOne.flushOnCommit();
             });
     }
 
@@ -1144,6 +1187,17 @@ export class Connection {
         return new Promise<ResultT>((resolve, reject) => {
             this.exec("BEGIN TRANSACTION")
                 .then(() => {
+                    /**
+                     * @todo Handle sync errors somehow.
+                     * Maybe propagate them to `IPool` and have an `onError` handler or something
+                     */
+                    this.eventEmitters.onInsertOne.flushOnCommit();
+                    if (!this.isInTransaction()) {
+                        /**
+                         * Why did one of the `OnCommit` listeners call `commit()` or `rollback()`?
+                         */
+                        throw new Error(`Expected to be in transaction`);
+                    }
                     return callback(this as unknown as tsql.ITransactionConnection);
                 })
                 .then((result) => {
@@ -1278,7 +1332,7 @@ export class Connection {
 /**
  * Only one connection can be allocated at any point in time.
  */
-export class Pool {
+export class Pool implements tsql.IPool {
     private readonly worker : ISqliteWorker;
     private readonly idAllocator : IdAllocator;
     private readonly transactionInfo : TransactionInformation = {
@@ -1290,7 +1344,15 @@ export class Pool {
         this.idAllocator = new IdAllocator();
         this.asyncQueue = new AsyncQueue<Connection>(
             () => {
-                const connection = new Connection(this.worker, this.idAllocator, this.transactionInfo);
+                const connection = new Connection(
+                    this,
+                    this.worker,
+                    this.idAllocator,
+                    this.transactionInfo,
+                    {
+                        onInsertOne : this.onInsertOne.createConnectionEventEmitter(),
+                    }
+                );
                 return {
                     item : connection,
                     deallocate : () => {
@@ -1299,11 +1361,22 @@ export class Pool {
                 };
             }
         );
-        this.acquire = this.asyncQueue.enqueue;
+        this.acquire = this.asyncQueue.enqueue as AsyncQueue<tsql.IConnection & Connection>["enqueue"];
     }
 
-    readonly acquire : AsyncQueue<Connection>["enqueue"];
+    readonly acquire : AsyncQueue<tsql.IConnection & Connection>["enqueue"];
+
+    acquireTransaction<ResultT> (
+        callback : tsql.TransactionCallback<ResultT>
+    ) : Promise<ResultT> {
+        return this.acquire((connection) => {
+            return connection.transaction(callback);
+        });
+    }
+
     disconnect () : Promise<void> {
         return this.asyncQueue.stop();
     }
+
+    readonly onInsertOne = new PoolEventEmitter<tsql.IInsertOneEvent<ITable>>();
 }

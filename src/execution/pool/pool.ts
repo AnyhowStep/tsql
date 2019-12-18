@@ -1,4 +1,6 @@
 import {IConnection, ITransactionConnection} from "../connection";
+import {ITable} from "../../table";
+import {IPoolEventEmitter, IInsertOneEvent} from "../../event";
 
 export type ConnectionCallback<ResultT> = (
     (connection : IConnection) => Promise<ResultT>
@@ -19,4 +21,6 @@ export interface IPool {
     ) : Promise<ResultT>;
 
     disconnect () : Promise<void>;
+
+    readonly onInsertOne : IPoolEventEmitter<IInsertOneEvent<ITable>>;
 }
