@@ -1,8 +1,9 @@
 import * as tm from "type-mapping";
 import {ITable, TableWithAutoIncrement, InsertableTable, TableUtil} from "../../../table";
 import {InsertOneConnection, InsertOneResult} from "../../connection";
-import {CustomInsertRow, InsertUtil} from "../../../insert";
+import {CustomInsertRow, InsertUtil, BuiltInInsertRow} from "../../../insert";
 import {DataTypeUtil} from "../../../data-type";
+import {InsertOneEvent} from "../../../event";
 
 export type InsertOneResultWithAutoIncrement<
     AutoIncrementColumnAlias extends string
@@ -18,26 +19,23 @@ export type InsertOneWithAutoIncrementReturnType<
 ;
 
 /**
- * Only inserts one row
- * ```sql
- *  INSERT INTO
- *      myTable (...column_list)
- *  VALUES
- *      (...value_list);
- * ```
+ * Does not invoke events.
  */
-export async function insertOne<
+async function insertOneImpl<
     TableT extends ITable & InsertableTable
 > (
     table : TableT,
     connection : InsertOneConnection,
     row : CustomInsertRow<TableT>
 ) : (
-    Promise<
-        TableT extends TableWithAutoIncrement ?
-        InsertOneWithAutoIncrementReturnType<TableT> :
-        InsertOneResult
-    >
+    Promise<{
+        insertRow : BuiltInInsertRow<TableT>,
+        insertResult : (
+            TableT extends TableWithAutoIncrement ?
+            InsertOneWithAutoIncrementReturnType<TableT> :
+            InsertOneResult
+        ),
+    }>
 ) {
     TableUtil.assertInsertEnabled(table);
 
@@ -47,7 +45,14 @@ export async function insertOne<
     row = InsertUtil.cleanInsertRow(table, row);
 
     if (table.autoIncrement == undefined) {
-        return connection.insertOne(table, row) as any;
+        return {
+            insertRow : row,
+            insertResult : await connection.insertOne(table, row) as (
+                TableT extends TableWithAutoIncrement ?
+                InsertOneWithAutoIncrementReturnType<TableT> :
+                InsertOneResult
+            ),
+        };
     }
 
     let explicitAutoIncrementBuiltInExpr = (row as { [k:string]:unknown })[table.autoIncrement];
@@ -57,9 +62,16 @@ export async function insertOne<
 
         if (insertResult.autoIncrementId != undefined) {
             return {
-                ...insertResult,
-                [table.autoIncrement] : insertResult.autoIncrementId,
-            } as any;
+                insertRow : row,
+                insertResult : {
+                    ...insertResult,
+                    [table.autoIncrement] : insertResult.autoIncrementId,
+                } as (
+                    TableT extends TableWithAutoIncrement ?
+                    InsertOneWithAutoIncrementReturnType<TableT> :
+                    InsertOneResult
+                ),
+            };
         }
 
         /**
@@ -90,9 +102,16 @@ export async function insertOne<
      */
     if (insertResult.autoIncrementId != undefined) {
         return {
-            ...insertResult,
-            [table.autoIncrement] : insertResult.autoIncrementId,
-        } as any;
+            insertRow : row,
+            insertResult : {
+                ...insertResult,
+                [table.autoIncrement] : insertResult.autoIncrementId,
+            } as (
+                TableT extends TableWithAutoIncrement ?
+                InsertOneWithAutoIncrementReturnType<TableT> :
+                InsertOneResult
+            ),
+        };
     }
 
     /**
@@ -100,8 +119,77 @@ export async function insertOne<
      * Use it.
      */
     return {
-        ...insertResult,
-        autoIncrementId : autoIncrementBigInt,
-        [table.autoIncrement] : autoIncrementBigInt,
-    } as any;
+        insertRow : row,
+        insertResult : {
+            ...insertResult,
+            autoIncrementId : autoIncrementBigInt,
+            [table.autoIncrement] : autoIncrementBigInt,
+        } as (
+            TableT extends TableWithAutoIncrement ?
+            InsertOneWithAutoIncrementReturnType<TableT> :
+            InsertOneResult
+        ),
+    };
+}
+
+/**
+ * Only inserts one row
+ * ```sql
+ *  INSERT INTO
+ *      myTable (...column_list)
+ *  VALUES
+ *      (...value_list);
+ * ```
+ */
+export async function insertOne<
+    TableT extends ITable & InsertableTable
+> (
+    table : TableT,
+    connection : InsertOneConnection,
+    row : CustomInsertRow<TableT>
+) : (
+    Promise<
+        TableT extends TableWithAutoIncrement ?
+        InsertOneWithAutoIncrementReturnType<TableT> :
+        InsertOneResult
+    >
+) {
+    const {
+        insertRow,
+        insertResult,
+    } = await insertOneImpl<TableT>(
+        table,
+        connection,
+        row
+    );
+
+    const fullConnection = connection.tryGetFullConnection();
+    if (fullConnection != undefined) {
+        await fullConnection.eventEmitters.onInsertOne.invoke(new InsertOneEvent({
+            connection : fullConnection,
+            table,
+            insertRow : (
+                table.autoIncrement == undefined ?
+                insertRow :
+                {
+                    ...insertRow,
+                    /**
+                     * The column may be specified to be `string|number|bigint`.
+                     * So, we need to use the column's mapper,
+                     * to get the desired data type.
+                     */
+                    [table.autoIncrement] : table.columns[table.autoIncrement].mapper(
+                        `${table.alias}.${table.autoIncrement}`,
+                        /**
+                         * This **should** be `bigint`
+                         */
+                        insertResult.autoIncrementId
+                    ),
+                }
+            ),
+            insertResult,
+        }));
+    }
+
+    return insertResult;
 }

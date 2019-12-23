@@ -3,6 +3,7 @@ import {WhereDelegate, WhereClauseUtil} from "../../../where-clause";
 import {FromClauseUtil} from "../../../from-clause";
 import {UpdateConnection, UpdateResult} from "../../connection";
 import {AssignmentMapDelegate, UpdateUtil} from "../../../update";
+import {UpdateEvent} from "../../../event";
 
 export async function update<
     TableT extends ITable
@@ -17,7 +18,7 @@ export async function update<
     >,
     assignmentMapDelegate : AssignmentMapDelegate<TableT>
 ) : Promise<UpdateResult> {
-    const where = WhereClauseUtil.where(
+    const whereClause = WhereClauseUtil.where(
         FromClauseUtil.from<
             FromClauseUtil.NewInstance,
             TableT
@@ -35,5 +36,18 @@ export async function update<
         whereDelegate
     );
     const assignmentMap = UpdateUtil.set(table, assignmentMapDelegate);
-    return connection.update(table, where, assignmentMap);
+    const updateResult = await connection.update(table, whereClause, assignmentMap);
+
+    const fullConnection = connection.tryGetFullConnection();
+    if (fullConnection != undefined) {
+        await fullConnection.eventEmitters.onUpdate.invoke(new UpdateEvent({
+            connection : fullConnection,
+            table,
+            whereClause,
+            assignmentMap,
+            updateResult,
+        }));
+    }
+
+    return updateResult;
 }

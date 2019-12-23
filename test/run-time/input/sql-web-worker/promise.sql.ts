@@ -247,6 +247,10 @@ export class Connection {
         });
     }
 
+    tryGetFullConnection () : tsql.IConnection|undefined {
+        return this as unknown as tsql.IConnection;
+    }
+
     select (query : tsql.IQueryBase) : Promise<tsql.SelectResult> {
         const sql = tsql.AstUtil.toSql(query, sqliteSqlfier);
         return this.exec(sql)
@@ -384,20 +388,6 @@ export class Connection {
                         warningCount : BigInt(0),
                         message : "ok",
                     };
-                    await nestedConnection.eventEmitters.onInsertOne.invoke(new tsql.InsertOneEvent({
-                        pool : nestedConnection.pool,
-                        connection : nestedConnection as unknown as tsql.IConnection,
-                        table,
-                        insertResult : insertOneResult,
-                        insertRow : (
-                            table.autoIncrement == undefined ?
-                            row :
-                            {
-                                ...row,
-                                [table.autoIncrement] : autoIncrementId,
-                            }
-                        ),
-                    }));
                     return insertOneResult;
                 })
                 .catch((err) => {
@@ -1373,4 +1363,5 @@ export class Pool implements tsql.IPool {
     }
 
     readonly onInsertOne = new PoolEventEmitter<tsql.IInsertOneEvent<ITable>>();
+    readonly onUpdate = new PoolEventEmitter<tsql.IUpdateEvent<ITable>>();
 }

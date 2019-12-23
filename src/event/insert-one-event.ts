@@ -1,17 +1,17 @@
 import * as tm from "type-mapping";
-import {InsertOneResult, IPool, IConnection} from "../execution";
+import {InsertOneResult, IConnection} from "../execution";
 import {ITable, TableUtil} from "../table";
 import {BuiltInInsertRow} from "../insert";
 import {CandidateKey_Output, CandidateKeyUtil} from "../candidate-key";
-import {IEventBase, EventBase} from "./pool-event-emitter";
 import {Row_Output} from "../row";
 import * as ExprLib from "../expr-library";
+import {IEventBase, EventBase} from "./event-base";
 
 export interface IInsertOneEvent<TableT extends ITable> extends IEventBase {
     readonly table : TableT;
+    readonly insertRow : BuiltInInsertRow<TableT>;
 
     readonly insertResult : InsertOneResult;
-    readonly insertRow : BuiltInInsertRow<TableT>;
 
     /**
      * If we can get the `candidateKey` from the `insertRow`, this will be set.
@@ -48,9 +48,9 @@ export interface IInsertOneEvent<TableT extends ITable> extends IEventBase {
 
 export class InsertOneEvent<TableT extends ITable> extends EventBase implements IInsertOneEvent<TableT> {
     readonly table : TableT;
+    readonly insertRow : BuiltInInsertRow<TableT>;
 
     readonly insertResult : InsertOneResult;
-    readonly insertRow : BuiltInInsertRow<TableT>;
 
     private candidateKeyCache : (
         | "uninitialized"
@@ -116,20 +116,19 @@ export class InsertOneEvent<TableT extends ITable> extends EventBase implements 
     }
 
     constructor (args : {
-        readonly pool : IPool;
         readonly connection : IConnection;
 
         readonly table : TableT;
+        readonly insertRow : BuiltInInsertRow<TableT>;
 
         readonly insertResult : InsertOneResult;
-        readonly insertRow : BuiltInInsertRow<TableT>;
     }) {
         super(args);
 
         this.table = args.table;
+        this.insertRow = args.insertRow;
 
         this.insertResult = args.insertResult;
-        this.insertRow = args.insertRow;
     }
 
     isFor<T extends ITable> (table : T) : this is IInsertOneEvent<T> {
