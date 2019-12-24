@@ -1,14 +1,12 @@
 import * as tm from "type-mapping";
-import {ITable, TableUtil} from "../../../table";
+import {ITable} from "../../../table";
 import {IsolableUpdateConnection} from "../../connection";
 import {AssignmentMapDelegate} from "../../../update";
 import {AssertNonUnion} from "../../../type-util";
-import {UpdateOneResult} from "./update-one";
 import * as ExprLib from "../../../expr-library";
 import {SuperKey_Input} from "../../../super-key";
 import {UpdateAndFetchOneBySuperKeyAssignmentMap, __updateAndFetchOneBySuperKeyHelper} from "./update-and-fetch-one-by-super-key";
-import {UpdateAndFetchZeroOrOneResult} from "./update-and-fetch-zero-or-one-by-candidate-key";
-import {updateZeroOrOne, NotFoundUpdateResult} from "./update-zero-or-one";
+import {UpdateAndFetchZeroOrOneResult, updateAndFetchZeroOrOneImpl} from "./update-and-fetch-zero-or-one-impl";
 
 export async function updateAndFetchZeroOrOneBySuperKey<
     TableT extends ITable,
@@ -62,35 +60,31 @@ export async function updateAndFetchZeroOrOneBySuperKey<
             newSuperKey,
         } = helperResult;
 
-        const updateZeroOrOneResult = await updateZeroOrOne(
+        return updateAndFetchZeroOrOneImpl<
+            TableT,
+            AssignmentMapT
+        >(
             table,
             connection,
             () => ExprLib.eqSuperKey(
                 table,
                 curSuperKey
             ) as any,
-            () => assignmentMap
-        );
-        if (tm.BigIntUtil.equal(updateZeroOrOneResult.foundRowCount, tm.BigInt(0))) {
-            const notFoundUpdateResult = updateZeroOrOneResult as NotFoundUpdateResult;
-            return {
-                ...notFoundUpdateResult,
-                row : undefined,
-            };
-        } else {
-            const updateOneResult = updateZeroOrOneResult as UpdateOneResult;
-            const row = await TableUtil.__fetchOneHelper(
+            () => ExprLib.eqSuperKey(
                 table,
-                connection,
-                () => ExprLib.eqSuperKey(
-                    table,
-                    newSuperKey
-                ) as any
-            );
-            return {
-                ...updateOneResult,
-                row,
-            };
-        }
+                newSuperKey
+            ) as any,
+            /**
+             * This cast is unsound.
+             * What we have is not `AssignmentMapT`.
+             *
+             * We have a `BuiltInExpr` version of `AssignmentMapT`,
+             * with some parts possibly being evaluated to a value expression.
+             *
+             * However, this will not affect the correctness of
+             * our results.
+             */
+            assignmentMap as any
+        );
     });
 }

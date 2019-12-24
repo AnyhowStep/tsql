@@ -1,13 +1,11 @@
 import * as tm from "type-mapping";
-import {TableUtil, TableWithPrimaryKey} from "../../../table";
+import {TableWithPrimaryKey} from "../../../table";
 import {IsolableUpdateConnection} from "../../connection";
 import {AssignmentMapDelegate} from "../../../update";
-import {UpdateOneResult} from "./update-one";
 import * as ExprLib from "../../../expr-library";
 import {PrimaryKey_Input} from "../../../primary-key";
 import {UpdateAndFetchOneByPrimaryKeyAssignmentMap, __updateAndFetchOneByPrimaryKeyHelper} from "./update-and-fetch-one-by-primary-key";
-import {UpdateAndFetchZeroOrOneResult} from "./update-and-fetch-zero-or-one-by-candidate-key";
-import {updateZeroOrOne, NotFoundUpdateResult} from "./update-zero-or-one";
+import {UpdateAndFetchZeroOrOneResult, updateAndFetchZeroOrOneImpl} from "./update-and-fetch-zero-or-one-impl";
 
 export async function updateAndFetchZeroOrOneByPrimaryKey<
     TableT extends TableWithPrimaryKey,
@@ -59,35 +57,31 @@ export async function updateAndFetchZeroOrOneByPrimaryKey<
             newPrimaryKey,
         } = helperResult;
 
-        const updateZeroOrOneResult = await updateZeroOrOne(
+        return updateAndFetchZeroOrOneImpl<
+            TableT,
+            AssignmentMapT
+        >(
             table,
             connection,
             () => ExprLib.eqPrimaryKey(
                 table,
                 curPrimaryKey
             ) as any,
-            () => assignmentMap
-        );
-        if (tm.BigIntUtil.equal(updateZeroOrOneResult.foundRowCount, tm.BigInt(0))) {
-            const notFoundUpdateResult = updateZeroOrOneResult as NotFoundUpdateResult;
-            return {
-                ...notFoundUpdateResult,
-                row : undefined,
-            };
-        } else {
-            const updateOneResult = updateZeroOrOneResult as UpdateOneResult;
-            const row = await TableUtil.__fetchOneHelper(
+            () => ExprLib.eqPrimaryKey(
                 table,
-                connection,
-                () => ExprLib.eqPrimaryKey(
-                    table,
-                    newPrimaryKey
-                ) as any
-            );
-            return {
-                ...updateOneResult,
-                row,
-            };
-        }
+                newPrimaryKey
+            ) as any,
+            /**
+             * This cast is unsound.
+             * What we have is not `AssignmentMapT`.
+             *
+             * We have a `BuiltInExpr` version of `AssignmentMapT`,
+             * with some parts possibly being evaluated to a value expression.
+             *
+             * However, this will not affect the correctness of
+             * our results.
+             */
+            assignmentMap as any
+        );
     });
 }

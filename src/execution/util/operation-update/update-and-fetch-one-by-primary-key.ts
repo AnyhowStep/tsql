@@ -2,13 +2,12 @@ import {TableUtil, TableWithPrimaryKey} from "../../../table";
 import {IsolableUpdateConnection, SelectConnection} from "../../connection";
 import {AssignmentMapDelegate, CustomAssignmentMap} from "../../../update";
 import {Identity} from "../../../type-util";
-import {updateOne} from "./update-one";
 import {CustomExpr_MapCorrelatedOrUndefined} from "../../../custom-expr";
 import * as ExprLib from "../../../expr-library";
 import {PrimaryKey_Input, PrimaryKeyUtil} from "../../../primary-key";
-import {UpdateAndFetchOneResult} from "./update-and-fetch-one-by-candidate-key";
 import {RowNotFoundError} from "../../../error";
 import {BuiltInExprUtil} from "../../../built-in-expr";
+import {updateAndFetchOneImpl, UpdateAndFetchOneResult} from "./update-and-fetch-one-impl";
 
 export type UpdateAndFetchOneByPrimaryKeyAssignmentMapImpl<
     TableT extends TableWithPrimaryKey
@@ -177,26 +176,31 @@ export async function updateAndFetchOneByPrimaryKey<
             newPrimaryKey,
         } = helperResult;
 
-        const updateOneResult = await updateOne(
+        return updateAndFetchOneImpl<
+            TableT,
+            AssignmentMapT
+        >(
             table,
             connection,
             () => ExprLib.eqPrimaryKey(
                 table,
                 curPrimaryKey
             ) as any,
-            () => assignmentMap
-        );
-        const row = await TableUtil.__fetchOneHelper(
-            table,
-            connection,
             () => ExprLib.eqPrimaryKey(
                 table,
                 newPrimaryKey
-            ) as any
+            ) as any,
+            /**
+             * This cast is unsound.
+             * What we have is not `AssignmentMapT`.
+             *
+             * We have a `BuiltInExpr` version of `AssignmentMapT`,
+             * with some parts possibly being evaluated to a value expression.
+             *
+             * However, this will not affect the correctness of
+             * our results.
+             */
+            assignmentMap as any
         );
-        return {
-            ...updateOneResult,
-            row,
-        };
     });
 }

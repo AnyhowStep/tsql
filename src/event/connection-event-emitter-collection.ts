@@ -4,10 +4,12 @@ import {ITable} from "../table";
 import {IReadonlyTransactionListenerCollection} from "./transaction-listener-collection";
 import {IConnectionEventEmitter, ConnectionEventEmitter} from "./connection-event-emitter";
 import {IUpdateEvent} from "./update-event";
+import {IUpdateAndFetchEvent} from "./update-and-fetch-event";
 
 export interface IConnectionEventEmitterCollection {
     readonly onInsertOne : IConnectionEventEmitter<IInsertOneEvent<ITable>>;
     readonly onUpdate : IConnectionEventEmitter<IUpdateEvent<ITable>>;
+    readonly onUpdateAndFetch : IConnectionEventEmitter<IUpdateAndFetchEvent<ITable>>;
 
     flushOnCommit () : { syncErrors : unknown[] };
     flushOnRollback () : { syncErrors : unknown[] };
@@ -22,6 +24,7 @@ export class ConnectionEventEmitterCollection implements IConnectionEventEmitter
 
     readonly onInsertOne : ConnectionEventEmitter<IInsertOneEvent<ITable>>;
     readonly onUpdate : ConnectionEventEmitter<IUpdateEvent<ITable>>;
+    readonly onUpdateAndFetch : ConnectionEventEmitter<IUpdateAndFetchEvent<ITable>>;
 
     private readonly addTransactionListenerCollectionImpl = (event : IReadonlyTransactionListenerCollection) => {
         this.transactionListenerCollections = [...this.transactionListenerCollections, event];
@@ -34,6 +37,10 @@ export class ConnectionEventEmitterCollection implements IConnectionEventEmitter
         );
         this.onUpdate = new ConnectionEventEmitter<IUpdateEvent<ITable>>(
             pool.onUpdate,
+            this.addTransactionListenerCollectionImpl
+        );
+        this.onUpdateAndFetch = new ConnectionEventEmitter<IUpdateAndFetchEvent<ITable>>(
+            pool.onUpdateAndFetch,
             this.addTransactionListenerCollectionImpl
         );
     }
