@@ -3,42 +3,11 @@ import {IsolableUpdateConnection, SelectConnection} from "../../connection";
 import {AssignmentMapDelegate, CustomAssignmentMap} from "../../../update";
 import {CandidateKey_NonUnion, CandidateKeyUtil, CandidateKey_Input} from "../../../candidate-key";
 import {StrictUnion, Identity} from "../../../type-util";
-import {UpdateOneResult, updateOne} from "./update-one";
 import {BuiltInExprUtil} from "../../../built-in-expr";
-import {CustomExprUtil, CustomExpr_MapCorrelatedOrUndefined} from "../../../custom-expr";
+import {CustomExpr_MapCorrelatedOrUndefined} from "../../../custom-expr";
 import * as ExprLib from "../../../expr-library";
 import {RowNotFoundError} from "../../../error";
-
-export type UpdatedAndFetchedRow<
-    TableT extends ITable,
-    AssignmentMapT extends CustomAssignmentMap<TableT>
-> =
-    Identity<{
-        readonly [columnAlias in TableUtil.ColumnAlias<TableT>] : (
-            columnAlias extends keyof AssignmentMapT ?
-            (
-                undefined extends AssignmentMapT[columnAlias] ?
-                TableUtil.ColumnType<TableT, columnAlias> :
-                CustomExprUtil.TypeOf<
-                    AssignmentMapT[columnAlias]
-                >
-            ) :
-            TableUtil.ColumnType<TableT, columnAlias>
-        )
-    }>
-;
-
-export type UpdateAndFetchOneResult<
-    TableT extends ITable,
-    AssignmentMapT extends CustomAssignmentMap<TableT>
-> =
-    Identity<
-        & UpdateOneResult
-        & {
-            row : UpdatedAndFetchedRow<TableT, AssignmentMapT>,
-        }
-    >
-;
+import {UpdateAndFetchOneResult, updateAndFetchOneImpl} from "./update-and-fetch-one-impl";
 
 export type UpdateAndFetchOneByCandidateKeyAssignmentMapImpl<
     TableT extends ITable
@@ -213,26 +182,31 @@ export async function updateAndFetchOneByCandidateKey<
             newCandidateKey,
         } = helperResult;
 
-        const updateOneResult = await updateOne(
+        return updateAndFetchOneImpl<
+            TableT,
+            AssignmentMapT
+        >(
             table,
             connection,
             () => ExprLib.eqCandidateKey(
                 table,
                 curCandidateKey
             ) as any,
-            () => assignmentMap
-        );
-        const row = await TableUtil.__fetchOneHelper(
-            table,
-            connection,
             () => ExprLib.eqCandidateKey(
                 table,
                 newCandidateKey
-            ) as any
+            ) as any,
+            /**
+             * This cast is unsound.
+             * What we have is not `AssignmentMapT`.
+             *
+             * We have a `BuiltInExpr` version of `AssignmentMapT`,
+             * with some parts possibly being evaluated to a value expression.
+             *
+             * However, this will not affect the correctness of
+             * our results.
+             */
+            assignmentMap as any
         );
-        return {
-            ...updateOneResult,
-            row,
-        };
     });
 }

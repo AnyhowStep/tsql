@@ -36,18 +36,21 @@ export async function update<
         whereDelegate
     );
     const assignmentMap = UpdateUtil.set(table, assignmentMapDelegate);
-    const updateResult = await connection.update(table, whereClause, assignmentMap);
 
-    const fullConnection = connection.tryGetFullConnection();
-    if (fullConnection != undefined) {
-        await fullConnection.eventEmitters.onUpdate.invoke(new UpdateEvent({
-            connection : fullConnection,
-            table,
-            whereClause,
-            assignmentMap,
-            updateResult,
-        }));
-    }
+    return connection.lock(async (connection) : Promise<UpdateResult> => {
+        const updateResult = await connection.update(table, whereClause, assignmentMap);
 
-    return updateResult;
+        const fullConnection = connection.tryGetFullConnection();
+        if (fullConnection != undefined) {
+            await fullConnection.eventEmitters.onUpdate.invoke(new UpdateEvent({
+                connection : fullConnection,
+                table,
+                whereClause,
+                assignmentMap,
+                updateResult,
+            }));
+        }
+
+        return updateResult;
+    });
 }

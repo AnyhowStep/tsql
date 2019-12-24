@@ -1,25 +1,12 @@
 import * as tm from "type-mapping";
-import {ITable, TableUtil} from "../../../table";
+import {ITable} from "../../../table";
 import {IsolableUpdateConnection} from "../../connection";
-import {AssignmentMapDelegate, CustomAssignmentMap} from "../../../update";
+import {AssignmentMapDelegate} from "../../../update";
 import {CandidateKey_NonUnion} from "../../../candidate-key";
 import {StrictUnion} from "../../../type-util";
-import {UpdateOneResult} from "./update-one";
 import * as ExprLib from "../../../expr-library";
-import {NotFoundUpdateResult, updateZeroOrOne} from "./update-zero-or-one";
-import {UpdateAndFetchOneResult, UpdateAndFetchOneByCandidateKeyAssignmentMap, __updateAndFetchOneByCandidateKeyHelper} from "./update-and-fetch-one-by-candidate-key";
-
-export interface NotFoundUpdateAndFetchResult extends NotFoundUpdateResult {
-    row : undefined,
-}
-
-export type UpdateAndFetchZeroOrOneResult<
-    TableT extends ITable,
-    AssignmentMapT extends CustomAssignmentMap<TableT>
-> =
-    | NotFoundUpdateAndFetchResult
-    | UpdateAndFetchOneResult<TableT, AssignmentMapT>
-;
+import {UpdateAndFetchOneByCandidateKeyAssignmentMap, __updateAndFetchOneByCandidateKeyHelper} from "./update-and-fetch-one-by-candidate-key";
+import {UpdateAndFetchZeroOrOneResult, updateAndFetchZeroOrOneImpl} from "./update-and-fetch-zero-or-one-impl";
 
 export async function updateAndFetchZeroOrOneByCandidateKey<
     TableT extends ITable,
@@ -73,35 +60,31 @@ export async function updateAndFetchZeroOrOneByCandidateKey<
             newCandidateKey,
         } = helperResult;
 
-        const updateZeroOrOneResult = await updateZeroOrOne(
+        return updateAndFetchZeroOrOneImpl<
+            TableT,
+            AssignmentMapT
+        >(
             table,
             connection,
             () => ExprLib.eqCandidateKey(
                 table,
                 curCandidateKey
             ) as any,
-            () => assignmentMap
-        );
-        if (tm.BigIntUtil.equal(updateZeroOrOneResult.foundRowCount, tm.BigInt(0))) {
-            const notFoundUpdateResult = updateZeroOrOneResult as NotFoundUpdateResult;
-            return {
-                ...notFoundUpdateResult,
-                row : undefined,
-            };
-        } else {
-            const updateOneResult = updateZeroOrOneResult as UpdateOneResult;
-            const row = await TableUtil.__fetchOneHelper(
+            () => ExprLib.eqCandidateKey(
                 table,
-                connection,
-                () => ExprLib.eqCandidateKey(
-                    table,
-                    newCandidateKey
-                ) as any
-            );
-            return {
-                ...updateOneResult,
-                row,
-            };
-        }
+                newCandidateKey
+            ) as any,
+            /**
+             * This cast is unsound.
+             * What we have is not `AssignmentMapT`.
+             *
+             * We have a `BuiltInExpr` version of `AssignmentMapT`,
+             * with some parts possibly being evaluated to a value expression.
+             *
+             * However, this will not affect the correctness of
+             * our results.
+             */
+            assignmentMap as any
+        );
     });
 }
