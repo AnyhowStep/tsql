@@ -22,10 +22,28 @@ export class EventBase implements IEventBase, IReadonlyTransactionListenerCollec
 
     private onCommitListeners : readonly (() => void)[] = [];
     private onRollbackListeners : readonly (() => void)[] = [];
+    /**
+     * If the `listener` has already been added, it will be ignored.
+     */
     addOnCommitListener (listener : () => void) : void {
+        if (this.onCommitListeners.includes(listener)) {
+            /**
+             * We do not want duplicate listener references.
+             */
+            return;
+        }
         this.onCommitListeners = [...this.onCommitListeners, listener];
     }
+    /**
+     * If the `listener` has already been added, it will be ignored.
+     */
     addOnRollbackListener (listener : () => void) : void {
+        if (this.onRollbackListeners.includes(listener)) {
+            /**
+             * We do not want duplicate listener references.
+             */
+            return;
+        }
         this.onRollbackListeners = [...this.onRollbackListeners, listener];
     }
     /**

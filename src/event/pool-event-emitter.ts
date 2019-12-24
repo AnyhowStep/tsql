@@ -15,20 +15,30 @@ export class PoolEventEmitter<EventT extends IEventBase> implements IPoolEventEm
      */
     private handlers : readonly EventHandler<EventT>[] = [];
 
+    /**
+     * If the `handler` has already been added, it will be ignored.
+     */
     addHandler (handler : EventHandler<EventT>) : void {
+        if (this.handlers.includes(handler)) {
+            /**
+             * We do not want duplicate handler references.
+             */
+            return;
+        }
         this.handlers = [...this.handlers, handler];
     }
     removeHandler (handler : EventHandler<EventT>) : void {
-        while (true) {
-            const index = this.handlers.indexOf(handler);
-            if (index < 0) {
-                return;
-            }
-            this.handlers = [
-                ...this.handlers.slice(0, index),
-                ...this.handlers.slice(index+1),
-            ];
+        /**
+         * We should not have duplicates
+         */
+        const index = this.handlers.indexOf(handler);
+        if (index < 0) {
+            return;
         }
+        this.handlers = [
+            ...this.handlers.slice(0, index),
+            ...this.handlers.slice(index+1),
+        ];
     }
     getHandlers () : readonly EventHandler<EventT>[] {
         return this.handlers;
