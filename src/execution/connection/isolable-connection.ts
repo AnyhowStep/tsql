@@ -1,4 +1,4 @@
-import {SelectConnection, DeleteConnection, UpdateConnection, InsertOneConnection} from "./connection";
+import {SelectConnection, DeleteConnection, UpdateConnection, InsertOneConnection, IConnection} from "./connection";
 
 export type IsolableLockCallback<T, ResultT> = (
     (connection : T & IsolableConnection<T>) => Promise<ResultT>
@@ -13,6 +13,8 @@ export type IsolatedCallback<T, ResultT> = (
  * Allows you to use transactions for isolating queries.
  */
 export interface IsolableConnection<T> {
+    tryGetFullConnection () : IConnection|undefined;
+
     lock<ResultT> (
         callback : IsolableLockCallback<T, ResultT>
     ) : Promise<ResultT>;

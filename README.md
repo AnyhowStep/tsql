@@ -273,7 +273,6 @@ http://lokijs.org/
 
 ### TODO Feature Parity with `typed-orm`
 
-+ Table-Per-Type Utils
 + Emulated `FULL OUTER JOIN` (MySQL does not have it)
 
 -----

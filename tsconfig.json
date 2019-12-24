@@ -76,6 +76,7 @@
         "./src/design-pattern-table-per-type/**/*",
         "./src/promise-util/**/*",
         "./src/async-queue.ts",
+        "./src/event/**/*",
         "./src/index.ts"
     ]
 }

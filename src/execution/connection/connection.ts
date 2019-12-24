@@ -1,4 +1,4 @@
-import {TransactionCallback} from "../pool";
+import {TransactionCallback, IPool} from "../pool";
 import {IQueryBase, QueryBaseUtil} from "../../query-base";
 import {InsertableTable, DeletableTable, ITable} from "../../table";
 import {BuiltInInsertRow} from "../../insert";
@@ -6,6 +6,7 @@ import {InsertSelectRow} from "../../insert-select";
 import {WhereClause} from "../../where-clause";
 import {BuiltInAssignmentMap} from "../../update";
 import {SchemaMeta} from "../../schema-introspection";
+import {IConnectionEventEmitterCollection} from "../../event";
 
 export interface RawQueryResult {
     query   : { sql : string },
@@ -204,6 +205,11 @@ export type LockCallback<ResultT> = (
     (connection : IConnection) => Promise<ResultT>
 );
 export interface IConnection {
+    readonly pool : IPool;
+    readonly eventEmitters : IConnectionEventEmitterCollection;
+
+    tryGetFullConnection () : IConnection|undefined;
+
     lock<ResultT> (
         callback : LockCallback<ResultT>
     ) : Promise<ResultT>;
@@ -303,10 +309,12 @@ export interface ITransactionConnection extends IConnection {
 }
 
 export type RestrictedLockCallback<T, ResultT> =
-    (connection : T & RestrictedLockableConnection<T>) => Promise<ResultT>
+    (connection : T & RestrictedConnectionImpl<T>) => Promise<ResultT>
 ;
 
-export interface RestrictedLockableConnection<T> {
+export interface RestrictedConnectionImpl<T> {
+    tryGetFullConnection () : IConnection|undefined;
+
     lock<ResultT> (
         callback : RestrictedLockCallback<T, ResultT>
     ) : Promise<ResultT>;
@@ -320,7 +328,7 @@ export interface RestrictedLockableConnection<T> {
 
 export type RestrictedConnection<K extends keyof IConnection> =
     & Pick<IConnection, K>
-    & RestrictedLockableConnection<Pick<IConnection, K>>
+    & RestrictedConnectionImpl<Pick<IConnection, K>>
 ;
 
 /**
