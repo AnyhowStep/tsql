@@ -1,9 +1,10 @@
 import * as tm from "type-mapping";
 import {ITable, TableWithAutoIncrement, InsertableTable, TableUtil} from "../../../table";
-import {IgnoredInsertOneResult, InsertIgnoreOneResult, InsertIgnoreOneConnection} from "../../connection";
-import {CustomInsertRow, InsertUtil} from "../../../insert";
+import {IgnoredInsertOneResult, InsertIgnoreOneResult, InsertIgnoreOneConnection, InsertOneResult} from "../../connection";
+import {CustomInsertRow, InsertUtil, BuiltInInsertRow} from "../../../insert";
 import {InsertOneResultWithAutoIncrement} from "./insert-one";
 import {Identity} from "../../../type-util";
+import {InsertOneEvent} from "../../../event";
 
 export type IgnoredInsertOneResultWithAutoIncrement<
     AutoIncrementColumnAlias extends string
@@ -31,34 +32,45 @@ function isIgnoredResult (result : InsertIgnoreOneResult) : result is IgnoredIns
     return tm.BigIntUtil.equal(result.insertedRowCount, tm.BigInt(0));
 }
 
+function isInsertOneResult (result : InsertIgnoreOneResult) : result is InsertOneResult {
+    return !isIgnoredResult(result);
+}
+
 /**
- * Only inserts zero or one row
- * ```sql
- *  INSERT IGNORE INTO
- *      myTable (...column_list)
- *  VALUES
- *      (...value_list);
- * ```
+ * Does not invoke events.
  */
-export async function insertIgnoreOne<
+async function insertIgnoreOneImpl<
     TableT extends ITable & InsertableTable
 > (
     table : TableT,
     connection : InsertIgnoreOneConnection,
     row : CustomInsertRow<TableT>
 ) : (
-    Promise<
-        TableT extends TableWithAutoIncrement ?
-        InsertIgnoreOneWithAutoIncrementReturnType<TableT> :
-        InsertIgnoreOneResult
-    >
+    Promise<{
+        insertRow : BuiltInInsertRow<TableT>,
+        insertResult : (
+            TableT extends TableWithAutoIncrement ?
+            InsertIgnoreOneWithAutoIncrementReturnType<TableT> :
+            InsertIgnoreOneResult
+        )
+    }>
 ) {
     TableUtil.assertInsertEnabled(table);
 
+    /**
+     * Should contain only `BuiltInExpr` now
+     */
     row = InsertUtil.cleanInsertRow(table, row);
 
     if (table.autoIncrement == undefined) {
-        return connection.insertIgnoreOne(table, row) as any;
+        return {
+            insertRow : row,
+            insertResult : await connection.insertIgnoreOne(table, row) as (
+                TableT extends TableWithAutoIncrement ?
+                InsertIgnoreOneWithAutoIncrementReturnType<TableT> :
+                InsertIgnoreOneResult
+            ),
+        };
     }
 
     const explicitAutoIncrementValue = (row as { [k:string]:unknown })[table.autoIncrement];
@@ -68,16 +80,30 @@ export async function insertIgnoreOne<
 
         if (isIgnoredResult(insertIgnoreResult)) {
             return {
-                ...insertIgnoreResult,
-                [table.autoIncrement] : insertIgnoreResult.autoIncrementId,
-            } as any;
+                insertRow : row,
+                insertResult : {
+                    ...insertIgnoreResult,
+                    [table.autoIncrement] : insertIgnoreResult.autoIncrementId,
+                } as (
+                    TableT extends TableWithAutoIncrement ?
+                    InsertIgnoreOneWithAutoIncrementReturnType<TableT> :
+                    InsertIgnoreOneResult
+                ),
+            };
         }
 
         if (insertIgnoreResult.autoIncrementId != undefined) {
             return {
-                ...insertIgnoreResult,
-                [table.autoIncrement] : insertIgnoreResult.autoIncrementId,
-            } as any;
+                insertRow : row,
+                insertResult : {
+                    ...insertIgnoreResult,
+                    [table.autoIncrement] : insertIgnoreResult.autoIncrementId,
+                } as (
+                    TableT extends TableWithAutoIncrement ?
+                    InsertIgnoreOneWithAutoIncrementReturnType<TableT> :
+                    InsertIgnoreOneResult
+                ),
+            };
         }
 
         /**
@@ -101,16 +127,30 @@ export async function insertIgnoreOne<
 
     if (isIgnoredResult(insertIgnoreResult)) {
         return {
-            ...insertIgnoreResult,
-            [table.autoIncrement] : insertIgnoreResult.autoIncrementId,
-        } as any;
+            insertRow : row,
+            insertResult : {
+                ...insertIgnoreResult,
+                [table.autoIncrement] : insertIgnoreResult.autoIncrementId,
+            } as (
+                TableT extends TableWithAutoIncrement ?
+                InsertIgnoreOneWithAutoIncrementReturnType<TableT> :
+                InsertIgnoreOneResult
+            ),
+        };
     }
 
     if (insertIgnoreResult.autoIncrementId != undefined) {
         return {
-            ...insertIgnoreResult,
-            [table.autoIncrement] : insertIgnoreResult.autoIncrementId,
-        } as any;
+            insertRow : row,
+            insertResult : {
+                ...insertIgnoreResult,
+                [table.autoIncrement] : insertIgnoreResult.autoIncrementId,
+            } as (
+                TableT extends TableWithAutoIncrement ?
+                InsertIgnoreOneWithAutoIncrementReturnType<TableT> :
+                InsertIgnoreOneResult
+            ),
+        };
     }
 
     const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
@@ -119,8 +159,87 @@ export async function insertIgnoreOne<
      * Use it.
      */
     return {
-        ...insertIgnoreResult,
-        autoIncrementId : BigInt(explicitAutoIncrementValue),
-        [table.autoIncrement] : BigInt(explicitAutoIncrementValue),
-    } as any;
+        insertRow : row,
+        insertResult : {
+            ...insertIgnoreResult,
+            autoIncrementId : BigInt(explicitAutoIncrementValue),
+            [table.autoIncrement] : BigInt(explicitAutoIncrementValue),
+        } as (
+            TableT extends TableWithAutoIncrement ?
+            InsertIgnoreOneWithAutoIncrementReturnType<TableT> :
+            InsertIgnoreOneResult
+        ),
+    };
+}
+
+/**
+ * Only inserts zero or one row
+ * ```sql
+ *  INSERT IGNORE INTO
+ *      myTable (...column_list)
+ *  VALUES
+ *      (...value_list);
+ * ```
+ */
+export async function insertIgnoreOne<
+    TableT extends ITable & InsertableTable
+> (
+    table : TableT,
+    connection : InsertIgnoreOneConnection,
+    row : CustomInsertRow<TableT>
+) : (
+    Promise<
+        TableT extends TableWithAutoIncrement ?
+        InsertIgnoreOneWithAutoIncrementReturnType<TableT> :
+        InsertIgnoreOneResult
+    >
+) {
+    return connection.lock(async (connection) : (
+        Promise<
+            TableT extends TableWithAutoIncrement ?
+            InsertIgnoreOneWithAutoIncrementReturnType<TableT> :
+            InsertIgnoreOneResult
+        >
+    ) => {
+        const {
+            insertRow,
+            insertResult,
+        } = await insertIgnoreOneImpl<TableT>(
+            table,
+            connection,
+            row
+        );
+
+        if (isInsertOneResult(insertResult)) {
+            const fullConnection = connection.tryGetFullConnection();
+            if (fullConnection != undefined) {
+                await fullConnection.eventEmitters.onInsertOne.invoke(new InsertOneEvent({
+                    connection : fullConnection,
+                    table,
+                    insertRow : (
+                        table.autoIncrement == undefined ?
+                        insertRow :
+                        {
+                            ...insertRow,
+                            /**
+                             * The column may be specified to be `string|number|bigint`.
+                             * So, we need to use the column's mapper,
+                             * to get the desired data type.
+                             */
+                            [table.autoIncrement] : table.columns[table.autoIncrement].mapper(
+                                `${table.alias}.${table.autoIncrement}`,
+                                /**
+                                 * This **should** be `bigint`
+                                 */
+                                insertResult.autoIncrementId
+                            ),
+                        }
+                    ),
+                    insertResult,
+                }));
+            }
+        }
+
+        return insertResult;
+    });
 }

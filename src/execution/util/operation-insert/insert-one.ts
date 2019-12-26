@@ -154,42 +154,50 @@ export async function insertOne<
         InsertOneResult
     >
 ) {
-    const {
-        insertRow,
-        insertResult,
-    } = await insertOneImpl<TableT>(
-        table,
-        connection,
-        row
-    );
-
-    const fullConnection = connection.tryGetFullConnection();
-    if (fullConnection != undefined) {
-        await fullConnection.eventEmitters.onInsertOne.invoke(new InsertOneEvent({
-            connection : fullConnection,
-            table,
-            insertRow : (
-                table.autoIncrement == undefined ?
-                insertRow :
-                {
-                    ...insertRow,
-                    /**
-                     * The column may be specified to be `string|number|bigint`.
-                     * So, we need to use the column's mapper,
-                     * to get the desired data type.
-                     */
-                    [table.autoIncrement] : table.columns[table.autoIncrement].mapper(
-                        `${table.alias}.${table.autoIncrement}`,
-                        /**
-                         * This **should** be `bigint`
-                         */
-                        insertResult.autoIncrementId
-                    ),
-                }
-            ),
+    return connection.lock(async (connection) : (
+        Promise<
+            TableT extends TableWithAutoIncrement ?
+            InsertOneWithAutoIncrementReturnType<TableT> :
+            InsertOneResult
+        >
+    ) => {
+        const {
+            insertRow,
             insertResult,
-        }));
-    }
+        } = await insertOneImpl<TableT>(
+            table,
+            connection,
+            row
+        );
 
-    return insertResult;
+        const fullConnection = connection.tryGetFullConnection();
+        if (fullConnection != undefined) {
+            await fullConnection.eventEmitters.onInsertOne.invoke(new InsertOneEvent({
+                connection : fullConnection,
+                table,
+                insertRow : (
+                    table.autoIncrement == undefined ?
+                    insertRow :
+                    {
+                        ...insertRow,
+                        /**
+                         * The column may be specified to be `string|number|bigint`.
+                         * So, we need to use the column's mapper,
+                         * to get the desired data type.
+                         */
+                        [table.autoIncrement] : table.columns[table.autoIncrement].mapper(
+                            `${table.alias}.${table.autoIncrement}`,
+                            /**
+                             * This **should** be `bigint`
+                             */
+                            insertResult.autoIncrementId
+                        ),
+                    }
+                ),
+                insertResult,
+            }));
+        }
+
+        return insertResult;
+    });
 }
