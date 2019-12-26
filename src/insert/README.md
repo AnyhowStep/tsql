@@ -49,6 +49,8 @@ Can easily be unified if table has only one unique key.
 ### `REPLACE`
 
 + MySQL       : `REPLACE ...`
++ PostgreSQL  : `DELETE` then `INSERT`. This is how other databases do it.
+<!--
 + PostgreSQL  : ??? `INSERT ... ON CONFLICT ... DO UPDATE ...` but update every single column?
   + Can easily be emulated if the table has only one unique key.
   + https://www.postgresql.org/message-id/3A9D57F4.E85E3E6E%40agliodbs.com
@@ -63,7 +65,29 @@ Can easily be unified if table has only one unique key.
     However, we cannot use this if we are already in a transaction.
     + What about nested transactions?
   + https://stackoverflow.com/questions/35888012/use-multiple-conflict-target-in-on-conflict-clause
+-->
 + SQLite      : `REPLACE ...`
+
+-----
+
+```sql
+CREATE TABLE tableA (
+  column0 INT,
+    column1 INT,
+    PRIMARY KEY (column0),
+    CONSTRAINT x UNIQUE (column1)
+);
+INSERT INTO tableA VALUES (1, 2), (3, 4);
+SELECT * FROM tableA;
+REPLACE INTO tableA VALUES (1, 4);
+SELECT * FROM tableA;
+```
+
+Gives,
+
+| column0 | column1 |
+|---------|---------|
+| 1       | 4       |
 
 -----
 
@@ -89,8 +113,11 @@ Can easily be unified if table has only one unique key.
 How to emulate this for `PostgreSQL`?
 
 + MySQL       : `REPLACE ... SELECT ...`
++ PostgreSQL  : `DELETE` then `INSERT`.
+<!--
 + PostgreSQL  : ???
   + Can easily be emulated if the table has only one unique key.
+-->
 + SQLite      : `REPLACE ... SELECT ...`
 
 PostgreSQL is unable to handle tables with multiple unique keys,
