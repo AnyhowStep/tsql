@@ -2,6 +2,7 @@ import {DeletableTable, TableUtil} from "../../../table";
 import {WhereDelegate, WhereClauseUtil} from "../../../where-clause";
 import {FromClauseUtil} from "../../../from-clause";
 import {DeleteResult, DeleteConnection} from "../../connection";
+import {DeleteEvent} from "../../../event";
 
 async function del<
     TableT extends DeletableTable
@@ -17,7 +18,7 @@ async function del<
 ) : Promise<DeleteResult> {
     TableUtil.assertDeleteEnabled(table);
 
-    const where = WhereClauseUtil.where(
+    const whereClause = WhereClauseUtil.where(
         FromClauseUtil.from<
             FromClauseUtil.NewInstance,
             TableT
@@ -34,7 +35,21 @@ async function del<
         undefined,
         whereDelegate
     );
-    return connection.delete(table, where);
+    return connection.lock(async (connection) : Promise<DeleteResult> => {
+        const deleteResult = await connection.delete(table, whereClause);
+
+        const fullConnection = connection.tryGetFullConnection();
+        if (fullConnection != undefined) {
+            await fullConnection.eventEmitters.onDelete.invoke(new DeleteEvent({
+                connection : fullConnection,
+                table,
+                whereClause,
+                deleteResult,
+            }));
+        }
+
+        return deleteResult;
+    });
 }
 export {
     del as delete,

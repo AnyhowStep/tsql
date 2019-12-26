@@ -1,6 +1,6 @@
 import {IConnection, ITransactionConnection} from "../connection";
 import {ITable} from "../../table";
-import {IPoolEventEmitter, IInsertOneEvent, IUpdateEvent} from "../../event";
+import {IPoolEventEmitter, IInsertOneEvent, IUpdateEvent, IDeleteEvent} from "../../event";
 import {IUpdateAndFetchEvent} from "../../event/update-and-fetch-event";
 
 export type ConnectionCallback<ResultT> = (
@@ -24,6 +24,9 @@ export interface IPool {
     disconnect () : Promise<void>;
 
     readonly onInsertOne : IPoolEventEmitter<IInsertOneEvent<ITable>>;
+
     readonly onUpdate : IPoolEventEmitter<IUpdateEvent<ITable>>;
     readonly onUpdateAndFetch : IPoolEventEmitter<IUpdateAndFetchEvent<ITable>>;
+
+    readonly onDelete : IPoolEventEmitter<IDeleteEvent<ITable>>;
 }
