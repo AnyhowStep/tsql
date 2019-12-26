@@ -1,5 +1,6 @@
 export * from "./connection-event-emitter-collection";
 export * from "./connection-event-emitter";
+export * from "./delete-event";
 export * from "./event-base";
 export * from "./event-handler";
 export * from "./insert-one-event";

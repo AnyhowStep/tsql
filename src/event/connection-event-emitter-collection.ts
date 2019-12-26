@@ -5,11 +5,15 @@ import {IReadonlyTransactionListenerCollection} from "./transaction-listener-col
 import {IConnectionEventEmitter, ConnectionEventEmitter} from "./connection-event-emitter";
 import {IUpdateEvent} from "./update-event";
 import {IUpdateAndFetchEvent} from "./update-and-fetch-event";
+import {IDeleteEvent} from "./delete-event";
 
 export interface IConnectionEventEmitterCollection {
     readonly onInsertOne : IConnectionEventEmitter<IInsertOneEvent<ITable>>;
+
     readonly onUpdate : IConnectionEventEmitter<IUpdateEvent<ITable>>;
     readonly onUpdateAndFetch : IConnectionEventEmitter<IUpdateAndFetchEvent<ITable>>;
+
+    readonly onDelete : IConnectionEventEmitter<IDeleteEvent<ITable>>;
 
     flushOnCommit () : { syncErrors : unknown[] };
     flushOnRollback () : { syncErrors : unknown[] };
@@ -23,8 +27,11 @@ export class ConnectionEventEmitterCollection implements IConnectionEventEmitter
     private transactionListenerCollections : readonly IReadonlyTransactionListenerCollection[] = [];
 
     readonly onInsertOne : ConnectionEventEmitter<IInsertOneEvent<ITable>>;
+
     readonly onUpdate : ConnectionEventEmitter<IUpdateEvent<ITable>>;
     readonly onUpdateAndFetch : ConnectionEventEmitter<IUpdateAndFetchEvent<ITable>>;
+
+    readonly onDelete : IConnectionEventEmitter<IDeleteEvent<ITable>>;
 
     private readonly addTransactionListenerCollectionImpl = (event : IReadonlyTransactionListenerCollection) => {
         this.transactionListenerCollections = [...this.transactionListenerCollections, event];
@@ -35,12 +42,18 @@ export class ConnectionEventEmitterCollection implements IConnectionEventEmitter
             pool.onInsertOne,
             this.addTransactionListenerCollectionImpl
         );
+
         this.onUpdate = new ConnectionEventEmitter<IUpdateEvent<ITable>>(
             pool.onUpdate,
             this.addTransactionListenerCollectionImpl
         );
         this.onUpdateAndFetch = new ConnectionEventEmitter<IUpdateAndFetchEvent<ITable>>(
             pool.onUpdateAndFetch,
+            this.addTransactionListenerCollectionImpl
+        );
+
+        this.onDelete = new ConnectionEventEmitter<IDeleteEvent<ITable>>(
+            pool.onDelete,
             this.addTransactionListenerCollectionImpl
         );
     }
