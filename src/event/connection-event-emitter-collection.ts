@@ -1,13 +1,15 @@
 import {IPool} from "../execution";
-import {IInsertOneEvent} from "./insert-one-event";
 import {ITable} from "../table";
 import {IReadonlyTransactionListenerCollection} from "./transaction-listener-collection";
 import {IConnectionEventEmitter, ConnectionEventEmitter} from "./connection-event-emitter";
+import {IInsertEvent} from "./insert-event";
+import {IInsertOneEvent} from "./insert-one-event";
 import {IUpdateEvent} from "./update-event";
 import {IUpdateAndFetchEvent} from "./update-and-fetch-event";
 import {IDeleteEvent} from "./delete-event";
 
 export interface IConnectionEventEmitterCollection {
+    readonly onInsert : IConnectionEventEmitter<IInsertEvent<ITable>>;
     readonly onInsertOne : IConnectionEventEmitter<IInsertOneEvent<ITable>>;
 
     readonly onUpdate : IConnectionEventEmitter<IUpdateEvent<ITable>>;
@@ -26,6 +28,7 @@ export class ConnectionEventEmitterCollection implements IConnectionEventEmitter
      */
     private transactionListenerCollections : readonly IReadonlyTransactionListenerCollection[] = [];
 
+    readonly onInsert : IConnectionEventEmitter<IInsertEvent<ITable>>;
     readonly onInsertOne : ConnectionEventEmitter<IInsertOneEvent<ITable>>;
 
     readonly onUpdate : ConnectionEventEmitter<IUpdateEvent<ITable>>;
@@ -38,6 +41,10 @@ export class ConnectionEventEmitterCollection implements IConnectionEventEmitter
     };
 
     constructor (pool : IPool) {
+        this.onInsert = new ConnectionEventEmitter<IInsertEvent<ITable>>(
+            pool.onInsert,
+            this.addTransactionListenerCollectionImpl
+        );
         this.onInsertOne = new ConnectionEventEmitter<IInsertOneEvent<ITable>>(
             pool.onInsertOne,
             this.addTransactionListenerCollectionImpl

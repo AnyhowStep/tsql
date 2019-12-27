@@ -4,7 +4,7 @@ import {InsertSelectDelegate, InsertSelectUtil} from "../../../insert-select";
 import {InsertSelectConnection, InsertManyResult} from "../../connection";
 
 export async function insertSelect<
-    QueryT extends QueryBaseUtil.AfterSelectClause,
+    QueryT extends QueryBaseUtil.AfterSelectClause & QueryBaseUtil.NonCorrelated,
     TableT extends InsertableTable
 > (
     connection : InsertSelectConnection,

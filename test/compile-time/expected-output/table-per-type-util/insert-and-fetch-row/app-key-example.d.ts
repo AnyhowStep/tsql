@@ -1,6 +1,6 @@
 import * as tsql from "../../../../../dist";
 export declare const browser: {
-    readonly key: tsql.BuiltInExpr_NonCorrelated<string>;
+    readonly key: tsql.CustomExpr_NonCorrelated<string>;
     readonly appId: tsql.CustomExpr_NonCorrelated<bigint>;
 } & {
     readonly disabledAt?: tsql.CustomExpr_NonCorrelatedOrUndefined<Date | null>;
@@ -8,7 +8,7 @@ export declare const browser: {
     readonly referer?: tsql.CustomExpr_NonCorrelatedOrUndefined<string | null>;
 } & {};
 export declare const server: {
-    readonly key: tsql.BuiltInExpr_NonCorrelated<string>;
+    readonly key: tsql.CustomExpr_NonCorrelated<string>;
     readonly appId: tsql.CustomExpr_NonCorrelated<bigint>;
 } & {
     readonly disabledAt?: tsql.CustomExpr_NonCorrelatedOrUndefined<Date | null>;

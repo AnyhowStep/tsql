@@ -1,7 +1,7 @@
 import * as tsql from "../../../../../dist";
 export declare const cat: {
     readonly appId: tsql.CustomExpr_NonCorrelated<bigint>;
-    readonly name: tsql.BuiltInExpr_NonCorrelated<string>;
+    readonly name: tsql.CustomExpr_NonCorrelated<string>;
 } & {
     readonly createdAt?: tsql.CustomExpr_NonCorrelatedOrUndefined<Date>;
     readonly extinctAt?: tsql.CustomExpr_NonCorrelatedOrUndefined<Date | null>;
@@ -9,7 +9,7 @@ export declare const cat: {
 } & {};
 export declare const dog: {
     readonly appId: tsql.CustomExpr_NonCorrelated<bigint>;
-    readonly name: tsql.BuiltInExpr_NonCorrelated<string>;
+    readonly name: tsql.CustomExpr_NonCorrelated<string>;
 } & {
     readonly createdAt?: tsql.CustomExpr_NonCorrelatedOrUndefined<Date>;
     readonly extinctAt?: tsql.CustomExpr_NonCorrelatedOrUndefined<Date | null>;
@@ -17,7 +17,7 @@ export declare const dog: {
 } & {};
 export declare const catDog: {
     readonly appId: tsql.CustomExpr_NonCorrelated<bigint>;
-    readonly name: tsql.BuiltInExpr_NonCorrelated<string>;
+    readonly name: tsql.CustomExpr_NonCorrelated<string>;
     readonly headsOnSameEndOfBody: tsql.CustomExpr_NonCorrelated<boolean>;
 } & {
     readonly createdAt?: tsql.CustomExpr_NonCorrelatedOrUndefined<Date>;

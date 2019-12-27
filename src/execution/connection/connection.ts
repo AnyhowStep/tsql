@@ -63,6 +63,14 @@ export interface InsertManyResult {
     insertedRowCount : bigint;
 
     /**
+     * The `autoIncrementId` of the last inserted row.
+     *
+     * This value only makes sense if the table has an `autoIncrement` column.
+     */
+    //alias for `insertId` in MySQL
+    lastAutoIncrementId : bigint|undefined;
+
+    /**
      * May be the duplicate row count, or some other value.
      */
     warningCount : bigint;
@@ -108,6 +116,21 @@ export interface InsertIgnoreManyResult {
 
     //alias for affectedRows on MySQL
     insertedRowCount : bigint;
+
+    /**
+     * The `autoIncrementId` of the last inserted row.
+     *
+     * This value only makes sense if the table has an `autoIncrement` column.
+     *
+     * It is possible for this value to be `undefined`,
+     * event if the table has an `autoIncrement` column.
+     *
+     * For example, if there are ignored rows, we will not know
+     * which rows were ignored. And so, we will not know
+     * which row the `autoIncrementId` belongs to.
+     */
+    //alias for `insertId` in MySQL
+    lastAutoIncrementId : bigint|undefined;
 
     /**
      * May be the duplicate row count, or some other value.
@@ -251,7 +274,7 @@ export interface IConnection {
     replaceMany<TableT extends InsertableTable & DeletableTable> (table : TableT, rows : readonly [BuiltInInsertRow<TableT>, ...BuiltInInsertRow<TableT>[]]) : Promise<ReplaceManyResult>;
 
     insertSelect<
-        QueryT extends QueryBaseUtil.AfterSelectClause,
+        QueryT extends QueryBaseUtil.AfterSelectClause & QueryBaseUtil.NonCorrelated,
         TableT extends InsertableTable
     > (
         query : QueryT,
@@ -259,7 +282,7 @@ export interface IConnection {
         row : InsertSelectRow<QueryT, TableT>
     ) : Promise<InsertManyResult>;
     insertIgnoreSelect<
-        QueryT extends QueryBaseUtil.AfterSelectClause,
+        QueryT extends QueryBaseUtil.AfterSelectClause & QueryBaseUtil.NonCorrelated,
         TableT extends InsertableTable
     > (
         query : QueryT,
@@ -267,7 +290,7 @@ export interface IConnection {
         row : InsertSelectRow<QueryT, TableT>
     ) : Promise<InsertIgnoreManyResult>;
     replaceSelect<
-        QueryT extends QueryBaseUtil.AfterSelectClause,
+        QueryT extends QueryBaseUtil.AfterSelectClause & QueryBaseUtil.NonCorrelated,
         TableT extends InsertableTable & DeletableTable
     > (
         query : QueryT,

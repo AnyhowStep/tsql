@@ -443,7 +443,7 @@ export class Connection {
                             query : { sql, },
                             insertedRowCount : BigInt(result.rowsModified) as 0n,
                             autoIncrementId : undefined,
-                            warningCount : BigInt(0),
+                            warningCount : BigInt(1),
                             message : "ok",
                         };
                     }
@@ -746,28 +746,44 @@ export class Connection {
         rows : readonly [tsql.BuiltInInsertRow<TableT>, ...tsql.BuiltInInsertRow<TableT>[]]
     ) : Promise<tsql.InsertManyResult> {
         const sql = await this.insertManySqlString(table, rows, "");
-        return this.exec(sql)
-            .then(async (result) => {
-                if (result.execResult.length != 0) {
-                    throw new Error(`insertMany() should have no result set; found ${result.execResult.length}`);
-                }
-                if (result.rowsModified != rows.length) {
-                    throw new Error(`insertMany() should modify ${rows.length} rows; only modified ${result.rowsModified} rows`);
-                }
+        return this.lock(async (rawNestedConnection) : Promise<tsql.InsertManyResult> => {
+            const nestedConnection = rawNestedConnection as unknown as Connection;
+            return nestedConnection.exec(sql)
+                .then(async (result) => {
+                    if (result.execResult.length != 0) {
+                        throw new Error(`insertMany() should have no result set; found ${result.execResult.length}`);
+                    }
+                    if (result.rowsModified != rows.length) {
+                        throw new Error(`insertMany() should modify ${rows.length} rows; only modified ${result.rowsModified} rows`);
+                    }
 
-                const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
+                    const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
 
-                return {
-                    query : { sql, },
-                    insertedRowCount : BigInt(result.rowsModified),
-                    warningCount : BigInt(0),
-                    message : "ok",
-                };
-            })
-            .catch((err) => {
-                //console.error("error encountered", sql);
-                throw err;
-            });
+                    return {
+                        query : { sql, },
+                        insertedRowCount : BigInt(result.rowsModified),
+                        lastAutoIncrementId : (
+                            table.autoIncrement == undefined ?
+                            undefined :
+                            await tsql
+                                .selectValue(() => tsql.expr(
+                                    {
+                                        mapper : tm.mysql.bigIntSigned(),
+                                        usedRef : tsql.UsedRefUtil.fromColumnRef({}),
+                                    },
+                                    "LAST_INSERT_ROWID()"
+                                ))
+                                .fetchValue(nestedConnection)
+                        ),
+                        warningCount : BigInt(0),
+                        message : "ok",
+                    };
+                })
+                .catch((err) => {
+                    //console.error("error encountered", sql);
+                    throw err;
+                });
+        });
     }
 
     async insertIgnoreMany<TableT extends ITable> (
@@ -775,28 +791,47 @@ export class Connection {
         rows : readonly [tsql.BuiltInInsertRow<TableT>, ...tsql.BuiltInInsertRow<TableT>[]]
     ) : Promise<tsql.InsertIgnoreManyResult> {
         const sql = await this.insertManySqlString(table, rows, "OR IGNORE");
-        return this.exec(sql)
-            .then(async (result) => {
-                if (result.execResult.length != 0) {
-                    throw new Error(`insertIgnoreMany() should have no result set; found ${result.execResult.length}`);
-                }
-                if (result.rowsModified > rows.length) {
-                    throw new Error(`insertIgnoreMany() should modify ${rows.length} rows or less; modified ${result.rowsModified} rows`);
-                }
+        return this.lock(async (rawNestedConnection) : Promise<tsql.InsertIgnoreManyResult> => {
+            const nestedConnection = rawNestedConnection as unknown as Connection;
+            return nestedConnection.exec(sql)
+                .then(async (result) => {
+                    if (result.execResult.length != 0) {
+                        throw new Error(`insertIgnoreMany() should have no result set; found ${result.execResult.length}`);
+                    }
+                    if (result.rowsModified > rows.length) {
+                        throw new Error(`insertIgnoreMany() should modify ${rows.length} rows or less; modified ${result.rowsModified} rows`);
+                    }
 
-                const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
+                    const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
 
-                return {
-                    query : { sql, },
-                    insertedRowCount : BigInt(result.rowsModified),
-                    warningCount : BigInt(rows.length - result.rowsModified),
-                    message : "ok",
-                };
-            })
-            .catch((err) => {
-                //console.error("error encountered", sql);
-                throw err;
-            });
+                    return {
+                        query : { sql, },
+                        insertedRowCount : BigInt(result.rowsModified),
+                        lastAutoIncrementId : (
+                            (
+                                table.autoIncrement == undefined ||
+                                result.rowsModified != rows.length
+                            ) ?
+                            undefined :
+                            await tsql
+                                .selectValue(() => tsql.expr(
+                                    {
+                                        mapper : tm.mysql.bigIntSigned(),
+                                        usedRef : tsql.UsedRefUtil.fromColumnRef({}),
+                                    },
+                                    "LAST_INSERT_ROWID()"
+                                ))
+                                .fetchValue(nestedConnection)
+                        ),
+                        warningCount : BigInt(rows.length - result.rowsModified),
+                        message : "ok",
+                    };
+                })
+                .catch((err) => {
+                    //console.error("error encountered", sql);
+                    throw err;
+                });
+        });
     }
 
     async replaceMany<TableT extends ITable> (
@@ -909,7 +944,7 @@ export class Connection {
     }
 
     async insertSelect<
-        QueryT extends tsql.QueryBaseUtil.AfterSelectClause,
+        QueryT extends tsql.QueryBaseUtil.AfterSelectClause & tsql.QueryBaseUtil.NonCorrelated,
         TableT extends tsql.InsertableTable
     > (
         query : QueryT,
@@ -917,32 +952,51 @@ export class Connection {
         row : tsql.InsertSelectRow<QueryT, TableT>
     ) : Promise<tsql.InsertManyResult> {
         const sql = await this.insertSelectSqlString(query, table, row, "");
-        return this.exec(sql)
-            .then(async (result) => {
-                if (result.execResult.length != 0) {
-                    throw new Error(`insertSelect() should have no result set; found ${result.execResult.length}`);
-                }
-                if (result.rowsModified < 0) {
-                    throw new Error(`insertSelect() should modify zero, or more rows; modified ${result.rowsModified} rows`);
-                }
+        return this.lock(async (rawNestedConnection) : Promise<tsql.InsertManyResult> => {
+            const nestedConnection = rawNestedConnection as unknown as Connection;
+            return nestedConnection.exec(sql)
+                .then(async (result) => {
+                    if (result.execResult.length != 0) {
+                        throw new Error(`insertSelect() should have no result set; found ${result.execResult.length}`);
+                    }
+                    if (result.rowsModified < 0) {
+                        throw new Error(`insertSelect() should modify zero, or more rows; modified ${result.rowsModified} rows`);
+                    }
 
-                const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
+                    const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
 
-                return {
-                    query : { sql, },
-                    insertedRowCount : BigInt(result.rowsModified),
-                    warningCount : BigInt(0),
-                    message : "ok",
-                };
-            })
-            .catch((err) => {
-                //console.error("error encountered", sql);
-                throw err;
-            });
+                    return {
+                        query : { sql, },
+                        insertedRowCount : BigInt(result.rowsModified),
+                        lastAutoIncrementId : (
+                            (
+                                table.autoIncrement == undefined ||
+                                result.rowsModified == 0
+                            ) ?
+                            undefined :
+                            await tsql
+                                .selectValue(() => tsql.expr(
+                                    {
+                                        mapper : tm.mysql.bigIntSigned(),
+                                        usedRef : tsql.UsedRefUtil.fromColumnRef({}),
+                                    },
+                                    "LAST_INSERT_ROWID()"
+                                ))
+                                .fetchValue(nestedConnection)
+                        ),
+                        warningCount : BigInt(0),
+                        message : "ok",
+                    };
+                })
+                .catch((err) => {
+                    //console.error("error encountered", sql);
+                    throw err;
+                });
+        });
     }
 
     async insertIgnoreSelect<
-        QueryT extends tsql.QueryBaseUtil.AfterSelectClause,
+        QueryT extends tsql.QueryBaseUtil.AfterSelectClause & tsql.QueryBaseUtil.NonCorrelated,
         TableT extends tsql.InsertableTable
     > (
         query : QueryT,
@@ -950,32 +1004,56 @@ export class Connection {
         row : tsql.InsertSelectRow<QueryT, TableT>
     ) : Promise<tsql.InsertIgnoreManyResult> {
         const sql = await this.insertSelectSqlString(query, table, row, "OR IGNORE");
-        return this.exec(sql)
-            .then(async (result) => {
-                if (result.execResult.length != 0) {
-                    throw new Error(`insertIgnoreSelect() should have no result set; found ${result.execResult.length}`);
-                }
-                if (result.rowsModified < 0) {
-                    throw new Error(`insertIgnoreSelect() should modify zero, or more rows; modified ${result.rowsModified} rows`);
-                }
+        return this.transactionIfNotInOne(async (rawNestedConnection) : Promise<tsql.InsertIgnoreManyResult> => {
+            const nestedConnection = rawNestedConnection as unknown as Connection;
+            const maxInsertCount = await tsql.ExecutionUtil.count(query, nestedConnection);
+            return nestedConnection.exec(sql)
+                .then(async (result) => {
+                    if (result.execResult.length != 0) {
+                        throw new Error(`insertIgnoreSelect() should have no result set; found ${result.execResult.length}`);
+                    }
+                    if (result.rowsModified < 0) {
+                        throw new Error(`insertIgnoreSelect() should modify zero, or more rows; modified ${result.rowsModified} rows`);
+                    }
 
-                const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
+                    const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
 
-                return {
-                    query : { sql, },
-                    insertedRowCount : BigInt(result.rowsModified),
-                    warningCount : BigInt(0),
-                    message : "ok",
-                };
-            })
-            .catch((err) => {
-                //console.error("error encountered", sql);
-                throw err;
-            });
+                    return {
+                        query : { sql, },
+                        insertedRowCount : BigInt(result.rowsModified),
+                        lastAutoIncrementId : (
+                            (
+                                table.autoIncrement == undefined ||
+                                result.rowsModified == 0 ||
+                                !tm.BigIntUtil.equal(result.rowsModified, maxInsertCount)
+                            ) ?
+                            undefined :
+                            await tsql
+                                .selectValue(() => tsql.expr(
+                                    {
+                                        mapper : tm.mysql.bigIntSigned(),
+                                        usedRef : tsql.UsedRefUtil.fromColumnRef({}),
+                                    },
+                                    "LAST_INSERT_ROWID()"
+                                ))
+                                .fetchValue(nestedConnection)
+                        ),
+                        warningCount : tm.BigIntUtil.sub(
+                            maxInsertCount,
+                            result.rowsModified
+                        ),
+                        message : "ok",
+                    };
+                })
+                .catch((err) => {
+                    //console.error("error encountered", sql);
+                    throw err;
+                });
+        });
     }
 
     async replaceSelect<
-        QueryT extends tsql.QueryBaseUtil.AfterSelectClause,
+        QueryT extends tsql.QueryBaseUtil.AfterSelectClause & tsql.QueryBaseUtil.NonCorrelated,
         TableT extends tsql.InsertableTable & tsql.DeletableTable
     > (
         query : QueryT,
@@ -1362,6 +1440,7 @@ export class Pool implements tsql.IPool {
         return this.asyncQueue.stop();
     }
 
+    readonly onInsert = new PoolEventEmitter<tsql.IInsertEvent<ITable>>();
     readonly onInsertOne = new PoolEventEmitter<tsql.IInsertOneEvent<ITable>>();
 
     readonly onUpdate = new PoolEventEmitter<tsql.IUpdateEvent<ITable>>();

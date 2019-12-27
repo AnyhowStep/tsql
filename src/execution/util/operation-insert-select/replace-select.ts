@@ -4,7 +4,7 @@ import {InsertSelectDelegate, InsertSelectUtil} from "../../../insert-select";
 import {ReplaceManyResult, ReplaceSelectConnection} from "../../connection";
 
 export async function replaceSelect<
-    QueryT extends QueryBaseUtil.AfterSelectClause,
+    QueryT extends QueryBaseUtil.AfterSelectClause & QueryBaseUtil.NonCorrelated,
     TableT extends InsertableTable & DeletableTable
 > (
     connection : ReplaceSelectConnection,

@@ -97,6 +97,9 @@ export class InsertOneEvent<TableT extends ITable> extends EventBase implements 
         if (this.fetchPromise == undefined) {
             const candidateKey = this.candidateKey;
             if (candidateKey == undefined) {
+                /**
+                 * @todo Custom Error type
+                 */
                 throw new Error(`Could not derive candidateKey from insertRow`);
             }
             this.fetchPromise = TableUtil.fetchOne(
