@@ -610,6 +610,7 @@ export const sqliteSqlfier : Sqlfier = {
             https://dev.mysql.com/doc/refman/8.0/en/logical-operators.html
         */
         [OperatorType.AND] : ({operands}) => insertBetween(operands, "AND"),
+        [OperatorType.OR] : ({operands}) => insertBetween(operands, "OR"),
         [OperatorType.NOT] : ({operands}) => [
             "NOT",
             operands[0]
