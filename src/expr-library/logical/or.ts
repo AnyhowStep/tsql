@@ -9,8 +9,8 @@ import {OperatorType} from "../../operator-type";
  *
  * For three-valued logic, @see {@link or3}
  */
-export const or : ChainableOperator<boolean> = makeChainableOperator<OperatorType.AND, boolean>(
-    OperatorType.AND,
+export const or : ChainableOperator<boolean> = makeChainableOperator<OperatorType.OR, boolean>(
+    OperatorType.OR,
     false,
     tm.mysql.boolean()
 );
