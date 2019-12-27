@@ -1521,16 +1521,16 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     insert<
         TableT extends InsertableTable
     > (
-        this : Extract<this, QueryBaseUtil.AfterSelectClause>,
+        this : Extract<this, QueryBaseUtil.AfterSelectClause & QueryBaseUtil.NonCorrelated>,
         connection : InsertSelectConnection,
         table : TableT,
         rowDelegate : InsertSelectDelegate<
-            Extract<this, QueryBaseUtil.AfterSelectClause>,
+            Extract<this, QueryBaseUtil.AfterSelectClause & QueryBaseUtil.NonCorrelated>,
             TableT
         >
     ) : Promise<InsertManyResult> {
         return ExecutionUtil.insertSelect<
-            Extract<this, QueryBaseUtil.AfterSelectClause>,
+            Extract<this, QueryBaseUtil.AfterSelectClause & QueryBaseUtil.NonCorrelated>,
             TableT
         >(
             connection,
@@ -1543,16 +1543,16 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     insertIgnore<
         TableT extends InsertableTable
     > (
-        this : Extract<this, QueryBaseUtil.AfterSelectClause>,
+        this : Extract<this, QueryBaseUtil.AfterSelectClause & QueryBaseUtil.NonCorrelated>,
         connection : InsertIgnoreSelectConnection,
         table : TableT,
         rowDelegate : InsertSelectDelegate<
-            Extract<this, QueryBaseUtil.AfterSelectClause>,
+            Extract<this, QueryBaseUtil.AfterSelectClause & QueryBaseUtil.NonCorrelated>,
             TableT
         >
     ) : Promise<InsertIgnoreManyResult> {
         return ExecutionUtil.insertIgnoreSelect<
-            Extract<this, QueryBaseUtil.AfterSelectClause>,
+            Extract<this, QueryBaseUtil.AfterSelectClause & QueryBaseUtil.NonCorrelated>,
             TableT
         >(
             connection,
@@ -1565,16 +1565,16 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     replace<
         TableT extends InsertableTable & DeletableTable
     > (
-        this : Extract<this, QueryBaseUtil.AfterSelectClause>,
+        this : Extract<this, QueryBaseUtil.AfterSelectClause & QueryBaseUtil.NonCorrelated>,
         connection : ReplaceSelectConnection,
         table : TableT,
         rowDelegate : InsertSelectDelegate<
-            Extract<this, QueryBaseUtil.AfterSelectClause>,
+            Extract<this, QueryBaseUtil.AfterSelectClause & QueryBaseUtil.NonCorrelated>,
             TableT
         >
     ) : Promise<ReplaceManyResult> {
         return ExecutionUtil.replaceSelect<
-            Extract<this, QueryBaseUtil.AfterSelectClause>,
+            Extract<this, QueryBaseUtil.AfterSelectClause & QueryBaseUtil.NonCorrelated>,
             TableT
         >(
             connection,

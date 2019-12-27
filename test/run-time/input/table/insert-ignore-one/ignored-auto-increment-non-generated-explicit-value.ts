@@ -48,7 +48,7 @@ tape(__filename, async (t) => {
     );
     t.deepEqual(
         insertResult.warningCount,
-        BigInt(0)
+        BigInt(1)
     );
     t.deepEqual(
         insertResult.testId,

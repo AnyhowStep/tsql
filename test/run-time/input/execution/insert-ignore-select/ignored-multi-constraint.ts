@@ -66,7 +66,7 @@ tape(__filename, async (t) => {
     );
     t.deepEqual(
         insertResult.warningCount,
-        BigInt(0)
+        BigInt(3)
     );
 
     await pool
