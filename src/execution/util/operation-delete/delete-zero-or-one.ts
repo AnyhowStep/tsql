@@ -1,10 +1,11 @@
 import * as tm from "type-mapping";
 import {DeletableTable, TableUtil} from "../../../table";
-import {WhereDelegate} from "../../../where-clause";
+import {WhereDelegate, WhereClause} from "../../../where-clause";
 import {FromClauseUtil} from "../../../from-clause";
 import {IsolableDeleteConnection} from "../../connection";
 import * as impl from "./delete";
 import {TooManyRowsFoundError} from "../../../error";
+import {DeleteEvent} from "../../../event";
 
 export interface DeleteZeroOrOneResult {
     query : { sql : string },
@@ -37,21 +38,49 @@ export async function deleteZeroOrOne<
 ) : Promise<DeleteZeroOrOneResult> {
     TableUtil.assertDeleteEnabled(table);
 
-    return connection.transactionIfNotInOne(async (connection) : Promise<DeleteZeroOrOneResult> => {
-        const result = await impl.delete(
-            table,
-            connection,
-            whereDelegate
-        );
-        if (tm.BigIntUtil.equal(result.deletedRowCount, tm.BigInt(0))) {
-            return result as DeleteZeroOrOneResult;
+    return connection.lock(async (connection) : Promise<DeleteZeroOrOneResult> => {
+        const {
+            whereClause,
+            deleteResult,
+        } = await connection.transactionIfNotInOne(async (connection) : Promise<{
+            whereClause : WhereClause,
+            deleteResult : DeleteZeroOrOneResult,
+        }> => {
+            const {
+                whereClause,
+                deleteResult,
+            } = await impl.deleteImplNoEvent(
+                table,
+                connection,
+                whereDelegate
+            );
+            if (
+                tm.BigIntUtil.equal(deleteResult.deletedRowCount, tm.BigInt(0)) ||
+                tm.BigIntUtil.equal(deleteResult.deletedRowCount, tm.BigInt(1))
+            ) {
+                return {
+                    whereClause,
+                    deleteResult : deleteResult as DeleteZeroOrOneResult,
+                };
+            }
+            throw new TooManyRowsFoundError(
+                `Expected to delete one row of ${table.alias}; found ${deleteResult.deletedRowCount} rows`,
+                deleteResult.query.sql
+            );
+        });
+
+        if (tm.BigIntUtil.equal(deleteResult.deletedRowCount, tm.BigInt(1))) {
+            const fullConnection = connection.tryGetFullConnection();
+            if (fullConnection != undefined) {
+                await fullConnection.eventEmitters.onDelete.invoke(new DeleteEvent({
+                    connection : fullConnection,
+                    table,
+                    whereClause,
+                    deleteResult,
+                }));
+            }
         }
-        if (tm.BigIntUtil.equal(result.deletedRowCount, tm.BigInt(1))) {
-            return result as DeleteZeroOrOneResult;
-        }
-        throw new TooManyRowsFoundError(
-            `Expected to delete one row of ${table.alias}; found ${result.deletedRowCount} rows`,
-            result.query.sql
-        );
+
+        return deleteResult;
     });
 }

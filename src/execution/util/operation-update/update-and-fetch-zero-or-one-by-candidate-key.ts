@@ -1,4 +1,3 @@
-import * as tm from "type-mapping";
 import {ITable} from "../../../table";
 import {IsolableUpdateConnection} from "../../connection";
 import {AssignmentMapDelegate} from "../../../update";
@@ -18,73 +17,53 @@ export async function updateAndFetchZeroOrOneByCandidateKey<
     candidateKey : CandidateKeyT,// & AssertNonUnion<CandidateKeyT>,
     assignmentMapDelegate : AssignmentMapDelegate<TableT, AssignmentMapT>
 ) : Promise<UpdateAndFetchZeroOrOneResult<TableT, AssignmentMapT>> {
-    return connection.transactionIfNotInOne(async (connection) : Promise<UpdateAndFetchZeroOrOneResult<TableT, AssignmentMapT>> => {
-        const helperResult = await __updateAndFetchOneByCandidateKeyHelper<
-            TableT,
-            CandidateKeyT,
-            AssignmentMapT
-        >(
-            table,
-            connection,
-            candidateKey,
-            assignmentMapDelegate
-        );
-        if (!helperResult.success) {
+    return updateAndFetchZeroOrOneImpl<
+        TableT,
+        AssignmentMapT
+    >(
+        table,
+        connection,
+        async (connection) => {
+            const helperResult = await __updateAndFetchOneByCandidateKeyHelper<
+                TableT,
+                CandidateKeyT,
+                AssignmentMapT
+            >(
+                table,
+                connection,
+                candidateKey,
+                assignmentMapDelegate
+            );
+            if (!helperResult.success) {
+                return helperResult;
+            }
+            const {
+                curCandidateKey,
+                assignmentMap,
+                newCandidateKey,
+            } = helperResult;
             return {
-                query : {
-                    sql : helperResult.rowNotFoundError.sql,
-                },
-
-                //Alias for affectedRows
-                foundRowCount : tm.BigInt(0) as 0n,
-
-                //Alias for changedRows
-                updatedRowCount : tm.BigInt(0) as 0n,
-
+                success : true,
+                updateWhereDelegate : () => ExprLib.eqCandidateKey(
+                    table,
+                    curCandidateKey
+                ) as any,
+                fetchWhereDelegate : () => ExprLib.eqCandidateKey(
+                    table,
+                    newCandidateKey
+                ) as any,
                 /**
-                 * May be the duplicate row count, or some other value.
+                 * This cast is unsound.
+                 * What we have is not `AssignmentMapT`.
+                 *
+                 * We have a `BuiltInExpr` version of `AssignmentMapT`,
+                 * with some parts possibly being evaluated to a value expression.
+                 *
+                 * However, this will not affect the correctness of
+                 * our results.
                  */
-                warningCount : tm.BigInt(0),
-                /**
-                 * An arbitrary message.
-                 * May be an empty string.
-                 */
-                message : "",
-
-                row : undefined,
+                assignmentMap : assignmentMap as AssignmentMapT,
             };
         }
-        const {
-            curCandidateKey,
-            assignmentMap,
-            newCandidateKey,
-        } = helperResult;
-
-        return updateAndFetchZeroOrOneImpl<
-            TableT,
-            AssignmentMapT
-        >(
-            table,
-            connection,
-            () => ExprLib.eqCandidateKey(
-                table,
-                curCandidateKey
-            ) as any,
-            () => ExprLib.eqCandidateKey(
-                table,
-                newCandidateKey
-            ) as any,
-            /**
-             * This cast is unsound.
-             * What we have is not `AssignmentMapT`.
-             *
-             * We have a `BuiltInExpr` version of `AssignmentMapT`,
-             * with some parts possibly being evaluated to a value expression.
-             *
-             * However, this will not affect the correctness of
-             * our results.
-             */
-            assignmentMap as any
-        );
-    });
+    );
 }

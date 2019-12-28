@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {ITable, TableWithAutoIncrement, InsertableTable, TableUtil} from "../../../table";
-import {InsertOneConnection, InsertOneResult} from "../../connection";
+import {InsertOneConnection, InsertOneResult, IConnection} from "../../connection";
 import {CustomInsertRow, InsertUtil, BuiltInInsertRow} from "../../../insert";
 import {DataTypeUtil} from "../../../data-type";
 import {InsertOneEvent, InsertEvent} from "../../../event";
@@ -18,10 +18,7 @@ export type InsertOneWithAutoIncrementReturnType<
     InsertOneResultWithAutoIncrement<TableT["autoIncrement"]>
 ;
 
-/**
- * Does not invoke events.
- */
-async function insertOneImpl<
+export async function insertOneImplNoEvent<
     TableT extends ITable & InsertableTable
 > (
     table : TableT,
@@ -132,6 +129,61 @@ async function insertOneImpl<
     };
 }
 
+export function createInsertOneEvents<
+    TableT extends ITable & InsertableTable
+> (
+    table : TableT,
+    fullConnection : IConnection,
+    insertRow : BuiltInInsertRow<TableT>,
+    insertResult : InsertOneResult,
+) : (
+    {
+        insertEvent : InsertEvent<TableT>,
+        insertOneEvent : InsertOneEvent<TableT>,
+    }
+) {
+    const augmentedInsertRow = (
+        table.autoIncrement == undefined ?
+        insertRow :
+        {
+            ...insertRow,
+            /**
+             * The column may be specified to be `string|number|bigint`.
+             * So, we need to use the column's mapper,
+             * to get the desired data type.
+             */
+            [table.autoIncrement] : table.columns[table.autoIncrement].mapper(
+                `${table.alias}.${table.autoIncrement}`,
+                /**
+                 * This **should** be `bigint`
+                 */
+                insertResult.autoIncrementId
+            ),
+        }
+    );
+
+    const insertEvent = new InsertEvent({
+        connection : fullConnection,
+        table,
+        insertRows : [augmentedInsertRow],
+        insertResult : {
+            ...insertResult,
+            lastAutoIncrementId : insertResult.autoIncrementId,
+        },
+    });
+    const insertOneEvent = new InsertOneEvent({
+        connection : fullConnection,
+        table,
+        insertRow : augmentedInsertRow,
+        insertResult,
+    });
+
+    return {
+        insertEvent,
+        insertOneEvent,
+    };
+}
+
 /**
  * Only inserts one row
  * ```sql
@@ -164,7 +216,7 @@ export async function insertOne<
         const {
             insertRow,
             insertResult,
-        } = await insertOneImpl<TableT>(
+        } = await insertOneImplNoEvent<TableT>(
             table,
             connection,
             row
@@ -172,40 +224,17 @@ export async function insertOne<
 
         const fullConnection = connection.tryGetFullConnection();
         if (fullConnection != undefined) {
-            const augmentedInsertRow = (
-                table.autoIncrement == undefined ?
-                insertRow :
-                {
-                    ...insertRow,
-                    /**
-                     * The column may be specified to be `string|number|bigint`.
-                     * So, we need to use the column's mapper,
-                     * to get the desired data type.
-                     */
-                    [table.autoIncrement] : table.columns[table.autoIncrement].mapper(
-                        `${table.alias}.${table.autoIncrement}`,
-                        /**
-                         * This **should** be `bigint`
-                         */
-                        insertResult.autoIncrementId
-                    ),
-                }
-            );
-            await fullConnection.eventEmitters.onInsert.invoke(new InsertEvent({
-                connection : fullConnection,
+            const {
+                insertEvent,
+                insertOneEvent,
+            } = createInsertOneEvents(
                 table,
-                insertRows : [augmentedInsertRow],
-                insertResult : {
-                    ...insertResult,
-                    lastAutoIncrementId : insertResult.autoIncrementId,
-                },
-            }));
-            await fullConnection.eventEmitters.onInsertOne.invoke(new InsertOneEvent({
-                connection : fullConnection,
-                table,
-                insertRow : augmentedInsertRow,
+                fullConnection,
+                insertRow,
                 insertResult,
-            }));
+            );
+            await fullConnection.eventEmitters.onInsert.invoke(insertEvent);
+            await fullConnection.eventEmitters.onInsertOne.invoke(insertOneEvent);
         }
 
         return insertResult;

@@ -1,10 +1,11 @@
 import * as tm from "type-mapping";
 import {DeletableTable, TableUtil} from "../../../table";
-import {WhereDelegate} from "../../../where-clause";
+import {WhereDelegate, WhereClause} from "../../../where-clause";
 import {FromClauseUtil} from "../../../from-clause";
 import {IsolableDeleteConnection} from "../../connection";
 import * as impl from "./delete";
 import {RowNotFoundError, TooManyRowsFoundError} from "../../../error";
+import {DeleteEvent} from "../../../event";
 
 export interface DeleteOneResult {
     query : { sql : string },
@@ -37,24 +38,50 @@ export async function deleteOne<
 ) : Promise<DeleteOneResult> {
     TableUtil.assertDeleteEnabled(table);
 
-    return connection.transactionIfNotInOne(async (connection) : Promise<DeleteOneResult> => {
-        const result = await impl.delete(
-            table,
-            connection,
-            whereDelegate
-        );
-        if (tm.BigIntUtil.equal(result.deletedRowCount, tm.BigInt(0))) {
-            throw new RowNotFoundError(
-                `Expected to delete one row of ${table.alias}; found ${result.deletedRowCount} rows`,
-                result.query.sql
+    return connection.lock(async (connection) : Promise<DeleteOneResult> => {
+        const {
+            whereClause,
+            deleteResult,
+        } = await connection.transactionIfNotInOne(async (connection) : Promise<{
+            whereClause : WhereClause,
+            deleteResult : DeleteOneResult
+        }> => {
+            const {
+                whereClause,
+                deleteResult,
+            } = await impl.deleteImplNoEvent(
+                table,
+                connection,
+                whereDelegate
             );
+            if (tm.BigIntUtil.equal(deleteResult.deletedRowCount, tm.BigInt(0))) {
+                throw new RowNotFoundError(
+                    `Expected to delete one row of ${table.alias}; found ${deleteResult.deletedRowCount} rows`,
+                    deleteResult.query.sql
+                );
+            }
+            if (tm.BigIntUtil.equal(deleteResult.deletedRowCount, tm.BigInt(1))) {
+                return {
+                    whereClause,
+                    deleteResult : deleteResult as DeleteOneResult,
+                };
+            }
+            throw new TooManyRowsFoundError(
+                `Expected to delete one row of ${table.alias}; found ${deleteResult.deletedRowCount} rows`,
+                deleteResult.query.sql
+            );
+        });
+
+        const fullConnection = connection.tryGetFullConnection();
+        if (fullConnection != undefined) {
+            await fullConnection.eventEmitters.onDelete.invoke(new DeleteEvent({
+                connection : fullConnection,
+                table,
+                whereClause,
+                deleteResult,
+            }));
         }
-        if (tm.BigIntUtil.equal(result.deletedRowCount, tm.BigInt(1))) {
-            return result as DeleteOneResult;
-        }
-        throw new TooManyRowsFoundError(
-            `Expected to delete one row of ${table.alias}; found ${result.deletedRowCount} rows`,
-            result.query.sql
-        );
+
+        return deleteResult;
     });
 }

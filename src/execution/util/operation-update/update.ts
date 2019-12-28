@@ -1,11 +1,12 @@
+import * as tm from "type-mapping";
 import {ITable} from "../../../table";
-import {WhereDelegate, WhereClauseUtil} from "../../../where-clause";
+import {WhereDelegate, WhereClauseUtil, WhereClause} from "../../../where-clause";
 import {FromClauseUtil} from "../../../from-clause";
 import {UpdateConnection, UpdateResult} from "../../connection";
-import {AssignmentMapDelegate, UpdateUtil} from "../../../update";
+import {AssignmentMapDelegate, UpdateUtil, BuiltInAssignmentMap} from "../../../update";
 import {UpdateEvent} from "../../../event";
 
-export async function update<
+export async function updateImplNoEvent<
     TableT extends ITable
 > (
     table : TableT,
@@ -17,7 +18,13 @@ export async function update<
         >
     >,
     assignmentMapDelegate : AssignmentMapDelegate<TableT>
-) : Promise<UpdateResult> {
+) : (
+    Promise<{
+        whereClause : WhereClause,
+        assignmentMap : BuiltInAssignmentMap<TableT>,
+        updateResult : UpdateResult,
+    }>
+) {
     const whereClause = WhereClauseUtil.where(
         FromClauseUtil.from<
             FromClauseUtil.NewInstance,
@@ -36,19 +43,46 @@ export async function update<
         whereDelegate
     );
     const assignmentMap = UpdateUtil.set(table, assignmentMapDelegate);
+    const updateResult = await connection.update(table, whereClause, assignmentMap);
 
+    return {
+        whereClause,
+        assignmentMap,
+        updateResult,
+    };
+}
+
+export async function update<
+    TableT extends ITable
+> (
+    table : TableT,
+    connection : UpdateConnection,
+    whereDelegate : WhereDelegate<
+        FromClauseUtil.From<
+            FromClauseUtil.NewInstance,
+            TableT
+        >
+    >,
+    assignmentMapDelegate : AssignmentMapDelegate<TableT>
+) : Promise<UpdateResult> {
     return connection.lock(async (connection) : Promise<UpdateResult> => {
-        const updateResult = await connection.update(table, whereClause, assignmentMap);
+        const {
+            whereClause,
+            assignmentMap,
+            updateResult,
+        } = await updateImplNoEvent(table, connection, whereDelegate, assignmentMapDelegate);
 
-        const fullConnection = connection.tryGetFullConnection();
-        if (fullConnection != undefined) {
-            await fullConnection.eventEmitters.onUpdate.invoke(new UpdateEvent({
-                connection : fullConnection,
-                table,
-                whereClause,
-                assignmentMap,
-                updateResult,
-            }));
+        if (!tm.BigIntUtil.equal(updateResult.updatedRowCount, tm.BigInt(0))) {
+            const fullConnection = connection.tryGetFullConnection();
+            if (fullConnection != undefined) {
+                await fullConnection.eventEmitters.onUpdate.invoke(new UpdateEvent({
+                    connection : fullConnection,
+                    table,
+                    whereClause,
+                    assignmentMap,
+                    updateResult,
+                }));
+            }
         }
 
         return updateResult;

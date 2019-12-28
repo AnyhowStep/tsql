@@ -1,4 +1,3 @@
-import * as tm from "type-mapping";
 import {TableWithPrimaryKey} from "../../../table";
 import {IsolableUpdateConnection} from "../../connection";
 import {AssignmentMapDelegate} from "../../../update";
@@ -16,72 +15,52 @@ export async function updateAndFetchZeroOrOneByPrimaryKey<
     primaryKey : PrimaryKey_Input<TableT>,
     assignmentMapDelegate : AssignmentMapDelegate<TableT, AssignmentMapT>
 ) : Promise<UpdateAndFetchZeroOrOneResult<TableT, AssignmentMapT>> {
-    return connection.transactionIfNotInOne(async (connection) : Promise<UpdateAndFetchZeroOrOneResult<TableT, AssignmentMapT>> => {
-        const helperResult = await __updateAndFetchOneByPrimaryKeyHelper<
-            TableT,
-            AssignmentMapT
-        >(
-            table,
-            connection,
-            primaryKey,
-            assignmentMapDelegate
-        );
-        if (!helperResult.success) {
+    return updateAndFetchZeroOrOneImpl<
+        TableT,
+        AssignmentMapT
+    >(
+        table,
+        connection,
+        async (connection) => {
+            const helperResult = await __updateAndFetchOneByPrimaryKeyHelper<
+                TableT,
+                AssignmentMapT
+            >(
+                table,
+                connection,
+                primaryKey,
+                assignmentMapDelegate
+            );
+            if (!helperResult.success) {
+                return helperResult;
+            }
+            const {
+                curPrimaryKey,
+                assignmentMap,
+                newPrimaryKey,
+            } = helperResult;
             return {
-                query : {
-                    sql : helperResult.rowNotFoundError.sql,
-                },
-
-                //Alias for affectedRows
-                foundRowCount : tm.BigInt(0) as 0n,
-
-                //Alias for changedRows
-                updatedRowCount : tm.BigInt(0) as 0n,
-
+                success : true,
+                updateWhereDelegate : () => ExprLib.eqPrimaryKey(
+                    table,
+                    curPrimaryKey
+                ) as any,
+                fetchWhereDelegate : () => ExprLib.eqPrimaryKey(
+                    table,
+                    newPrimaryKey
+                ) as any,
                 /**
-                 * May be the duplicate row count, or some other value.
+                 * This cast is unsound.
+                 * What we have is not `AssignmentMapT`.
+                 *
+                 * We have a `BuiltInExpr` version of `AssignmentMapT`,
+                 * with some parts possibly being evaluated to a value expression.
+                 *
+                 * However, this will not affect the correctness of
+                 * our results.
                  */
-                warningCount : tm.BigInt(0),
-                /**
-                 * An arbitrary message.
-                 * May be an empty string.
-                 */
-                message : "",
-
-                row : undefined,
+                assignmentMap : assignmentMap as AssignmentMapT,
             };
         }
-        const {
-            curPrimaryKey,
-            assignmentMap,
-            newPrimaryKey,
-        } = helperResult;
-
-        return updateAndFetchZeroOrOneImpl<
-            TableT,
-            AssignmentMapT
-        >(
-            table,
-            connection,
-            () => ExprLib.eqPrimaryKey(
-                table,
-                curPrimaryKey
-            ) as any,
-            () => ExprLib.eqPrimaryKey(
-                table,
-                newPrimaryKey
-            ) as any,
-            /**
-             * This cast is unsound.
-             * What we have is not `AssignmentMapT`.
-             *
-             * We have a `BuiltInExpr` version of `AssignmentMapT`,
-             * with some parts possibly being evaluated to a value expression.
-             *
-             * However, this will not affect the correctness of
-             * our results.
-             */
-            assignmentMap as any
-        );
-    });
+    );
 }

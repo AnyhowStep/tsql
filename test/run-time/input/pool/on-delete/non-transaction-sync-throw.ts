@@ -34,6 +34,11 @@ tape(__filename, async (t) => {
             BigInt(1)
         );
 
+        t.deepEqual(
+            event.connection.isInTransaction(),
+            false
+        );
+
         throw new Error(`Sync throw`);
     });
 

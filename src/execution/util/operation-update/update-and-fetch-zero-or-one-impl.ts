@@ -1,14 +1,15 @@
 import * as tm from "type-mapping";
 import {ITable, TableUtil} from "../../../table";
-import {IsolableUpdateConnection} from "../../connection";
+import {IsolableUpdateConnection, UpdateConnection, IsolatedConnection} from "../../connection";
 import {CustomAssignmentMap, BuiltInAssignmentMap} from "../../../update";
 import {UpdateOneResult} from "./update-one";
-import {UpdateAndFetchEvent} from "../../../event";
-import {WhereDelegate} from "../../../where-clause";
+import {UpdateAndFetchEvent, UpdateEvent} from "../../../event";
+import {WhereDelegate, WhereClause} from "../../../where-clause";
 import {FromClauseUtil} from "../../../from-clause";
-import {NotFoundUpdateResult, updateZeroOrOne} from "./update-zero-or-one";
+import {NotFoundUpdateResult, updateZeroOrOneImplNoEvent} from "./update-zero-or-one";
 import {UpdateAndFetchOneResult} from "./update-and-fetch-one-impl";
 import {Identity} from "../../../type-util";
+import {RowNotFoundError} from "../../../error";
 
 export interface NotFoundUpdateAndFetchResult extends NotFoundUpdateResult {
     row : undefined,
@@ -39,64 +40,154 @@ export async function updateAndFetchZeroOrOneImpl<
 > (
     table : TableT,
     connection : IsolableUpdateConnection,
-    /**
-     * We need two separate `WHERE` clauses because
-     * the `UPDATE` statement may change the unique identifier
-     * of the row.
-     */
-    updateWhereDelegate : WhereDelegate<
-        FromClauseUtil.From<
-            FromClauseUtil.NewInstance,
-            TableT
-        >
-    >,
-    fetchWhereDelegate : WhereDelegate<
-        FromClauseUtil.From<
-            FromClauseUtil.NewInstance,
-            TableT
-        >
-    >,
-    assignmentMap : AssignmentMapT
+    initCallback : (connection : UpdateConnection & IsolatedConnection<UpdateConnection>) => Promise<
+        | {
+            success : false,
+            rowNotFoundError : RowNotFoundError
+        }
+        | {
+            success : true,
+            /**
+             * We need two separate `WHERE` clauses because
+             * the `UPDATE` statement may change the unique identifier
+             * of the row.
+             */
+            updateWhereDelegate : WhereDelegate<
+                FromClauseUtil.From<
+                    FromClauseUtil.NewInstance,
+                    TableT
+                >
+            >,
+            fetchWhereDelegate : WhereDelegate<
+                FromClauseUtil.From<
+                    FromClauseUtil.NewInstance,
+                    TableT
+                >
+            >,
+            assignmentMap : AssignmentMapT
+        }
+    >
 ) : Promise<UpdateAndFetchZeroOrOneResult<TableT, AssignmentMapT>> {
-    return connection.transactionIfNotInOne(async (connection) : Promise<UpdateAndFetchZeroOrOneResult<TableT, AssignmentMapT>> => {
-        const updateZeroOrOneResult = await updateZeroOrOne(
-            table,
-            connection,
-            updateWhereDelegate,
-            () => assignmentMap
-        );
+    return connection.lock(async (connection) : Promise<UpdateAndFetchZeroOrOneResult<TableT, AssignmentMapT>> => {
+        const updateAndFetchResult = await connection.transactionIfNotInOne(async (connection) : Promise<
+            | {
+                success : false,
+                updateResult : NotFoundUpdateAndFetchResult,
+            }
+            | {
+                success : true,
+                updateWhereClause : WhereClause,
+                updateResult : UpdateAndFetchZeroOrOneResult<TableT, AssignmentMapT>,
+                assignmentMap : AssignmentMapT,
+            }
+        > => {
+            const initResult = await initCallback(connection);
 
-        if (tm.BigIntUtil.equal(updateZeroOrOneResult.foundRowCount, tm.BigInt(0))) {
-            const notFoundUpdateResult = updateZeroOrOneResult as NotFoundUpdateResult;
-            return {
-                ...notFoundUpdateResult,
-                row : undefined,
-            };
-        } else {
-            const updateOneResult = updateZeroOrOneResult as UpdateOneResult;
-            const row = await TableUtil.__fetchOneHelper(
+            if (!initResult.success) {
+                return {
+                    success : false,
+                    updateResult : {
+                        query : {
+                            sql : initResult.rowNotFoundError.sql,
+                        },
+
+                        //Alias for affectedRows
+                        foundRowCount : tm.BigInt(0) as 0n,
+
+                        //Alias for changedRows
+                        updatedRowCount : tm.BigInt(0) as 0n,
+
+                        /**
+                         * May be the duplicate row count, or some other value.
+                         */
+                        warningCount : tm.BigInt(0),
+                        /**
+                         * An arbitrary message.
+                         * May be an empty string.
+                         */
+                        message : "",
+
+                        row : undefined,
+                    },
+                };
+            }
+
+            const {
+                updateWhereDelegate,
+                fetchWhereDelegate,
+                assignmentMap,
+            } = initResult;
+
+            const {
+                whereClause : updateWhereClause,
+                updateResult : updateZeroOrOneResult,
+            } = await updateZeroOrOneImplNoEvent(
                 table,
                 connection,
-                fetchWhereDelegate
+                updateWhereDelegate,
+                () => assignmentMap
             );
 
-            const fullConnection = connection.tryGetFullConnection();
-            if (fullConnection != undefined) {
-                await fullConnection.eventEmitters.onUpdateAndFetch.invoke(new UpdateAndFetchEvent({
-                    connection : fullConnection,
-                    table,
+            if (tm.BigIntUtil.equal(updateZeroOrOneResult.foundRowCount, tm.BigInt(0))) {
+                const notFoundUpdateResult = updateZeroOrOneResult as NotFoundUpdateResult;
+                return {
+                    success : true,
+                    updateWhereClause,
+                    updateResult : {
+                        ...notFoundUpdateResult,
+                        row : undefined,
+                    },
                     assignmentMap,
+                };
+            } else {
+                const updateOneResult = updateZeroOrOneResult as UpdateOneResult;
+                const row = await TableUtil.__fetchOneHelper(
+                    table,
+                    connection,
+                    fetchWhereDelegate
+                );
+
+                return {
+                    success : true,
+                    updateWhereClause,
                     updateResult : {
                         ...updateOneResult,
                         row,
                     },
+                    assignmentMap,
+                };
+            }
+        });
+
+        if (!updateAndFetchResult.success) {
+            return updateAndFetchResult.updateResult;
+        }
+
+        const {
+            updateWhereClause,
+            updateResult,
+            assignmentMap,
+        } = updateAndFetchResult;
+
+        if (!tm.BigIntUtil.equal(updateResult.updatedRowCount, tm.BigInt(0))) {
+            const fullConnection = connection.tryGetFullConnection();
+            if (fullConnection != undefined) {
+                await fullConnection.eventEmitters.onUpdate.invoke(new UpdateEvent({
+                    connection : fullConnection,
+                    table,
+                    whereClause : updateWhereClause,
+                    assignmentMap,
+                    updateResult,
+                }));
+                await fullConnection.eventEmitters.onUpdateAndFetch.invoke(new UpdateAndFetchEvent({
+                    connection : fullConnection,
+                    table,
+                    assignmentMap,
+                    updateResult : updateResult as any,
                 }));
             }
-
-            return {
-                ...updateOneResult,
-                row,
-            };
         }
+
+        return updateResult;
     });
 }
