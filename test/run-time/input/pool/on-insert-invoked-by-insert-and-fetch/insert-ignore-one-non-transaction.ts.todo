@@ -12,13 +12,12 @@ tape(__filename, async (t) => {
             testId : tm.mysql.bigIntUnsigned(),
             testVal : tm.mysql.bigIntUnsigned(),
         })
-        .setPrimaryKey(columns => [columns.testId])
-        .addAllMutable();
+        .setPrimaryKey(columns => [columns.testId]);
 
     let eventHandled = false;
     let onCommitInvoked = false;
     let onRollbackInvoked = false;
-    pool.onDelete.addHandler((event) => {
+    pool.onInsert.addHandler((event) => {
         if (!event.isFor(test)) {
             return;
         }
@@ -30,8 +29,12 @@ tape(__filename, async (t) => {
         });
         eventHandled = true;
         t.deepEqual(
-            event.deleteResult.deletedRowCount,
-            BigInt(1)
+            event.candidateKeys,
+            [
+                {
+                    testId : BigInt(4),
+                },
+            ]
         );
     });
 
@@ -53,7 +56,7 @@ tape(__filename, async (t) => {
         t.deepEqual(onCommitInvoked, false);
         t.deepEqual(onRollbackInvoked, false);
 
-        const result = await test.insertOne(
+        const result = await test.insertIgnoreOne(
             connection,
             {
                 testId : BigInt(4),
@@ -61,22 +64,8 @@ tape(__filename, async (t) => {
             }
         );
 
-        t.deepEqual(eventHandled, false);
-        t.deepEqual(onCommitInvoked, false);
-        t.deepEqual(onRollbackInvoked, false);
-
-        /**
-         * This actually starts a transaction, if we are not in a transaction.
-         */
-        await test.deleteOneByPrimaryKey(
-            connection,
-            {
-                testId : BigInt(4),
-            }
-        );
-
         t.deepEqual(eventHandled, true);
-        t.deepEqual(onCommitInvoked, true);
+        t.deepEqual(onCommitInvoked, false);
         t.deepEqual(onRollbackInvoked, false);
 
         return result;
@@ -91,23 +80,21 @@ tape(__filename, async (t) => {
         BigInt(1)
     );
     t.deepEqual(
-        insertResult.autoIncrementId,
-        undefined
-    );
-    t.deepEqual(
         insertResult.warningCount,
         BigInt(0)
     );
 
     await pool
         .acquire(async (connection) => {
-            return test.fetchOneByPrimaryKey(connection, { testId : BigInt(4) })
-                .orUndefined();
+            return test.fetchOneByPrimaryKey(connection, { testId : BigInt(4) });
         })
         .then((row) => {
             t.deepEqual(
                 row,
-                undefined
+                {
+                    testId : BigInt(4),
+                    testVal : BigInt(400),
+                }
             );
         });
 

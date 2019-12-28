@@ -33,6 +33,11 @@ tape(__filename, async (t) => {
             event.deleteResult.deletedRowCount,
             BigInt(1)
         );
+
+        t.deepEqual(
+            event.connection.isInTransaction(),
+            true
+        );
     });
 
     await pool.acquire(async (connection) => {

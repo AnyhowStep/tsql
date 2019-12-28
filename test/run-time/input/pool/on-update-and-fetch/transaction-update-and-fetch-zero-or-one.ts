@@ -36,6 +36,11 @@ tape(__filename, async (t) => {
                 testVal : BigInt(444),
             }
         );
+
+        t.deepEqual(
+            event.connection.isInTransaction(),
+            true
+        );
     });
 
     const insertResult = await pool.acquire(async (connection) => {

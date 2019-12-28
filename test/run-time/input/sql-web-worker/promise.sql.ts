@@ -1442,6 +1442,7 @@ export class Pool implements tsql.IPool {
 
     readonly onInsert = new PoolEventEmitter<tsql.IInsertEvent<ITable>>();
     readonly onInsertOne = new PoolEventEmitter<tsql.IInsertOneEvent<ITable>>();
+    readonly onInsertAndFetch = new PoolEventEmitter<tsql.IInsertAndFetchEvent<ITable>>();
 
     readonly onUpdate = new PoolEventEmitter<tsql.IUpdateEvent<ITable>>();
     readonly onUpdateAndFetch = new PoolEventEmitter<tsql.IUpdateAndFetchEvent<ITable>>();

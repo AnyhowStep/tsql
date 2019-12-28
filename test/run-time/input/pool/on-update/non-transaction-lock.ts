@@ -33,6 +33,10 @@ tape(__filename, async (t) => {
             event.updateResult.foundRowCount,
             BigInt(1)
         );
+        t.deepEqual(
+            event.connection.isInTransaction(),
+            false
+        );
     });
 
     const insertResult = await pool.acquire(async (connection) => {

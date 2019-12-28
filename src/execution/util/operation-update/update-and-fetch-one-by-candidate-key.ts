@@ -162,51 +162,52 @@ export async function updateAndFetchOneByCandidateKey<
     candidateKey : CandidateKeyT,// & AssertNonUnion<CandidateKeyT>,
     assignmentMapDelegate : AssignmentMapDelegate<TableT, AssignmentMapT>
 ) : Promise<UpdateAndFetchOneResult<TableT, AssignmentMapT>> {
-    return connection.transactionIfNotInOne(async (connection) : Promise<UpdateAndFetchOneResult<TableT, AssignmentMapT>> => {
-        const helperResult = await __updateAndFetchOneByCandidateKeyHelper<
-            TableT,
-            CandidateKeyT,
-            AssignmentMapT
-        >(
-            table,
-            connection,
-            candidateKey,
-            assignmentMapDelegate
-        );
-        if (!helperResult.success) {
-            throw helperResult.rowNotFoundError;
+    return updateAndFetchOneImpl<
+        TableT,
+        AssignmentMapT
+    >(
+        table,
+        connection,
+        async (connection) => {
+            const helperResult = await __updateAndFetchOneByCandidateKeyHelper<
+                TableT,
+                CandidateKeyT,
+                AssignmentMapT
+            >(
+                table,
+                connection,
+                candidateKey,
+                assignmentMapDelegate
+            );
+            if (!helperResult.success) {
+                throw helperResult.rowNotFoundError;
+            }
+            const {
+                curCandidateKey,
+                assignmentMap,
+                newCandidateKey,
+            } = helperResult;
+            return {
+                updateWhereDelegate : () => ExprLib.eqCandidateKey(
+                    table,
+                    curCandidateKey
+                ) as any,
+                fetchWhereDelegate : () => ExprLib.eqCandidateKey(
+                    table,
+                    newCandidateKey
+                ) as any,
+                /**
+                 * This cast is unsound.
+                 * What we have is not `AssignmentMapT`.
+                 *
+                 * We have a `BuiltInExpr` version of `AssignmentMapT`,
+                 * with some parts possibly being evaluated to a value expression.
+                 *
+                 * However, this will not affect the correctness of
+                 * our results.
+                 */
+                assignmentMap : assignmentMap as AssignmentMapT,
+            };
         }
-        const {
-            curCandidateKey,
-            assignmentMap,
-            newCandidateKey,
-        } = helperResult;
-
-        return updateAndFetchOneImpl<
-            TableT,
-            AssignmentMapT
-        >(
-            table,
-            connection,
-            () => ExprLib.eqCandidateKey(
-                table,
-                curCandidateKey
-            ) as any,
-            () => ExprLib.eqCandidateKey(
-                table,
-                newCandidateKey
-            ) as any,
-            /**
-             * This cast is unsound.
-             * What we have is not `AssignmentMapT`.
-             *
-             * We have a `BuiltInExpr` version of `AssignmentMapT`,
-             * with some parts possibly being evaluated to a value expression.
-             *
-             * However, this will not affect the correctness of
-             * our results.
-             */
-            assignmentMap as any
-        );
-    });
+    );
 }

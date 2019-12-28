@@ -58,34 +58,50 @@ export interface IsolatedConnection<K> extends IsolableConnection<K> {
  * + Allows `SELECT` statements
  * +
  */
-export type IsolableSelectConnection = (
-    & SelectConnection
+export type IsolableSelectConnection =
+    /**
+     * The order of operands is important here!
+     * Intersections are not commutative in TypeScript!
+     */
     & IsolableConnection<SelectConnection>
-);
+    & SelectConnection
+;
 
 /**
  * + Allows `SELECT/INSERT` statements
  * +
  */
-export type IsolableInsertOneConnection = (
-    & InsertOneConnection
+export type IsolableInsertOneConnection =
+    /**
+     * The order of operands is important here!
+     * Intersections are not commutative in TypeScript!
+     */
     & IsolableConnection<InsertOneConnection>
-);
+    & InsertOneConnection
+;
 
 /**
  * + Allows `SELECT/DELETE` statements
  * +
  */
-export type IsolableDeleteConnection = (
-    & DeleteConnection
+export type IsolableDeleteConnection =
+    /**
+     * The order of operands is important here!
+     * Intersections are not commutative in TypeScript!
+     */
     & IsolableConnection<DeleteConnection>
-);
+    & DeleteConnection
+;
 
 /**
  * + Allows `SELECT/UPDATE` statements
  * +
  */
-export type IsolableUpdateConnection = (
-    & UpdateConnection
+export type IsolableUpdateConnection =
+    /**
+     * The order of operands is important here!
+     * Intersections are not commutative in TypeScript!
+     */
     & IsolableConnection<UpdateConnection>
-);
+    & UpdateConnection
+;

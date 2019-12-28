@@ -1,10 +1,11 @@
+import * as tm from "type-mapping";
 import {DeletableTable, TableUtil} from "../../../table";
-import {WhereDelegate, WhereClauseUtil} from "../../../where-clause";
+import {WhereDelegate, WhereClauseUtil, WhereClause} from "../../../where-clause";
 import {FromClauseUtil} from "../../../from-clause";
 import {DeleteResult, DeleteConnection} from "../../connection";
 import {DeleteEvent} from "../../../event";
 
-async function del<
+export async function deleteImplNoEvent <
     TableT extends DeletableTable
 > (
     table : TableT,
@@ -15,7 +16,12 @@ async function del<
             TableT
         >
     >
-) : Promise<DeleteResult> {
+) : (
+    Promise<{
+        whereClause : WhereClause,
+        deleteResult : DeleteResult,
+    }>
+) {
     TableUtil.assertDeleteEnabled(table);
 
     const whereClause = WhereClauseUtil.where(
@@ -35,17 +41,46 @@ async function del<
         undefined,
         whereDelegate
     );
-    return connection.lock(async (connection) : Promise<DeleteResult> => {
-        const deleteResult = await connection.delete(table, whereClause);
+    const deleteResult = await connection.delete(table, whereClause);
 
-        const fullConnection = connection.tryGetFullConnection();
-        if (fullConnection != undefined) {
-            await fullConnection.eventEmitters.onDelete.invoke(new DeleteEvent({
-                connection : fullConnection,
-                table,
-                whereClause,
-                deleteResult,
-            }));
+    return {
+        whereClause,
+        deleteResult,
+    };
+}
+
+async function del<
+    TableT extends DeletableTable
+> (
+    table : TableT,
+    connection : DeleteConnection,
+    whereDelegate : WhereDelegate<
+        FromClauseUtil.From<
+            FromClauseUtil.NewInstance,
+            TableT
+        >
+    >
+) : Promise<DeleteResult> {
+    return connection.lock(async (connection) : Promise<DeleteResult> => {
+        const {
+            whereClause,
+            deleteResult,
+        } = await deleteImplNoEvent(
+            table,
+            connection,
+            whereDelegate
+        );
+
+        if (tm.BigIntUtil.greaterThan(deleteResult.deletedRowCount, tm.BigInt(0))) {
+            const fullConnection = connection.tryGetFullConnection();
+            if (fullConnection != undefined) {
+                await fullConnection.eventEmitters.onDelete.invoke(new DeleteEvent({
+                    connection : fullConnection,
+                    table,
+                    whereClause,
+                    deleteResult,
+                }));
+            }
         }
 
         return deleteResult;

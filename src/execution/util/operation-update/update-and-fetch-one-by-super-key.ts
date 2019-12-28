@@ -164,51 +164,52 @@ export async function updateAndFetchOneBySuperKey<
     superKey : SuperKeyT & AssertNonUnion<SuperKeyT>,
     assignmentMapDelegate : AssignmentMapDelegate<TableT, AssignmentMapT>
 ) : Promise<UpdateAndFetchOneResult<TableT, AssignmentMapT>> {
-    return connection.transactionIfNotInOne(async (connection) : Promise<UpdateAndFetchOneResult<TableT, AssignmentMapT>> => {
-        const helperResult = await __updateAndFetchOneBySuperKeyHelper<
-            TableT,
-            SuperKeyT,
-            AssignmentMapT
-        >(
-            table,
-            connection,
-            superKey,
-            assignmentMapDelegate
-        );
-        if (!helperResult.success) {
-            throw helperResult.rowNotFoundError;
+    return updateAndFetchOneImpl<
+        TableT,
+        AssignmentMapT
+    >(
+        table,
+        connection,
+        async (connection) => {
+            const helperResult = await __updateAndFetchOneBySuperKeyHelper<
+                TableT,
+                SuperKeyT,
+                AssignmentMapT
+            >(
+                table,
+                connection,
+                superKey,
+                assignmentMapDelegate
+            );
+            if (!helperResult.success) {
+                throw helperResult.rowNotFoundError;
+            }
+            const {
+                curSuperKey,
+                assignmentMap,
+                newSuperKey,
+            } = helperResult;
+            return {
+                updateWhereDelegate : () => ExprLib.eqSuperKey(
+                    table,
+                    curSuperKey
+                ) as any,
+                fetchWhereDelegate : () => ExprLib.eqSuperKey(
+                    table,
+                    newSuperKey
+                ) as any,
+                /**
+                 * This cast is unsound.
+                 * What we have is not `AssignmentMapT`.
+                 *
+                 * We have a `BuiltInExpr` version of `AssignmentMapT`,
+                 * with some parts possibly being evaluated to a value expression.
+                 *
+                 * However, this will not affect the correctness of
+                 * our results.
+                 */
+                assignmentMap : assignmentMap as AssignmentMapT,
+            };
         }
-        const {
-            curSuperKey,
-            assignmentMap,
-            newSuperKey,
-        } = helperResult;
-
-        return updateAndFetchOneImpl<
-            TableT,
-            AssignmentMapT
-        >(
-            table,
-            connection,
-            () => ExprLib.eqSuperKey(
-                table,
-                curSuperKey
-            ) as any,
-            () => ExprLib.eqSuperKey(
-                table,
-                newSuperKey
-            ) as any,
-            /**
-             * This cast is unsound.
-             * What we have is not `AssignmentMapT`.
-             *
-             * We have a `BuiltInExpr` version of `AssignmentMapT`,
-             * with some parts possibly being evaluated to a value expression.
-             *
-             * However, this will not affect the correctness of
-             * our results.
-             */
-            assignmentMap as any
-        );
-    });
+    );
 }

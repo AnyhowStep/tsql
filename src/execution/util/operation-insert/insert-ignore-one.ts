@@ -2,9 +2,8 @@ import * as tm from "type-mapping";
 import {ITable, TableWithAutoIncrement, InsertableTable, TableUtil} from "../../../table";
 import {IgnoredInsertOneResult, InsertIgnoreOneResult, InsertIgnoreOneConnection, InsertOneResult} from "../../connection";
 import {CustomInsertRow, InsertUtil, BuiltInInsertRow} from "../../../insert";
-import {InsertOneResultWithAutoIncrement} from "./insert-one";
+import {InsertOneResultWithAutoIncrement, createInsertOneEvents} from "./insert-one";
 import {Identity} from "../../../type-util";
-import {InsertOneEvent, InsertEvent} from "../../../event";
 
 export type IgnoredInsertOneResultWithAutoIncrement<
     AutoIncrementColumnAlias extends string
@@ -213,40 +212,17 @@ export async function insertIgnoreOne<
         if (isInsertOneResult(insertResult)) {
             const fullConnection = connection.tryGetFullConnection();
             if (fullConnection != undefined) {
-                const augmentedInsertRow = (
-                    table.autoIncrement == undefined ?
-                    insertRow :
-                    {
-                        ...insertRow,
-                        /**
-                         * The column may be specified to be `string|number|bigint`.
-                         * So, we need to use the column's mapper,
-                         * to get the desired data type.
-                         */
-                        [table.autoIncrement] : table.columns[table.autoIncrement].mapper(
-                            `${table.alias}.${table.autoIncrement}`,
-                            /**
-                             * This **should** be `bigint`
-                             */
-                            insertResult.autoIncrementId
-                        ),
-                    }
-                );
-                await fullConnection.eventEmitters.onInsert.invoke(new InsertEvent({
-                    connection : fullConnection,
+                const {
+                    insertEvent,
+                    insertOneEvent,
+                } = createInsertOneEvents(
                     table,
-                    insertRows : [augmentedInsertRow],
-                    insertResult : {
-                        ...insertResult,
-                        lastAutoIncrementId : insertResult.autoIncrementId,
-                    },
-                }));
-                await fullConnection.eventEmitters.onInsertOne.invoke(new InsertOneEvent({
-                    connection : fullConnection,
-                    table,
-                    insertRow : augmentedInsertRow,
+                    fullConnection,
+                    insertRow,
                     insertResult,
-                }));
+                );
+                await fullConnection.eventEmitters.onInsert.invoke(insertEvent);
+                await fullConnection.eventEmitters.onInsertOne.invoke(insertOneEvent);
             }
         }
 
