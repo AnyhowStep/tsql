@@ -166,10 +166,7 @@ export function createInsertOneEvents<
         connection : fullConnection,
         table,
         insertRows : [augmentedInsertRow],
-        insertResult : {
-            ...insertResult,
-            lastAutoIncrementId : insertResult.autoIncrementId,
-        },
+        insertResult,
     });
     const insertOneEvent = new InsertOneEvent({
         connection : fullConnection,

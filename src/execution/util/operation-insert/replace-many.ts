@@ -2,6 +2,7 @@ import * as tm from "type-mapping";
 import {InsertableTable, TableUtil, DeletableTable} from "../../../table";
 import {ReplaceManyConnection, ReplaceManyResult} from "../../connection";
 import {CustomInsertRow, BuiltInInsertRow, InsertUtil} from "../../../insert";
+import {ReplaceEvent} from "../../../event";
 
 /**
  * Inserts/Replaces zero-to-many rows
@@ -42,10 +43,26 @@ export async function replaceMany<
             message : "No rows to insert",
         };
     }
-    return connection.replaceMany(
-        table,
-        rows.map(
+
+    return connection.lock(async (connection) : Promise<ReplaceManyResult> => {
+        const insertRows = rows.map(
             row => InsertUtil.cleanInsertRow(table, row)
-        ) as [BuiltInInsertRow<TableT>, ...BuiltInInsertRow<TableT>[]]
-    );
+        ) as [BuiltInInsertRow<TableT>, ...BuiltInInsertRow<TableT>[]];
+        const replaceResult = await connection.replaceMany(
+            table,
+            insertRows
+        );
+
+        const fullConnection = connection.tryGetFullConnection();
+        if (fullConnection != undefined) {
+            await fullConnection.eventEmitters.onReplace.invoke(new ReplaceEvent({
+                connection : fullConnection,
+                table,
+                insertRows,
+                replaceResult,
+            }));
+        }
+
+        return replaceResult;
+    });
 }

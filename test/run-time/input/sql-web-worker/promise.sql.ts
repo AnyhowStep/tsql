@@ -399,28 +399,57 @@ export class Connection {
 
     replaceOne<TableT extends ITable> (table : TableT, row : tsql.BuiltInInsertRow<TableT>) : Promise<tsql.ReplaceOneResult> {
         const sql = this.insertOneSqlString(table, row, "OR REPLACE");
-        return this.exec(sql)
-            .then(async (result) => {
-                if (result.execResult.length != 0) {
-                    throw new Error(`replaceOne() should have no result set; found ${result.execResult.length}`);
-                }
-                if (result.rowsModified != 1) {
-                    throw new Error(`replaceOne() should modify one row`);
-                }
+        return this.lock((rawNestedConnection) => {
+            const nestedConnection = (rawNestedConnection as unknown as Connection);
+            return nestedConnection.exec(sql)
+                .then(async (result) => {
+                    if (result.execResult.length != 0) {
+                        throw new Error(`replaceOne() should have no result set; found ${result.execResult.length}`);
+                    }
+                    if (result.rowsModified != 1) {
+                        throw new Error(`replaceOne() should modify one row`);
+                    }
 
-                const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
+                    const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
 
-                return {
-                    query : { sql, },
-                    insertedOrReplacedRowCount : BigInt(1) as 1n,
-                    warningCount : BigInt(0),
-                    message : "ok",
-                };
-            })
-            .catch((err) => {
-                //console.error("error encountered", sql);
-                throw err;
-            });
+                    const autoIncrementId = (
+                        (table.autoIncrement == undefined) ?
+                        undefined :
+                        (row[table.autoIncrement as keyof typeof row] === undefined) ?
+                        await tsql
+                            .selectValue(() => tsql.expr(
+                                {
+                                    mapper : tm.mysql.bigIntSigned(),
+                                    usedRef : tsql.UsedRefUtil.fromColumnRef({}),
+                                },
+                                "LAST_INSERT_ROWID()"
+                            ))
+                            .fetchValue(nestedConnection) :
+                        /**
+                         * Emulate MySQL behaviour
+                         */
+                        BigInt(0)
+                    );
+
+                    return {
+                        query : { sql, },
+                        insertedOrReplacedRowCount : BigInt(1) as 1n,
+                        autoIncrementId : (
+                            autoIncrementId == undefined ?
+                            undefined :
+                            tm.BigIntUtil.equal(autoIncrementId, BigInt(0)) ?
+                            undefined :
+                            autoIncrementId
+                        ),
+                        warningCount : BigInt(0),
+                        message : "ok",
+                    };
+                })
+                .catch((err) => {
+                    //console.error("error encountered", sql);
+                    throw err;
+                });
+        });
     }
 
     insertIgnoreOne<TableT extends ITable> (table : TableT, row : tsql.BuiltInInsertRow<TableT>) : Promise<tsql.InsertIgnoreOneResult> {
@@ -762,19 +791,6 @@ export class Connection {
                     return {
                         query : { sql, },
                         insertedRowCount : BigInt(result.rowsModified),
-                        lastAutoIncrementId : (
-                            table.autoIncrement == undefined ?
-                            undefined :
-                            await tsql
-                                .selectValue(() => tsql.expr(
-                                    {
-                                        mapper : tm.mysql.bigIntSigned(),
-                                        usedRef : tsql.UsedRefUtil.fromColumnRef({}),
-                                    },
-                                    "LAST_INSERT_ROWID()"
-                                ))
-                                .fetchValue(nestedConnection)
-                        ),
                         warningCount : BigInt(0),
                         message : "ok",
                     };
@@ -807,22 +823,6 @@ export class Connection {
                     return {
                         query : { sql, },
                         insertedRowCount : BigInt(result.rowsModified),
-                        lastAutoIncrementId : (
-                            (
-                                table.autoIncrement == undefined ||
-                                result.rowsModified != rows.length
-                            ) ?
-                            undefined :
-                            await tsql
-                                .selectValue(() => tsql.expr(
-                                    {
-                                        mapper : tm.mysql.bigIntSigned(),
-                                        usedRef : tsql.UsedRefUtil.fromColumnRef({}),
-                                    },
-                                    "LAST_INSERT_ROWID()"
-                                ))
-                                .fetchValue(nestedConnection)
-                        ),
                         warningCount : BigInt(rows.length - result.rowsModified),
                         message : "ok",
                     };
@@ -968,22 +968,6 @@ export class Connection {
                     return {
                         query : { sql, },
                         insertedRowCount : BigInt(result.rowsModified),
-                        lastAutoIncrementId : (
-                            (
-                                table.autoIncrement == undefined ||
-                                result.rowsModified == 0
-                            ) ?
-                            undefined :
-                            await tsql
-                                .selectValue(() => tsql.expr(
-                                    {
-                                        mapper : tm.mysql.bigIntSigned(),
-                                        usedRef : tsql.UsedRefUtil.fromColumnRef({}),
-                                    },
-                                    "LAST_INSERT_ROWID()"
-                                ))
-                                .fetchValue(nestedConnection)
-                        ),
                         warningCount : BigInt(0),
                         message : "ok",
                     };
@@ -1021,23 +1005,6 @@ export class Connection {
                     return {
                         query : { sql, },
                         insertedRowCount : BigInt(result.rowsModified),
-                        lastAutoIncrementId : (
-                            (
-                                table.autoIncrement == undefined ||
-                                result.rowsModified == 0 ||
-                                !tm.BigIntUtil.equal(result.rowsModified, maxInsertCount)
-                            ) ?
-                            undefined :
-                            await tsql
-                                .selectValue(() => tsql.expr(
-                                    {
-                                        mapper : tm.mysql.bigIntSigned(),
-                                        usedRef : tsql.UsedRefUtil.fromColumnRef({}),
-                                    },
-                                    "LAST_INSERT_ROWID()"
-                                ))
-                                .fetchValue(nestedConnection)
-                        ),
                         warningCount : tm.BigIntUtil.sub(
                             maxInsertCount,
                             result.rowsModified
@@ -1443,6 +1410,8 @@ export class Pool implements tsql.IPool {
     readonly onInsert = new PoolEventEmitter<tsql.IInsertEvent<ITable>>();
     readonly onInsertOne = new PoolEventEmitter<tsql.IInsertOneEvent<ITable>>();
     readonly onInsertAndFetch = new PoolEventEmitter<tsql.IInsertAndFetchEvent<ITable>>();
+
+    readonly onReplace = new PoolEventEmitter<tsql.IReplaceEvent<ITable>>();
 
     readonly onUpdate = new PoolEventEmitter<tsql.IUpdateEvent<ITable>>();
     readonly onUpdateAndFetch = new PoolEventEmitter<tsql.IUpdateAndFetchEvent<ITable>>();

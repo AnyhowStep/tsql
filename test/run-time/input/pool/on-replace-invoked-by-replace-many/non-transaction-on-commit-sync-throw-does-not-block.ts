@@ -12,17 +12,30 @@ tape(__filename, async (t) => {
             testId : tm.mysql.bigIntUnsigned(),
             testVal : tm.mysql.bigIntUnsigned(),
         })
-        .setAutoIncrement(columns => columns.testId);
+        .setPrimaryKey(columns => [columns.testId]);
 
     let eventHandled = false;
-    let onCommitInvoked = false;
+    let onCommitInvoked = 0;
     let onRollbackInvoked = false;
-    pool.onInsert.addHandler((event) => {
+    pool.onReplace.addHandler((event) => {
         if (!event.isFor(test)) {
             return;
         }
         event.addOnCommitListener(() => {
-            onCommitInvoked = true;
+            ++onCommitInvoked;
+            throw new Error(`Blah`);
+        });
+        event.addOnCommitListener(() => {
+            ++onCommitInvoked;
+            throw new Error(`Blah`);
+        });
+        event.addOnCommitListener(() => {
+            ++onCommitInvoked;
+            throw new Error(`Blah`);
+        });
+        event.addOnCommitListener(() => {
+            ++onCommitInvoked;
+            throw new Error(`Blah`);
         });
         event.addOnRollbackListener(() => {
             onRollbackInvoked = true;
@@ -31,19 +44,17 @@ tape(__filename, async (t) => {
         t.deepEqual(
             event.candidateKeys,
             [
-                undefined,
+                {
+                    testId : BigInt(4),
+                },
             ]
-        );
-        t.deepEqual(
-            event.insertResult.warningCount,
-            BigInt(0)
         );
     });
 
     const insertResult = await pool.acquire(async (connection) => {
         await connection.exec(`
             CREATE TABLE test (
-                testId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                testId INT PRIMARY KEY,
                 testVal INT
             );
             INSERT INTO
@@ -55,31 +66,32 @@ tape(__filename, async (t) => {
         `);
 
         t.deepEqual(eventHandled, false);
-        t.deepEqual(onCommitInvoked, false);
+        t.deepEqual(onCommitInvoked, 0);
         t.deepEqual(onRollbackInvoked, false);
 
-        const result = await test.insertIgnoreMany(
+        const result = await test.replaceMany(
             connection,
             [
                 {
+                    testId : BigInt(4),
                     testVal : BigInt(400),
                 },
             ]
         );
 
         t.deepEqual(eventHandled, true);
-        t.deepEqual(onCommitInvoked, false);
+        t.deepEqual(onCommitInvoked, 0);
         t.deepEqual(onRollbackInvoked, false);
 
         return result;
     });
 
     t.deepEqual(eventHandled, true);
-    t.deepEqual(onCommitInvoked, true);
+    t.deepEqual(onCommitInvoked, 4);
     t.deepEqual(onRollbackInvoked, false);
 
     t.deepEqual(
-        insertResult.insertedRowCount,
+        insertResult.insertedOrReplacedRowCount,
         BigInt(1)
     );
     t.deepEqual(

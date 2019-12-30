@@ -12,12 +12,12 @@ tape(__filename, async (t) => {
             testId : tm.mysql.bigIntUnsigned(),
             testVal : tm.mysql.bigIntUnsigned(),
         })
-        .setAutoIncrement(columns => columns.testId);
+        .setPrimaryKey(columns => [columns.testId]);
 
     let eventHandled = false;
     let onCommitInvoked = false;
     let onRollbackInvoked = false;
-    pool.onInsert.addHandler((event) => {
+    pool.onReplace.addHandler((event) => {
         if (!event.isFor(test)) {
             return;
         }
@@ -31,19 +31,19 @@ tape(__filename, async (t) => {
         t.deepEqual(
             event.candidateKeys,
             [
-                undefined,
+                {
+                    testId : BigInt(4),
+                },
             ]
         );
-        t.deepEqual(
-            event.insertResult.warningCount,
-            BigInt(0)
-        );
+
+        throw new Error(`Sync throw`);
     });
 
-    const insertResult = await pool.acquire(async (connection) => {
+    await pool.acquire(async (connection) => {
         await connection.exec(`
             CREATE TABLE test (
-                testId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                testId INT PRIMARY KEY,
                 testVal INT
             );
             INSERT INTO
@@ -58,34 +58,28 @@ tape(__filename, async (t) => {
         t.deepEqual(onCommitInvoked, false);
         t.deepEqual(onRollbackInvoked, false);
 
-        const result = await test.insertIgnoreMany(
+        await test.replaceMany(
             connection,
             [
                 {
+                    testId : BigInt(4),
                     testVal : BigInt(400),
                 },
             ]
-        );
+        ).then(() => {
+            t.fail("Should throw");
+        }).catch((err) => {
+            t.deepEqual(err.message, "Sync throw");
+        });
 
         t.deepEqual(eventHandled, true);
         t.deepEqual(onCommitInvoked, false);
         t.deepEqual(onRollbackInvoked, false);
-
-        return result;
     });
 
     t.deepEqual(eventHandled, true);
     t.deepEqual(onCommitInvoked, true);
     t.deepEqual(onRollbackInvoked, false);
-
-    t.deepEqual(
-        insertResult.insertedRowCount,
-        BigInt(1)
-    );
-    t.deepEqual(
-        insertResult.warningCount,
-        BigInt(0)
-    );
 
     await pool
         .acquire(async (connection) => {

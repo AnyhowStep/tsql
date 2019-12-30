@@ -1,6 +1,133 @@
-import {InsertableTable, TableUtil, DeletableTable} from "../../../table";
+import * as tm from "type-mapping";
+import {InsertableTable, TableUtil, DeletableTable, TableWithAutoIncrement} from "../../../table";
 import {ReplaceOneResult, ReplaceOneConnection} from "../../connection";
-import {CustomInsertRow, InsertUtil} from "../../../insert";
+import {CustomInsertRow, InsertUtil, BuiltInInsertRow} from "../../../insert";
+import {DataTypeUtil} from "../../../data-type";
+
+export type ReplaceOneResultWithAutoIncrement<
+    AutoIncrementColumnAlias extends string
+> =
+    & ReplaceOneResult
+    & { autoIncrementId : bigint }
+    & { [columnAlias in AutoIncrementColumnAlias] : bigint }
+;
+export type ReplaceOneWithAutoIncrementReturnType<
+    TableT extends TableWithAutoIncrement
+> =
+    ReplaceOneResultWithAutoIncrement<TableT["autoIncrement"]>
+;
+
+export async function replaceOneImplNoEvent<
+    TableT extends InsertableTable & DeletableTable
+> (
+    table : TableT,
+    connection : ReplaceOneConnection,
+    row : CustomInsertRow<TableT>
+) : (
+    Promise<{
+        insertRow : BuiltInInsertRow<TableT>,
+        replaceResult : (
+            TableT extends TableWithAutoIncrement ?
+            ReplaceOneWithAutoIncrementReturnType<TableT> :
+            ReplaceOneResult
+        ),
+    }>
+) {
+    TableUtil.assertInsertEnabled(table);
+    TableUtil.assertDeleteEnabled(table);
+
+    /**
+     * Should contain only `BuiltInExpr` now
+     */
+    row = InsertUtil.cleanInsertRow(table, row);
+
+    if (table.autoIncrement == undefined) {
+        return {
+            insertRow : row,
+            replaceResult : await connection.replaceOne(table, row) as (
+                TableT extends TableWithAutoIncrement ?
+                ReplaceOneWithAutoIncrementReturnType<TableT> :
+                ReplaceOneResult
+            ),
+        };
+    }
+
+    let explicitAutoIncrementBuiltInExpr = (row as { [k:string]:unknown })[table.autoIncrement];
+
+    if (explicitAutoIncrementBuiltInExpr === undefined) {
+        const replaceResult = await connection.replaceOne(table, row);
+
+        if (replaceResult.autoIncrementId != undefined) {
+            return {
+                insertRow : row,
+                replaceResult : {
+                    ...replaceResult,
+                    [table.autoIncrement] : replaceResult.autoIncrementId,
+                } as (
+                    TableT extends TableWithAutoIncrement ?
+                    ReplaceOneWithAutoIncrementReturnType<TableT> :
+                    ReplaceOneResult
+                ),
+            };
+        }
+
+        /**
+         * @todo Custom error type
+         */
+        throw new Error(`Successful replaceOne() to ${table.alias} should return autoIncrementId`);
+    }
+
+    explicitAutoIncrementBuiltInExpr = await DataTypeUtil.evaluateCustomExpr(
+        table.columns[table.autoIncrement],
+        connection,
+        explicitAutoIncrementBuiltInExpr
+    );
+
+    const autoIncrementBigInt = tm.BigInt(explicitAutoIncrementBuiltInExpr as any);
+
+    const replaceResult = await connection.replaceOne(
+        table,
+        {
+            ...row,
+            [table.autoIncrement] : explicitAutoIncrementBuiltInExpr,
+        }
+    );
+
+    /**
+     * We defer to the `autoIncrementId` of the `replaceResult`.
+     * We assume the `connection` always knows best.
+     */
+    if (replaceResult.autoIncrementId != undefined) {
+        return {
+            insertRow : row,
+            replaceResult : {
+                ...replaceResult,
+                [table.autoIncrement] : replaceResult.autoIncrementId,
+            } as (
+                TableT extends TableWithAutoIncrement ?
+                ReplaceOneWithAutoIncrementReturnType<TableT> :
+                ReplaceOneResult
+            ),
+        };
+    }
+
+    /**
+     * User supplied an explicit value for the `AUTO_INCREMENT`/`SERIAL` column, for whatever reason.
+     * Use it.
+     */
+    return {
+        insertRow : row,
+        replaceResult : {
+            ...replaceResult,
+            autoIncrementId : autoIncrementBigInt,
+            [table.autoIncrement] : autoIncrementBigInt,
+        } as (
+            TableT extends TableWithAutoIncrement ?
+            ReplaceOneWithAutoIncrementReturnType<TableT> :
+            ReplaceOneResult
+        ),
+    };
+}
 
 /**
  * Only inserts/replaces one row
@@ -21,12 +148,47 @@ export async function replaceOne<
     connection : ReplaceOneConnection,
     row : CustomInsertRow<TableT>
 ) : (
-    Promise<ReplaceOneResult>
+    Promise<
+        TableT extends TableWithAutoIncrement ?
+        ReplaceOneWithAutoIncrementReturnType<TableT> :
+        ReplaceOneResult
+    >
 ) {
-    TableUtil.assertInsertEnabled(table);
-    TableUtil.assertDeleteEnabled(table);
+    return connection.lock(async (connection) : (
+        Promise<
+            TableT extends TableWithAutoIncrement ?
+            ReplaceOneWithAutoIncrementReturnType<TableT> :
+            ReplaceOneResult
+        >
+    ) => {
+        const {
+            //insertRow,
+            replaceResult,
+        } = await replaceOneImplNoEvent<TableT>(
+            table,
+            connection,
+            row
+        );
 
-    row = InsertUtil.cleanInsertRow(table, row);
-
-    return connection.replaceOne(table, row);
+        /**
+         * @todo
+         */
+        /*
+        const fullConnection = connection.tryGetFullConnection();
+        if (fullConnection != undefined) {
+            const {
+                replaceEvent,
+                replaceOneEvent,
+            } = createReplaceOneEvents(
+                table,
+                fullConnection,
+                insertRow,
+                replaceResult,
+            );
+            await fullConnection.eventEmitters.onReplace.invoke(replaceEvent);
+            await fullConnection.eventEmitters.onReplaceOne.invoke(replaceOneEvent);
+        }
+        */
+        return replaceResult;
+    });
 }

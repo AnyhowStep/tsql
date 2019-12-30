@@ -17,7 +17,7 @@ tape(__filename, async (t) => {
     let eventHandled = false;
     let onCommitInvoked = false;
     let onRollbackInvoked = false;
-    pool.onInsert.addHandler((event) => {
+    pool.onReplace.addHandler(async (event) => {
         if (!event.isFor(test)) {
             return;
         }
@@ -32,11 +32,9 @@ tape(__filename, async (t) => {
             event.candidateKeys,
             [
                 undefined,
+                undefined,
+                undefined,
             ]
-        );
-        t.deepEqual(
-            event.insertResult.warningCount,
-            BigInt(0)
         );
     });
 
@@ -58,11 +56,17 @@ tape(__filename, async (t) => {
         t.deepEqual(onCommitInvoked, false);
         t.deepEqual(onRollbackInvoked, false);
 
-        const result = await test.insertIgnoreMany(
+        const result = await test.replaceMany(
             connection,
             [
                 {
                     testVal : BigInt(400),
+                },
+                {
+                    testVal : BigInt(600),
+                },
+                {
+                    testVal : BigInt(500),
                 },
             ]
         );
@@ -79,8 +83,8 @@ tape(__filename, async (t) => {
     t.deepEqual(onRollbackInvoked, false);
 
     t.deepEqual(
-        insertResult.insertedRowCount,
-        BigInt(1)
+        insertResult.insertedOrReplacedRowCount,
+        BigInt(3)
     );
     t.deepEqual(
         insertResult.warningCount,
@@ -97,6 +101,34 @@ tape(__filename, async (t) => {
                 {
                     testId : BigInt(4),
                     testVal : BigInt(400),
+                }
+            );
+        });
+
+    await pool
+        .acquire(async (connection) => {
+            return test.fetchOneByPrimaryKey(connection, { testId : BigInt(5) });
+        })
+        .then((row) => {
+            t.deepEqual(
+                row,
+                {
+                    testId : BigInt(5),
+                    testVal : BigInt(600),
+                }
+            );
+        });
+
+    await pool
+        .acquire(async (connection) => {
+            return test.fetchOneByPrimaryKey(connection, { testId : BigInt(6) });
+        })
+        .then((row) => {
+            t.deepEqual(
+                row,
+                {
+                    testId : BigInt(6),
+                    testVal : BigInt(500),
                 }
             );
         });

@@ -63,14 +63,6 @@ export interface InsertManyResult {
     insertedRowCount : bigint;
 
     /**
-     * The `autoIncrementId` of the last inserted row.
-     *
-     * This value only makes sense if the table has an `autoIncrement` column.
-     */
-    //alias for `insertId` in MySQL
-    lastAutoIncrementId : bigint|undefined;
-
-    /**
      * May be the duplicate row count, or some other value.
      */
     warningCount : bigint;
@@ -118,21 +110,6 @@ export interface InsertIgnoreManyResult {
     insertedRowCount : bigint;
 
     /**
-     * The `autoIncrementId` of the last inserted row.
-     *
-     * This value only makes sense if the table has an `autoIncrement` column.
-     *
-     * It is possible for this value to be `undefined`,
-     * event if the table has an `autoIncrement` column.
-     *
-     * For example, if there are ignored rows, we will not know
-     * which rows were ignored. And so, we will not know
-     * which row the `autoIncrementId` belongs to.
-     */
-    //alias for `insertId` in MySQL
-    lastAutoIncrementId : bigint|undefined;
-
-    /**
      * May be the duplicate row count, or some other value.
      */
     warningCount : bigint;
@@ -150,6 +127,23 @@ export interface ReplaceOneResult {
      */
     //alias for affectedRows on MySQL
     insertedOrReplacedRowCount : 1n;
+
+    /**
+     * If the table has an `AUTO_INCREMENT`/`SERIAL` column, it returns `> 0n`.
+     * Else, it returns `undefined`.
+     *
+     * If multiple rows are inserted, there is no guarantee that `insertId` will be set.
+     *
+     * -----
+     *
+     * If you explicitly set the value of the `AUTO_INCREMENT` column,
+     * should there be a guarantee that it is set to the explicit value?
+     *
+     * Using MySQL's `LAST_INSERT_ID()` returns `0`, in this case.
+     * But the library should be able to infer...
+     */
+    //alias for `insertId` in MySQL
+    autoIncrementId : bigint|undefined;
 
     /**
      * May be the duplicate row count, or some other value.
