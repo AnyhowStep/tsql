@@ -4,15 +4,18 @@ import {IReadonlyTransactionListenerCollection} from "./transaction-listener-col
 import {IConnectionEventEmitter, ConnectionEventEmitter} from "./connection-event-emitter";
 import {IInsertEvent} from "./insert-event";
 import {IInsertOneEvent} from "./insert-one-event";
+import {IInsertAndFetchEvent} from "./insert-and-fetch-event";
+import {IReplaceEvent} from "./replace-event";
 import {IUpdateEvent} from "./update-event";
 import {IUpdateAndFetchEvent} from "./update-and-fetch-event";
 import {IDeleteEvent} from "./delete-event";
-import {IInsertAndFetchEvent} from "./insert-and-fetch-event";
 
 export interface IConnectionEventEmitterCollection {
     readonly onInsert : IConnectionEventEmitter<IInsertEvent<ITable>>;
     readonly onInsertOne : IConnectionEventEmitter<IInsertOneEvent<ITable>>;
     readonly onInsertAndFetch : IConnectionEventEmitter<IInsertAndFetchEvent<ITable>>;
+
+    readonly onReplace : IConnectionEventEmitter<IReplaceEvent<ITable>>;
 
     readonly onUpdate : IConnectionEventEmitter<IUpdateEvent<ITable>>;
     readonly onUpdateAndFetch : IConnectionEventEmitter<IUpdateAndFetchEvent<ITable>>;
@@ -34,6 +37,8 @@ export class ConnectionEventEmitterCollection implements IConnectionEventEmitter
     readonly onInsertOne : ConnectionEventEmitter<IInsertOneEvent<ITable>>;
     readonly onInsertAndFetch : IConnectionEventEmitter<IInsertAndFetchEvent<ITable>>;
 
+    readonly onReplace : IConnectionEventEmitter<IReplaceEvent<ITable>>;
+
     readonly onUpdate : ConnectionEventEmitter<IUpdateEvent<ITable>>;
     readonly onUpdateAndFetch : ConnectionEventEmitter<IUpdateAndFetchEvent<ITable>>;
 
@@ -54,6 +59,11 @@ export class ConnectionEventEmitterCollection implements IConnectionEventEmitter
         );
         this.onInsertAndFetch = new ConnectionEventEmitter<IInsertAndFetchEvent<ITable>>(
             pool.onInsertAndFetch,
+            this.addTransactionListenerCollectionImpl
+        );
+
+        this.onReplace = new ConnectionEventEmitter<IReplaceEvent<ITable>>(
+            pool.onReplace,
             this.addTransactionListenerCollectionImpl
         );
 

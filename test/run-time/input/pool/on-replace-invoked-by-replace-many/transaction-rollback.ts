@@ -12,12 +12,12 @@ tape(__filename, async (t) => {
             testId : tm.mysql.bigIntUnsigned(),
             testVal : tm.mysql.bigIntUnsigned(),
         })
-        .setAutoIncrement(columns => columns.testId);
+        .setPrimaryKey(columns => [columns.testId]);
 
     let eventHandled = false;
     let onCommitInvoked = false;
     let onRollbackInvoked = false;
-    pool.onInsert.addHandler((event) => {
+    pool.onReplace.addHandler((event) => {
         if (!event.isFor(test)) {
             return;
         }
@@ -31,19 +31,17 @@ tape(__filename, async (t) => {
         t.deepEqual(
             event.candidateKeys,
             [
-                undefined,
+                {
+                    testId : BigInt(4),
+                },
             ]
-        );
-        t.deepEqual(
-            event.insertResult.warningCount,
-            BigInt(0)
         );
     });
 
-    const insertResult = await pool.acquire(async (connection) => {
+    await pool.acquire(async (connection) => {
         await connection.exec(`
             CREATE TABLE test (
-                testId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                testId INT PRIMARY KEY,
                 testVal INT
             );
             INSERT INTO
@@ -58,48 +56,46 @@ tape(__filename, async (t) => {
         t.deepEqual(onCommitInvoked, false);
         t.deepEqual(onRollbackInvoked, false);
 
-        const result = await test.insertIgnoreMany(
-            connection,
-            [
-                {
-                    testVal : BigInt(400),
-                },
-            ]
-        );
+        await connection.transaction(async (connection) => {
 
+            t.deepEqual(eventHandled, false);
+            t.deepEqual(onCommitInvoked, false);
+            t.deepEqual(onRollbackInvoked, false);
+
+            await test.replaceMany(
+                connection,
+                [
+                    {
+                        testId : BigInt(4),
+                        testVal : BigInt(400),
+                    },
+                ]
+            );
+
+            t.deepEqual(eventHandled, true);
+            t.deepEqual(onCommitInvoked, false);
+            t.deepEqual(onRollbackInvoked, false);
+
+            throw new Error(``);
+        });
+
+        t.fail("Should throw");
+    }).then(() => {
+        t.fail("Should throw");
+    }).catch(async () => {
         t.deepEqual(eventHandled, true);
         t.deepEqual(onCommitInvoked, false);
-        t.deepEqual(onRollbackInvoked, false);
+        t.deepEqual(onRollbackInvoked, true);
 
-        return result;
+        await pool
+            .acquire(async (connection) => {
+                return test.fetchOneByPrimaryKey(connection, { testId : BigInt(4) });
+            }).then(() => {
+                t.fail("Should not exist");
+            }).catch((err) => {
+                t.true(err instanceof tsql.RowNotFoundError);
+            });
     });
-
-    t.deepEqual(eventHandled, true);
-    t.deepEqual(onCommitInvoked, true);
-    t.deepEqual(onRollbackInvoked, false);
-
-    t.deepEqual(
-        insertResult.insertedRowCount,
-        BigInt(1)
-    );
-    t.deepEqual(
-        insertResult.warningCount,
-        BigInt(0)
-    );
-
-    await pool
-        .acquire(async (connection) => {
-            return test.fetchOneByPrimaryKey(connection, { testId : BigInt(4) });
-        })
-        .then((row) => {
-            t.deepEqual(
-                row,
-                {
-                    testId : BigInt(4),
-                    testVal : BigInt(400),
-                }
-            );
-        });
 
     t.end();
 });

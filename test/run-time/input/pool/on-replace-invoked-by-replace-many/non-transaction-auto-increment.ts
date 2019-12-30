@@ -17,7 +17,7 @@ tape(__filename, async (t) => {
     let eventHandled = false;
     let onCommitInvoked = false;
     let onRollbackInvoked = false;
-    pool.onInsert.addHandler((event) => {
+    pool.onReplace.addHandler((event) => {
         if (!event.isFor(test)) {
             return;
         }
@@ -33,10 +33,6 @@ tape(__filename, async (t) => {
             [
                 undefined,
             ]
-        );
-        t.deepEqual(
-            event.insertResult.warningCount,
-            BigInt(0)
         );
     });
 
@@ -58,7 +54,7 @@ tape(__filename, async (t) => {
         t.deepEqual(onCommitInvoked, false);
         t.deepEqual(onRollbackInvoked, false);
 
-        const result = await test.insertIgnoreMany(
+        const result = await test.replaceMany(
             connection,
             [
                 {
@@ -79,7 +75,7 @@ tape(__filename, async (t) => {
     t.deepEqual(onRollbackInvoked, false);
 
     t.deepEqual(
-        insertResult.insertedRowCount,
+        insertResult.insertedOrReplacedRowCount,
         BigInt(1)
     );
     t.deepEqual(

@@ -33,17 +33,8 @@ tape(__filename, async (t) => {
             [
                 undefined,
                 undefined,
-                {
-                    testId : BigInt(6),
-                },
+                undefined,
             ]
-        );
-        t.deepEqual(
-            await event.getOrFetch(2),
-            {
-                testId : BigInt(6),
-                testVal : BigInt(500),
-            }
         );
     });
 

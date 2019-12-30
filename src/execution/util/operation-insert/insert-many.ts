@@ -34,7 +34,6 @@ export async function insertMany<
                 sql : "",
             },
             insertedRowCount : tm.BigInt(0),
-            lastAutoIncrementId : undefined,
             /**
              * Should this be considered a warning?
              * Probably not.
@@ -55,37 +54,10 @@ export async function insertMany<
 
         const fullConnection = connection.tryGetFullConnection();
         if (fullConnection != undefined) {
-            const tableAutoIncrement = table.autoIncrement;
-            const augmentedInsertRows : [BuiltInInsertRow<TableT>, ...BuiltInInsertRow<TableT>[]] = (
-                tableAutoIncrement == undefined ?
-                insertRows :
-                insertRows.map((insertRow, index) : BuiltInInsertRow<TableT> => {
-                    if (index == insertRows.length-1) {
-                        return {
-                            ...insertRow,
-                            /**
-                             * The column may be specified to be `string|number|bigint`.
-                             * So, we need to use the column's mapper,
-                             * to get the desired data type.
-                             */
-                            [tableAutoIncrement] : table.columns[tableAutoIncrement].mapper(
-                                `${table.alias}.${table.autoIncrement}`,
-                                /**
-                                 * This **should** be `bigint`
-                                 */
-                                insertResult.lastAutoIncrementId
-                            ),
-                        };
-                    } else {
-                        return insertRow;
-                    }
-                })
-            );
-
             await fullConnection.eventEmitters.onInsert.invoke(new InsertEvent({
                 connection : fullConnection,
                 table,
-                insertRows : augmentedInsertRows,
+                insertRows,
                 insertResult,
             }));
         }

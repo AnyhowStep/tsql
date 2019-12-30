@@ -31,12 +31,10 @@ tape(__filename, async (t) => {
         t.deepEqual(
             event.candidateKeys,
             [
-                undefined,
+                {
+                    testId : BigInt(4),
+                },
             ]
-        );
-        t.deepEqual(
-            event.insertResult.warningCount,
-            BigInt(0)
         );
     });
 
@@ -58,13 +56,11 @@ tape(__filename, async (t) => {
         t.deepEqual(onCommitInvoked, false);
         t.deepEqual(onRollbackInvoked, false);
 
-        const result = await test.insertIgnoreMany(
+        const result = await test.insertIgnoreOne(
             connection,
-            [
-                {
-                    testVal : BigInt(400),
-                },
-            ]
+            {
+                testVal : BigInt(400),
+            }
         );
 
         t.deepEqual(eventHandled, true);

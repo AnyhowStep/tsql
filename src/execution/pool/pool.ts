@@ -8,6 +8,7 @@ import {
     IUpdateAndFetchEvent,
     IDeleteEvent,
     IInsertAndFetchEvent,
+    IReplaceEvent,
 } from "../../event";
 
 export type ConnectionCallback<ResultT> = (
@@ -33,6 +34,8 @@ export interface IPool {
     readonly onInsert : IPoolEventEmitter<IInsertEvent<ITable>>;
     readonly onInsertOne : IPoolEventEmitter<IInsertOneEvent<ITable>>;
     readonly onInsertAndFetch : IPoolEventEmitter<IInsertAndFetchEvent<ITable>>;
+
+    readonly onReplace : IPoolEventEmitter<IReplaceEvent<ITable>>;
 
     readonly onUpdate : IPoolEventEmitter<IUpdateEvent<ITable>>;
     readonly onUpdateAndFetch : IPoolEventEmitter<IUpdateAndFetchEvent<ITable>>;

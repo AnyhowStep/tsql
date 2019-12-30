@@ -17,7 +17,7 @@ import {FromClauseUtil} from "../from-clause";
 import {WhereDelegate} from "../where-clause";
 import {AnyBuiltInExpr} from "../built-in-expr";
 import {CustomInsertRow} from "../insert";
-import {InsertOneWithAutoIncrementReturnType, InsertIgnoreOneWithAutoIncrementReturnType, DeleteOneResult, DeleteZeroOrOneResult, UpdateOneResult, UpdateZeroOrOneResult} from "../execution/util";
+import {InsertOneWithAutoIncrementReturnType, InsertIgnoreOneWithAutoIncrementReturnType, DeleteOneResult, DeleteZeroOrOneResult, UpdateOneResult, UpdateZeroOrOneResult, ReplaceOneWithAutoIncrementReturnType} from "../execution/util";
 import {AssignmentMapDelegate} from "../update";
 
 export class Table<DataT extends TableData> implements ITable {
@@ -924,7 +924,11 @@ export class Table<DataT extends TableData> implements ITable {
         this : Extract<this, InsertableTable & DeletableTable>,
         connection : ReplaceOneConnection,
         row : CustomInsertRow<Extract<this, InsertableTable & DeletableTable>>
-    ) : Promise<ReplaceOneResult> {
+    ) : Promise<
+        this extends TableWithAutoIncrement ?
+        ReplaceOneWithAutoIncrementReturnType<Extract<this, TableWithAutoIncrement>> :
+        ReplaceOneResult
+    > {
         return ExecutionUtil.replaceOne(
             this,
             connection,

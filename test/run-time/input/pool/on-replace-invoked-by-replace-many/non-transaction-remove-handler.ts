@@ -12,12 +12,13 @@ tape(__filename, async (t) => {
             testId : tm.mysql.bigIntUnsigned(),
             testVal : tm.mysql.bigIntUnsigned(),
         })
-        .setAutoIncrement(columns => columns.testId);
+        .setPrimaryKey(columns => [columns.testId]);
 
     let eventHandled = false;
     let onCommitInvoked = false;
     let onRollbackInvoked = false;
-    pool.onInsert.addHandler((event) => {
+
+    const handler : tsql.EventHandler<tsql.IReplaceEvent<tsql.ITable>> = (event) => {
         if (!event.isFor(test)) {
             return;
         }
@@ -27,23 +28,23 @@ tape(__filename, async (t) => {
         event.addOnRollbackListener(() => {
             onRollbackInvoked = true;
         });
+        t.deepEqual(eventHandled, false);
         eventHandled = true;
         t.deepEqual(
             event.candidateKeys,
             [
-                undefined,
+                {
+                    testId : BigInt(4),
+                },
             ]
         );
-        t.deepEqual(
-            event.insertResult.warningCount,
-            BigInt(0)
-        );
-    });
+    };
+    pool.onReplace.addHandler(handler);
 
     const insertResult = await pool.acquire(async (connection) => {
         await connection.exec(`
             CREATE TABLE test (
-                testId INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                testId INT PRIMARY KEY,
                 testVal INT
             );
             INSERT INTO
@@ -58,28 +59,31 @@ tape(__filename, async (t) => {
         t.deepEqual(onCommitInvoked, false);
         t.deepEqual(onRollbackInvoked, false);
 
-        const result = await test.insertIgnoreMany(
+        pool.onReplace.removeHandler(handler);
+
+        const result = await test.replaceMany(
             connection,
             [
                 {
+                    testId : BigInt(4),
                     testVal : BigInt(400),
                 },
             ]
         );
 
-        t.deepEqual(eventHandled, true);
+        t.deepEqual(eventHandled, false);
         t.deepEqual(onCommitInvoked, false);
         t.deepEqual(onRollbackInvoked, false);
 
         return result;
     });
 
-    t.deepEqual(eventHandled, true);
-    t.deepEqual(onCommitInvoked, true);
+    t.deepEqual(eventHandled, false);
+    t.deepEqual(onCommitInvoked, false);
     t.deepEqual(onRollbackInvoked, false);
 
     t.deepEqual(
-        insertResult.insertedRowCount,
+        insertResult.insertedOrReplacedRowCount,
         BigInt(1)
     );
     t.deepEqual(
