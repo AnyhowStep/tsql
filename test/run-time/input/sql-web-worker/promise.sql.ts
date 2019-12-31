@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import * as tsql from "../../../../dist";
 import {ISqliteWorker, SqliteAction, FromSqliteMessage, ToSqliteMessage} from "./worker.sql";
-import {AsyncQueue, PoolEventEmitter, IPool} from "../../../../dist";
+import {AsyncQueue, PoolEventEmitter, IPool, TransactionAccessMode, IsolationLevel, IsolationLevelUtil, TransactionAccessModeUtil} from "../../../../dist";
 import {sqliteSqlfier} from "../../../sqlite-sqlfier";
 import {ITable, BuiltInExprUtil, WhereClause, DeletableTable, DeleteResult, BuiltInAssignmentMap, UpdateResult} from "../../../../dist";
 
@@ -85,7 +85,13 @@ interface TransactionInformation {
     /**
      * mutable
      */
-    isInTransaction : boolean;
+    state : (
+        | undefined
+        | {
+            minimumIsolationLevel : IsolationLevel,
+            accessMode : TransactionAccessMode,
+        }
+    );
 }
 
 /**
@@ -248,7 +254,18 @@ export class Connection {
     }
 
     tryGetFullConnection () : tsql.IConnection|undefined {
-        return this as unknown as tsql.IConnection;
+        if (
+            this.transactionInfo.state != undefined &&
+            this.transactionInfo.state.accessMode == TransactionAccessMode.READ_ONLY
+        ) {
+            /**
+             * Can't give a full connection if we are in a readonly transaction.
+             * No `INSERT/UPDATE/DELETE` allowed.
+             */
+            return undefined;
+        } else {
+            return this as unknown as tsql.IConnection;
+        }
     }
 
     select (query : tsql.IQueryBase) : Promise<tsql.SelectResult> {
@@ -1181,7 +1198,7 @@ export class Connection {
         }
         return this.exec("ROLLBACK")
             .then(() => {
-                this.transactionInfo.isInTransaction = false;
+                this.transactionInfo.state = undefined;
                 /**
                  * @todo Handle sync errors somehow.
                  * Maybe propagate them to `IPool` and have an `onError` handler or something
@@ -1195,7 +1212,7 @@ export class Connection {
         }
         return this.exec("COMMIT")
             .then(() => {
-                this.transactionInfo.isInTransaction = false;
+                this.transactionInfo.state = undefined;
                 /**
                  * @todo Handle sync errors somehow.
                  * Maybe propagate them to `IPool` and have an `onError` handler or something
@@ -1204,16 +1221,42 @@ export class Connection {
             });
     }
 
+    getMinimumIsolationLevel () : IsolationLevel {
+        if (this.transactionInfo.state == undefined) {
+            throw new Error(`Not in transaction`);
+        }
+        return this.transactionInfo.state.minimumIsolationLevel;
+    }
+    getTransactionAccessMode () : TransactionAccessMode {
+        if (this.transactionInfo.state == undefined) {
+            throw new Error(`Not in transaction`);
+        }
+        return this.transactionInfo.state.accessMode;
+    }
+
     isInTransaction () : this is tsql.ITransactionConnection {
-        return this.transactionInfo.isInTransaction;
+        return this.transactionInfo.state != undefined;
     }
     private transactionImpl<ResultT> (
-        callback : tsql.TransactionCallback<ResultT>
+        minimumIsolationLevel : IsolationLevel,
+        accessMode : TransactionAccessMode,
+        callback : tsql.TransactionCallback<ResultT>|tsql.ReadOnlyTransactionCallback<ResultT>
     ) : Promise<ResultT> {
-        if (this.transactionInfo.isInTransaction) {
-            return Promise.reject(new Error(`Transaction already started`));
+        if (this.transactionInfo.state != undefined) {
+            return Promise.reject(new Error(`Transaction already started or starting`));
         }
-        this.transactionInfo.isInTransaction = true;
+        /**
+         * SQLite only has `SERIALIZABLE` transactions.
+         * So, no matter what we request, we will always get a
+         * `SERIALIZABLE` transaction.
+         *
+         * However, we will just pretend that we have all
+         * isolation levels supported.
+         */
+        this.transactionInfo.state = {
+            minimumIsolationLevel,
+            accessMode,
+        };
 
         return new Promise<ResultT>((resolve, reject) => {
             this.exec("BEGIN TRANSACTION")
@@ -1269,27 +1312,116 @@ export class Connection {
                 });
         });
     }
-    transaction<ResultT> (
-        callback : tsql.TransactionCallback<ResultT>
-    ) : Promise<ResultT> {
-        return this.lock(async (nestedConnection) => {
-            return (nestedConnection as unknown as Connection).transactionImpl(callback);
-        });
-    }
-    transactionIfNotInOne<ResultT> (
-        callback : tsql.TransactionCallback<ResultT>
+    private transactionIfNotInOneImpl<ResultT> (
+        minimumIsolationLevel : IsolationLevel,
+        accessMode : TransactionAccessMode,
+        callback : tsql.TransactionCallback<ResultT>|tsql.ReadOnlyTransactionCallback<ResultT>
     ) : Promise<ResultT> {
         return this.lock(async (nestedConnection) => {
             if (nestedConnection.isInTransaction()) {
+                if (IsolationLevelUtil.isWeakerThan(
+                    this.getMinimumIsolationLevel(),
+                    minimumIsolationLevel
+                )) {
+                    /**
+                     * For example, our current isolation level is
+                     * `READ_UNCOMMITTED` but we want
+                     * `SERIALIZABLE`.
+                     *
+                     * Obviously, `READ_UNCOMMITTED` is weaker than
+                     * `SERIALIZABLE`.
+                     *
+                     * So, we error.
+                     *
+                     * @todo Custom error type
+                     */
+                    return Promise.reject(new Error(`Current isolation level is ${this.getMinimumIsolationLevel()}; cannot guarantee ${minimumIsolationLevel}`));
+                }
+                if (TransactionAccessModeUtil.isLessPermissiveThan(
+                    this.getTransactionAccessMode(),
+                    accessMode
+                )) {
+                    return Promise.reject(new Error(`Current transaction access mode is ${this.getTransactionAccessMode()}; cannot allow ${accessMode}`));
+                }
                 try {
                     return callback(nestedConnection);
                 } catch (err) {
                     return Promise.reject(err);
                 }
             } else {
-                return (nestedConnection as unknown as Connection).transactionImpl(callback);
+                return (nestedConnection as unknown as Connection).transactionImpl(
+                    minimumIsolationLevel,
+                    accessMode,
+                    callback
+                );
             }
         });
+    }
+    transaction<ResultT> (
+        callback : tsql.TransactionCallback<ResultT>
+    ) : Promise<ResultT>;
+    transaction<ResultT> (
+        minimumIsolationLevel : IsolationLevel,
+        callback : tsql.TransactionCallback<ResultT>
+    ) : Promise<ResultT>;
+    transaction<ResultT> (
+        ...args : (
+            | [tsql.TransactionCallback<ResultT>]
+            | [IsolationLevel, tsql.TransactionCallback<ResultT>]
+        )
+    ) : Promise<ResultT> {
+        return this.lock(async (nestedConnection) => {
+            return (nestedConnection as unknown as Connection).transactionImpl(
+                args.length == 1 ? IsolationLevel.SERIALIZABLE : args[0],
+                TransactionAccessMode.READ_WRITE,
+                args.length == 1 ? args[0] : args[1]
+            );
+        });
+    }
+    transactionIfNotInOne<ResultT> (
+        callback : tsql.TransactionCallback<ResultT>
+    ) : Promise<ResultT>;
+    transactionIfNotInOne<ResultT> (
+        minimumIsolationLevel : IsolationLevel,
+        callback : tsql.TransactionCallback<ResultT>
+    ) : Promise<ResultT>;
+    transactionIfNotInOne<ResultT> (
+        ...args : (
+            | [tsql.TransactionCallback<ResultT>]
+            | [IsolationLevel, tsql.TransactionCallback<ResultT>]
+        )
+    ) : Promise<ResultT> {
+        return this.transactionIfNotInOneImpl(
+            args.length == 1 ? IsolationLevel.SERIALIZABLE : args[0],
+            TransactionAccessMode.READ_WRITE,
+            args.length == 1 ? args[0] : args[1]
+        );
+    }
+    readOnlyTransaction<ResultT> (
+        ...args : (
+            | [tsql.ReadOnlyTransactionCallback<ResultT>]
+            | [IsolationLevel, tsql.ReadOnlyTransactionCallback<ResultT>]
+        )
+    ) : Promise<ResultT> {
+        return this.lock(async (nestedConnection) => {
+            return (nestedConnection as unknown as Connection).transactionImpl(
+                args.length == 1 ? IsolationLevel.SERIALIZABLE : args[0],
+                TransactionAccessMode.READ_ONLY,
+                args.length == 1 ? args[0] : args[1]
+            );
+        });
+    }
+    readOnlyTransactionIfNotInOne<ResultT> (
+        ...args : (
+            | [tsql.ReadOnlyTransactionCallback<ResultT>]
+            | [IsolationLevel, tsql.ReadOnlyTransactionCallback<ResultT>]
+        )
+    ) : Promise<ResultT> {
+        return this.transactionIfNotInOneImpl(
+            args.length == 1 ? IsolationLevel.SERIALIZABLE : args[0],
+            TransactionAccessMode.READ_ONLY,
+            args.length == 1 ? args[0] : args[1]
+        );
     }
 
     private async fetchTableMeta (tableAlias : string) : Promise<tsql.TableMeta> {
@@ -1367,7 +1499,7 @@ export class Pool implements tsql.IPool {
     private readonly worker : ISqliteWorker;
     private readonly idAllocator : IdAllocator;
     private readonly transactionInfo : TransactionInformation = {
-        isInTransaction : false,
+        state : undefined,
     };
     private readonly asyncQueue : AsyncQueue<Connection>;
     constructor (worker : ISqliteWorker) {
@@ -1397,9 +1529,51 @@ export class Pool implements tsql.IPool {
 
     acquireTransaction<ResultT> (
         callback : tsql.TransactionCallback<ResultT>
+    ) : Promise<ResultT>;
+    acquireTransaction<ResultT> (
+        minimumIsolationLevel : IsolationLevel,
+        callback : tsql.TransactionCallback<ResultT>
+    ) : Promise<ResultT>;
+    acquireTransaction<ResultT> (
+        ...args : (
+            | [tsql.TransactionCallback<ResultT>]
+            | [IsolationLevel, tsql.TransactionCallback<ResultT>]
+        )
     ) : Promise<ResultT> {
         return this.acquire((connection) => {
-            return connection.transaction(callback);
+            /**
+             * TS has weird narrowing behaviours
+             */
+            if (args.length == 1) {
+                return connection.transaction(...args);
+            } else {
+                return connection.transaction(...args);
+            }
+        });
+    }
+
+    acquireReadOnlyTransaction<ResultT> (
+        callback : tsql.ReadOnlyTransactionCallback<ResultT>
+    ) : Promise<ResultT>;
+    acquireReadOnlyTransaction<ResultT> (
+        minimumIsolationLevel : IsolationLevel,
+        callback : tsql.ReadOnlyTransactionCallback<ResultT>
+    ) : Promise<ResultT>;
+    acquireReadOnlyTransaction<ResultT> (
+        ...args : (
+            | [tsql.ReadOnlyTransactionCallback<ResultT>]
+            | [IsolationLevel, tsql.ReadOnlyTransactionCallback<ResultT>]
+        )
+    ) : Promise<ResultT> {
+        return this.acquire((connection) => {
+            /**
+             * TS has weird narrowing behaviours
+             */
+            if (args.length == 1) {
+                return connection.readOnlyTransaction(...args);
+            } else {
+                return connection.readOnlyTransaction(...args);
+            }
         });
     }
 

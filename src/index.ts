@@ -67,7 +67,9 @@ export * from "./where-clause";
 export * from "./async-queue";
 export * from "./constants";
 export * from "./error";
+export * from "./isolation-level";
 export * from "./operator-type";
+export * from "./transaction-access-mode";
 export * from "./type-hint";
 
 
