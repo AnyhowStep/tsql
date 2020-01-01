@@ -77,6 +77,8 @@
         "./src/promise-util/**/*",
         "./src/async-queue.ts",
         "./src/event/**/*",
+        "./src/isolation-level.ts",
+        "./src/transaction-access-mode.ts",
         "./src/index.ts"
     ]
 }

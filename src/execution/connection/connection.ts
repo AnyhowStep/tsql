@@ -1,4 +1,4 @@
-import {TransactionCallback, IPool} from "../pool";
+import {TransactionCallback, IPool, ReadOnlyTransactionCallback} from "../pool";
 import {IQueryBase, QueryBaseUtil} from "../../query-base";
 import {InsertableTable, DeletableTable, ITable} from "../../table";
 import {BuiltInInsertRow} from "../../insert";
@@ -7,6 +7,8 @@ import {WhereClause} from "../../where-clause";
 import {BuiltInAssignmentMap} from "../../update";
 import {SchemaMeta} from "../../schema-introspection";
 import {IConnectionEventEmitterCollection} from "../../event";
+import {IsolationLevel} from "../../isolation-level";
+import {TransactionAccessMode} from "../../transaction-access-mode";
 
 export interface RawQueryResult {
     query   : { sql : string },
@@ -232,11 +234,35 @@ export interface IConnection {
     ) : Promise<ResultT>;
 
     isInTransaction () : this is ITransactionConnection;
+
     transaction<ResultT> (
+        callback : TransactionCallback<ResultT>
+    ) : Promise<ResultT>;
+    transaction<ResultT> (
+        minimumIsolationLevel : IsolationLevel,
         callback : TransactionCallback<ResultT>
     ) : Promise<ResultT>;
     transactionIfNotInOne<ResultT> (
         callback : TransactionCallback<ResultT>
+    ) : Promise<ResultT>;
+    transactionIfNotInOne<ResultT> (
+        minimumIsolationLevel : IsolationLevel,
+        callback : TransactionCallback<ResultT>
+    ) : Promise<ResultT>;
+
+    readOnlyTransaction<ResultT> (
+        callback : ReadOnlyTransactionCallback<ResultT>
+    ) : Promise<ResultT>;
+    readOnlyTransaction<ResultT> (
+        minimumIsolationLevel : IsolationLevel,
+        callback : ReadOnlyTransactionCallback<ResultT>
+    ) : Promise<ResultT>;
+    readOnlyTransactionIfNotInOne<ResultT> (
+        callback : ReadOnlyTransactionCallback<ResultT>
+    ) : Promise<ResultT>;
+    readOnlyTransactionIfNotInOne<ResultT> (
+        minimumIsolationLevel : IsolationLevel,
+        callback : ReadOnlyTransactionCallback<ResultT>
     ) : Promise<ResultT>;
 
     rawQuery (sql : string) : Promise<RawQueryResult>;
@@ -323,6 +349,9 @@ export interface IConnection {
 export interface ITransactionConnection extends IConnection {
     rollback () : Promise<void>;
     commit () : Promise<void>;
+
+    getMinimumIsolationLevel () : IsolationLevel;
+    getTransactionAccessMode () : TransactionAccessMode;
 }
 
 export type RestrictedLockCallback<T, ResultT> =
