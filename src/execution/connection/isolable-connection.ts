@@ -1,4 +1,6 @@
 import {SelectConnection, DeleteConnection, UpdateConnection, InsertOneConnection, IConnection} from "./connection";
+import {IsolationLevel} from "../../isolation-level";
+import {TransactionAccessMode} from "../../transaction-access-mode";
 
 export type IsolableLockCallback<T, ResultT> = (
     (connection : T & IsolableConnection<T>) => Promise<ResultT>
@@ -38,12 +40,35 @@ export interface IsolableConnection<T> {
     transaction<ResultT> (
         callback : IsolatedCallback<T, ResultT>
     ) : Promise<ResultT>;
+    transaction<ResultT> (
+        minimumIsolationLevel : IsolationLevel,
+        callback : IsolatedCallback<T, ResultT>
+    ) : Promise<ResultT>;
     /**
      * Enters a transaction, if not already in one.
      * If already in a transaction, it uses the current transaction.
      */
     transactionIfNotInOne<ResultT> (
         callback : IsolatedCallback<T, ResultT>
+    ) : Promise<ResultT>;
+    transactionIfNotInOne<ResultT> (
+        minimumIsolationLevel : IsolationLevel,
+        callback : IsolatedCallback<T, ResultT>
+    ) : Promise<ResultT>;
+
+    readOnlyTransaction<ResultT> (
+        callback : IsolatedCallback<SelectConnection, ResultT>
+    ) : Promise<ResultT>;
+    readOnlyTransaction<ResultT> (
+        minimumIsolationLevel : IsolationLevel,
+        callback : IsolatedCallback<SelectConnection, ResultT>
+    ) : Promise<ResultT>;
+    readOnlyTransactionIfNotInOne<ResultT> (
+        callback : IsolatedCallback<SelectConnection, ResultT>
+    ) : Promise<ResultT>;
+    readOnlyTransactionIfNotInOne<ResultT> (
+        minimumIsolationLevel : IsolationLevel,
+        callback : IsolatedCallback<SelectConnection, ResultT>
     ) : Promise<ResultT>;
 }
 /**
@@ -52,6 +77,9 @@ export interface IsolableConnection<T> {
 export interface IsolatedConnection<K> extends IsolableConnection<K> {
     rollback () : Promise<void>;
     commit () : Promise<void>;
+
+    getMinimumIsolationLevel () : IsolationLevel;
+    getTransactionAccessMode () : TransactionAccessMode;
 }
 
 /**
