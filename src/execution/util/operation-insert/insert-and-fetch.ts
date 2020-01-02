@@ -7,6 +7,7 @@ import * as ExprLib from "../../../expr-library";
 import {DataTypeUtil} from "../../../data-type";
 import {TryEvaluateColumnsResult} from "../../../data-type/util";
 import {InsertAndFetchEvent} from "../../../event";
+import {IsolationLevel} from "../../../isolation-level";
 
 export type InsertAndFetchRow<
     TableT extends InsertableTable
@@ -36,7 +37,12 @@ async function insertAndFetchImpl<
     TableUtil.assertInsertEnabled(table);
     TableUtil.assertHasCandidateKey(table);
 
-    return connection.transactionIfNotInOne(async (connection) : (
+    /**
+     * @todo Check if `SERIALIZABLE` is better.
+     * Intuitively, `REPEATABLE_READ` makes sense because
+     * we're just reading a row we've inserted inside this transaction.
+     */
+    return connection.transactionIfNotInOne(IsolationLevel.REPEATABLE_READ, async (connection) : (
         Promise<{
             insertRow : BuiltInInsertRow<TableT>,
             insertResult : (
@@ -107,7 +113,7 @@ async function insertAndFetchImpl<
 /**
  * Convenience method for
  * ```ts
- *  connection.transactionIfNotInOne(async (connection) => {
+ *  connection.transactionIfNotInOne(IsolationLevel.REPEATABLE_READ, async (connection) => {
  *      await table.insertOne(connection, ...);
  *      return table.fetchOne(connection, ...);
  *  });

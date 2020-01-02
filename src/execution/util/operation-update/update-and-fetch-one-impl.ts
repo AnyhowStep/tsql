@@ -7,6 +7,7 @@ import {CustomExprUtil} from "../../../custom-expr";
 import {UpdateAndFetchEvent, UpdateEvent} from "../../../event";
 import {WhereDelegate, WhereClause} from "../../../where-clause";
 import {FromClauseUtil} from "../../../from-clause";
+import {IsolationLevel} from "../../../isolation-level";
 
 export type UpdatedAndFetchedRow<
     TableT extends ITable,
@@ -76,11 +77,14 @@ export async function updateAndFetchOneImpl<
     }>
 ) : Promise<UpdateAndFetchOneResult<TableT, AssignmentMapT>> {
     return connection.lock(async (connection) : Promise<UpdateAndFetchOneResult<TableT, AssignmentMapT>> => {
+        /**
+         * `REPEATABLE_READ` should be fine because we're not creating any new rows.
+         */
         const {
             updateWhereClause,
             updateResult,
             assignmentMap,
-        } = await connection.transactionIfNotInOne(async (connection) : Promise<{
+        } = await connection.transactionIfNotInOne(IsolationLevel.REPEATABLE_READ, async (connection) : Promise<{
             updateWhereClause : WhereClause,
             updateResult : UpdateAndFetchOneResult<TableT, AssignmentMapT>,
             assignmentMap : AssignmentMapT,

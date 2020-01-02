@@ -6,6 +6,7 @@ import {IsolableDeleteConnection} from "../../connection";
 import * as impl from "./delete";
 import {TooManyRowsFoundError} from "../../../error";
 import {DeleteEvent} from "../../../event";
+import {IsolationLevel} from "../../../isolation-level";
 
 export interface DeleteZeroOrOneResult {
     query : { sql : string },
@@ -39,10 +40,14 @@ export async function deleteZeroOrOne<
     TableUtil.assertDeleteEnabled(table);
 
     return connection.lock(async (connection) : Promise<DeleteZeroOrOneResult> => {
+        /**
+         * `READ_UNCOMMITTED` because this should be a simple `DELETE` statement.
+         * It should execute no other statements.
+         */
         const {
             whereClause,
             deleteResult,
-        } = await connection.transactionIfNotInOne(async (connection) : Promise<{
+        } = await connection.transactionIfNotInOne(IsolationLevel.READ_UNCOMMITTED, async (connection) : Promise<{
             whereClause : WhereClause,
             deleteResult : DeleteZeroOrOneResult,
         }> => {

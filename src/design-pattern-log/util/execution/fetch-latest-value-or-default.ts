@@ -9,6 +9,7 @@ import * as ExprLib from "../../../expr-library";
 import {ColumnIdentifierMapUtil} from "../../../column-identifier-map";
 import {Identity} from "../../../type-util";
 import {DataTypeUtil} from "../../../data-type";
+import {IsolationLevel} from "../../../isolation-level";
 
 export type FetchLatestValueOrDefaultColumnMap<
     LogT extends ILog
@@ -64,7 +65,7 @@ export async function fetchLatestValueOrDefault<
         return latestValueOrUndefined;
     }
 
-    return connection.transactionIfNotInOne(async (connection) => {
+    return connection.readOnlyTransactionIfNotInOne(IsolationLevel.REPEATABLE_READ, async (connection) => {
         //If the owner does not exist, there is no default value
         await TableUtil.assertExists(
             log.ownerTable,

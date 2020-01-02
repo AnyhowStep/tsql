@@ -6,6 +6,7 @@ import {PrimaryKey_Input} from "../../../primary-key";
 import {UpdateAndFetchOneReturnType} from "./update-and-fetch-one-by-candidate-key";
 import {invokeAssignmentDelegate, updateAndFetchOneImpl} from "../execution-impl";
 import {CustomAssignmentMap, AssignmentMapDelegate} from "./assignment-map";
+import {IsolationLevel} from "../../../isolation-level";
 
 export async function updateAndFetchOneByPrimaryKey<
     TptT extends ITablePerType,
@@ -16,7 +17,7 @@ export async function updateAndFetchOneByPrimaryKey<
     primaryKey : PrimaryKey_Input<TptT["childTable"]>,
     assignmentMapDelegate : AssignmentMapDelegate<TptT, AssignmentMapT>
 ) : Promise<UpdateAndFetchOneReturnType<TptT, AssignmentMapT>> {
-    return connection.transactionIfNotInOne(async (connection) : Promise<UpdateAndFetchOneReturnType<TptT, AssignmentMapT>> => {
+    return connection.transactionIfNotInOne(IsolationLevel.REPEATABLE_READ, async (connection) : Promise<UpdateAndFetchOneReturnType<TptT, AssignmentMapT>> => {
         const cleanedAssignmentMap = await invokeAssignmentDelegate(
             tpt,
             connection,

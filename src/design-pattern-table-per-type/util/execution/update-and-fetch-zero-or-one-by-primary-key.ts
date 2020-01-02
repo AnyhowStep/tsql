@@ -7,6 +7,7 @@ import {UpdateAndFetchZeroOrOneReturnType} from "./update-and-fetch-zero-or-one-
 import {QueryUtil} from "../../../unified-query";
 import {updateAndFetchOneByPrimaryKey} from "./update-and-fetch-one-by-primary-key";
 import {CustomAssignmentMap, AssignmentMapDelegate} from "./assignment-map";
+import {IsolationLevel} from "../../../isolation-level";
 
 export async function updateAndFetchZeroOrOneByPrimaryKey<
     TptT extends ITablePerType,
@@ -17,7 +18,7 @@ export async function updateAndFetchZeroOrOneByPrimaryKey<
     primaryKey : PrimaryKey_Input<TptT["childTable"]>,
     assignmentMapDelegate : AssignmentMapDelegate<TptT, AssignmentMapT>
 ) : Promise<UpdateAndFetchZeroOrOneReturnType<TptT, AssignmentMapT>> {
-    return connection.transactionIfNotInOne(async (connection) : Promise<UpdateAndFetchZeroOrOneReturnType<TptT, AssignmentMapT>> => {
+    return connection.transactionIfNotInOne(IsolationLevel.REPEATABLE_READ, async (connection) : Promise<UpdateAndFetchZeroOrOneReturnType<TptT, AssignmentMapT>> => {
         const existsResult = await ExecutionUtil.existsImpl(
             QueryUtil.newInstance()
                 .from(tpt.childTable as any)

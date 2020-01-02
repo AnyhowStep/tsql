@@ -7,6 +7,7 @@ import {TableWithPrimaryKey} from "../../../table";
 import {from} from "../execution-impl";
 import {From} from "./from";
 import {WhereDelegate} from "../../../where-clause";
+import {IsolationLevel} from "../../../isolation-level";
 
 export interface DeleteOneResult {
     deleteOneResults : (
@@ -36,7 +37,11 @@ export async function deleteOneImpl<
     /**
      * @todo Add `assertDeletable()` or something
      */
-    return connection.transactionIfNotInOne(async (connection) : Promise<DeleteOneResult> => {
+    /**
+     * Using `SERIALIZABLE` because it's possible for a different transaction to
+     * `UPDATE` primary key values between the `fetchOne()` and multiple `deleteOne()` calls.
+     */
+    return connection.transactionIfNotInOne(IsolationLevel.SERIALIZABLE, async (connection) : Promise<DeleteOneResult> => {
         const primaryKeys = await ExecutionUtil.fetchOne(
             from(tpt)
                 .where(whereDelegate)

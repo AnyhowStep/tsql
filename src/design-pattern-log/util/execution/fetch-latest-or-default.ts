@@ -4,6 +4,7 @@ import {Row} from "../../../row";
 import {IsolableSelectConnection} from "../../../execution";
 import {PrimaryKey_Input} from "../../../primary-key";
 import {fetchLatest} from "./fetch-latest";
+import {IsolationLevel} from "../../../isolation-level";
 
 export type LatestOrDefault<LatestRowT, DefaultRowT> =
     | {
@@ -29,7 +30,7 @@ export async function fetchLatestOrDefault<
     connection : IsolableSelectConnection,
     primaryKey : PrimaryKey_Input<LogT["ownerTable"]>
 ) : Promise<FetchLatestOrDefault<LogT>> {
-    return connection.transactionIfNotInOne(async (connection) : Promise<FetchLatestOrDefault<LogT>> => {
+    return connection.readOnlyTransactionIfNotInOne(IsolationLevel.REPEATABLE_READ, async (connection) : Promise<FetchLatestOrDefault<LogT>> => {
         const latestOrUndefined = await fetchLatest(log, connection, primaryKey).orUndefined();
         if (latestOrUndefined != undefined) {
             return {

@@ -7,6 +7,7 @@ import * as impl from "./update";
 import {RowNotFoundError, TooManyRowsFoundError} from "../../../error";
 import {AssignmentMapDelegate, BuiltInAssignmentMap} from "../../../update";
 import {UpdateEvent} from "../../../event";
+import {IsolationLevel} from "../../../isolation-level";
 
 export interface UpdateOneResult {
     query : { sql : string },
@@ -45,7 +46,11 @@ export async function updateOneImplNoEvent<
     assignmentMap : BuiltInAssignmentMap<TableT>,
     updateResult : UpdateOneResult,
 }> {
-    return connection.transactionIfNotInOne(async (connection) : Promise<{
+    /**
+     * `READ_UNCOMMITTED` because this should be a simple `UPDATE` statement.
+     * It should execute no other statements.
+     */
+    return connection.transactionIfNotInOne(IsolationLevel.READ_UNCOMMITTED, async (connection) : Promise<{
         whereClause : WhereClause,
         assignmentMap : BuiltInAssignmentMap<TableT>,
         updateResult : UpdateOneResult,
