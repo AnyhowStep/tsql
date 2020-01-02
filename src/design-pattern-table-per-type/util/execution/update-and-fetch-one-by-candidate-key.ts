@@ -11,6 +11,7 @@ import {
     UpdateAndFetchOneResult,
 } from "../execution-impl";
 import {CustomAssignmentMap, AssignmentMapDelegate} from "./assignment-map";
+import {IsolationLevel} from "../../../isolation-level";
 
 export type UpdatedAndFetchedRow<
     TptT extends ITablePerType,
@@ -56,7 +57,7 @@ export async function updateAndFetchOneByCandidateKey<
     candidateKey : CandidateKeyT,// & AssertNonUnion<CandidateKeyT>,
     assignmentMapDelegate : AssignmentMapDelegate<TptT, AssignmentMapT>
 ) : Promise<UpdateAndFetchOneReturnType<TptT, AssignmentMapT>> {
-    return connection.transactionIfNotInOne(async (connection) : Promise<UpdateAndFetchOneReturnType<TptT, AssignmentMapT>> => {
+    return connection.transactionIfNotInOne(IsolationLevel.REPEATABLE_READ, async (connection) : Promise<UpdateAndFetchOneReturnType<TptT, AssignmentMapT>> => {
         const cleanedAssignmentMap = await invokeAssignmentDelegate(
             tpt,
             connection,

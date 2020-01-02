@@ -10,6 +10,7 @@ import {NotFoundUpdateResult, updateZeroOrOneImplNoEvent} from "./update-zero-or
 import {UpdateAndFetchOneResult} from "./update-and-fetch-one-impl";
 import {Identity} from "../../../type-util";
 import {RowNotFoundError} from "../../../error";
+import {IsolationLevel} from "../../../isolation-level";
 
 export interface NotFoundUpdateAndFetchResult extends NotFoundUpdateResult {
     row : undefined,
@@ -69,7 +70,10 @@ export async function updateAndFetchZeroOrOneImpl<
     >
 ) : Promise<UpdateAndFetchZeroOrOneResult<TableT, AssignmentMapT>> {
     return connection.lock(async (connection) : Promise<UpdateAndFetchZeroOrOneResult<TableT, AssignmentMapT>> => {
-        const updateAndFetchResult = await connection.transactionIfNotInOne(async (connection) : Promise<
+        /**
+         * `REPEATABLE_READ` should be fine because we're not creating any new rows.
+         */
+        const updateAndFetchResult = await connection.transactionIfNotInOne(IsolationLevel.REPEATABLE_READ, async (connection) : Promise<
             | {
                 success : false,
                 updateResult : NotFoundUpdateAndFetchResult,

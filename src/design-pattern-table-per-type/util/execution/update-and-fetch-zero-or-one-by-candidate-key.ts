@@ -9,6 +9,7 @@ import {NotFoundUpdateAndFetchResult} from "../../../execution/util";
 import {QueryUtil} from "../../../unified-query";
 import {UpdateAndFetchOneResult} from "../execution-impl";
 import {CustomAssignmentMap, AssignmentMapDelegate} from "./assignment-map";
+import {IsolationLevel} from "../../../isolation-level";
 
 export type UpdateAndFetchZeroOrOneReturnType<
     TptT extends ITablePerType,
@@ -36,7 +37,7 @@ export async function updateAndFetchZeroOrOneByCandidateKey<
     candidateKey : CandidateKeyT,// & AssertNonUnion<CandidateKeyT>,
     assignmentMapDelegate : AssignmentMapDelegate<TptT, AssignmentMapT>
 ) : Promise<UpdateAndFetchZeroOrOneReturnType<TptT, AssignmentMapT>> {
-    return connection.transactionIfNotInOne(async (connection) : Promise<UpdateAndFetchZeroOrOneReturnType<TptT, AssignmentMapT>> => {
+    return connection.transactionIfNotInOne(IsolationLevel.REPEATABLE_READ, async (connection) : Promise<UpdateAndFetchZeroOrOneReturnType<TptT, AssignmentMapT>> => {
         const existsResult = await ExecutionUtil.existsImpl(
             QueryUtil.newInstance()
                 .from(tpt.childTable as any)

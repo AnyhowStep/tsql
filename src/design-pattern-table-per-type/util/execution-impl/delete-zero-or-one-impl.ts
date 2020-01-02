@@ -5,6 +5,7 @@ import {From} from "./from";
 import {WhereDelegate} from "../../../where-clause";
 import {DeleteOneResult, deleteOneImpl} from "./delete-one-impl";
 import {existsImpl} from "./exists-impl";
+import {IsolationLevel} from "../../../isolation-level";
 
 export interface DeleteZeroResult {
     /**
@@ -44,7 +45,10 @@ export async function deleteZeroOrOneImpl<
     /**
      * @todo Add `assertDeletable()` or something
      */
-    return connection.transactionIfNotInOne(async (connection) : Promise<DeleteZeroOrOneResult> => {
+    /**
+     * `SERIALIZABLE` because it uses `deleteOneImpl()`, which uses `SERIALIZABLE`
+     */
+    return connection.transactionIfNotInOne(IsolationLevel.SERIALIZABLE, async (connection) : Promise<DeleteZeroOrOneResult> => {
         const existsResult = await existsImpl(
             tpt,
             connection,

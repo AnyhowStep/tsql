@@ -7,6 +7,7 @@ import {eqSuperKey} from "../operation";
 import {updateAndFetchOneBySuperKey} from "./update-and-fetch-one-by-super-key";
 import {existsImpl} from "../execution-impl";
 import {CustomAssignmentMap, AssignmentMapDelegate} from "./assignment-map";
+import {IsolationLevel} from "../../../isolation-level";
 
 export async function updateAndFetchZeroOrOneBySuperKey<
     TptT extends ITablePerType,
@@ -17,7 +18,7 @@ export async function updateAndFetchZeroOrOneBySuperKey<
     superKey : SuperKey<TptT>,
     assignmentMapDelegate : AssignmentMapDelegate<TptT, AssignmentMapT>
 ) : Promise<UpdateAndFetchZeroOrOneReturnType<TptT, AssignmentMapT>> {
-    return connection.transactionIfNotInOne(async (connection) : Promise<UpdateAndFetchZeroOrOneReturnType<TptT, AssignmentMapT>> => {
+    return connection.transactionIfNotInOne(IsolationLevel.REPEATABLE_READ, async (connection) : Promise<UpdateAndFetchZeroOrOneReturnType<TptT, AssignmentMapT>> => {
         const existsResult = await existsImpl(
             tpt,
             connection,

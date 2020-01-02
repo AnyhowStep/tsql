@@ -9,6 +9,7 @@ import {KeyUtil} from "../../../key";
 import {Identity} from "../../../type-util";
 import {ExprUtil} from "../../../expr";
 import {BuiltInExprUtil} from "../../../built-in-expr";
+import {IsolationLevel} from "../../../isolation-level";
 
 export type AssertAllTrackedHasDefaultValue<LogT extends ILog> =
     Exclude<
@@ -75,7 +76,7 @@ export async function fetchDefault<
         primaryKey
     ) as any;
 
-    return connection.transactionIfNotInOne(async (connection) : Promise<DefaultRow<LogT>> => {
+    return connection.readOnlyTransactionIfNotInOne(IsolationLevel.REPEATABLE_READ, async (connection) : Promise<DefaultRow<LogT>> => {
         //If the owner does not exist, there is no default value
         await TableUtil.assertExists(
             log.ownerTable,

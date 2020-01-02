@@ -5,6 +5,7 @@ import {IsolableUpdateConnection, ExecutionUtil} from "../../../execution";
 import {TableWithPrimaryKey} from "../../../table";
 import {UpdateOneResult} from "../../../execution/util";
 import {absorbRow} from "./absorb-row";
+import {IsolationLevel} from "../../../isolation-level";
 
 export interface UpdateAndFetchOneResult<RowT> {
     updateOneResults : (
@@ -45,7 +46,7 @@ export async function updateAndFetchOneImpl<
     cleanedAssignmentMap : Record<string, unknown>,
     updateAndFetchChildResult : ExecutionUtil.UpdateAndFetchOneResult<any, any>
 ) : Promise<UpdateAndFetchOneResult<Record<string, unknown>>> {
-    return connection.transactionIfNotInOne(async (connection) : Promise<UpdateAndFetchOneResult<Record<string, unknown>>> => {
+    return connection.transactionIfNotInOne(IsolationLevel.REPEATABLE_READ, async (connection) : Promise<UpdateAndFetchOneResult<Record<string, unknown>>> => {
         const updateOneResults : UpdateAndFetchOneResult<any>["updateOneResults"] = [
             {
                 ...updateAndFetchChildResult,

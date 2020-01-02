@@ -8,6 +8,7 @@ import {TableUtil} from "../../../table";
 import {expr} from "../../../expr";
 import {UsedRefUtil} from "../../../used-ref";
 import {absorbRow} from "../execution-impl";
+import {IsolationLevel} from "../../../isolation-level";
 
 export type InsertAndFetchRow<
     TptT extends InsertableTablePerType
@@ -52,7 +53,7 @@ export async function insertAndFetch<
     /**
      * @todo Add `assertInsertable()` or something
      */
-    return connection.transactionIfNotInOne(async (connection) : Promise<InsertedAndFetchedRow<TptT, RowT>> => {
+    return connection.transactionIfNotInOne(IsolationLevel.REPEATABLE_READ, async (connection) : Promise<InsertedAndFetchedRow<TptT, RowT>> => {
         const generated = generatedColumnAliases(tpt);
 
         const result : any = omitOwnEnumerable(

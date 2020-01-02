@@ -10,6 +10,7 @@ import {Row} from "../../../row";
 import {TrackResult} from "./track-result";
 import {DataTypeUtil} from "../../../data-type";
 import {BuiltInExprUtil} from "../../../built-in-expr";
+import {IsolationLevel} from "../../../isolation-level";
 
 export type TrackRow<LogT extends ILog> =
     /**
@@ -188,7 +189,7 @@ export async function unsafeTrack<LogT extends ILog> (
 ) : (
     Promise<Track<LogT>>
 ) {
-    return connection.transactionIfNotInOne(async (connection) : Promise<Track<LogT>> => {
+    return connection.transactionIfNotInOne(IsolationLevel.REPEATABLE_READ, async (connection) : Promise<Track<LogT>> => {
         const latestOrDefault = await fetchLatestOrDefault(log, connection, primaryKey);
         const {changed, insertRow} = await toInsertRow(
             log,
