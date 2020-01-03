@@ -81,40 +81,44 @@ function postMessage<ActionT extends SqliteAction, ResultT> (
     });
 }
 
-interface TransactionInformation {
+interface SharedConnectionInformation {
     /**
      * mutable
      */
-    state : (
+    transactionData : (
         | undefined
         | {
             minimumIsolationLevel : IsolationLevel,
             accessMode : TransactionAccessMode,
         }
     );
+    /**
+     * mutable
+     */
+    savepointId : number;
 }
 
 /**
  * Only one operation can be running at any point in time.
  */
 export class Connection {
-    private readonly pool : IPool;
+    readonly pool : IPool;
     private readonly idAllocator : IdAllocator;
     private readonly asyncQueue : AsyncQueue<ISqliteWorker>;
-    private readonly transactionInfo : TransactionInformation;
+    private readonly sharedConnectionInfo : SharedConnectionInformation;
 
-    private readonly eventEmitters : tsql.IConnectionEventEmitterCollection;
+    readonly eventEmitters : tsql.IConnectionEventEmitterCollection;
 
     constructor (
         pool : IPool,
         worker : ISqliteWorker|AsyncQueue<ISqliteWorker>,
         idAllocator : IdAllocator,
-        transactionInfo : TransactionInformation,
+        sharedConnectionInfo : SharedConnectionInformation,
         eventEmitters : tsql.IConnectionEventEmitterCollection
     ) {
         this.pool = pool;
         this.idAllocator = idAllocator;
-        this.transactionInfo = transactionInfo;
+        this.sharedConnectionInfo = sharedConnectionInfo;
         this.eventEmitters = eventEmitters;
 
         this.asyncQueue = worker instanceof AsyncQueue ?
@@ -134,7 +138,7 @@ export class Connection {
          * @todo Handle sync errors somehow.
          * Maybe propagate them to `IPool` and have an `onError` handler or something
          */
-        this.eventEmitters.flushOnCommit();
+        this.eventEmitters.commit();
     }
 
     allocateId () {
@@ -167,6 +171,23 @@ export class Connection {
                 },
             );
         });
+    }
+    rawQuery (sql : string) : Promise<tsql.RawQueryResult> {
+        return this.exec(sql)
+            .then((result) : tsql.RawQueryResult => {
+                if (result.execResult.length == 0) {
+                    return {
+                        query : { sql },
+                        results : undefined,
+                        columns : [],
+                    };
+                }
+                return {
+                    query : { sql },
+                    results : result.execResult[0].values,
+                    columns : result.execResult[0].columns,
+                };
+            });
     }
     export () {
         return this.asyncQueue.enqueue((worker) => {
@@ -244,7 +265,7 @@ export class Connection {
                 this.pool,
                 nestedAsyncQueue,
                 this.idAllocator,
-                this.transactionInfo,
+                this.sharedConnectionInfo,
                 this.eventEmitters
             );
             return callback(
@@ -255,8 +276,8 @@ export class Connection {
 
     tryGetFullConnection () : tsql.IConnection|undefined {
         if (
-            this.transactionInfo.state != undefined &&
-            this.transactionInfo.state.accessMode == TransactionAccessMode.READ_ONLY
+            this.sharedConnectionInfo.transactionData != undefined &&
+            this.sharedConnectionInfo.transactionData.accessMode == TransactionAccessMode.READ_ONLY
         ) {
             /**
              * Can't give a full connection if we are in a readonly transaction.
@@ -1198,12 +1219,12 @@ export class Connection {
         }
         return this.exec("ROLLBACK")
             .then(() => {
-                this.transactionInfo.state = undefined;
+                this.sharedConnectionInfo.transactionData = undefined;
                 /**
                  * @todo Handle sync errors somehow.
                  * Maybe propagate them to `IPool` and have an `onError` handler or something
                  */
-                this.eventEmitters.flushOnRollback();
+                this.eventEmitters.rollback();
             });
     }
     commit () : Promise<void> {
@@ -1212,37 +1233,37 @@ export class Connection {
         }
         return this.exec("COMMIT")
             .then(() => {
-                this.transactionInfo.state = undefined;
+                this.sharedConnectionInfo.transactionData = undefined;
                 /**
                  * @todo Handle sync errors somehow.
                  * Maybe propagate them to `IPool` and have an `onError` handler or something
                  */
-                this.eventEmitters.flushOnCommit();
+                this.eventEmitters.commit();
             });
     }
 
     getMinimumIsolationLevel () : IsolationLevel {
-        if (this.transactionInfo.state == undefined) {
+        if (this.sharedConnectionInfo.transactionData == undefined) {
             throw new Error(`Not in transaction`);
         }
-        return this.transactionInfo.state.minimumIsolationLevel;
+        return this.sharedConnectionInfo.transactionData.minimumIsolationLevel;
     }
     getTransactionAccessMode () : TransactionAccessMode {
-        if (this.transactionInfo.state == undefined) {
+        if (this.sharedConnectionInfo.transactionData == undefined) {
             throw new Error(`Not in transaction`);
         }
-        return this.transactionInfo.state.accessMode;
+        return this.sharedConnectionInfo.transactionData.accessMode;
     }
 
     isInTransaction () : this is tsql.ITransactionConnection {
-        return this.transactionInfo.state != undefined;
+        return this.sharedConnectionInfo.transactionData != undefined;
     }
     private transactionImpl<ResultT> (
         minimumIsolationLevel : IsolationLevel,
         accessMode : TransactionAccessMode,
         callback : tsql.LockCallback<tsql.ITransactionConnection, ResultT>|tsql.LockCallback<tsql.IsolatedSelectConnection, ResultT>
     ) : Promise<ResultT> {
-        if (this.transactionInfo.state != undefined) {
+        if (this.sharedConnectionInfo.transactionData != undefined) {
             return Promise.reject(new Error(`Transaction already started or starting`));
         }
         /**
@@ -1253,7 +1274,7 @@ export class Connection {
          * However, we will just pretend that we have all
          * isolation levels supported.
          */
-        this.transactionInfo.state = {
+        this.sharedConnectionInfo.transactionData = {
             minimumIsolationLevel,
             accessMode,
         };
@@ -1265,7 +1286,7 @@ export class Connection {
                      * @todo Handle sync errors somehow.
                      * Maybe propagate them to `IPool` and have an `onError` handler or something
                      */
-                    this.eventEmitters.flushOnCommit();
+                    this.eventEmitters.commit();
                     if (!this.isInTransaction()) {
                         /**
                          * Why did one of the `OnCommit` listeners call `commit()` or `rollback()`?
@@ -1424,6 +1445,146 @@ export class Connection {
         );
     }
 
+    rollbackToSavepoint () : Promise<void> {
+        if (this.savepointData == undefined) {
+            return Promise.reject(new Error("Not in savepoint; cannot release savepoint"));
+        }
+        return this.exec(`ROLLBACK TO SAVEPOINT ${this.savepointData.savepointName}`)
+            .then(() => {
+                this.savepointData = undefined;
+                this.eventEmitters.rollbackToSavepoint();
+            });
+    }
+    releaseSavepoint () : Promise<void> {
+        if (this.savepointData == undefined) {
+            return Promise.reject(new Error("Not in savepoint; cannot release savepoint"));
+        }
+        return this.exec(`RELEASE SAVEPOINT ${this.savepointData.savepointName}`)
+            .then(() => {
+                this.savepointData = undefined;
+                this.eventEmitters.releaseSavepoint();
+            });
+    }
+    private savepointData : (
+        | undefined
+        | {
+            savepointName : string,
+        }
+    ) = undefined;
+    private savepointImpl<ResultT> (
+        callback : tsql.LockCallback<tsql.ITransactionConnection & tsql.ConnectionComponent.InSavepoint, ResultT>
+    ) : Promise<ResultT> {
+        if (this.sharedConnectionInfo.transactionData == undefined) {
+            return Promise.reject(new Error(`Cannot use savepoint outside transaction`));
+        }
+        if (this.savepointData != undefined) {
+            return Promise.reject(new Error(`A savepoint is already in progress`));
+        }
+        const savepointData = {
+            savepointName : `tsql_savepoint_${++this.sharedConnectionInfo.savepointId}`,
+        };
+        this.savepointData = savepointData;
+        this.eventEmitters.savepoint();
+
+        return new Promise<ResultT>((resolve, reject) => {
+            this.exec(`SAVEPOINT ${savepointData.savepointName}`)
+                .then(() => {
+                    if (!this.isInTransaction()) {
+                        throw new Error(`Expected to be in transaction`);
+                    }
+                    if (this.savepointData != savepointData) {
+                        /**
+                         * Why did the savepoint information change?
+                         */
+                        throw new Error(`Expected to be in savepoint ${savepointData.savepointName}`);
+                    }
+                    return callback(this as tsql.ITransactionConnection & tsql.ConnectionComponent.InSavepoint);
+                })
+                .then((result) => {
+                    if (!this.isInTransaction()) {
+                        /**
+                         * `.rollback()` was probably explicitly called
+                         */
+                        resolve(result);
+                        return;
+                    }
+                    if (this.savepointData == undefined) {
+                        /**
+                         * `.rollbackToSavepoint()` was probably explicitly called
+                         */
+                        resolve(result);
+                        return;
+                    }
+                    if (this.savepointData != savepointData) {
+                        /**
+                         * Some weird thing is going on here.
+                         * This should never happen.
+                         */
+                        reject(new Error(`Expected to be in savepoint ${savepointData.savepointName} or to not be in a savepoint`));
+                        return;
+                    }
+
+                    this.releaseSavepoint()
+                        .then(() => {
+                            resolve(result);
+                        })
+                        .catch((_releaseErr) => {
+                            /**
+                             * Being unable to release a savepoint isn't so bad.
+                             * It usually just means the DBMS cannot reclaim resources
+                             * until the transaction ends.
+                             *
+                             * @todo Do something with `_releaseErr`
+                             */
+                            resolve(result);
+                        });
+                })
+                .catch((err) => {
+                    if (!this.isInTransaction()) {
+                        /**
+                         * `.rollback()` was probably explicitly called
+                         */
+                        reject(err);
+                        return;
+                    }
+                    if (this.savepointData == undefined) {
+                        /**
+                         * `.rollbackToSavepoint()` was probably explicitly called
+                         */
+                        reject(err);
+                        return;
+                    }
+                    if (this.savepointData != savepointData) {
+                        /**
+                         * Some weird thing is going on here.
+                         * This should never happen.
+                         */
+                        err.savepointErr = new Error(`Expected to be in savepoint ${savepointData.savepointName} or to not be in a savepoint`);
+                        reject(err);
+                        return;
+                    }
+
+                    this.rollbackToSavepoint()
+                        .then(() => {
+                            reject(err);
+                        })
+                        .catch((rollbackToSavepointErr) => {
+                            err.rollbackToSavepointErr = rollbackToSavepointErr;
+                            reject(err);
+                        });
+                });
+        });
+    }
+    savepoint<ResultT> (
+        callback : tsql.LockCallback<tsql.ITransactionConnection & tsql.ConnectionComponent.InSavepoint, ResultT>
+    ) : Promise<ResultT> {
+        return this.lock(async (nestedConnection) => {
+            return (nestedConnection as unknown as Connection).savepointImpl(
+                callback
+            );
+        });
+    }
+
     private async fetchTableMeta (tableAlias : string) : Promise<tsql.TableMeta> {
         const structure = await this.fetchTableStructure(tableAlias);
         return {
@@ -1498,8 +1659,9 @@ export class Connection {
 export class Pool implements tsql.IPool {
     private readonly worker : ISqliteWorker;
     private readonly idAllocator : IdAllocator;
-    private readonly transactionInfo : TransactionInformation = {
-        state : undefined,
+    private readonly sharedConnectionInfo : SharedConnectionInformation = {
+        transactionData : undefined,
+        savepointId : 0,
     };
     private readonly asyncQueue : AsyncQueue<Connection>;
     constructor (worker : ISqliteWorker) {
@@ -1511,7 +1673,7 @@ export class Pool implements tsql.IPool {
                     this,
                     this.worker,
                     this.idAllocator,
-                    this.transactionInfo,
+                    this.sharedConnectionInfo,
                     new tsql.ConnectionEventEmitterCollection(this)
                 );
                 return {

@@ -24,6 +24,7 @@ import {
     ReadOnlyTransaction,
     TryFetchSchemaMeta,
     TryFetchGeneratedColumnExpression,
+    Savepoint,
 } from "./component";
 
 export interface IConnection extends
@@ -53,6 +54,9 @@ export interface IConnection extends
     readonly pool : IPool;
     readonly eventEmitters : IConnectionEventEmitterCollection;
 }
+/**
+ * @todo Rename to `IIsolatedConnection`?
+ */
 export interface ITransactionConnection extends
     TryGetFullConnection,
     Lockable<ITransactionConnection>,
@@ -76,7 +80,8 @@ export interface ITransactionConnection extends
     Transaction<ITransactionConnection>,
     ReadOnlyTransaction,
     InTransaction,
-    IsInTransaction<ITransactionConnection>
+    IsInTransaction<ITransactionConnection>,
+    Savepoint<ITransactionConnection>
 {
     readonly pool : IPool;
     readonly eventEmitters : IConnectionEventEmitterCollection;

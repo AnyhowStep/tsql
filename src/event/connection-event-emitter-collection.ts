@@ -22,8 +22,12 @@ export interface IConnectionEventEmitterCollection {
 
     readonly onDelete : IConnectionEventEmitter<IDeleteEvent<ITable>>;
 
-    flushOnCommit () : { syncErrors : unknown[] };
-    flushOnRollback () : { syncErrors : unknown[] };
+    savepoint () : void;
+    releaseSavepoint () : void;
+    rollbackToSavepoint () : { syncErrors : unknown[] };
+
+    commit () : { syncErrors : unknown[] };
+    rollback () : { syncErrors : unknown[] };
 }
 
 export class ConnectionEventEmitterCollection implements IConnectionEventEmitterCollection {
@@ -31,7 +35,88 @@ export class ConnectionEventEmitterCollection implements IConnectionEventEmitter
      * We want to avoid mutating arrays because it may mess up our loops.
      * We might add/remove events while invoking a handler.
      */
-    private transactionListenerCollections : readonly IReadonlyTransactionListenerCollection[] = [];
+    private transactionListenerCollections : readonly [
+        readonly IReadonlyTransactionListenerCollection[],
+        ...(readonly IReadonlyTransactionListenerCollection[])[]
+    ] = [
+        []
+    ];
+
+    /**
+     * @todo Better name
+     *
+     * Used whenever a savepoint is created
+     */
+    savepoint () {
+        this.transactionListenerCollections = [
+            ...this.transactionListenerCollections,
+            []
+        ] as [unknown] as (
+            readonly [
+                readonly IReadonlyTransactionListenerCollection[],
+                ...(readonly IReadonlyTransactionListenerCollection[])[]
+            ]
+        );
+    }
+    /**
+     * @todo Better name
+     *
+     * Used whenever a savepoint is released
+     */
+    releaseSavepoint () {
+        if (this.transactionListenerCollections.length == 1) {
+            throw new Error(`Cannot unnest top-level transaction listener collection`);
+        }
+        const bottom = this.transactionListenerCollections[this.transactionListenerCollections.length-1];
+        const parent = this.transactionListenerCollections[this.transactionListenerCollections.length-2];
+        const ancestors = this.transactionListenerCollections.slice(
+            0,
+            this.transactionListenerCollections.length-2
+        );
+        this.transactionListenerCollections = [
+            ...ancestors,
+            [
+                ...parent,
+                ...bottom
+            ]
+        ] as [unknown] as (
+            readonly [
+                readonly IReadonlyTransactionListenerCollection[],
+                ...(readonly IReadonlyTransactionListenerCollection[])[]
+            ]
+        );
+    }
+    /**
+     * @todo Better name
+     *
+     * Used whenever a savepoint is rolled back
+     */
+    rollbackToSavepoint () : { syncErrors : unknown[] } {
+        if (this.transactionListenerCollections.length == 1) {
+            throw new Error(`Cannot unnest top-level transaction listener collection`);
+        }
+
+        const bottom = this.transactionListenerCollections[this.transactionListenerCollections.length-1];
+        const parentAndAncestors = this.transactionListenerCollections.slice(
+            0,
+            this.transactionListenerCollections.length-1
+        );
+        this.transactionListenerCollections = parentAndAncestors as [unknown] as (
+            readonly [
+                readonly IReadonlyTransactionListenerCollection[],
+                ...(readonly IReadonlyTransactionListenerCollection[])[]
+            ]
+        );
+
+        const syncErrors : unknown[] = [];
+        for (const collection of bottom) {
+            const invokeResult = collection.invokeOnRollbackListeners();
+            syncErrors.push(
+                ...invokeResult.syncErrors
+            );
+        }
+        return { syncErrors };
+    }
 
     readonly onInsert : IConnectionEventEmitter<IInsertEvent<ITable>>;
     readonly onInsertOne : ConnectionEventEmitter<IInsertOneEvent<ITable>>;
@@ -45,7 +130,23 @@ export class ConnectionEventEmitterCollection implements IConnectionEventEmitter
     readonly onDelete : IConnectionEventEmitter<IDeleteEvent<ITable>>;
 
     private readonly addTransactionListenerCollectionImpl = (event : IReadonlyTransactionListenerCollection) => {
-        this.transactionListenerCollections = [...this.transactionListenerCollections, event];
+        const bottom = this.transactionListenerCollections[this.transactionListenerCollections.length-1];
+        const parentAndAncestors = this.transactionListenerCollections.slice(
+            0,
+            this.transactionListenerCollections.length-1
+        );
+        this.transactionListenerCollections = [
+            ...parentAndAncestors,
+            [
+                ...bottom,
+                event
+            ]
+        ] as [unknown] as (
+            readonly [
+                readonly IReadonlyTransactionListenerCollection[],
+                ...(readonly IReadonlyTransactionListenerCollection[])[]
+            ]
+        );
     };
 
     constructor (pool : IPool) {
@@ -84,32 +185,40 @@ export class ConnectionEventEmitterCollection implements IConnectionEventEmitter
 
     /**
      * This should not throw
+     *
+     * Used when a transaction is committed
      */
-    flushOnCommit () : { syncErrors : unknown[] } {
+    commit () : { syncErrors : unknown[] } {
         const syncErrors : unknown[] = [];
-        const collections = this.transactionListenerCollections;
-        this.transactionListenerCollections = [];
-        for (const collection of collections) {
-            const invokeResult = collection.invokeOnCommitListeners();
-            syncErrors.push(
-                ...invokeResult.syncErrors
-            );
+        const scopes = this.transactionListenerCollections;
+        this.transactionListenerCollections = [[]];
+        for (const scope of scopes) {
+            for (const collection of scope) {
+                const invokeResult = collection.invokeOnCommitListeners();
+                syncErrors.push(
+                    ...invokeResult.syncErrors
+                );
+            }
         }
         return { syncErrors };
     }
 
     /**
      * This should not throw
+     *
+     * Used when a transaction is rolled back
      */
-    flushOnRollback () : { syncErrors : unknown[] } {
+    rollback () : { syncErrors : unknown[] } {
         const syncErrors : unknown[] = [];
-        const collections = this.transactionListenerCollections;
-        this.transactionListenerCollections = [];
-        for (const collection of collections) {
-            const invokeResult = collection.invokeOnRollbackListeners();
-            syncErrors.push(
-                ...invokeResult.syncErrors
-            );
+        const scopes = this.transactionListenerCollections;
+        this.transactionListenerCollections = [[]];
+        for (const scope of scopes) {
+            for (const collection of scope) {
+                const invokeResult = collection.invokeOnRollbackListeners();
+                syncErrors.push(
+                    ...invokeResult.syncErrors
+                );
+            }
         }
         return { syncErrors };
     }
