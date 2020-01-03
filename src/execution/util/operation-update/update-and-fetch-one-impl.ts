@@ -1,5 +1,5 @@
 import {ITable, TableUtil} from "../../../table";
-import {IsolableUpdateConnection, UpdateConnection, IsolatedConnection} from "../../connection";
+import {IsolableUpdateConnection, IsolatedUpdateConnection} from "../../connection";
 import {CustomAssignmentMap, BuiltInAssignmentMap} from "../../../update";
 import {Identity} from "../../../type-util";
 import {UpdateOneResult, updateOneImplNoEvent} from "./update-one";
@@ -55,7 +55,7 @@ export async function updateAndFetchOneImpl<
 > (
     table : TableT,
     connection : IsolableUpdateConnection,
-    initCallback : (connection : UpdateConnection & IsolatedConnection<UpdateConnection>) => Promise<{
+    initCallback : (connection : IsolatedUpdateConnection) => Promise<{
         /**
          * We need two separate `WHERE` clauses because
          * the `UPDATE` statement may change the unique identifier

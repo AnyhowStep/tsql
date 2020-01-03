@@ -1,0 +1,9 @@
+[
+  {
+    "messageText": "Property 'transactionIfNotInOne' does not exist on type 'IsolatedSelectConnection'.",
+    "code": 2339,
+    "category": 1,
+    "length": 21,
+    "start": 283
+  }
+]

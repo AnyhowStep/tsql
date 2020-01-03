@@ -11,7 +11,7 @@ tape(__filename, async (t) => {
         t.deepEqual(connection.getMinimumIsolationLevel(), tsql.IsolationLevel.SERIALIZABLE);
         t.deepEqual(connection.getTransactionAccessMode(), tsql.TransactionAccessMode.READ_ONLY);
 
-        await connection.transactionIfNotInOne(async () => {
+        await (connection as unknown as tsql.IConnection).transactionIfNotInOne(async () => {
             t.fail("Cannot go from READ_ONLY to READ_WRITE");
         }).catch((err) => {
             t.deepEqual(

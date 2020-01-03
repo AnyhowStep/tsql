@@ -1,135 +1,127 @@
-import {SelectConnection, DeleteConnection, UpdateConnection, InsertOneConnection, IConnection} from "./connection";
-import {IsolationLevel} from "../../isolation-level";
-import {TransactionAccessMode} from "../../transaction-access-mode";
-
-export type IsolableLockCallback<T, ResultT> = (
-    (connection : T & IsolableConnection<T>) => Promise<ResultT>
-);
-/**
- * A callback containing an isolated connection.
- */
-export type IsolatedCallback<T, ResultT> = (
-    (connection : T & IsolatedConnection<T>) => Promise<ResultT>
-);
-/**
- * Allows you to use transactions for isolating queries.
- */
-export interface IsolableConnection<T> {
-    tryGetFullConnection () : IConnection|undefined;
-
-    lock<ResultT> (
-        callback : IsolableLockCallback<T, ResultT>
-    ) : Promise<ResultT>;
-
-    tryFetchGeneratedColumnExpression (
-        schemaAlias : string|undefined,
-        tableAlias : string,
-        columnAlias : string
-    ) : Promise<string|undefined>;
-
-    /**
-     * Tells you if this connection is in a transaction.
-     */
-    isInTransaction () : this is IsolatedConnection<T>;
-    /**
-     * Enters a transaction.
-     *
-     * Will throw an error if already inside a transaction.
-     * Nesting transactions is not allowed.
-     */
-    transaction<ResultT> (
-        callback : IsolatedCallback<T, ResultT>
-    ) : Promise<ResultT>;
-    transaction<ResultT> (
-        minimumIsolationLevel : IsolationLevel,
-        callback : IsolatedCallback<T, ResultT>
-    ) : Promise<ResultT>;
-    /**
-     * Enters a transaction, if not already in one.
-     * If already in a transaction, it uses the current transaction.
-     */
-    transactionIfNotInOne<ResultT> (
-        callback : IsolatedCallback<T, ResultT>
-    ) : Promise<ResultT>;
-    transactionIfNotInOne<ResultT> (
-        minimumIsolationLevel : IsolationLevel,
-        callback : IsolatedCallback<T, ResultT>
-    ) : Promise<ResultT>;
-
-    readOnlyTransaction<ResultT> (
-        callback : IsolatedCallback<SelectConnection, ResultT>
-    ) : Promise<ResultT>;
-    readOnlyTransaction<ResultT> (
-        minimumIsolationLevel : IsolationLevel,
-        callback : IsolatedCallback<SelectConnection, ResultT>
-    ) : Promise<ResultT>;
-    readOnlyTransactionIfNotInOne<ResultT> (
-        callback : IsolatedCallback<SelectConnection, ResultT>
-    ) : Promise<ResultT>;
-    readOnlyTransactionIfNotInOne<ResultT> (
-        minimumIsolationLevel : IsolationLevel,
-        callback : IsolatedCallback<SelectConnection, ResultT>
-    ) : Promise<ResultT>;
-}
-/**
- * A connection that is isolated in a transaction.
- */
-export interface IsolatedConnection<K> extends IsolableConnection<K> {
-    rollback () : Promise<void>;
-    commit () : Promise<void>;
-
-    getMinimumIsolationLevel () : IsolationLevel;
-    getTransactionAccessMode () : TransactionAccessMode;
-}
+import {
+    Lockable,
+    TryGetFullConnection,
+    TransactionIfNotInOne,
+    ReadOnlyTransactionIfNotInOne,
+    InsertOne,
+    Select,
+    InTransaction,
+    IsInTransaction,
+    TryFetchGeneratedColumnExpression,
+    Update,
+    Delete,
+} from "./component";
 
 /**
  * + Allows `SELECT` statements
  * +
  */
-export type IsolableSelectConnection =
-    /**
-     * The order of operands is important here!
-     * Intersections are not commutative in TypeScript!
-     */
-    & IsolableConnection<SelectConnection>
-    & SelectConnection
-;
+export interface IsolableSelectConnection extends
+    Lockable<IsolableSelectConnection>,
+    ReadOnlyTransactionIfNotInOne,
+    IsInTransaction<IsolatedSelectConnection>,
+    Select
+{
+
+}
+
+export interface IsolatedSelectConnection extends
+    Lockable<IsolatedSelectConnection>,
+    ReadOnlyTransactionIfNotInOne,
+    InTransaction,
+    IsInTransaction<IsolatedSelectConnection>,
+    Select
+{
+
+}
+
 
 /**
  * + Allows `SELECT/INSERT` statements
  * +
  */
-export type IsolableInsertOneConnection =
-    /**
-     * The order of operands is important here!
-     * Intersections are not commutative in TypeScript!
-     */
-    & IsolableConnection<InsertOneConnection>
-    & InsertOneConnection
-;
+export interface IsolableInsertOneConnection extends
+    Lockable<IsolableInsertOneConnection>,
+    ReadOnlyTransactionIfNotInOne,
+    TransactionIfNotInOne<IsolatedInsertOneConnection>,
+    IsInTransaction<IsolatedInsertOneConnection>,
+    Select,
+    InsertOne,
+    TryFetchGeneratedColumnExpression,
+    TryGetFullConnection
+{
+
+}
+
+export interface IsolatedInsertOneConnection extends
+    Lockable<IsolatedInsertOneConnection>,
+    ReadOnlyTransactionIfNotInOne,
+    TransactionIfNotInOne<IsolatedInsertOneConnection>,
+    IsInTransaction<IsolatedInsertOneConnection>,
+    InTransaction,
+    Select,
+    InsertOne,
+    TryFetchGeneratedColumnExpression,
+    TryGetFullConnection
+{
+
+}
 
 /**
  * + Allows `SELECT/DELETE` statements
  * +
  */
-export type IsolableDeleteConnection =
-    /**
-     * The order of operands is important here!
-     * Intersections are not commutative in TypeScript!
-     */
-    & IsolableConnection<DeleteConnection>
-    & DeleteConnection
-;
+export interface IsolableDeleteConnection extends
+    Lockable<IsolableDeleteConnection>,
+    ReadOnlyTransactionIfNotInOne,
+    TransactionIfNotInOne<IsolatedDeleteConnection>,
+    IsInTransaction<IsolatedDeleteConnection>,
+    Select,
+    Delete,
+    TryGetFullConnection
+{
+
+}
+
+export interface IsolatedDeleteConnection extends
+    Lockable<IsolatedDeleteConnection>,
+    ReadOnlyTransactionIfNotInOne,
+    TransactionIfNotInOne<IsolatedDeleteConnection>,
+    IsInTransaction<IsolatedDeleteConnection>,
+    InTransaction,
+    Select,
+    Delete,
+    TryFetchGeneratedColumnExpression,
+    TryGetFullConnection
+{
+
+}
 
 /**
  * + Allows `SELECT/UPDATE` statements
  * +
  */
-export type IsolableUpdateConnection =
-    /**
-     * The order of operands is important here!
-     * Intersections are not commutative in TypeScript!
-     */
-    & IsolableConnection<UpdateConnection>
-    & UpdateConnection
-;
+export interface IsolableUpdateConnection extends
+    Lockable<IsolableUpdateConnection>,
+    ReadOnlyTransactionIfNotInOne,
+    TransactionIfNotInOne<IsolatedUpdateConnection>,
+    IsInTransaction<IsolatedUpdateConnection>,
+    Select,
+    Update,
+    TryGetFullConnection
+{
+
+}
+
+export interface IsolatedUpdateConnection extends
+    Lockable<IsolatedUpdateConnection>,
+    ReadOnlyTransactionIfNotInOne,
+    TransactionIfNotInOne<IsolatedUpdateConnection>,
+    IsInTransaction<IsolatedUpdateConnection>,
+    InTransaction,
+    Select,
+    Update,
+    TryGetFullConnection
+{
+
+}

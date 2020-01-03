@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {ITable, TableUtil} from "../../../table";
-import {IsolableUpdateConnection, UpdateConnection, IsolatedConnection} from "../../connection";
+import {IsolableUpdateConnection, IsolatedUpdateConnection} from "../../connection";
 import {CustomAssignmentMap, BuiltInAssignmentMap} from "../../../update";
 import {UpdateOneResult} from "./update-one";
 import {UpdateAndFetchEvent, UpdateEvent} from "../../../event";
@@ -41,7 +41,7 @@ export async function updateAndFetchZeroOrOneImpl<
 > (
     table : TableT,
     connection : IsolableUpdateConnection,
-    initCallback : (connection : UpdateConnection & IsolatedConnection<UpdateConnection>) => Promise<
+    initCallback : (connection : IsolatedUpdateConnection) => Promise<
         | {
             success : false,
             rowNotFoundError : RowNotFoundError
