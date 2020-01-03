@@ -237,7 +237,7 @@ export class Connection {
     }
 
     async lock<ResultT> (
-        callback : tsql.LockCallback<ResultT>
+        callback : tsql.LockCallback<tsql.IConnection, ResultT>
     ) : Promise<ResultT> {
         return this.asyncQueue.lock((nestedAsyncQueue) => {
             const nestedConnection = new Connection(
@@ -1240,7 +1240,7 @@ export class Connection {
     private transactionImpl<ResultT> (
         minimumIsolationLevel : IsolationLevel,
         accessMode : TransactionAccessMode,
-        callback : tsql.TransactionCallback<ResultT>|tsql.ReadOnlyTransactionCallback<ResultT>
+        callback : tsql.LockCallback<tsql.ITransactionConnection, ResultT>|tsql.LockCallback<tsql.IsolatedSelectConnection, ResultT>
     ) : Promise<ResultT> {
         if (this.transactionInfo.state != undefined) {
             return Promise.reject(new Error(`Transaction already started or starting`));
@@ -1315,7 +1315,7 @@ export class Connection {
     private transactionIfNotInOneImpl<ResultT> (
         minimumIsolationLevel : IsolationLevel,
         accessMode : TransactionAccessMode,
-        callback : tsql.TransactionCallback<ResultT>|tsql.ReadOnlyTransactionCallback<ResultT>
+        callback : tsql.LockCallback<tsql.ITransactionConnection, ResultT>|tsql.LockCallback<tsql.IsolatedSelectConnection, ResultT>
     ) : Promise<ResultT> {
         return this.lock(async (nestedConnection) => {
             if (nestedConnection.isInTransaction()) {
@@ -1358,16 +1358,16 @@ export class Connection {
         });
     }
     transaction<ResultT> (
-        callback : tsql.TransactionCallback<ResultT>
+        callback : tsql.LockCallback<tsql.ITransactionConnection, ResultT>
     ) : Promise<ResultT>;
     transaction<ResultT> (
         minimumIsolationLevel : IsolationLevel,
-        callback : tsql.TransactionCallback<ResultT>
+        callback : tsql.LockCallback<tsql.ITransactionConnection, ResultT>
     ) : Promise<ResultT>;
     transaction<ResultT> (
         ...args : (
-            | [tsql.TransactionCallback<ResultT>]
-            | [IsolationLevel, tsql.TransactionCallback<ResultT>]
+            | [tsql.LockCallback<tsql.ITransactionConnection, ResultT>]
+            | [IsolationLevel, tsql.LockCallback<tsql.ITransactionConnection, ResultT>]
         )
     ) : Promise<ResultT> {
         return this.lock(async (nestedConnection) => {
@@ -1379,16 +1379,16 @@ export class Connection {
         });
     }
     transactionIfNotInOne<ResultT> (
-        callback : tsql.TransactionCallback<ResultT>
+        callback : tsql.LockCallback<tsql.ITransactionConnection, ResultT>
     ) : Promise<ResultT>;
     transactionIfNotInOne<ResultT> (
         minimumIsolationLevel : IsolationLevel,
-        callback : tsql.TransactionCallback<ResultT>
+        callback : tsql.LockCallback<tsql.ITransactionConnection, ResultT>
     ) : Promise<ResultT>;
     transactionIfNotInOne<ResultT> (
         ...args : (
-            | [tsql.TransactionCallback<ResultT>]
-            | [IsolationLevel, tsql.TransactionCallback<ResultT>]
+            | [tsql.LockCallback<tsql.ITransactionConnection, ResultT>]
+            | [IsolationLevel, tsql.LockCallback<tsql.ITransactionConnection, ResultT>]
         )
     ) : Promise<ResultT> {
         return this.transactionIfNotInOneImpl(
@@ -1399,8 +1399,8 @@ export class Connection {
     }
     readOnlyTransaction<ResultT> (
         ...args : (
-            | [tsql.ReadOnlyTransactionCallback<ResultT>]
-            | [IsolationLevel, tsql.ReadOnlyTransactionCallback<ResultT>]
+            | [tsql.LockCallback<tsql.IsolatedSelectConnection, ResultT>]
+            | [IsolationLevel, tsql.LockCallback<tsql.IsolatedSelectConnection, ResultT>]
         )
     ) : Promise<ResultT> {
         return this.lock(async (nestedConnection) => {
@@ -1413,8 +1413,8 @@ export class Connection {
     }
     readOnlyTransactionIfNotInOne<ResultT> (
         ...args : (
-            | [tsql.ReadOnlyTransactionCallback<ResultT>]
-            | [IsolationLevel, tsql.ReadOnlyTransactionCallback<ResultT>]
+            | [tsql.LockCallback<tsql.IsolatedSelectConnection, ResultT>]
+            | [IsolationLevel, tsql.LockCallback<tsql.IsolatedSelectConnection, ResultT>]
         )
     ) : Promise<ResultT> {
         return this.transactionIfNotInOneImpl(
@@ -1528,16 +1528,16 @@ export class Pool implements tsql.IPool {
     readonly acquire : AsyncQueue<tsql.IConnection & Connection>["enqueue"];
 
     acquireTransaction<ResultT> (
-        callback : tsql.TransactionCallback<ResultT>
+        callback : tsql.LockCallback<tsql.ITransactionConnection, ResultT>
     ) : Promise<ResultT>;
     acquireTransaction<ResultT> (
         minimumIsolationLevel : IsolationLevel,
-        callback : tsql.TransactionCallback<ResultT>
+        callback : tsql.LockCallback<tsql.ITransactionConnection, ResultT>
     ) : Promise<ResultT>;
     acquireTransaction<ResultT> (
         ...args : (
-            | [tsql.TransactionCallback<ResultT>]
-            | [IsolationLevel, tsql.TransactionCallback<ResultT>]
+            | [tsql.LockCallback<tsql.ITransactionConnection, ResultT>]
+            | [IsolationLevel, tsql.LockCallback<tsql.ITransactionConnection, ResultT>]
         )
     ) : Promise<ResultT> {
         return this.acquire((connection) => {
@@ -1553,16 +1553,16 @@ export class Pool implements tsql.IPool {
     }
 
     acquireReadOnlyTransaction<ResultT> (
-        callback : tsql.ReadOnlyTransactionCallback<ResultT>
+        callback : tsql.LockCallback<tsql.IsolatedSelectConnection, ResultT>
     ) : Promise<ResultT>;
     acquireReadOnlyTransaction<ResultT> (
         minimumIsolationLevel : IsolationLevel,
-        callback : tsql.ReadOnlyTransactionCallback<ResultT>
+        callback : tsql.LockCallback<tsql.IsolatedSelectConnection, ResultT>
     ) : Promise<ResultT>;
     acquireReadOnlyTransaction<ResultT> (
         ...args : (
-            | [tsql.ReadOnlyTransactionCallback<ResultT>]
-            | [IsolationLevel, tsql.ReadOnlyTransactionCallback<ResultT>]
+            | [tsql.LockCallback<tsql.IsolatedSelectConnection, ResultT>]
+            | [IsolationLevel, tsql.LockCallback<tsql.IsolatedSelectConnection, ResultT>]
         )
     ) : Promise<ResultT> {
         return this.acquire((connection) => {

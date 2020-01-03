@@ -1,4 +1,4 @@
-import {IConnection, ITransactionConnection, SelectConnection, IsolatedConnection} from "../connection";
+import {IConnection, ITransactionConnection, IsolatedSelectConnection} from "../connection";
 import {ITable} from "../../table";
 import {
     IPoolEventEmitter,
@@ -11,15 +11,10 @@ import {
     IReplaceEvent,
 } from "../../event";
 import {IsolationLevel} from "../../isolation-level";
+import {LockCallback} from "../connection/component";
 
 export type ConnectionCallback<ResultT> = (
     (connection : IConnection) => Promise<ResultT>
-);
-export type TransactionCallback<ResultT> = (
-    (connection : ITransactionConnection) => Promise<ResultT>
-);
-export type ReadOnlyTransactionCallback<ResultT> = (
-    (connection : SelectConnection & IsolatedConnection<SelectConnection>) => Promise<ResultT>
 );
 /*
     All connections **should** set @@SESSION.time_zone to "+00:00"
@@ -30,19 +25,19 @@ export interface IPool {
     ) : Promise<ResultT>;
 
     acquireTransaction<ResultT> (
-        callback : TransactionCallback<ResultT>
+        callback : LockCallback<ITransactionConnection, ResultT>
     ) : Promise<ResultT>;
     acquireTransaction<ResultT> (
         minimumIsolationLevel : IsolationLevel,
-        callback : TransactionCallback<ResultT>
+        callback : LockCallback<ITransactionConnection, ResultT>
     ) : Promise<ResultT>;
 
     acquireReadOnlyTransaction<ResultT> (
-        callback : ReadOnlyTransactionCallback<ResultT>
+        callback : LockCallback<IsolatedSelectConnection, ResultT>
     ) : Promise<ResultT>;
     acquireReadOnlyTransaction<ResultT> (
         minimumIsolationLevel : IsolationLevel,
-        callback : ReadOnlyTransactionCallback<ResultT>
+        callback : LockCallback<IsolatedSelectConnection, ResultT>
     ) : Promise<ResultT>;
 
     disconnect () : Promise<void>;
