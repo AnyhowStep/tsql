@@ -13,6 +13,7 @@ import {
     SelectResult,
     UpdateResult,
 
+    RawQueryResult,
     LockCallback,
 } from "./component";
 export {
@@ -27,6 +28,7 @@ export {
     SelectResult,
     UpdateResult,
 
+    RawQueryResult,
     LockCallback,
 };
 

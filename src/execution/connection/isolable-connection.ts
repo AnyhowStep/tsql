@@ -10,6 +10,7 @@ import {
     TryFetchGeneratedColumnExpression,
     Update,
     Delete,
+    Savepoint,
 } from "./component";
 
 /**
@@ -59,6 +60,7 @@ export interface IsolatedInsertOneConnection extends
     TransactionIfNotInOne<IsolatedInsertOneConnection>,
     IsInTransaction<IsolatedInsertOneConnection>,
     InTransaction,
+    Savepoint<IsolatedInsertOneConnection>,
     Select,
     InsertOne,
     TryFetchGeneratedColumnExpression,
@@ -89,6 +91,7 @@ export interface IsolatedDeleteConnection extends
     TransactionIfNotInOne<IsolatedDeleteConnection>,
     IsInTransaction<IsolatedDeleteConnection>,
     InTransaction,
+    Savepoint<IsolatedDeleteConnection>,
     Select,
     Delete,
     TryFetchGeneratedColumnExpression,
@@ -119,6 +122,7 @@ export interface IsolatedUpdateConnection extends
     TransactionIfNotInOne<IsolatedUpdateConnection>,
     IsInTransaction<IsolatedUpdateConnection>,
     InTransaction,
+    Savepoint<IsolatedUpdateConnection>,
     Select,
     Update,
     TryGetFullConnection

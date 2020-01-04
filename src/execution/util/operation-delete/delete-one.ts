@@ -51,30 +51,35 @@ export async function deleteOne<
             whereClause : WhereClause,
             deleteResult : DeleteOneResult
         }> => {
-            const {
-                whereClause,
-                deleteResult,
-            } = await impl.deleteImplNoEvent(
-                table,
-                connection,
-                whereDelegate
-            );
-            if (tm.BigIntUtil.equal(deleteResult.deletedRowCount, tm.BigInt(0))) {
-                throw new RowNotFoundError(
+            return connection.savepoint(async (connection) : Promise<{
+                whereClause : WhereClause,
+                deleteResult : DeleteOneResult
+            }> => {
+                const {
+                    whereClause,
+                    deleteResult,
+                } = await impl.deleteImplNoEvent(
+                    table,
+                    connection,
+                    whereDelegate
+                );
+                if (tm.BigIntUtil.equal(deleteResult.deletedRowCount, tm.BigInt(0))) {
+                    throw new RowNotFoundError(
+                        `Expected to delete one row of ${table.alias}; found ${deleteResult.deletedRowCount} rows`,
+                        deleteResult.query.sql
+                    );
+                }
+                if (tm.BigIntUtil.equal(deleteResult.deletedRowCount, tm.BigInt(1))) {
+                    return {
+                        whereClause,
+                        deleteResult : deleteResult as DeleteOneResult,
+                    };
+                }
+                throw new TooManyRowsFoundError(
                     `Expected to delete one row of ${table.alias}; found ${deleteResult.deletedRowCount} rows`,
                     deleteResult.query.sql
                 );
-            }
-            if (tm.BigIntUtil.equal(deleteResult.deletedRowCount, tm.BigInt(1))) {
-                return {
-                    whereClause,
-                    deleteResult : deleteResult as DeleteOneResult,
-                };
-            }
-            throw new TooManyRowsFoundError(
-                `Expected to delete one row of ${table.alias}; found ${deleteResult.deletedRowCount} rows`,
-                deleteResult.query.sql
-            );
+            });
         });
 
         const fullConnection = connection.tryGetFullConnection();
