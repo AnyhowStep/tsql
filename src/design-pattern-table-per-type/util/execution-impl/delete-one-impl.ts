@@ -42,66 +42,68 @@ export async function deleteOneImpl<
      * `UPDATE` primary key values between the `fetchOne()` and multiple `deleteOne()` calls.
      */
     return connection.transactionIfNotInOne(IsolationLevel.SERIALIZABLE, async (connection) : Promise<DeleteOneResult> => {
-        const primaryKeys = await ExecutionUtil.fetchOne(
-            from(tpt)
-                .where(whereDelegate)
-                .select(() => primaryKeyColumnAliases(tpt).map(columnAlias => {
-                    const table = findTableWithColumnAlias(tpt, columnAlias);
-                    return table.columns[columnAlias];
-                }) as any) as any,
-            connection
-        );
+        return connection.savepoint(async (connection) : Promise<DeleteOneResult> => {
+            const primaryKeys = await ExecutionUtil.fetchOne(
+                from(tpt)
+                    .where(whereDelegate)
+                    .select(() => primaryKeyColumnAliases(tpt).map(columnAlias => {
+                        const table = findTableWithColumnAlias(tpt, columnAlias);
+                        return table.columns[columnAlias];
+                    }) as any) as any,
+                connection
+            );
 
-        const deleteChildResult = await ExecutionUtil.deleteOne(
-            tpt.childTable,
-            connection,
-            () => ExprLib.eqPrimaryKey(
+            const deleteChildResult = await ExecutionUtil.deleteOne(
                 tpt.childTable,
-                primaryKeys as any
-            )
-        );
-        const deleteOneResults : DeleteOneResult["deleteOneResults"] = [
-            {
-                ...deleteChildResult,
-                table : tpt.childTable,
-            },
-        ];
-        let deletedRowCount : bigint = deleteChildResult.deletedRowCount;
-        let warningCount : bigint = deleteChildResult.warningCount;
-
-        /**
-         * We use `.reverse()` here to `DELETE` the parents
-         * as we go up the inheritance hierarchy.
-         */
-        for(const parentTable of [...tpt.parentTables].reverse()) {
-            const deleteParentResult = await ExecutionUtil.deleteOne(
-                parentTable,
                 connection,
                 () => ExprLib.eqPrimaryKey(
-                    parentTable,
+                    tpt.childTable,
                     primaryKeys as any
                 )
             );
-            deleteOneResults.push({
-                ...deleteParentResult,
-                table : parentTable,
-            });
-            deletedRowCount = tm.BigIntUtil.add(
+            const deleteOneResults : DeleteOneResult["deleteOneResults"] = [
+                {
+                    ...deleteChildResult,
+                    table : tpt.childTable,
+                },
+            ];
+            let deletedRowCount : bigint = deleteChildResult.deletedRowCount;
+            let warningCount : bigint = deleteChildResult.warningCount;
+
+            /**
+             * We use `.reverse()` here to `DELETE` the parents
+             * as we go up the inheritance hierarchy.
+             */
+            for(const parentTable of [...tpt.parentTables].reverse()) {
+                const deleteParentResult = await ExecutionUtil.deleteOne(
+                    parentTable,
+                    connection,
+                    () => ExprLib.eqPrimaryKey(
+                        parentTable,
+                        primaryKeys as any
+                    )
+                );
+                deleteOneResults.push({
+                    ...deleteParentResult,
+                    table : parentTable,
+                });
+                deletedRowCount = tm.BigIntUtil.add(
+                    deletedRowCount,
+                    deleteParentResult.deletedRowCount
+                );
+                warningCount = tm.BigIntUtil.add(
+                    warningCount,
+                    deleteParentResult.warningCount
+                );
+            }
+
+            return {
+                deleteOneResults,
+
                 deletedRowCount,
-                deleteParentResult.deletedRowCount
-            );
-            warningCount = tm.BigIntUtil.add(
+
                 warningCount,
-                deleteParentResult.warningCount
-            );
-        }
-
-        return {
-            deleteOneResults,
-
-            deletedRowCount,
-
-            warningCount,
-        };
+            };
+        });
     });
 }
