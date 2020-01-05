@@ -105,21 +105,24 @@ export async function insertAndFetch<
 
             for(const table of [...tpt.parentTables, tpt.childTable]) {
                 const fetchedRow = await ExecutionUtil.insertAndFetch(
-                    (
+                    /**
+                     * We use `InsertAndFetchOptions`, instead of creating
+                     * a new table instance because we want events to use the
+                     * original `table` instance.
+                     *
+                     * `event.isFor()` methods use `===` internally
+                     */
+                    table,
+                    connection,
+                    result as never,
+                    {
                         /**
                          * We want to allow explicit auto-increment values internally,
                          * so that the same value is used for all tables of the same
                          * inheritance hierarchy.
                          */
-                        table.autoIncrement != undefined && !table.explicitAutoIncrementValueEnabled ?
-                        {
-                            ...table,
-                            explicitAutoIncrementValueEnabled : true,
-                        } :
-                        table
-                    ),
-                    connection,
-                    result as never
+                        explicitAutoIncrementValueEnabled : true,
+                    }
                 );
                 absorbRow(result, table, fetchedRow);
             }

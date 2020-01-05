@@ -17,7 +17,7 @@ export type InsertAndFetchRow<
     CustomInsertRowWithCandidateKey<TableT>
 ;
 
-async function insertAndFetchImpl<
+async function insertAndFetchImplNoEvent<
     TableT extends ITable & InsertableTable
 > (
     table : TableT,
@@ -123,6 +123,15 @@ async function insertAndFetchImpl<
 }
 
 /**
+ * Added for `TablePerTypeUtil.insertAndFetch()`,
+ * which needs to set `explicitAutoIncrementValueEnabled : true`,
+ * to synchronize autoIncrement column values across the table hierarchy.
+ */
+export interface InsertAndFetchOptions {
+    explicitAutoIncrementValueEnabled? : boolean;
+}
+
+/**
  * Convenience method for
  * ```ts
  *  connection.transactionIfNotInOne(IsolationLevel.REPEATABLE_READ, async (connection) => {
@@ -136,7 +145,8 @@ export async function insertAndFetch<
 > (
     table : TableT,
     connection : IsolableInsertOneConnection,
-    row : InsertAndFetchRow<TableT>
+    row : InsertAndFetchRow<TableT>,
+    insertAndFetchOptions? : InsertAndFetchOptions
 ) : (
     Promise<Row<TableT>>
 ) {
@@ -148,8 +158,15 @@ export async function insertAndFetch<
             insertRow,
             insertResult,
             fetchedRow,
-        } = await insertAndFetchImpl<TableT>(
-            table,
+        } = await insertAndFetchImplNoEvent<TableT>(
+            (
+                insertAndFetchOptions == undefined ?
+                table :
+                {
+                    ...table,
+                    ...insertAndFetchOptions,
+                }
+            ),
             connection,
             row
         );
