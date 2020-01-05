@@ -53,60 +53,72 @@ async function insertAndFetchImpl<
             fetchedRow : Row<TableT>,
         }>
     ) => {
-        if (
-            table.autoIncrement == undefined
-        ) {
-            const candidateKeyResult : (
-                TryEvaluateColumnsResult<TableT, any>
-            ) = await DataTypeUtil.tryEvaluateInsertableCandidateKeyPreferPrimaryKey(
-                table,
-                connection,
-                row as any
-            );
-            if (!candidateKeyResult.success) {
-                throw candidateKeyResult.error;
+        return connection.savepoint(async (connection) : (
+            Promise<{
+                insertRow : BuiltInInsertRow<TableT>,
+                insertResult : (
+                    TableT extends TableWithAutoIncrement ?
+                    InsertOneWithAutoIncrementReturnType<TableT> :
+                    InsertOneResult
+                ),
+                fetchedRow : Row<TableT>,
+            }>
+        ) => {
+            if (
+                table.autoIncrement == undefined
+            ) {
+                const candidateKeyResult : (
+                    TryEvaluateColumnsResult<TableT, any>
+                ) = await DataTypeUtil.tryEvaluateInsertableCandidateKeyPreferPrimaryKey(
+                    table,
+                    connection,
+                    row as any
+                );
+                if (!candidateKeyResult.success) {
+                    throw candidateKeyResult.error;
+                }
+                row = {
+                    ...row,
+                    ...candidateKeyResult.outputRow,
+                };
+                const insertOneImplResult = await insertOneImplNoEvent(table, connection, row as any);
+                const fetchedRow = await TableUtil.fetchOne<TableT>(
+                    table,
+                    connection,
+                    () => ExprLib.eqCandidateKey(
+                        table,
+                        candidateKeyResult.outputRow as any
+                    ) as any
+                );
+                return {
+                    ...insertOneImplResult,
+                    fetchedRow,
+                };
+            } else {
+                const insertOneImplResult = await insertOneImplNoEvent(table, connection, row as any);
+                const fetchedRow = await TableUtil.fetchOne<TableT>(
+                    table,
+                    connection,
+                    /**
+                     * We use this instead of `eqPrimaryKey()` because it's possible
+                     * for an `AUTO_INCREMENT` column to not be a primary key
+                     * with some databases...
+                     *
+                     * It's also possible for it to not be a candidate key!
+                     */
+                    () => ExprLib.eqColumns(
+                        table,
+                        {
+                            [table.autoIncrement as string] : insertOneImplResult.insertResult.autoIncrementId,
+                        } as any
+                    ) as any
+                );
+                return {
+                    ...insertOneImplResult,
+                    fetchedRow,
+                };
             }
-            row = {
-                ...row,
-                ...candidateKeyResult.outputRow,
-            };
-            const insertOneImplResult = await insertOneImplNoEvent(table, connection, row as any);
-            const fetchedRow = await TableUtil.fetchOne<TableT>(
-                table,
-                connection,
-                () => ExprLib.eqCandidateKey(
-                    table,
-                    candidateKeyResult.outputRow as any
-                ) as any
-            );
-            return {
-                ...insertOneImplResult,
-                fetchedRow,
-            };
-        } else {
-            const insertOneImplResult = await insertOneImplNoEvent(table, connection, row as any);
-            const fetchedRow = await TableUtil.fetchOne<TableT>(
-                table,
-                connection,
-                /**
-                 * We use this instead of `eqPrimaryKey()` because it's possible
-                 * for an `AUTO_INCREMENT` column to not be a primary key
-                 * with some databases...
-                 *
-                 * It's also possible for it to not be a candidate key!
-                 */
-                () => ExprLib.eqColumns(
-                    table,
-                    {
-                        [table.autoIncrement as string] : insertOneImplResult.insertResult.autoIncrementId,
-                    } as any
-                ) as any
-            );
-            return {
-                ...insertOneImplResult,
-                fetchedRow,
-            };
-        }
+        });
     });
 }
 
