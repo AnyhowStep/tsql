@@ -47,7 +47,7 @@ tape(__filename, async (t) => {
 
         await connection.transaction(async (connection) => {
             await connection.savepoint(async (connection) => {
-                await dst.deleteOne(
+                await dst.deleteZeroOrOne(
                     connection,
                     columns => tsql.eq(
                         columns.testVal,
@@ -57,9 +57,22 @@ tape(__filename, async (t) => {
                 t.deepEqual(handlerInvoked, true);
                 t.deepEqual(commitInvoked, false);
                 t.deepEqual(rollbackInvoked, false);
+
+                await connection.releaseSavepoint();
+
+                t.deepEqual(handlerInvoked, true);
+                t.deepEqual(commitInvoked, false);
+                t.deepEqual(rollbackInvoked, false);
+
+                await connection.commit();
+
+                t.deepEqual(handlerInvoked, true);
+                t.deepEqual(commitInvoked, true);
+                t.deepEqual(rollbackInvoked, false);
+
             });
             t.deepEqual(handlerInvoked, true);
-            t.deepEqual(commitInvoked, false);
+            t.deepEqual(commitInvoked, true);
             t.deepEqual(rollbackInvoked, false);
 
             await tsql.from(dst)

@@ -50,8 +50,7 @@ tape(__filename, async (t) => {
                 /**
                  * This should delete exactly one row.
                  */
-                await tsql.ExecutionUtil.deleteOne(
-                    dst,
+                await dst.deleteOne(
                     connection,
                     columns => tsql.eq(
                         columns.testVal,

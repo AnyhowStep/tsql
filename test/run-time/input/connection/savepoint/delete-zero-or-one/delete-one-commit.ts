@@ -47,7 +47,7 @@ tape(__filename, async (t) => {
 
         await connection.transaction(async (connection) => {
             await connection.savepoint(async (connection) => {
-                await dst.deleteOne(
+                await dst.deleteZeroOrOne(
                     connection,
                     columns => tsql.eq(
                         columns.testVal,

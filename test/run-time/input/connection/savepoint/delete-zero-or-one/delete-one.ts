@@ -26,7 +26,7 @@ tape(__filename, async (t) => {
                 (3,300);
         `);
 
-        await dst.deleteOne(
+        await dst.deleteZeroOrOne(
             connection,
             columns => tsql.eq(
                 columns.testVal,

@@ -57,8 +57,7 @@ tape(__filename, async (t) => {
                     /**
                      * This should delete exactly one row.
                      */
-                    await tsql.ExecutionUtil.deleteOne(
-                        dst,
+                    await dst.deleteOne(
                         connection,
                         columns => tsql.eq(
                             columns.testVal,
@@ -74,35 +73,13 @@ tape(__filename, async (t) => {
                 t.deepEqual(commitInvoked, false);
                 t.deepEqual(rollbackInvoked, false);
 
+                await connection.rollbackToSavepoint();
+
+                t.deepEqual(handlerInvoked, true);
+                t.deepEqual(commitInvoked, false);
+                t.deepEqual(rollbackInvoked, true);
+
             });
-
-            await tsql.from(dst)
-                .select(columns => [columns])
-                .orderBy(columns => [
-                    columns.testId.asc(),
-                ])
-                .fetchAll(connection)
-                .then((rows) => {
-                    t.deepEqual(
-                        rows,
-                        [
-                            {
-                                testId : BigInt(1),
-                                testVal : BigInt(100),
-                            },
-                            {
-                                testId : BigInt(3),
-                                testVal : BigInt(300),
-                            },
-                        ]
-                    );
-                });
-
-            t.deepEqual(handlerInvoked, true);
-            t.deepEqual(commitInvoked, false);
-            t.deepEqual(rollbackInvoked, false);
-
-            await connection.rollback();
 
             t.deepEqual(handlerInvoked, true);
             t.deepEqual(commitInvoked, false);

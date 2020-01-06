@@ -26,13 +26,23 @@ tape(__filename, async (t) => {
                 (3,300);
         `);
 
-        await dst.deleteOne(
+        /**
+         * This should end up deleting two rows,
+         * which should throw an error,
+         * which should rollback to savepoint,
+         * causing no rows to be deleted
+         */
+        await dst.deleteZeroOrOne(
             connection,
-            columns => tsql.eq(
+            columns => tsql.gt(
                 columns.testVal,
-                BigInt(200)
+                BigInt(100)
             )
-        );
+        ).then(() => {
+            t.fail("Should not be able to delete two rows");
+        }).catch((err) => {
+            t.true(err instanceof tsql.TooManyRowsFoundError);
+        });
 
         await tsql.from(dst)
             .select(columns => [columns])
@@ -47,6 +57,10 @@ tape(__filename, async (t) => {
                         {
                             testId : BigInt(1),
                             testVal : BigInt(100),
+                        },
+                        {
+                            testId : BigInt(2),
+                            testVal : BigInt(200),
                         },
                         {
                             testId : BigInt(3),

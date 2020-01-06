@@ -26,28 +26,31 @@ tape(__filename, async (t) => {
                 (3,300);
         `);
 
-        let handlerInvoked = false;
-        let commitInvoked = false;
-        let rollbackInvoked = false;
-        const myDeleteHandler : tsql.EventHandler<tsql.IDeleteEvent<tsql.ITable>> = (evt) => {
-            t.deepEqual(handlerInvoked, false);
-            handlerInvoked = true;
+        return connection.transaction(async (connection) => {
+            let handlerInvoked = false;
+            let commitInvoked = false;
+            let rollbackInvoked = false;
 
-            evt.addOnCommitListener(() => {
-                t.deepEqual(commitInvoked, false);
-                commitInvoked = true;
-            });
-
-            evt.addOnRollbackListener(() => {
-                t.fail("Should not invoke rollback listener");
-                rollbackInvoked = true;
-            });
-        };
-        pool.onDelete.addHandler(myDeleteHandler);
-
-        await connection.transaction(async (connection) => {
             await connection.savepoint(async (connection) => {
-                await dst.deleteOne(
+                const myDeleteHandler : tsql.EventHandler<tsql.IDeleteEvent<tsql.ITable>> = (evt) => {
+                    t.deepEqual(handlerInvoked, false);
+                    handlerInvoked = true;
+
+                    evt.addOnCommitListener(() => {
+                        t.fail("Should not invoke commit listener");
+                        commitInvoked = true;
+                    });
+
+                    evt.addOnRollbackListener(() => {
+                        t.deepEqual(rollbackInvoked, false);
+                        rollbackInvoked = true;
+                    });
+                };
+                pool.onDelete.addHandler(myDeleteHandler);
+                /**
+                 * This should delete exactly one row.
+                 */
+                await dst.deleteZeroOrOne(
                     connection,
                     columns => tsql.eq(
                         columns.testVal,
@@ -57,10 +60,20 @@ tape(__filename, async (t) => {
                 t.deepEqual(handlerInvoked, true);
                 t.deepEqual(commitInvoked, false);
                 t.deepEqual(rollbackInvoked, false);
+
+                throw new Error(`Blah`);
+            }).catch((err) => {
+
+                t.deepEqual(handlerInvoked, true);
+                t.deepEqual(commitInvoked, false);
+                t.deepEqual(rollbackInvoked, true);
+
+                t.deepEqual(err.message, `Blah`);
             });
+
             t.deepEqual(handlerInvoked, true);
             t.deepEqual(commitInvoked, false);
-            t.deepEqual(rollbackInvoked, false);
+            t.deepEqual(rollbackInvoked, true);
 
             await tsql.from(dst)
                 .select(columns => [columns])
@@ -77,6 +90,10 @@ tape(__filename, async (t) => {
                                 testVal : BigInt(100),
                             },
                             {
+                                testId : BigInt(2),
+                                testVal : BigInt(200),
+                            },
+                            {
                                 testId : BigInt(3),
                                 testVal : BigInt(300),
                             },
@@ -84,9 +101,6 @@ tape(__filename, async (t) => {
                     );
                 });
         });
-        t.deepEqual(handlerInvoked, true);
-        t.deepEqual(commitInvoked, true);
-        t.deepEqual(rollbackInvoked, false);
     });
 
     t.end();
