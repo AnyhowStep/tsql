@@ -2,16 +2,18 @@ import * as tm from "type-mapping";
 import {WritableColumnMap} from "../../column-map";
 import {Column} from "../../../column";
 import {MapperMap} from "../../../mapper-map";
+import {Identity} from "../../../type-util";
 
-export type FromMapperMap<
+type FromMapperMapImpl<
     TableAliasT extends string,
-    MapperMapT extends MapperMap
-> = (
-    {
-        readonly [columnAlias in Extract<keyof MapperMapT, string>] : (
+    MapperMapT extends MapperMap,
+    ColumnAliasT extends keyof MapperMapT
+> =
+    Identity<{
+        readonly [columnAlias in ColumnAliasT] : (
             Column<{
                 tableAlias : TableAliasT,
-                columnAlias : columnAlias,
+                columnAlias : Extract<columnAlias, string>,
                 /**
                  * We erase the type of the `mapper` and
                  * replace it with `SafeMapper`.
@@ -21,7 +23,17 @@ export type FromMapperMap<
                 mapper : tm.SafeMapper<tm.OutputOf<MapperMapT[columnAlias]>>
             }>
         )
-    }
+    }>
+;
+export type FromMapperMap<
+    TableAliasT extends string,
+    MapperMapT extends MapperMap
+> = (
+    FromMapperMapImpl<
+        TableAliasT,
+        MapperMapT,
+        Extract<keyof MapperMapT, string>
+    >
 );
 export function fromMapperMap<
     TableAliasT extends string,

@@ -4,7 +4,7 @@ import {Table} from "../../table-impl";
 import {ColumnUtil, IColumn, ColumnArrayUtil} from "../../../column";
 import {AssertValidCandidateKey, assertValidCandidateKey} from "./add-candidate-key";
 import {KeyArrayUtil, KeyUtil} from "../../../key";
-import {pickOwnEnumerable} from "../../../type-util";
+import {pickOwnEnumerable, ReadOnlyPick} from "../../../type-util";
 
 /**
  * @todo Allow custom data types for primary key.
@@ -23,13 +23,9 @@ export type SetPrimaryKeyColumnAlias<TableT extends Pick<ITable, "columns">> = (
     }[Extract<keyof TableT["columns"], string>]
 );
 
-export type SetPrimaryKeyColumnMap<TableT extends Pick<ITable, "columns">> = (
-    {
-        readonly [columnName in SetPrimaryKeyColumnAlias<TableT>] : (
-            TableT["columns"][columnName]
-        )
-    }
-);
+export type SetPrimaryKeyColumnMap<TableT extends Pick<ITable, "columns">> =
+    ReadOnlyPick<TableT["columns"], SetPrimaryKeyColumnAlias<TableT>>
+;
 export function setPrimaryKeyColumnMap<
     TableT extends Pick<ITable, "columns">
 > (

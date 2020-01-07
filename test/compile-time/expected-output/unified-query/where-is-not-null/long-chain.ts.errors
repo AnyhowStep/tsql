@@ -4,11 +4,11 @@
     "code": 2589,
     "category": 1,
     "length": 55,
-    "start": 4689
+    "start": 4737
   },
   {
     "messageText": {
-      "messageText": "Argument of type '(columns: { readonly column37: Column<{ tableAlias: \"myTable\"; columnAlias: \"column37\"; mapper: Mapper<unknown, bigint | null>; }>; }) => Column<{ tableAlias: \"myTable\"; columnAlias: \"column37\"; mapper: Mapper<...>; }>' is not assignable to parameter of type '(columns: { readonly [x: string]: { readonly [x: string]: any; }; }) => Column<{ tableAlias: \"myTable\"; columnAlias: \"column37\"; mapper: Mapper<unknown, bigint | null>; }>'.",
+      "messageText": "Argument of type '(columns: { readonly column36: Column<{ tableAlias: \"myTable\"; columnAlias: \"column36\"; mapper: Mapper<unknown, bigint | null>; }>; readonly column37: Column<{ tableAlias: \"myTable\"; columnAlias: \"column37\"; mapper: Mapper<...>; }>; }) => Column<...>' is not assignable to parameter of type '(columns: { readonly [x: string]: { readonly [x: string]: any; }; }) => Column<{ tableAlias: \"myTable\"; columnAlias: \"column37\"; mapper: Mapper<unknown, bigint | null>; }>'.",
       "category": 1,
       "code": 2345,
       "next": {
@@ -16,15 +16,15 @@
         "category": 1,
         "code": 2328,
         "next": {
-          "messageText": "Property 'column37' is missing in type '{ readonly [x: string]: { readonly [x: string]: any; }; }' but required in type '{ readonly column37: Column<{ tableAlias: \"myTable\"; columnAlias: \"column37\"; mapper: Mapper<unknown, bigint | null>; }>; }'.",
+          "messageText": "Type '{ readonly [x: string]: { readonly [x: string]: any; }; }' is missing the following properties from type '{ readonly column36: Column<{ tableAlias: \"myTable\"; columnAlias: \"column36\"; mapper: Mapper<unknown, bigint | null>; }>; readonly column37: Column<{ tableAlias: \"myTable\"; columnAlias: \"column37\"; mapper: Mapper<...>; }>; }': column36, column37",
           "category": 1,
-          "code": 2741
+          "code": 2739
         }
       }
     },
     "code": 2345,
     "category": 1,
     "length": 27,
-    "start": 4715
+    "start": 4763
   }
 ]

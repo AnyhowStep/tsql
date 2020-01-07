@@ -190,7 +190,7 @@ export declare const query: tsql.Query<{
                 readonly column36: tsql.Column<{
                     tableAlias: "myTable";
                     columnAlias: "column36";
-                    mapper: tm.Mapper<unknown, bigint>;
+                    mapper: tm.Mapper<unknown, bigint | null>;
                 }>;
                 readonly column37: tsql.Column<{
                     tableAlias: "myTable";

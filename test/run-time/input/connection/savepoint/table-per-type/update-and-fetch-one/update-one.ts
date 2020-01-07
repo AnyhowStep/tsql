@@ -27,7 +27,7 @@ tape(__filename, async (t) => {
         let handlerInvoked = 0;
         let commitInvoked = 0;
         let rollbackInvoked = 0;
-        pool.onInsertAndFetch.addHandler(async (evt) => {
+        pool.onUpdateAndFetch.addHandler(async (evt) => {
             ++handlerInvoked;
 
             evt.addOnCommitListener(() => {
@@ -84,13 +84,28 @@ tape(__filename, async (t) => {
         t.deepEqual(commitInvoked, 3);
         t.deepEqual(rollbackInvoked, 0);
 
-        await specialServerAppKey.existsByPrimaryKey(
+        await specialServerAppKeyTpt.fetchOne(
             connection,
-            {
-                appKeyId : BigInt(1),
-            }
+            () => tsql.eqPrimaryKey(
+                specialServerAppKey,
+                {
+                    appKeyId: BigInt(1),
+                }
+            )
         ).then((result) => {
-            t.deepEqual(result, true);
+            t.deepEqual(
+                result,
+                {
+                    appKeyId: BigInt(1),
+                    appKeyTypeId: BigInt(1),
+                    ipAddress : "ip-updated",
+                    trustProxy : false,
+                    appId: BigInt(1),
+                    key: "server",
+                    createdAt: new Date(1),
+                    disabledAt: new Date(2),
+                }
+            );
         });
     });
 

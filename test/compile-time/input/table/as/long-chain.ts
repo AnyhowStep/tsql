@@ -13,6 +13,9 @@ const myTable = tsql.table("myTable")
         column6 : tm.mysql.json(),
         column7 : tm.mysql.varChar(255),
         column8 : tm.mysql.varChar(255),
+        /**
+         * Comment
+         */
         column9 : tm.mysql.varChar(255),
     });
 
@@ -36,9 +39,9 @@ export const aliasedTable = myTable
     .as("16")
     .as("17")
     .as("18")
-    .as("19")
-    .as("20")
-    .as("21");
+    .as("19");
+    //.as("20");
+    //.as("21");
 /**
  * The type of `columns.column0.columnAlias` is all messed up.
  * No max-depth error, though.

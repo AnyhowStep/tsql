@@ -40,6 +40,9 @@ const myTable = tsql.table("myTable")
         column34 : tm.mysql.bigIntUnsigned().orNull(),
         column35 : tm.mysql.bigIntUnsigned().orNull(),
         column36 : tm.mysql.bigIntUnsigned().orNull(),
+        /**
+         * Comment
+         */
         column37 : tm.mysql.bigIntUnsigned().orNull(),
     });
 
@@ -152,10 +155,10 @@ export const query = tsql.QueryUtil.newInstance()
     )
     .whereIsNotNull(
         columns => columns.column35
-    )
-    .whereIsNotNull(
-        columns => columns.column36
     );
+    /*.whereIsNotNull(
+        columns => columns.column36
+    );*/
 /**
  * @todo Find a way to increase the limit to 60 or more
  */

@@ -1,3 +1,5 @@
+import {Identity} from "./identity";
+
 /**
  * + Assumes `T` is not a union
  * + Lets `KeyT` be a union
@@ -22,4 +24,10 @@ export type DistributePick<
     T extends any ?
     Pick<T, Extract<KeyT, keyof T>> :
     never
+;
+
+export type ReadOnlyPick<T, K extends keyof T> =
+    Identity<{
+        readonly [k in K] : T[k]
+    }>
 ;

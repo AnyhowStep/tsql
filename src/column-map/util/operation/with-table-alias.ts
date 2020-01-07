@@ -1,19 +1,31 @@
 import {ColumnMap, WritableColumnMap} from "../../column-map";
 import {ColumnUtil} from "../../../column";
+import {Identity} from "../../../type-util";
 
-export type WithTableAlias<
+type WithTableAliasImpl<
     ColumnMapT extends ColumnMap,
-    NewTableAliasT extends string
-> = (
-    {
-        readonly [columnAlias in Extract<keyof ColumnMapT, string>] : (
+    NewTableAliasT extends string,
+    ColumnAliasT extends keyof ColumnMapT
+> =
+    Identity<{
+        readonly [columnAlias in ColumnAliasT] : (
             ColumnUtil.WithTableAlias<
                 ColumnMapT[columnAlias],
                 NewTableAliasT
             >
         )
-    }
-);
+    }>
+;
+export type WithTableAlias<
+    ColumnMapT extends ColumnMap,
+    NewTableAliasT extends string
+> =
+    WithTableAliasImpl<
+        ColumnMapT,
+        NewTableAliasT,
+        Extract<keyof ColumnMapT, string>
+    >
+;
 export function withTableAlias<
     ColumnMapT extends ColumnMap,
     NewTableAliasT extends string
