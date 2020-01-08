@@ -33,8 +33,7 @@ tape(__filename, async (t) => {
              * which should rollback to savepoint,
              * causing no rows to be deleted
              */
-            await tsql.ExecutionUtil.deleteOne(
-                dst,
+            await dst.deleteOne(
                 connection,
                 columns => tsql.gt(
                     columns.testVal,

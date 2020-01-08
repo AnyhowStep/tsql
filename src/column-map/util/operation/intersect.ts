@@ -1,20 +1,19 @@
 import {ColumnMap, WritableColumnMap} from "../../column-map";
 import {LeftIntersect, leftIntersect} from "./left-intersect";
-import {Merge} from "../../../type-util";
+import {Merge, ReadOnlyPick} from "../../../type-util";
 
 export type IntersectImpl<
     MapA extends ColumnMap,
     MapB extends ColumnMap,
 > = (
     & LeftIntersect<MapA, MapB>
-    & {
-        readonly [columnAlias in Exclude<
+    & ReadOnlyPick<
+        MapB,
+        Exclude<
             Extract<keyof MapB, string>,
             keyof MapA
-        >] : (
-            MapB[columnAlias]
-        )
-    }
+        >
+    >
 );
 export type Intersect<
     MapA extends ColumnMap,

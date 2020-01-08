@@ -58,39 +58,41 @@ export async function updateAndFetchOneByCandidateKey<
     assignmentMapDelegate : AssignmentMapDelegate<TptT, AssignmentMapT>
 ) : Promise<UpdateAndFetchOneReturnType<TptT, AssignmentMapT>> {
     return connection.transactionIfNotInOne(IsolationLevel.REPEATABLE_READ, async (connection) : Promise<UpdateAndFetchOneReturnType<TptT, AssignmentMapT>> => {
-        const cleanedAssignmentMap = await invokeAssignmentDelegate(
-            tpt,
-            connection,
-            () => ExprLib.eqCandidateKey(
+        return connection.savepoint(async (connection) : Promise<UpdateAndFetchOneReturnType<TptT, AssignmentMapT>> => {
+            const cleanedAssignmentMap = await invokeAssignmentDelegate(
+                tpt,
+                connection,
+                () => ExprLib.eqCandidateKey(
+                    tpt.childTable,
+                    candidateKey
+                ),
+                assignmentMapDelegate
+            );
+            /**
+             * @todo If `result` contains any primaryKey values,
+             * then we will need to fetch the **current** primaryKey values,
+             * before any `UPDATE` statements are executed.
+             *
+             * This function breaks if we try to update values
+             * of columns that are foreign keys.
+             *
+             * I do not want to disable foreign key checks.
+             */
+            const updateAndFetchChildResult = await ExecutionUtil.updateAndFetchOneByCandidateKey(
                 tpt.childTable,
-                candidateKey
-            ),
-            assignmentMapDelegate
-        );
-        /**
-         * @todo If `result` contains any primaryKey values,
-         * then we will need to fetch the **current** primaryKey values,
-         * before any `UPDATE` statements are executed.
-         *
-         * This function breaks if we try to update values
-         * of columns that are foreign keys.
-         *
-         * I do not want to disable foreign key checks.
-         */
-        const updateAndFetchChildResult = await ExecutionUtil.updateAndFetchOneByCandidateKey(
-            tpt.childTable,
-            connection,
-            candidateKey,
-            () => pickOwnEnumerable(
+                connection,
+                candidateKey,
+                () => pickOwnEnumerable(
+                    cleanedAssignmentMap,
+                    tpt.childTable.mutableColumns
+                )
+            );
+            return updateAndFetchOneImpl(
+                tpt,
+                connection,
                 cleanedAssignmentMap,
-                tpt.childTable.mutableColumns
-            )
-        );
-        return updateAndFetchOneImpl(
-            tpt,
-            connection,
-            cleanedAssignmentMap,
-            updateAndFetchChildResult
-        ) as Promise<UpdateAndFetchOneReturnType<TptT, AssignmentMapT>>;
+                updateAndFetchChildResult
+            ) as Promise<UpdateAndFetchOneReturnType<TptT, AssignmentMapT>>;
+        });
     });
 }

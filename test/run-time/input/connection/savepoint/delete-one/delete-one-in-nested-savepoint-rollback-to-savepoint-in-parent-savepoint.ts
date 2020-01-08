@@ -27,36 +27,48 @@ tape(__filename, async (t) => {
         `);
 
         return connection.transaction(async (connection) => {
+            let handlerInvoked = false;
+            let commitInvoked = false;
+            let rollbackInvoked = false;
+
+            /**
+             * This savepoint will be rolled back.
+             */
             await connection.savepoint(async (connection) => {
-                let handlerInvoked = false;
-                let commitInvoked = false;
-                let rollbackInvoked = false;
-                const myDeleteHandler : tsql.EventHandler<tsql.IDeleteEvent<tsql.ITable>> = (evt) => {
-                    t.deepEqual(handlerInvoked, false);
-                    handlerInvoked = true;
-
-                    evt.addOnCommitListener(() => {
-                        t.fail("Should not invoke commit listener");
-                        commitInvoked = true;
-                    });
-
-                    evt.addOnRollbackListener(() => {
-                        t.deepEqual(rollbackInvoked, false);
-                        rollbackInvoked = true;
-                    });
-                };
-                pool.onDelete.addHandler(myDeleteHandler);
                 /**
-                 * This should delete exactly one row.
+                 * This savepoint will be released.
                  */
-                await tsql.ExecutionUtil.deleteOne(
-                    dst,
-                    connection,
-                    columns => tsql.eq(
-                        columns.testVal,
-                        BigInt(200)
-                    )
-                );
+                await connection.savepoint(async (connection) => {
+                    const myDeleteHandler : tsql.EventHandler<tsql.IDeleteEvent<tsql.ITable>> = (evt) => {
+                        t.deepEqual(handlerInvoked, false);
+                        handlerInvoked = true;
+
+                        evt.addOnCommitListener(() => {
+                            t.fail("Should not invoke commit listener");
+                            commitInvoked = true;
+                        });
+
+                        evt.addOnRollbackListener(() => {
+                            t.deepEqual(rollbackInvoked, false);
+                            rollbackInvoked = true;
+                        });
+                    };
+                    pool.onDelete.addHandler(myDeleteHandler);
+                    /**
+                     * This should delete exactly one row.
+                     */
+                    await dst.deleteOne(
+                        connection,
+                        columns => tsql.eq(
+                            columns.testVal,
+                            BigInt(200)
+                        )
+                    );
+                    t.deepEqual(handlerInvoked, true);
+                    t.deepEqual(commitInvoked, false);
+                    t.deepEqual(rollbackInvoked, false);
+                });
+
                 t.deepEqual(handlerInvoked, true);
                 t.deepEqual(commitInvoked, false);
                 t.deepEqual(rollbackInvoked, false);
@@ -66,7 +78,12 @@ tape(__filename, async (t) => {
                 t.deepEqual(handlerInvoked, true);
                 t.deepEqual(commitInvoked, false);
                 t.deepEqual(rollbackInvoked, true);
+
             });
+
+            t.deepEqual(handlerInvoked, true);
+            t.deepEqual(commitInvoked, false);
+            t.deepEqual(rollbackInvoked, true);
 
             await tsql.from(dst)
                 .select(columns => [columns])

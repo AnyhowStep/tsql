@@ -580,6 +580,8 @@ export const sqliteSqlfier : Sqlfier = {
         [OperatorType.NULL_SAFE_EQUAL] : ({operands}) => insertBetween(operands, "IS"),
         [OperatorType.LESS_THAN] : ({operands}) => insertBetween(operands, "<"),
         [OperatorType.GREATER_THAN] : ({operands}) => insertBetween(operands, ">"),
+        [OperatorType.LESS_THAN_OR_EQUAL] : ({operands}) => insertBetween(operands, "<="),
+        [OperatorType.GREATER_THAN_OR_EQUAL] : ({operands}) => insertBetween(operands, ">="),
         [OperatorType.IN] : ({operands : [x, y, ...rest]}) => {
             if (rest.length == 0 && Parentheses.IsParentheses(y) && QueryBaseUtil.isQuery(y.ast)) {
                 return [

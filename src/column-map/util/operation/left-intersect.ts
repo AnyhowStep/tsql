@@ -2,14 +2,15 @@ import * as tm from "type-mapping";
 import {ColumnMap, WritableColumnMap} from "../../column-map";
 import {Column, ColumnUtil} from "../../../column";
 import {DataTypeUtil} from "../../../data-type";
+import {Identity} from "../../../type-util";
 
-//Take the intersection and the "left" columnMap
-export type LeftIntersect<
+type LeftIntersectImpl<
     MapA extends ColumnMap,
     MapB extends ColumnMap,
-> = (
-    {
-        readonly [columnAlias in Extract<keyof MapA, string>] : (
+    ColumnAliasT extends keyof MapA
+> =
+    Identity<{
+        readonly [columnAlias in ColumnAliasT] : (
             columnAlias extends keyof MapB ?
             Column<{
                 tableAlias : MapA[columnAlias]["tableAlias"],
@@ -21,8 +22,15 @@ export type LeftIntersect<
             }> :
             MapA[columnAlias]
         )
-    }
-);
+    }>
+;
+//Take the intersection and the "left" columnMap
+export type LeftIntersect<
+    MapA extends ColumnMap,
+    MapB extends ColumnMap,
+> =
+    LeftIntersectImpl<MapA, MapB, Extract<keyof MapA, string>>
+;
 export function leftIntersect<
     MapA extends ColumnMap,
     MapB extends ColumnMap,

@@ -54,75 +54,80 @@ export async function insertAndFetch<
      * @todo Add `assertInsertable()` or something
      */
     return connection.transactionIfNotInOne(IsolationLevel.REPEATABLE_READ, async (connection) : Promise<InsertedAndFetchedRow<TptT, RowT>> => {
-        const generated = generatedColumnAliases(tpt);
+        return connection.savepoint(async (connection) : Promise<InsertedAndFetchedRow<TptT, RowT>> => {
+            const generated = generatedColumnAliases(tpt);
 
-        const result : any = omitOwnEnumerable(
-            insertRow,
-            [
-                /**
-                 * We omit implicit auto-increment values because we do not
-                 * want them to be set by users of the library.
-                 */
-                ...implicitAutoIncrement(tpt),
-                /**
-                 * We omit generated values because users can't set them, anyway.
-                 */
-                ...generated,
-            ] as any
-        );
-
-        for(const columnAlias of generated) {
-            const table = findTableWithGeneratedColumnAlias(
-                tpt,
-                columnAlias
+            const result : any = omitOwnEnumerable(
+                insertRow,
+                [
+                    /**
+                     * We omit implicit auto-increment values because we do not
+                     * want them to be set by users of the library.
+                     */
+                    ...implicitAutoIncrement(tpt),
+                    /**
+                     * We omit generated values because users can't set them, anyway.
+                     */
+                    ...generated,
+                ] as any
             );
 
-            const sqlString = await connection.tryFetchGeneratedColumnExpression(
-                TableUtil.tryGetSchemaName(table),
-                table.alias,
-                columnAlias
-            );
+            for(const columnAlias of generated) {
+                const table = findTableWithGeneratedColumnAlias(
+                    tpt,
+                    columnAlias
+                );
 
-            if (sqlString == undefined) {
-                throw new Error(`Generated column ${table.alias}.${columnAlias} should have generation expression`);
+                const sqlString = await connection.tryFetchGeneratedColumnExpression(
+                    TableUtil.tryGetSchemaName(table),
+                    table.alias,
+                    columnAlias
+                );
+
+                if (sqlString == undefined) {
+                    throw new Error(`Generated column ${table.alias}.${columnAlias} should have generation expression`);
+                }
+
+                result[columnAlias] = expr(
+                    {
+                        mapper : table.columns[columnAlias].mapper,
+                        usedRef : UsedRefUtil.fromColumnRef({}),
+                    },
+                    /**
+                     * This `sqlString` is not allowed to reference any columns.
+                     * If it does, there is a very high chance that it will cause an error.
+                     *
+                     * @todo Find use case where we need to allow this to reference columns.
+                     */
+                    sqlString
+                );
             }
 
-            result[columnAlias] = expr(
-                {
-                    mapper : table.columns[columnAlias].mapper,
-                    usedRef : UsedRefUtil.fromColumnRef({}),
-                },
-                /**
-                 * This `sqlString` is not allowed to reference any columns.
-                 * If it does, there is a very high chance that it will cause an error.
-                 *
-                 * @todo Find use case where we need to allow this to reference columns.
-                 */
-                sqlString
-            );
-        }
-
-        for(const table of [...tpt.parentTables, tpt.childTable]) {
-            const fetchedRow = await ExecutionUtil.insertAndFetch(
-                (
+            for(const table of [...tpt.parentTables, tpt.childTable]) {
+                const fetchedRow = await ExecutionUtil.insertAndFetch(
                     /**
-                     * We want to allow explicit auto-increment values internally,
-                     * so that the same value is used for all tables of the same
-                     * inheritance hierarchy.
+                     * We use `InsertAndFetchOptions`, instead of creating
+                     * a new table instance because we want events to use the
+                     * original `table` instance.
+                     *
+                     * `event.isFor()` methods use `===` internally
                      */
-                    table.autoIncrement != undefined && !table.explicitAutoIncrementValueEnabled ?
+                    table,
+                    connection,
+                    result as never,
                     {
-                        ...table,
+                        /**
+                         * We want to allow explicit auto-increment values internally,
+                         * so that the same value is used for all tables of the same
+                         * inheritance hierarchy.
+                         */
                         explicitAutoIncrementValueEnabled : true,
-                    } :
-                    table
-                ),
-                connection,
-                result as never
-            );
-            absorbRow(result, table, fetchedRow);
-        }
+                    }
+                );
+                absorbRow(result, table, fetchedRow);
+            }
 
-        return result;
+            return result;
+        });
     });
 }

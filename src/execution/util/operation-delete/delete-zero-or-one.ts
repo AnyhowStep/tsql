@@ -51,27 +51,32 @@ export async function deleteZeroOrOne<
             whereClause : WhereClause,
             deleteResult : DeleteZeroOrOneResult,
         }> => {
-            const {
-                whereClause,
-                deleteResult,
-            } = await impl.deleteImplNoEvent(
-                table,
-                connection,
-                whereDelegate
-            );
-            if (
-                tm.BigIntUtil.equal(deleteResult.deletedRowCount, tm.BigInt(0)) ||
-                tm.BigIntUtil.equal(deleteResult.deletedRowCount, tm.BigInt(1))
-            ) {
-                return {
+            return connection.savepoint(async (connection) : Promise<{
+                whereClause : WhereClause,
+                deleteResult : DeleteZeroOrOneResult,
+            }> => {
+                const {
                     whereClause,
-                    deleteResult : deleteResult as DeleteZeroOrOneResult,
-                };
-            }
-            throw new TooManyRowsFoundError(
-                `Expected to delete one row of ${table.alias}; found ${deleteResult.deletedRowCount} rows`,
-                deleteResult.query.sql
-            );
+                    deleteResult,
+                } = await impl.deleteImplNoEvent(
+                    table,
+                    connection,
+                    whereDelegate
+                );
+                if (
+                    tm.BigIntUtil.equal(deleteResult.deletedRowCount, tm.BigInt(0)) ||
+                    tm.BigIntUtil.equal(deleteResult.deletedRowCount, tm.BigInt(1))
+                ) {
+                    return {
+                        whereClause,
+                        deleteResult : deleteResult as DeleteZeroOrOneResult,
+                    };
+                }
+                throw new TooManyRowsFoundError(
+                    `Expected to delete zero or one row of ${table.alias}; found ${deleteResult.deletedRowCount} rows`,
+                    deleteResult.query.sql
+                );
+            });
         });
 
         if (tm.BigIntUtil.equal(deleteResult.deletedRowCount, tm.BigInt(1))) {

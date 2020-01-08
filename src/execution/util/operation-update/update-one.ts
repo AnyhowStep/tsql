@@ -55,41 +55,47 @@ export async function updateOneImplNoEvent<
         assignmentMap : BuiltInAssignmentMap<TableT>,
         updateResult : UpdateOneResult,
     }> => {
-        const {
-            whereClause,
-            assignmentMap,
-            updateResult,
-        } = await impl.updateImplNoEvent(
-            table,
-            connection,
-            whereDelegate,
-            assignmentMapDelegate
-        );
-        if (tm.BigIntUtil.equal(updateResult.foundRowCount, tm.BigInt(0))) {
-            throw new RowNotFoundError(
+        return connection.savepoint(async (connection) : Promise<{
+            whereClause : WhereClause,
+            assignmentMap : BuiltInAssignmentMap<TableT>,
+            updateResult : UpdateOneResult,
+        }> => {
+            const {
+                whereClause,
+                assignmentMap,
+                updateResult,
+            } = await impl.updateImplNoEvent(
+                table,
+                connection,
+                whereDelegate,
+                assignmentMapDelegate
+            );
+            if (tm.BigIntUtil.equal(updateResult.foundRowCount, tm.BigInt(0))) {
+                throw new RowNotFoundError(
+                    `Expected to find one row of ${table.alias}; found ${updateResult.foundRowCount} rows`,
+                    updateResult.query.sql
+                );
+            }
+            if (tm.BigIntUtil.equal(updateResult.foundRowCount, tm.BigInt(1))) {
+                if (
+                    tm.BigIntUtil.equal(updateResult.updatedRowCount, tm.BigInt(0)) ||
+                    tm.BigIntUtil.equal(updateResult.updatedRowCount, tm.BigInt(1))
+                ) {
+                    return {
+                        whereClause,
+                        assignmentMap,
+                        updateResult : updateResult as UpdateOneResult,
+                    };
+                } else {
+                    //Should never happen...
+                    throw new Error(`Expected to update zero or one row of ${table.alias}; updated ${updateResult.updatedRowCount}`);
+                }
+            }
+            throw new TooManyRowsFoundError(
                 `Expected to find one row of ${table.alias}; found ${updateResult.foundRowCount} rows`,
                 updateResult.query.sql
             );
-        }
-        if (tm.BigIntUtil.equal(updateResult.foundRowCount, tm.BigInt(1))) {
-            if (
-                tm.BigIntUtil.equal(updateResult.updatedRowCount, tm.BigInt(0)) ||
-                tm.BigIntUtil.equal(updateResult.updatedRowCount, tm.BigInt(1))
-            ) {
-                return {
-                    whereClause,
-                    assignmentMap,
-                    updateResult : updateResult as UpdateOneResult,
-                };
-            } else {
-                //Should never happen...
-                throw new Error(`Expected to update zero or one row of ${table.alias}; updated ${updateResult.updatedRowCount}`);
-            }
-        }
-        throw new TooManyRowsFoundError(
-            `Expected to find one row of ${table.alias}; found ${updateResult.foundRowCount} rows`,
-            updateResult.query.sql
-        );
+        });
     });
 }
 

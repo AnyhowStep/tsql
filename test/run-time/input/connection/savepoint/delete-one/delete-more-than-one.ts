@@ -26,52 +26,49 @@ tape(__filename, async (t) => {
                 (3,300);
         `);
 
-        return connection.transaction(async (connection) => {
-            /**
-             * This should end up deleting two rows,
-             * which should throw an error,
-             * which should rollback to savepoint,
-             * causing no rows to be deleted
-             */
-            await tsql.ExecutionUtil.deleteOne(
-                dst,
-                connection,
-                columns => tsql.gt(
-                    columns.testVal,
-                    BigInt(100)
-                )
-            ).then(() => {
-                t.fail("Should not be able to delete two rows");
-            }).catch((err) => {
-                t.true(err instanceof tsql.TooManyRowsFoundError);
-            });
-
-            await tsql.from(dst)
-                .select(columns => [columns])
-                .orderBy(columns => [
-                    columns.testId.asc(),
-                ])
-                .fetchAll(connection)
-                .then((rows) => {
-                    t.deepEqual(
-                        rows,
-                        [
-                            {
-                                testId : BigInt(1),
-                                testVal : BigInt(100),
-                            },
-                            {
-                                testId : BigInt(2),
-                                testVal : BigInt(200),
-                            },
-                            {
-                                testId : BigInt(3),
-                                testVal : BigInt(300),
-                            },
-                        ]
-                    );
-                });
+        /**
+         * This should end up deleting two rows,
+         * which should throw an error,
+         * which should rollback to savepoint,
+         * causing no rows to be deleted
+         */
+        await dst.deleteOne(
+            connection,
+            columns => tsql.gt(
+                columns.testVal,
+                BigInt(100)
+            )
+        ).then(() => {
+            t.fail("Should not be able to delete two rows");
+        }).catch((err) => {
+            t.true(err instanceof tsql.TooManyRowsFoundError);
         });
+
+        await tsql.from(dst)
+            .select(columns => [columns])
+            .orderBy(columns => [
+                columns.testId.asc(),
+            ])
+            .fetchAll(connection)
+            .then((rows) => {
+                t.deepEqual(
+                    rows,
+                    [
+                        {
+                            testId : BigInt(1),
+                            testVal : BigInt(100),
+                        },
+                        {
+                            testId : BigInt(2),
+                            testVal : BigInt(200),
+                        },
+                        {
+                            testId : BigInt(3),
+                            testVal : BigInt(300),
+                        },
+                    ]
+                );
+            });
     });
 
     t.end();

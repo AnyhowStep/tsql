@@ -26,38 +26,35 @@ tape(__filename, async (t) => {
                 (3,300);
         `);
 
-        return connection.transaction(async (connection) => {
-            await tsql.ExecutionUtil.deleteOne(
-                dst,
-                connection,
-                columns => tsql.eq(
-                    columns.testVal,
-                    BigInt(200)
-                )
-            );
+        await dst.deleteOne(
+            connection,
+            columns => tsql.eq(
+                columns.testVal,
+                BigInt(200)
+            )
+        );
 
-            await tsql.from(dst)
-                .select(columns => [columns])
-                .orderBy(columns => [
-                    columns.testId.asc(),
-                ])
-                .fetchAll(connection)
-                .then((rows) => {
-                    t.deepEqual(
-                        rows,
-                        [
-                            {
-                                testId : BigInt(1),
-                                testVal : BigInt(100),
-                            },
-                            {
-                                testId : BigInt(3),
-                                testVal : BigInt(300),
-                            },
-                        ]
-                    );
-                });
-        });
+        await tsql.from(dst)
+            .select(columns => [columns])
+            .orderBy(columns => [
+                columns.testId.asc(),
+            ])
+            .fetchAll(connection)
+            .then((rows) => {
+                t.deepEqual(
+                    rows,
+                    [
+                        {
+                            testId : BigInt(1),
+                            testVal : BigInt(100),
+                        },
+                        {
+                            testId : BigInt(3),
+                            testVal : BigInt(300),
+                        },
+                    ]
+                );
+            });
     });
 
     t.end();

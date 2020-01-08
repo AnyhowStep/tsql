@@ -89,34 +89,40 @@ export async function updateAndFetchOneImpl<
             updateResult : UpdateAndFetchOneResult<TableT, AssignmentMapT>,
             assignmentMap : AssignmentMapT,
         }> => {
-            const {
-                updateWhereDelegate,
-                fetchWhereDelegate,
-                assignmentMap,
-            } = await initCallback(connection);
-            const {
-                whereClause : updateWhereClause,
-                updateResult : updateOneResult,
-            } = await updateOneImplNoEvent(
-                table,
-                connection,
-                updateWhereDelegate,
-                () => assignmentMap
-            );
-            const row = await TableUtil.__fetchOneHelper(
-                table,
-                connection,
-                fetchWhereDelegate
-            );
+            return connection.savepoint(async (connection) : Promise<{
+                updateWhereClause : WhereClause,
+                updateResult : UpdateAndFetchOneResult<TableT, AssignmentMapT>,
+                assignmentMap : AssignmentMapT,
+            }> => {
+                const {
+                    updateWhereDelegate,
+                    fetchWhereDelegate,
+                    assignmentMap,
+                } = await initCallback(connection);
+                const {
+                    whereClause : updateWhereClause,
+                    updateResult : updateOneResult,
+                } = await updateOneImplNoEvent(
+                    table,
+                    connection,
+                    updateWhereDelegate,
+                    () => assignmentMap
+                );
+                const row = await TableUtil.__fetchOneHelper(
+                    table,
+                    connection,
+                    fetchWhereDelegate
+                );
 
-            return {
-                updateWhereClause,
-                updateResult : {
-                    ...updateOneResult,
-                    row,
-                },
-                assignmentMap,
-            };
+                return {
+                    updateWhereClause,
+                    updateResult : {
+                        ...updateOneResult,
+                        row,
+                    },
+                    assignmentMap,
+                };
+            });
         });
 
         const fullConnection = connection.tryGetFullConnection();

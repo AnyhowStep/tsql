@@ -36,7 +36,10 @@ export interface UpdateAndFetchOneResult<RowT> {
 }
 
 /**
- * Not meant to be called externally
+ * Not meant to be called externally.
+ *
+ * **DOES NOT** use savepoints, internally.
+ * You **SHOULD** use savepoints before calling this function.
  */
 export async function updateAndFetchOneImpl<
     TptT extends ITablePerType

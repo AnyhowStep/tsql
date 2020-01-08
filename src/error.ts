@@ -56,14 +56,6 @@ export class TooManyColumnsSelectedError extends Error {
 }
 TooManyColumnsSelectedError.prototype.name = "TooManyColumnsSelectedError";
 
-export class TooManyRowsUpdatedError extends Error {
-    constructor (message : string) {
-        super(message);
-        Object.setPrototypeOf(this, TooManyRowsUpdatedError.prototype);
-    }
-}
-TooManyRowsUpdatedError.prototype.name = "TooManyRowsUpdatedError";
-
 export class CannotCountError extends Error {
     constructor (message : string) {
         super(message);
