@@ -35,6 +35,17 @@ tape(__filename, async (t) => {
             }
         );
 
+        await event.getOrFetch()
+            .then((row) => {
+                t.deepEqual(
+                    row,
+                    {
+                        testId : BigInt(4),
+                        testVal : BigInt(400),
+                    }
+                );
+            });
+
         throw new Error(`Async throw`);
     });
 
