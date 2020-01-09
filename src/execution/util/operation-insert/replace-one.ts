@@ -1,8 +1,9 @@
 import * as tm from "type-mapping";
 import {InsertableTable, TableUtil, DeletableTable, TableWithAutoIncrement} from "../../../table";
-import {ReplaceOneResult, ReplaceOneConnection} from "../../connection";
+import {ReplaceOneResult, ReplaceOneConnection, IConnection} from "../../connection";
 import {CustomInsertRow, InsertUtil, BuiltInInsertRow} from "../../../insert";
 import {DataTypeUtil} from "../../../data-type";
+import {ReplaceEvent, ReplaceOneEvent} from "../../../event";
 
 export type ReplaceOneResultWithAutoIncrement<
     AutoIncrementColumnAlias extends string
@@ -129,6 +130,58 @@ export async function replaceOneImplNoEvent<
     };
 }
 
+export function createReplaceOneEvents<
+    TableT extends InsertableTable & DeletableTable
+> (
+    table : TableT,
+    fullConnection : IConnection,
+    insertRow : BuiltInInsertRow<TableT>,
+    replaceResult : ReplaceOneResult,
+) : (
+    {
+        replaceEvent : ReplaceEvent<TableT>,
+        replaceOneEvent : ReplaceOneEvent<TableT>,
+    }
+) {
+    const augmentedInsertRow = (
+        table.autoIncrement == undefined ?
+        insertRow :
+        {
+            ...insertRow,
+            /**
+             * The column may be specified to be `string|number|bigint`.
+             * So, we need to use the column's mapper,
+             * to get the desired data type.
+             */
+            [table.autoIncrement] : table.columns[table.autoIncrement].mapper(
+                `${table.alias}.${table.autoIncrement}`,
+                /**
+                 * This **should** be `bigint`
+                 */
+                replaceResult.autoIncrementId
+            ),
+        }
+    );
+
+    const replaceEvent = new ReplaceEvent({
+        connection : fullConnection,
+        table,
+        insertRows : [augmentedInsertRow],
+        replaceResult,
+    });
+    const replaceOneEvent = new ReplaceOneEvent({
+        connection : fullConnection,
+        table,
+        insertRow : augmentedInsertRow,
+        replaceResult,
+    });
+
+    return {
+        replaceEvent,
+        replaceOneEvent,
+    };
+}
+
 /**
  * Only inserts/replaces one row
  * ```sql
@@ -162,7 +215,7 @@ export async function replaceOne<
         >
     ) => {
         const {
-            //insertRow,
+            insertRow,
             replaceResult,
         } = await replaceOneImplNoEvent<TableT>(
             table,
@@ -170,10 +223,6 @@ export async function replaceOne<
             row
         );
 
-        /**
-         * @todo
-         */
-        /*
         const fullConnection = connection.tryGetFullConnection();
         if (fullConnection != undefined) {
             const {
@@ -188,7 +237,7 @@ export async function replaceOne<
             await fullConnection.eventEmitters.onReplace.invoke(replaceEvent);
             await fullConnection.eventEmitters.onReplaceOne.invoke(replaceOneEvent);
         }
-        */
+
         return replaceResult;
     });
 }

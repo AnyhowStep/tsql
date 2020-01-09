@@ -8,6 +8,7 @@ export * from "./insert-event";
 export * from "./insert-one-event";
 export * from "./pool-event-emitter";
 export * from "./replace-event";
+export * from "./replace-one-event";
 export * from "./transaction-listener-collection";
 export * from "./update-and-fetch-event";
 export * from "./update-event";
