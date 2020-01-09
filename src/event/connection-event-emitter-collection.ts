@@ -9,6 +9,7 @@ import {IReplaceEvent} from "./replace-event";
 import {IUpdateEvent} from "./update-event";
 import {IUpdateAndFetchEvent} from "./update-and-fetch-event";
 import {IDeleteEvent} from "./delete-event";
+import {IReplaceOneEvent} from "./replace-one-event";
 
 export interface IConnectionEventEmitterCollection {
     readonly onInsert : IConnectionEventEmitter<IInsertEvent<ITable>>;
@@ -16,6 +17,7 @@ export interface IConnectionEventEmitterCollection {
     readonly onInsertAndFetch : IConnectionEventEmitter<IInsertAndFetchEvent<ITable>>;
 
     readonly onReplace : IConnectionEventEmitter<IReplaceEvent<ITable>>;
+    readonly onReplaceOne : IConnectionEventEmitter<IReplaceOneEvent<ITable>>;
 
     readonly onUpdate : IConnectionEventEmitter<IUpdateEvent<ITable>>;
     readonly onUpdateAndFetch : IConnectionEventEmitter<IUpdateAndFetchEvent<ITable>>;
@@ -123,6 +125,7 @@ export class ConnectionEventEmitterCollection implements IConnectionEventEmitter
     readonly onInsertAndFetch : IConnectionEventEmitter<IInsertAndFetchEvent<ITable>>;
 
     readonly onReplace : IConnectionEventEmitter<IReplaceEvent<ITable>>;
+    readonly onReplaceOne : IConnectionEventEmitter<IReplaceOneEvent<ITable>>;
 
     readonly onUpdate : ConnectionEventEmitter<IUpdateEvent<ITable>>;
     readonly onUpdateAndFetch : ConnectionEventEmitter<IUpdateAndFetchEvent<ITable>>;
@@ -165,6 +168,10 @@ export class ConnectionEventEmitterCollection implements IConnectionEventEmitter
 
         this.onReplace = new ConnectionEventEmitter<IReplaceEvent<ITable>>(
             pool.onReplace,
+            this.addTransactionListenerCollectionImpl
+        );
+        this.onReplaceOne = new ConnectionEventEmitter<IReplaceOneEvent<ITable>>(
+            pool.onReplaceOne,
             this.addTransactionListenerCollectionImpl
         );
 
