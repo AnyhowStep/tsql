@@ -1,4 +1,7 @@
-import {ITable} from "./table";
+/**
+ * @todo Refactor this file
+ */
+import {ITable} from "../table";
 
 export class RowNotFoundError extends Error {
     /**

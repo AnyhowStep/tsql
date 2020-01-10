@@ -8,7 +8,8 @@ import {
     TransactionAccessMode,
     IsolationLevel,
     IsolationLevelUtil,
-    TransactionAccessModeUtil
+    TransactionAccessModeUtil,
+    DataOutOfRangeError
 } from "../../../../dist";
 import {sqliteSqlfier} from "../../../sqlite-sqlfier";
 import {
@@ -72,7 +73,26 @@ function postMessage<ActionT extends SqliteAction, ResultT> (
         data : Extract<FromSqliteMessage, { action : ActionT, error? : undefined }>
     ) => ResultT
 ) {
-    return new Promise<ResultT>((innerResolve, innerReject) => {
+    return new Promise<ResultT>((innerResolve, originalInnerReject) => {
+        const innerReject = (error : any) => {
+            if (error instanceof Error) {
+                if (error.message.startsWith("DataOutOfRangeError")) {
+                    const newErr = new DataOutOfRangeError(error.message);
+                    Object.defineProperty(
+                        newErr,
+                        "stack",
+                        {
+                            value : error.stack
+                        }
+                    );
+                    originalInnerReject(newErr);
+                } else {
+                    originalInnerReject(error);
+                }
+            } else {
+                originalInnerReject(error);
+            }
+        };
         worker.onmessage = ({data}) => {
             onMessage(
                 data,
@@ -328,7 +348,7 @@ export class Connection {
                     } :
                     result.execResult[0]
                 );
-                return {
+                const selectResult : tsql.SelectResult = {
                     query : { sql, },
                     rows : resultSet.values.map((row) => {
                         const obj : Record<string, unknown> = {};
@@ -341,6 +361,8 @@ export class Connection {
                     }),
                     columns : resultSet.columns,
                 };
+                console.log(selectResult);
+                return selectResult;
             })
             .catch((err) => {
                 //console.error("error encountered", sql);
@@ -1672,9 +1694,6 @@ export class Connection {
     }
 }
 
-/**
- * Only one connection can be allocated at any point in time.
- */
 export class Pool implements tsql.IPool {
     private readonly worker : ISqliteWorker;
     private readonly idAllocator : IdAllocator;
@@ -1704,6 +1723,29 @@ export class Pool implements tsql.IPool {
             }
         );
         this.acquire = this.asyncQueue.enqueue as AsyncQueue<tsql.IConnection & Connection>["enqueue"];
+        this.acquire(async (connection) => {
+            await connection.createFunction("bigint_add", (a, b) => {
+                if (tm.TypeUtil.isBigInt(a) && tm.TypeUtil.isBigInt(b)) {
+                    const result = tm.BigIntUtil.add(a, b);
+                    if (tm.BigIntUtil.lessThan(result, BigInt("-9223372036854775808"))) {
+                        throw new Error(`DataOutOfRangeError: bigint_add result was ${String(result)}`);
+                    }
+                    if (tm.BigIntUtil.greaterThan(result, BigInt("9223372036854775807"))) {
+                        throw new Error(`DataOutOfRangeError: bigint_add result was ${String(result)}`);
+                    }
+                    console.log("add result", a, b, result);
+                    return result;
+                } else {
+                    throw new Error(`Can only add two bigint values`);
+                }
+            });
+        }).then(
+            () => {},
+            (err) => {
+                console.error("Error creating bigint_add", err);
+                process.exit(1);
+            }
+        );
     }
 
     readonly acquire : AsyncQueue<tsql.IConnection & Connection>["enqueue"];
@@ -1759,7 +1801,17 @@ export class Pool implements tsql.IPool {
     }
 
     disconnect () : Promise<void> {
-        return this.asyncQueue.stop();
+        return this.asyncQueue.stop()
+            .then(
+                () => this.worker.postMessage({
+                    id : this.idAllocator.allocateId(),
+                    action : SqliteAction.CLOSE,
+                }),
+                () => this.worker.postMessage({
+                    id : this.idAllocator.allocateId(),
+                    action : SqliteAction.CLOSE,
+                })
+            );
     }
     isDeallocated () {
         return this.asyncQueue.getShouldStop();

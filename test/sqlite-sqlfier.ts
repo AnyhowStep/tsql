@@ -694,7 +694,13 @@ export const sqliteSqlfier : Sqlfier = {
                 throw new Error(`INTEGER_REMAINDER not implemented for ${typeHint}`);
             }
         },
-        [OperatorType.ADDITION] : ({operands}) => insertBetween(operands, "+"),
+        [OperatorType.ADDITION] : ({operands, typeHint}) => {
+            if (typeHint == TypeHint.BIGINT_SIGNED) {
+                return functionCall("bigint_add", operands);
+            } else {
+                return insertBetween(operands, "+");
+            }
+        },
         [OperatorType.MULTIPLICATION] : ({operands}) => insertBetween(operands, "*"),
         [OperatorType.UNARY_MINUS] : ({operands}) => ["-", operands[0]],
 
