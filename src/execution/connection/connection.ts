@@ -25,6 +25,7 @@ import {
     TryFetchSchemaMeta,
     TryFetchGeneratedColumnExpression,
     Savepoint,
+    IsDeallocated,
 } from "./component";
 
 export interface IConnection extends
@@ -49,7 +50,8 @@ export interface IConnection extends
     TryFetchGeneratedColumnExpression,
     Transaction<ITransactionConnection>,
     ReadOnlyTransaction,
-    IsInTransaction<ITransactionConnection>
+    IsInTransaction<ITransactionConnection>,
+    IsDeallocated
 {
     readonly pool : IPool;
     readonly eventEmitters : IConnectionEventEmitterCollection;
@@ -81,7 +83,8 @@ export interface ITransactionConnection extends
     ReadOnlyTransaction,
     InTransaction,
     IsInTransaction<ITransactionConnection>,
-    Savepoint<ITransactionConnection>
+    Savepoint<ITransactionConnection>,
+    IsDeallocated
 {
     readonly pool : IPool;
     readonly eventEmitters : IConnectionEventEmitterCollection;

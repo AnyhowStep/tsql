@@ -42,6 +42,13 @@ export interface IPool {
     ) : Promise<ResultT>;
 
     disconnect () : Promise<void>;
+    /**
+     * Returns `true` if the pool has been disconnected,
+     * or is disconnecting.
+     *
+     * Attempts to use the pool when deallocated will throw an error.
+     */
+    isDeallocated () : boolean;
 
     readonly onInsert : IPoolEventEmitter<IInsertEvent<ITable>>;
     readonly onInsertOne : IPoolEventEmitter<IInsertOneEvent<ITable>>;

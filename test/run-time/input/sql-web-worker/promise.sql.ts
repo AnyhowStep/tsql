@@ -140,6 +140,9 @@ export class Connection {
          */
         this.eventEmitters.commit();
     }
+    isDeallocated () {
+        return this.asyncQueue.getShouldStop();
+    }
 
     allocateId () {
         return this.idAllocator.allocateId();
@@ -1741,6 +1744,9 @@ export class Pool implements tsql.IPool {
 
     disconnect () : Promise<void> {
         return this.asyncQueue.stop();
+    }
+    isDeallocated () {
+        return this.asyncQueue.getShouldStop();
     }
 
     readonly onInsert = new PoolEventEmitter<tsql.IInsertEvent<ITable>>();
