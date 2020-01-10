@@ -48,7 +48,7 @@ export declare const myQuery: tsql.Query<{
     }>;
     selectClause: [tsql.IExprSelectItem<{
         mapper: tm.Mapper<unknown, bigint>;
-        tableAlias: "__aliased";
+        tableAlias: "$aliased";
         alias: "x";
         usedRef: tsql.IUsedRef<never>;
     }>];

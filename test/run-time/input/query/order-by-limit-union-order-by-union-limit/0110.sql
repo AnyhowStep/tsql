@@ -3,7 +3,7 @@ SELECT
 FROM
   (
     SELECT
-      PI() AS "__aliased--pi"
+      PI() AS "$aliased--pi"
     FROM
       "myTable"
     LIMIT
@@ -12,4 +12,4 @@ FROM
       0
   )
 ORDER BY
-  "__aliased--pi" DESC
+  "$aliased--pi" DESC

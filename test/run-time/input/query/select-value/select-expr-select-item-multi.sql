@@ -1,5 +1,5 @@
 SELECT
-  (NOT "myTable"."myColumn") AS "__aliased--x",
-  (NOT "myTable"."myColumn") AS "__aliased--y"
+  (NOT "myTable"."myColumn") AS "$aliased--x",
+  (NOT "myTable"."myColumn") AS "$aliased--y"
 FROM
   "myTable"

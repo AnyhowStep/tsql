@@ -28,7 +28,7 @@ export declare const query: tsql.Query<{
     }>;
     selectClause: [tsql.IExprSelectItem<{
         mapper: tm.Mapper<unknown, true>;
-        tableAlias: "__aliased";
+        tableAlias: "$aliased";
         alias: "value";
         usedRef: tsql.IUsedRef<never>;
     }>];

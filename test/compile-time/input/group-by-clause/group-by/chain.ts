@@ -35,7 +35,7 @@ export const groupByClause = tsql.GroupByClauseUtil.groupBy(
     columns => [
         columns.otherTable.otherTableId,
         columns.myTable.createdAt,
-        columns.__aliased.eq,
+        columns.$aliased.eq,
     ]
 );
 
@@ -46,6 +46,6 @@ export const groupByClause2 = tsql.GroupByClauseUtil.groupBy(
     columns => [
         columns.otherTable.otherTableId,
         columns.myTable.createdAt,
-        columns.__aliased.eq,
+        columns.$aliased.eq,
     ]
 );

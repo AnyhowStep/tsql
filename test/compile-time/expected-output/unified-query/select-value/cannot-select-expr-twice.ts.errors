@@ -1,11 +1,11 @@
 [
   {
     "messageText": {
-      "messageText": "Type 'ExprImpl<boolean, IUsedRef<{}>>' is not assignable to type 'ExprImpl<boolean, IUsedRef<{}>> & CompileError<[\"Identifiers already used in SELECT clause; consider aliasing\", [\"__aliased\", \"value\"]]>'.",
+      "messageText": "Type 'ExprImpl<boolean, IUsedRef<{}>>' is not assignable to type 'ExprImpl<boolean, IUsedRef<{}>> & CompileError<[\"Identifiers already used in SELECT clause; consider aliasing\", [\"$aliased\", \"value\"]]>'.",
       "category": 1,
       "code": 2322,
       "next": {
-        "messageText": "Property '__compileError' is missing in type 'ExprImpl<boolean, IUsedRef<{}>>' but required in type 'CompileError<[\"Identifiers already used in SELECT clause; consider aliasing\", [\"__aliased\", \"value\"]]>'.",
+        "messageText": "Property '__compileError' is missing in type 'ExprImpl<boolean, IUsedRef<{}>>' but required in type 'CompileError<[\"Identifiers already used in SELECT clause; consider aliasing\", [\"$aliased\", \"value\"]]>'.",
         "category": 1,
         "code": 2741
       }

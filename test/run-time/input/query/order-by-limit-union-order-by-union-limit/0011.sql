@@ -1,9 +1,9 @@
 SELECT
-  PI() AS "__aliased--pi"
+  PI() AS "$aliased--pi"
 FROM
   "myTable"
 ORDER BY
-  "__aliased--pi" DESC
+  "$aliased--pi" DESC
 LIMIT
   2
 OFFSET

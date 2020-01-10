@@ -68,12 +68,12 @@ tape(__filename, async (t) => {
             {
                 test: { testId: BigInt(3), testVal: BigInt(300) },
                 other: { testId: BigInt(3), otherVal: BigInt(333) },
-                __aliased : { gt : true },
+                $aliased : { gt : true },
             },
             {
                 test: { testId: BigInt(1), testVal: BigInt(100) },
                 other: { testId: BigInt(1), otherVal: BigInt(111) },
-                __aliased : { gt : false },
+                $aliased : { gt : false },
             },
         ]
     );

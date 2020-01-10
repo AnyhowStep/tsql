@@ -1,4 +1,4 @@
 SELECT
-  (NOT "myTable"."myBoolColumn") AS "__aliased--neg"
+  (NOT "myTable"."myBoolColumn") AS "$aliased--neg"
 FROM
   "myTable"

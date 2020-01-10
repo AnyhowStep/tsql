@@ -1,7 +1,7 @@
 (
   (
     SELECT
-      ("myTable"."myTableId" > "somethingElse"."boop") AS "__aliased--result"
+      ("myTable"."myTableId" > "somethingElse"."boop") AS "$aliased--result"
     FROM
       "myTable"
     LIMIT

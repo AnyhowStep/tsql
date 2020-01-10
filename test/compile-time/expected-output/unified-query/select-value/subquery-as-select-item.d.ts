@@ -58,7 +58,7 @@ export declare const myQuery: tsql.Query<{
     }>;
     selectClause: [tsql.IExprSelectItem<{
         mapper: tm.Mapper<unknown, bigint | null>;
-        tableAlias: "__aliased"; /**
+        tableAlias: "$aliased"; /**
          * We now have multiple tables in the `FROM` clause (and outer query `FROM` clause).
          * So, we must now qualify columns with a table name.
          */

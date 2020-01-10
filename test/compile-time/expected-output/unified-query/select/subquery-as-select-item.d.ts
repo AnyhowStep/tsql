@@ -67,17 +67,17 @@ export declare const myQuery: tsql.Query<{
         usedRef: tsql.IUsedRef<never>;
     }>, tsql.IExprSelectItem<{
         mapper: tm.Mapper<unknown, "I am an aliased expression">;
-        tableAlias: "__aliased";
+        tableAlias: "$aliased";
         alias: "aliasedLiteralValueExpression";
         usedRef: tsql.IUsedRef<never>;
     }>, tsql.IExprSelectItem<{
         mapper: tm.Mapper<unknown, string>;
-        tableAlias: "__aliased";
+        tableAlias: "$aliased";
         alias: "aliasedExpression";
         usedRef: tsql.IUsedRef<never>;
     }>, tsql.IExprSelectItem<{
         mapper: tm.Mapper<unknown, bigint | null>;
-        tableAlias: "__aliased";
+        tableAlias: "$aliased";
         alias: "aliasedSubqueryExpression";
         usedRef: tsql.IUsedRef<never>;
     }>];

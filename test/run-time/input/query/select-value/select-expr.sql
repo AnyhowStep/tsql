@@ -1,4 +1,4 @@
 SELECT
-  (NOT TRUE) AS "__aliased--value"
+  (NOT TRUE) AS "$aliased--value"
 FROM
   "myTable"

@@ -65,7 +65,7 @@ type ApplyNullableJoins<
             RowOfTable<RefT, JoinsT, tableAlias>
         )
     }
-    //Extras (Like __aliased)
+    //Extras (Like $aliased)
     & {
         readonly [
             tableAlias in Exclude<

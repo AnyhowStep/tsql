@@ -1,7 +1,7 @@
 [
   {
     "messageText": {
-      "messageText": "Argument of type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>; selectClause: [IExprSelectItem<{ mapper: Mapper<unknown, \"hi\">; tableAlias: \"__aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>]; limitClause: undefined; compoundQueryClause: undefined; compoundQueryLimitClause: undefine...' is not assignable to parameter of type 'IQueryBase<{ fromClause: IFromClause<FromClauseData>; selectClause: [IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; }>]; limitClause: LimitClause | undefined; compou...'.",
+      "messageText": "Argument of type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>; selectClause: [IExprSelectItem<{ mapper: Mapper<unknown, \"hi\">; tableAlias: \"$aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>]; limitClause: undefined; compoundQueryClause: undefined; compoundQueryLimitClause: undefined...' is not assignable to parameter of type 'IQueryBase<{ fromClause: IFromClause<FromClauseData>; selectClause: [IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; }>]; limitClause: LimitClause | undefined; compou...'.",
       "category": 1,
       "code": 2345,
       "next": {
@@ -9,19 +9,19 @@
         "category": 1,
         "code": 2326,
         "next": {
-          "messageText": "Type '[IExprSelectItem<{ mapper: Mapper<unknown, \"hi\">; tableAlias: \"__aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>]' is not assignable to type '[IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>]'.",
+          "messageText": "Type '[IExprSelectItem<{ mapper: Mapper<unknown, \"hi\">; tableAlias: \"$aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>]' is not assignable to type '[IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>]'.",
           "category": 1,
           "code": 2322,
           "next": {
-            "messageText": "Type 'IExprSelectItem<{ mapper: Mapper<unknown, \"hi\">; tableAlias: \"__aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>' is not assignable to type 'IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>'.",
+            "messageText": "Type 'IExprSelectItem<{ mapper: Mapper<unknown, \"hi\">; tableAlias: \"$aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>' is not assignable to type 'IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>'.",
             "category": 1,
             "code": 2322,
             "next": {
-              "messageText": "Type 'IExprSelectItem<{ mapper: Mapper<unknown, \"hi\">; tableAlias: \"__aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>' is not assignable to type 'IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>'.",
+              "messageText": "Type 'IExprSelectItem<{ mapper: Mapper<unknown, \"hi\">; tableAlias: \"$aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>' is not assignable to type 'IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>'.",
               "category": 1,
               "code": 2322,
               "next": {
-                "messageText": "Type '{ mapper: Mapper<unknown, \"hi\">; tableAlias: \"__aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }' is not assignable to type '{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }'.",
+                "messageText": "Type '{ mapper: Mapper<unknown, \"hi\">; tableAlias: \"$aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }' is not assignable to type '{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }'.",
                 "category": 1,
                 "code": 2322,
                 "next": {
@@ -52,7 +52,7 @@
   },
   {
     "messageText": {
-      "messageText": "Argument of type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>; selectClause: [IExprSelectItem<{ mapper: Mapper<unknown, 1>; tableAlias: \"__aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>]; limitClause: undefined; compoundQueryClause: undefined; compoundQueryLimitClause: undefined; ...' is not assignable to parameter of type 'IQueryBase<{ fromClause: IFromClause<FromClauseData>; selectClause: [IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, string>; }> | IExprSelectItem<{ mapper: Mapper<unknown, string>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; }>]; limitClause: LimitClause | undefined; compou...'.",
+      "messageText": "Argument of type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>; selectClause: [IExprSelectItem<{ mapper: Mapper<unknown, 1>; tableAlias: \"$aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>]; limitClause: undefined; compoundQueryClause: undefined; compoundQueryLimitClause: undefined; m...' is not assignable to parameter of type 'IQueryBase<{ fromClause: IFromClause<FromClauseData>; selectClause: [IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, string>; }> | IExprSelectItem<{ mapper: Mapper<unknown, string>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; }>]; limitClause: LimitClause | undefined; compou...'.",
       "category": 1,
       "code": 2345,
       "next": {
@@ -60,19 +60,19 @@
         "category": 1,
         "code": 2326,
         "next": {
-          "messageText": "Type '[IExprSelectItem<{ mapper: Mapper<unknown, 1>; tableAlias: \"__aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>]' is not assignable to type '[IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, string>; }> | IExprSelectItem<{ mapper: Mapper<unknown, string>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>]'.",
+          "messageText": "Type '[IExprSelectItem<{ mapper: Mapper<unknown, 1>; tableAlias: \"$aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>]' is not assignable to type '[IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, string>; }> | IExprSelectItem<{ mapper: Mapper<unknown, string>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>]'.",
           "category": 1,
           "code": 2322,
           "next": {
-            "messageText": "Type 'IExprSelectItem<{ mapper: Mapper<unknown, 1>; tableAlias: \"__aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>' is not assignable to type 'IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, string>; }> | IExprSelectItem<{ mapper: Mapper<unknown, string>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>'.",
+            "messageText": "Type 'IExprSelectItem<{ mapper: Mapper<unknown, 1>; tableAlias: \"$aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>' is not assignable to type 'IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, string>; }> | IExprSelectItem<{ mapper: Mapper<unknown, string>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>'.",
             "category": 1,
             "code": 2322,
             "next": {
-              "messageText": "Type 'IExprSelectItem<{ mapper: Mapper<unknown, 1>; tableAlias: \"__aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>' is not assignable to type 'IExprSelectItem<{ mapper: Mapper<unknown, string>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>'.",
+              "messageText": "Type 'IExprSelectItem<{ mapper: Mapper<unknown, 1>; tableAlias: \"$aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>' is not assignable to type 'IExprSelectItem<{ mapper: Mapper<unknown, string>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>'.",
               "category": 1,
               "code": 2322,
               "next": {
-                "messageText": "Type '{ mapper: Mapper<unknown, 1>; tableAlias: \"__aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }' is not assignable to type '{ mapper: Mapper<unknown, string>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }'.",
+                "messageText": "Type '{ mapper: Mapper<unknown, 1>; tableAlias: \"$aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }' is not assignable to type '{ mapper: Mapper<unknown, string>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }'.",
                 "category": 1,
                 "code": 2322,
                 "next": {
@@ -103,7 +103,7 @@
   },
   {
     "messageText": {
-      "messageText": "Argument of type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>; selectClause: [IExprSelectItem<{ mapper: Mapper<unknown, 1>; tableAlias: \"__aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>]; limitClause: undefined; compoundQueryClause: undefined; compoundQueryLimitClause: undefined; ...' is not assignable to parameter of type 'IQueryBase<{ fromClause: IFromClause<FromClauseData>; selectClause: [IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, boolean>; }> | IExprSelectItem<{ mapper: Mapper<unknown, boolean>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; }>]; limitClause: LimitClause | undefined; comp...'.",
+      "messageText": "Argument of type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>; selectClause: [IExprSelectItem<{ mapper: Mapper<unknown, 1>; tableAlias: \"$aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>]; limitClause: undefined; compoundQueryClause: undefined; compoundQueryLimitClause: undefined; m...' is not assignable to parameter of type 'IQueryBase<{ fromClause: IFromClause<FromClauseData>; selectClause: [IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, boolean>; }> | IExprSelectItem<{ mapper: Mapper<unknown, boolean>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; }>]; limitClause: LimitClause | undefined; comp...'.",
       "category": 1,
       "code": 2345,
       "next": {
@@ -111,19 +111,19 @@
         "category": 1,
         "code": 2326,
         "next": {
-          "messageText": "Type '[IExprSelectItem<{ mapper: Mapper<unknown, 1>; tableAlias: \"__aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>]' is not assignable to type '[IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, boolean>; }> | IExprSelectItem<{ mapper: Mapper<unknown, boolean>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>]'.",
+          "messageText": "Type '[IExprSelectItem<{ mapper: Mapper<unknown, 1>; tableAlias: \"$aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>]' is not assignable to type '[IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, boolean>; }> | IExprSelectItem<{ mapper: Mapper<unknown, boolean>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>]'.",
           "category": 1,
           "code": 2322,
           "next": {
-            "messageText": "Type 'IExprSelectItem<{ mapper: Mapper<unknown, 1>; tableAlias: \"__aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>' is not assignable to type 'IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, boolean>; }> | IExprSelectItem<{ mapper: Mapper<unknown, boolean>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>'.",
+            "messageText": "Type 'IExprSelectItem<{ mapper: Mapper<unknown, 1>; tableAlias: \"$aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>' is not assignable to type 'IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, boolean>; }> | IExprSelectItem<{ mapper: Mapper<unknown, boolean>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>'.",
             "category": 1,
             "code": 2322,
             "next": {
-              "messageText": "Type 'IExprSelectItem<{ mapper: Mapper<unknown, 1>; tableAlias: \"__aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>' is not assignable to type 'IExprSelectItem<{ mapper: Mapper<unknown, boolean>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>'.",
+              "messageText": "Type 'IExprSelectItem<{ mapper: Mapper<unknown, 1>; tableAlias: \"$aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>' is not assignable to type 'IExprSelectItem<{ mapper: Mapper<unknown, boolean>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>'.",
               "category": 1,
               "code": 2322,
               "next": {
-                "messageText": "Type '{ mapper: Mapper<unknown, 1>; tableAlias: \"__aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }' is not assignable to type '{ mapper: Mapper<unknown, boolean>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }'.",
+                "messageText": "Type '{ mapper: Mapper<unknown, 1>; tableAlias: \"$aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }' is not assignable to type '{ mapper: Mapper<unknown, boolean>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }'.",
                 "category": 1,
                 "code": 2322,
                 "next": {
@@ -154,7 +154,7 @@
   },
   {
     "messageText": {
-      "messageText": "Argument of type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>; selectClause: [IExprSelectItem<{ mapper: Mapper<unknown, null>; tableAlias: \"__aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>]; limitClause: undefined; compoundQueryClause: undefined; compoundQueryLimitClause: undefine...' is not assignable to parameter of type 'IQueryBase<{ fromClause: IFromClause<FromClauseData>; selectClause: [IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, boolean>; }> | IExprSelectItem<{ mapper: Mapper<unknown, boolean>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; }>]; limitClause: LimitClause | undefined; comp...'.",
+      "messageText": "Argument of type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>; selectClause: [IExprSelectItem<{ mapper: Mapper<unknown, null>; tableAlias: \"$aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>]; limitClause: undefined; compoundQueryClause: undefined; compoundQueryLimitClause: undefined...' is not assignable to parameter of type 'IQueryBase<{ fromClause: IFromClause<FromClauseData>; selectClause: [IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, boolean>; }> | IExprSelectItem<{ mapper: Mapper<unknown, boolean>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; }>]; limitClause: LimitClause | undefined; comp...'.",
       "category": 1,
       "code": 2345,
       "next": {
@@ -162,19 +162,19 @@
         "category": 1,
         "code": 2326,
         "next": {
-          "messageText": "Type '[IExprSelectItem<{ mapper: Mapper<unknown, null>; tableAlias: \"__aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>]' is not assignable to type '[IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, boolean>; }> | IExprSelectItem<{ mapper: Mapper<unknown, boolean>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>]'.",
+          "messageText": "Type '[IExprSelectItem<{ mapper: Mapper<unknown, null>; tableAlias: \"$aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>]' is not assignable to type '[IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, boolean>; }> | IExprSelectItem<{ mapper: Mapper<unknown, boolean>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>]'.",
           "category": 1,
           "code": 2322,
           "next": {
-            "messageText": "Type 'IExprSelectItem<{ mapper: Mapper<unknown, null>; tableAlias: \"__aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>' is not assignable to type 'IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, boolean>; }> | IExprSelectItem<{ mapper: Mapper<unknown, boolean>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>'.",
+            "messageText": "Type 'IExprSelectItem<{ mapper: Mapper<unknown, null>; tableAlias: \"$aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>' is not assignable to type 'IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, boolean>; }> | IExprSelectItem<{ mapper: Mapper<unknown, boolean>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>'.",
             "category": 1,
             "code": 2322,
             "next": {
-              "messageText": "Type 'IExprSelectItem<{ mapper: Mapper<unknown, null>; tableAlias: \"__aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>' is not assignable to type 'IExprSelectItem<{ mapper: Mapper<unknown, boolean>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>'.",
+              "messageText": "Type 'IExprSelectItem<{ mapper: Mapper<unknown, null>; tableAlias: \"$aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }>' is not assignable to type 'IExprSelectItem<{ mapper: Mapper<unknown, boolean>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }>'.",
               "category": 1,
               "code": 2322,
               "next": {
-                "messageText": "Type '{ mapper: Mapper<unknown, null>; tableAlias: \"__aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }' is not assignable to type '{ mapper: Mapper<unknown, boolean>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }'.",
+                "messageText": "Type '{ mapper: Mapper<unknown, null>; tableAlias: \"$aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; }' is not assignable to type '{ mapper: Mapper<unknown, boolean>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; }'.",
                 "category": 1,
                 "code": 2322,
                 "next": {

@@ -1,6 +1,6 @@
 SELECT
   "myTable"."myBoolColumn" AS "myTable--myBoolColumn",
-  PI() AS "__aliased--pi"
+  PI() AS "$aliased--pi"
 FROM
   "myTable"
 ORDER BY
@@ -13,12 +13,12 @@ ORDER BY
   ("myTable"."myBoolColumn" IS NOT NULL) ASC,
   ("myTable"."myBoolColumn" IS NOT NULL) ASC,
   ("myTable"."myBoolColumn" IS NOT NULL) DESC,
-  "__aliased--pi" ASC,
-  "__aliased--pi" ASC,
-  "__aliased--pi" DESC,
-  ("__aliased--pi" IS NOT NULL) ASC,
-  ("__aliased--pi" IS NOT NULL) ASC,
-  ("__aliased--pi" IS NOT NULL) DESC,
-  ("__aliased--pi" IS NOT NULL) ASC,
-  ("__aliased--pi" IS NOT NULL) ASC,
-  ("__aliased--pi" IS NOT NULL) DESC
+  "$aliased--pi" ASC,
+  "$aliased--pi" ASC,
+  "$aliased--pi" DESC,
+  ("$aliased--pi" IS NOT NULL) ASC,
+  ("$aliased--pi" IS NOT NULL) ASC,
+  ("$aliased--pi" IS NOT NULL) DESC,
+  ("$aliased--pi" IS NOT NULL) ASC,
+  ("$aliased--pi" IS NOT NULL) ASC,
+  ("$aliased--pi" IS NOT NULL) DESC

@@ -51,7 +51,7 @@ tape(__filename, async (t) => {
                             myTableId : BigInt(1),
                             createdAt : new Date("2015-01-01T00:00:00.000Z"),
                         },
-                        __aliased : {
+                        $aliased : {
                             createdAt : new Date("2015-01-02T00:00:00.000Z"),
                         }
                     }
@@ -85,7 +85,7 @@ tape(__filename, async (t) => {
                             myTableId : BigInt(1),
                             createdAt : new Date("2015-01-01T00:00:00.000Z"),
                         },
-                        __aliased : {
+                        $aliased : {
                             createdAt : new Date("2015-01-02T00:00:00.000Z"),
                         }
                     }
@@ -167,7 +167,7 @@ tape(__filename, async (t) => {
                             myTableId : BigInt(1),
                             createdAt : new Date("2015-01-01T00:00:00.000Z"),
                         },
-                        __aliased : {
+                        $aliased : {
                             myTableId : new Date("2015-01-02T00:00:00.000Z"),
                         }
                     }
@@ -201,7 +201,7 @@ tape(__filename, async (t) => {
                             myTableId : BigInt(1),
                             createdAt : new Date("2015-01-01T00:00:00.000Z"),
                         },
-                        __aliased : {
+                        $aliased : {
                             myTableId : new Date("2015-01-02T00:00:00.000Z"),
                         }
                     }

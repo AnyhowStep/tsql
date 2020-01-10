@@ -1,11 +1,11 @@
 [
   {
     "messageText": {
-      "messageText": "Type 'true' is not assignable to type 'true & CompileError<[\"Identifiers already used in SELECT clause; consider aliasing\", [\"__aliased\", \"value\"]]>'.",
+      "messageText": "Type 'true' is not assignable to type 'true & CompileError<[\"Identifiers already used in SELECT clause; consider aliasing\", [\"$aliased\", \"value\"]]>'.",
       "category": 1,
       "code": 2322,
       "next": {
-        "messageText": "Type 'true' is not assignable to type 'CompileError<[\"Identifiers already used in SELECT clause; consider aliasing\", [\"__aliased\", \"value\"]]>'.",
+        "messageText": "Type 'true' is not assignable to type 'CompileError<[\"Identifiers already used in SELECT clause; consider aliasing\", [\"$aliased\", \"value\"]]>'.",
         "category": 1,
         "code": 2322
       }

@@ -15,9 +15,9 @@ tape(__filename, t => {
             c.myTable.myBoolColumn,
             c.myTable.myBoolColumn.asc(),
             c.myTable.myBoolColumn.desc(),
-            c.__aliased.pi,
-            c.__aliased.pi.asc(),
-            c.__aliased.pi.desc(),
+            c.$aliased.pi,
+            c.$aliased.pi.asc(),
+            c.$aliased.pi.desc(),
             /*
             Only names in SELECT clause allowed
             tsql.isNotNull(c.myTable.myBoolColumn),

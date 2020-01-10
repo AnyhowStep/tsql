@@ -5,7 +5,7 @@ export declare const row: Promise<{
     readonly otherTable: {
         readonly myTableId: bigint;
     };
-    readonly __aliased: {
+    readonly $aliased: {
         readonly value: 42;
     };
 } | undefined>;

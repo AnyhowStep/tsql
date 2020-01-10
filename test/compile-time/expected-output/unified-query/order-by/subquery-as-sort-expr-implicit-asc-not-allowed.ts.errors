@@ -5,7 +5,7 @@
       "category": 1,
       "code": 2322,
       "next": {
-        "messageText": "Type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: readonly Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly myColumn: Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn\"; mapper: Mapper<unknown, bigint>; }>; readonly myTableId: Column<...>; readonly myOtherColumn: Column<...>; }; ... 4 more .....' is missing the following properties from type 'Column<{ tableAlias: \"__aliased\"; columnAlias: \"x\"; mapper: Mapper<unknown, bigint>; }>': tableAlias, columnAlias, mapper, unaliasedAst",
+        "messageText": "Type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: readonly Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly myColumn: Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn\"; mapper: Mapper<unknown, bigint>; }>; readonly myTableId: Column<...>; readonly myOtherColumn: Column<...>; }; ... 4 more .....' is missing the following properties from type 'Column<{ tableAlias: \"$aliased\"; columnAlias: \"x\"; mapper: Mapper<unknown, bigint>; }>': tableAlias, columnAlias, mapper, unaliasedAst",
         "category": 1,
         "code": 2739
       }

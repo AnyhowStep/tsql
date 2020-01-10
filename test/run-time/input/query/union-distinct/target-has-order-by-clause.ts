@@ -27,7 +27,7 @@ tape(__filename, t => {
                     c.someOtherColumn
                 ])
                 .orderBy(c => [
-                    c.__aliased.gt.desc(),
+                    c.$aliased.gt.desc(),
                 ])
         );
 

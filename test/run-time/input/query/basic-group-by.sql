@@ -1,6 +1,6 @@
 SELECT
   "myTable"."myBoolColumn" AS "myTable--myBoolColumn",
-  PI() AS "__aliased--pi"
+  PI() AS "$aliased--pi"
 FROM
   "myTable"
 CROSS JOIN
@@ -10,4 +10,4 @@ CROSS JOIN
 GROUP BY
   "myTable"."myBoolColumn",
   "myTable2"."myDoubleColumn",
-  "__aliased--pi"
+  "$aliased--pi"
