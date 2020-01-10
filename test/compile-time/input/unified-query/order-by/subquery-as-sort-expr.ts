@@ -26,7 +26,7 @@ export const myQuery = tsql
         //Column
         columns.myTable.myColumn.asc(),
         //Alias in `SELECT` clause
-        columns.__aliased.x.asc(),
+        columns.$aliased.x.asc(),
         //Unaliased expression
         tsql.integer.add(
             columns.myTable.myColumn,

@@ -7,7 +7,7 @@ export declare const compound: {
         mapper: tm.Mapper<unknown, bigint>;
     }>, tsql.IExprSelectItem<{
         mapper: tm.Mapper<unknown, boolean>;
-        tableAlias: "__aliased";
+        tableAlias: "$aliased";
         alias: "gt";
         usedRef: tsql.IUsedRef<never>;
     }>];

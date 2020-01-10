@@ -47,7 +47,7 @@ tape(__filename, async (t) => {
                             testId : BigInt(3),
                             testVal : BigInt(300),
                         },
-                        __aliased : {
+                        $aliased : {
                             testVal : BigInt(345),
                         },
                     }

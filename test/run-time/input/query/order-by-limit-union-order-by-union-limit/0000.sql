@@ -1,4 +1,4 @@
 SELECT
-  PI() AS "__aliased--pi"
+  PI() AS "$aliased--pi"
 FROM
   "myTable"

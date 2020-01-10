@@ -19,7 +19,7 @@ tape(__filename, async (t) => {
         resultSet,
         [
             {
-                __aliased : {
+                $aliased : {
                     value : 42,
                 }
             }

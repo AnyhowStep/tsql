@@ -10,7 +10,7 @@ tape(__filename, async (t) => {
         return tsql.selectValue(() => 42)
             .map((row) => {
                 return {
-                    x : row.__aliased.value + 58,
+                    x : row.$aliased.value + 58,
                 };
             })
             .fetchAll(

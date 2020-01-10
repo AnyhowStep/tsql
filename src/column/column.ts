@@ -32,11 +32,11 @@ export interface IColumn<DataT extends ColumnData=ColumnData> {
      *          --The `unaliasedAst` of this column is `undefined`
      *          myTable.myColumn,
      *          --The `unaliasedAst` of this column is `RAND()`
-     *          RAND() AS `__aliased--curTime` --This is an ExprSelectItem
+     *          RAND() AS `$aliased--curTime` --This is an ExprSelectItem
      *      FROM
      *          myTable
      *      ORDER BY
-     *          `__aliased--curTime`  ASC
+     *          `$aliased--curTime`  ASC
      *  )
      * ```
      */

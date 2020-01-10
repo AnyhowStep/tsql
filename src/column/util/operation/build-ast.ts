@@ -24,7 +24,7 @@ export function buildAst (
          * unlikely to be used naturally by others.
          *
          * The table alias is the value of the variable `ALIASED`,
-         * which should be `__aliased`
+         * which should be `$aliased`
          */
         return identifierNode(`${tableAlias}${SEPARATOR}${columnAlias}`);
     } else {

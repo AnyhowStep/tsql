@@ -35,7 +35,7 @@ export interface IExprSelectItem<DataT extends ExprSelectItemData=ExprSelectItem
      *
      * ```sql
      * SELECT
-     *  --The `tableAlias` is `__aliased`
+     *  --The `tableAlias` is `$aliased`
      *  --The `alias` is `myAlias`
      *  RAND() AS myAlias
      * ```

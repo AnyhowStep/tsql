@@ -1,7 +1,7 @@
 SELECT
   (
     SELECT
-      (NOT TRUE) AS "__aliased--x"
-  ) AS "__aliased--value"
+      (NOT TRUE) AS "$aliased--x"
+  ) AS "$aliased--value"
 FROM
   "myTable"

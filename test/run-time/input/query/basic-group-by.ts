@@ -24,7 +24,7 @@ tape(__filename, t => {
         .groupBy(columns => [
             columns.myTable.myBoolColumn,
             columns.myTable2.myDoubleColumn,
-            columns.__aliased.pi,
+            columns.$aliased.pi,
         ]);
 
     compareSqlPretty(__filename, t, query);

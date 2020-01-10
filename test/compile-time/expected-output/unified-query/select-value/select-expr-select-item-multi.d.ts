@@ -28,12 +28,12 @@ export declare const query: tsql.Query<{
     }>;
     selectClause: [tsql.IExprSelectItem<{
         mapper: tm.Mapper<unknown, boolean>;
-        tableAlias: "__aliased";
+        tableAlias: "$aliased";
         alias: "x";
         usedRef: tsql.IUsedRef<never>;
     }>, tsql.IExprSelectItem<{
         mapper: tm.Mapper<unknown, boolean>;
-        tableAlias: "__aliased";
+        tableAlias: "$aliased";
         alias: "y";
         usedRef: tsql.IUsedRef<never>;
     }>];

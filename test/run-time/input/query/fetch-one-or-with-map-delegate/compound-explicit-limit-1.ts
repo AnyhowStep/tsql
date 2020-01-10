@@ -17,7 +17,7 @@ tape(__filename, async (t) => {
             .compoundQueryLimit(1)
             .map((row) => {
                 return {
-                    x : row.__aliased.value + 58,
+                    x : row.$aliased.value + 58,
                 };
             })
             .fetchOneOr(

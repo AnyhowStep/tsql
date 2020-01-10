@@ -1,5 +1,5 @@
 SELECT
-  ("myTable"."myColumn" + 32) AS "__aliased--x"
+  ("myTable"."myColumn" + 32) AS "$aliased--x"
 FROM
   "myTable"
 UNION ALL
@@ -8,4 +8,4 @@ SELECT
 FROM
   "otherTable"
 ORDER BY
-  "__aliased--x" ASC
+  "$aliased--x" ASC

@@ -5,7 +5,7 @@
       "category": 1,
       "code": 2719,
       "next": {
-        "messageText": "Property '__compileError' is missing in type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>; selectClause: [IExprSelectItem<{ mapper: Mapper<unknown, boolean>; tableAlias: \"__aliased\"; alias: \"x\"; usedRef: IUsedRef<never>; }>]; limitClause: undefined; compoundQueryClause: undefined; compoundQueryLimitClause: undefined...' but required in type 'CompileError<[\"Identifiers already used in SELECT clause; consider aliasing\", [\"__aliased\", \"value\"]]>'.",
+        "messageText": "Property '__compileError' is missing in type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>; selectClause: [IExprSelectItem<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"x\"; usedRef: IUsedRef<never>; }>]; limitClause: undefined; compoundQueryClause: undefined; compoundQueryLimitClause: undefined;...' but required in type 'CompileError<[\"Identifiers already used in SELECT clause; consider aliasing\", [\"$aliased\", \"value\"]]>'.",
         "category": 1,
         "code": 2741
       }

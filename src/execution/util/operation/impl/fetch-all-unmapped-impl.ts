@@ -58,7 +58,7 @@ export async function fetchAllUnmappedImpl<
                         j => j.tableAlias == tableAlias
                     ) < 0
                 ) {
-                    //Probably `__aliased`
+                    //Probably `$aliased`
                     continue;
                 }
                 const map = row[tableAlias];

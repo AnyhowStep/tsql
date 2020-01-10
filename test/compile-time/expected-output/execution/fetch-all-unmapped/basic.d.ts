@@ -1,5 +1,5 @@
 export declare const p: Promise<{
-    readonly __aliased: {
+    readonly $aliased: {
         readonly value: 42;
     };
 }[]>;

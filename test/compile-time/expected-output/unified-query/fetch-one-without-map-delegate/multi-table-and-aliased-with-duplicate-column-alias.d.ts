@@ -6,7 +6,7 @@ export declare const row: tsql.ExecutionUtil.FetchOnePromise<{
     readonly otherTable: {
         readonly myTableId: bigint;
     };
-    readonly __aliased: {
+    readonly $aliased: {
         readonly value: 42;
     };
 }>;

@@ -1,6 +1,6 @@
 SELECT
   "myTable"."myBoolColumn" AS "myTable--myBoolColumn",
-  PI() AS "__aliased--pi"
+  PI() AS "$aliased--pi"
 FROM
   "myTable"
 ORDER BY

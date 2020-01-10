@@ -13,7 +13,7 @@ tape(__filename, t => {
         .select(() => [tsql.double.pi().as("pi")])
         .orderBy(columns => [
             columns.myTable.myBoolColumn,
-            columns.__aliased.pi,
+            columns.$aliased.pi,
         ])
         .limit(1);
 

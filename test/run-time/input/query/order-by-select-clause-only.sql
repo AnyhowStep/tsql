@@ -1,12 +1,12 @@
 SELECT
-  PI() AS "__aliased--pi"
+  PI() AS "$aliased--pi"
 ORDER BY
-  "__aliased--pi" ASC,
-  "__aliased--pi" ASC,
-  "__aliased--pi" DESC,
-  ("__aliased--pi" IS NOT NULL) ASC,
-  ("__aliased--pi" IS NOT NULL) ASC,
-  ("__aliased--pi" IS NOT NULL) DESC,
-  ("__aliased--pi" IS NOT NULL) ASC,
-  ("__aliased--pi" IS NOT NULL) ASC,
-  ("__aliased--pi" IS NOT NULL) DESC
+  "$aliased--pi" ASC,
+  "$aliased--pi" ASC,
+  "$aliased--pi" DESC,
+  ("$aliased--pi" IS NOT NULL) ASC,
+  ("$aliased--pi" IS NOT NULL) ASC,
+  ("$aliased--pi" IS NOT NULL) DESC,
+  ("$aliased--pi" IS NOT NULL) ASC,
+  ("$aliased--pi" IS NOT NULL) ASC,
+  ("$aliased--pi" IS NOT NULL) DESC

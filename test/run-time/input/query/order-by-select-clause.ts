@@ -22,15 +22,15 @@ tape(__filename, t => {
             tsql.isNotNull(c.myTable.myBoolColumn).as("someName").asc(),
             tsql.isNotNull(c.myTable.myBoolColumn).as("someName").desc(),
 
-            c.__aliased.pi,
-            c.__aliased.pi.asc(),
-            c.__aliased.pi.desc(),
-            tsql.isNotNull(c.__aliased.pi),
-            tsql.isNotNull(c.__aliased.pi).asc(),
-            tsql.isNotNull(c.__aliased.pi).desc(),
-            tsql.isNotNull(c.__aliased.pi).as("someName"),
-            tsql.isNotNull(c.__aliased.pi).as("someName").asc(),
-            tsql.isNotNull(c.__aliased.pi).as("someName").desc()
+            c.$aliased.pi,
+            c.$aliased.pi.asc(),
+            c.$aliased.pi.desc(),
+            tsql.isNotNull(c.$aliased.pi),
+            tsql.isNotNull(c.$aliased.pi).asc(),
+            tsql.isNotNull(c.$aliased.pi).desc(),
+            tsql.isNotNull(c.$aliased.pi).as("someName"),
+            tsql.isNotNull(c.$aliased.pi).as("someName").asc(),
+            tsql.isNotNull(c.$aliased.pi).as("someName").desc()
         ]);
 
     compareSqlPretty(__filename, t, query);

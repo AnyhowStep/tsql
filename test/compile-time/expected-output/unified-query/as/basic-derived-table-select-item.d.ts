@@ -3,7 +3,7 @@ import * as tsql from "../../../../../dist";
 export declare const aliased: tsql.DerivedTableSelectItem<{
     mapper: tm.Mapper<unknown, bigint | null>;
     isLateral: false;
-    tableAlias: "__aliased";
+    tableAlias: "$aliased";
     alias: "myAlias";
     columns: {
         readonly myTableId: tsql.Column<{

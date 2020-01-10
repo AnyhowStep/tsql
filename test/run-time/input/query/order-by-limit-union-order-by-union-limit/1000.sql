@@ -1,7 +1,7 @@
 SELECT
-  PI() AS "__aliased--pi"
+  PI() AS "$aliased--pi"
 FROM
   "myTable"
 ORDER BY
   "myTable"."myBoolColumn" ASC,
-  "__aliased--pi" ASC
+  "$aliased--pi" ASC

@@ -2,7 +2,7 @@ import * as tsql from "../../../../../dist";
 export declare const aliased: tsql.DerivedTableSelectItem<{
     mapper: import("type-mapping").Mapper<unknown, boolean>;
     isLateral: false;
-    tableAlias: "__aliased";
+    tableAlias: "$aliased";
     alias: "myAlias";
     columns: {
         readonly and: tsql.Column<{

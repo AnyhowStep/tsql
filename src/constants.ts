@@ -1,5 +1,5 @@
 /**
- * This string value `__aliased` was picked
+ * This string value `$aliased` was picked
  * as it is unlikely to be part of an identifier
  * in a database.
  *
@@ -14,7 +14,7 @@
  * becomes,
  * ```sql
  * SELECT
- *  RAND() AS `__aliased--r`
+ *  RAND() AS `$aliased--r`
  * ```
  *
  * -----
@@ -28,7 +28,7 @@
  * becomes,
  * ```sql
  * SELECT
- *  (SELECT x FROM myTable LIMIT 1) AS `__aliased--r`
+ *  (SELECT x FROM myTable LIMIT 1) AS `$aliased--r`
  * ```
  *
  * @todo Make this a reserved `tableAlias`
@@ -39,10 +39,10 @@
  * it would make enforcing safe interactions between
  * `SELECT` and `FROM` clause very difficult/troublesome.
  *
- * But... What's the probability of someone using `__aliased`
+ * But... What's the probability of someone using `$aliased`
  * as a table name?
  */
-export const ALIASED = "__aliased";
+export const ALIASED = "$aliased";
 
 /**
  * This string value `--` was picked
@@ -60,7 +60,7 @@ export const ALIASED = "__aliased";
  * becomes,
  * ```sql
  * SELECT
- *  RAND() AS `__aliased--r`
+ *  RAND() AS `$aliased--r`
  * ```
  *
  * -----
@@ -74,7 +74,7 @@ export const ALIASED = "__aliased";
  * becomes,
  * ```sql
  * SELECT
- *  (SELECT x FROM myTable LIMIT 1) AS `__aliased--r`
+ *  (SELECT x FROM myTable LIMIT 1) AS `$aliased--r`
  * ```
  */
 export const SEPARATOR = "--";

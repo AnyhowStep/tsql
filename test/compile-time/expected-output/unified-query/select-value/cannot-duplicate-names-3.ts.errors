@@ -1,11 +1,11 @@
 [
   {
     "messageText": {
-      "messageText": "Type 'AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"__aliased\"; alias: \"x\"; usedRef: IUsedRef<{ readonly myTable: { readonly myColumn: boolean; }; }>; }>' is not assignable to type 'AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"__aliased\"; alias: \"x\"; usedRef: IUsedRef<{ readonly myTable: { readonly myColumn: boolean; }; }>; }> & CompileError<[\"Identifiers already used in SELECT clause; consider aliasing\", [...]]>'.",
+      "messageText": "Type 'AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"x\"; usedRef: IUsedRef<{ readonly myTable: { readonly myColumn: boolean; }; }>; }>' is not assignable to type 'AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"x\"; usedRef: IUsedRef<{ readonly myTable: { readonly myColumn: boolean; }; }>; }> & CompileError<[\"Identifiers already used in SELECT clause; consider aliasing\", [...]]>'.",
       "category": 1,
       "code": 2322,
       "next": {
-        "messageText": "Property '__compileError' is missing in type 'AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"__aliased\"; alias: \"x\"; usedRef: IUsedRef<{ readonly myTable: { readonly myColumn: boolean; }; }>; }>' but required in type 'CompileError<[\"Identifiers already used in SELECT clause; consider aliasing\", [\"__aliased\", \"x\"]]>'.",
+        "messageText": "Property '__compileError' is missing in type 'AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"x\"; usedRef: IUsedRef<{ readonly myTable: { readonly myColumn: boolean; }; }>; }>' but required in type 'CompileError<[\"Identifiers already used in SELECT clause; consider aliasing\", [\"$aliased\", \"x\"]]>'.",
         "category": 1,
         "code": 2741
       }

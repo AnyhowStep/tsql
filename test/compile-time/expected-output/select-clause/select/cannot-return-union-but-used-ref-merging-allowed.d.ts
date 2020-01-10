@@ -5,7 +5,7 @@ export declare const selectClause: [tsql.IExprSelectItem<{
      * The two `SelectsT` have different `usedRef` but the first
      * is a subset of the second.
      */
-    tableAlias: "__aliased";
+    tableAlias: "$aliased";
     alias: "eq";
     usedRef: tsql.IUsedRef<never>;
 }>];

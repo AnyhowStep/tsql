@@ -1,9 +1,25 @@
 import * as tm from "type-mapping";
 import * as tsql from "../../../../dist";
 import {ISqliteWorker, SqliteAction, FromSqliteMessage, ToSqliteMessage} from "./worker.sql";
-import {AsyncQueue, PoolEventEmitter, IPool, TransactionAccessMode, IsolationLevel, IsolationLevelUtil, TransactionAccessModeUtil} from "../../../../dist";
+import {
+    AsyncQueue,
+    PoolEventEmitter,
+    IPool,
+    TransactionAccessMode,
+    IsolationLevel,
+    IsolationLevelUtil,
+    TransactionAccessModeUtil
+} from "../../../../dist";
 import {sqliteSqlfier} from "../../../sqlite-sqlfier";
-import {ITable, BuiltInExprUtil, WhereClause, DeletableTable, DeleteResult, BuiltInAssignmentMap, UpdateResult} from "../../../../dist";
+import {
+    ITable,
+    BuiltInExprUtil,
+    WhereClause,
+    DeletableTable,
+    DeleteResult,
+    BuiltInAssignmentMap,
+    UpdateResult
+} from "../../../../dist";
 
 const sqlite_master = tsql.table("sqlite_master")
     .addColumns({

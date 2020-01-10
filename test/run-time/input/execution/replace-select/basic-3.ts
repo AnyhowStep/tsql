@@ -52,7 +52,7 @@ tape(__filename, async (t) => {
                 columns => {
                     return {
                         testId : columns.src.testId,
-                        testVal : columns.__aliased.sum,
+                        testVal : columns.$aliased.sum,
                     };
                 }
             );

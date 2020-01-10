@@ -7,7 +7,7 @@ export declare const p: Promise<{
         readonly testId: bigint;
         readonly otherVal: bigint;
     };
-    readonly __aliased: {
+    readonly $aliased: {
         readonly gt: boolean;
     };
 }[]>;
