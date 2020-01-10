@@ -42,5 +42,6 @@ tape(__filename, async (t) => {
         new Uint8Array([1,2,3])
     );
 
-    await pool.disconnect();t.end();
+    await pool.disconnect();
+    t.end();
 });

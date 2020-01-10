@@ -26,7 +26,8 @@ tape(__filename, async (t) => {
         t.deepEqual(err.sql, `SELECT 42e0 AS "$aliased--value" UNION SELECT 99e0 AS "$aliased--value" ORDER BY "$aliased--value" DESC LIMIT 2 OFFSET 0`);
     });
 
-    await pool.disconnect();t.end();
+    await pool.disconnect();
+    t.end();
 });
 
 tape(__filename, async (t) => {
@@ -50,5 +51,6 @@ tape(__filename, async (t) => {
         t.deepEqual(err.sql, `SELECT 42e0 AS "$aliased--value" UNION SELECT 99e0 AS "$aliased--value" ORDER BY "$aliased--value" DESC LIMIT 2 OFFSET 0`);
     });
 
-    await pool.disconnect();t.end();
+    await pool.disconnect();
+    t.end();
 });

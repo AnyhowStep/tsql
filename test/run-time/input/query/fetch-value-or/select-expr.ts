@@ -66,7 +66,8 @@ tape(__filename, async (t) => {
         633
     );
 
-    await pool.disconnect();t.end();
+    await pool.disconnect();
+    t.end();
 });
 
 tape(__filename, async (t) => {
@@ -129,5 +130,6 @@ tape(__filename, async (t) => {
         633
     );
 
-    await pool.disconnect();t.end();
+    await pool.disconnect();
+    t.end();
 });

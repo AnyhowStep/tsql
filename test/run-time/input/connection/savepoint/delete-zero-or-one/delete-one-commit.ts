@@ -89,5 +89,6 @@ tape(__filename, async (t) => {
         t.deepEqual(rollbackInvoked, false);
     });
 
-    await pool.disconnect();t.end();
+    await pool.disconnect();
+    t.end();
 });

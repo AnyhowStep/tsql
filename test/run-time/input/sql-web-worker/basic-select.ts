@@ -24,5 +24,6 @@ tape(__filename, async (t) => {
     t.deepEqual(selectResult.values[1][0], BigInt(3));
     t.deepEqual(selectResult.values[1][1], BigInt(4));
 
-    await pool.disconnect();t.end();
+    await pool.disconnect();
+    t.end();
 });
