@@ -1,6 +1,6 @@
 {
     "parser": "@typescript-eslint/parser",
-    "plugins": ["@typescript-eslint", "local"],
+    "plugins": ["@typescript-eslint"],
     "parserOptions": {
         "ecmaVersion": 8,
         "sourceType": "module",
@@ -12,8 +12,6 @@
         "warnOnUnsupportedTypeScriptVersion": true
     },
     "rules": {
-        "local/no-method": ["off"],
-
         "func-call-spacing": "off",
         "@typescript-eslint/func-call-spacing": ["error"],
         "@typescript-eslint/no-floating-promises": ["error"],
