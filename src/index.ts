@@ -56,6 +56,7 @@ export * from "./sort-direction";
 export * from "./super-key";
 export * from "./sqlstring";
 export * from "./table";
+export * from "./table-where";
 export * from "./type-map";
 export * from "./type-ref";
 export * from "./unified-query";

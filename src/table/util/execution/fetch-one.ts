@@ -96,6 +96,9 @@ export function fetchOne<
     }
 }
 
+/**
+ * Not meant to be invoked directly
+ */
 export function __fetchOneHelper<
     TableT extends ITable
 > (

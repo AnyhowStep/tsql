@@ -79,6 +79,7 @@
         "./src/event/**/*",
         "./src/isolation-level.ts",
         "./src/transaction-access-mode.ts",
+        "./src/table-where/**/*",
         "./src/index.ts"
     ]
 }

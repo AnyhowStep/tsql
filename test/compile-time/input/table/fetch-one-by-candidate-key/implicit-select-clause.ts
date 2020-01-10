@@ -4,6 +4,9 @@ import * as tsql from "../../../../../dist";
 const myTable = tsql.table("myTable")
     .addColumns({
         myTableId : tm.mysql.bigIntSigned(),
+        /**
+         * Comment
+         */
         createdAt : tm.mysql.dateTime(),
     })
     .setPrimaryKey(columns => [columns.myTableId]);
