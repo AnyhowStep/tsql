@@ -168,7 +168,7 @@ tape(__filename, async (t) => {
             });
         const unsafeTrackResult2 = await businessEnabledLog.unsafeTrack(
             connection,
-            { businessId : BigInt(2) },
+            { businessId: BigInt(2) },
             {
                 enabled : BigInt(3),
                 updatedByExternalUserId : "test2",
@@ -214,5 +214,6 @@ tape(__filename, async (t) => {
         );
     });
 
+    await pool.disconnect();
     t.end();
 });

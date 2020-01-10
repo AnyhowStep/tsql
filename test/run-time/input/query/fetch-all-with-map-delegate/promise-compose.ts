@@ -58,7 +58,7 @@ tape(__filename, async (t) => {
                     other2 : row.other,
                     total : tm.BigIntUtil.add(row.test.testVal, row.other.otherVal),
                 };
-            })
+      })
             .map(async (row) => {
                 return {
                     ...row,
@@ -90,5 +90,6 @@ tape(__filename, async (t) => {
         ]
     );
 
+    await pool.disconnect();
     t.end();
 });

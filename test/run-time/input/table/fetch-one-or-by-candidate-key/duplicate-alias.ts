@@ -119,7 +119,7 @@ tape(__filename, async (t) => {
             t.fail("Should exist");
         });
 
-        await myTable.fetchOneByCandidateKey(
+ await myTable.fetchOneByCandidateKey(
             connection,
             {
                 myTableId : BigInt(1),
@@ -273,5 +273,6 @@ tape(__filename, async (t) => {
 
     });
 
+    await pool.disconnect();
     t.end();
 });

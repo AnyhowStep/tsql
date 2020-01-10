@@ -121,7 +121,7 @@ tape(__filename, async (t) => {
                         appId : BigInt(1),
                         businessId : BigInt(2),
                         enabled : true,
-                    },
+        },
                 },
             }
         );
@@ -145,5 +145,6 @@ tape(__filename, async (t) => {
             });
     });
 
+    await pool.disconnect();
     t.end();
 });

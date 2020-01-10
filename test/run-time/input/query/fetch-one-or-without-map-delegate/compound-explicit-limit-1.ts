@@ -27,6 +27,7 @@ tape(__filename, async (t) => {
         }
     );
 
+    await pool.disconnect();
     t.end();
 });
 
@@ -52,5 +53,6 @@ tape(__filename, async (t) => {
         }
     );
 
+    await pool.disconnect();
     t.end();
 });

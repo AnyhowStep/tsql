@@ -42,7 +42,7 @@ tape(__filename, async (t) => {
                 testId INT PRIMARY KEY,
                 testVal INT
             );
-            INSERT INTO
+  INSERT INTO
                 test(testId, testVal)
             VALUES
                 (1, 100),
@@ -93,5 +93,6 @@ tape(__filename, async (t) => {
             });
     });
 
+    await pool.disconnect();
     t.end();
 });

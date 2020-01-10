@@ -776,7 +776,10 @@ Database = (function() {
     if (returnCode === SQLite.OK) {
       return null;
     } else {
-      errmsg = sqlite3_errmsg(this.db);
+      errmsg = customErrorMessage == undefined ?
+        sqlite3_errmsg(this.db) :
+        customErrorMessage;
+      customErrorMessage = undefined;
       throw new Error(errmsg);
     }
   };
@@ -904,7 +907,12 @@ Database = (function() {
       return func.apply(null, args);
     } catch (error) {
       //console.error("user-defined function error", error);
-      sqlite3_result_error(cx, (typeof error == "string") ? error : String(error), -1);
+      if (error.message.indexOf("DataOutOfRangeError") == 0) {
+        customErrorMessage = error.message;
+        sqlite3_result_error(cx, customErrorMessage, -1);
+      } else {
+        sqlite3_result_error(cx, (typeof error == "string") ? error : String(error), -1);
+      }
       return undefined;
     }
   }

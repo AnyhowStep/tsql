@@ -67,7 +67,7 @@ tape(__filename, async (t) => {
                                 },
                             ]
                         );
-                    });
+                 });
 
                 await connection.rollback();
 
@@ -152,5 +152,6 @@ tape(__filename, async (t) => {
             });
     });
 
+    await pool.disconnect();
     t.end();
 });

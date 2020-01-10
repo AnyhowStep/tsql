@@ -124,5 +124,6 @@ tape(__filename, async (t) => {
         t.fail("Should not throw");
     });
 
+    await pool.disconnect();
     t.end();
 });

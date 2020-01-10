@@ -90,7 +90,7 @@ tape(__filename, async (t) => {
                 connection,
                 { businessId : BigInt(2) }
             )
-            .then((result) => {
+            .then((result) =>{
                 t.deepEqual(
                     result,
                     {
@@ -214,5 +214,6 @@ tape(__filename, async (t) => {
         );
     });
 
+    await pool.disconnect();
     t.end();
 });

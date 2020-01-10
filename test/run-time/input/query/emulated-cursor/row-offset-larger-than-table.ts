@@ -53,5 +53,6 @@ tape(__filename, async (t) => {
         t.deepEqual(i, 0);
     });
 
+    await pool.disconnect();
     t.end();
 });

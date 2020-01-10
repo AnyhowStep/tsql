@@ -55,7 +55,7 @@ tape(__filename, async (t) => {
         BigInt(0)
     );
     t.deepEqual(
-        result.row,
+   result.row,
         {
             testId : BigInt(123456),
             testVal : BigInt(100),
@@ -91,5 +91,6 @@ tape(__filename, async (t) => {
             );
         });
 
+    await pool.disconnect();
     t.end();
 });

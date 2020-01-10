@@ -45,6 +45,7 @@ tape(__filename, async (t) => {
         BigInt(300)
     );
 
+    await pool.disconnect();
     t.end();
 });
 
@@ -87,5 +88,6 @@ tape(__filename, async (t) => {
         BigInt(300)
     );
 
+    await pool.disconnect();
     t.end();
 });

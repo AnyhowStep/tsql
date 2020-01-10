@@ -186,7 +186,7 @@ export function initWorker (
                         "An unknown error occurred" :
                         typeof error.message == "string" ?
                         error.message + "\n" + error.stack :
-                        "An unexpected error occurred"
+                        "An unexpected error occurred: " + String(error)
                     ),
                 });
             });

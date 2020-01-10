@@ -23,7 +23,7 @@ tape(__filename, async (t) => {
                 testVal INT
             );
 
-            INSERT INTO dst(testId, testVal) VALUES
+         INSERT INTO dst(testId, testVal) VALUES
                 (1,100),
                 (2,200),
                 (3,300);
@@ -69,5 +69,6 @@ tape(__filename, async (t) => {
             });
     });
 
+    await pool.disconnect();
     t.end();
 });

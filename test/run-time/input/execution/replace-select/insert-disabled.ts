@@ -74,8 +74,9 @@ tape(__filename, async (t) => {
             t.deepEqual(
                 rows,
                 []
-            );
+         );
         });
 
+    await pool.disconnect();
     t.end();
 });

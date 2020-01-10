@@ -18,7 +18,7 @@ tape(__filename, async (t) => {
 
     const updateAndFetchResult = await pool.acquire(async (connection) => {
         await connection.createFunction("replaceX", (pointStr, newX) => {
-            if (typeof pointStr != "string") {
+            if (typeof pointStr != "string"){
                 throw new Error(`Expected string`);
             }
             const point = JSON.parse(pointStr);
@@ -128,5 +128,6 @@ tape(__filename, async (t) => {
             );
         });
 
+    await pool.disconnect();
     t.end();
 });

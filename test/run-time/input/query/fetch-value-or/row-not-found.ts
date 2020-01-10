@@ -19,6 +19,7 @@ tape(__filename, async (t) => {
         "Hello, world"
     );
 
+    await pool.disconnect();
     t.end();
 });
 
@@ -36,5 +37,6 @@ tape(__filename, async (t) => {
         "Hello, world"
     );
 
+    await pool.disconnect();
     t.end();
 });
