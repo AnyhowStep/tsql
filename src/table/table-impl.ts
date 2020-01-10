@@ -19,6 +19,7 @@ import {AnyBuiltInExpr} from "../built-in-expr";
 import {CustomInsertRow} from "../insert";
 import {InsertOneWithAutoIncrementReturnType, InsertIgnoreOneWithAutoIncrementReturnType, DeleteOneResult, DeleteZeroOrOneResult, UpdateOneResult, UpdateZeroOrOneResult, ReplaceOneWithAutoIncrementReturnType} from "../execution/util";
 import {AssignmentMapDelegate} from "../update";
+import {TableWhere} from "../table-where";
 
 export class Table<DataT extends TableData> implements ITable {
     readonly isLateral : DataT["isLateral"];
@@ -1351,6 +1352,51 @@ export class Table<DataT extends TableData> implements ITable {
             connection,
             superKey,
             assignmentMapDelegate
+        );
+    }
+
+    where (
+        whereDelegate : WhereDelegate<
+            FromClauseUtil.From<
+                FromClauseUtil.NewInstance,
+                this
+            >
+        >
+    ) : TableWhere<this> {
+        return new TableWhere<this>(this, whereDelegate);
+    }
+    usingCandidateKey (
+        candidateKey : StrictUnion<CandidateKey_NonUnion<this>>
+    ) : TableWhere<this> {
+        return new TableWhere<this>(
+            this,
+            () => ExprLib.eqCandidateKey(
+                this,
+                candidateKey
+            ) as any
+        );
+    }
+    usingPrimaryKey (
+        this : Extract<this, TableWithPrimaryKey>,
+        primaryKey : PrimaryKey_Input<Extract<this, TableWithPrimaryKey>>
+    ) : TableWhere<this> {
+        return new TableWhere<this>(
+            this,
+            () => ExprLib.eqPrimaryKey(
+                this,
+                primaryKey
+            ) as any
+        );
+    }
+    usingSuperKey (
+        superKey : SuperKey_Input<this>
+    ) : TableWhere<this> {
+        return new TableWhere<this>(
+            this,
+            () => ExprLib.eqSuperKey(
+                this,
+                superKey
+            ) as any
         );
     }
 }

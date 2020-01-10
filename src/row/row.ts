@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {ITable} from "../table";
-import {UnionToIntersection} from "../type-util";
+import {UnionToIntersection, Identity} from "../type-util";
 
 /**
  * Represents a row of the table, when retrieved from the database.
@@ -18,13 +18,13 @@ import {UnionToIntersection} from "../type-util";
  * + Why does your table not have a definite set of columns?
  *   Is it Schrödinger's columns?
  */
-export type Row_NonUnion<TableT extends Pick<ITable, "columns">> = (
-    {
-        readonly [columnAlias in Extract<keyof TableT["columns"], string>] : (
+export type Row_NonUnion<TableT extends Pick<ITable, "columns">> =
+    Identity<{
+        readonly [columnAlias in keyof TableT["columns"]] : (
             tm.OutputOf<TableT["columns"][columnAlias]["mapper"]>
         )
-    }
-);
+    }>
+;
 
 /**
  * Represents a row of the table, when retrieved from the database.
