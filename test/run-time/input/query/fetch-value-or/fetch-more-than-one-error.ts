@@ -63,7 +63,7 @@ tape(__filename, async (t) => {
         t.deepEqual(err.name, "TooManyRowsFoundError");
     });
 
-    t.end();
+    await pool.disconnect();t.end();
 });
 
 tape(__filename, async (t) => {
@@ -123,5 +123,5 @@ tape(__filename, async (t) => {
         t.deepEqual(err.name, "TooManyRowsFoundError");
     });
 
-    t.end();
+    await pool.disconnect();t.end();
 });

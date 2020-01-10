@@ -74,7 +74,7 @@ tape(__filename, async (t) => {
 
         const validationResult = await tsql.SchemaValidationUtil.validateSchema(
             [business, businessEnabled],
-            (await connection.tryFetchSchemaMeta(undefined))!
+(await connection.tryFetchSchemaMeta(undefined))!
         );
         t.deepEqual(validationResult.errors, []);
         t.deepEqual(validationResult.warnings, [
@@ -177,5 +177,5 @@ tape(__filename, async (t) => {
             });
     });
 
-    t.end();
+    await pool.disconnect();t.end();
 });

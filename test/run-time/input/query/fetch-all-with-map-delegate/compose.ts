@@ -84,11 +84,11 @@ tape(__filename, async (t) => {
             {
                 test: { testId: BigInt(1), testVal: BigInt(100) },
                 other2: { testId: BigInt(1), otherVal: BigInt(111) },
-                total: BigInt(211),
+             total: BigInt(211),
                 hello: "hi",
             },
         ]
     );
 
-    t.end();
+    await pool.disconnect();t.end();
 });

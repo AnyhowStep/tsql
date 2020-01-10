@@ -1,5 +1,5 @@
 SELECT
-  ("myTable"."myColumn" + 32) AS "$aliased--x"
+  bigint_add("myTable"."myColumn", 32) AS "$aliased--x"
 FROM
   "myTable"
 UNION ALL

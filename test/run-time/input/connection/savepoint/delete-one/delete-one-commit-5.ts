@@ -101,5 +101,5 @@ tape(__filename, async (t) => {
         t.deepEqual(rollbackInvoked, false);
     });
 
-    t.end();
+    await pool.disconnect();t.end();
 });

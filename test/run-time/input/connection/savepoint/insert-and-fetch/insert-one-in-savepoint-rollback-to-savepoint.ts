@@ -56,7 +56,7 @@ tape(__filename, async (t) => {
                                 },
                                 {
                                     testId : BigInt(2),
-                                    testVal : BigInt(200),
+                        testVal : BigInt(200),
                                 },
                                 {
                                     testId : BigInt(3),
@@ -127,5 +127,5 @@ tape(__filename, async (t) => {
             });
     });
 
-    t.end();
+    await pool.disconnect();t.end();
 });

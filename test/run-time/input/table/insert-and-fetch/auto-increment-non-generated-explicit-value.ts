@@ -63,5 +63,5 @@ tape(__filename, async (t) => {
             t.fail("Should not fail");
         });
 
-    t.end();
+    await pool.disconnect();t.end();
 });

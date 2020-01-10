@@ -23,7 +23,7 @@ tape(__filename, async (t) => {
 
     if (result == undefined) {
         t.fail("Expected SchemaMeta");
-        t.end();
+        await pool.disconnect();t.end();
         return;
     }
 
@@ -77,5 +77,5 @@ tape(__filename, async (t) => {
         ]
     );
 
-    t.end();
+    await pool.disconnect();t.end();
 });

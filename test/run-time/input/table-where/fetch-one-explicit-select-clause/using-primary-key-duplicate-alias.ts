@@ -294,7 +294,7 @@ tape(__filename, async (t) => {
                 ]
             )
             .then(() => {
-                t.fail("Should not exist");
+             t.fail("Should not exist");
             })
             .catch((err) => {
                 t.true(err instanceof tsql.RowNotFoundError);
@@ -303,5 +303,5 @@ tape(__filename, async (t) => {
 
     });
 
-    t.end();
+    await pool.disconnect();t.end();
 });

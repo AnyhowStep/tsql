@@ -255,5 +255,5 @@ tape(__filename, async (t) => {
             });
     });
 
-    t.end();
+    await pool.disconnect();t.end();
 });

@@ -45,9 +45,9 @@ tape(__filename, async (t) => {
             appId: BigInt(1),
             key: "browser",
             createdAt: new Date(0),
-            disabledAt: null,
+     disabledAt: null,
         }
     );
 
-    t.end();
+    await pool.disconnect();t.end();
 });

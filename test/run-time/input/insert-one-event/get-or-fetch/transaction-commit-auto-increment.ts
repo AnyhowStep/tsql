@@ -131,5 +131,5 @@ tape(__filename, async (t) => {
             t.fail(err.message);
         });
 
-    t.end();
+    await pool.disconnect();t.end();
 });

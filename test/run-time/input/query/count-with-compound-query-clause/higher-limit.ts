@@ -59,5 +59,5 @@ tape(__filename, async (t) => {
         BigInt(5)
     );
 
-    t.end();
+    await pool.disconnect();t.end();
 });

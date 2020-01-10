@@ -361,7 +361,6 @@ export class Connection {
                     }),
                     columns : resultSet.columns,
                 };
-                console.log(selectResult);
                 return selectResult;
             })
             .catch((err) => {
@@ -1733,7 +1732,6 @@ export class Pool implements tsql.IPool {
                     if (tm.BigIntUtil.greaterThan(result, BigInt("9223372036854775807"))) {
                         throw new Error(`DataOutOfRangeError: bigint_add result was ${String(result)}`);
                     }
-                    console.log("add result", a, b, result);
                     return result;
                 } else {
                     throw new Error(`Can only add two bigint values`);

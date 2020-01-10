@@ -13,7 +13,7 @@ tape(__filename, async (t) => {
                     x : row.$aliased.value + 58,
                 };
             })
-            .fetchAllMapped(
+ .fetchAllMapped(
                 /**
                  * @todo Make `connection` implement `IConnection` properly
                  */
@@ -29,5 +29,5 @@ tape(__filename, async (t) => {
         ]
     );
 
-    t.end();
+    await pool.disconnect();t.end();
 });

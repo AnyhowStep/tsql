@@ -43,5 +43,5 @@ tape(__filename, async (t) => {
         "not-found"
     );
 
-    t.end();
+    await pool.disconnect();t.end();
 });

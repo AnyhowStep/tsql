@@ -29,5 +29,5 @@ tape(__filename, async (t) => {
         t.pass("Cannot acquire connection from disconnected pool");
     });
 
-    t.end();
+    await pool.disconnect();t.end();
 });

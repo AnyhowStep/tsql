@@ -28,5 +28,5 @@ tape(__filename, async (t) => {
         t.deepEqual(err.sql, `SELECT 42e0 AS "$aliased--value" WHERE FALSE LIMIT 0 OFFSET 0`);
     });
 
-    t.end();
+    await pool.disconnect();t.end();
 });

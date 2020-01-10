@@ -27,5 +27,5 @@ tape(__filename, async (t) => {
         "Hello, world"
     );
 
-    t.end();
+    await pool.disconnect();t.end();
 });

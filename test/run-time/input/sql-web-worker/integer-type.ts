@@ -32,5 +32,5 @@ tape(__filename, async (t) => {
         t.deepEqual(result4.execResult[0].values, [ ["real", -9223372036854780000, -9223372036854780000] ]);
     });
 
-    t.end();
+    await pool.disconnect();t.end();
 });
