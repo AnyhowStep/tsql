@@ -106,6 +106,10 @@ export class AsyncQueue<ItemT> {
         );
     }
 
+    getShouldStop () {
+        return this.shouldStop;
+    }
+
 
     /**
      * Enqueues a callback that will be run asynchronously.

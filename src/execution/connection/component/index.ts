@@ -6,6 +6,7 @@ export * from "./insert-ignore-select";
 export * from "./insert-many";
 export * from "./insert-one";
 export * from "./insert-select";
+export * from "./is-deallocated";
 export * from "./is-in-transaction";
 export * from "./lockable";
 export * from "./raw-query";
