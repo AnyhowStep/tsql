@@ -714,7 +714,13 @@ export const sqliteSqlfier : Sqlfier = {
                 return insertBetween(operands, "-");
             }
         },
-        [OperatorType.MULTIPLICATION] : ({operands}) => insertBetween(operands, "*"),
+        [OperatorType.MULTIPLICATION] : ({operands, typeHint}) => {
+            if (typeHint == TypeHint.BIGINT_SIGNED) {
+                return functionCall("bigint_mul", operands);
+            } else {
+                return insertBetween(operands, "*");
+            }
+        },
         [OperatorType.UNARY_MINUS] : ({operands}) => ["-", operands[0]],
 
         /*

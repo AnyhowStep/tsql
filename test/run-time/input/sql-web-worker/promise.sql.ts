@@ -1751,6 +1751,20 @@ export class Pool implements tsql.IPool {
                     throw new Error(`Can only sub two bigint values`);
                 }
             });
+            await connection.createFunction("bigint_mul", (a, b) => {
+                if (tm.TypeUtil.isBigInt(a) && tm.TypeUtil.isBigInt(b)) {
+                    const result = tm.BigIntUtil.mul(a, b);
+                    if (tm.BigIntUtil.lessThan(result, BigInt("-9223372036854775808"))) {
+                        throw new Error(`DataOutOfRangeError: bigint_mul result was ${String(result)}`);
+                    }
+                    if (tm.BigIntUtil.greaterThan(result, BigInt("9223372036854775807"))) {
+                        throw new Error(`DataOutOfRangeError: bigint_mul result was ${String(result)}`);
+                    }
+                    return result;
+                } else {
+                    throw new Error(`Can only mul two bigint values`);
+                }
+            });
             await connection.createFunction("decimal_ctor", (x, precision, scale) => {
                 if (
                     tm.TypeUtil.isBigInt(precision) &&
