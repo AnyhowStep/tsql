@@ -1,7 +1,9 @@
 SELECT
-  CAST(
+  decimal_ctor(
     (
       SELECT
-        CAST('1.234' AS DECIMAL(10, 4)) AS "$aliased--value"
-    ) AS DECIMAL(42, 10)
+        decimal_ctor('1.234', 10, 4) AS "$aliased--value"
+    ),
+    42,
+    10
   ) AS "$aliased--value"

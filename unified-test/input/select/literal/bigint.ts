@@ -27,6 +27,20 @@ export const test : Test = ({tape, pool}) => {
                 .then((value) => {
                     t.deepEqual(value, BigInt("-9223372036854775808"));
                 });
+
+            t.throws(() => {
+                /**
+                 * Too small
+                 */
+                tsql.selectValue(() => BigInt("-9223372036854775809"));
+            });
+
+            t.throws(() => {
+                /**
+                 * Too big
+                 */
+                tsql.selectValue(() => BigInt("9223372036854775808"));
+            });
         });
 
         t.end();

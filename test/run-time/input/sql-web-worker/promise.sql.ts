@@ -1737,10 +1737,25 @@ export class Pool implements tsql.IPool {
                     throw new Error(`Can only add two bigint values`);
                 }
             });
+            await connection.createFunction("decimal_ctor", (x, precision, scale) => {
+                if (
+                    tm.TypeUtil.isBigInt(precision) &&
+                    tm.TypeUtil.isBigInt(scale)
+                ) {
+                    if (typeof x == "string") {
+                        const parsed = tm.mysql.decimal(precision, scale)("rawDecimal", x);
+                        return parsed.toString();
+                    } else {
+                        throw new Error(`Only string to decimal cast implemented`);
+                    }
+                } else {
+                    throw new Error(`Precision and scale must be bigint`);
+                }
+            });
         }).then(
             () => {},
             (err) => {
-                console.error("Error creating bigint_add", err);
+                console.error("Error creating functions", err);
                 process.exit(1);
             }
         );

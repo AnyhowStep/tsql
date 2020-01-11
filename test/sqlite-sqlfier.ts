@@ -31,7 +31,6 @@ import {
     IQueryBase,
     QueryBaseUtil,
     DateTimeUtil,
-    castAsDecimal,
     utcStringToTimestamp,
     TypeHint,
     Parentheses,
@@ -539,13 +538,20 @@ export const sqliteSqlfier : Sqlfier = {
         .map(escapeIdentifierWithDoubleQuotes)
         .join("."),
     literalValueSqlfier : {
-        [LiteralValueType.DECIMAL] : ({literalValue, precision, scale}, toSql) => toSql(
+        [LiteralValueType.DECIMAL] : ({literalValue, precision, scale}) => functionCall(
+            "decimal_ctor",
+            [
+                pascalStyleEscapeString(literalValue),
+                escapeValue(precision),
+                escapeValue(scale)
+            ]
+        )/*toSql(
             castAsDecimal(
                 literalValue,
                 precision,
                 scale
             ).ast
-        ),
+        )*/,
         [LiteralValueType.STRING] : ({literalValue}) => pascalStyleEscapeString(literalValue),
         [LiteralValueType.DOUBLE] : ({literalValue}) => escapeValue(literalValue),
         [LiteralValueType.BIGINT_SIGNED] : ({literalValue}) => escapeValue(literalValue),
@@ -798,12 +804,19 @@ export const sqliteSqlfier : Sqlfier = {
             https://dev.mysql.com/doc/refman/8.0/en/cast-functions.html
         */
 
-        [OperatorType.CAST_AS_DECIMAL] : ({operands : [arg, precision, scale]}, toSql) => functionCall(
+        [OperatorType.CAST_AS_DECIMAL] : ({operands : [arg, precision, scale]}) => functionCall(
+            "decimal_ctor",
+            [
+                arg,
+                precision,
+                scale
+            ]
+        )/*functionCall(
             "CAST",
             [
                 toSql(arg) + `AS DECIMAL(${toSql(precision)}, ${toSql(scale)})`
             ]
-        ),
+        )*/,
 
         [OperatorType.CAST_AS_DOUBLE] : ({operands}, toSql) => functionCall("CAST", [`${toSql(operands)} AS DOUBLE`]),
 

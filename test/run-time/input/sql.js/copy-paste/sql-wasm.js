@@ -907,7 +907,7 @@ Database = (function() {
       return func.apply(null, args);
     } catch (error) {
       //console.error("user-defined function error", error);
-      if (error.message.indexOf("DataOutOfRangeError") == 0) {
+      if (error instanceof Error) {
         customErrorMessage = error.message;
         sqlite3_result_error(cx, customErrorMessage, -1);
       } else {
