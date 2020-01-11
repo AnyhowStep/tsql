@@ -804,12 +804,19 @@ export const sqliteSqlfier : Sqlfier = {
             https://dev.mysql.com/doc/refman/8.0/en/cast-functions.html
         */
 
-        [OperatorType.CAST_AS_DECIMAL] : ({operands : [arg, precision, scale]}, toSql) => functionCall(
+        [OperatorType.CAST_AS_DECIMAL] : ({operands : [arg, precision, scale]}) => functionCall(
+            "decimal_ctor",
+            [
+                arg,
+                precision,
+                scale
+            ]
+        )/*functionCall(
             "CAST",
             [
                 toSql(arg) + `AS DECIMAL(${toSql(precision)}, ${toSql(scale)})`
             ]
-        ),
+        )*/,
 
         [OperatorType.CAST_AS_DOUBLE] : ({operands}, toSql) => functionCall("CAST", [`${toSql(operands)} AS DOUBLE`]),
 
