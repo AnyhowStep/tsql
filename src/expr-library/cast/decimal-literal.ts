@@ -5,6 +5,19 @@ import {Expr} from "../../expr";
 import {LiteralValueNodeUtil} from "../../ast/literal-value-node";
 import {expr} from "../../expr/expr-impl";
 
+/**
+ *
+ * @param rawDecimalLiteral
+ *
+ * @param precision
+ * + MySQL's max precision is `65`
+ * + PostgreSQL's min precision is `1`
+ *
+ * @param scale
+ * + MySQL's max scale is `30`.
+ * + The min scale is `0`.
+ * + `scale` must be <= `precision`.
+ */
 export function decimalLiteral (
     rawDecimalLiteral : string|number|bigint|Decimal,
     /**

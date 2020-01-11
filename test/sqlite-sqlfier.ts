@@ -31,7 +31,6 @@ import {
     IQueryBase,
     QueryBaseUtil,
     DateTimeUtil,
-    castAsDecimal,
     utcStringToTimestamp,
     TypeHint,
     Parentheses,
@@ -539,13 +538,20 @@ export const sqliteSqlfier : Sqlfier = {
         .map(escapeIdentifierWithDoubleQuotes)
         .join("."),
     literalValueSqlfier : {
-        [LiteralValueType.DECIMAL] : ({literalValue, precision, scale}, toSql) => toSql(
+        [LiteralValueType.DECIMAL] : ({literalValue, precision, scale}) => functionCall(
+            "decimal_ctor",
+            [
+                pascalStyleEscapeString(literalValue),
+                escapeValue(precision),
+                escapeValue(scale)
+            ]
+        )/*toSql(
             castAsDecimal(
                 literalValue,
                 precision,
                 scale
             ).ast
-        ),
+        )*/,
         [LiteralValueType.STRING] : ({literalValue}) => pascalStyleEscapeString(literalValue),
         [LiteralValueType.DOUBLE] : ({literalValue}) => escapeValue(literalValue),
         [LiteralValueType.BIGINT_SIGNED] : ({literalValue}) => escapeValue(literalValue),
