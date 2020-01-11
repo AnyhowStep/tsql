@@ -9,7 +9,8 @@ import {
     IsolationLevel,
     IsolationLevelUtil,
     TransactionAccessModeUtil,
-    DataOutOfRangeError
+    DataOutOfRangeError,
+    DivideByZeroError
 } from "../../../../dist";
 import {sqliteSqlfier} from "../../../sqlite-sqlfier";
 import {
@@ -78,6 +79,16 @@ function postMessage<ActionT extends SqliteAction, ResultT> (
             if (error instanceof Error) {
                 if (error.message.startsWith("DataOutOfRangeError")) {
                     const newErr = new DataOutOfRangeError(error.message);
+                    Object.defineProperty(
+                        newErr,
+                        "stack",
+                        {
+                            value : error.stack
+                        }
+                    );
+                    originalInnerReject(newErr);
+                }if (error.message.startsWith("DivideByZeroError")) {
+                    const newErr = new DivideByZeroError(error.message);
                     Object.defineProperty(
                         newErr,
                         "stack",
@@ -1763,6 +1774,23 @@ export class Pool implements tsql.IPool {
                     return result;
                 } else {
                     throw new Error(`Can only mul two bigint values`);
+                }
+            });
+            await connection.createFunction("bigint_div", (a, b) => {
+                if (tm.TypeUtil.isBigInt(a) && tm.TypeUtil.isBigInt(b)) {
+                    if (tm.BigIntUtil.equal(b, tm.BigInt(0))) {
+                        throw new Error(`DivideByZeroError: Cannot divide by zero`);
+                    }
+                    const result = tm.BigIntUtil.div(a, b);
+                    if (tm.BigIntUtil.lessThan(result, BigInt("-9223372036854775808"))) {
+                        throw new Error(`DataOutOfRangeError: bigint_div result was ${String(result)}`);
+                    }
+                    if (tm.BigIntUtil.greaterThan(result, BigInt("9223372036854775807"))) {
+                        throw new Error(`DataOutOfRangeError: bigint_div result was ${String(result)}`);
+                    }
+                    return result;
+                } else {
+                    throw new Error(`Can only div two bigint values`);
                 }
             });
             await connection.createFunction("decimal_ctor", (x, precision, scale) => {
