@@ -669,6 +669,8 @@ export const sqliteSqlfier : Sqlfier = {
                         ) + " AS DOUBLE"
                     ]
                 );
+            } else if (typeHint == TypeHint.BIGINT_SIGNED) {
+                return functionCall("bigint_div", operands);
             } else {
                 throw new Error(`INTEGER_DIVISION not implemented for ${typeHint}`);
             }
