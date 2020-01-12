@@ -1,3 +1,4 @@
+import * as tm from "type-mapping";
 import {Test} from "../../../test";
 import * as tsql from "../../../../dist";
 
@@ -44,37 +45,55 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     t.deepEqual(row, { value : BigInt(9001) });
                 });
 
-            /**
-             * MAX BIGINT SIGNED VALUE
-             */
-            await tsql.selectValue(() => BigInt("9223372036854775807"))
-                .fetchValue(connection)
-                .then((value) => {
-                    t.deepEqual(value, BigInt("9223372036854775807"));
+            await myTable
+                .insertAndFetch(
+                    connection,
+                    {
+                        value : BigInt("9223372036854775807"),
+                    }
+                )
+                .then((row) => {
+                    t.deepEqual(row, { value : BigInt("9223372036854775807") });
                 });
 
-            /**
-             * MIN BIGINT SIGNED VALUE
-             */
-            await tsql.selectValue(() => BigInt("-9223372036854775808"))
-                .fetchValue(connection)
-                .then((value) => {
-                    t.deepEqual(value, BigInt("-9223372036854775808"));
+            await myTable
+                .insertAndFetch(
+                    connection,
+                    {
+                        value : BigInt("-9223372036854775808"),
+                    }
+                )
+                .then((row) => {
+                    t.deepEqual(row, { value : BigInt("-9223372036854775808") });
                 });
 
-            t.throws(() => {
-                /**
-                 * Too small
-                 */
-                tsql.selectValue(() => BigInt("-9223372036854775809"));
-            });
+            await myTable
+                .insertAndFetch(
+                    connection,
+                    {
+                        value : BigInt("-9223372036854775809"),
+                    }
+                )
+                .then(() => {
+                    t.fail("Should be out of range");
+                })
+                .catch((err) => {
+                    t.deepEqual(tm.ErrorUtil.isMappingError(err), true);
+                });
 
-            t.throws(() => {
-                /**
-                 * Too big
-                 */
-                tsql.selectValue(() => BigInt("9223372036854775808"));
-            });
+            await myTable
+                .insertAndFetch(
+                    connection,
+                    {
+                        value : BigInt("9223372036854775808"),
+                    }
+                )
+                .then(() => {
+                    t.fail("Should be out of range");
+                })
+                .catch((err) => {
+                    t.deepEqual(tm.ErrorUtil.isMappingError(err), true);
+                });
         });
 
         t.end();
