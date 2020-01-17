@@ -87,7 +87,7 @@ function postMessage<ActionT extends SqliteAction, ResultT> (
                         }
                     );
                     originalInnerReject(newErr);
-                }if (error.message.startsWith("DivideByZeroError")) {
+                } else if (error.message.startsWith("DivideByZeroError")) {
                     const newErr = new DivideByZeroError(error.message);
                     Object.defineProperty(
                         newErr,

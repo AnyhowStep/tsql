@@ -98,5 +98,16 @@ export function makeDecimalDataType (
  * + MySQL      : `DECIMAL(p, s)`
  * + PostgreSQL : `DECIMAL(p, s)`
  * + SQLite     : -NA-; Should be emulated using `TEXT` and custom functions.
+ *
+ * @param precision
+ * + MySQL's max precision is `65`
+ * + PostgreSQL's min precision is `1`
+ *
+ * @param scale
+ * + MySQL's max scale is `30`.
+ * + The min scale is `0`.
+ * + `scale` must be <= `precision`.
+ *
+ * @param extraMapper
  */
 export const dtDecimal = makeDecimalDataType(tm.mysql.decimal);
