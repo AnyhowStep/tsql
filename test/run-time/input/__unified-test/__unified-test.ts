@@ -13,7 +13,11 @@ unifiedTest({
         schema : UnifiedSchema
     ) : Promise<void> => {
         for (const table of schema.tables) {
-            const tableSql : string[] = [`CREATE TABLE ${tsql.escapeIdentifierWithDoubleQuotes(table.tableAlias)} (`];
+            await connection.rawQuery(`DROP TABLE IF EXISTS ${tsql.escapeIdentifierWithDoubleQuotes(table.tableAlias)}`);
+
+            const tableSql : string[] = [
+                `CREATE TEMPORARY TABLE ${tsql.escapeIdentifierWithDoubleQuotes(table.tableAlias)} (`
+            ];
 
             let firstColumn = true;
             for (const column of table.columns) {
@@ -33,11 +37,18 @@ unifiedTest({
                         break;
                     }
                     case tsql.TypeHint.DATE_TIME: {
-                        columnSql.push("DATETIME(3");
+                        columnSql.push("DATETIME(3)");
                         break;
                     }
                     case tsql.TypeHint.DECIMAL: {
-                        columnSql.push("NUMERIC");
+                        /**
+                         * Using numeric will cause SQLite to cast DECIMAL strings
+                         * into `double` and lose precision, when stored on disk.
+                         *
+                         * @todo Document this, when implementing "emulated DECIMAL" support proper.
+                         */
+                        //columnSql.push("NUMERIC");
+                        columnSql.push("TEXT");
                         break;
                     }
                     case tsql.TypeHint.DOUBLE: {

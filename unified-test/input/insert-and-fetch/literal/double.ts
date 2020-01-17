@@ -1,4 +1,3 @@
-import * as tm from "type-mapping";
 import {Test} from "../../../test";
 import * as tsql from "../../../../dist";
 
@@ -7,7 +6,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
         await pool.acquire(async (connection) => {
             const myTable = tsql.table("myTable")
                 .addColumns({
-                    value : tsql.dtBigIntSigned(),
+                    value : tsql.dtDouble(),
                 })
                 .setId(columns => columns.value);
 
@@ -21,7 +20,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                                 {
                                     columnAlias : "value",
                                     dataType : {
-                                        typeHint : tsql.TypeHint.BIGINT_SIGNED,
+                                        typeHint : tsql.TypeHint.DOUBLE,
                                     },
                                 }
                             ],
@@ -39,62 +38,46 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 .insertAndFetch(
                     connection,
                     {
-                        value : BigInt(9001),
+                        value : 0,
                     }
                 )
                 .then((row) => {
-                    t.deepEqual(row, { value : BigInt(9001) });
+                    t.deepEqual(row, { value : 0 });
                 });
 
             await myTable
                 .insertAndFetch(
                     connection,
                     {
-                        value : BigInt("9223372036854775807"),
+                        value : -3.141,
                     }
                 )
                 .then((row) => {
-                    t.deepEqual(row, { value : BigInt("9223372036854775807") });
+                    t.deepEqual(row, { value : -3.141 });
                 });
 
             await myTable
                 .insertAndFetch(
                     connection,
                     {
-                        value : BigInt("-9223372036854775808"),
+                        value : 9007199254740990,
                     }
                 )
                 .then((row) => {
-                    t.deepEqual(row, { value : BigInt("-9223372036854775808") });
+                    t.deepEqual(row, { value : 9007199254740990 });
                 });
 
             await myTable
                 .insertAndFetch(
                     connection,
                     {
-                        value : BigInt("-9223372036854775809"),
+                        value : 1.234567e98,
                     }
                 )
-                .then(() => {
-                    t.fail("Should be out of range");
-                })
-                .catch((err) => {
-                    t.deepEqual(tm.ErrorUtil.isMappingError(err), true);
+                .then((row) => {
+                    t.deepEqual(row, { value : 1.234567e98 });
                 });
 
-            await myTable
-                .insertAndFetch(
-                    connection,
-                    {
-                        value : BigInt("9223372036854775808"),
-                    }
-                )
-                .then(() => {
-                    t.fail("Should be out of range");
-                })
-                .catch((err) => {
-                    t.deepEqual(tm.ErrorUtil.isMappingError(err), true);
-                });
         });
 
         t.end();

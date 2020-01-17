@@ -25,6 +25,8 @@ export interface UnifiedColumn {
         }
         | {
             readonly typeHint : tsql.TypeHint.DECIMAL,
+            readonly precision : number,
+            readonly scale : number,
         }
         | {
             readonly typeHint : tsql.TypeHint.STRING,
