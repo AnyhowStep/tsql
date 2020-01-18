@@ -9,13 +9,14 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 testId : tm.mysql.bigIntUnsigned(),
                 testVal : tm.mysql.bigIntUnsigned(),
             })
-            .setPrimaryKey(columns => [columns.testId])
+            .addCandidateKey(columns => [columns.testId])
             .addExplicitDefaultValue(columns => [
-                columns.testId,
+                //testVal is NOT NULL and has no DEFAULT value
+                //but we are lying about it
                 columns.testVal,
             ]);
 
-        const insertResult = await pool.acquire(async (connection) => {
+        await pool.acquire(async (connection) => {
             await createTemporarySchema(
                 connection,
                 {
@@ -28,14 +29,12 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                                     dataType : {
                                         typeHint : tsql.TypeHint.BIGINT_SIGNED,
                                     },
-                                    default : BigInt(80085),
                                 },
                                 {
                                     columnAlias : "testVal",
                                     dataType : {
                                         typeHint : tsql.TypeHint.BIGINT_SIGNED,
                                     },
-                                    default : BigInt(1337),
                                 },
                             ],
                             primaryKey : {
@@ -48,55 +47,42 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 }
             );
 
-            await test
-                .enableExplicitAutoIncrementValue()
-                .insertMany(
-                    connection,
-                    [
-                        {
-                            testId : BigInt(1),
-                            testVal : BigInt(100),
-                        },
-                        {
-                            testId : BigInt(2),
-                            testVal : BigInt(200),
-                        },
-                        {
-                            testId : BigInt(3),
-                            testVal : BigInt(300),
-                        },
-                    ]
-                );
-
-            return test.insertOne(
+            return test.insertMany(
                 connection,
-                {}
+                [
+                    {
+                        testId : BigInt(999),
+                        testVal : BigInt(999),
+                    },
+                    {
+                        testId : BigInt(1),
+                        //testVal : BigInt(100),
+                    },
+                    {
+                        testId : BigInt(888),
+                        testVal : BigInt(888),
+                    },
+                ]
             );
+        }).then(() => {
+            t.fail("Should not insert anything");
+        }).catch((err) => {
+            t.pass(err.message);
         });
-        t.deepEqual(
-            insertResult.insertedRowCount,
-            BigInt(1)
-        );
-        t.deepEqual(
-            insertResult.autoIncrementId,
-            undefined
-        );
-        t.deepEqual(
-            insertResult.warningCount,
-            BigInt(0)
-        );
 
         await pool
             .acquire(async (connection) => {
-                return test.fetchOneByPrimaryKey(connection, { testId : BigInt(80085) });
+                return tsql.from(test)
+                    .select(columns => [columns])
+                    .orderBy(columns => [
+                        columns.testId.asc(),
+                    ])
+                    .fetchAll(connection);
             })
-            .then((row) => {
+            .then((rows) => {
                 t.deepEqual(
-                    row,
-                    {
-                        testId : BigInt(80085),
-                        testVal : BigInt(1337),
-                    }
+                    rows,
+                    []
                 );
             });
 
