@@ -114,6 +114,15 @@ unifiedTest({
                 tableSql.push(`, PRIMARY KEY (${columnAliases})`);
             }
 
+            if (table.candidateKeys != undefined) {
+                for (const candidateKey of table.candidateKeys) {
+                    const keyStr = candidateKey
+                        .map(columnAlias => tsql.escapeIdentifierWithDoubleQuotes(columnAlias))
+                        .join(", ");
+                    tableSql.push(`, UNIQUE(${keyStr})`);
+                }
+            }
+
             tableSql.push(");");
 
             await connection.rawQuery(`DROP TABLE IF EXISTS ${tsql.escapeIdentifierWithDoubleQuotes(table.tableAlias)}`);

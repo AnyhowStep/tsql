@@ -9,11 +9,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 testId : tm.mysql.bigIntUnsigned(),
                 testVal : tm.mysql.bigIntUnsigned(),
             })
-            .setPrimaryKey(columns => [columns.testId])
-            .addExplicitDefaultValue(columns => [
-                columns.testId,
-                columns.testVal,
-            ]);
+            .setPrimaryKey(columns => [columns.testId]);
 
         const insertResult = await pool.acquire(async (connection) => {
             await createTemporarySchema(
@@ -28,14 +24,12 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                                     dataType : {
                                         typeHint : tsql.TypeHint.BIGINT_SIGNED,
                                     },
-                                    default : BigInt(80085),
                                 },
                                 {
                                     columnAlias : "testVal",
                                     dataType : {
                                         typeHint : tsql.TypeHint.BIGINT_SIGNED,
                                     },
-                                    default : BigInt(1337),
                                 },
                             ],
                             primaryKey : {
@@ -48,10 +42,45 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 }
             );
 
-            await test
-                .enableExplicitAutoIncrementValue()
-                .insertMany(
-                    connection,
+            return test.insertMany(
+                connection,
+                [
+                    {
+                        testId : BigInt(1),
+                        testVal : BigInt(100),
+                    },
+                    {
+                        testId : BigInt(2),
+                        testVal : BigInt(200),
+                    },
+                    {
+                        testId : BigInt(3),
+                        testVal : BigInt(300),
+                    },
+                ]
+            );
+        });
+        t.deepEqual(
+            insertResult.insertedRowCount,
+            BigInt(3)
+        );
+        t.deepEqual(
+            insertResult.warningCount,
+            BigInt(0)
+        );
+
+        await pool
+            .acquire(async (connection) => {
+                return tsql.from(test)
+                    .select(columns => [columns])
+                    .orderBy(columns => [
+                        columns.testId.asc(),
+                    ])
+                    .fetchAll(connection);
+            })
+            .then((rows) => {
+                t.deepEqual(
+                    rows,
                     [
                         {
                             testId : BigInt(1),
@@ -66,37 +95,6 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                             testVal : BigInt(300),
                         },
                     ]
-                );
-
-            return test.insertOne(
-                connection,
-                {}
-            );
-        });
-        t.deepEqual(
-            insertResult.insertedRowCount,
-            BigInt(1)
-        );
-        t.deepEqual(
-            insertResult.autoIncrementId,
-            undefined
-        );
-        t.deepEqual(
-            insertResult.warningCount,
-            BigInt(0)
-        );
-
-        await pool
-            .acquire(async (connection) => {
-                return test.fetchOneByPrimaryKey(connection, { testId : BigInt(80085) });
-            })
-            .then((row) => {
-                t.deepEqual(
-                    row,
-                    {
-                        testId : BigInt(80085),
-                        testVal : BigInt(1337),
-                    }
                 );
             });
 

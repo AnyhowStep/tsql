@@ -55,6 +55,8 @@ export interface UnifiedTable {
             readonly autoIncrement : boolean;
         }
     );
+
+    readonly candidateKeys? : readonly (readonly string[])[];
 }
 export interface UnifiedSchema {
     readonly tables : readonly UnifiedTable[];
