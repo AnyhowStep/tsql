@@ -16,7 +16,7 @@ unifiedTest({
             await connection.rawQuery(`DROP TABLE IF EXISTS ${tsql.escapeIdentifierWithDoubleQuotes(table.tableAlias)}`);
 
             const tableSql : string[] = [
-                `CREATE TEMPORARY TABLE ${tsql.escapeIdentifierWithDoubleQuotes(table.tableAlias)} (`
+                `CREATE TABLE ${tsql.escapeIdentifierWithDoubleQuotes(table.tableAlias)} (`
             ];
 
             let firstColumn = true;
