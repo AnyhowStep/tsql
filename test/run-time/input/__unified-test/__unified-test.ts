@@ -13,8 +13,6 @@ unifiedTest({
         schema : UnifiedSchema
     ) : Promise<void> => {
         for (const table of schema.tables) {
-            await connection.rawQuery(`DROP TABLE IF EXISTS ${tsql.escapeIdentifierWithDoubleQuotes(table.tableAlias)}`);
-
             const tableSql : string[] = [
                 `CREATE TABLE ${tsql.escapeIdentifierWithDoubleQuotes(table.tableAlias)} (`
             ];
@@ -25,7 +23,19 @@ unifiedTest({
 
                 switch (column.dataType.typeHint) {
                     case tsql.TypeHint.BIGINT_SIGNED: {
-                        columnSql.push("INTEGER");
+                        /**
+                         * `INT` and `INTEGER` mean different things in SQLite
+                         */
+                        if (
+                            table.primaryKey != undefined &&
+                            !table.primaryKey.multiColumn &&
+                            table.primaryKey.autoIncrement &&
+                            table.primaryKey.columnAlias == column.columnAlias
+                        ) {
+                            columnSql.push("INTEGER");
+                        } else {
+                            columnSql.push("INT");
+                        }
                         break;
                     }
                     case tsql.TypeHint.BOOLEAN: {
@@ -106,6 +116,7 @@ unifiedTest({
 
             tableSql.push(");");
 
+            await connection.rawQuery(`DROP TABLE IF EXISTS ${tsql.escapeIdentifierWithDoubleQuotes(table.tableAlias)}`);
             await connection.rawQuery(tableSql.join(" "));
         }
     },
