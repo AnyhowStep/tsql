@@ -41,6 +41,16 @@ export class TableWhere<TableT extends ITable> {
         this.whereDelegate = whereDelegate;
     }
 
+    assertExists (
+        connection : SelectConnection
+    ) : Promise<void> {
+        return TableUtil.assertExists(
+            this.table,
+            connection,
+            this.whereDelegate
+        );
+    }
+
     exists (
         connection : SelectConnection
     ) : Promise<boolean> {
