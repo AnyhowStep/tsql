@@ -1,6 +1,14 @@
 import {ITable, DeletableTable} from "../table/table";
 import {WhereDelegate} from "../where-clause";
-import {SelectConnection, ExecutionUtil, DeleteConnection, DeleteResult} from "../execution";
+import {
+    ExecutionUtil,
+    SelectConnection,
+    DeleteConnection,
+    IsolableDeleteConnection,
+    DeleteResult,
+    DeleteOneResult,
+    DeleteZeroOrOneResult,
+} from "../execution";
 import {Row_NonUnion} from "../row";
 import {SelectClause, SelectDelegate} from "../select-clause";
 import {FromClauseUtil} from "../from-clause";
@@ -85,6 +93,38 @@ export class TableWhere<TableT extends ITable> {
     ) : Promise<DeleteResult> {
         return ExecutionUtil.delete(
             this.table as TableT & DeletableTable,
+            connection,
+            this.whereDelegate as unknown as WhereDelegate<
+                FromClauseUtil.From<
+                    FromClauseUtil.NewInstance,
+                    TableT & DeletableTable
+                >
+            >
+        );
+    }
+
+    deleteOne (
+        this : Extract<this, { table : DeletableTable }>,
+        connection : IsolableDeleteConnection
+    ) : Promise<DeleteOneResult> {
+        return ExecutionUtil.deleteOne(
+            this.table,
+            connection,
+            this.whereDelegate as unknown as WhereDelegate<
+                FromClauseUtil.From<
+                    FromClauseUtil.NewInstance,
+                    TableT & DeletableTable
+                >
+            >
+        );
+    }
+
+    deleteZeroOrOne (
+        this : Extract<this, { table : DeletableTable }>,
+        connection : IsolableDeleteConnection
+    ) : Promise<DeleteZeroOrOneResult> {
+        return ExecutionUtil.deleteZeroOrOne(
+            this.table,
             connection,
             this.whereDelegate as unknown as WhereDelegate<
                 FromClauseUtil.From<
