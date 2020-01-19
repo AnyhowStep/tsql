@@ -96,7 +96,6 @@ export function unifiedTest (
     }
 
     tape("pool.disconnect()", async (t) => {
-        await pool.disconnect();
 
         t.end();
     });
