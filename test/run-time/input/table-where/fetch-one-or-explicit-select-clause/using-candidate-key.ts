@@ -29,7 +29,7 @@ tape(__filename, async (t) => {
             .setPrimaryKey(columns => [columns.myTableId]);
 
         await myTable
-            .usingCandidateKey({
+            .whereEqCandidateKey({
                 myTableId : BigInt(1),
             })
             .fetchOne(
@@ -51,7 +51,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingCandidateKey(
+            .whereEqCandidateKey(
                 {
                     myTableId : BigInt(1),
                 }
@@ -74,7 +74,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingCandidateKey(
+            .whereEqCandidateKey(
                 {
                     myTableId : BigInt(1),
                 }
@@ -97,7 +97,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingCandidateKey(
+            .whereEqCandidateKey(
                 {
                     myTableId : BigInt(1),
                 }
@@ -121,7 +121,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingCandidateKey(
+            .whereEqCandidateKey(
                 {
                     myTableId : BigInt(1),
                 }
@@ -152,7 +152,7 @@ tape(__filename, async (t) => {
         await connection.exec(`DELETE FROM myTable`);
 
         await myTable
-            .usingCandidateKey(
+            .whereEqCandidateKey(
                 {
                     myTableId : BigInt(1),
                 }
@@ -173,7 +173,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingCandidateKey(
+            .whereEqCandidateKey(
                 {
                     myTableId : BigInt(1),
                 }
@@ -194,7 +194,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingCandidateKey(
+            .whereEqCandidateKey(
                 {
                     myTableId : BigInt(1),
                 }
@@ -215,7 +215,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingCandidateKey(
+            .whereEqCandidateKey(
                 {
                     myTableId : BigInt(1),
                 }
@@ -236,7 +236,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingCandidateKey(
+            .whereEqCandidateKey(
                 {
                     myTableId : BigInt(1),
                 }

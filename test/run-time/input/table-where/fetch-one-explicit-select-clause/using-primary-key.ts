@@ -29,7 +29,7 @@ tape(__filename, async (t) => {
             .setPrimaryKey(columns => [columns.myTableId]);
 
         await myTable
-            .usingPrimaryKey(
+            .whereEqPrimaryKey(
                 {
                     myTableId : BigInt(1),
                 }
@@ -52,7 +52,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingPrimaryKey(
+            .whereEqPrimaryKey(
                 {
                     myTableId : BigInt(1),
                 }
@@ -74,7 +74,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingPrimaryKey(
+            .whereEqPrimaryKey(
                 {
                     myTableId : BigInt(1),
                 }
@@ -96,7 +96,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingPrimaryKey(
+            .whereEqPrimaryKey(
                 {
                     myTableId : BigInt(1),
                 }
@@ -119,7 +119,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingPrimaryKey(
+            .whereEqPrimaryKey(
                 {
                     myTableId : BigInt(1),
                 }
@@ -149,7 +149,7 @@ tape(__filename, async (t) => {
         await connection.exec(`DELETE FROM myTable`);
 
         await myTable
-            .usingPrimaryKey(
+            .whereEqPrimaryKey(
                 {
                     myTableId : BigInt(1),
                 }
@@ -166,7 +166,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingPrimaryKey(
+            .whereEqPrimaryKey(
                 {
                     myTableId : BigInt(1),
                 }
@@ -183,7 +183,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingPrimaryKey(
+            .whereEqPrimaryKey(
                 {
                     myTableId : BigInt(1),
                 }
@@ -200,7 +200,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingPrimaryKey(
+            .whereEqPrimaryKey(
                 {
                     myTableId : BigInt(1),
                 }
@@ -217,7 +217,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingPrimaryKey(
+            .whereEqPrimaryKey(
                 {
                     myTableId : BigInt(1),
                 }

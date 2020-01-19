@@ -29,7 +29,7 @@ tape(__filename, async (t) => {
             .setPrimaryKey(columns => [columns.myTableId]);
 
         await myTable
-            .usingPrimaryKey(
+            .whereEqPrimaryKey(
                 {
                     myTableId : BigInt(1),
                 }
@@ -49,7 +49,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingPrimaryKey(
+            .whereEqPrimaryKey(
                 {
                     myTableId : BigInt(1),
                     /**
@@ -73,7 +73,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingPrimaryKey(
+            .whereEqPrimaryKey(
                 {
                     myTableId : BigInt(100),
                 }
@@ -87,7 +87,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingPrimaryKey(
+            .whereEqPrimaryKey(
                 {
                     createdAt : new Date("2015-01-01T00:00:00.000Z"),
                 } as any
@@ -104,7 +104,7 @@ tape(__filename, async (t) => {
         await connection.exec(`DELETE FROM myTable`);
 
         await myTable
-            .usingPrimaryKey(
+            .whereEqPrimaryKey(
                 {
                     myTableId : BigInt(1),
                 }
@@ -118,7 +118,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingPrimaryKey(
+            .whereEqPrimaryKey(
                 {
                     myTableId : BigInt(1),
                     /**
@@ -136,7 +136,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingPrimaryKey(
+            .whereEqPrimaryKey(
                 {
                     myTableId : BigInt(100),
                 }
@@ -150,7 +150,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingPrimaryKey(
+            .whereEqPrimaryKey(
                 {
                     createdAt : new Date("2015-01-01T00:00:00.000Z"),
                 } as any

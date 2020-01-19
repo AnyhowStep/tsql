@@ -29,7 +29,7 @@ tape(__filename, async (t) => {
             .setPrimaryKey(columns => [columns.myTableId]);
 
         await myTable
-            .usingCandidateKey({
+            .whereEqCandidateKey({
                 myTableId : BigInt(1),
             })
             .fetchOne(connection)
@@ -48,7 +48,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingCandidateKey(
+            .whereEqCandidateKey(
                 {
                     myTableId : BigInt(1),
                     /**
@@ -72,7 +72,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingCandidateKey({
+            .whereEqCandidateKey({
                 myTableId : BigInt(100),
             })
             .fetchOne(connection)
@@ -88,7 +88,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingCandidateKey(
+            .whereEqCandidateKey(
                 {
                     createdAt : new Date("2015-01-01T00:00:00.000Z"),
                 } as any
@@ -106,7 +106,7 @@ tape(__filename, async (t) => {
         await connection.exec(`DELETE FROM myTable`);
 
         await myTable
-            .usingCandidateKey({
+            .whereEqCandidateKey({
                 myTableId : BigInt(1),
             })
             .fetchOne(connection)
@@ -122,7 +122,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingCandidateKey(
+            .whereEqCandidateKey(
                 {
                     myTableId : BigInt(1),
                     /**
@@ -144,7 +144,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingCandidateKey({
+            .whereEqCandidateKey({
                 myTableId : BigInt(100),
             })
             .fetchOne(connection)
@@ -160,7 +160,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingCandidateKey(
+            .whereEqCandidateKey(
                 {
                     createdAt : new Date("2015-01-01T00:00:00.000Z"),
                 } as any
