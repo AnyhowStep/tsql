@@ -1365,7 +1365,7 @@ export class Table<DataT extends TableData> implements ITable {
     ) : TableWhere<this> {
         return new TableWhere<this>(this, whereDelegate);
     }
-    usingCandidateKey (
+    whereEqCandidateKey (
         candidateKey : StrictUnion<CandidateKey_NonUnion<this>>
     ) : TableWhere<this> {
         return new TableWhere<this>(
@@ -1376,7 +1376,7 @@ export class Table<DataT extends TableData> implements ITable {
             ) as any
         );
     }
-    usingPrimaryKey (
+    whereEqPrimaryKey (
         this : Extract<this, TableWithPrimaryKey>,
         primaryKey : PrimaryKey_Input<Extract<this, TableWithPrimaryKey>>
     ) : TableWhere<this> {
@@ -1388,7 +1388,7 @@ export class Table<DataT extends TableData> implements ITable {
             ) as any
         );
     }
-    usingSuperKey (
+    whereEqSuperKey (
         superKey : SuperKey_Input<this>
     ) : TableWhere<this> {
         return new TableWhere<this>(

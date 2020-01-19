@@ -29,7 +29,7 @@ tape(__filename, async (t) => {
             .setPrimaryKey(columns => [columns.myTableId]);
 
         await myTable
-            .usingSuperKey(
+            .whereEqSuperKey(
                 {
                     myTableId : BigInt(1),
                 }
@@ -52,7 +52,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingSuperKey(
+            .whereEqSuperKey(
                 {
                     myTableId : BigInt(1),
                     createdAt : new Date("2015-01-01T00:00:00.000Z"),
@@ -76,7 +76,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingSuperKey(
+            .whereEqSuperKey(
                 {
                     myTableId : BigInt(1),
                     createdAt : new Date("2015-01-01T00:00:00.001Z"),
@@ -94,7 +94,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingSuperKey(
+            .whereEqSuperKey(
                 {
                     createdAt : new Date("2015-01-01T00:00:00.000Z"),
                 } as any
@@ -112,7 +112,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingSuperKey(
+            .whereEqSuperKey(
                 {
                     myTableId : BigInt(1),
                 }
@@ -134,7 +134,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingSuperKey(
+            .whereEqSuperKey(
                 {
                     myTableId : BigInt(1),
                 }
@@ -156,7 +156,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingSuperKey(
+            .whereEqSuperKey(
                 {
                     myTableId : BigInt(1),
                 }
@@ -179,7 +179,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingSuperKey(
+            .whereEqSuperKey(
                 {
                     myTableId : BigInt(1),
                 }
@@ -209,7 +209,7 @@ tape(__filename, async (t) => {
         await connection.exec(`DELETE FROM myTable`);
 
         await myTable
-            .usingSuperKey(
+            .whereEqSuperKey(
                 {
                     myTableId : BigInt(1),
                 }
@@ -226,7 +226,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingSuperKey(
+            .whereEqSuperKey(
                 {
                     myTableId : BigInt(1),
                 }
@@ -243,7 +243,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingSuperKey(
+            .whereEqSuperKey(
                 {
                     myTableId : BigInt(1),
                 }
@@ -260,7 +260,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingSuperKey(
+            .whereEqSuperKey(
                 {
                     myTableId : BigInt(1),
                 }
@@ -277,7 +277,7 @@ tape(__filename, async (t) => {
             });
 
         await myTable
-            .usingSuperKey(
+            .whereEqSuperKey(
                 {
                     myTableId : BigInt(1),
                 }

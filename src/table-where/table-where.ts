@@ -1,6 +1,6 @@
-import {ITable} from "../table/table";
+import {ITable, DeletableTable} from "../table/table";
 import {WhereDelegate} from "../where-clause";
-import {SelectConnection, ExecutionUtil} from "../execution";
+import {SelectConnection, ExecutionUtil, DeleteConnection, DeleteResult} from "../execution";
 import {Row_NonUnion} from "../row";
 import {SelectClause, SelectDelegate} from "../select-clause";
 import {FromClauseUtil} from "../from-clause";
@@ -31,6 +31,16 @@ export class TableWhere<TableT extends ITable> {
     ) {
         this.table = table;
         this.whereDelegate = whereDelegate;
+    }
+
+    exists (
+        connection : SelectConnection
+    ) : Promise<boolean> {
+        return TableUtil.exists(
+            this.table,
+            connection,
+            this.whereDelegate
+        );
     }
 
     fetchOne (
@@ -68,4 +78,21 @@ export class TableWhere<TableT extends ITable> {
             selectDelegate
         );
     }
+
+    delete (
+        this : Extract<this, { table : DeletableTable }>,
+        connection : DeleteConnection
+    ) : Promise<DeleteResult> {
+        return ExecutionUtil.delete(
+            this.table as TableT & DeletableTable,
+            connection,
+            this.whereDelegate as unknown as WhereDelegate<
+                FromClauseUtil.From<
+                    FromClauseUtil.NewInstance,
+                    TableT & DeletableTable
+                >
+            >
+        );
+    }
+
 }
