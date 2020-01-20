@@ -10,10 +10,11 @@ import {
     DeleteZeroOrOneResult,
 } from "../execution";
 import {Row_NonUnion} from "../row";
-import {SelectClause, SelectDelegate} from "../select-clause";
+import {SelectClause, SelectDelegate, SelectValueDelegate, SelectClauseUtil} from "../select-clause";
 import {FromClauseUtil} from "../from-clause";
 import {QueryUtil} from "../unified-query";
 import {TableUtil} from "../table";
+import {AnyBuiltInExpr} from "../built-in-expr";
 
 /**
  * @todo Better name
@@ -94,6 +95,47 @@ export class TableWhere<TableT extends ITable> {
             connection,
             this.whereDelegate,
             selectDelegate
+        );
+    }
+
+    fetchValue<
+        BuiltInExprT extends AnyBuiltInExpr
+    > (
+        connection : SelectConnection,
+        selectValueDelegate : SelectValueDelegate<
+            FromClauseUtil.From<
+                FromClauseUtil.NewInstance,
+                TableT
+            >,
+            undefined,
+            BuiltInExprT
+        >
+    ) : ExecutionUtil.FetchValueReturnType<
+        /**
+         * @todo Report assignability bug to TS issues page
+         */
+        /*
+            QueryUtil.SelectValue<
+                QueryUtil.From<
+                    QueryUtil.NewInstance,
+                    this
+                >,
+                BuiltInExprT
+            >
+        */
+        QueryUtil.SelectNoSelectClause<
+            QueryUtil.From<
+                QueryUtil.NewInstance,
+                TableT
+            >,
+            SelectClauseUtil.ValueFromBuiltInExpr<BuiltInExprT>
+        >
+    > {
+        return TableUtil.fetchValue<TableT, BuiltInExprT>(
+            this.table,
+            connection,
+            this.whereDelegate,
+            selectValueDelegate
         );
     }
 
