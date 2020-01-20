@@ -1,7 +1,7 @@
 import {ITable} from "../../table";
 import {Table} from "../../table-impl";
 
-export type DisableInsert<
+export type EnableInsert<
     TableT extends ITable
 > = (
     Table<{
@@ -15,7 +15,7 @@ export type DisableInsert<
         primaryKey : TableT["primaryKey"],
         candidateKeys : TableT["candidateKeys"],
 
-        insertEnabled : false,
+        insertEnabled : true,
         deleteEnabled : TableT["deleteEnabled"],
 
         generatedColumns : TableT["generatedColumns"],
@@ -26,19 +26,13 @@ export type DisableInsert<
         explicitAutoIncrementValueEnabled : TableT["explicitAutoIncrementValueEnabled"],
     }>
 );
-/**
- * Prevents rows from being inserted through this library.
- *
- * Good for look-up tables.
- *
- * @param table
- */
-export function disableInsert<
+
+export function enableInsert<
     TableT extends ITable
 > (
     table : TableT
 ) : (
-    DisableInsert<TableT>
+    EnableInsert<TableT>
 ) {
     const {
         isLateral,
@@ -63,7 +57,7 @@ export function disableInsert<
     } = table;
 
 
-    const result : DisableInsert<TableT> = new Table(
+    const result : EnableInsert<TableT> = new Table(
         {
             isLateral,
             alias,
@@ -75,7 +69,7 @@ export function disableInsert<
             primaryKey,
             candidateKeys,
 
-            insertEnabled : false,
+            insertEnabled : true,
             deleteEnabled,
 
             generatedColumns,
