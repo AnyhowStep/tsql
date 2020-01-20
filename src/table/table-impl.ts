@@ -240,6 +240,14 @@ export class Table<DataT extends TableData> implements ITable {
     }
 
     /**
+     * The opposite of `disableInsert()`.
+     * You really shouldn't need to use this as tables allow insert by default.
+     */
+    enableInsert () : TableUtil.EnableInsert<this> {
+        return TableUtil.enableInsert(this);
+    }
+
+    /**
      * Makes all columns immutable.
      */
     removeAllMutable () : TableUtil.RemoveAllMutable<this> {

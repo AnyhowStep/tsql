@@ -10,6 +10,7 @@ export * from "./as";
 export * from "./disable-delete";
 export * from "./disable-insert";
 export * from "./enable-explicit-auto-increment-value";
+export * from "./enable-insert";
 export * from "./remove-all-mutable";
 export * from "./remove-explicit-default-value";
 export * from "./remove-generated";
