@@ -1,0 +1,94 @@
+/**
+ * @todo https://github.com/AnyhowStep/tsql/issues/127
+ */
+import * as tm from "type-mapping";
+import {Test} from "../../../../test";
+import * as tsql from "../../../../../dist";
+
+export const test : Test = ({tape, pool, createTemporarySchema}) => {
+    tape(__filename, async (t) => {
+        const test = tsql.table("test")
+            .addColumns({
+                testId : tm.mysql.bigIntUnsigned(),
+                testVal : tm.mysql.bigIntUnsigned(),
+            })
+            .addCandidateKey(columns => [columns.testId])
+            .addExplicitDefaultValue(columns => [
+                //testVal is NOT NULL and has no DEFAULT value
+                //but we are lying about it
+                columns.testVal,
+            ]);
+
+        await pool.acquire(async (connection) => {
+            await createTemporarySchema(
+                connection,
+                {
+                    tables : [
+                        {
+                            tableAlias : "test",
+                            columns : [
+                                {
+                                    columnAlias : "testId",
+                                    dataType : {
+                                        typeHint : tsql.TypeHint.BIGINT_SIGNED,
+                                    },
+                                },
+                                {
+                                    columnAlias : "testVal",
+                                    dataType : {
+                                        typeHint : tsql.TypeHint.BIGINT_SIGNED,
+                                    },
+                                },
+                            ],
+                            primaryKey : {
+                                multiColumn : false,
+                                columnAlias : "testId",
+                                autoIncrement : false,
+                            },
+                        }
+                    ]
+                }
+            );
+
+            return test.insertIgnoreMany(
+                connection,
+                [
+                    {
+                        testId : BigInt(999),
+                        testVal : BigInt(999),
+                    },
+                    {
+                        testId : BigInt(1),
+                        //testVal : BigInt(100),
+                    },
+                    {
+                        testId : BigInt(888),
+                        testVal : BigInt(888),
+                    },
+                ]
+            );
+        }).then(() => {
+            t.fail("Should not insert anything");
+        }).catch((err) => {
+            t.pass(err.message);
+        });
+
+        await pool
+            .acquire(async (connection) => {
+                return tsql.from(test)
+                    .select(columns => [columns])
+                    .orderBy(columns => [
+                        columns.testId.asc(),
+                    ])
+                    .fetchAll(connection);
+            })
+            .then((rows) => {
+                t.deepEqual(
+                    rows,
+                    []
+                );
+            });
+
+        t.end();
+    });
+};
