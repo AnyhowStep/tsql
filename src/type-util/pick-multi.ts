@@ -31,3 +31,9 @@ export type ReadOnlyPick<T, K extends keyof T> =
         readonly [k in K] : T[k]
     }>
 ;
+
+export type ExpandPick<T, K extends keyof T> =
+    Identity<{
+        [k in K] : T[k]
+    }>
+;

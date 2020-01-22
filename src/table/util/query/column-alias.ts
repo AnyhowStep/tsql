@@ -1,7 +1,7 @@
 import {ITable} from "../../table";
 import {ColumnMapUtil} from "../../../column-map";
 
-export type ColumnAlias<TableT extends ITable> =
+export type ColumnAlias<TableT extends Pick<ITable, "columns">> =
     ColumnMapUtil.ColumnAlias<TableT["columns"]>
 ;
 /**

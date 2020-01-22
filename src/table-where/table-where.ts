@@ -8,6 +8,8 @@ import {
     DeleteResult,
     DeleteOneResult,
     DeleteZeroOrOneResult,
+    UpdateConnection,
+    UpdateResult,
 } from "../execution";
 import {Row_NonUnion} from "../row";
 import {SelectClause, SelectDelegate, SelectValueDelegate, SelectClauseUtil} from "../select-clause";
@@ -15,6 +17,8 @@ import {FromClauseUtil} from "../from-clause";
 import {QueryUtil} from "../unified-query";
 import {TableUtil} from "../table";
 import {AnyBuiltInExpr} from "../built-in-expr";
+import {AssignmentMapDelegate} from "../update";
+import {ExpandPick} from "../type-util";
 
 /**
  * @todo Better name
@@ -187,4 +191,15 @@ export class TableWhere<TableT extends ITable> {
         );
     }
 
+    update (
+        connection : UpdateConnection,
+        assignmentMapDelegate : AssignmentMapDelegate<ExpandPick<TableT, "columns"|"mutableColumns">>
+    ) : Promise<UpdateResult> {
+        return ExecutionUtil.update(
+            this.table,
+            connection,
+            this.whereDelegate as any,
+            assignmentMapDelegate
+        );
+    }
 }

@@ -2,7 +2,7 @@ import {ITable, TableUtil} from "../table";
 import {BuiltInExpr_MapCorrelatedOrUndefined} from "../built-in-expr";
 import {CustomExpr_MapCorrelatedOrUndefined} from "../custom-expr";
 
-export type CustomAssignmentMap<TableT extends ITable> =
+export type CustomAssignmentMap<TableT extends Pick<ITable, "columns"|"mutableColumns">> =
     & {
         readonly [columnAlias in TableT["mutableColumns"][number]]? : (
             CustomExpr_MapCorrelatedOrUndefined<
