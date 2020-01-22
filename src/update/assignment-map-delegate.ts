@@ -1,11 +1,14 @@
 import {ITable} from "../table";
 import {CustomAssignmentMap} from "./assignment-map";
+import {Identity} from "../type-util";
 
 export type AssignmentMapDelegate<
-    TableT extends ITable,
+    TableT extends Pick<ITable, "columns"|"mutableColumns">,
     AssignmentMapT extends CustomAssignmentMap<TableT> = CustomAssignmentMap<TableT>
 > =
-    (
-        columns : TableT["columns"]
-    ) => AssignmentMapT
+    Identity<
+        (
+            columns : TableT["columns"]
+        ) => AssignmentMapT
+    >
 ;
