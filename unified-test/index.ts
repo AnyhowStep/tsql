@@ -1,5 +1,6 @@
 import * as tsql from "../dist";
 import {getAllTsFiles} from "./util";
+import * as fs from "fs";
 
 /**
  * @todo More properties like default values, generated values, auto increment, etc.
@@ -79,24 +80,60 @@ export function unifiedTest (
         fileNameLike : string|undefined,
     }
 ) {
-    const tsFiles = getAllTsFiles(
+    const paths = getAllTsFiles(
         `${__dirname}/input`,
         false
     );
-    for (const tsFile of tsFiles) {
-        if (fileNameLike != undefined && !tsFile.includes(fileNameLike)) {
-            continue;
-        }
-        const required = require(tsFile);
-        if (required.test == undefined) {
-            continue;
-        }
-        console.log(tsFile);
-        required.test({tape, pool, createTemporarySchema});
-    }
+    const imports = paths
+        .filter(path => {
+            if (fileNameLike != undefined && !path.includes(fileNameLike)) {
+                return false;
+            }
+            return /export\s+const\s+test/.test(fs.readFileSync(path).toString());
+        });
+    /**
+     * Contains generated code that, when run,
+     * will import all the run-time tests.
+     */
+    const runTimeTestImportsGeneratedCode = imports
+        .map((path, index) => {
+            path = JSON.stringify(
+                path
+                    .replace(/\.ts$/, "")
+                    .replace(__dirname, ".")
+            );
+            return `
+import {test as test${index+1}} from ${path};
+console.log(${index+1}, "/",${paths.length}, ${path});
+`;
+        })
+        .join("");
+    const runTimeTestFunctionCallsGeneratedCode = imports
+        .map((_path, index) => {
+            return `test${index+1}(args);`;
+        })
+        .join("\n    ");
+
+
+    /**
+     * Write the generated code to a file,
+     * and then import that file.
+     */
+    const runTimeTestImportsPath = __dirname + "/test-imports.ts";
+    fs.writeFileSync(
+        runTimeTestImportsPath,
+        runTimeTestImportsGeneratedCode + `
+import {Test} from "./test";
+export const testAll : Test = (args) => {
+    ${runTimeTestFunctionCallsGeneratedCode}
+};
+`
+    );
+    require(runTimeTestImportsPath).testAll({tape, pool, createTemporarySchema});
+
 
     tape("pool.disconnect()", async (t) => {
-
+        await pool.disconnect();
         t.end();
     });
 }
