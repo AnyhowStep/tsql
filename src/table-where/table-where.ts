@@ -20,7 +20,7 @@ import {TableUtil} from "../table";
 import {AnyBuiltInExpr} from "../built-in-expr";
 import {AssignmentMapDelegate} from "../update";
 import {ExpandPick} from "../type-util";
-import {UpdateOneResult} from "../execution/util";
+import {UpdateOneResult, UpdateZeroOrOneResult} from "../execution/util";
 
 /**
  * @todo Better name
@@ -197,10 +197,10 @@ export class TableWhere<TableT extends ITable> {
         connection : UpdateConnection,
         assignmentMapDelegate : AssignmentMapDelegate<ExpandPick<TableT, "columns"|"mutableColumns">>
     ) : Promise<UpdateResult> {
-        return ExecutionUtil.update(
+        return ExecutionUtil.update<TableT>(
             this.table,
             connection,
-            this.whereDelegate as any,
+            this.whereDelegate,
             assignmentMapDelegate
         );
     }
@@ -209,11 +209,24 @@ export class TableWhere<TableT extends ITable> {
         connection : IsolableUpdateConnection,
         assignmentMapDelegate : AssignmentMapDelegate<ExpandPick<TableT, "columns"|"mutableColumns">>
     ) : Promise<UpdateOneResult> {
-        return ExecutionUtil.updateOne(
+        return ExecutionUtil.updateOne<TableT>(
             this.table,
             connection,
-            this.whereDelegate as any,
+            this.whereDelegate,
             assignmentMapDelegate
         );
     }
+
+    updateZeroOrOne (
+        connection : IsolableUpdateConnection,
+        assignmentMapDelegate : AssignmentMapDelegate<ExpandPick<TableT, "columns"|"mutableColumns">>
+    ) : Promise<UpdateZeroOrOneResult> {
+        return ExecutionUtil.updateZeroOrOne<TableT>(
+            this.table,
+            connection,
+            this.whereDelegate,
+            assignmentMapDelegate
+        );
+    }
+
 }
