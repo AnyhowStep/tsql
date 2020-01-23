@@ -1,12 +1,9 @@
 import * as tm from "type-mapping";
-import * as tape from "tape";
+import {Test} from "../../../../test";
 import * as tsql from "../../../../../dist";
-import {Pool} from "../../sql-web-worker/promise.sql";
-import {SqliteWorker} from "../../sql-web-worker/worker.sql";
 
+export const test : Test = ({tape, pool, createTemporarySchema}) => {
 tape(__filename, async (t) => {
-    const pool = new Pool(new SqliteWorker());
-
     const dst = tsql.table("dst")
         .addColumns({
             testId : tm.mysql.bigIntUnsigned(),
@@ -18,19 +15,57 @@ tape(__filename, async (t) => {
         ]);
 
     const result = await pool.acquire(async (connection) => {
-        await connection.exec(`
-            CREATE TABLE dst (
-                testId INT PRIMARY KEY,
-                testVal INT
+        await createTemporarySchema(
+            connection,
+            {
+                tables : [
+                    {
+                        tableAlias : "dst",
+                        columns : [
+                            {
+                                columnAlias : "testId",
+                                dataType : {
+                                    typeHint : tsql.TypeHint.BIGINT_SIGNED,
+                                },
+                            },
+                            {
+                                columnAlias : "testVal",
+                                dataType : {
+                                    typeHint : tsql.TypeHint.BIGINT_SIGNED,
+                                },
+                            },
+                        ],
+                        primaryKey : {
+                            multiColumn : false,
+                            columnAlias : "testId",
+                            autoIncrement : false,
+                        },
+                    }
+                ]
+            }
+        );
+
+        await dst
+            .enableExplicitAutoIncrementValue()
+            .insertMany(
+                connection,
+                [
+                    {
+                        testId : BigInt(1),
+                        testVal : BigInt(100),
+                    },
+                    {
+                        testId : BigInt(2),
+                        testVal : BigInt(200),
+                    },
+                    {
+                        testId : BigInt(3),
+                        testVal : BigInt(300),
+                    },
+                ]
             );
 
-            INSERT INTO dst(testId, testVal) VALUES
-                (1,100),
-                (2,200),
-                (3,300);
-        `);
-
-        return dst.updateZeroOrOneByCandidateKey(
+        return dst.updateZeroOrOneByPrimaryKey(
             connection,
             {
                 testId : BigInt(4),
@@ -87,6 +122,6 @@ tape(__filename, async (t) => {
             );
         });
 
-    await pool.disconnect();
     t.end();
 });
+};
