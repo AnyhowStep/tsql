@@ -260,4 +260,35 @@ export class TableWhere<TableT extends ITable> {
         );
     }
 
+    /**
+     * The `table` must have at least one `candidateKey` to use this method.
+     *
+     * Internally,
+     * 1. Fetch the candidate key of the row specified by the `WHERE` clause.
+     * 2. Calculate what the new candidate key will be after the `UPDATE` statement is run.
+     *    (if the candidate key will not be updated, this step is skipped)
+     * 3. Run the `UPDATE` statement.
+     * 4. Fetch the row using the new candidate key (if any were found during the `UPDATE`)
+     *
+     * This algorithm will probably fail if you have triggers that modify the candidate key
+     * `ON UPDATE`.
+     */
+    updateAndFetchZeroOrOne<
+        AssignmentMapT extends ExecutionUtil.UpdateAndFetchOneAssignmentMap<TableT>
+    > (
+        this : Extract<this, { table : TableT & TableUtil.AssertHasCandidateKey<TableT> }>,
+        connection : IsolableUpdateConnection,
+        assignmentMapDelegate : AssignmentMapDelegate<TableT, AssignmentMapT>
+    ) : Promise<ExecutionUtil.UpdateAndFetchZeroOrOneResult<TableT, AssignmentMapT>> {
+        return ExecutionUtil.updateAndFetchZeroOrOne<
+            TableT,
+            AssignmentMapT
+        >(
+            this.table,
+            connection,
+            this.whereDelegate,
+            assignmentMapDelegate
+        );
+    }
+
 }
