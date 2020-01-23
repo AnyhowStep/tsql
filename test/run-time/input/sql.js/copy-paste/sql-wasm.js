@@ -770,7 +770,7 @@ Database = (function() {
   an error with a descriptive message otherwise
   @nodoc
    */
-
+  customErrorMessage = undefined;
   Database.prototype.handleError = function(returnCode) {
     var errmsg;
     if (returnCode === SQLite.OK) {

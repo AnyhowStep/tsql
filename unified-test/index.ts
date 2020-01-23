@@ -104,7 +104,7 @@ export function unifiedTest (
             );
             return `
 import {test as test${index+1}} from ${path};
-console.log(${index+1}, "/",${paths.length}, ${path});
+console.log(${index+1}, "/",${imports.length}, ${path});
 `;
         })
         .join("");
