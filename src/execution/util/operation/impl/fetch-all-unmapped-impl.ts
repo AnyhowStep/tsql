@@ -61,6 +61,16 @@ export async function fetchAllUnmappedImpl<
                     //Probably `$aliased`
                     continue;
                 }
+                if (query.fromClause.currentJoins != undefined) {
+                    const join = query.fromClause.currentJoins.find(
+                        j => j.tableAlias == tableAlias
+                    );
+                    if (join != undefined && !join.nullable) {
+                        //This is not a nullable join, do not make it `undefined`,
+                        //no matter what.
+                        continue;
+                    }
+                }
                 const map = row[tableAlias];
                 if (map == undefined) {
                     continue;
