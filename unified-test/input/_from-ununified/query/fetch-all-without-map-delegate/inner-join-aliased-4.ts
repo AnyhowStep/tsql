@@ -96,25 +96,38 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     ]
                 );
 
-            return tsql.from(test)
-                .innerJoinUsingPrimaryKey(
-                    tables => tables.test,
-                    other
-                )
-                .orderBy(columns => [
-                    columns.test.testId.desc(),
-                ])
-                .limit(3)
-                .select(c => [c])
-                .count(
-                    connection
-                );
-        });
-        t.deepEqual(
-            resultSet,
-            BigInt(2)
-        );
+                const query = tsql.from(test)
+                    .innerJoinUsingPrimaryKey(
+                        tables => tables.test,
+                        other
+                            .as("aliased")
+                            /**
+                             * @todo Require a certain schema name for unified tests
+                             * so we can test `setSchemaName()`
+                             */
+                            //.setSchemaName("main")
+                    )
+                    .select(columns => [
+                        columns.test,
+                        columns.aliased.otherVal,
+                    ])
+                    .orderBy(columns => [
+                        columns.test.testId.desc(),
+                    ]);
 
-        t.end();
-    });
+                return query
+                    .fetchAll(
+                        connection
+                    );
+            });
+            t.deepEqual(
+                resultSet,
+                [
+                    { testId: BigInt(3), testVal: BigInt(300), otherVal: BigInt(333) },
+                    { testId: BigInt(1), testVal: BigInt(100), otherVal: BigInt(111) },
+                ]
+            );
+
+            t.end();
+        });
 };

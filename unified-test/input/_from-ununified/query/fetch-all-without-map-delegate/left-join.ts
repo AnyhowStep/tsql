@@ -97,22 +97,34 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 );
 
             return tsql.from(test)
-                .innerJoinUsingPrimaryKey(
+                .leftJoinUsingPrimaryKey(
                     tables => tables.test,
                     other
                 )
+                .select(columns => [columns])
                 .orderBy(columns => [
                     columns.test.testId.desc(),
                 ])
-                .limit(3)
-                .select(c => [c])
-                .count(
+                .fetchAll(
                     connection
                 );
         });
         t.deepEqual(
             resultSet,
-            BigInt(2)
+            [
+                {
+                    test: { testId: BigInt(3), testVal: BigInt(300) },
+                    other: { testId: BigInt(3), otherVal: BigInt(333) },
+                },
+                {
+                    test: { testId: BigInt(2), testVal: BigInt(200) },
+                    other: undefined,
+                },
+                {
+                    test: { testId: BigInt(1), testVal: BigInt(100) },
+                    other: { testId: BigInt(1), otherVal: BigInt(111) },
+                },
+            ]
         );
 
         t.end();

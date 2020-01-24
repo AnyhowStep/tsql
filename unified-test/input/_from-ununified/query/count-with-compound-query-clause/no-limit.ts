@@ -97,22 +97,18 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 );
 
             return tsql.from(test)
-                .innerJoinUsingPrimaryKey(
-                    tables => tables.test,
-                    other
+                .select(c => [c.testVal])
+                .unionDistinct(
+                    tsql.from(other)
+                        .select(c => [c.otherVal])
                 )
-                .orderBy(columns => [
-                    columns.test.testId.desc(),
-                ])
-                .limit(3)
-                .select(c => [c])
                 .count(
                     connection
                 );
         });
         t.deepEqual(
             resultSet,
-            BigInt(2)
+            BigInt(5)
         );
 
         t.end();

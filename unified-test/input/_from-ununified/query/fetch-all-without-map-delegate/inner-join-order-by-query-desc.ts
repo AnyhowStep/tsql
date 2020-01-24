@@ -101,18 +101,26 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     tables => tables.test,
                     other
                 )
-                .orderBy(columns => [
-                    columns.test.testId.desc(),
+                .select(columns => [
+                    columns.test,
+                    columns.other.otherVal,
                 ])
-                .limit(3)
-                .select(c => [c])
-                .count(
+                .orderBy(() => [
+                    tsql
+                        .requireOuterQueryJoins(test)
+                        .selectValue(columns => columns.testId)
+                        .desc(),
+                ])
+                .fetchAll(
                     connection
                 );
         });
         t.deepEqual(
             resultSet,
-            BigInt(2)
+            [
+                { testId: BigInt(3), testVal: BigInt(300), otherVal: BigInt(333) },
+                { testId: BigInt(1), testVal: BigInt(100), otherVal: BigInt(111) },
+            ]
         );
 
         t.end();

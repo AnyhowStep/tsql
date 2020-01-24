@@ -101,18 +101,31 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     tables => tables.test,
                     other
                 )
+                .select(columns => [
+                    columns,
+                    tsql.gt(columns.test.testVal, BigInt(100)).as("gt"),
+                ])
                 .orderBy(columns => [
                     columns.test.testId.desc(),
                 ])
-                .limit(3)
-                .select(c => [c])
-                .count(
+                .fetchAll(
                     connection
                 );
         });
         t.deepEqual(
             resultSet,
-            BigInt(2)
+            [
+                {
+                    test: { testId: BigInt(3), testVal: BigInt(300) },
+                    other: { testId: BigInt(3), otherVal: BigInt(333) },
+                    $aliased : { gt : true },
+                },
+                {
+                    test: { testId: BigInt(1), testVal: BigInt(100) },
+                    other: { testId: BigInt(1), otherVal: BigInt(111) },
+                    $aliased : { gt : false },
+                },
+            ]
         );
 
         t.end();

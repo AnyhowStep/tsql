@@ -101,20 +101,44 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     tables => tables.test,
                     other
                 )
+                .select(columns => [columns])
                 .orderBy(columns => [
                     columns.test.testId.desc(),
                 ])
-                .limit(3)
-                .select(c => [c])
-                .count(
+                .map(async (row) => {
+                    return {
+                        test : row.test,
+                        other2 : row.other,
+                        total : tm.BigIntUtil.add(row.test.testVal, row.other.otherVal),
+                    };
+                })
+                .map(async (row) => {
+                    return {
+                        ...row,
+                        hello : "hi",
+                    };
+                })
+                .fetchAll(
                     connection
                 );
         });
         t.deepEqual(
             resultSet,
-            BigInt(2)
+            [
+                {
+                    test: { testId: BigInt(3), testVal: BigInt(300) },
+                    other2: { testId: BigInt(3), otherVal: BigInt(333) },
+                    total: BigInt(633),
+                    hello: "hi",
+                },
+                {
+                    test: { testId: BigInt(1), testVal: BigInt(100) },
+                    other2: { testId: BigInt(1), otherVal: BigInt(111) },
+                    total: BigInt(211),
+                    hello: "hi",
+                },
+            ]
         );
-
         t.end();
     });
 };
