@@ -23,6 +23,19 @@ import {ExpandPick} from "../type-util";
 import {UpdateOneResult, UpdateZeroOrOneResult} from "../execution/util";
 
 /**
+ * @todo Implement something like `TableWhereOrderBy`?
+ *
+ * `.fetchAll()` is not provided here
+ * because "proper" usage would minimally require,
+ * + `ORDER BY` clause - For deterministic ordering
+ * + `LIMIT` clause - To prevent accidental OOMs
+ *
+ * `.paginate()`, `.emulatedCursor()` are not provided here
+ * because "proper" usage of them would minimally require,
+ * + `ORDER BY` clause - For deterministic ordering
+ *
+ */
+/**
  * @todo Better name
  * This is basically a `table` + `WHERE` clause.
  */
