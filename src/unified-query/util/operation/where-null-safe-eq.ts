@@ -21,6 +21,7 @@ export type WhereNullSafeEqImpl<
     CompoundQueryClauseT extends AfterFromClause["compoundQueryClause"],
     CompoundQueryLimitClauseT extends AfterFromClause["compoundQueryLimitClause"],
     MapDelegateT extends AfterFromClause["mapDelegate"],
+    GroupByClauseT extends AfterFromClause["groupByClause"],
 > = (
     Query<{
         fromClause : FromClauseUtil.WhereNullSafeEq<FromClauseT, ColumnT, ValueT>,
@@ -31,6 +32,7 @@ export type WhereNullSafeEqImpl<
         compoundQueryClause : CompoundQueryClauseT,
         compoundQueryLimitClause : CompoundQueryLimitClauseT,
         mapDelegate : MapDelegateT,
+        groupByClause : GroupByClauseT,
     }>
 );
 export type WhereNullSafeEq<
@@ -48,7 +50,8 @@ export type WhereNullSafeEq<
         QueryT["limitClause"],
         QueryT["compoundQueryClause"],
         QueryT["compoundQueryLimitClause"],
-        QueryT["mapDelegate"]
+        QueryT["mapDelegate"],
+        QueryT["groupByClause"]
     >
 );
 export function whereNullSafeEq<
@@ -102,8 +105,8 @@ export function whereNullSafeEq<
         compoundQueryClause,
         compoundQueryLimitClause,
         mapDelegate,
-
         groupByClause,
+
         havingClause,
         orderByClause,
         compoundQueryOrderByClause,
@@ -120,10 +123,10 @@ export function whereNullSafeEq<
             compoundQueryClause,
             compoundQueryLimitClause,
             mapDelegate,
+            groupByClause,
         },
         {
             whereClause,
-            groupByClause,
             havingClause,
             orderByClause,
             compoundQueryOrderByClause,

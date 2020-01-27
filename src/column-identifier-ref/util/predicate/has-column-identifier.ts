@@ -54,7 +54,7 @@ export function assertHasColumnIdentifier (ref : ColumnIdentifierRef, identifier
         throw new Error(`Column ${identifier.tableAlias}.${identifier.columnAlias} does not exist in column identifier ref`);
     }
 }
-export function assertHasColumnIdentifiers (ref : ColumnIdentifierRef, identifiers : ColumnIdentifier[]) {
+export function assertHasColumnIdentifiers (ref : ColumnIdentifierRef, identifiers : readonly ColumnIdentifier[]) {
     for (const identifier of identifiers) {
         assertHasColumnIdentifier(ref, identifier);
     }

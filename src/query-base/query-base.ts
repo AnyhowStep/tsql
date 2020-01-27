@@ -19,6 +19,24 @@ export interface QueryBaseData {
     readonly compoundQueryLimitClause : LimitClause|undefined,
 
     readonly mapDelegate : MapDelegate|undefined,
+
+    /**
+     * When a `HAVING` clause exists without a `GROUP BY` clause,
+     * it is usually an error.
+     *
+     * When SQL-fying, we should treat a missing `GROUP BY` clause as an `<empty grouping set>`.
+     *
+     * -----
+     *
+     * + PostgreSQL 10.0    : `GROUP BY ()` (SQL 1999)
+     * + PostgreSQL  9.4    : `GROUP BY NULL || NULL` (Apply string concatenation on two `NULL` values to get `NULL`)
+     * + MySQL       8.0    : `GROUP BY NULL`
+     * + MySQL       5.7    : `GROUP BY NULL`
+     * + SQLite      3.28   : `GROUP BY NULL`
+     *
+     * https://blog.jooq.org/2018/05/25/how-to-group-by-nothing-in-sql/
+     */
+    readonly groupByClause : GroupByClause|undefined,
 }
 
 /**
@@ -69,24 +87,9 @@ export interface IQueryBase<DataT extends QueryBaseData=QueryBaseData> {
      */
     readonly mapDelegate : DataT["mapDelegate"],
 
+    readonly groupByClause : DataT["groupByClause"],
+
     readonly whereClause : WhereClause|undefined,
-    /**
-     * When a `HAVING` clause exists without a `GROUP BY` clause,
-     * it is usually an error.
-     *
-     * When SQL-fying, we should treat a missing `GROUP BY` clause as an `<empty grouping set>`.
-     *
-     * -----
-     *
-     * + PostgreSQL 10.0    : `GROUP BY ()` (SQL 1999)
-     * + PostgreSQL  9.4    : `GROUP BY NULL || NULL` (Apply string concatenation on two `NULL` values to get `NULL`)
-     * + MySQL       8.0    : `GROUP BY NULL`
-     * + MySQL       5.7    : `GROUP BY NULL`
-     * + SQLite      3.28   : `GROUP BY NULL`
-     *
-     * https://blog.jooq.org/2018/05/25/how-to-group-by-nothing-in-sql/
-     */
-    readonly groupByClause : GroupByClause|undefined,
     readonly havingClause : HavingClause|undefined,
     readonly orderByClause : OrderByClause|undefined,
     readonly compoundQueryOrderByClause : CompoundQueryOrderByClause|undefined,

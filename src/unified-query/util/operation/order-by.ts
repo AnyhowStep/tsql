@@ -16,6 +16,7 @@ export type OrderByImpl<
     CompoundQueryClauseT extends IQuery["compoundQueryClause"],
     CompoundQueryLimitClauseT extends IQuery["compoundQueryLimitClause"],
     MapDelegateT extends IQuery["mapDelegate"],
+    GroupByClauseT extends IQuery["groupByClause"],
 > = (
     Query<{
         fromClause : FromClauseT,
@@ -26,6 +27,7 @@ export type OrderByImpl<
         compoundQueryClause : CompoundQueryClauseT,
         compoundQueryLimitClause : CompoundQueryLimitClauseT,
         mapDelegate : MapDelegateT,
+        groupByClause : GroupByClauseT,
     }>
 );
 export type OrderBy<
@@ -37,7 +39,8 @@ export type OrderBy<
         QueryT["limitClause"],
         QueryT["compoundQueryClause"],
         QueryT["compoundQueryLimitClause"],
-        QueryT["mapDelegate"]
+        QueryT["mapDelegate"],
+        QueryT["groupByClause"]
     >
 );
 export type QueryOrderByDelegate<QueryT extends IQuery> =
@@ -75,9 +78,9 @@ export function orderBy<
         compoundQueryClause,
         compoundQueryLimitClause,
         mapDelegate,
+        groupByClause,
 
         whereClause,
-        groupByClause,
         havingClause,
         compoundQueryOrderByClause,
         isDistinct,
@@ -93,10 +96,10 @@ export function orderBy<
             compoundQueryClause,
             compoundQueryLimitClause,
             mapDelegate,
+            groupByClause,
         },
         {
             whereClause,
-            groupByClause,
             havingClause,
             orderByClause,
             compoundQueryOrderByClause,

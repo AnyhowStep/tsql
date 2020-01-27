@@ -16,6 +16,7 @@ export type CompoundQueryOffsetBigIntImpl<
     CompoundQueryClauseT extends IQuery["compoundQueryClause"],
     CompoundQueryLimitClauseT extends IQuery["compoundQueryLimitClause"],
     MapDelegateT extends IQuery["mapDelegate"],
+    GroupByClauseT extends IQuery["groupByClause"],
 > =
     Query<{
         fromClause : FromClauseT,
@@ -30,6 +31,7 @@ export type CompoundQueryOffsetBigIntImpl<
         >,
 
         mapDelegate : MapDelegateT,
+        groupByClause : GroupByClauseT,
     }>
 ;
 export type CompoundQueryOffsetBigInt<
@@ -43,6 +45,7 @@ export type CompoundQueryOffsetBigInt<
         QueryT["limitClause"],
         QueryT["compoundQueryClause"],
         QueryT["compoundQueryLimitClause"],
-        QueryT["mapDelegate"]
+        QueryT["mapDelegate"],
+        QueryT["groupByClause"]
     >
 ;

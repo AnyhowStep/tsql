@@ -35,6 +35,7 @@ export declare const query: tsql.Query<{
      */
     compoundQueryLimitClause: undefined;
     mapDelegate: undefined;
+    groupByClause: undefined;
 }>;
 declare type AllowedUsedRef = tsql.FromClauseUtil.AllowedUsedRef<typeof query["fromClause"], {
     isLateral: true;

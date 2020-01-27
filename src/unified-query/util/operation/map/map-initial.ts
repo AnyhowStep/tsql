@@ -28,6 +28,7 @@ export type MapInitialImpl<
     LimitClauseT extends IQuery["limitClause"],
     CompoundQueryClauseT extends IQuery["compoundQueryClause"],
     CompoundQueryLimitClauseT extends IQuery["compoundQueryLimitClause"],
+    GroupByClauseT extends IQuery["groupByClause"],
 > = (
     Query<{
         fromClause : FromClauseT,
@@ -38,6 +39,7 @@ export type MapInitialImpl<
         compoundQueryClause : CompoundQueryClauseT,
         compoundQueryLimitClause : CompoundQueryLimitClauseT,
         mapDelegate : NewMapDelegateT,
+        groupByClause : GroupByClauseT,
     }>
 );
 export type MapInitial<
@@ -53,7 +55,8 @@ export type MapInitial<
         QueryT["selectClause"],
         QueryT["limitClause"],
         QueryT["compoundQueryClause"],
-        QueryT["compoundQueryLimitClause"]
+        QueryT["compoundQueryLimitClause"],
+        QueryT["groupByClause"]
     >
 );
 export function mapInitial<
@@ -74,6 +77,7 @@ export function mapInitial<
         compoundQueryClause,
         compoundQueryLimitClause,
         //mapDelegate,
+        groupByClause,
     } = query;
 
     const result : MapInitial<QueryT, NxtReturnT> = new Query(
@@ -86,6 +90,7 @@ export function mapInitial<
             compoundQueryClause,
             compoundQueryLimitClause,
             mapDelegate : mapDelegate as MapDelegate<never, never, NxtReturnT>,
+            groupByClause,
         },
         query
     );

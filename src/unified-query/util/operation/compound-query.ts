@@ -20,6 +20,7 @@ export type CompoundQueryImpl<
     //CompoundQueryClauseT extends AfterSelectClause["compoundQueryClause"],
     CompoundQueryLimitClauseT extends AfterSelectClause["compoundQueryLimitClause"],
     MapDelegateT extends AfterSelectClause["mapDelegate"],
+    GroupByClauseT extends AfterSelectClause["groupByClause"],
 > = (
     Query<{
         fromClause : FromClauseT,
@@ -36,6 +37,7 @@ export type CompoundQueryImpl<
         compoundQueryClause : CompoundQueryClause,
         compoundQueryLimitClause : CompoundQueryLimitClauseT,
         mapDelegate : MapDelegateT,
+        groupByClause : GroupByClauseT,
     }>
 );
 export type CompoundQuery<
@@ -49,7 +51,8 @@ export type CompoundQuery<
         QueryT["limitClause"],
         //QueryT["compoundQueryClause"],
         QueryT["compoundQueryLimitClause"],
-        QueryT["mapDelegate"]
+        QueryT["mapDelegate"],
+        QueryT["groupByClause"]
     >
 );
 export function compoundQuery<
@@ -95,6 +98,7 @@ export function compoundQuery<
         //compoundQueryClause,
         compoundQueryLimitClause,
         mapDelegate,
+        groupByClause,
     } = query;
 
     const result : CompoundQuery<QueryT, TargetQueryT> = new Query(
@@ -107,6 +111,7 @@ export function compoundQuery<
             compoundQueryClause,
             compoundQueryLimitClause,
             mapDelegate,
+            groupByClause,
         },
         query
     );

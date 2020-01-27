@@ -18,6 +18,7 @@ export type SelectNoSelectClauseImpl<
     CompoundQueryClauseT extends BeforeCompoundQueryClause["compoundQueryClause"],
     CompoundQueryLimitClauseT extends BeforeCompoundQueryClause["compoundQueryLimitClause"],
     MapDelegateT extends BeforeCompoundQueryClause["mapDelegate"],
+    GroupByClauseT extends BeforeCompoundQueryClause["groupByClause"],
 > = (
     Query<{
         fromClause : FromClauseT,
@@ -28,6 +29,7 @@ export type SelectNoSelectClauseImpl<
         compoundQueryClause : CompoundQueryClauseT,
         compoundQueryLimitClause : CompoundQueryLimitClauseT,
         mapDelegate : MapDelegateT,
+        groupByClause : GroupByClauseT,
     }>
 );
 export type SelectNoSelectClause<
@@ -40,7 +42,8 @@ export type SelectNoSelectClause<
         QueryT["limitClause"],
         QueryT["compoundQueryClause"],
         QueryT["compoundQueryLimitClause"],
-        QueryT["mapDelegate"]
+        QueryT["mapDelegate"],
+        QueryT["groupByClause"]
     >
 );
 
@@ -58,6 +61,7 @@ export type SelectImpl<
     CompoundQueryClauseT extends BeforeCompoundQueryClause["compoundQueryClause"],
     CompoundQueryLimitClauseT extends BeforeCompoundQueryClause["compoundQueryLimitClause"],
     MapDelegateT extends BeforeCompoundQueryClause["mapDelegate"],
+    GroupByClauseT extends BeforeCompoundQueryClause["groupByClause"],
 > = (
     Query<{
         fromClause : FromClauseT,
@@ -68,6 +72,7 @@ export type SelectImpl<
         compoundQueryClause : CompoundQueryClauseT,
         compoundQueryLimitClause : CompoundQueryLimitClauseT,
         mapDelegate : MapDelegateT,
+        groupByClause : GroupByClauseT,
     }>
 );
 export type Select<
@@ -81,7 +86,8 @@ export type Select<
         QueryT["limitClause"],
         QueryT["compoundQueryClause"],
         QueryT["compoundQueryLimitClause"],
-        QueryT["mapDelegate"]
+        QueryT["mapDelegate"],
+        QueryT["groupByClause"]
     >
 );
 
@@ -131,6 +137,7 @@ export function select<
         compoundQueryClause,
         compoundQueryLimitClause,
         mapDelegate,
+        groupByClause,
     } = query;
 
     const result : Select<QueryT, SelectsT> = new Query(
@@ -143,6 +150,7 @@ export function select<
             compoundQueryClause,
             compoundQueryLimitClause,
             mapDelegate,
+            groupByClause,
         },
         query
     );

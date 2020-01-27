@@ -1,7 +1,8 @@
-import {GroupByDelegate, GroupByClauseUtil} from "../../../group-by-clause";
+import {GroupByDelegate, GroupByClauseUtil, GroupByClause} from "../../../group-by-clause";
 import {Query} from "../../query-impl";
 import {IQuery} from "../../query";
 import {AfterFromClause} from "../helper-type";
+import {ColumnIdentifierUtil} from "../../../column-identifier";
 
 /**
  * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966
@@ -10,12 +11,14 @@ import {AfterFromClause} from "../helper-type";
  * to trigger max depth/max count errors.
  */
 export type GroupByImpl<
+    GroupByT extends GroupByClause,
     FromClauseT extends IQuery["fromClause"],
     SelectClauseT extends IQuery["selectClause"],
     LimitClauseT extends IQuery["limitClause"],
     CompoundQueryClauseT extends IQuery["compoundQueryClause"],
     CompoundQueryLimitClauseT extends IQuery["compoundQueryLimitClause"],
     MapDelegateT extends IQuery["mapDelegate"],
+    GroupByClauseT extends IQuery["groupByClause"],
 > = (
     Query<{
         fromClause : FromClauseT,
@@ -26,34 +29,41 @@ export type GroupByImpl<
         compoundQueryClause : CompoundQueryClauseT,
         compoundQueryLimitClause : CompoundQueryLimitClauseT,
         mapDelegate : MapDelegateT,
+        groupByClause : GroupByClauseUtil.GroupBy<GroupByClauseT, GroupByT>,
     }>
 );
 export type GroupBy<
-    QueryT extends IQuery
+    QueryT extends IQuery,
+    GroupByT extends GroupByClause
 > = (
     GroupByImpl<
+        GroupByT,
         QueryT["fromClause"],
         QueryT["selectClause"],
         QueryT["limitClause"],
         QueryT["compoundQueryClause"],
         QueryT["compoundQueryLimitClause"],
-        QueryT["mapDelegate"]
+        QueryT["mapDelegate"],
+        QueryT["groupByClause"]
     >
 );
 export function groupBy<
-    QueryT extends AfterFromClause
+    QueryT extends AfterFromClause,
+    GroupByT extends readonly ColumnIdentifierUtil.FromColumnRef<
+        GroupByClauseUtil.AllowedColumnIdentifierRef<QueryT["fromClause"]>
+    >[]
 > (
     query : QueryT,
-    groupByDelegate : GroupByDelegate<QueryT["fromClause"], QueryT["selectClause"]>
+    groupByDelegate : GroupByDelegate<QueryT["fromClause"], GroupByT>
 ) : (
-    GroupBy<QueryT>
+    GroupBy<QueryT, GroupByT>
 ) {
     const groupByClause = GroupByClauseUtil.groupBy<
         QueryT["fromClause"],
-        QueryT["selectClause"]
+        QueryT["groupByClause"],
+        GroupByT
     >(
         query.fromClause,
-        query.selectClause,
         query.groupByClause,
         groupByDelegate
     );
@@ -75,7 +85,7 @@ export function groupBy<
         isDistinct,
     } = query;
 
-    const result : GroupBy<QueryT> = new Query(
+    const result : GroupBy<QueryT, GroupByT> = new Query(
         {
             fromClause,
             selectClause,
@@ -85,10 +95,10 @@ export function groupBy<
             compoundQueryClause,
             compoundQueryLimitClause,
             mapDelegate,
+            groupByClause,
         },
         {
             whereClause,
-            groupByClause,
             havingClause,
             orderByClause,
             compoundQueryOrderByClause,

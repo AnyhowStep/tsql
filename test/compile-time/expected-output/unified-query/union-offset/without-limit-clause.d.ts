@@ -12,4 +12,5 @@ export declare const query: tsql.Query<{
         readonly offset: 90010n;
     };
     mapDelegate: undefined;
+    groupByClause: undefined;
 }>;

@@ -21,6 +21,7 @@ export type InnerJoinUsingCandidateKeyImpl<
     CompoundQueryClauseT extends AfterFromClause["compoundQueryClause"],
     CompoundQueryLimitClauseT extends AfterFromClause["compoundQueryLimitClause"],
     MapDelegateT extends AfterFromClause["mapDelegate"],
+    GroupByClauseT extends AfterFromClause["groupByClause"],
 > =
     Query<{
         fromClause : FromClauseUtil.InnerJoin<FromClauseT, AliasedTableT>,
@@ -31,6 +32,7 @@ export type InnerJoinUsingCandidateKeyImpl<
         compoundQueryClause : CompoundQueryClauseT,
         compoundQueryLimitClause : CompoundQueryLimitClauseT,
         mapDelegate : MapDelegateT,
+        groupByClause : GroupByClauseT,
     }>
 ;
 export type InnerJoinUsingCandidateKey<QueryT extends AfterFromClause, AliasedTableT extends IAliasedTable> =
@@ -41,7 +43,8 @@ export type InnerJoinUsingCandidateKey<QueryT extends AfterFromClause, AliasedTa
         QueryT["limitClause"],
         QueryT["compoundQueryClause"],
         QueryT["compoundQueryLimitClause"],
-        QueryT["mapDelegate"]
+        QueryT["mapDelegate"],
+        QueryT["groupByClause"]
     >
 ;
 export function innerJoinUsingCandidateKey<
@@ -72,6 +75,7 @@ export function innerJoinUsingCandidateKey<
         compoundQueryClause,
         compoundQueryLimitClause,
         mapDelegate,
+        groupByClause,
     } = query;
 
     const result : InnerJoinUsingCandidateKey<QueryT, DstT> = new Query(
@@ -94,6 +98,7 @@ export function innerJoinUsingCandidateKey<
             compoundQueryClause,
             compoundQueryLimitClause,
             mapDelegate,
+            groupByClause,
         },
         query
     );

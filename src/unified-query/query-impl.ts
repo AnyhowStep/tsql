@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {ExtraQueryData, QueryData, IQuery} from "./query";
 import {WhereClause, WhereDelegate} from "../where-clause";
-import {GroupByClause, GroupByDelegate} from "../group-by-clause";
+import {GroupByDelegate, GroupByClauseUtil} from "../group-by-clause";
 import {HavingClause, HavingDelegate} from "../having-clause";
 import {OrderByClause} from "../order-by-clause";
 import {IAliasedTable} from "../aliased-table";
@@ -30,6 +30,7 @@ import {MapDelegate} from "../map-delegate";
 import {ExecutionUtil, SelectConnection, IsolableSelectConnection, InsertSelectConnection, InsertManyResult, InsertIgnoreSelectConnection, InsertIgnoreManyResult, ReplaceSelectConnection, ReplaceManyResult} from "../execution";
 import {SortDirection} from "../sort-direction";
 import {InsertSelectDelegate} from "../insert-select";
+import {ColumnIdentifierUtil} from "../column-identifier";
 
 export class Query<DataT extends QueryData> implements IQuery<DataT> {
     readonly fromClause : DataT["fromClause"];
@@ -41,9 +42,9 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     readonly compoundQueryLimitClause : DataT["compoundQueryLimitClause"];
 
     readonly mapDelegate : DataT["mapDelegate"];
+    readonly groupByClause : DataT["groupByClause"];
 
     readonly whereClause : WhereClause|undefined;
-    readonly groupByClause : GroupByClause|undefined;
     readonly havingClause : HavingClause|undefined;
     readonly orderByClause : OrderByClause|undefined;
     readonly compoundQueryOrderByClause : CompoundQueryOrderByClause|undefined;
@@ -56,9 +57,9 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         this.compoundQueryClause = data.compoundQueryClause;
         this.compoundQueryLimitClause = data.compoundQueryLimitClause;
         this.mapDelegate = data.mapDelegate;
+        this.groupByClause = data.groupByClause;
 
         this.whereClause = extraData.whereClause;
-        this.groupByClause = extraData.groupByClause;
         this.havingClause = extraData.havingClause;
         this.orderByClause = extraData.orderByClause;
         this.compoundQueryOrderByClause = extraData.compoundQueryOrderByClause;
@@ -272,17 +273,22 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         );
     }
 
-    groupBy (
+    groupBy<
+        GroupByT extends readonly ColumnIdentifierUtil.FromColumnRef<
+            GroupByClauseUtil.AllowedColumnIdentifierRef<Extract<this, QueryUtil.AfterFromClause>["fromClause"]>
+        >[]
+    > (
         this : Extract<this, QueryUtil.AfterFromClause>,
         groupByDelegate : GroupByDelegate<
             Extract<this, QueryUtil.AfterFromClause>["fromClause"],
-            Extract<this, QueryUtil.AfterFromClause>["selectClause"]
+            GroupByT
         >
     ) : (
-        QueryUtil.GroupBy<Extract<this, QueryUtil.AfterFromClause>>
+        QueryUtil.GroupBy<Extract<this, QueryUtil.AfterFromClause>, GroupByT>
     ) {
         return QueryUtil.groupBy<
-            Extract<this, QueryUtil.AfterFromClause>
+            Extract<this, QueryUtil.AfterFromClause>,
+            GroupByT
         >(
             this,
             groupByDelegate

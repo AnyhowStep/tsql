@@ -17,6 +17,7 @@ export type RequireNullableOuterQueryJoins<
         compoundQueryLimitClause : QueryT["compoundQueryLimitClause"],
 
         mapDelegate : QueryT["mapDelegate"],
+        groupByClause : QueryT["groupByClause"],
     }>
 );
 export function requireNullableOuterQueryJoins<
@@ -40,6 +41,7 @@ export function requireNullableOuterQueryJoins<
         compoundQueryClause,
         compoundQueryLimitClause,
         mapDelegate,
+        groupByClause,
     } = query;
 
     const result : RequireNullableOuterQueryJoins<QueryT, AliasedTablesT> = new Query(
@@ -58,6 +60,7 @@ export function requireNullableOuterQueryJoins<
             compoundQueryClause,
             compoundQueryLimitClause,
             mapDelegate,
+            groupByClause,
         },
         query
     );

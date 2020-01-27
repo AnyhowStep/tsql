@@ -78,4 +78,5 @@ export declare const query: tsql.Query<{
         };
         x3: bigint;
     }>>;
+    groupByClause: undefined;
 }>;

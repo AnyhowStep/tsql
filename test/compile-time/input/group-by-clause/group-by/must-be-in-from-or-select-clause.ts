@@ -20,7 +20,6 @@ const fromClause = tsql.FromClauseUtil.from(
 tsql.GroupByClauseUtil.groupBy(
     fromClause,
     undefined,
-    undefined,
     () => [
         otherTable.columns.otherTableId,
         myTable.columns.createdAt,

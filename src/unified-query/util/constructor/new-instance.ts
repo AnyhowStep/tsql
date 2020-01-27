@@ -11,6 +11,7 @@ export type NewInstance = Query<{
     compoundQueryLimitClause : undefined,
 
     mapDelegate : undefined,
+    groupByClause : undefined,
 }>;
 export function newInstance () : NewInstance {
     const result : NewInstance = new Query(
@@ -24,10 +25,10 @@ export function newInstance () : NewInstance {
             compoundQueryLimitClause : undefined,
 
             mapDelegate : undefined,
+            groupByClause : undefined,
         },
         {
             whereClause : undefined,
-            groupByClause : undefined,
             havingClause : undefined,
             orderByClause : undefined,
             compoundQueryOrderByClause : undefined,
