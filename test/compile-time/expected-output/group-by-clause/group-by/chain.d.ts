@@ -6,5 +6,17 @@ export declare const selectClause: [tsql.IExprSelectItem<{
     alias: "eq";
     usedRef: tsql.IUsedRef<never>;
 }>];
-export declare const groupByClause: tsql.ColumnIdentifier[];
-export declare const groupByClause2: tsql.ColumnIdentifier[];
+export declare const groupByClause: readonly ({
+    readonly tableAlias: "otherTable";
+    readonly columnAlias: "otherTableId";
+} | {
+    readonly tableAlias: "myTable";
+    readonly columnAlias: "createdAt";
+})[];
+export declare const groupByClause2: readonly ({
+    readonly tableAlias: "otherTable";
+    readonly columnAlias: "otherTableId";
+} | {
+    readonly tableAlias: "myTable";
+    readonly columnAlias: "createdAt";
+})[];

@@ -31,4 +31,8 @@ export declare const query: tsql.Query<{
     compoundQueryClause: undefined;
     compoundQueryLimitClause: undefined;
     mapDelegate: undefined;
+    groupByClause: readonly {
+        readonly tableAlias: "myTable";
+        readonly columnAlias: "myTableId";
+    }[];
 }>;

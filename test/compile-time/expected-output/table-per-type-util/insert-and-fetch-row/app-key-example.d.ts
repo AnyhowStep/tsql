@@ -38,6 +38,7 @@ export declare const server: {
         compoundQueryClause: readonly tsql.CompoundQuery[] | undefined;
         compoundQueryLimitClause: tsql.LimitClause | undefined;
         mapDelegate: tsql.MapDelegate<never, never, unknown> | undefined;
+        groupByClause: readonly tsql.ColumnIdentifier[] | undefined;
     }> & tsql.IQueryBase<{
         fromClause: tsql.IFromClause<{
             outerQueryJoins: readonly tsql.IJoin<tsql.JoinData>[] | undefined;
@@ -48,6 +49,7 @@ export declare const server: {
         compoundQueryClause: undefined;
         compoundQueryLimitClause: tsql.LimitClause | undefined;
         mapDelegate: tsql.MapDelegate<never, never, unknown> | undefined;
+        groupByClause: readonly tsql.ColumnIdentifier[] | undefined;
     }> & tsql.IQueryBase<{
         fromClause: tsql.IFromClause<{
             outerQueryJoins: undefined;
@@ -58,5 +60,6 @@ export declare const server: {
         compoundQueryClause: readonly tsql.CompoundQuery[] | undefined;
         compoundQueryLimitClause: tsql.LimitClause | undefined;
         mapDelegate: tsql.MapDelegate<never, never, unknown> | undefined;
+        groupByClause: readonly tsql.ColumnIdentifier[] | undefined;
     }>) | undefined;
 } & {};

@@ -23,7 +23,6 @@ const fromClause = tsql.FromClauseUtil.crossJoin(
 export const groupByClause = tsql.GroupByClauseUtil.groupBy(
     fromClause,
     undefined,
-    undefined,
     columns => [
         columns.otherTable.otherTableId,
         columns.myTable.createdAt,

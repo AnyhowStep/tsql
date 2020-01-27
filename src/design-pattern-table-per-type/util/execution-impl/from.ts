@@ -24,6 +24,7 @@ export type From<TptT extends ITablePerType> =
         compoundQueryLimitClause : undefined,
 
         mapDelegate : undefined,
+        groupByClause : undefined,
     }>
 ;
 

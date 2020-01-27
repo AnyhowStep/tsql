@@ -52,4 +52,5 @@ export declare const correlated: tsql.Query<{
     compoundQueryClause: undefined;
     compoundQueryLimitClause: undefined;
     mapDelegate: undefined;
+    groupByClause: undefined;
 }>;

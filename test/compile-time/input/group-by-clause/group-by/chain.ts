@@ -30,7 +30,6 @@ export const selectClause = tsql.SelectClauseUtil.select(
 
 export const groupByClause = tsql.GroupByClauseUtil.groupBy(
     fromClause,
-    selectClause,
     undefined,
     columns => [
         columns.otherTable.otherTableId,
@@ -41,7 +40,6 @@ export const groupByClause = tsql.GroupByClauseUtil.groupBy(
 
 export const groupByClause2 = tsql.GroupByClauseUtil.groupBy(
     fromClause,
-    selectClause,
     groupByClause,
     columns => [
         columns.otherTable.otherTableId,

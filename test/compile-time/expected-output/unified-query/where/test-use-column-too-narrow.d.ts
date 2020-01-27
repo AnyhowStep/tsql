@@ -34,6 +34,7 @@ export declare const query: tsql.Query<{
      * We make this `WHERE` clause require that `myTableId` is **NON-NULLABLE**.
      * So, `bigint` only.
      */
+    groupByClause: undefined;
 }>;
 declare type AllowedUsedRef = tsql.FromClauseUtil.AllowedUsedRef<typeof query["fromClause"], {
     isLateral: true;

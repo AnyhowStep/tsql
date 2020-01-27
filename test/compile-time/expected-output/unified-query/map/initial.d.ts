@@ -75,4 +75,5 @@ export declare const query: tsql.Query<{
             readonly myOtherTableId: bigint;
         } | undefined;
     }>;
+    groupByClause: undefined;
 }>;

@@ -69,6 +69,7 @@ export declare const myQuery: tsql.Query<{
     compoundQueryClause: undefined;
     compoundQueryLimitClause: undefined;
     mapDelegate: undefined;
+    groupByClause: undefined;
 }>;
 export declare const fetchedRow: tsql.ExecutionUtil.FetchOnePromise<{
     readonly value: bigint | null;

@@ -1,11 +1,11 @@
 [
   {
     "messageText": {
-      "messageText": "Type '[Column<{ tableAlias: \"myTable\"; columnAlias: \"createdAt2\"; mapper: Mapper<unknown, Date>; }>, Column<{ tableAlias: \"myTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }>]' is not assignable to type '({ readonly tableAlias: \"myTable\"; readonly columnAlias: \"createdAt\"; } | { readonly tableAlias: \"myTable\"; readonly columnAlias: \"myTableId\"; })[] & { \"0\": unknown; }'.",
+      "messageText": "Type '[Column<{ tableAlias: \"myTable\"; columnAlias: \"createdAt2\"; mapper: Mapper<unknown, Date>; }>, Column<{ tableAlias: \"myTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }>]' is not assignable to type 'readonly ({ readonly tableAlias: \"myTable\"; readonly columnAlias: \"createdAt\"; } | { readonly tableAlias: \"myTable\"; readonly columnAlias: \"myTableId\"; })[] & { \"0\": unknown; }'.",
       "category": 1,
       "code": 2322,
       "next": {
-        "messageText": "Type '[Column<{ tableAlias: \"myTable\"; columnAlias: \"createdAt2\"; mapper: Mapper<unknown, Date>; }>, Column<{ tableAlias: \"myTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }>]' is not assignable to type '({ readonly tableAlias: \"myTable\"; readonly columnAlias: \"createdAt\"; } | { readonly tableAlias: \"myTable\"; readonly columnAlias: \"myTableId\"; })[]'.",
+        "messageText": "Type '[Column<{ tableAlias: \"myTable\"; columnAlias: \"createdAt2\"; mapper: Mapper<unknown, Date>; }>, Column<{ tableAlias: \"myTable\"; columnAlias: \"createdAt\"; mapper: Mapper<unknown, Date>; }>]' is not assignable to type 'readonly ({ readonly tableAlias: \"myTable\"; readonly columnAlias: \"createdAt\"; } | { readonly tableAlias: \"myTable\"; readonly columnAlias: \"myTableId\"; })[]'.",
         "category": 1,
         "code": 2322,
         "next": {
@@ -38,6 +38,6 @@
     "code": 2322,
     "category": 1,
     "length": 82,
-    "start": 537
+    "start": 522
   }
 ]

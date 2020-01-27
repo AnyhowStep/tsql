@@ -18,6 +18,7 @@ export type MapComposeImpl<
     LimitClauseT extends IQuery["limitClause"],
     CompoundQueryClauseT extends IQuery["compoundQueryClause"],
     CompoundQueryLimitClauseT extends IQuery["compoundQueryLimitClause"],
+    GroupByClauseT extends IQuery["groupByClause"],
 > = (
     Query<{
         fromClause : FromClauseT,
@@ -28,6 +29,7 @@ export type MapComposeImpl<
         compoundQueryClause : CompoundQueryClauseT,
         compoundQueryLimitClause : CompoundQueryLimitClauseT,
         mapDelegate : NewMapDelegateT,
+        groupByClause : GroupByClauseT,
     }>
 );
 export type MapCompose<
@@ -40,7 +42,8 @@ export type MapCompose<
         QueryT["selectClause"],
         QueryT["limitClause"],
         QueryT["compoundQueryClause"],
-        QueryT["compoundQueryLimitClause"]
+        QueryT["compoundQueryLimitClause"],
+        QueryT["groupByClause"]
     >
 );
 export type ComposedMapDelegate<
@@ -71,6 +74,7 @@ export function mapCompose<
         compoundQueryClause,
         compoundQueryLimitClause,
         //mapDelegate,
+        groupByClause,
     } = query;
 
     const result : MapCompose<QueryT, NxtReturnT> = new Query(
@@ -101,6 +105,7 @@ export function mapCompose<
                     mapDelegate
                 )
             ) as MapDelegate<never, never, Promise<TypeOfAwait<NxtReturnT>>>,
+            groupByClause,
         },
         query
     );

@@ -1,26 +1,22 @@
 import {FromClauseUtil} from "../../../from-clause";
 import {allowedColumnIdentifierRef, AllowedColumnIdentifierRef} from "../query";
-import {SelectClause} from "../../../select-clause";
 import {GroupByClause} from "../../group-by-clause";
 import {GroupByDelegate} from "../../group-by-delegate";
 import {ColumnIdentifierRefUtil} from "../../../column-identifier-ref";
 import {ColumnIdentifierUtil} from "../../../column-identifier";
-import {Concat} from "../../../tuple-util";
 
-/**
- * This will be more important when proper SQL `GROUP BY` behaviour
- * is supported.
- */
 export type GroupBy<
     GroupByClauseT extends GroupByClause|undefined,
     GroupByT extends GroupByClause
 > =
     GroupByClauseT extends GroupByClause ?
-    Concat<
-        GroupByClauseT,
-        GroupByT
-    > :
-    GroupByT
+    readonly (
+        | GroupByClauseT[number]
+        | GroupByT[number]
+    )[] :
+    readonly (
+        GroupByT[number]
+    )[]
 ;
 
 /**
@@ -51,56 +47,20 @@ export function groupBy<
      * the constraint **must** be `FromClauseUtil.AfterFromClause`
      */
     FromClauseT extends FromClauseUtil.AfterFromClause,
-    SelectClauseT extends SelectClause|undefined
-> (
-    fromClause : FromClauseT,
-    selectClause : SelectClauseT,
-    groupByClause : GroupByClause|undefined,
-    groupByDelegate : GroupByDelegate<FromClauseT, SelectClauseT>
-) : (
-    GroupByClause
-);
-export function groupBy<
-    /**
-     * For MySQL 5.7,
-     * the constraint **must** be `FromClauseUtil.AfterFromClause`
-     */
-    FromClauseT extends FromClauseUtil.AfterFromClause,
-    SelectClauseT extends SelectClause|undefined,
     GroupByClauseT extends GroupByClause|undefined,
-    GroupByT extends ColumnIdentifierUtil.FromColumnRef<
-        AllowedColumnIdentifierRef<FromClauseT, SelectClauseT>
+    GroupByT extends readonly ColumnIdentifierUtil.FromColumnRef<
+        AllowedColumnIdentifierRef<FromClauseT>
     >[]
 > (
     fromClause : FromClauseT,
-    selectClause : SelectClauseT,
     groupByClause : GroupByClauseT,
-    groupByDelegate : GroupByDelegate<FromClauseT, SelectClauseT, GroupByT>
+    groupByDelegate : GroupByDelegate<FromClauseT, GroupByT>
 ) : (
-    GroupByClause
-);
-export function groupBy<
-    /**
-     * For MySQL 5.7,
-     * the constraint **must** be `FromClauseUtil.AfterFromClause`
-     */
-    FromClauseT extends FromClauseUtil.AfterFromClause,
-    SelectClauseT extends SelectClause|undefined,
-    GroupByClauseT extends GroupByClause|undefined,
-    GroupByT extends ColumnIdentifierUtil.FromColumnRef<
-        AllowedColumnIdentifierRef<FromClauseT, SelectClauseT>
-    >[]
-> (
-    fromClause : FromClauseT,
-    selectClause : SelectClauseT,
-    groupByClause : GroupByClauseT,
-    groupByDelegate : GroupByDelegate<FromClauseT, SelectClauseT, GroupByT>
-) : (
-    GroupByClause
+    GroupBy<GroupByClauseT, GroupByT>
 ) {
     FromClauseUtil.assertAfterFromClause(fromClause);
 
-    const columns = allowedColumnIdentifierRef(fromClause, selectClause);
+    const columns = allowedColumnIdentifierRef(fromClause);
     const groupBy = groupByDelegate(ColumnIdentifierRefUtil.tryFlatten(
         columns
     ));
@@ -112,7 +72,12 @@ export function groupBy<
 
     return (
         groupByClause == undefined ?
-        groupBy :
-        [...(groupByClause as Exclude<GroupByClauseT, undefined>), ...groupBy]
-    );
+        groupBy as readonly (
+            GroupByT[number]
+        )[] :
+        [...(groupByClause as Exclude<GroupByClauseT, undefined>), ...groupBy] as readonly (
+            | Exclude<GroupByClauseT, undefined>[number]
+            | GroupByT[number]
+        )[]
+    ) as GroupBy<GroupByClauseT, GroupByT>;
 }
