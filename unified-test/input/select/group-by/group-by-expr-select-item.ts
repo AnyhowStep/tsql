@@ -74,14 +74,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     tsql.integer.integerDiv(columns.testVal, BigInt(2)).as("valDiv"),
                 ])
                 .groupBy(columns => [
-                    /**
-                     * We can `groupBy` `valDiv`.
-                     * But if we tried to `groupBy` `sumId`, we'd get a run-time error.
-                     *
-                     * This library is not compile-time safe with respect to `GROUP BY/HAVING` clauses,
-                     * and aggregate functions...
-                     */
-                    columns.$aliased.valDiv,
+                    columns.testVal,
                 ])
                 .orderBy(columns => [
                     /**

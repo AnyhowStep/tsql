@@ -74,7 +74,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     tsql.integer.integerDiv(columns.testVal, BigInt(2)).as("valDiv"),
                 ])
                 .groupBy(columns => [
-                    columns.test.testVal,
+                    columns.testVal,
                 ])
                 .orderBy(columns => [
                     columns.test.testVal.desc(),

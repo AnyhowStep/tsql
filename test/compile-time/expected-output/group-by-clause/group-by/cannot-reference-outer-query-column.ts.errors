@@ -1,0 +1,9 @@
+[
+  {
+    "messageText": "Property 'myTableId' does not exist on type '{ readonly otherTableId: { readonly tableAlias: \"otherTable\"; readonly columnAlias: \"otherTableId\"; }; }'.",
+    "code": 2339,
+    "category": 1,
+    "length": 9,
+    "start": 459
+  }
+]

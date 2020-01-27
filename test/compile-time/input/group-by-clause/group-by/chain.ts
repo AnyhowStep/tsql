@@ -5,7 +5,7 @@ const myTable = tsql.table("myTable")
     .addColumns({
         myTableId : tm.mysql.bigIntSigned(),
         createdAt : tm.mysql.dateTime(),
-    })
+    });
 
 const otherTable = tsql.table("otherTable")
     .addColumns({
@@ -35,7 +35,7 @@ export const groupByClause = tsql.GroupByClauseUtil.groupBy(
     columns => [
         columns.otherTable.otherTableId,
         columns.myTable.createdAt,
-        columns.$aliased.eq,
+        //columns.$aliased.eq,
     ]
 );
 
@@ -46,6 +46,6 @@ export const groupByClause2 = tsql.GroupByClauseUtil.groupBy(
     columns => [
         columns.otherTable.otherTableId,
         columns.myTable.createdAt,
-        columns.$aliased.eq,
+        //columns.$aliased.eq,
     ]
 );
