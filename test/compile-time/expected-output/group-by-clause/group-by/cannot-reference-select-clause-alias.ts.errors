@@ -1,0 +1,9 @@
+[
+  {
+    "messageText": "Property '$aliased' does not exist on type '{ readonly myTable: { readonly createdAt: { readonly tableAlias: \"myTable\"; readonly columnAlias: \"createdAt\"; }; readonly myTableId: { readonly tableAlias: \"myTable\"; readonly columnAlias: \"myTableId\"; }; }; readonly otherTable: { ...; }; }'.",
+    "code": 2339,
+    "category": 1,
+    "length": 8,
+    "start": 946
+  }
+]

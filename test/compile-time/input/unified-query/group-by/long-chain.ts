@@ -8,363 +8,183 @@ const myTable = tsql.table("myTable")
 
 export const query = tsql.QueryUtil.newInstance()
     .from(myTable)
-    .select(columns => [
-        tsql.eq(columns.myTableId, 1n).as("eq1"),
+    .groupBy(columns => [
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq1,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 2n).as("eq2"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq2,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 3n).as("eq3"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq3,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 4n).as("eq4"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq4,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 5n).as("eq5"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq5,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 6n).as("eq6"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq6,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 7n).as("eq7"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq7,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 8n).as("eq8"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq8,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 9n).as("eq9"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq9,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 10n).as("eq10"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq10,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 11n).as("eq11"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq11,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 12n).as("eq12"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq12,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 13n).as("eq13"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq13,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 14n).as("eq14"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq14,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 15n).as("eq15"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq15,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 16n).as("eq16"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq16,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 17n).as("eq17"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq17,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 18n).as("eq18"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq18,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 19n).as("eq19"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq19,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 20n).as("eq20"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq20,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 21n).as("eq21"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq21,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 22n).as("eq22"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq22,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 23n).as("eq23"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq23,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 24n).as("eq24"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq24,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 25n).as("eq25"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq25,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 26n).as("eq26"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq26,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 27n).as("eq27"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq27,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 28n).as("eq28"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq28,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 29n).as("eq29"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq29,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 30n).as("eq30"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq30,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 31n).as("eq31"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq31,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 32n).as("eq32"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq32,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 33n).as("eq33"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq33,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 34n).as("eq34"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq34,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 35n).as("eq35"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq35,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 36n).as("eq36"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq36,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 37n).as("eq37"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq37,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 38n).as("eq38"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq38,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 39n).as("eq39"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq39,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 40n).as("eq40"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq40,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 41n).as("eq41"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq41,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 42n).as("eq42"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq42,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 43n).as("eq43"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq43,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 44n).as("eq44"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq44,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 45n).as("eq45"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq45,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 46n).as("eq46"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq46,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 47n).as("eq47"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq47,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 48n).as("eq48"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq48,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 49n).as("eq49"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq49,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 50n).as("eq50"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq50,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 51n).as("eq51"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq51,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 52n).as("eq52"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq52,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 53n).as("eq53"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq53,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 54n).as("eq54"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq54,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 55n).as("eq55"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq55,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 56n).as("eq56"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq56,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 57n).as("eq57"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq57,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 58n).as("eq58"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq58,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 59n).as("eq59"),
+        columns.myTableId,
     ])
     .groupBy(columns => [
-        columns.$aliased.eq59,
-    ])
-    .select(columns => [
-        tsql.eq(columns.myTableId, 60n).as("eq60"),
-    ])
-    .groupBy(columns => [
-        columns.$aliased.eq60,
+        columns.myTableId,
     ]);

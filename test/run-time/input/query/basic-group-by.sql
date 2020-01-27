@@ -9,5 +9,4 @@ CROSS JOIN
   "myTable3"
 GROUP BY
   "myTable"."myBoolColumn",
-  "myTable2"."myDoubleColumn",
-  "$aliased--pi"
+  "myTable2"."myDoubleColumn"
