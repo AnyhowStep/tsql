@@ -593,6 +593,7 @@ export class Table<DataT extends TableData> implements ITable {
                 this
             >,
             undefined,
+            undefined,
             SelectsT
         >
     ) : ExecutionUtil.FetchOneReturnType<
@@ -637,6 +638,7 @@ export class Table<DataT extends TableData> implements ITable {
                 this
             >,
             undefined,
+            undefined,
             SelectsT
         >
     ) : ExecutionUtil.FetchOneReturnType<
@@ -677,6 +679,7 @@ export class Table<DataT extends TableData> implements ITable {
                 this
             >,
             undefined,
+            undefined,
             SelectsT
         >
     ) : ExecutionUtil.FetchOneReturnType<
@@ -715,6 +718,7 @@ export class Table<DataT extends TableData> implements ITable {
                 FromClauseUtil.NewInstance,
                 this
             >,
+            undefined,
             undefined,
             SelectsT
         >

@@ -1,0 +1,34 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type '[AliasedExpr<{ mapper: Mapper<unknown, number | null>; tableAlias: \"$aliased\"; alias: \"x\"; usedRef: IUsedRef<{}>; isAggregate: true; }>, AliasedExpr<{ mapper: Mapper<unknown, bigint>; tableAlias: \"$aliased\"; alias: \"y\"; usedRef: IUsedRef<...>; isAggregate: false; }>]' is not assignable to type '[AliasedExpr<{ mapper: Mapper<unknown, number | null>; tableAlias: \"$aliased\"; alias: \"x\"; usedRef: IUsedRef<{}>; isAggregate: true; }>, AliasedExpr<{ mapper: Mapper<unknown, bigint>; tableAlias: \"$aliased\"; alias: \"y\"; usedRef: IUsedRef<...>; isAggregate: false; }>] & { ...; } & CompileError<...>'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Property '__compileError' is missing in type '[AliasedExpr<{ mapper: Mapper<unknown, number | null>; tableAlias: \"$aliased\"; alias: \"x\"; usedRef: IUsedRef<{}>; isAggregate: true; }>, AliasedExpr<{ mapper: Mapper<unknown, bigint>; tableAlias: \"$aliased\"; alias: \"y\"; usedRef: IUsedRef<...>; isAggregate: false; }>]' but required in type 'CompileError<[\"The following columns cannot be referenced in non-aggregate expressions; they are not in the GROUP BY clause\", [\"myTable\", \"myTableId\"]]>'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 212,
+    "start": 1031
+  },
+  {
+    "messageText": {
+      "messageText": "Type '[AliasedExpr<{ mapper: Mapper<unknown, Decimal | null>; tableAlias: \"$aliased\"; alias: \"x\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; isAggregate: true; }>, AliasedExpr<...>]' is not assignable to type '[AliasedExpr<{ mapper: Mapper<unknown, Decimal | null>; tableAlias: \"$aliased\"; alias: \"x\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; isAggregate: true; }>, AliasedExpr<...>] & { ...; } & CompileError<...>'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Property '__compileError' is missing in type '[AliasedExpr<{ mapper: Mapper<unknown, Decimal | null>; tableAlias: \"$aliased\"; alias: \"x\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; isAggregate: true; }>, AliasedExpr<...>]' but required in type 'CompileError<[\"The following columns cannot be referenced in non-aggregate expressions; they are not in the GROUP BY clause\", [\"myTable\", \"myTableId\"]]>'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 234,
+    "start": 1323
+  }
+]

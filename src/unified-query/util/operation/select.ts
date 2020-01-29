@@ -98,7 +98,7 @@ export type QuerySelectDelegate<
     (
         columns : SelectDelegateColumns<QueryT["fromClause"]>,
         subquery : Correlate<QueryT>
-    ) => SelectDelegateReturnType<QueryT["fromClause"], QueryT["selectClause"], SelectsT>
+    ) => SelectDelegateReturnType<QueryT["fromClause"], QueryT["groupByClause"], QueryT["selectClause"], SelectsT>
 ;
 
 export function select<
@@ -118,10 +118,12 @@ export function select<
 
     const selectClause = SelectClauseUtil.select<
         QueryT["fromClause"],
+        QueryT["groupByClause"],
         QueryT["selectClause"],
         SelectsT
     >(
         query.fromClause,
+        query.groupByClause,
         query.selectClause,
         (columns) => {
             return selectDelegate(columns, correlate<QueryT>(query));

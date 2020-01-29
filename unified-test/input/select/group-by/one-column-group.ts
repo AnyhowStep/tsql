@@ -69,12 +69,12 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 );
 
             return tsql.from(test)
+                .groupBy(columns => [
+                    columns.testVal,
+                ])
                 .select(columns => [
                     tsql.integer.sum(columns.testId).as("sumId"),
                     tsql.integer.integerDiv(columns.testVal, BigInt(2)).as("valDiv"),
-                ])
-                .groupBy(columns => [
-                    columns.testVal,
                 ])
                 .orderBy(columns => [
                     columns.test.testVal.desc(),

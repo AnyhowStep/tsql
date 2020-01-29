@@ -23,6 +23,7 @@ type ExtractedStrictSubTypeToCompileError<
  * Checks if `AllowedT` is assignable to `UsedT`
  */
 export type AssertAllowedImpl<
+    MessageT extends string,
     AllowedT extends TypeRef,
     UsedT extends TypeRef
 > = (
@@ -35,7 +36,7 @@ export type AssertAllowedImpl<
         >
     ) :
     CompileError<[
-        "The following columns cannot be referenced",
+        MessageT,
         TypeRefUtil.ExtractExcessColumnIdentifier<UsedT, AllowedT>
     ]>
 );
@@ -44,6 +45,18 @@ export type AssertAllowed<
     UsedT extends IUsedRef
 > = (
     AssertAllowedImpl<
+        "The following columns cannot be referenced",
+        TypeRefOf<AllowedT>,
+        TypeRefOf<UsedT>
+    >
+);
+export type AssertAllowedCustom<
+    MessageT extends string,
+    AllowedT extends IUsedRef,
+    UsedT extends IUsedRef
+> = (
+    AssertAllowedImpl<
+        MessageT,
         TypeRefOf<AllowedT>,
         TypeRefOf<UsedT>
     >

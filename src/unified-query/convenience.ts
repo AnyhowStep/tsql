@@ -51,6 +51,7 @@ export function select<
 > (
     selectDelegate : SelectDelegate<
         QueryUtil.NewInstance["fromClause"],
+        QueryUtil.NewInstance["groupByClause"],
         QueryUtil.NewInstance["selectClause"],
         SelectsT
     >

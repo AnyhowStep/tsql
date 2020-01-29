@@ -94,6 +94,7 @@ export class TableWhere<TableT extends ITable> {
                 TableT
             >,
             undefined,
+            undefined,
             SelectsT
         >
     ) : ExecutionUtil.FetchOneReturnType<
