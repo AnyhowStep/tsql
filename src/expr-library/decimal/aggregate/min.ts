@@ -1,12 +1,12 @@
 import {decimalMapper} from "../decimal-mapper";
 import {OperatorType} from "../../../operator-type";
 import {TypeHint} from "../../../type-hint";
-import {makeOperator2, Operator1} from "../../factory";
-import {BuiltInExpr} from "../../../built-in-expr";
+import {makeAggregateOperator2, AggregateOperator1} from "../../aggregate-factory";
+import {BuiltInExpr_NonAggregate} from "../../../built-in-expr";
 import {ExprUtil} from "../../../expr";
 import {Decimal} from "../../../decimal";
 
-const minImpl = makeOperator2<OperatorType.AGGREGATE_MIN, boolean, Decimal, Decimal|null>(
+const minImpl = makeAggregateOperator2<OperatorType.AGGREGATE_MIN, boolean, Decimal, Decimal|null>(
     OperatorType.AGGREGATE_MIN,
     decimalMapper.orNull(),
     TypeHint.DECIMAL
@@ -15,24 +15,24 @@ const minImpl = makeOperator2<OperatorType.AGGREGATE_MIN, boolean, Decimal, Deci
 /**
  * @todo Figure out what the difference is between `MIN(DISTINCT x)` and `MIN(x)`
  */
-export const minDistinct : Operator1<Decimal, Decimal|null> = <
-    ArgT extends BuiltInExpr<Decimal>
+export const minDistinct : AggregateOperator1<Decimal, Decimal|null> = <
+    ArgT extends BuiltInExpr_NonAggregate<Decimal>
 >(
     arg : ArgT
 ) : (
-    ExprUtil.Intersect<Decimal|null, ArgT>
+    ExprUtil.AggregateIntersect<Decimal|null, ArgT>
 ) => {
-    return minImpl(true, arg) as ExprUtil.Intersect<Decimal|null, ArgT>;
+    return minImpl(true, arg) as ExprUtil.AggregateIntersect<Decimal|null, ArgT>;
 };
 
-export const minAll : Operator1<Decimal, Decimal|null> = <
-    ArgT extends BuiltInExpr<Decimal>
+export const minAll : AggregateOperator1<Decimal, Decimal|null> = <
+    ArgT extends BuiltInExpr_NonAggregate<Decimal>
 >(
     arg : ArgT
 ) : (
-    ExprUtil.Intersect<Decimal|null, ArgT>
+    ExprUtil.AggregateIntersect<Decimal|null, ArgT>
 ) => {
-    return minImpl(false, arg) as ExprUtil.Intersect<Decimal|null, ArgT>;
+    return minImpl(false, arg) as ExprUtil.AggregateIntersect<Decimal|null, ArgT>;
 };
 
 export const min = minAll;
