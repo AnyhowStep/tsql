@@ -17,6 +17,7 @@ export type LatestValue<
             | BuiltInExprUtil.TypeOf<BuiltInExprT>
         >,
         usedRef : UsedRefUtil.FromColumnMap<LogT["ownerTable"]["columns"]>,
+        isAggregate : false,
     }>
 );
 

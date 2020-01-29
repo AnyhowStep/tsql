@@ -15,4 +15,4 @@ export declare const expr: tsql.ExprImpl<boolean, tsql.IUsedRef<{
         readonly computerId: string | null;
         readonly accessedAt2: Date;
     };
-}>>;
+}>, false>;

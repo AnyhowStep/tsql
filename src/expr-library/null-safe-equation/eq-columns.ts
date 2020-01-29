@@ -50,7 +50,8 @@ export type EqColumns = (
     ) => (
         Expr<{
             mapper : tm.SafeMapper<boolean>,
-            usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>
+            usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>,
+            isAggregate : false,
         }>
     )
 );
@@ -63,7 +64,8 @@ export const eqColumns : EqColumns = (
     ) : (
         Expr<{
             mapper : tm.SafeMapper<boolean>,
-            usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>
+            usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>,
+            isAggregate : false,
         }>
     ) => {
         const columns = PartialRowUtil.mapper(table)(
@@ -90,13 +92,15 @@ export const eqColumns : EqColumns = (
                 );
                 return expr as Expr<{
                     mapper : tm.SafeMapper<boolean>,
-                    usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>
+                    usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>,
+                    isAggregate : false,
                 }>;
             });
         const result = and(...arr);
         return result as Expr<{
             mapper : tm.SafeMapper<boolean>,
-            usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>
+            usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>,
+            isAggregate : false,
         }>;
     }
 );

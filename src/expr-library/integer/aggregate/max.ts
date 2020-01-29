@@ -21,7 +21,7 @@ export const maxDistinct : Operator1<bigint, bigint|null> = <
 ) : (
     ExprUtil.Intersect<bigint|null, ArgT>
 ) => {
-    return maxImpl(true, arg);
+    return maxImpl(true, arg) as ExprUtil.Intersect<bigint|null, ArgT>;
 };
 
 export const maxAll : Operator1<bigint, bigint|null> = <
@@ -31,7 +31,7 @@ export const maxAll : Operator1<bigint, bigint|null> = <
 ) : (
     ExprUtil.Intersect<bigint|null, ArgT>
 ) => {
-    return maxImpl(false, arg);
+    return maxImpl(false, arg) as ExprUtil.Intersect<bigint|null, ArgT>;
 };
 
 export const max = maxAll;

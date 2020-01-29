@@ -39,8 +39,16 @@ export async function count (
                          */
                         mapper : tm.mysql.bigIntUnsigned(),
                         usedRef : UsedRefUtil.fromColumnRef({}),
+                        isAggregate : false,
                     },
                     parentheses(
+                        /**
+                         * @todo **THIS** is not database agnostic. Change it to a proper AST
+                         * @todo Find other such occurrences,
+                         * where we assume the implementing DB will be able to execute SQL strings
+                         *
+                         * This should be fine for now, since most DB engines should be able to handle this.
+                         */
                         [
                             "SELECT COUNT(*) FROM",
                             parentheses(

@@ -22,7 +22,7 @@ export const maxDistinct : Operator1<Decimal, Decimal|null> = <
 ) : (
     ExprUtil.Intersect<Decimal|null, ArgT>
 ) => {
-    return maxImpl(true, arg);
+    return maxImpl(true, arg) as ExprUtil.Intersect<Decimal|null, ArgT>;
 };
 
 export const maxAll : Operator1<Decimal, Decimal|null> = <
@@ -32,7 +32,7 @@ export const maxAll : Operator1<Decimal, Decimal|null> = <
 ) : (
     ExprUtil.Intersect<Decimal|null, ArgT>
 ) => {
-    return maxImpl(false, arg);
+    return maxImpl(false, arg) as ExprUtil.Intersect<Decimal|null, ArgT>;
 };
 
 export const max = maxAll;

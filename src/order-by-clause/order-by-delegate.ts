@@ -21,11 +21,13 @@ type ValidSortExpr<
     | ColumnUtil.FromColumnRef<OrderByClauseUtil.AllowedColumnRef<FromClauseT, SelectClauseT>>
     | IExpr<{
         mapper : tm.SafeMapper<unknown>,
-        usedRef : OrderByClauseUtil.AllowedUsedRef<FromClauseT, SelectClauseT>
+        usedRef : OrderByClauseUtil.AllowedUsedRef<FromClauseT, SelectClauseT>,
+        isAggregate : boolean,
     }>
     | IExprSelectItem<{
         mapper : tm.SafeMapper<unknown>,
         usedRef : OrderByClauseUtil.AllowedUsedRef<FromClauseT, SelectClauseT>,
+        isAggregate : boolean,
         /**
          * @todo Determine if passing an aliased column is OK
          */

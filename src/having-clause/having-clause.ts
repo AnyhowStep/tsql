@@ -10,4 +10,4 @@ import {IAnonymousExpr} from "../expr";
  * At some point, they should diverge when `WHERE` clause is prevented
  * from using aggregation functions.
  */
-export type HavingClause = IAnonymousExpr<boolean>;
+export type HavingClause = IAnonymousExpr<boolean, boolean>;

@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {BuiltInValueExprUtil} from "../../../built-in-value-expr";
-import {BuiltInExpr_NonCorrelated} from "../../../built-in-expr";
+import {BuiltInExpr_NonCorrelated_NonAggregate} from "../../../built-in-expr";
 import {IAnonymousColumn, ColumnUtil} from "../../../column";
 import {DataTypeUtil} from "../../../data-type";
 
@@ -13,7 +13,7 @@ import {DataTypeUtil} from "../../../data-type";
 export function fromValueExpr<TypeT> (
     mapper : tm.SafeMapper<TypeT>|IAnonymousColumn<TypeT>,
     value : TypeT
-) : BuiltInExpr_NonCorrelated<TypeT> {
+) : BuiltInExpr_NonCorrelated_NonAggregate<TypeT> {
     let valueName = "literal-value";
 
     if (ColumnUtil.isColumn(mapper)) {
@@ -29,7 +29,7 @@ export function fromValueExpr<TypeT> (
         );
     } else {
         if (BuiltInValueExprUtil.isBuiltInValueExpr(value)) {
-            return mapper(valueName, value) as BuiltInExpr_NonCorrelated<TypeT>;
+            return mapper(valueName, value) as BuiltInExpr_NonCorrelated_NonAggregate<TypeT>;
         } else {
             /**
              * @todo Custom `Error` type

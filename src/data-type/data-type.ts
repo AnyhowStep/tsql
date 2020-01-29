@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {BuiltInExpr_NonCorrelated} from "../built-in-expr";
+import {BuiltInExpr_NonCorrelated_NonAggregate} from "../built-in-expr";
 
 /**
  * When just using `TypeT` with a `BuiltInValueExpr`,
@@ -31,7 +31,7 @@ export interface IDataType<TypeT> extends tm.SafeMapper<TypeT> {
      *
      * @param value - The value to convert to a `BuiltInExpr_NonCorrelated`
      */
-    toBuiltInExpr_NonCorrelated (value : TypeT) : BuiltInExpr_NonCorrelated<TypeT>;
+    toBuiltInExpr_NonCorrelated (value : TypeT) : BuiltInExpr_NonCorrelated_NonAggregate<TypeT>;
 
     /**
      * At the moment, this is specifically used by `Log.track()`

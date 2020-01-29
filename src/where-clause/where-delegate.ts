@@ -16,7 +16,8 @@ export type WhereDelegate<
         | boolean
         | IExpr<{
             mapper : tm.SafeMapper<boolean>,
-            usedRef : WhereClauseUtil.AllowedUsedRef<FromClauseT>
+            usedRef : WhereClauseUtil.AllowedUsedRef<FromClauseT>,
+            isAggregate : false,
         }>
         | ColumnUtil.ExtractWithType<
             ColumnUtil.FromColumnRef<

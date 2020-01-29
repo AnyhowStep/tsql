@@ -42,7 +42,8 @@ export type EqPrimaryKeyOfTable =
     ) => (
         Expr<{
             mapper : tm.SafeMapper<boolean>,
-            usedRef : UsedRefUtil.FromColumnMap<SrcT["columns"]|DstT["columns"]>
+            usedRef : UsedRefUtil.FromColumnMap<SrcT["columns"]|DstT["columns"]>,
+            isAggregate : false,
         }>
     )
 ;
@@ -64,7 +65,8 @@ export const eqPrimaryKeyOfTable : EqPrimaryKeyOfTable = (
     ) : (
         Expr<{
             mapper : tm.SafeMapper<boolean>,
-            usedRef : UsedRefUtil.FromColumnMap<SrcT["columns"]|DstT["columns"]>
+            usedRef : UsedRefUtil.FromColumnMap<SrcT["columns"]|DstT["columns"]>,
+            isAggregate : false,
         }>
     ) => {
         TableUtil.assertHasNullSafeComparablePrimaryKey(dst, src.columns);
@@ -83,13 +85,15 @@ export const eqPrimaryKeyOfTable : EqPrimaryKeyOfTable = (
             );
             return expr as Expr<{
                 mapper : tm.SafeMapper<boolean>,
-                usedRef : UsedRefUtil.FromColumnMap<SrcT["columns"]|DstT["columns"]>
+                usedRef : UsedRefUtil.FromColumnMap<SrcT["columns"]|DstT["columns"]>,
+                isAggregate : false,
             }>;
         });
         const result = and(...arr);
         return result as Expr<{
             mapper : tm.SafeMapper<boolean>,
-            usedRef : UsedRefUtil.FromColumnMap<SrcT["columns"]|DstT["columns"]>
+            usedRef : UsedRefUtil.FromColumnMap<SrcT["columns"]|DstT["columns"]>,
+            isAggregate : false,
         }>;
     }
 );

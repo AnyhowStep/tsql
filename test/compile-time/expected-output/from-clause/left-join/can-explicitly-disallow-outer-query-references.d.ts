@@ -8,7 +8,7 @@ import * as tsql from "../../../../../dist";
  *
  * The SQL standard allows it. MySQL just doesn't.
  */
-export declare function leftJoinNoOuterQueryReference<FromClauseT extends tsql.FromClauseUtil.AfterFromClause, AliasedTableT extends tsql.IAliasedTable, RawOnClauseT extends tsql.BuiltInExpr<boolean>>(fromClause: FromClauseT, aliasedTable: (AliasedTableT & tsql.TypeUtil.AssertNonUnion<AliasedTableT> & tsql.FromClauseUtil.AssertValidCurrentJoinBase<FromClauseT, AliasedTableT>), onDelegate: tsql.OnDelegate<FromClauseT, AliasedTableT, (RawOnClauseT & tsql.OnClauseUtil.AssertNoOuterQueryUsedRef<FromClauseT, RawOnClauseT>)>): (tsql.FromClauseUtil.InnerJoin<FromClauseT, AliasedTableT>);
+export declare function leftJoinNoOuterQueryReference<FromClauseT extends tsql.FromClauseUtil.AfterFromClause, AliasedTableT extends tsql.IAliasedTable, RawOnClauseT extends tsql.BuiltInExpr_NonAggregate<boolean>>(fromClause: FromClauseT, aliasedTable: (AliasedTableT & tsql.TypeUtil.AssertNonUnion<AliasedTableT> & tsql.FromClauseUtil.AssertValidCurrentJoinBase<FromClauseT, AliasedTableT>), onDelegate: tsql.OnDelegate<FromClauseT, AliasedTableT, (RawOnClauseT & tsql.OnClauseUtil.AssertNoOuterQueryUsedRef<FromClauseT, RawOnClauseT>)>): (tsql.FromClauseUtil.InnerJoin<FromClauseT, AliasedTableT>);
 export declare const fromClause: tsql.IFromClause<{
     outerQueryJoins: readonly tsql.Join<{
         tableAlias: "outerQueryTable";

@@ -8,20 +8,25 @@ import {EquatableType, EquatableTypeUtil} from "../../../equatable-type";
 
 export class CaseConditionBuilderImpl<
     ResultT extends EquatableType,
-    UsedRefT extends IUsedRef
-> implements CaseConditionBuilder<ResultT, UsedRefT> {
+    UsedRefT extends IUsedRef,
+    IsAggregateT extends boolean
+> implements CaseConditionBuilder<ResultT, UsedRefT, IsAggregateT> {
     private readonly resultMappers : readonly tm.SafeMapper<ResultT>[];
     private readonly usedRef : UsedRefT;
     private readonly ast : CaseConditionNode;
+
+    readonly isAggregate : IsAggregateT;
 
     constructor (
         resultMappers : tm.SafeMapper<ResultT>[],
         usedRef : UsedRefT,
         ast : CaseConditionNode,
+        isAggregate : IsAggregateT,
     ) {
         this.resultMappers = resultMappers;
         this.usedRef = usedRef;
         this.ast = ast;
+        this.isAggregate = isAggregate;
     }
 
     when<
@@ -36,7 +41,8 @@ export class CaseConditionBuilderImpl<
             UsedRefUtil.IntersectTryReuseExistingType<
                 | UsedRefT
                 | BuiltInExprUtil.IntersectUsedRef<ConditionT|ThenT>
-            >
+            >,
+            IsAggregateT|BuiltInExprUtil.IsAggregate<ConditionT|ThenT>
         >
     ) {
         return new CaseConditionBuilderImpl<
@@ -44,7 +50,8 @@ export class CaseConditionBuilderImpl<
             UsedRefUtil.IntersectTryReuseExistingType<
                 | UsedRefT
                 | BuiltInExprUtil.IntersectUsedRef<ConditionT|ThenT>
-            >
+            >,
+            IsAggregateT|BuiltInExprUtil.IsAggregate<ConditionT|ThenT>
         >(
             [...this.resultMappers, BuiltInExprUtil.mapper(then)],
             UsedRefUtil.intersect<
@@ -68,7 +75,12 @@ export class CaseConditionBuilderImpl<
                     ]
                 ]),
                 else : this.ast.else,
-            }
+            },
+            (
+                this.isAggregate ||
+                BuiltInExprUtil.isAggregate(condition) ||
+                BuiltInExprUtil.isAggregate(then)
+            ) as IsAggregateT|BuiltInExprUtil.IsAggregate<ConditionT|ThenT>
         ) as (
             /**
              * @todo Investigate type instantiation exessively deep error
@@ -78,15 +90,17 @@ export class CaseConditionBuilderImpl<
                 UsedRefUtil.IntersectTryReuseExistingType<
                     | UsedRefT
                     | BuiltInExprUtil.IntersectUsedRef<ConditionT|ThenT>
-                >
+                >,
+                IsAggregateT|BuiltInExprUtil.IsAggregate<ConditionT|ThenT>
             >
         );
     }
-    end () : ExprImpl<ResultT|null, UsedRefT> {
+    end () : ExprImpl<ResultT|null, UsedRefT, IsAggregateT> {
         return expr(
             {
                 mapper : tm.unsafeOr(...this.resultMappers, tm.null()),
                 usedRef : this.usedRef,
+                isAggregate : this.isAggregate,
             },
             this.ast
         );
@@ -102,7 +116,8 @@ export class CaseConditionBuilderImpl<
                 UsedRefUtil.Intersect<
                     | UsedRefT
                     | BuiltInExprUtil.UsedRef<ElseT>
-                >
+                >,
+                IsAggregateT|BuiltInExprUtil.IsAggregate<ElseT>
             >
         }
     ) {
@@ -111,7 +126,8 @@ export class CaseConditionBuilderImpl<
             UsedRefUtil.Intersect<
                 | UsedRefT
                 | BuiltInExprUtil.UsedRef<ElseT>
-            >
+            >,
+            IsAggregateT|BuiltInExprUtil.IsAggregate<ElseT>
         > => {
             return expr(
                 {
@@ -123,6 +139,10 @@ export class CaseConditionBuilderImpl<
                         this.usedRef,
                         BuiltInExprUtil.usedRef(elseResult)
                     ),
+                    isAggregate : (
+                        this.isAggregate ||
+                        BuiltInExprUtil.isAggregate(elseResult)
+                    ) as IsAggregateT|BuiltInExprUtil.IsAggregate<ElseT>
                 },
                 {
                     ...this.ast,

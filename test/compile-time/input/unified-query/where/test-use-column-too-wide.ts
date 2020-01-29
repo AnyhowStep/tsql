@@ -12,7 +12,8 @@ export const query = tsql.QueryUtil.newInstance()
 type AllowedUsedRef = tsql.FromClauseUtil.AllowedUsedRef<typeof query["fromClause"], { isLateral : true }>;
 type AllowedExpr = tsql.IExpr<{
     mapper : () => boolean,
-    usedRef : AllowedUsedRef
+    usedRef : AllowedUsedRef,
+    isAggregate : false,
 }>;
 type MyExpr = tsql.IExpr<{
     mapper : () => boolean,
@@ -24,7 +25,8 @@ type MyExpr = tsql.IExpr<{
              */
             myTableId: bigint|null,
         },
-    }>
+    }>,
+    isAggregate : false,
 }>;
 declare const whereClause : MyExpr;
 /**

@@ -7,4 +7,4 @@ export declare const expr: tsql.CaseValueBuilder<number, number | null, tsql.IUs
         readonly someColumn02: number;
         readonly someColumn03: number | null;
     };
-}>>;
+}>, false>;

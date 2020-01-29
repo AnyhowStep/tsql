@@ -2,7 +2,7 @@ import * as tm from "type-mapping";
 import {DataType} from "../../data-type-impl";
 import {isDataType} from "../predicate";
 import {makeDataType} from "../constructor";
-import {BuiltInExpr_NonCorrelated, BuiltInExprUtil} from "../../../built-in-expr";
+import {BuiltInExpr_NonCorrelated_NonAggregate, BuiltInExprUtil} from "../../../built-in-expr";
 import {BuiltInValueExprUtil} from "../../../built-in-value-expr";
 
 export type Merge<TypeA, TypeB> =
@@ -96,7 +96,7 @@ export function intersect<
                      *
                      * So, we only need one mapper to convert to a built-in expr.
                      */
-                    return mapperA.toBuiltInExpr_NonCorrelated(value) as BuiltInExpr_NonCorrelated<TypeA & TypeB>;
+                    return mapperA.toBuiltInExpr_NonCorrelated(value) as BuiltInExpr_NonCorrelated_NonAggregate<TypeA & TypeB>;
                 },
                 (a, b) => {
                     /**
@@ -152,7 +152,7 @@ export function intersect<
                      *
                      * So, we only need one mapper to convert to a built-in expr.
                      */
-                    return mapperA.toBuiltInExpr_NonCorrelated(value) as BuiltInExpr_NonCorrelated<TypeA & TypeB>;
+                    return mapperA.toBuiltInExpr_NonCorrelated(value) as BuiltInExpr_NonCorrelated_NonAggregate<TypeA & TypeB>;
                 },
                 (a, b) => {
                     /**
@@ -210,7 +210,7 @@ export function intersect<
                      *
                      * So, we only need one mapper to convert to a built-in expr.
                      */
-                    return mapperB.toBuiltInExpr_NonCorrelated(value) as BuiltInExpr_NonCorrelated<TypeA & TypeB>;
+                    return mapperB.toBuiltInExpr_NonCorrelated(value) as BuiltInExpr_NonCorrelated_NonAggregate<TypeA & TypeB>;
                 },
                 (a, b) => {
                     /**
@@ -308,7 +308,7 @@ export function intersect<
                      *
                      * So, we can assume they are built-in values
                      */
-                    return BuiltInExprUtil.fromValueExpr(mapperA, value) as BuiltInExpr_NonCorrelated<TypeA & TypeB>;
+                    return BuiltInExprUtil.fromValueExpr(mapperA, value) as BuiltInExpr_NonCorrelated_NonAggregate<TypeA & TypeB>;
                 },
                 (a, b) => {
                     /**

@@ -65,21 +65,25 @@ export declare const myQuery: tsql.Query<{
         tableAlias: "myTable";
         alias: "aliasedColumnExpression";
         usedRef: tsql.IUsedRef<never>;
+        isAggregate: false;
     }>, tsql.IExprSelectItem<{
         mapper: tm.Mapper<unknown, "I am an aliased expression">;
         tableAlias: "$aliased";
         alias: "aliasedLiteralValueExpression";
         usedRef: tsql.IUsedRef<never>;
+        isAggregate: false;
     }>, tsql.IExprSelectItem<{
         mapper: tm.Mapper<unknown, string>;
         tableAlias: "$aliased";
         alias: "aliasedExpression";
         usedRef: tsql.IUsedRef<never>;
+        isAggregate: false;
     }>, tsql.IExprSelectItem<{
         mapper: tm.Mapper<unknown, bigint | null>;
         tableAlias: "$aliased";
         alias: "aliasedSubqueryExpression";
         usedRef: tsql.IUsedRef<never>;
+        isAggregate: false;
     }>];
     limitClause: undefined;
     compoundQueryClause: undefined;

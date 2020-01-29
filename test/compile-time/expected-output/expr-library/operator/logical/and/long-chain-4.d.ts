@@ -4,22 +4,26 @@ export declare const expr: tsql.AliasedExpr<{
     tableAlias: "$aliased";
     alias: "x";
     usedRef: tsql.IUsedRef<{}>;
+    isAggregate: never;
 }>;
 export declare const expr2: tsql.AliasedExpr<{
     mapper: import("type-mapping").Mapper<unknown, boolean>;
     tableAlias: "$aliased";
     alias: "x";
     usedRef: tsql.IUsedRef<{}>;
+    isAggregate: never;
 }>;
 export declare const expr3: tsql.AliasedExpr<{
     mapper: import("type-mapping").Mapper<unknown, boolean>;
     tableAlias: "$aliased";
     alias: "x";
     usedRef: tsql.IUsedRef<{}>;
+    isAggregate: never;
 }>;
 export declare const expr4: tsql.AliasedExpr<{
     mapper: import("type-mapping").Mapper<unknown, boolean>;
     tableAlias: "$aliased";
     alias: "x";
     usedRef: tsql.IUsedRef<{}>;
+    isAggregate: never;
 }>;

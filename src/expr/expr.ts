@@ -5,6 +5,7 @@ import {IUsedRef} from "../used-ref";
 export interface ExprData {
     readonly mapper : tm.AnySafeMapper;
     readonly usedRef : IUsedRef;
+    readonly isAggregate : boolean;
 }
 
 export interface IExpr<DataT extends ExprData=ExprData> {
@@ -28,15 +29,21 @@ export interface IExpr<DataT extends ExprData=ExprData> {
      */
     readonly usedRef : DataT["usedRef"];
 
+    readonly isAggregate : DataT["isAggregate"];
+
     /**
      * The AST of the expression
      */
     readonly ast : Ast;
 }
 
-export type IAnonymousExpr<TypeT> = (
+/**
+ * @todo Find All References and check that usages are valid.
+ */
+export type IAnonymousExpr<TypeT, IsAggregateT extends boolean> = (
     IExpr<{
         mapper : tm.SafeMapper<TypeT>,
         usedRef : IUsedRef,
+        isAggregate : IsAggregateT,
     }>
 );

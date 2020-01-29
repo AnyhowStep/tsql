@@ -35,6 +35,7 @@ export function ifIsNull<
                 >
             >
         ),
+        isAggregate : BuiltInExprUtil.IsAggregate<ThenT|ElseT>,
     }>
 ) {
     return ifImpl.if(
@@ -66,6 +67,7 @@ export function ifIsNull<
                     >
                 >
             ),
+            isAggregate : BuiltInExprUtil.IsAggregate<ThenT|ElseT>,
         }>
     );
 }

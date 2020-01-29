@@ -6,8 +6,11 @@ import {EquatableTypeUtil, EquatableType} from "../../../equatable-type";
 
 export interface CaseConditionBuilder<
     ResultT extends EquatableType,
-    UsedRefT extends IUsedRef
+    UsedRefT extends IUsedRef,
+    IsAggregateT extends boolean
 > {
+    readonly isAggregate : IsAggregateT;
+
     when<
         ConditionT extends BuiltInExpr<boolean>,
         ThenT extends BuiltInExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
@@ -28,14 +31,15 @@ export interface CaseConditionBuilder<
             UsedRefUtil.IntersectTryReuseExistingType<
                 | UsedRefT
                 | BuiltInExprUtil.IntersectUsedRef<ConditionT|ThenT>
-            >
+            >,
+            IsAggregateT|BuiltInExprUtil.IsAggregate<ConditionT|ThenT>
         >
     );
     /**
      * Calling `.end()` without an `ELSE` clause can
      * cause the result to be `null`
      */
-    end () : ExprImpl<ResultT|null, UsedRefT>;
+    end () : ExprImpl<ResultT|null, UsedRefT, IsAggregateT>;
     else<
         ElseT extends BuiltInExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
     > (
@@ -47,7 +51,8 @@ export interface CaseConditionBuilder<
                 UsedRefUtil.Intersect<
                     | UsedRefT
                     | BuiltInExprUtil.UsedRef<ElseT>
-                >
+                >,
+                IsAggregateT|BuiltInExprUtil.IsAggregate<ElseT>
             >
         }
     );
@@ -62,7 +67,8 @@ export interface UninitializedCaseConditionBuilder {
     ) : (
         CaseConditionBuilder<
             BuiltInExprUtil.TypeOf<ThenT>,
-            BuiltInExprUtil.IntersectUsedRef<ConditionT|ThenT>
+            BuiltInExprUtil.IntersectUsedRef<ConditionT|ThenT>,
+            BuiltInExprUtil.IsAggregate<ConditionT|ThenT>
         >
     );
 }

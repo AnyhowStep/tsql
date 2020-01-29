@@ -45,7 +45,8 @@ export type EqCandidateKeyOfTable =
     ) => (
         Expr<{
             mapper : tm.SafeMapper<boolean>,
-            usedRef : UsedRefUtil.FromColumnMap<SrcT["columns"]|DstT["columns"]>
+            usedRef : UsedRefUtil.FromColumnMap<SrcT["columns"]|DstT["columns"]>,
+            isAggregate : false,
         }>
     )
 ;
@@ -62,7 +63,8 @@ export const eqCandidateKeyOfTable : EqCandidateKeyOfTable = (
     ) : (
         Expr<{
             mapper : tm.SafeMapper<boolean>,
-            usedRef : UsedRefUtil.FromColumnMap<SrcT["columns"]|DstT["columns"]>
+            usedRef : UsedRefUtil.FromColumnMap<SrcT["columns"]|DstT["columns"]>,
+            isAggregate : false,
         }>
     ) => {
         const candidateKeys = TableUtil.extractCandidateKeysWithColumnAliasInTable<DstT, SrcT>(dst, src);
@@ -101,13 +103,15 @@ export const eqCandidateKeyOfTable : EqCandidateKeyOfTable = (
             );
             return expr as Expr<{
                 mapper : tm.SafeMapper<boolean>,
-                usedRef : UsedRefUtil.FromColumnMap<SrcT["columns"]|DstT["columns"]>
+                usedRef : UsedRefUtil.FromColumnMap<SrcT["columns"]|DstT["columns"]>,
+                isAggregate : false,
             }>;
         });
         const result = and(...arr);
         return result as Expr<{
             mapper : tm.SafeMapper<boolean>,
-            usedRef : UsedRefUtil.FromColumnMap<SrcT["columns"]|DstT["columns"]>
+            usedRef : UsedRefUtil.FromColumnMap<SrcT["columns"]|DstT["columns"]>,
+            isAggregate : false,
         }>;
     }
 );

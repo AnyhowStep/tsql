@@ -13,4 +13,5 @@ export declare const aliased: tsql.DerivedTableSelectItem<{
         }>;
     };
     usedRef: tsql.IUsedRef<{}>;
+    isAggregate: false;
 }>;

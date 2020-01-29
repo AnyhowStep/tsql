@@ -41,6 +41,7 @@ export type As<ColumnT extends IColumn, AliasT extends string> =
         alias : AliasT;
 
         usedRef : UsedRefUtil.FromColumn<ColumnT>;
+        isAggregate : false;
     }>
 ;
 export function as<ColumnT extends IColumn, AliasT extends string> (
@@ -53,6 +54,7 @@ export function as<ColumnT extends IColumn, AliasT extends string> (
             mapper : column.mapper,
             tableAlias : column.tableAlias,
             alias : alias,
+            isAggregate : false,
         },
         buildAst(column)
     );

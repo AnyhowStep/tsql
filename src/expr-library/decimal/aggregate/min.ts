@@ -22,7 +22,7 @@ export const minDistinct : Operator1<Decimal, Decimal|null> = <
 ) : (
     ExprUtil.Intersect<Decimal|null, ArgT>
 ) => {
-    return minImpl(true, arg);
+    return minImpl(true, arg) as ExprUtil.Intersect<Decimal|null, ArgT>;
 };
 
 export const minAll : Operator1<Decimal, Decimal|null> = <
@@ -32,7 +32,7 @@ export const minAll : Operator1<Decimal, Decimal|null> = <
 ) : (
     ExprUtil.Intersect<Decimal|null, ArgT>
 ) => {
-    return minImpl(false, arg);
+    return minImpl(false, arg) as ExprUtil.Intersect<Decimal|null, ArgT>;
 };
 
 export const min = minAll;

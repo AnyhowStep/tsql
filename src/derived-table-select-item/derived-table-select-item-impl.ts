@@ -17,6 +17,7 @@ export class DerivedTableSelectItem<
     readonly alias : DataT["alias"];
     readonly columns : DataT["columns"];
     readonly usedRef : DataT["usedRef"];
+    readonly isAggregate : DataT["isAggregate"];
 
     readonly ast : Ast;
     readonly unaliasedAst : Ast;
@@ -31,6 +32,7 @@ export class DerivedTableSelectItem<
         this.alias = data.alias;
         this.columns = data.columns;
         this.usedRef = data.usedRef;
+        this.isAggregate = data.isAggregate;
 
         this.ast = unaliasedAst;
         this.unaliasedAst = unaliasedAst;

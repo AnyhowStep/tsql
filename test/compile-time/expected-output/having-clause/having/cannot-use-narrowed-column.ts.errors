@@ -1,11 +1,11 @@
 [
   {
     "messageText": {
-      "messageText": "Type 'ExprImpl<boolean, IUsedRef<{ readonly myTable: { readonly myColumn: boolean; }; }>>' is not assignable to type 'boolean | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{ myTable: { myColumn: boolean | null; }; }>; }>'.",
+      "messageText": "Type 'ExprImpl<boolean, IUsedRef<{ readonly myTable: { readonly myColumn: boolean; }; }>, false>' is not assignable to type 'boolean | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{ myTable: { myColumn: boolean | null; }; }>; isAggregate: boolean; }>'.",
       "category": 1,
       "code": 2322,
       "next": {
-        "messageText": "Type 'ExprImpl<boolean, IUsedRef<{ readonly myTable: { readonly myColumn: boolean; }; }>>' is not assignable to type 'IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{ myTable: { myColumn: boolean | null; }; }>; }>'.",
+        "messageText": "Type 'ExprImpl<boolean, IUsedRef<{ readonly myTable: { readonly myColumn: boolean; }; }>, false>' is not assignable to type 'IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{ myTable: { myColumn: boolean | null; }; }>; isAggregate: boolean; }>'.",
         "category": 1,
         "code": 2322,
         "next": {

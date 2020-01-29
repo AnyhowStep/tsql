@@ -16,7 +16,7 @@ export declare const expr: tsql.ExprImpl<boolean, tsql.IUsedRef<{
         readonly computerId: string;
         readonly createdAt: Date;
     };
-}>>;
+}>, false>;
 export declare const expr2: tsql.ExprImpl<boolean, tsql.IUsedRef<{
     readonly childTable: {
         readonly userId: bigint;
@@ -33,7 +33,7 @@ export declare const expr2: tsql.ExprImpl<boolean, tsql.IUsedRef<{
         readonly computerId: string;
         readonly createdAt: Date;
     };
-}>>;
+}>, false>;
 export declare const expr3: tsql.ExprImpl<boolean, tsql.IUsedRef<{
     readonly childTable: {
         readonly userId: bigint;
@@ -50,4 +50,4 @@ export declare const expr3: tsql.ExprImpl<boolean, tsql.IUsedRef<{
         readonly computerId: string;
         readonly createdAt: Date;
     };
-}>>;
+}>, false>;

@@ -4,4 +4,5 @@ export declare const aliasedExpr: tsql.AliasedExpr<{
     tableAlias: "$aliased";
     alias: "199";
     usedRef: tsql.IUsedRef<{}>;
+    isAggregate: false;
 }>;

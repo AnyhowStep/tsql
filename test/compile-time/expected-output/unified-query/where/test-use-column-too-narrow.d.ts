@@ -30,10 +30,7 @@ export declare const query: tsql.Query<{
     limitClause: undefined;
     compoundQueryClause: undefined;
     compoundQueryLimitClause: undefined;
-    mapDelegate: undefined; /**
-     * We make this `WHERE` clause require that `myTableId` is **NON-NULLABLE**.
-     * So, `bigint` only.
-     */
+    mapDelegate: undefined;
     groupByClause: undefined;
 }>;
 declare type AllowedUsedRef = tsql.FromClauseUtil.AllowedUsedRef<typeof query["fromClause"], {
@@ -42,6 +39,7 @@ declare type AllowedUsedRef = tsql.FromClauseUtil.AllowedUsedRef<typeof query["f
 declare type AllowedExpr = tsql.IExpr<{
     mapper: () => boolean;
     usedRef: AllowedUsedRef;
+    isAggregate: false;
 }>;
 export declare const notAllowed: AllowedExpr;
 export {};

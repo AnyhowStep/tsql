@@ -5,5 +5,6 @@ export declare const selectClause: [tsql.IExprSelectItem<{
     tableAlias: "$aliased";
     alias: "eq";
     usedRef: tsql.IUsedRef<never>;
+    isAggregate: false;
 }>];
 export declare const groupByClause: readonly any[];

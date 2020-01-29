@@ -13,6 +13,7 @@ export const dtPoint = tsql.DataTypeUtil.makeDataType(
                 y : tm.finiteNumber(),
             }),
             usedRef : tsql.UsedRefUtil.fromColumnRef({}),
+            isAggregate : false,
         },
         tsql.LiteralValueNodeUtil.stringLiteralNode(
             JSON.stringify(value)

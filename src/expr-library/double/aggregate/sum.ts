@@ -18,7 +18,7 @@ export const sumDistinct : Operator1<number, number|null> = <
 ) : (
     ExprUtil.Intersect<number|null, ArgT>
 ) => {
-    return sumImpl(true, arg);
+    return sumImpl(true, arg) as ExprUtil.Intersect<number|null, ArgT>;
 };
 
 export const sumAll : Operator1<number, number|null> = <
@@ -28,7 +28,7 @@ export const sumAll : Operator1<number, number|null> = <
 ) : (
     ExprUtil.Intersect<number|null, ArgT>
 ) => {
-    return sumImpl(false, arg);
+    return sumImpl(false, arg) as ExprUtil.Intersect<number|null, ArgT>;
 };
 
 export const sum = sumAll;

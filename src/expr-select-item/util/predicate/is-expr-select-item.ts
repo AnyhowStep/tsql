@@ -10,14 +10,15 @@ import {isObjectWithOwnEnumerableKeys} from "../../../type-util";
  *
  * @todo Consider adding checks for increased type safety.
  */
-export function isExprSelectItem (x : unknown) : x is IAnonymousExprSelectItem<unknown> {
-    if (!isObjectWithOwnEnumerableKeys<IAnonymousExprSelectItem<unknown>>()(
+export function isExprSelectItem (x : unknown) : x is IAnonymousExprSelectItem<unknown, boolean> {
+    if (!isObjectWithOwnEnumerableKeys<IAnonymousExprSelectItem<unknown, boolean>>()(
         x,
         [
             "mapper",
             "tableAlias",
             "alias",
             "usedRef",
+            "isAggregate",
             "unaliasedAst",
         ]
     )) {
@@ -28,6 +29,7 @@ export function isExprSelectItem (x : unknown) : x is IAnonymousExprSelectItem<u
         (typeof x.tableAlias == "string") &&
         (typeof x.alias == "string") //&&
         //UsedRefUtil.isUsedRef(x.usedRef) &&
+        //(typeof x.isAggregate == "boolean") &&
         //AstUtil.isAst(x.ast)
     );
 }

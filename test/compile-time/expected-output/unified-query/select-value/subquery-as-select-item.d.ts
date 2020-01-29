@@ -64,6 +64,7 @@ export declare const myQuery: tsql.Query<{
          */
         alias: "value";
         usedRef: tsql.IUsedRef<never>;
+        isAggregate: false;
     }>];
     limitClause: undefined;
     compoundQueryClause: undefined;

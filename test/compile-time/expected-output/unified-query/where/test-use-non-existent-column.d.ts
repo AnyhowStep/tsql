@@ -39,6 +39,7 @@ declare type AllowedUsedRef = tsql.FromClauseUtil.AllowedUsedRef<typeof query["f
 declare type AllowedExpr = tsql.IExpr<{
     mapper: () => boolean;
     usedRef: AllowedUsedRef;
+    isAggregate: false;
 }>;
 export declare const notAllowed: AllowedExpr;
 export {};

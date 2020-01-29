@@ -26,11 +26,14 @@ export const likeEscapeImpl = makeOperator3<OperatorType.LIKE_ESCAPE, string, st
     TypeHint.STRING
 );
 
-export interface LikeExpr<UsedRefT extends IUsedRef> extends ExprImpl<boolean, UsedRefT> {
+export interface LikeExpr<
+    UsedRefT extends IUsedRef,
+    IsAggregateT extends boolean
+> extends ExprImpl<boolean, UsedRefT, IsAggregateT> {
     /**
      * SQLite requires the `escapeChar` be exactly of length `1`
      */
-    escape : (escapeChar : string) => ExprImpl<boolean, UsedRefT>;
+    escape : (escapeChar : string) => ExprImpl<boolean, UsedRefT, IsAggregateT>;
 }
 export function like<
     ExprT extends BuiltInExpr<string>,
@@ -40,12 +43,14 @@ export function like<
     pattern : PatternT
 ) : (
     LikeExpr<
-        BuiltInExprUtil.IntersectUsedRef<ExprT|PatternT>
+        BuiltInExprUtil.IntersectUsedRef<ExprT|PatternT>,
+        BuiltInExprUtil.IsAggregate<ExprT|PatternT>
     >
 ) {
     const result = likeImpl<ExprT, PatternT>(builtInExpr, pattern) as unknown as (
         LikeExpr<
-            BuiltInExprUtil.IntersectUsedRef<ExprT|PatternT>
+            BuiltInExprUtil.IntersectUsedRef<ExprT|PatternT>,
+            BuiltInExprUtil.IsAggregate<ExprT|PatternT>
         >
     );
     result.escape = (escapeChar : string) : ReturnType<typeof result.escape> => {

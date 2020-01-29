@@ -22,7 +22,7 @@ export const avgDistinct : Operator1<bigint, Decimal|null> = <
 ) : (
     ExprUtil.Intersect<Decimal|null, ArgT>
 ) => {
-    return avgImpl(true, arg);
+    return avgImpl(true, arg) as ExprUtil.Intersect<Decimal|null, ArgT>;
 };
 
 export const avgAll : Operator1<bigint, Decimal|null> = <
@@ -32,7 +32,7 @@ export const avgAll : Operator1<bigint, Decimal|null> = <
 ) : (
     ExprUtil.Intersect<Decimal|null, ArgT>
 ) => {
-    return avgImpl(false, arg);
+    return avgImpl(false, arg) as ExprUtil.Intersect<Decimal|null, ArgT>;
 };
 
 export const avg = avgAll;

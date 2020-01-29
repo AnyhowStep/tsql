@@ -181,6 +181,7 @@ export declare const result: {
     whereClause: tsql.IExpr<{
         mapper: tm.Mapper<unknown, boolean>;
         usedRef: tsql.IUsedRef<never>;
+        isAggregate: false;
     }>;
 };
 export declare const result2: {
@@ -364,6 +365,7 @@ export declare const result2: {
     whereClause: tsql.IExpr<{
         mapper: tm.Mapper<unknown, boolean>;
         usedRef: tsql.IUsedRef<never>;
+        isAggregate: false;
     }>;
 };
 export declare const result3: {
@@ -547,6 +549,7 @@ export declare const result3: {
     whereClause: tsql.IExpr<{
         mapper: tm.Mapper<unknown, boolean>;
         usedRef: tsql.IUsedRef<never>;
+        isAggregate: false;
     }>;
 };
 export declare const result4: {
@@ -730,5 +733,6 @@ export declare const result4: {
     whereClause: tsql.IExpr<{
         mapper: tm.Mapper<unknown, boolean>;
         usedRef: tsql.IUsedRef<never>;
+        isAggregate: false;
     }>;
 };

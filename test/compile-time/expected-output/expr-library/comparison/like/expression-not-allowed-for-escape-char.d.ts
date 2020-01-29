@@ -4,4 +4,4 @@ export declare const expr0: tsql.ExprImpl<boolean, tsql.IUsedRef<{
         readonly v: string;
         readonly v2: string;
     };
-}>>;
+}>, false>;

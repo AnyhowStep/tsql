@@ -10,12 +10,13 @@ import {isObjectWithOwnEnumerableKeys} from "../../../type-util";
  *
  * @todo Consider adding checks for increased type safety.
  */
-export function isExpr (x : unknown) : x is IAnonymousExpr<unknown> {
-    if (!isObjectWithOwnEnumerableKeys<IAnonymousExpr<unknown>>()(
+export function isExpr (x : unknown) : x is IAnonymousExpr<unknown, boolean> {
+    if (!isObjectWithOwnEnumerableKeys<IAnonymousExpr<unknown, boolean>>()(
         x,
         [
             "mapper",
             "usedRef",
+            "isAggregate",
             "ast"
         ]
     )) {
@@ -24,6 +25,7 @@ export function isExpr (x : unknown) : x is IAnonymousExpr<unknown> {
     return (
         (typeof x.mapper == "function") //&&
         //UsedRefUtil.isUsedRef(x.usedRef) &&
-        //AstUtil.isAst(x.ast)
+        //AstUtil.isAst(x.ast) &&
+        //(typeof x.isAggregate == "boolean")
     );
 }

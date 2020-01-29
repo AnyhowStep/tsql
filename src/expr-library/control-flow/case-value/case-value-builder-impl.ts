@@ -28,20 +28,25 @@ declare global {
 export class CaseValueBuilderImpl<
     ValueT extends NonNullEquatableType,
     ResultT extends EquatableType,
-    UsedRefT extends IUsedRef
-> implements CaseValueBuilder<ValueT, ResultT, UsedRefT> {
+    UsedRefT extends IUsedRef,
+    IsAggregateT extends boolean
+> implements CaseValueBuilder<ValueT, ResultT, UsedRefT, IsAggregateT> {
     private readonly resultMappers : readonly tm.SafeMapper<ResultT>[];
     private readonly usedRef : UsedRefT;
     private readonly ast : CaseValueNode;
+
+    readonly isAggregate : IsAggregateT;
 
     constructor (
         resultMappers : tm.SafeMapper<ResultT>[],
         usedRef : UsedRefT,
         ast : CaseValueNode,
+        isAggregate : IsAggregateT
     ) {
         this.resultMappers = resultMappers;
         this.usedRef = usedRef;
         this.ast = ast;
+        this.isAggregate = isAggregate;
     }
 
     when<
@@ -57,7 +62,8 @@ export class CaseValueBuilderImpl<
             UsedRefUtil.IntersectTryReuseExistingType<
                 | UsedRefT
                 | BuiltInExprUtil.IntersectUsedRef<CompareValueT|ThenT>
-            >
+            >,
+            IsAggregateT|BuiltInExprUtil.IsAggregate<CompareValueT|ThenT>
         >
     ) {
         return new CaseValueBuilderImpl<
@@ -66,7 +72,8 @@ export class CaseValueBuilderImpl<
             UsedRefUtil.IntersectTryReuseExistingType<
                 | UsedRefT
                 | BuiltInExprUtil.IntersectUsedRef<CompareValueT|ThenT>
-            >
+            >,
+            IsAggregateT|BuiltInExprUtil.IsAggregate<CompareValueT|ThenT>
         >(
             [...this.resultMappers, BuiltInExprUtil.mapper(then)],
             UsedRefUtil.intersect<
@@ -91,7 +98,12 @@ export class CaseValueBuilderImpl<
                     ]
                 ]),
                 else : this.ast.else,
-            }
+            },
+            (
+                this.isAggregate ||
+                BuiltInExprUtil.isAggregate(compareValue) ||
+                BuiltInExprUtil.isAggregate(then)
+            ) as IsAggregateT|BuiltInExprUtil.IsAggregate<CompareValueT|ThenT>
         ) as (
             /**
              * @todo Investigate type instantiation exessively deep error
@@ -102,15 +114,17 @@ export class CaseValueBuilderImpl<
                 UsedRefUtil.IntersectTryReuseExistingType<
                     | UsedRefT
                     | BuiltInExprUtil.IntersectUsedRef<CompareValueT|ThenT>
-                >
+                >,
+                IsAggregateT|BuiltInExprUtil.IsAggregate<CompareValueT|ThenT>
             >
         );
     }
-    end () : ExprImpl<ResultT|null, UsedRefT> {
+    end () : ExprImpl<ResultT|null, UsedRefT, IsAggregateT> {
         return expr(
             {
                 mapper : tm.unsafeOr(...this.resultMappers, tm.null()),
                 usedRef : this.usedRef,
+                isAggregate : this.isAggregate,
             },
             this.ast
         );
@@ -126,7 +140,8 @@ export class CaseValueBuilderImpl<
                 UsedRefUtil.Intersect<
                     | UsedRefT
                     | BuiltInExprUtil.UsedRef<ElseT>
-                >
+                >,
+                IsAggregateT|BuiltInExprUtil.IsAggregate<ElseT>
             >
         }
     ) {
@@ -135,7 +150,8 @@ export class CaseValueBuilderImpl<
             UsedRefUtil.Intersect<
                 | UsedRefT
                 | BuiltInExprUtil.UsedRef<ElseT>
-            >
+            >,
+            IsAggregateT|BuiltInExprUtil.IsAggregate<ElseT>
         > => {
             return expr(
                 {
@@ -147,6 +163,10 @@ export class CaseValueBuilderImpl<
                         this.usedRef,
                         BuiltInExprUtil.usedRef(elseResult)
                     ),
+                    isAggregate : (
+                        this.isAggregate ||
+                        BuiltInExprUtil.isAggregate(elseResult)
+                    ) as IsAggregateT|BuiltInExprUtil.IsAggregate<ElseT>
                 },
                 {
                     ...this.ast,

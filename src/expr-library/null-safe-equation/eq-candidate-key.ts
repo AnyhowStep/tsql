@@ -62,7 +62,8 @@ export type EqCandidateKey = (
     ) => (
         Expr<{
             mapper : tm.SafeMapper<boolean>,
-            usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>
+            usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>,
+            isAggregate : false,
         }>
     )
 );
@@ -75,7 +76,8 @@ export const eqCandidateKey : EqCandidateKey = (
     ) : (
         Expr<{
             mapper : tm.SafeMapper<boolean>,
-            usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>
+            usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>,
+            isAggregate : false,
         }>
     ) => {
         const candidateKey = CandidateKeyUtil.mapperPreferPrimaryKey(table)(
@@ -97,13 +99,15 @@ export const eqCandidateKey : EqCandidateKey = (
             );
             return expr as Expr<{
                 mapper : tm.SafeMapper<boolean>,
-                usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>
+                usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>,
+                isAggregate : false,
             }>;
         });
         const result = and(...arr);
         return result as Expr<{
             mapper : tm.SafeMapper<boolean>,
-            usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>
+            usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>,
+            isAggregate : false,
         }>;
     }
 );

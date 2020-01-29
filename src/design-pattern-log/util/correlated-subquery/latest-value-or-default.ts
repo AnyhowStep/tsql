@@ -45,6 +45,7 @@ export type LatestValueOrDefault<
             ReturnType<ColumnT["mapper"]>
         >,
         usedRef : UsedRefUtil.FromColumnMap<LogT["ownerTable"]["columns"]>,
+        isAggregate : false,
     }>
 );
 

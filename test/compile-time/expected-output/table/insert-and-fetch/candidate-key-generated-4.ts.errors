@@ -1,11 +1,11 @@
 [
   {
     "messageText": {
-      "messageText": "Argument of type '{ testId: bigint; }' is not assignable to parameter of type '{} & { readonly testVal?: bigint | IExpr<{ mapper: Mapper<unknown, bigint>; usedRef: IUsedRef<{}>; }> | IExprSelectItem<{ mapper: Mapper<unknown, bigint>; tableAlias: string; alias: string; usedRef: IUsedRef<{}>; }> | (IQueryBase<...> & ... 1 more ... & IQueryBase<...>) | undefined; }'.",
+      "messageText": "Argument of type '{ testId: bigint; }' is not assignable to parameter of type '{} & { readonly testVal?: bigint | IExpr<{ mapper: Mapper<unknown, bigint>; usedRef: IUsedRef<{}>; isAggregate: boolean; }> | IExprSelectItem<{ mapper: Mapper<unknown, bigint>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; isAggregate: boolean; }> | (IQueryBase<...> & ... 1 more ... & IQueryBase<...>) |...'.",
       "category": 1,
       "code": 2345,
       "next": {
-        "messageText": "Object literal may only specify known properties, and 'testId' does not exist in type '{} & { readonly testVal?: bigint | IExpr<{ mapper: Mapper<unknown, bigint>; usedRef: IUsedRef<{}>; }> | IExprSelectItem<{ mapper: Mapper<unknown, bigint>; tableAlias: string; alias: string; usedRef: IUsedRef<{}>; }> | (IQueryBase<...> & ... 1 more ... & IQueryBase<...>) | undefined; }'.",
+        "messageText": "Object literal may only specify known properties, and 'testId' does not exist in type '{} & { readonly testVal?: bigint | IExpr<{ mapper: Mapper<unknown, bigint>; usedRef: IUsedRef<{}>; isAggregate: boolean; }> | IExprSelectItem<{ mapper: Mapper<unknown, bigint>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; isAggregate: boolean; }> | (IQueryBase<...> & ... 1 more ... & IQueryBase<...>) |...'.",
         "category": 1,
         "code": 2353
       }
@@ -17,11 +17,11 @@
   },
   {
     "messageText": {
-      "messageText": "Argument of type '{ testId: bigint; testVal: bigint; }' is not assignable to parameter of type '{} & { readonly testVal?: bigint | IExpr<{ mapper: Mapper<unknown, bigint>; usedRef: IUsedRef<{}>; }> | IExprSelectItem<{ mapper: Mapper<unknown, bigint>; tableAlias: string; alias: string; usedRef: IUsedRef<{}>; }> | (IQueryBase<...> & ... 1 more ... & IQueryBase<...>) | undefined; }'.",
+      "messageText": "Argument of type '{ testId: bigint; testVal: bigint; }' is not assignable to parameter of type '{} & { readonly testVal?: bigint | IExpr<{ mapper: Mapper<unknown, bigint>; usedRef: IUsedRef<{}>; isAggregate: boolean; }> | IExprSelectItem<{ mapper: Mapper<unknown, bigint>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; isAggregate: boolean; }> | (IQueryBase<...> & ... 1 more ... & IQueryBase<...>) |...'.",
       "category": 1,
       "code": 2345,
       "next": {
-        "messageText": "Object literal may only specify known properties, and 'testId' does not exist in type '{} & { readonly testVal?: bigint | IExpr<{ mapper: Mapper<unknown, bigint>; usedRef: IUsedRef<{}>; }> | IExprSelectItem<{ mapper: Mapper<unknown, bigint>; tableAlias: string; alias: string; usedRef: IUsedRef<{}>; }> | (IQueryBase<...> & ... 1 more ... & IQueryBase<...>) | undefined; }'.",
+        "messageText": "Object literal may only specify known properties, and 'testId' does not exist in type '{} & { readonly testVal?: bigint | IExpr<{ mapper: Mapper<unknown, bigint>; usedRef: IUsedRef<{}>; isAggregate: boolean; }> | IExprSelectItem<{ mapper: Mapper<unknown, bigint>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; isAggregate: boolean; }> | (IQueryBase<...> & ... 1 more ... & IQueryBase<...>) |...'.",
         "category": 1,
         "code": 2353
       }

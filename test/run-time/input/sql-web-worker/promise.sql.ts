@@ -454,6 +454,7 @@ export class Connection {
                                 {
                                     mapper : tm.mysql.bigIntSigned(),
                                     usedRef : tsql.UsedRefUtil.fromColumnRef({}),
+                                    isAggregate : false,
                                 },
                                 "LAST_INSERT_ROWID()"
                             ))
@@ -510,6 +511,7 @@ export class Connection {
                                 {
                                     mapper : tm.mysql.bigIntSigned(),
                                     usedRef : tsql.UsedRefUtil.fromColumnRef({}),
+                                    isAggregate : false,
                                 },
                                 "LAST_INSERT_ROWID()"
                             ))
@@ -575,6 +577,7 @@ export class Connection {
                                 {
                                     mapper : tm.mysql.bigIntSigned(),
                                     usedRef : tsql.UsedRefUtil.fromColumnRef({}),
+                                    isAggregate : false,
                                 },
                                 "LAST_INSERT_ROWID()"
                             ))

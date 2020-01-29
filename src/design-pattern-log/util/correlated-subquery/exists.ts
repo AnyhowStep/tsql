@@ -9,6 +9,7 @@ export type Exists<LogT extends ILog> =
     Expr<{
         mapper : tm.SafeMapper<boolean>,
         usedRef : UsedRefUtil.FromColumnMap<LogT["ownerTable"]["columns"]>,
+        isAggregate : false,
     }>
 ;
 export function exists<LogT extends ILog> (

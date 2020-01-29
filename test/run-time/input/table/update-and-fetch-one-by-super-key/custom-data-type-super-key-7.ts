@@ -39,6 +39,7 @@ tape(__filename, async (t) => {
                 {
                     mapper : dtPoint,
                     usedRef : BuiltInExprUtil.intersectUsedRef(arg, newX),
+                    isAggregate : false,
                 },
                 tsql.functionCall(
                     "replaceX",

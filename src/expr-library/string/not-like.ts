@@ -24,11 +24,14 @@ export const notLikeEscapeImpl = makeOperator3<OperatorType.NOT_LIKE_ESCAPE, str
     TypeHint.STRING
 );
 
-export interface NotLikeExpr<UsedRefT extends IUsedRef> extends ExprImpl<boolean, UsedRefT> {
+export interface NotLikeExpr<
+    UsedRefT extends IUsedRef,
+    IsAggregateT extends boolean
+> extends ExprImpl<boolean, UsedRefT, IsAggregateT> {
     /**
      * SQLite requires the `escapeChar` be exactly of length `1`
      */
-    escape : (escapeChar : string) => ExprImpl<boolean, UsedRefT>;
+    escape : (escapeChar : string) => ExprImpl<boolean, UsedRefT, IsAggregateT>;
 }
 export function notLike<
     ExprT extends BuiltInExpr<string>,
@@ -38,12 +41,14 @@ export function notLike<
     pattern : PatternT
 ) : (
     NotLikeExpr<
-        BuiltInExprUtil.IntersectUsedRef<ExprT|PatternT>
+        BuiltInExprUtil.IntersectUsedRef<ExprT|PatternT>,
+        BuiltInExprUtil.IsAggregate<ExprT|PatternT>
     >
 ) {
     const result = notLikeImpl<ExprT, PatternT>(builtInExpr, pattern) as unknown as (
         NotLikeExpr<
-            BuiltInExprUtil.IntersectUsedRef<ExprT|PatternT>
+            BuiltInExprUtil.IntersectUsedRef<ExprT|PatternT>,
+            BuiltInExprUtil.IsAggregate<ExprT|PatternT>
         >
     );
     result.escape = (escapeChar : string) : ReturnType<typeof result.escape> => {

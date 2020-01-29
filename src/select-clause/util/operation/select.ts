@@ -24,7 +24,8 @@ type EraseUsedRef<
                 mapper : SelectsT[index]["mapper"],
                 tableAlias : SelectsT[index]["tableAlias"],
                 alias : SelectsT[index]["alias"],
-                usedRef : IUsedRef
+                usedRef : IUsedRef,
+                isAggregate : SelectsT[index]["isAggregate"],
             }> :
             SelectsT[index]
         )

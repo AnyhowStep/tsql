@@ -10,7 +10,7 @@ export type SingleValueSelectItem = (
 
 export type AnonymousSingleValueSelectItem<TypeT> = (
     IAnonymousColumn<TypeT> |
-    IAnonymousExprSelectItem<TypeT>
+    IAnonymousExprSelectItem<TypeT, boolean>
 );
 
 export type SelectItem = (

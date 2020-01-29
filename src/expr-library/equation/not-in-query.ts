@@ -68,6 +68,7 @@ export function notInQuery<
     Expr<{
         mapper : tm.SafeMapper<boolean>,
         usedRef : BuiltInExprUtil.IntersectUsedRef<BuiltInExprT|QueryT>,
+        isAggregate : BuiltInExprUtil.IsAggregate<BuiltInExprT>,
     }>
 ) {
     if (!QueryBaseUtil.isOneSelectItem(query)) {
@@ -81,6 +82,7 @@ export function notInQuery<
         {
             mapper : tm.mysql.boolean(),
             usedRef : BuiltInExprUtil.intersectUsedRef(builtInExpr, query),
+            isAggregate : BuiltInExprUtil.isAggregate(builtInExpr),
         },
         OperatorNodeUtil.operatorNode2(OperatorType.NOT_IN, [
             BuiltInExprUtil.buildAst(builtInExpr),
