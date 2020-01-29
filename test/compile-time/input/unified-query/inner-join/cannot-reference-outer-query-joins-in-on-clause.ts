@@ -40,18 +40,20 @@ const myTable3 = tsql.table("myTable3")
         myTable3Id : tm.mysql.bigIntUnsigned(),
     });
 
+export const expr = tsql.isNotNull(
+    tsql.requireOuterQueryJoins(myTable)
+        .from(myTable2)
+        .select(columns => [columns.myTable2.myTable2Id])
+        .limit(1)
+        .innerJoin(
+            myTable3,
+            (columns) => tsql.eq(
+                columns.myTable3.myTable3Id,
+                columns.myTable.myTableId
+            )
+        )
+);
+
 export const query = tsql
     .from(myTable)
-    .where(() => tsql.isNotNull(
-        tsql.requireOuterQueryJoins(myTable)
-            .from(myTable2)
-            .select(columns => [columns.myTable2.myTable2Id])
-            .limit(1)
-            .innerJoin(
-                myTable3,
-                (columns) => tsql.eq(
-                    columns.myTable3.myTable3Id,
-                    columns.myTable.myTableId
-                )
-            )
-    ));
+    .where(() => expr);

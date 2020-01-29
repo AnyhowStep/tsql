@@ -1,4 +1,5 @@
 export * from "./aggregate";
+export * from "./aggregate-factory";
 export * from "./cast";
 export * from "./comparison";
 export * from "./control-flow";

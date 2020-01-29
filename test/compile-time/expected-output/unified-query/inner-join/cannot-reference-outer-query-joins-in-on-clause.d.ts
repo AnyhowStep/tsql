@@ -24,6 +24,11 @@
  */
 import * as tm from "type-mapping/fluent";
 import * as tsql from "../../../../../dist";
+export declare const expr: tsql.ExprImpl<boolean, tsql.IUsedRef<{
+    readonly [x: string]: {
+        [x: string]: any;
+    };
+}>, boolean>;
 export declare const query: tsql.Query<{
     fromClause: tsql.IFromClause<{
         outerQueryJoins: undefined;
