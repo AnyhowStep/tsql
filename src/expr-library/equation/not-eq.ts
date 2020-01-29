@@ -10,5 +10,5 @@ import {OperatorType} from "../../operator-type";
  *
  */
 export const notEq = makeEquation2(
-    OperatorType.LESS_THAN
+    OperatorType.NOT_EQUAL
 );
