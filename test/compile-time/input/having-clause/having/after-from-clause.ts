@@ -12,6 +12,7 @@ export const havingClause = tsql.HavingClauseUtil.having(
         FromClauseUtil.newInstance(),
         myTable
     ),
+    [myTable.columns.myColumn],
     undefined,
     () => tsql.and(
         myTable.columns.myColumn,

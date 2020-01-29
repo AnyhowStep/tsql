@@ -4,6 +4,43 @@ import {ColumnRefUtil} from "../column-ref";
 import {IExpr} from "../expr";
 import * as HavingClauseUtil from "./util";
 import {ColumnUtil} from "../column";
+import {GroupByClause} from "../group-by-clause";
+import {Identity} from "../type-util";
+
+export type AllowedHavingClause<
+    FromClauseT extends IFromClause,
+    GroupByClauseT extends GroupByClause
+> =
+    Identity<
+        | boolean
+        | IExpr<{
+            mapper : tm.SafeMapper<boolean>,
+            usedRef : HavingClauseUtil.AllowedUsedRef<FromClauseT>,
+            isAggregate : true,
+        }>
+        /**
+         * If `isAggregate` is `false` or `boolean`, we treat it
+         * as a non-aggregate expression.
+         *
+         * Non-aggregate expressions have more restrictions
+         * on what can be referenced.
+         */
+        | IExpr<{
+            mapper : tm.SafeMapper<boolean>,
+            usedRef : HavingClauseUtil.AllowedNonAggregateUsedRef<FromClauseT, GroupByClauseT>,
+            isAggregate : boolean,
+        }>
+        /**
+         * Columns are non-aggregate expressions
+         */
+        | ColumnUtil.ExtractWithType<
+            ColumnUtil.FromColumnRef<
+                HavingClauseUtil.AllowedNonAggregateColumnRef<FromClauseT, GroupByClauseT>
+            >,
+            boolean
+        >
+    >
+;
 
 /**
  * For now, this is basically the same as `WhereDelegate<>`.
@@ -13,24 +50,24 @@ import {ColumnUtil} from "../column";
  * + The `HAVING` clause enforces proper `GROUP BY` interactions.
  */
 export type HavingDelegate<
-    FromClauseT extends IFromClause
+    FromClauseT extends IFromClause,
+    GroupByClauseT extends GroupByClause|undefined
 > = (
     (
         columns : ColumnRefUtil.TryFlatten<
             HavingClauseUtil.AllowedColumnRef<FromClauseT>
         >
     ) => (
-        | boolean
-        | IExpr<{
-            mapper : tm.SafeMapper<boolean>,
-            usedRef : HavingClauseUtil.AllowedUsedRef<FromClauseT>,
-            isAggregate : boolean,
-        }>
-        | ColumnUtil.ExtractWithType<
-            ColumnUtil.FromColumnRef<
-                HavingClauseUtil.AllowedColumnRef<FromClauseT>
-            >,
-            boolean
+        AllowedHavingClause<
+            FromClauseT,
+            (
+                GroupByClauseT extends GroupByClause ?
+                GroupByClauseT :
+                /**
+                 * For the `HAVING` clause, we assume it's the empty grouping set.
+                 */
+                []
+            )
         >
     )
 );

@@ -1,7 +1,7 @@
 [
   {
     "messageText": {
-      "messageText": "Type 'ExprImpl<boolean | null, IUsedRef<{}>, false>' is not assignable to type 'boolean | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{}>; isAggregate: boolean; }>'.",
+      "messageText": "Type 'ExprImpl<boolean | null, IUsedRef<{}>, false>' is not assignable to type 'boolean | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{}>; isAggregate: true; }> | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{}>; isAggregate: boolean; }>'.",
       "category": 1,
       "code": 2322,
       "next": {
@@ -33,6 +33,6 @@
     "code": 2322,
     "category": 1,
     "length": 44,
-    "start": 215
+    "start": 230
   }
 ]

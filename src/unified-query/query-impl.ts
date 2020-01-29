@@ -297,7 +297,8 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
 
     having (
         havingDelegate : HavingDelegate<
-            this["fromClause"]
+            this["fromClause"],
+            this["groupByClause"]
         >
     ) : (
         QueryUtil.Having<this>

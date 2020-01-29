@@ -4,6 +4,7 @@ import {FromClauseUtil} from "../../../../../dist";
 export const havingClause = tsql.HavingClauseUtil.having(
     FromClauseUtil.newInstance(),
     undefined,
+    undefined,
     () => tsql.and3(
         null,
         false

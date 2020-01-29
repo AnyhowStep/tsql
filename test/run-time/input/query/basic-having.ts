@@ -21,6 +21,10 @@ tape(__filename, t => {
         .select(c => [c.myBoolColumn])
         .crossJoin(myTable2)
         .crossJoin(myTable3)
+        .groupBy(columns => [
+            columns.myTable.myBoolColumn,
+            columns.myTable2.myDoubleColumn
+        ])
         .having(() => true)
         .having(columns => columns.myTable.myBoolColumn)
         .having(columns => tsql.and(

@@ -1,7 +1,7 @@
 [
   {
     "messageText": {
-      "messageText": "Type 'ExprImpl<boolean, IUsedRef<{ readonly myTable: { readonly myColumn: boolean; }; }>, false>' is not assignable to type 'boolean | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{ myTable: { myColumn: boolean | null; }; }>; isAggregate: boolean; }>'.",
+      "messageText": "Type 'ExprImpl<boolean, IUsedRef<{ readonly myTable: { readonly myColumn: boolean; }; }>, false>' is not assignable to type 'boolean | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{ myTable: { myColumn: boolean | null; }; }>; isAggregate: true; }> | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{ myTable: { ...; }; }>; isAggregate: boolean; }>'.",
       "category": 1,
       "code": 2322,
       "next": {
@@ -53,6 +53,6 @@
     "code": 2322,
     "category": 1,
     "length": 67,
-    "start": 531
+    "start": 567
   }
 ]

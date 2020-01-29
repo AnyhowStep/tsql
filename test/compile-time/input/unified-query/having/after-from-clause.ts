@@ -8,6 +8,9 @@ const myTable = tsql.table("myTable")
 
 export const query = tsql.QueryUtil.newInstance()
     .from(myTable)
+    .groupBy(columns => [
+        columns.myColumn,
+    ])
     .having(columns => tsql.and(
         columns.myColumn,
         false
