@@ -29,6 +29,7 @@ const fromClause = tsql.FromClauseUtil.crossJoin(
 export const selectClause = tsql.SelectClauseUtil.select(
     fromClause,
     undefined,
+    undefined,
     columns => [
         columns.otherTable,
         myTableWithNarrowedType.columns,

@@ -928,7 +928,7 @@ export const sqliteSqlfier : Sqlfier = {
                 } else {
                     //EXISTS(FROM table)
                     return functionCall("EXISTS", [
-                        "SELECT *" + toSql(query)
+                        "SELECT 1 " + toSql(query)
                     ]);
                 }
             } else {

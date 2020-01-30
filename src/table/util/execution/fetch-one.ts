@@ -34,6 +34,7 @@ export function fetchOne<
             TableT
         >,
         undefined,
+        undefined,
         SelectsT
     >
 ) : (

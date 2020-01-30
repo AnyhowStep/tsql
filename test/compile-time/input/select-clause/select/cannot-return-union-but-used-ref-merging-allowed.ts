@@ -23,6 +23,7 @@ const fromClause = tsql.FromClauseUtil.crossJoin(
 export const selectClause = tsql.SelectClauseUtil.select(
     fromClause,
     undefined,
+    undefined,
     columns => (
         /**
          * The two `SelectsT` have different `usedRef` but the first

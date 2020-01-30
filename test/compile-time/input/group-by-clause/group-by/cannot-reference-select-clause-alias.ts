@@ -23,6 +23,7 @@ const fromClause = tsql.FromClauseUtil.crossJoin(
 export const selectClause = tsql.SelectClauseUtil.select(
     fromClause,
     undefined,
+    undefined,
     columns => [
         tsql.eq(columns.myTable.myTableId, columns.myTable.myTableId).as("eq")
     ]

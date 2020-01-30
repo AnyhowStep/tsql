@@ -3,6 +3,8 @@ import {ColumnRefUtil} from "../column-ref";
 import {AssertNonUnion, Identity} from "../type-util";
 import {SelectClause} from "./select-clause";
 import * as SelectClauseUtil from "./util";
+import {GroupByClause} from "../group-by-clause";
+import {IExprSelectItem} from "../expr-select-item";
 
 export type SelectDelegateColumns<
     FromClauseT extends IFromClause
@@ -13,6 +15,7 @@ export type SelectDelegateColumns<
 ;
 export type SelectDelegateReturnType<
     FromClauseT extends IFromClause,
+    GroupByClauseT extends GroupByClause|undefined,
     SelectClauseT extends SelectClause|undefined,
     SelectsT extends SelectClause
 > =
@@ -32,16 +35,35 @@ export type SelectDelegateReturnType<
          */
         & { "0" : unknown }
         & AssertNonUnion<SelectsT>
-        & SelectClauseUtil.AssertValidUsedRef<FromClauseT, SelectsT>
         & SelectClauseUtil.AssertValidColumnIdentifier<SelectClauseT, SelectsT>
+        & (
+            GroupByClauseT extends GroupByClause ?
+            (
+                & SelectClauseUtil.AssertValidUsedRef_Aggregate<FromClauseT, SelectsT>
+                & SelectClauseUtil.AssertValidUsedRef_NonAggregate<FromClauseT, GroupByClauseT, SelectsT>
+            ) :
+            (
+                true extends Extract<
+                    | SelectsT[number]
+                    | Extract<SelectClauseT, SelectClause>[number],
+                    IExprSelectItem
+                >["isAggregate"] ?
+                (
+                    & SelectClauseUtil.AssertValidUsedRef_Aggregate<FromClauseT, SelectsT>
+                    & SelectClauseUtil.AssertValidUsedRef_NonAggregate<FromClauseT, [], SelectsT>
+                ) :
+                SelectClauseUtil.AssertValidUsedRef<FromClauseT, SelectsT>
+            )
+        )
     >
 ;
 export type SelectDelegate<
     FromClauseT extends IFromClause,
+    GroupByClauseT extends GroupByClause|undefined,
     SelectClauseT extends SelectClause|undefined,
     SelectsT extends SelectClause
 > =
     (
         columns : SelectDelegateColumns<FromClauseT>
-    ) => SelectDelegateReturnType<FromClauseT, SelectClauseT, SelectsT>
+    ) => SelectDelegateReturnType<FromClauseT, GroupByClauseT, SelectClauseT, SelectsT>
 ;
