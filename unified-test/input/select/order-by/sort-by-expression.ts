@@ -82,11 +82,17 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                         columns.myTableId
                     ).as("y"),
                 ])
-                .orderBy((columns) => [
-                    tsql.isNotNull(columns.$aliased.x).asc(),
-                    tsql.isNotNull(columns.$aliased.y).asc(),
-                    columns.$aliased.x.asc(),
-                ])
+                .orderBy((columns) => {
+                    t.true(tsql.ExprColumnUtil.isExprColumn(columns.$aliased.x));
+                    t.false(tsql.ExprColumnUtil.isExprColumn(columns.$aliased.y));
+                    t.false(tsql.ExprColumnUtil.isExprColumn(columns.myTable.myTableId));
+                    t.false(tsql.ExprColumnUtil.isExprColumn(columns.myTable.myTableVal));
+                    return [
+                        tsql.isNotNull(columns.$aliased.x).asc(),
+                        tsql.isNotNull(columns.$aliased.y).asc(),
+                        columns.$aliased.x.asc(),
+                    ];
+                })
                 .fetchAll(connection);
         });
 

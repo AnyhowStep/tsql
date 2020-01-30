@@ -1,0 +1,189 @@
+import * as tm from "type-mapping";
+import {Test} from "../../../test";
+import * as tsql from "../../../../dist";
+
+export const test : Test = ({tape, pool, createTemporarySchema}) => {
+    tape(__filename, async (t) => {
+        const test = tsql.table("test")
+            .addColumns({
+                testId : tm.mysql.bigIntUnsigned(),
+                testVal : tm.mysql.bigIntUnsigned(),
+            });
+        const otherTable = tsql.table("otherTable")
+            .addColumns({
+                otherTableId : tm.mysql.bigIntUnsigned(),
+                otherTableVal : tm.mysql.bigIntUnsigned(),
+            });
+
+        const resultSet = await pool.acquire(async (connection) => {
+            await createTemporarySchema(
+                connection,
+                {
+                    tables : [
+                        {
+                            tableAlias : "test",
+                            columns : [
+                                {
+                                    columnAlias : "testId",
+                                    dataType : {
+                                        typeHint : tsql.TypeHint.BIGINT_SIGNED,
+                                    },
+                                },
+                                {
+                                    columnAlias : "testVal",
+                                    dataType : {
+                                        typeHint : tsql.TypeHint.BIGINT_SIGNED,
+                                    },
+                                },
+                            ],
+                        },
+                        {
+                            tableAlias : "otherTable",
+                            columns : [
+                                {
+                                    columnAlias : "otherTableId",
+                                    dataType : {
+                                        typeHint : tsql.TypeHint.BIGINT_SIGNED,
+                                    },
+                                },
+                                {
+                                    columnAlias : "otherTableVal",
+                                    dataType : {
+                                        typeHint : tsql.TypeHint.BIGINT_SIGNED,
+                                    },
+                                },
+                            ],
+                        },
+                    ]
+                }
+            );
+
+            await test
+                .enableExplicitAutoIncrementValue()
+                .insertMany(
+                    connection,
+                    [
+                        {
+                            testId : BigInt(1),
+                            testVal : BigInt(100),
+                        },
+                        {
+                            testId : BigInt(2),
+                            testVal : BigInt(200),
+                        },
+                        {
+                            testId : BigInt(3),
+                            testVal : BigInt(300),
+                        },
+                        {
+                            testId : BigInt(4),
+                            testVal : BigInt(100),
+                        },
+                        {
+                            testId : BigInt(5),
+                            testVal : BigInt(200),
+                        },
+                        {
+                            testId : BigInt(6),
+                            testVal : BigInt(300),
+                        },
+                    ]
+                );
+
+            await otherTable
+                .enableExplicitAutoIncrementValue()
+                .insertMany(
+                    connection,
+                    [
+                        {
+                            otherTableId : BigInt(1),
+                            otherTableVal : BigInt(1000),
+                        },
+                        {
+                            otherTableId : BigInt(2),
+                            otherTableVal : BigInt(2000),
+                        },
+                        {
+                            otherTableId : BigInt(3),
+                            otherTableVal : BigInt(3000),
+                        },
+                        {
+                            otherTableId : BigInt(4),
+                            otherTableVal : BigInt(1000),
+                        },
+                        {
+                            otherTableId : BigInt(5),
+                            otherTableVal : BigInt(2000),
+                        },
+                        {
+                            otherTableId : BigInt(6),
+                            otherTableVal : BigInt(3000),
+                        },
+                    ]
+                );
+
+            return tsql.from(test)
+                .groupBy(columns => [
+                    columns.testVal,
+                ])
+                .select(columns => [
+                    tsql.integer.sum(columns.testId).as("sumId"),
+                    tsql.integer.integerDiv(columns.testVal, BigInt(2)).as("valDiv"),
+                    tsql
+                        .requireOuterQueryJoins(
+                            test.pickColumns(columns => [columns.testVal])
+                        )
+                        .from(otherTable)
+                        .selectValue(columns => tsql.integer.add(
+                            columns.test.testVal,
+                            columns.otherTable.otherTableVal
+                        ))
+                        .where(columns => tsql.eq(
+                            tsql.coalesce(
+                                tsql.integer.integerDiv(
+                                    columns.otherTable.otherTableVal,
+                                    BigInt(10)
+                                ),
+                                BigInt(0)
+                            ),
+                            columns.test.testVal
+                        ))
+                        .orderBy(columns => [
+                            columns.otherTable.otherTableVal.desc(),
+                        ])
+                        .limit(1)
+                        .coalesce(null)
+                        .as("x"),
+                ])
+                .orderBy(columns => [
+                    /**
+                     * @todo If a `GROUP BY` clause exists, we can only order by,
+                     * + expressions/columns in `GROUP BY` clause
+                     * + aggregate function expressions
+                     */
+                    columns.$aliased.valDiv.desc(),
+                    columns.$aliased.sumId.desc(),
+                ])
+                .fetchAll(
+                    connection
+                );
+        });
+
+        t.deepEqual(
+            resultSet.map(
+                row => ({
+                    sumId : String(row.sumId),
+                    valDiv : row.valDiv,
+                    x : row.x,
+                })
+            ),
+            [
+                { sumId: "9.0", valDiv: BigInt(150), x : BigInt(3300) },
+                { sumId: "7.0", valDiv: BigInt(100), x : BigInt(2200) },
+                { sumId: "5.0", valDiv: BigInt(50), x : BigInt(1100) }
+            ]
+        );
+
+        t.end();
+    });
+};
