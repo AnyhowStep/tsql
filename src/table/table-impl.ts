@@ -464,6 +464,21 @@ export class Table<DataT extends TableData> implements ITable {
         return TableUtil.validate(this, connection, result);
     }*/
 
+    pickColumns<
+        NewColumnsT extends readonly ColumnUtil.FromColumnMap<this["columns"]>[]
+    > (
+        delegate : (
+            TableUtil.PickColumnsDelegate<
+                this,
+                NewColumnsT
+            >
+        )
+    ) : (
+        TableUtil.PickColumns<this, NewColumnsT>
+    ) {
+        return TableUtil.pickColumns(this, delegate);
+    }
+
     async assertExists (
         connection : SelectConnection,
         whereDelegate : WhereDelegate<

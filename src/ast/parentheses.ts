@@ -79,20 +79,16 @@ export class Parentheses {
         this.ast = ast;
         this.canUnwrap = canUnwrap;
     }
-    private cachedSql : string|undefined = undefined;
     public toSql = (sqlfier : Sqlfier) : string => {
-        if (this.cachedSql == undefined) {
-            /**
-             * @todo Investigate this logic
-             */
-            const sqlAst = AstUtil.toSqlAst(this.ast, sqlfier);
-            if (!this.canUnwrap || shouldWrap(sqlAst, this.canUnwrap)) {
-                this.cachedSql = `(${AstUtil.toSql(sqlAst, sqlfier)})`;
-            } else {
-                this.cachedSql = AstUtil.toSql(sqlAst, sqlfier);
-            }
+        /**
+         * @todo Investigate this logic
+         */
+        const sqlAst = AstUtil.toSqlAst(this.ast, sqlfier);
+        if (!this.canUnwrap || shouldWrap(sqlAst, this.canUnwrap)) {
+            return `(${AstUtil.toSql(sqlAst, sqlfier)})`;
+        } else {
+            return AstUtil.toSql(sqlAst, sqlfier);
         }
-        return this.cachedSql;
     }
 
     public static IsParentheses (x : any) : x is Parentheses {

@@ -239,6 +239,11 @@ export type OperatorOperand = {
     */
     [OperatorType.CURRENT_DATABASE]     : Operand0,
     [OperatorType.CURRENT_USER]         : Operand0,
+
+    /*
+        Library Extensions that can be implemented with standard SQL.
+    */
+    [OperatorType.THROW_IF_NULL] : Operand1,
 };
 
 type AssertAssignable<ExpectedT, _ActualT extends ExpectedT> = never;

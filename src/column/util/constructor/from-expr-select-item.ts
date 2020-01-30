@@ -1,12 +1,13 @@
 import {IExprSelectItem} from "../../../expr-select-item";
-import {Column} from "../../column-impl";
+import {ExprColumn} from "../../../expr-column";
 
 export type FromExprSelectItem<ExprSelectItemT extends IExprSelectItem> = (
     ExprSelectItemT extends IExprSelectItem ?
-    Column<{
+    ExprColumn<{
         tableAlias : ExprSelectItemT["tableAlias"],
         columnAlias : ExprSelectItemT["alias"],
-        mapper : ExprSelectItemT["mapper"]
+        mapper : ExprSelectItemT["mapper"],
+        isAggregate : ExprSelectItemT["isAggregate"],
     }> :
     never
 );
@@ -14,16 +15,18 @@ export function fromExprSelectItem<ExprSelectItemT extends IExprSelectItem> (
     exprSelectItem : ExprSelectItemT
 ) : FromExprSelectItem<ExprSelectItemT> {
     const result : (
-        Column<{
+        ExprColumn<{
             tableAlias : ExprSelectItemT["tableAlias"],
             columnAlias : ExprSelectItemT["alias"],
-            mapper : ExprSelectItemT["mapper"]
+            mapper : ExprSelectItemT["mapper"],
+            isAggregate : ExprSelectItemT["isAggregate"],
         }>
-    ) = new Column(
+    ) = new ExprColumn(
         {
             tableAlias : exprSelectItem.tableAlias,
             columnAlias : exprSelectItem.alias,
             mapper : exprSelectItem.mapper,
+            isAggregate : exprSelectItem.isAggregate,
         },
         exprSelectItem.unaliasedAst
     );
