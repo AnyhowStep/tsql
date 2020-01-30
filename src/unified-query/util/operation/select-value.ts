@@ -45,6 +45,7 @@ export function selectValue<
             SelectClauseUtil.valueFromBuiltInExpr<BuiltInExprT>(selectValueDelegate(columns, subquery)) as (
                 SelectDelegateReturnType<
                     QueryT["fromClause"],
+                    QueryT["groupByClause"],
                     QueryT["selectClause"],
                     SelectClauseUtil.ValueFromBuiltInExpr<BuiltInExprT>
                 >

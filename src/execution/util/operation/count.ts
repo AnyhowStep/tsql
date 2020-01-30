@@ -73,6 +73,7 @@ export async function count (
                 ...query,
                 selectClause : SelectClauseUtil.selectValue(
                     query.fromClause,
+                    query.groupByClause,
                     query.selectClause,
                     () => ExprLib.countAll()
                 ),

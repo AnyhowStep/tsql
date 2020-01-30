@@ -28,6 +28,7 @@ const fromClause = tsql.FromClauseUtil.crossJoin(
 tsql.SelectClauseUtil.select(
     fromClause,
     undefined,
+    undefined,
     () => [
         myTable.columns.myTableId, //Should be OK
         otherTableWithNarrowedType.columns.otherTableId, //Should Error

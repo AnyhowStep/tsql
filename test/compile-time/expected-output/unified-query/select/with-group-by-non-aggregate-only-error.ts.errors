@@ -1,0 +1,50 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type '[Column<{ tableAlias: \"otherTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>, AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"x\"; usedRef: IUsedRef<{}>; isAggregate: false; }>]' is not assignable to type '[Column<{ tableAlias: \"otherTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>, AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"x\"; usedRef: IUsedRef<{}>; isAggregate: false; }>] & { ...; } & CompileError<...>'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Property '__compileError' is missing in type '[Column<{ tableAlias: \"otherTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>, AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"x\"; usedRef: IUsedRef<{}>; isAggregate: false; }>]' but required in type 'CompileError<[\"The following columns cannot be referenced in non-aggregate expressions; they are not in the GROUP BY clause\", [\"otherTable\", \"myTableId\"]]>'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 132,
+    "start": 505
+  },
+  {
+    "messageText": {
+      "messageText": "Type '[{ readonly myTableId: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>; readonly myTableId2: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId2\"; mapper: Mapper<...>; }>; }]' is not assignable to type '[{ readonly myTableId: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>; readonly myTableId2: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId2\"; mapper: Mapper<...>; }>; }] & { ...; } & CompileError<...>'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Property '__compileError' is missing in type '[{ readonly myTableId: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>; readonly myTableId2: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId2\"; mapper: Mapper<...>; }>; }]' but required in type 'CompileError<[\"The following columns cannot be referenced in non-aggregate expressions; they are not in the GROUP BY clause\", [\"myTable\", \"myTableId2\"]]>'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 52,
+    "start": 785
+  },
+  {
+    "messageText": {
+      "messageText": "Type '[{ readonly myTable: { readonly myTableId: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>; readonly myTableId2: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId2\"; mapper: Mapper<...>; }>; }; readonly otherTable: { ...; }; }]' is not assignable to type '[{ readonly myTable: { readonly myTableId: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>; readonly myTableId2: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId2\"; mapper: Mapper<...>; }>; }; readonly otherTable: { ...; }; }] & { ...; } & CompileError<...>'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Property '__compileError' is missing in type '[{ readonly myTable: { readonly myTableId: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }>; readonly myTableId2: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId2\"; mapper: Mapper<...>; }>; }; readonly otherTable: { ...; }; }]' but required in type 'CompileError<[\"The following columns cannot be referenced in non-aggregate expressions; they are not in the GROUP BY clause\", [\"otherTable\", \"myTableId\"] | [\"myTable\", \"myTableId2\"]]>'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 44,
+    "start": 985
+  }
+]
