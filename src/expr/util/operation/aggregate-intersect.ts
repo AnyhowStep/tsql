@@ -1,16 +1,8 @@
 import * as tm from "type-mapping";
-import {AnyBuiltInExpr, BuiltInExprUtil} from "../../../built-in-expr";
+import {AnyBuiltInExpr_NonAggregate, BuiltInExprUtil} from "../../../built-in-expr";
 import {Expr, expr} from "../../expr-impl";
 import {TryReuseExistingType} from "../../../type-util";
 import {Ast} from "../../../ast";
-
-type Intersect_IsAggregate<ArgsT extends AnyBuiltInExpr> =
-    true extends BuiltInExprUtil.HasNonUnitIsAggregate<ArgsT> ?
-    boolean :
-    true extends BuiltInExprUtil.IsAggregate<ArgsT> ?
-    true :
-    false
-;
 
 /**
  * Given `foo(arg0, arg1, ...)`,
@@ -22,12 +14,12 @@ type Intersect_IsAggregate<ArgsT extends AnyBuiltInExpr> =
  * | N                  | Y                       | Y
  * | N                  | N                       | N
  *
- * This `Intersect<>` type assumes `foo` is non-aggregate.
- * @see AggregateIntersect<>
+ * This `AggregateIntersect<>` type assumes `foo` is aggregate.
+ * @see Intersect<>
  */
-export type Intersect<
+export type AggregateIntersect<
     OutputTypeT,
-    ArgsT extends AnyBuiltInExpr
+    ArgsT extends AnyBuiltInExpr_NonAggregate
 > =
     TryReuseExistingType<
         ArgsT,
@@ -36,7 +28,7 @@ export type Intersect<
             usedRef : BuiltInExprUtil.IntersectUsedRef<
                 ArgsT
             >,
-            isAggregate : Intersect_IsAggregate<ArgsT>,
+            isAggregate : true,
         }>
     >
 ;
@@ -44,32 +36,37 @@ export type Intersect<
  * Called wasteful because it does not attempt to reuse existing types,
  * wasting our depth limit.
  */
-export type __WastefulIntersect<
+export type __WastefulAggregateIntersect<
     OutputTypeT,
-    ArgsT extends AnyBuiltInExpr
+    ArgsT extends AnyBuiltInExpr_NonAggregate
 > =
     Expr<{
         mapper : tm.SafeMapper<OutputTypeT>,
         usedRef : BuiltInExprUtil.IntersectUsedRef<
             ArgsT
         >,
-        isAggregate : Intersect_IsAggregate<ArgsT>,
+        isAggregate : true,
     }>
 ;
-export function intersect<
+export function aggregateIntersect<
     OutputTypeT,
-    ArgsT extends AnyBuiltInExpr
+    ArgsT extends AnyBuiltInExpr_NonAggregate
 > (
     mapper : tm.SafeMapper<OutputTypeT>,
     args : readonly ArgsT[],
     ast : Ast
-) : Intersect<OutputTypeT, ArgsT> {
+) : AggregateIntersect<OutputTypeT, ArgsT> {
+    /**
+     * @todo Set the `name` parameter?
+     */
+    BuiltInExprUtil.assertAllNonAggregate(``, args);
+
     return expr(
         {
             mapper,
             usedRef : BuiltInExprUtil.intersectUsedRef(...args),
-            isAggregate : args.some(BuiltInExprUtil.isAggregate),
+            isAggregate : true,
         },
         ast
-    ) as Intersect<OutputTypeT, ArgsT>;
+    ) as AggregateIntersect<OutputTypeT, ArgsT>;
 }

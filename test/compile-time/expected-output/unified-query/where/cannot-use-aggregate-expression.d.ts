@@ -1,6 +1,4 @@
-import * as tm from "type-mapping/fluent";
 import * as tsql from "../../../../../dist";
-export declare const expr: tsql.ExprImpl<boolean, tsql.IUsedRef<{}>, false>;
 export declare const query: tsql.Query<{
     fromClause: tsql.IFromClause<{
         outerQueryJoins: undefined;
@@ -11,14 +9,14 @@ export declare const query: tsql.Query<{
                 readonly myColumn: tsql.Column<{
                     tableAlias: "myTable";
                     columnAlias: "myColumn";
-                    mapper: tm.Mapper<unknown, boolean>;
+                    mapper: import("type-mapping").Mapper<unknown, bigint>;
                 }>;
             };
             originalColumns: {
                 readonly myColumn: tsql.Column<{
                     tableAlias: "myTable";
                     columnAlias: "myColumn";
-                    mapper: tm.Mapper<unknown, boolean>;
+                    mapper: import("type-mapping").Mapper<unknown, bigint>;
                 }>;
             };
             primaryKey: undefined;

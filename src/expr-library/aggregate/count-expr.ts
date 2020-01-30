@@ -1,11 +1,11 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
-import {makeOperator2, Operator1} from "../factory";
-import {BuiltInExpr} from "../../built-in-expr";
+import {makeAggregateOperator2, AggregateOperator1} from "../aggregate-factory";
+import {BuiltInExpr_NonAggregate} from "../../built-in-expr";
 import {ExprUtil} from "../../expr";
 import {EquatableType} from "../../equatable-type";
 
-const countExprImpl = makeOperator2<OperatorType.AGGREGATE_COUNT_EXPR, boolean, EquatableType, bigint>(
+const countExprImpl = makeAggregateOperator2<OperatorType.AGGREGATE_COUNT_EXPR, boolean, EquatableType, bigint>(
     OperatorType.AGGREGATE_COUNT_EXPR,
     /**
      * Should not return a value less than zero
@@ -13,24 +13,24 @@ const countExprImpl = makeOperator2<OperatorType.AGGREGATE_COUNT_EXPR, boolean, 
     tm.mysql.bigIntUnsigned()
 );
 
-export const countExprDistinct : Operator1<EquatableType, bigint> = <
-    ArgT extends BuiltInExpr<EquatableType>
+export const countExprDistinct : AggregateOperator1<EquatableType, bigint> = <
+    ArgT extends BuiltInExpr_NonAggregate<EquatableType>
 >(
     arg : ArgT
 ) : (
-    ExprUtil.Intersect<bigint, ArgT>
+    ExprUtil.AggregateIntersect<bigint, ArgT>
 ) => {
-    return countExprImpl(true, arg) as  ExprUtil.Intersect<bigint, ArgT>;
+    return countExprImpl(true, arg) as  ExprUtil.AggregateIntersect<bigint, ArgT>;
 };
 
-export const countExprAll : Operator1<EquatableType, bigint> = <
-    ArgT extends BuiltInExpr<EquatableType>
+export const countExprAll : AggregateOperator1<EquatableType, bigint> = <
+    ArgT extends BuiltInExpr_NonAggregate<EquatableType>
 >(
     arg : ArgT
 ) : (
-    ExprUtil.Intersect<bigint, ArgT>
+    ExprUtil.AggregateIntersect<bigint, ArgT>
 ) => {
-    return countExprImpl(false, arg) as  ExprUtil.Intersect<bigint, ArgT>;
+    return countExprImpl(false, arg) as  ExprUtil.AggregateIntersect<bigint, ArgT>;
 };
 
 export const countExpr = countExprAll;

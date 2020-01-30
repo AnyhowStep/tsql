@@ -116,13 +116,32 @@ export type BuiltInExpr<TypeT> = (
 );
 
 export type AnySubqueryExpr = (QueryBaseUtil.OneSelectItem<any> & QueryBaseUtil.ZeroOrOneRow);
-export type AnyBuiltInExpr = (
+export type AnyBuiltInExpr =
     | BuiltInValueExpr
     | IExpr
     | IColumn
     | AnySubqueryExpr
     | IExprSelectItem
-);
+;
+export type AnyBuiltInExpr_NonAggregate =
+    | BuiltInValueExpr
+    | IExpr<{
+        mapper : tm.AnySafeMapper,
+        usedRef : IUsedRef,
+        isAggregate : false,
+    }>
+    | IColumn
+    | AnySubqueryExpr
+    | IExprSelectItem<{
+        mapper : tm.AnySafeMapper,
+
+        tableAlias : string,
+        alias : string,
+
+        usedRef : IUsedRef,
+        isAggregate : false,
+    }>
+;
 
 export type AnyNonValueExpr =
     | IExpr

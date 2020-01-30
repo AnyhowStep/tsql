@@ -60,7 +60,7 @@ export function notLike<
         /**
          * @todo Investigate assignability
          */
-        return escapedExpr as ReturnType<typeof result.escape>;
+        return escapedExpr as unknown as ReturnType<typeof result.escape>;
     };
     return result;
 }

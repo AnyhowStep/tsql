@@ -1,6 +1,18 @@
 import {AnyBuiltInExpr} from "../../built-in-expr";
 import {IQueryBase} from "../../../query-base";
 
+export type HasNonUnitIsAggregate<BuiltInExprT extends AnyBuiltInExpr|IQueryBase> =
+    /**
+     * Could be `IExpr|IExprSelectItem`
+     */
+    BuiltInExprT extends { isAggregate : boolean } ?
+    (
+        boolean extends BuiltInExprT["isAggregate"] ?
+        true :
+        false
+    ) :
+    false
+;
 export type IsAggregate<BuiltInExprT extends AnyBuiltInExpr|IQueryBase> =
     /**
      * Could be `IExpr|IExprSelectItem`
