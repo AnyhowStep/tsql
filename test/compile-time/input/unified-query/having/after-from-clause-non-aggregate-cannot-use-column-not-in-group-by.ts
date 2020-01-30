@@ -6,12 +6,13 @@ const myTable = tsql.table("myTable")
         myColumn : tm.mysql.boolean(),
     });
 
-export const query = tsql.QueryUtil.newInstance()
+tsql.QueryUtil.newInstance()
     .from(myTable)
-    .groupBy(columns => [
+    .having(columns => tsql.and(
         columns.myColumn,
-    ])
-    .having(columns => tsql.eq(
-        columns.myColumn,
-        columns.myColumn
+        false
     ));
+
+tsql.QueryUtil.newInstance()
+    .from(myTable)
+    .having(columns => columns.myColumn);

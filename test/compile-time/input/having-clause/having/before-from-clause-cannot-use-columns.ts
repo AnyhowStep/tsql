@@ -9,6 +9,7 @@ const myTable = tsql.table("myTable")
 
 export const havingClause = tsql.HavingClauseUtil.having(
     FromClauseUtil.newInstance(),
+    [myTable.columns.myColumn],
     undefined,
     () => tsql.and(
         myTable.columns.myColumn,

@@ -1,5 +1,6 @@
 export * from "./column-alias";
 export * from "./duplicate-column-alias";
+export * from "./extract-column-identifier";
 export * from "./extract-non-nullable";
 export * from "./extract-nullable";
 export * from "./extract-with-type";

@@ -1,18 +1,33 @@
 [
   {
     "messageText": {
-      "messageText": "Type 'ExprImpl<boolean, IUsedRef<{ readonly otherTable: { readonly otherColumn: boolean; }; }>, false>' is not assignable to type 'boolean | Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn\"; mapper: Mapper<unknown, boolean>; }> | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{ myTable: { myColumn: boolean; }; }>; isAggregate: boolean; }>'.",
+      "messageText": "Type 'ExprImpl<boolean, IUsedRef<{ readonly otherTable: { readonly otherColumn: boolean; }; }>, false>' is not assignable to type 'boolean | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{ myTable: { myColumn: boolean; }; }>; isAggregate: true; }> | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{}>; isAggregate: boolean; }>'.",
       "category": 1,
       "code": 2322,
       "next": {
-        "messageText": "Type 'ExprImpl<boolean, IUsedRef<{ readonly otherTable: { readonly otherColumn: boolean; }; }>, false>' is missing the following properties from type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn\"; mapper: Mapper<unknown, boolean>; }>': tableAlias, columnAlias, unaliasedAst",
+        "messageText": "Type 'ExprImpl<boolean, IUsedRef<{ readonly otherTable: { readonly otherColumn: boolean; }; }>, false>' is not assignable to type 'IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{}>; isAggregate: boolean; }>'.",
         "category": 1,
-        "code": 2739
+        "code": 2322,
+        "next": {
+          "messageText": "Types of property 'usedRef' are incompatible.",
+          "category": 1,
+          "code": 2326,
+          "next": {
+            "messageText": "Type 'IUsedRef<{ readonly otherTable: { readonly otherColumn: boolean; }; }>' is not assignable to type 'IUsedRef<{}>'.",
+            "category": 1,
+            "code": 2322,
+            "next": {
+              "messageText": "Property 'otherTable' is missing in type '{}' but required in type '{ readonly otherTable: { readonly otherColumn: boolean; }; }'.",
+              "category": 1,
+              "code": 2741
+            }
+          }
+        }
       }
     },
     "code": 2322,
     "category": 1,
     "length": 69,
-    "start": 527
+    "start": 565
   }
 ]

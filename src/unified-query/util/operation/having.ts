@@ -46,14 +46,16 @@ export function having<
     QueryT extends IQuery
 > (
     query : QueryT,
-    havingDelegate : HavingDelegate<QueryT["fromClause"]>
+    havingDelegate : HavingDelegate<QueryT["fromClause"], QueryT["groupByClause"]>
 ) : (
     Having<QueryT>
 ) {
     const havingClause = HavingClauseUtil.having<
-        QueryT["fromClause"]
+        QueryT["fromClause"],
+        QueryT["groupByClause"]
     >(
         query.fromClause,
+        query.groupByClause,
         query.havingClause,
         havingDelegate
     );
