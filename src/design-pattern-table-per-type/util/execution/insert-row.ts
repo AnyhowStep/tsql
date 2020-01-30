@@ -1,8 +1,8 @@
 import {ITablePerType} from "../../table-per-type";
 import {ColumnType, RequiredColumnAlias, OptionalColumnAlias, InsertableColumnAlias} from "../query";
 import {Identity} from "../../../type-util";
-import {CustomExpr_NonCorrelated, CustomExpr_NonCorrelatedOrUndefined} from "../../../custom-expr";
-import {BuiltInExpr_NonCorrelated, BuiltInExpr_NonCorrelatedOrUndefined} from "../../../built-in-expr";
+import {CustomExpr_NonCorrelated_NonAggregate, CustomExpr_NonCorrelated_NonAggregateOrUndefined} from "../../../custom-expr";
+import {BuiltInExpr_NonCorrelated_NonAggregate, BuiltInExpr_NonCorrelated_NonAggregateOrUndefined} from "../../../built-in-expr";
 import {Key, KeyUtil} from "../../../key";
 
 export type ValueInsertRow<TptT extends ITablePerType> =
@@ -24,14 +24,20 @@ export type CustomInsertRow<TptT extends ITablePerType> =
     Identity<
         & {
             readonly [columnAlias in RequiredColumnAlias<TptT>] : (
-                CustomExpr_NonCorrelated<
+                /**
+                 * The following `INSERT` statement is invalid,
+                 * ```sql
+                 *  INSERT INTO myTable (myColumn) VALUES (SUM(1));
+                 * ```
+                 */
+                CustomExpr_NonCorrelated_NonAggregate<
                     ColumnType<TptT, columnAlias>
                 >
             )
         }
         & {
             readonly [columnAlias in OptionalColumnAlias<TptT>]? : (
-                CustomExpr_NonCorrelatedOrUndefined<
+                CustomExpr_NonCorrelated_NonAggregateOrUndefined<
                     ColumnType<TptT, columnAlias>
                 >
             )
@@ -43,14 +49,14 @@ export type BuiltInInsertRow<TptT extends ITablePerType> =
     Identity<
         & {
             readonly [columnAlias in RequiredColumnAlias<TptT>] : (
-                BuiltInExpr_NonCorrelated<
+                BuiltInExpr_NonCorrelated_NonAggregate<
                     ColumnType<TptT, columnAlias>
                 >
             )
         }
         & {
             readonly [columnAlias in OptionalColumnAlias<TptT>]? : (
-                BuiltInExpr_NonCorrelatedOrUndefined<
+                BuiltInExpr_NonCorrelated_NonAggregateOrUndefined<
                     ColumnType<TptT, columnAlias>
                 >
             )
@@ -65,14 +71,14 @@ export type CustomInsertRowWithPrimaryKey_NonUnion<
     Identity<
         & {
             readonly [columnAlias in Exclude<RequiredColumnAlias<TptT>, PrimaryKeyT[number]>] : (
-                CustomExpr_NonCorrelated<
+                CustomExpr_NonCorrelated_NonAggregate<
                     ColumnType<TptT, columnAlias>
                 >
             )
         }
         & {
             readonly [columnAlias in Exclude<OptionalColumnAlias<TptT>, PrimaryKeyT[number]>]? : (
-                CustomExpr_NonCorrelatedOrUndefined<
+                CustomExpr_NonCorrelated_NonAggregateOrUndefined<
                     ColumnType<TptT, columnAlias>
                 >
             )
@@ -82,7 +88,7 @@ export type CustomInsertRowWithPrimaryKey_NonUnion<
          */
         & {
             readonly [candidateKeyColumnAlias in PrimaryKeyT[number]] : (
-                CustomExpr_NonCorrelated<
+                CustomExpr_NonCorrelated_NonAggregate<
                     ColumnType<TptT, candidateKeyColumnAlias>
                 >
             )

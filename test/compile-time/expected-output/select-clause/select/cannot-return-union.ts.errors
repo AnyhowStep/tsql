@@ -1,27 +1,27 @@
 [
   {
     "messageText": {
-      "messageText": "Type '[AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"eq\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; }>] | [AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"eq2\"; usedRef: IUsedRef<...>; }>]' is not assignable to type '([AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"eq\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; }>] & { \"0\": unknown; } & CompileError<[\"Union type not allowed\"]>) | ([...] & ... 1 more ... & CompileError<...>)'.",
+      "messageText": "Type '[AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"eq\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; isAggregate: false; }>] | [AliasedExpr<...>]' is not assignable to type '([AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"eq\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; isAggregate: false; }>] & { ...; } & CompileError<...>) | ([...] & ... 1 more ... & CompileError<...>)'.",
       "category": 1,
       "code": 2322,
       "next": {
-        "messageText": "Type '[AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"eq\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; }>]' is not assignable to type '([AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"eq\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; }>] & { \"0\": unknown; } & CompileError<[\"Union type not allowed\"]>) | ([...] & ... 1 more ... & CompileError<...>)'.",
+        "messageText": "Type '[AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"eq\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; isAggregate: false; }>]' is not assignable to type '([AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"eq\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; isAggregate: false; }>] & { ...; } & CompileError<...>) | ([...] & ... 1 more ... & CompileError<...>)'.",
         "category": 1,
         "code": 2322,
         "next": {
-          "messageText": "Type '[AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"eq\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; }>]' is not assignable to type '[AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"eq2\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; }>] & { \"0\": unknown; } & CompileError<[\"Union type not allowed\"]>'.",
+          "messageText": "Type '[AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"eq\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; isAggregate: false; }>]' is not assignable to type '[AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"eq2\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; isAggregate: false; }>] & { ...; } & CompileError<...>'.",
           "category": 1,
           "code": 2322,
           "next": {
-            "messageText": "Type '[AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"eq\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; }>]' is not assignable to type '[AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"eq2\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; }>]'.",
+            "messageText": "Type '[AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"eq\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; isAggregate: false; }>]' is not assignable to type '[AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"eq2\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; isAggregate: false; }>]'.",
             "category": 1,
             "code": 2322,
             "next": {
-              "messageText": "Type 'AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"eq\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; }>' is not assignable to type 'AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"eq2\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; }>'.",
+              "messageText": "Type 'AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"eq\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; isAggregate: false; }>' is not assignable to type 'AliasedExpr<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"eq2\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; isAggregate: false; }>'.",
               "category": 1,
               "code": 2322,
               "next": {
-                "messageText": "Type '{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"eq\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; }' is not assignable to type '{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"eq2\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; }'.",
+                "messageText": "Type '{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"eq\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; isAggregate: false; }' is not assignable to type '{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"eq2\"; usedRef: IUsedRef<{ readonly myTable: { readonly myTableId: bigint; }; }>; isAggregate: false; }'.",
                 "category": 1,
                 "code": 2322,
                 "next": {

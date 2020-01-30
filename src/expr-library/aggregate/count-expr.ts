@@ -20,7 +20,7 @@ export const countExprDistinct : Operator1<EquatableType, bigint> = <
 ) : (
     ExprUtil.Intersect<bigint, ArgT>
 ) => {
-    return countExprImpl(true, arg);
+    return countExprImpl(true, arg) as  ExprUtil.Intersect<bigint, ArgT>;
 };
 
 export const countExprAll : Operator1<EquatableType, bigint> = <
@@ -30,7 +30,7 @@ export const countExprAll : Operator1<EquatableType, bigint> = <
 ) : (
     ExprUtil.Intersect<bigint, ArgT>
 ) => {
-    return countExprImpl(false, arg);
+    return countExprImpl(false, arg) as  ExprUtil.Intersect<bigint, ArgT>;
 };
 
 export const countExpr = countExprAll;

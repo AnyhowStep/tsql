@@ -21,7 +21,7 @@ export const minDistinct : Operator1<bigint, bigint|null> = <
 ) : (
     ExprUtil.Intersect<bigint|null, ArgT>
 ) => {
-    return minImpl(true, arg);
+    return minImpl(true, arg) as ExprUtil.Intersect<bigint|null, ArgT>;
 };
 
 export const minAll : Operator1<bigint, bigint|null> = <
@@ -31,7 +31,7 @@ export const minAll : Operator1<bigint, bigint|null> = <
 ) : (
     ExprUtil.Intersect<bigint|null, ArgT>
 ) => {
-    return minImpl(false, arg);
+    return minImpl(false, arg) as ExprUtil.Intersect<bigint|null, ArgT>;
 };
 
 export const min = minAll;

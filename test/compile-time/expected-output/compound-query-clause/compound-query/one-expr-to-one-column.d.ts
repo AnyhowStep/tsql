@@ -6,6 +6,7 @@ export declare const compound: {
         tableAlias: "$aliased";
         alias: "y";
         usedRef: tsql.IUsedRef<never>;
+        isAggregate: false;
     }>];
     compoundQueryClause: readonly tsql.CompoundQuery[];
 };

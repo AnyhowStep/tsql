@@ -13,6 +13,11 @@ export function exists<
     Expr<{
         mapper : tm.SafeMapper<boolean>,
         usedRef : UsedRefUtil.FromFromClause<QueryT["fromClause"]>,
+        /**
+         * Sub-queries are not aggregate expressions.
+         * `EXISTS()` isn't an aggregate function, either.
+         */
+        isAggregate : false,
     }>
 ) {
     if (!QueryBaseUtil.isAfterFromClause(query) && !QueryBaseUtil.isAfterSelectClause(query)) {
@@ -22,6 +27,7 @@ export function exists<
         {
             mapper : tm.mysql.boolean(),
             usedRef : UsedRefUtil.fromFromClause(query.fromClause),
+            isAggregate : false,
         },
         operatorNode1(OperatorType.EXISTS, [query], undefined)
     );

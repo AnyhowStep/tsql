@@ -19,4 +19,4 @@ import {IAnonymousExpr} from "../expr";
  * > The scope of expressions in the `ON` clause includes the current tables
  * > and any tables in outer query blocks to the current `SELECT`.
  */
-export type OnClause = IAnonymousExpr<boolean>;
+export type OnClause = IAnonymousExpr<boolean, false>;

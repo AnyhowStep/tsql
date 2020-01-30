@@ -17,4 +17,5 @@ export declare const aliased: tsql.DerivedTableSelectItem<{
             someColumnOfAs: string;
         };
     }>;
+    isAggregate: false;
 }>;

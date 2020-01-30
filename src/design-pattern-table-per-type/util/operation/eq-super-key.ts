@@ -54,7 +54,8 @@ export type EqSuperKey =
             usedRef : UsedRefUtil.FromColumnMap<
                 | TptT["childTable"]["columns"]
                 | TptT["parentTables"][number]["columns"]
-            >
+            >,
+            isAggregate : false,
         }>
     )
 ;
@@ -70,7 +71,8 @@ export const eqSuperKey : EqSuperKey = (
             usedRef : UsedRefUtil.FromColumnMap<
                 | TptT["childTable"]["columns"]
                 | TptT["parentTables"][number]["columns"]
-            >
+            >,
+            isAggregate : false,
         }>
     ) => {
         const superKey = superKeyMapper(tpt)(
@@ -91,7 +93,7 @@ export const eqSuperKey : EqSuperKey = (
                 const table = findTableWithColumnAlias(tpt, columnAlias);
                 const expr = ExprLib.nullSafeEq(
                     table.columns[columnAlias],
-                    BuiltInExprUtil.fromValueExpr(
+                    BuiltInExprUtil.fromValueExpr<unknown>(
                         table.columns[columnAlias],
                         superKey[columnAlias]
                     )
@@ -101,7 +103,8 @@ export const eqSuperKey : EqSuperKey = (
                     usedRef : UsedRefUtil.FromColumnMap<
                         | TptT["childTable"]["columns"]
                         | TptT["parentTables"][number]["columns"]
-                    >
+                    >,
+                    isAggregate : false,
                 }>;
             });
         const result = ExprLib.and(...arr);
@@ -110,7 +113,8 @@ export const eqSuperKey : EqSuperKey = (
             usedRef : UsedRefUtil.FromColumnMap<
                 | TptT["childTable"]["columns"]
                 | TptT["parentTables"][number]["columns"]
-            >
+            >,
+            isAggregate : false,
         }>;
     }
 );

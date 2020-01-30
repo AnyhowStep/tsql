@@ -23,7 +23,8 @@ export type HavingDelegate<
         | boolean
         | IExpr<{
             mapper : tm.SafeMapper<boolean>,
-            usedRef : HavingClauseUtil.AllowedUsedRef<FromClauseT>
+            usedRef : HavingClauseUtil.AllowedUsedRef<FromClauseT>,
+            isAggregate : boolean,
         }>
         | ColumnUtil.ExtractWithType<
             ColumnUtil.FromColumnRef<

@@ -36,7 +36,7 @@ export function having<
 ) {
     const columns = allowedColumnRef(fromClause);
     const operand : (
-        boolean|IAnonymousColumn<boolean>|IAnonymousExpr<boolean>
+        boolean|IAnonymousColumn<boolean>|IAnonymousExpr<boolean, boolean>
     ) = havingDelegate(ColumnRefUtil.tryFlatten(
         columns
     ));

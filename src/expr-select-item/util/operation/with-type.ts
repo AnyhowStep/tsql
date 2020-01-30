@@ -13,6 +13,7 @@ export type WithTypeImpl<
     TableAliasT extends string,
     AliasT extends string,
     UsedRefT extends IUsedRef,
+    IsAggregateT extends boolean,
 > = (
     IExprSelectItem<{
         mapper : tm.SafeMapper<TypeT>,
@@ -20,6 +21,7 @@ export type WithTypeImpl<
         alias : AliasT,
 
         usedRef : UsedRefT,
+        isAggregate : IsAggregateT,
     }>
 );
 /**
@@ -34,7 +36,8 @@ export type WithType<
         TypeT,
         ExprSelectItemT["tableAlias"],
         ExprSelectItemT["alias"],
-        ExprSelectItemT["usedRef"]
+        ExprSelectItemT["usedRef"],
+        ExprSelectItemT["isAggregate"]
     > :
     never
 );
@@ -47,6 +50,7 @@ export function withType<
         alias,
         usedRef,
         unaliasedAst,
+        isAggregate,
     } : ExprSelectItemT,
     newMapper : tm.SafeMapper<TypeT>
 ) : (
@@ -57,6 +61,7 @@ export function withType<
         tableAlias,
         alias,
         usedRef,
+        isAggregate,
 
         unaliasedAst,
     };

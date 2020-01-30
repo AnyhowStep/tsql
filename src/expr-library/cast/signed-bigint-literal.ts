@@ -14,6 +14,7 @@ export function signedBigIntLiteral (
     Expr<{
         mapper : tm.SafeMapper<bigint>,
         usedRef : IUsedRef<{}>,
+        isAggregate : false,
     }>
 ) {
     const mapper = tm.mysql.bigIntSigned();
@@ -22,6 +23,7 @@ export function signedBigIntLiteral (
         {
             mapper,
             usedRef : UsedRefUtil.fromColumnRef({}),
+            isAggregate : false,
         },
         LiteralValueNodeUtil.signedBigIntLiteralNode(
             value

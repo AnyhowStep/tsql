@@ -11,4 +11,4 @@ export declare const expr: tsql.ExprImpl<boolean, tsql.IUsedRef<{
         readonly computerId: string;
         readonly createdAt: Date;
     };
-}>>;
+}>, false>;

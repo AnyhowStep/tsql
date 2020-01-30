@@ -90,5 +90,6 @@ export declare const result: {
     whereClause: tsql.IExpr<{
         mapper: tm.Mapper<unknown, boolean>;
         usedRef: tsql.IUsedRef<never>;
+        isAggregate: false;
     }>;
 };

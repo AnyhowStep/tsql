@@ -31,6 +31,7 @@ export declare const query: tsql.Query<{
         tableAlias: "$aliased";
         alias: "x";
         usedRef: tsql.IUsedRef<never>;
+        isAggregate: false;
     }>];
     limitClause: undefined;
     compoundQueryClause: undefined;

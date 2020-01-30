@@ -1,11 +1,11 @@
 [
   {
     "messageText": {
-      "messageText": "Type 'IExpr<{ mapper: () => boolean; usedRef: IUsedRef<{ myTable: { myTableId: bigint; }; }>; }>' is not assignable to type 'IExpr<{ mapper: () => boolean; usedRef: IUsedRef<{ myTable: { myTableId: bigint | null; }; }>; }>'.",
+      "messageText": "Type 'IExpr<{ mapper: () => boolean; usedRef: IUsedRef<{ myTable: { myTableId: bigint; }; }>; isAggregate: false; }>' is not assignable to type 'IExpr<{ mapper: () => boolean; usedRef: IUsedRef<{ myTable: { myTableId: bigint | null; }; }>; isAggregate: false; }>'.",
       "category": 1,
       "code": 2322,
       "next": {
-        "messageText": "Type '{ mapper: () => boolean; usedRef: IUsedRef<{ myTable: { myTableId: bigint; }; }>; }' is not assignable to type '{ mapper: () => boolean; usedRef: IUsedRef<{ myTable: { myTableId: bigint | null; }; }>; }'.",
+        "messageText": "Type '{ mapper: () => boolean; usedRef: IUsedRef<{ myTable: { myTableId: bigint; }; }>; isAggregate: false; }' is not assignable to type '{ mapper: () => boolean; usedRef: IUsedRef<{ myTable: { myTableId: bigint | null; }; }>; isAggregate: false; }'.",
         "category": 1,
         "code": 2322,
         "next": {
@@ -53,6 +53,6 @@
     "code": 2322,
     "category": 1,
     "length": 10,
-    "start": 938
+    "start": 990
   }
 ]

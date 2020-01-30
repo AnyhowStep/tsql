@@ -8,4 +8,4 @@ export declare const payInMethodTypeFeeAmount: tsql.ExprImpl<bigint | null, tsql
         readonly otherBaseAmount: bigint;
         readonly ratio: number;
     };
-}>>;
+}>, false>;

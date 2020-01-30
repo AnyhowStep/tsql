@@ -120,7 +120,8 @@ export class AliasedExpr<
     DataT extends ExprSelectItemData
 > extends ExprImpl<
     ReturnType<DataT["mapper"]>,
-    DataT["usedRef"]
+    DataT["usedRef"],
+    DataT["isAggregate"]
 > implements IExprSelectItem<
     DataT
 > {

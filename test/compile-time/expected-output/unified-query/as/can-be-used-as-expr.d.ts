@@ -1,2 +1,2 @@
 import * as tsql from "../../../../../dist";
-export declare const aliased: tsql.ExprImpl<boolean, tsql.IUsedRef<{}>>;
+export declare const aliased: tsql.ExprImpl<boolean, tsql.IUsedRef<{}>, false>;

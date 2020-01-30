@@ -4,6 +4,19 @@ import {Expr, expr} from "../../expr-impl";
 import {TryReuseExistingType} from "../../../type-util";
 import {Ast} from "../../../ast";
 
+/**
+ * Given `foo(arg0, arg1, ...)`,
+ *
+ * | `foo` is aggregate | some `arg` is aggregate | expression is aggregate |
+ * |--------------------|-------------------------|-------------------------|
+ * | Y                  | Y                       | -Compile Error-
+ * | Y                  | N                       | Y
+ * | N                  | Y                       | Y
+ * | N                  | N                       | N
+ *
+ * This `Intersect<>` type assumes `foo` is non-aggregate.
+ * @see AggregateIntersect<>
+ */
 export type Intersect<
     OutputTypeT,
     ArgsT extends AnyBuiltInExpr
@@ -15,6 +28,7 @@ export type Intersect<
             usedRef : BuiltInExprUtil.IntersectUsedRef<
                 ArgsT
             >,
+            isAggregate : BuiltInExprUtil.IsAggregate<ArgsT>,
         }>
     >
 ;
@@ -31,6 +45,7 @@ export type __WastefulIntersect<
         usedRef : BuiltInExprUtil.IntersectUsedRef<
             ArgsT
         >,
+        isAggregate : BuiltInExprUtil.IsAggregate<ArgsT>,
     }>
 ;
 export function intersect<
@@ -45,6 +60,7 @@ export function intersect<
         {
             mapper,
             usedRef : BuiltInExprUtil.intersectUsedRef(...args),
+            isAggregate : args.some(BuiltInExprUtil.isAggregate),
         },
         ast
     ) as Intersect<OutputTypeT, ArgsT>;

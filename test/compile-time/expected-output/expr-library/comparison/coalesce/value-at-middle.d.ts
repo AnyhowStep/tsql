@@ -5,4 +5,4 @@ export declare const expr0: tsql.ExprImpl<string | boolean | Buffer | 9001, tsql
         readonly someColumnB: string | null;
         readonly someColumnC: Buffer | null;
     };
-}>>;
+}>, false>;

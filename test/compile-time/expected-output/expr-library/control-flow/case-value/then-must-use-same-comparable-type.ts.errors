@@ -1,7 +1,7 @@
 [
   {
     "messageText": {
-      "messageText": "Argument of type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"someColumn03\"; mapper: Mapper<unknown, string>; }>' is not assignable to parameter of type 'number | IExpr<{ mapper: Mapper<unknown, number | null>; usedRef: IUsedRef<never>; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number | null>; }> | IExprSelectItem<{ ...; }> | (IQueryBase<...> & IQueryBase<...>) | (IQueryBase<...> & IQueryBase<...>) | (IQueryBase<...> & IQueryBase...'.",
+      "messageText": "Argument of type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"someColumn03\"; mapper: Mapper<unknown, string>; }>' is not assignable to parameter of type 'number | IExpr<{ mapper: Mapper<unknown, number | null>; usedRef: IUsedRef<never>; isAggregate: boolean; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number | null>; }> | ... 4 more ... | null'.",
       "category": 1,
       "code": 2345,
       "next": {

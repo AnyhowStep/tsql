@@ -29,10 +29,6 @@ export declare const query: tsql.Query<{
     selectClause: undefined;
     limitClause: undefined;
     compoundQueryClause: undefined;
-    /**
-     * We make this `WHERE` clause handle `myTableId`, even if it is `null`.
-     * So, `bigint|null`.
-     */
     compoundQueryLimitClause: undefined;
     mapDelegate: undefined;
     groupByClause: undefined;
@@ -43,6 +39,7 @@ declare type AllowedUsedRef = tsql.FromClauseUtil.AllowedUsedRef<typeof query["f
 declare type AllowedExpr = tsql.IExpr<{
     mapper: () => boolean;
     usedRef: AllowedUsedRef;
+    isAggregate: false;
 }>;
 /**
  * This is allowed because the column will always be `bigint`.

@@ -35,12 +35,14 @@ export function decimalLiteral (
     Expr<{
         mapper : tm.SafeMapper<Decimal>,
         usedRef : IUsedRef<{}>,
+        isAggregate : false,
     }>
 ) {
     return expr(
         {
             mapper : tm.mysql.decimal(precision, scale),
             usedRef : UsedRefUtil.fromColumnRef({}),
+            isAggregate : false,
         },
         LiteralValueNodeUtil.decimalLiteralNode(
             rawDecimalLiteral,

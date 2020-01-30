@@ -90,20 +90,29 @@ import {QueryBaseUtil} from "../query-base";
 import {IUsedRef, UsedRefUtil} from "../used-ref";
 import {ColumnMap} from "../column-map";
 
+/**
+ * @note `IsAggregateT` here is impossible to infer in the following situation,
+ * ```ts
+ *  declare function foo<TypeT, IsAggregateT extends boolean> (e : BuiltInExpr<TypeT, IsAggregateT>) : IsAggregateT;
+ *  foo(1); //What is the return type?
+ * ```
+ *
+ * It is inferred as `boolean`, when it should be `false`.
+ */
 export type BuiltInExpr<TypeT> = (
     | (
         TypeT extends BuiltInValueExpr ?
         TypeT :
         never
     )
-    | IAnonymousExpr<TypeT>
+    | IAnonymousExpr<TypeT, boolean>
     | IAnonymousColumn<TypeT>
     | (
         null extends TypeT ?
         (QueryBaseUtil.OneSelectItem<TypeT> & QueryBaseUtil.ZeroOrOneRow) :
         (QueryBaseUtil.OneSelectItem<TypeT> & QueryBaseUtil.OneRow)
     )
-    | IAnonymousExprSelectItem<TypeT>
+    | IAnonymousExprSelectItem<TypeT, boolean>
 );
 
 export type AnySubqueryExpr = (QueryBaseUtil.OneSelectItem<any> & QueryBaseUtil.ZeroOrOneRow);
@@ -126,6 +135,7 @@ export type NonValueExpr_NonCorrelated<TypeT> =
     | IExpr<{
         mapper : tm.SafeMapper<TypeT>,
         usedRef : IUsedRef<{}>,
+        isAggregate : boolean,
     }>
     /**
      * A `column` is itself a used ref, and is not allowed
@@ -143,6 +153,7 @@ export type NonValueExpr_NonCorrelated<TypeT> =
         alias : string,
 
         usedRef : IUsedRef<{}>,
+        isAggregate : boolean,
     }>
 ;
 
@@ -181,6 +192,7 @@ export type BuiltInExpr_MapCorrelated<
     | IExpr<{
         mapper : tm.SafeMapper<TypeT>,
         usedRef : UsedRefUtil.FromColumnMap<ColumnMapT>,
+        isAggregate : boolean,
     }>
     | ColumnUtil.FromColumnMap<ColumnMapT>
     | IExprSelectItem<{
@@ -188,6 +200,7 @@ export type BuiltInExpr_MapCorrelated<
         usedRef : UsedRefUtil.FromColumnMap<ColumnMapT>,
         tableAlias : string,
         alias : string,
+        isAggregate : boolean,
     }>
 ;
 
@@ -203,5 +216,70 @@ export type BuiltInExpr_MapCorrelatedOrUndefined<
     TypeT
 > =
     | BuiltInExpr_MapCorrelated<ColumnMapT, TypeT>
+    | undefined
+;
+
+export type BuiltInExpr_NonAggregate<TypeT> = (
+    | (
+        TypeT extends BuiltInValueExpr ?
+        TypeT :
+        never
+    )
+    | IAnonymousExpr<TypeT, false>
+    | IAnonymousColumn<TypeT>
+    | (
+        null extends TypeT ?
+        (QueryBaseUtil.OneSelectItem<TypeT> & QueryBaseUtil.ZeroOrOneRow) :
+        (QueryBaseUtil.OneSelectItem<TypeT> & QueryBaseUtil.OneRow)
+    )
+    | IAnonymousExprSelectItem<TypeT, false>
+);
+
+export type NonValueExpr_NonCorrelated_NonAggregate<TypeT> =
+    | IExpr<{
+        mapper : tm.SafeMapper<TypeT>,
+        usedRef : IUsedRef<{}>,
+        isAggregate : false,
+    }>
+    /**
+     * A `column` is itself a used ref, and is not allowed
+     */
+    //| IAnonymousColumn<TypeT>
+    | (
+        null extends TypeT ?
+        (QueryBaseUtil.OneSelectItem<TypeT> & QueryBaseUtil.ZeroOrOneRow & QueryBaseUtil.NonCorrelated) :
+        (QueryBaseUtil.OneSelectItem<TypeT> & QueryBaseUtil.OneRow & QueryBaseUtil.NonCorrelated)
+    )
+    | IExprSelectItem<{
+        mapper : tm.SafeMapper<TypeT>,
+
+        tableAlias : string,
+        alias : string,
+
+        usedRef : IUsedRef<{}>,
+        isAggregate : false,
+    }>
+;
+
+export type AnyBuiltInExpr_NonCorrelated_NonAggregate =
+    | BuiltInValueExpr
+    | NonValueExpr_NonCorrelated_NonAggregate<any>
+;
+
+export type BuiltInExpr_NonCorrelated_NonAggregate<TypeT> =
+    | (
+        TypeT extends BuiltInValueExpr ?
+        TypeT :
+        never
+    )
+    | NonValueExpr_NonCorrelated_NonAggregate<TypeT>
+;
+
+/**
+ * Workaround,
+ * https://github.com/microsoft/TypeScript/issues/35616#issuecomment-564894944
+ */
+export type BuiltInExpr_NonCorrelated_NonAggregateOrUndefined<TypeT> =
+    | BuiltInExpr_NonCorrelated_NonAggregate<TypeT>
     | undefined
 ;

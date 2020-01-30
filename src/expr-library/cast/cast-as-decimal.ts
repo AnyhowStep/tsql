@@ -152,6 +152,7 @@ export function castAsDecimal<
          * @todo Use `TryReuseExistingType<>` hack to fight off depth limit
          */
         usedRef : BuiltInExprUtil.UsedRef<ArgT>,
+        isAggregate : BuiltInExprUtil.IsAggregate<ArgT>,
     }>
 );
 export function castAsDecimal<
@@ -176,6 +177,7 @@ export function castAsDecimal<
          * @todo Use `TryReuseExistingType<>` hack to fight off depth limit
          */
         usedRef : BuiltInExprUtil.UsedRef<ArgT>,
+        isAggregate : BuiltInExprUtil.IsAggregate<ArgT>,
     }>
 );
 export function castAsDecimal<
@@ -200,6 +202,7 @@ export function castAsDecimal<
          * @todo Use `TryReuseExistingType<>` hack to fight off depth limit
          */
         usedRef : BuiltInExprUtil.UsedRef<ArgT>,
+        isAggregate : BuiltInExprUtil.IsAggregate<ArgT>,
     }>
 ) {
     const argMapper = BuiltInExprUtil.mapper(arg);
@@ -210,6 +213,7 @@ export function castAsDecimal<
                 tm.mysql.decimal(precision, scale).orNull() :
                 tm.mysql.decimal(precision, scale),
             usedRef : BuiltInExprUtil.usedRef(arg),
+            isAggregate : BuiltInExprUtil.isAggregate(arg),
         },
         OperatorNodeUtil.operatorNode3(
             OperatorType.CAST_AS_DECIMAL,

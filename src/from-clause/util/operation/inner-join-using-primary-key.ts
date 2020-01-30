@@ -121,7 +121,8 @@ export function innerJoinUsingPrimaryKey<
         DstT,
         Expr<{
             mapper : tm.SafeMapper<boolean>,
-            usedRef : UsedRefUtil.FromColumnMap<SrcT["columns"]|DstT["columns"]>
+            usedRef : UsedRefUtil.FromColumnMap<SrcT["columns"]|DstT["columns"]>,
+            isAggregate : false,
         }>
     >(
         fromClause,

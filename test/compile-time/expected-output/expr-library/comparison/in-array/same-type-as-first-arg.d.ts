@@ -4,5 +4,5 @@ export declare const expr0: tsql.ExprImpl<boolean, tsql.IUsedRef<{
     readonly inListTable: {
         readonly v: tm.mysql.Decimal;
     };
-}>>;
-export declare const expr1: tsql.ExprImpl<boolean, tsql.IUsedRef<{}>>;
+}>, false>;
+export declare const expr1: tsql.ExprImpl<boolean, tsql.IUsedRef<{}>, false>;

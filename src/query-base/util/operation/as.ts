@@ -27,6 +27,7 @@ export type As<QueryT extends AfterSelectClause, AliasT extends string> =
             QueryT["fromClause"]["outerQueryJoins"] :
             []
         >,
+        isAggregate : false,
     }> :
     DerivedTable<{
         isLateral : false,
@@ -88,6 +89,7 @@ export function as<
                     [] :
                     query.fromClause.outerQueryJoins
                 ),
+                isAggregate : false,
             },
             parentheses(query, false)
         );

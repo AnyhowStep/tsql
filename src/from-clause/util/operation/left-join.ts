@@ -5,7 +5,7 @@ import {assertAfterFromClause, assertValidCurrentJoinBase, AssertValidCurrentJoi
 import {JoinArrayUtil, JoinUtil, JoinType} from "../../../join";
 import {AssertNonUnion} from "../../../type-util";
 import {OnDelegate, OnClauseUtil} from "../../../on-clause";
-import {BuiltInExpr} from "../../../built-in-expr";
+import {BuiltInExpr_NonAggregate} from "../../../built-in-expr";
 
 /**
  * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966
@@ -48,7 +48,7 @@ export type LeftJoin<
 export function leftJoin<
     FromClauseT extends AfterFromClause,
     AliasedTableT extends IAliasedTable,
-    RawOnClauseT extends BuiltInExpr<boolean>
+    RawOnClauseT extends BuiltInExpr_NonAggregate<boolean>
 > (
     fromClause : FromClauseT,
     aliasedTable : (

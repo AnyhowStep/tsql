@@ -11,20 +11,23 @@ import {AliasedExpr} from "../../../aliased-expr";
 export type AsImpl<
     AliasT extends string,
     MapperT extends IExpr["mapper"],
-    UsedRefT extends IExpr["usedRef"]
+    UsedRefT extends IExpr["usedRef"],
+    IsAggregateT extends IExpr["isAggregate"],
 > = (
     AliasedExpr<{
         mapper : MapperT,
         tableAlias : typeof ALIASED,
         alias : AliasT,
         usedRef : UsedRefT,
+        isAggregate : IsAggregateT,
     }>
 );
 export type As<ExprT extends IExpr, AliasT extends string> = (
     AsImpl<
         AliasT,
         ExprT["mapper"],
-        ExprT["usedRef"]
+        ExprT["usedRef"],
+        ExprT["isAggregate"]
     >
 );
 export function as<ExprT extends IExpr, AliasT extends string> (
@@ -37,6 +40,7 @@ export function as<ExprT extends IExpr, AliasT extends string> (
             tableAlias : ALIASED,
             alias,
             usedRef : expr.usedRef,
+            isAggregate : expr.isAggregate,
         },
         expr.ast
     );

@@ -75,6 +75,7 @@ export async function invokeAssignmentDelegate<
                                 BuiltInExprUtil.mapper(customExpr)
                             ),
                             usedRef : BuiltInExprUtil.usedRef(customExpr),
+                            isAggregate : BuiltInExprUtil.isAggregate(customExpr),
                         },
                         BuiltInExprUtil.buildAst(customExpr)
                     ).as(columnAlias);

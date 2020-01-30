@@ -1,7 +1,7 @@
 import {ITablePerType} from "../../table-per-type";
 import {Identity} from "../../../type-util";
 import {MutableColumnAlias, ColumnType, ColumnAlias} from "../query";
-import {CustomExpr_MapCorrelatedOrUndefined} from "../../../custom-expr";
+import {CustomExpr_MapCorrelated_NonAggregateOrUndefined} from "../../../custom-expr";
 import {ColumnRefUtil} from "../../../column-ref";
 import {ColumnUtil} from "../../../column";
 
@@ -11,7 +11,14 @@ export type CustomAssignmentMap<
     Identity<
         & {
             readonly [columnAlias in MutableColumnAlias<TptT>]? : (
-                CustomExpr_MapCorrelatedOrUndefined<
+                /**
+                 * The following `UPDATE` statement is invalid,
+                 * aggregate expressions are not allowed.
+                 * ```sql
+                 *  UPDATE myTable SET myColumn = SUM(myColumn);
+                 * ```
+                 */
+                CustomExpr_MapCorrelated_NonAggregateOrUndefined<
                     (
                         | TptT["childTable"]["columns"]
                         | TptT["parentTables"][number]["columns"]

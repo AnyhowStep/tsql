@@ -5,4 +5,4 @@ export declare const expr: tsql.ExprImpl<number | null, tsql.IUsedRef<{
         readonly someColumn01: number;
         readonly someColumn02: number;
     };
-}>>;
+}>, false>;

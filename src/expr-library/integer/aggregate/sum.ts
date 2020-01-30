@@ -22,7 +22,7 @@ export const sumDistinct : Operator1<bigint, Decimal|null> = <
 ) : (
     ExprUtil.Intersect<Decimal|null, ArgT>
 ) => {
-    return sumImpl(true, arg);
+    return sumImpl(true, arg) as ExprUtil.Intersect<Decimal|null, ArgT>;
 };
 
 export const sumAll : Operator1<bigint, Decimal|null> = <
@@ -32,7 +32,7 @@ export const sumAll : Operator1<bigint, Decimal|null> = <
 ) : (
     ExprUtil.Intersect<Decimal|null, ArgT>
 ) => {
-    return sumImpl(false, arg);
+    return sumImpl(false, arg) as ExprUtil.Intersect<Decimal|null, ArgT>;
 };
 
 export const sum = sumAll;

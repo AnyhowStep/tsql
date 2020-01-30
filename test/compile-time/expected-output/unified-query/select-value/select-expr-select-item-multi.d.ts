@@ -31,11 +31,13 @@ export declare const query: tsql.Query<{
         tableAlias: "$aliased";
         alias: "x";
         usedRef: tsql.IUsedRef<never>;
+        isAggregate: false;
     }>, tsql.IExprSelectItem<{
         mapper: tm.Mapper<unknown, boolean>;
         tableAlias: "$aliased";
         alias: "y";
         usedRef: tsql.IUsedRef<never>;
+        isAggregate: false;
     }>];
     limitClause: undefined;
     compoundQueryClause: undefined;

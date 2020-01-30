@@ -29,6 +29,7 @@ export function isNullOr<
                 tm.OutputOf<ColumnT["mapper"]>
             >
         ),
+        isAggregate : BuiltInExprUtil.IsAggregate<BuiltInExprT>,
     }>
 ) {
     return or(
@@ -56,6 +57,7 @@ export function isNullOr<
                     tm.OutputOf<ColumnT["mapper"]>
                 >
             ),
+            isAggregate : BuiltInExprUtil.IsAggregate<BuiltInExprT>,
         }>
     );
 }

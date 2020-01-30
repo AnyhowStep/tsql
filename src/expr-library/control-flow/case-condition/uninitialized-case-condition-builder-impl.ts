@@ -16,12 +16,14 @@ export class UninitializedCaseConditionBuilderImpl implements UninitializedCaseC
     ) : (
         CaseConditionBuilder<
             BuiltInExprUtil.TypeOf<ThenT>,
-            BuiltInExprUtil.IntersectUsedRef<ConditionT|ThenT>
+            BuiltInExprUtil.IntersectUsedRef<ConditionT|ThenT>,
+            BuiltInExprUtil.IsAggregate<ConditionT|ThenT>
         >
     ) {
         return new CaseConditionBuilderImpl<
             BuiltInExprUtil.TypeOf<ThenT>,
-            BuiltInExprUtil.IntersectUsedRef<ConditionT|ThenT>
+            BuiltInExprUtil.IntersectUsedRef<ConditionT|ThenT>,
+            BuiltInExprUtil.IsAggregate<ConditionT|ThenT>
         >(
             [BuiltInExprUtil.mapper(then)],
             BuiltInExprUtil.intersectUsedRef<(ConditionT|ThenT)[]>(
@@ -37,7 +39,11 @@ export class UninitializedCaseConditionBuilderImpl implements UninitializedCaseC
                     ]
                 ],
                 else : undefined,
-            }
+            },
+            (
+                BuiltInExprUtil.isAggregate(condition) ||
+                BuiltInExprUtil.isAggregate(then)
+            ) as BuiltInExprUtil.IsAggregate<ConditionT|ThenT>
         );
     }
 }

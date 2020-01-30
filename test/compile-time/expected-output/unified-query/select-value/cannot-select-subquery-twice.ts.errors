@@ -1,11 +1,11 @@
 [
   {
     "messageText": {
-      "messageText": "Type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>; selectClause: [IExprSelectItem<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"x\"; usedRef: IUsedRef<never>; }>]; ... 4 more ...; groupByClause: undefined; }>' is not assignable to type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>; selectClause: [IExprSelectItem<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"x\"; usedRef: IUsedRef<never>; }>]; ... 4 more ...; groupByClause: undefined; }> & CompileError<...>'.",
+      "messageText": "Type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>; selectClause: [IExprSelectItem<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"x\"; usedRef: IUsedRef<never>; isAggregate: false; }>]; ... 4 more ...; groupByClause: undefined; }>' is not assignable to type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>; selectClause: [IExprSelectItem<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"x\"; usedRef: IUsedRef<never>; isAggregate: false; }>]; ... 4 more ...; groupByClause: undefined; }> & CompileError<...>'.",
       "category": 1,
       "code": 2322,
       "next": {
-        "messageText": "Property '__compileError' is missing in type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>; selectClause: [IExprSelectItem<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"x\"; usedRef: IUsedRef<never>; }>]; ... 4 more ...; groupByClause: undefined; }>' but required in type 'CompileError<[\"Identifiers already used in SELECT clause; consider aliasing\", [\"$aliased\", \"value\"]]>'.",
+        "messageText": "Property '__compileError' is missing in type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>; selectClause: [IExprSelectItem<{ mapper: Mapper<unknown, boolean>; tableAlias: \"$aliased\"; alias: \"x\"; usedRef: IUsedRef<never>; isAggregate: false; }>]; ... 4 more ...; groupByClause: undefined; }>' but required in type 'CompileError<[\"Identifiers already used in SELECT clause; consider aliasing\", [\"$aliased\", \"value\"]]>'.",
         "category": 1,
         "code": 2741
       }

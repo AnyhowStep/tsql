@@ -3,4 +3,4 @@ export declare const aliased: tsql.ExprImpl<boolean, tsql.IUsedRef<{
     readonly somethingElse: {
         boop: bigint;
     };
-}>>;
+}>, false>;

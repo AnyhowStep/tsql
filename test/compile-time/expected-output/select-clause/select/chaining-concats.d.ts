@@ -5,12 +5,14 @@ export declare const selectClause: [tsql.IExprSelectItem<{
     tableAlias: "$aliased";
     alias: "eq";
     usedRef: tsql.IUsedRef<never>;
+    isAggregate: false;
 }>];
 export declare const selectClause2: [tsql.IExprSelectItem<{
     mapper: tm.Mapper<unknown, boolean>;
     tableAlias: "$aliased";
     alias: "eq";
     usedRef: tsql.IUsedRef<never>;
+    isAggregate: false;
 }>, tsql.Column<{
     tableAlias: "myTable";
     columnAlias: "myTableId";

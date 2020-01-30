@@ -11,6 +11,7 @@ tape(__filename, t => {
                 alias : "",
                 usedRef : tsql.UsedRefUtil.fromColumnRef({}),
                 unaliasedAst : "hi",
+                isAggregate : false,
             }
         ),
         "hi"
@@ -24,6 +25,7 @@ tape(__filename, t => {
                     alias : "",
                     usedRef : tsql.UsedRefUtil.fromColumnRef({}),
                     unaliasedAst : ["a", "b"],
+                    isAggregate : false,
                 }
             ) as any,
             toSql : undefined,

@@ -4,4 +4,4 @@ export declare const expr: tsql.ExprImpl<bigint, tsql.IUsedRef<{
         readonly testId: bigint;
         testVal: bigint | null;
     };
-}>>;
+}>, false>;

@@ -12,6 +12,7 @@ export type Operator0<
         Expr<{
             mapper : tm.SafeMapper<OutputTypeT>,
             usedRef : IUsedRef<{}>,
+            isAggregate : false,
         }>
     )
 ;
@@ -29,12 +30,14 @@ export function makeOperator0<
         Expr<{
             mapper : tm.SafeMapper<OutputTypeT>,
             usedRef : IUsedRef<{}>,
+            isAggregate : false,
         }>
     ) => {
         return expr(
             {
                 mapper,
                 usedRef : UsedRefUtil.fromColumnRef({}),
+                isAggregate : false,
             },
             OperatorNodeUtil.operatorNode0<OperatorTypeT>(
                 operatorType,

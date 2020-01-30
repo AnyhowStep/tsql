@@ -7,8 +7,11 @@ import {NonNullEquatableType, EquatableTypeUtil, EquatableType} from "../../../e
 export interface CaseValueBuilder<
     ValueT extends NonNullEquatableType,
     ResultT extends EquatableType,
-    UsedRefT extends IUsedRef
+    UsedRefT extends IUsedRef,
+    IsAggregateT extends boolean
 > {
+    readonly isAggregate : IsAggregateT;
+
     when<
         CompareValueT extends BuiltInExpr<ValueT>,
         ThenT extends BuiltInExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
@@ -30,14 +33,15 @@ export interface CaseValueBuilder<
             UsedRefUtil.IntersectTryReuseExistingType<
                 | UsedRefT
                 | BuiltInExprUtil.IntersectUsedRef<CompareValueT|ThenT>
-            >
+            >,
+            IsAggregateT|BuiltInExprUtil.IsAggregate<CompareValueT|ThenT>
         >
     );
     /**
      * Calling `.end()` without an `ELSE` clause can
      * cause the result to be `null`
      */
-    end () : ExprImpl<ResultT|null, UsedRefT>;
+    end () : ExprImpl<ResultT|null, UsedRefT, IsAggregateT>;
     else<
         ElseT extends BuiltInExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
     > (
@@ -49,12 +53,19 @@ export interface CaseValueBuilder<
                 UsedRefUtil.Intersect<
                     | UsedRefT
                     | BuiltInExprUtil.UsedRef<ElseT>
-                >
+                >,
+                IsAggregateT|BuiltInExprUtil.IsAggregate<ElseT>
             >
         }
     );
 }
-export interface UninitializedCaseValueBuilder<ValueT extends NonNullEquatableType, UsedRefT extends IUsedRef> {
+export interface UninitializedCaseValueBuilder<
+    ValueT extends NonNullEquatableType,
+    UsedRefT extends IUsedRef,
+    IsAggregateT extends boolean
+> {
+    readonly isAggregate : IsAggregateT;
+
     when<
         CompareValueT extends BuiltInExpr<ValueT>,
         ThenT extends BuiltInExpr<EquatableType>
@@ -68,7 +79,8 @@ export interface UninitializedCaseValueBuilder<ValueT extends NonNullEquatableTy
             UsedRefUtil.Intersect<
                 | UsedRefT
                 | BuiltInExprUtil.IntersectUsedRef<CompareValueT|ThenT>
-            >
+            >,
+            IsAggregateT|BuiltInExprUtil.IsAggregate<CompareValueT|ThenT>
         >
     );
 }
@@ -79,22 +91,26 @@ export function caseValue<
 ) : (
     UninitializedCaseValueBuilder<
         EquatableTypeUtil.BaseNonNullEquatableType<BuiltInExprUtil.TypeOf<ValueExprT>>,
-        BuiltInExprUtil.UsedRef<ValueExprT>
+        BuiltInExprUtil.UsedRef<ValueExprT>,
+        BuiltInExprUtil.IsAggregate<ValueExprT>
     >
 ) {
     return new UninitializedCaseValueBuilderImpl<
         EquatableTypeUtil.BaseNonNullEquatableType<BuiltInExprUtil.TypeOf<ValueExprT>>,
-        BuiltInExprUtil.UsedRef<ValueExprT>
+        BuiltInExprUtil.UsedRef<ValueExprT>,
+        BuiltInExprUtil.IsAggregate<ValueExprT>
     >(
         BuiltInExprUtil.usedRef<ValueExprT>(valueExpr),
-        BuiltInExprUtil.buildAst(valueExpr)
+        BuiltInExprUtil.buildAst(valueExpr),
+        BuiltInExprUtil.isAggregate(valueExpr)
     ) as (
         /**
          * @todo Investigate type instantiation exessively deep error
          */
         UninitializedCaseValueBuilder<
             EquatableTypeUtil.BaseNonNullEquatableType<BuiltInExprUtil.TypeOf<ValueExprT>>,
-            BuiltInExprUtil.UsedRef<ValueExprT>
+            BuiltInExprUtil.UsedRef<ValueExprT>,
+            BuiltInExprUtil.IsAggregate<ValueExprT>
         >
     );
 }

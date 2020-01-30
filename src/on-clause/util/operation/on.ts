@@ -3,14 +3,18 @@ import {allowedColumnRef} from "../query";
 import {IAliasedTable} from "../../../aliased-table";
 import {OnDelegate} from "../../on-delegate";
 import {OnClause} from "../../on-clause";
-import {BuiltInExpr} from "../../../built-in-expr";
+import {BuiltInExpr_NonAggregate} from "../../../built-in-expr";
 import {assertValidUsedRef} from "../predicate";
 import {ExprUtil} from "../../../expr";
 
 export function on<
     FromClauseT extends FromClauseUtil.AfterFromClause,
     AliasedTableT extends IAliasedTable,
-    RawOnClauseT extends BuiltInExpr<boolean>
+    /**
+     * @todo This looks like it should be `MapCorrelated`, or `RefCorrelated`.
+     * Yet, I don't see that restriction here.
+     */
+    RawOnClauseT extends BuiltInExpr_NonAggregate<boolean>
 > (
     fromClause : FromClauseT,
     aliasedTable : AliasedTableT,

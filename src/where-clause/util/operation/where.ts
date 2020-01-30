@@ -30,7 +30,7 @@ export function where<
      * Explicit type annotation required or `tsc` crashes
      */
     const operand : (
-        boolean|IAnonymousColumn<boolean>|IAnonymousExpr<boolean>
+        boolean|IAnonymousColumn<boolean>|IAnonymousExpr<boolean, false>
     ) = whereDelegate(ColumnRefUtil.tryFlatten(
         columns
     ));

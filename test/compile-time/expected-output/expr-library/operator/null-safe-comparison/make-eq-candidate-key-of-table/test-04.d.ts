@@ -17,4 +17,4 @@ export declare const expr: tsql.ExprImpl<boolean, tsql.IUsedRef<{
         readonly outerTableIdB: boolean;
         readonly outerColumn: string;
     };
-}>>;
+}>, false>;

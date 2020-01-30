@@ -7,14 +7,19 @@ import {NonNullEquatableType, EquatableType} from "../../../equatable-type";
 
 export class UninitializedCaseValueBuilderImpl<
     ValueT extends NonNullEquatableType,
-    UsedRefT extends IUsedRef
-> implements UninitializedCaseValueBuilder<ValueT, UsedRefT> {
+    UsedRefT extends IUsedRef,
+    IsAggregateT extends boolean
+> implements UninitializedCaseValueBuilder<ValueT, UsedRefT, IsAggregateT> {
+
     private readonly usedRef : UsedRefT;
     private readonly valueAst : Ast;
 
-    constructor (usedRef : UsedRefT, valueAst : Ast) {
+    readonly isAggregate : IsAggregateT;
+
+    constructor (usedRef : UsedRefT, valueAst : Ast, isAggregate : IsAggregateT) {
         this.usedRef = usedRef;
         this.valueAst = valueAst;
+        this.isAggregate = isAggregate;
     }
 
     when<
@@ -30,7 +35,8 @@ export class UninitializedCaseValueBuilderImpl<
             UsedRefUtil.Intersect<
                 | UsedRefT
                 | BuiltInExprUtil.IntersectUsedRef<CompareValueT|ThenT>
-            >
+            >,
+            IsAggregateT|BuiltInExprUtil.IsAggregate<CompareValueT|ThenT>
         >
     ) {
         return new CaseValueBuilderImpl<
@@ -39,7 +45,8 @@ export class UninitializedCaseValueBuilderImpl<
             UsedRefUtil.Intersect<
                 | UsedRefT
                 | BuiltInExprUtil.IntersectUsedRef<CompareValueT|ThenT>
-            >
+            >,
+            IsAggregateT|BuiltInExprUtil.IsAggregate<CompareValueT|ThenT>
         >(
             [BuiltInExprUtil.mapper(then)],
             UsedRefUtil.intersect<
@@ -61,7 +68,12 @@ export class UninitializedCaseValueBuilderImpl<
                     ]
                 ],
                 else : undefined,
-            }
+            },
+            (
+                this.isAggregate ||
+                BuiltInExprUtil.isAggregate(compareValue) ||
+                BuiltInExprUtil.isAggregate(then)
+            ) as IsAggregateT|BuiltInExprUtil.IsAggregate<CompareValueT|ThenT>
         ) as (
             /**
              * @todo Investigate type instantiation exessively deep error
@@ -72,7 +84,8 @@ export class UninitializedCaseValueBuilderImpl<
                 UsedRefUtil.Intersect<
                     | UsedRefT
                     | BuiltInExprUtil.IntersectUsedRef<CompareValueT|ThenT>
-                >
+                >,
+                IsAggregateT|BuiltInExprUtil.IsAggregate<CompareValueT|ThenT>
             >
         );
     }

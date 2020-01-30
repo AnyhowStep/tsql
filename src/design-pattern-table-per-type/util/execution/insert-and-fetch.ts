@@ -92,6 +92,10 @@ export async function insertAndFetch<
                     {
                         mapper : table.columns[columnAlias].mapper,
                         usedRef : UsedRefUtil.fromColumnRef({}),
+                        /**
+                         * `GENERATED` columns should not have aggregate expressions.
+                         */
+                        isAggregate : false,
                     },
                     /**
                      * This `sqlString` is not allowed to reference any columns.

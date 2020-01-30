@@ -1,7 +1,7 @@
 import {IAliasedTable} from "../../../aliased-table";
 import {FromClauseUtil} from "../../../from-clause";
 import * as TypeUtil from "../../../type-util";
-import {BuiltInExpr} from "../../../built-in-expr";
+import {BuiltInExpr_NonAggregate} from "../../../built-in-expr";
 import {OnDelegate, OnClauseUtil} from "../../../on-clause";
 import {Query} from "../../query-impl";
 import {assertValidJoinTarget, AssertValidCurrentJoin} from "../predicate";
@@ -50,7 +50,7 @@ export type InnerJoin<QueryT extends AfterFromClause, AliasedTableT extends IAli
 export function innerJoin<
     QueryT extends AfterFromClause,
     AliasedTableT extends IAliasedTable,
-    RawOnClauseT extends BuiltInExpr<boolean>
+    RawOnClauseT extends BuiltInExpr_NonAggregate<boolean>
 > (
     query : QueryT,
     aliasedTable : (

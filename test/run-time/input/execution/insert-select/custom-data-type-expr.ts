@@ -53,6 +53,7 @@ tape(__filename, async (t) => {
                             {
                                 mapper : dtPoint,
                                 usedRef : tsql.UsedRefUtil.fromColumnRef({}),
+                                isAggregate : false,
                             },
                             tsql.LiteralValueNodeUtil.stringLiteralNode(
                                 JSON.stringify({

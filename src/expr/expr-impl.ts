@@ -15,13 +15,16 @@ import {IUsedRef} from "../used-ref";
 export class ExprImpl<
     TypeT,
     //MapperT extends ExprData["mapper"],
-    UsedRefT extends ExprData["usedRef"]
+    UsedRefT extends ExprData["usedRef"],
+    IsAggregateT extends boolean
 > implements IExpr<{
     mapper : tm.SafeMapper<TypeT>,
     usedRef : UsedRefT,
+    isAggregate : IsAggregateT
 }> {
     readonly mapper : tm.SafeMapper<TypeT>;
     readonly usedRef : UsedRefT;
+    readonly isAggregate : IsAggregateT;
 
     readonly ast : Ast;
 
@@ -29,11 +32,13 @@ export class ExprImpl<
         data : {
             mapper : tm.SafeMapper<TypeT>,
             usedRef : UsedRefT,
+            isAggregate : IsAggregateT,
         },
         ast : Ast
     ) {
         this.mapper = data.mapper;
         this.usedRef = data.usedRef;
+        this.isAggregate = data.isAggregate;
 
         //Gotta' play it safe.
         //We want to preserve the order of operations.
@@ -90,7 +95,8 @@ export class ExprImpl<
 export type Expr<DataT extends ExprData> =
     ExprImpl<
         ReturnType<DataT["mapper"]>,
-        DataT["usedRef"]
+        DataT["usedRef"],
+        DataT["isAggregate"]
     >
 ;
 export function expr<DataT extends ExprData> (
@@ -203,7 +209,8 @@ export function expr<DataT extends ExprData> (
  */
 export type TableExpr<
     TableT extends { tableAlias : string, columns : ColumnMap },
-    TypeT
+    TypeT,
+    IsAggregateT extends boolean
 > = (
     Expr<{
         mapper : tm.SafeMapper<TypeT>,
@@ -213,5 +220,6 @@ export type TableExpr<
         usedRef : IUsedRef<{
             [alias in TableT["tableAlias"]] : TableT["columns"]
         }>,
+        isAggregate : IsAggregateT,
     }>
 );

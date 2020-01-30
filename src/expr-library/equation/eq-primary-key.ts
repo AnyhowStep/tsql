@@ -46,7 +46,8 @@ export function eqPrimaryKey<
 ) : (
     Expr<{
         mapper : tm.SafeMapper<boolean>,
-        usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>
+        usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>,
+        isAggregate : false,
     }>
 ) {
     const primaryKey = PrimaryKeyUtil.mapper(table)(
@@ -68,19 +69,21 @@ export function eqPrimaryKey<
          */
         const expr = eq(
             table.columns[columnAlias],
-            BuiltInExprUtil.fromValueExpr(
+            BuiltInExprUtil.fromValueExpr<unknown>(
                 table.columns[columnAlias],
                 primaryKey[columnAlias as keyof PrimaryKey_Output<TableT>]
             )
         );
         return expr as Expr<{
             mapper : tm.SafeMapper<boolean>,
-            usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>
+            usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>,
+            isAggregate : false,
         }>;
     });
     const result = and(...arr);
     return result as Expr<{
         mapper : tm.SafeMapper<boolean>,
-        usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>
+        usedRef : UsedRefUtil.FromColumnMap<TableT["columns"]>,
+        isAggregate : false,
     }>;
 }

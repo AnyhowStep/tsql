@@ -9,6 +9,7 @@ export interface ExprSelectItemData {
     readonly alias : string;
 
     readonly usedRef : IUsedRef;
+    readonly isAggregate : boolean;
 }
 
 /**
@@ -72,6 +73,8 @@ export interface IExprSelectItem<DataT extends ExprSelectItemData=ExprSelectItem
      */
     readonly usedRef : DataT["usedRef"];
 
+    readonly isAggregate : DataT["isAggregate"];
+
     /**
      * The AST without the `AS alias` part.
      *
@@ -88,7 +91,7 @@ export interface IExprSelectItem<DataT extends ExprSelectItemData=ExprSelectItem
     readonly unaliasedAst : Ast;
 }
 
-export type IAnonymousExprSelectItem<TypeT> = (
+export type IAnonymousExprSelectItem<TypeT, IsAggregateT extends boolean> = (
     IExprSelectItem<{
         mapper : tm.SafeMapper<TypeT>,
 
@@ -96,5 +99,6 @@ export type IAnonymousExprSelectItem<TypeT> = (
         alias : string,
 
         usedRef : IUsedRef,
+        isAggregate : IsAggregateT,
     }>
 );

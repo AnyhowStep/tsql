@@ -64,6 +64,7 @@ export function inQuery<
     Expr<{
         mapper : tm.SafeMapper<boolean>,
         usedRef : BuiltInExprUtil.IntersectUsedRef<BuiltInExprT|QueryT>,
+        isAggregate : BuiltInExprUtil.IsAggregate<BuiltInExprT>,
     }>
 ) {
     if (!QueryBaseUtil.isOneSelectItem(query)) {
@@ -77,6 +78,7 @@ export function inQuery<
         {
             mapper : tm.mysql.boolean(),
             usedRef : BuiltInExprUtil.intersectUsedRef(builtInExpr, query),
+            isAggregate : BuiltInExprUtil.isAggregate(builtInExpr),
         },
         OperatorNodeUtil.operatorNode2(OperatorType.IN, [
             BuiltInExprUtil.buildAst(builtInExpr),
