@@ -1,9 +1,9 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../../operator-type";
 import {TypeHint} from "../../../type-hint";
-import {makeOperator1} from "../../factory";
+import {makeAggregateOperator1} from "../../aggregate-factory";
 
-export const varPop = makeOperator1<OperatorType.AGGREGATE_POPULATION_VARIANCE, number, number|null>(
+export const varPop = makeAggregateOperator1<OperatorType.AGGREGATE_POPULATION_VARIANCE, number, number|null>(
     OperatorType.AGGREGATE_POPULATION_VARIANCE,
     tm.mysql.double().orNull(),
     TypeHint.DOUBLE
