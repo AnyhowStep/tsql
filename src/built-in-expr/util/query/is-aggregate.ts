@@ -15,7 +15,7 @@ export type HasNonUnitIsAggregate<BuiltInExprT extends AnyBuiltInExpr|IQueryBase
 ;
 export type IsAggregate<BuiltInExprT extends AnyBuiltInExpr|IQueryBase> =
     /**
-     * Could be `IExpr|IExprSelectItem`
+     * Could be `IExpr|IExprSelectItem` or `ExprColumn`, if it came from the `SELECT` clause.
      */
     BuiltInExprT extends { isAggregate : boolean } ?
     BuiltInExprT["isAggregate"] :

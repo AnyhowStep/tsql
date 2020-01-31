@@ -3272,4 +3272,60 @@ export enum OperatorType {
      *   + Maybe just return dummy data like `"sqliteUser"`
      */
     CURRENT_USER = "CURRENT_USER",
+
+    /*
+        Custom library functions
+
+        These functions are not standard SQL,
+        but can be implemented using standard SQL.
+    */
+    /*
+     * An invalid expression that is syntactically valid.
+     * So, it will run.
+     * But evaluating it will throw a run-time error.
+     *
+     * Good for stuff like,
+     * ```sql
+     *  -- Throw if the condition is false
+     *  -- Otherwise, return the expression
+     *  IF(
+     *      -- condition,
+     *      -- expression,
+     *      THROW()
+     *  )
+     * ```
+     *
+     * Or,
+     * ```sql
+     *  -- Throw if expression is null
+     *  -- Otherwise, return the expression
+     *  COALESCE(
+     *      -- possibly null expression,
+     *      throw()
+     *  )
+     * ```
+     *
+     * A good example of such a throwing expression is,
+     * ```sql
+     *  -- Returns two rows,
+     *  (SELECT NULL UNION ALL SELECT NULL)
+     * ```
+     *
+     * @todo Find other such throwing expressions?
+     *
+     * This cannot be done in PostgreSQL.
+     * PostgeSQL's type system does not allow mixing types like,
+     * ```sql
+     *  COALESCE(true, (SELECT NULL UNION ALL SELECT NULL))
+     * ```
+     */
+    //THROW = "THROW",
+    /**
+     * + MySQL      - `COALESCE(x, (SELECT NULL UNION ALL SELECT NULL))`
+     * + PostgreSQL - `COALESCE(x, (SELECT NULL UNION ALL SELECT x))`
+     *   Unfortunately, with PostgreSQL, we need to duplicate the expression...
+     *   But this is a debug expression, anyway, and should not be used often.
+     * + SQLite     - `COALESCE(x, (SELECT NULL UNION ALL SELECT NULL))`
+     */
+    THROW_IF_NULL = "THROW_IF_NULL",
 }

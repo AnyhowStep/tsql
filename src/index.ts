@@ -27,6 +27,7 @@ export * from "./equatable-type";
 export * from "./event";
 export * from "./execution";
 export * from "./expr";
+export * from "./expr-column";
 export * from "./expr-library";
 export * from "./expr-select-item";
 export * from "./from-clause";

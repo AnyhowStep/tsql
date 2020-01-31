@@ -174,7 +174,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     ),
                 query
                     .orderBy(columns => [
-                        columns.$aliased.renamed2.as("stop-renaming-stuff").asc(),
+                        columns.$aliased.renamed2.asc(),
                         columns.myTable.myTableId.as("stahp").desc(),
                     ])
                     .fetchAll(
@@ -190,7 +190,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     ),
                 query
                     .orderBy(columns => [
-                        columns.$aliased.renamed2.as("stop-renaming-stuff").sort(tsql.SortDirection.ASC),
+                        columns.$aliased.renamed2.sort(tsql.SortDirection.ASC),
                         columns.myTable.myTableId.as("stahp").desc(),
                     ])
                     .fetchAll(

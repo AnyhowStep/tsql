@@ -19,7 +19,7 @@
         "./src/column/**/*",
         "./src/column-map/**/*",
         "./src/column-ref/**/*",
-        "./src/aggregate-column/**/*",
+        "./src/expr-column/**/*",
         "./src/used-ref/**/*",
         "./src/aliased-table/**/*",
         "./src/derived-table/**/*",

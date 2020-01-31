@@ -30,6 +30,6 @@ export function latest<LogT extends ILog> (
             log.logTable,
             log.ownerTable
         ))
-        .orderBy(() => [log.latestOrder])
+        .orderBy(() => [log.latestOrder as any])
         .limit(1) as unknown as Latest<LogT>;
 }

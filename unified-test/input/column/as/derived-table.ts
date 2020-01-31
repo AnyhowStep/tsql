@@ -108,7 +108,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     )
                 ))
                 .orderBy(columns => [
-                    columns.renamed.as("stop-renaming-stuff").desc(),
+                    columns.renamed.desc(),
                     columns.myTableId.as("stahp").asc(),
                 ])
                 .fetchAll(

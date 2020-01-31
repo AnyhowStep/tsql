@@ -54,72 +54,73 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                             myTableVal : BigInt(300),
                         },
                         {
-                            myTableId : BigInt(4),
-                            myTableVal : BigInt(100),
+                            myTableId : BigInt(1),
+                            myTableVal : BigInt(1000),
                         },
                         {
-                            myTableId : BigInt(5),
-                            myTableVal : BigInt(200),
+                            myTableId : BigInt(2),
+                            myTableVal : BigInt(2000),
                         },
                         {
-                            myTableId : BigInt(6),
-                            myTableVal : BigInt(300),
+                            myTableId : BigInt(3),
+                            myTableVal : BigInt(3000),
                         },
                     ]
                 );
 
-            return tsql.from(myTable)
-                .select(columns => [
-                    columns.myTableId,
-                    columns.myTableVal.as("renamed"),
-                ])
-                .where(columns => tsql.and(
-                    tsql.gt(
-                        columns.myTableVal.as("blah"),
-                        BigInt(100)
-                    ),
-                    tsql.notEq(
-                        columns.myTableId,
-                        BigInt(2)
-                    )
-                ))
+            return tsql
+                .from(myTable)
                 .groupBy(columns => [
                     columns.myTableId,
-                    columns.myTableVal,
                 ])
-                .having(columns => tsql.and(
-                    tsql.gt(
-                        columns.myTableVal,
-                        BigInt(100)
-                    ),
-                    tsql.notEq(
-                        columns.myTableId.as("blah"),
-                        BigInt(2)
-                    )
-                ))
-                .orderBy(columns => [
-                    columns.renamed.desc(),
-                    columns.myTableId.as("stahp").asc(),
+                .select(columns => [
+                    columns.myTableId,
+                    tsql.integer.max(
+                        columns.myTableVal
+                    ).as("x"),
+                    tsql.integer.add(
+                        columns.myTableId
+                    ).as("y"),
                 ])
-                .fetchAll(
-                    connection
-                );
+                .orderBy((columns) => {
+                    t.true(tsql.ExprColumnUtil.isExprColumn(columns.$aliased.x));
+                    t.true(tsql.BuiltInExprUtil.isAggregate(columns.$aliased.x));
+
+                    t.true(tsql.ExprColumnUtil.isExprColumn(columns.$aliased.y));
+                    t.false(tsql.BuiltInExprUtil.isAggregate(columns.$aliased.y));
+
+                    t.false(tsql.ExprColumnUtil.isExprColumn(columns.myTable.myTableId));
+                    t.false(tsql.BuiltInExprUtil.isAggregate(columns.myTable.myTableId));
+
+                    t.false(tsql.ExprColumnUtil.isExprColumn(columns.myTable.myTableVal));
+                    t.false(tsql.BuiltInExprUtil.isAggregate(columns.myTable.myTableVal));
+
+                    return [
+                        tsql.isNotNull(columns.$aliased.x).asc(),
+                        tsql.isNotNull(columns.$aliased.y).asc(),
+                        columns.$aliased.x.asc(),
+                    ];
+                })
+                .fetchAll(connection);
         });
 
         t.deepEqual(
             resultSet,
             [
                 {
+                    myTableId : BigInt(1),
+                    x : BigInt(1000),
+                    y : BigInt(1),
+                },
+                {
+                    myTableId : BigInt(2),
+                    x : BigInt(2000),
+                    y : BigInt(2),
+                },
+                {
                     myTableId : BigInt(3),
-                    renamed : BigInt(300),
-                },
-                {
-                    myTableId : BigInt(6),
-                    renamed : BigInt(300),
-                },
-                {
-                    myTableId : BigInt(5),
-                    renamed : BigInt(200),
+                    x : BigInt(3000),
+                    y : BigInt(3),
                 },
             ]
         );

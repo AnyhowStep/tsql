@@ -1,7 +1,8 @@
-import {IFromClause, FromClauseUtil} from "../../../from-clause";
+import {IFromClause} from "../../../from-clause";
 import {SelectClause} from "../../../select-clause";
 import {ColumnRefUtil, ColumnRef} from "../../../column-ref";
 import {UsedRefUtil} from "../../../used-ref";
+import {IJoin} from "../../../join";
 
 /**
  * They will change when,
@@ -17,15 +18,29 @@ import {UsedRefUtil} from "../../../used-ref";
  *  ORDER BY
  *      r --This is valid
  * ```
+ *
+ * SQLite does not allow outer query columns to be referenced in the `ORDER BY` clause.
+ * https://stackoverflow.com/questions/59982992/order-by-cannot-reference-outer-query-column
  */
 export type AllowedColumnRef<
     FromClauseT extends IFromClause,
     SelectClauseT extends SelectClause|undefined
 > = (
     ColumnRefUtil.Intersect<
-        FromClauseUtil.AllowedColumnRef<FromClauseT, { isLateral : true }>,
+        /**
+         * We know these will never be aggregate expressions
+         */
+        ColumnRefUtil.FromJoinArray<
+            FromClauseT["currentJoins"] extends readonly IJoin[] ?
+            FromClauseT["currentJoins"] :
+            []
+        >,
         (
             SelectClauseT extends SelectClause ?
+            /**
+             * May possibly contain aggregate expressions,
+             * if they are `$aliased`
+             */
             ColumnRefUtil.FromSelectClause<SelectClauseT> :
             {}
         )
@@ -56,7 +71,11 @@ export function allowedColumnRef<
 ) : (
     AllowedColumnRef<FromClauseT, SelectClauseT>
 ) {
-    const fromClauseColumns = FromClauseUtil.allowedColumnRef(fromClause, { isLateral : true });
+    const fromClauseColumns = ColumnRefUtil.fromJoinArray(
+        (fromClause.currentJoins != undefined) ?
+        fromClause.currentJoins :
+        []
+    );
     const selectClauseColumns = (
         selectClause == undefined ?
         {} :

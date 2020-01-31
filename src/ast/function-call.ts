@@ -17,12 +17,8 @@ export class FunctionArg {
         }
     }
 
-    private cachedSql : string|undefined = undefined;
     toSql = (sqlfier : Sqlfier) : string => {
-        if (this.cachedSql == undefined) {
-            this.cachedSql = AstUtil.toSql(this.ast, sqlfier);
-        }
-        return this.cachedSql;
+        return AstUtil.toSql(this.ast, sqlfier);
     };
 
     static IsFunctionArg (x : any) : x is FunctionArg {
@@ -55,15 +51,11 @@ export class FunctionCall {
         this.args = args;
     }
 
-    private cachedSql : string|undefined = undefined;
     toSql = (sqlfier : Sqlfier) : string => {
-        if (this.cachedSql == undefined) {
-            const argsSql = this.args
-                .map(arg => arg.toSql(sqlfier))
-                .join(", ");
-            this.cachedSql = `${this.functionName}(${argsSql})`;
-        }
-        return this.cachedSql;
+        const argsSql = this.args
+            .map(arg => arg.toSql(sqlfier))
+            .join(", ");
+        return `${this.functionName}(${argsSql})`;
     };
 
     public static IsFunctionCall (x : any) : x is FunctionCall {
