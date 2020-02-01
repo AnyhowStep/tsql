@@ -1,0 +1,40 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type '[ExprImpl<bigint | null, IUsedRef<{ readonly [x: string]: { [x: string]: any; }; }>, true>, \"ASC\"]' is not assignable to type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn\"; mapper: Mapper<unknown, bigint>; }> | Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }> | Column<...> | ... 4 more ... | readonly [...]'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Type '[ExprImpl<bigint | null, IUsedRef<{ readonly [x: string]: { [x: string]: any; }; }>, true>, \"ASC\"]' is not assignable to type 'readonly [Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn\"; mapper: Mapper<unknown, bigint>; }> | Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }> | ... 4 more ... | IExprSelectItem<...>, \"ASC\" | \"DESC\"]'.",
+        "category": 1,
+        "code": 2322,
+        "next": {
+          "messageText": "Types of property '0' are incompatible.",
+          "category": 1,
+          "code": 2326,
+          "next": {
+            "messageText": "Type 'ExprImpl<bigint | null, IUsedRef<{ readonly [x: string]: { [x: string]: any; }; }>, true>' is not assignable to type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn\"; mapper: Mapper<unknown, bigint>; }> | Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }> | Column<...> | Column<...> | ExprColumn<...> | IExpr<...> | IExprSelectItem<...>'.",
+            "category": 1,
+            "code": 2322,
+            "next": {
+              "messageText": "Type 'ExprImpl<bigint | null, IUsedRef<{ readonly [x: string]: { [x: string]: any; }; }>, true>' is missing the following properties from type 'ExprColumn<{ tableAlias: \"$aliased\"; columnAlias: \"x\"; mapper: Mapper<unknown, bigint>; isAggregate: false; }>': tableAlias, columnAlias, unaliasedAst",
+              "category": 1,
+              "code": 2739
+            }
+          }
+        }
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 40,
+    "start": 589
+  },
+  {
+    "messageText": "Property 'myColumn' does not exist on type '{ readonly myTable: { readonly myColumn: Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn\"; mapper: Mapper<unknown, bigint>; }>; readonly myTableId: Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<...>; }>; readonly myColumn2: Column<...>; readonly stringColumn: Column<...>; }; } & { ....'.",
+    "code": 2339,
+    "category": 1,
+    "length": 8,
+    "start": 614
+  }
+]
