@@ -13,20 +13,20 @@ import {GroupByClause} from "../../../group-by-clause";
  * The number of names in the `SELECT` clause is called the **degree** of the query.
  * A scalar query has a degree of **one**.
  */
-export type OneSelectItem<TypeT> = (
-    IQueryBase<{
-        fromClause : IFromClause,
-        /**
-         * A 1-tuple containing a single-value select item
-         */
-        selectClause : [AnonymousSingleValueSelectItem<TypeT>],
+export interface OneSelectItem<TypeT> extends IQueryBase<{
+    fromClause : IFromClause,
+    /**
+     * A 1-tuple containing a single-value select item
+     */
+    selectClause : readonly [AnonymousSingleValueSelectItem<TypeT>],
 
-        limitClause : LimitClause|undefined,
+    limitClause : LimitClause|undefined,
 
-        compoundQueryClause : CompoundQueryClause|undefined,
-        compoundQueryLimitClause : LimitClause|undefined,
+    compoundQueryClause : CompoundQueryClause|undefined,
+    compoundQueryLimitClause : LimitClause|undefined,
 
-        mapDelegate : MapDelegate|undefined,
-        groupByClause : GroupByClause|undefined,
-    }>
-);
+    mapDelegate : MapDelegate|undefined,
+    groupByClause : GroupByClause|undefined,
+}> {
+
+}

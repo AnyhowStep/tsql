@@ -1,7 +1,7 @@
 [
   {
     "messageText": {
-      "messageText": "Argument of type 'Column<{ tableAlias: \"myOtherTable\"; columnAlias: \"myOtherTableId\"; mapper: Mapper<unknown, bigint | null>; }>' is not assignable to parameter of type 'string | number | bigint | boolean | Date | Uint8Array | IExpr<{ mapper: Mapper<unknown, string | number | bigint | boolean | Date | Uint8Array | Decimal | CustomEquatableType>; usedRef: IUsedRef<...>; isAggregate: boolean; }> | IColumn<...> | IExprSelectItem<...> | (IQueryBase<...> & OneRowBeforeFromClause) | (IQue...'.",
+      "messageText": "Argument of type 'Column<{ tableAlias: \"myOtherTable\"; columnAlias: \"myOtherTableId\"; mapper: Mapper<unknown, bigint | null>; }>' is not assignable to parameter of type 'string | number | bigint | boolean | Date | Uint8Array | IExpr<{ mapper: Mapper<unknown, string | number | bigint | boolean | Date | Uint8Array | Decimal | CustomEquatableType>; usedRef: IUsedRef<...>; isAggregate: boolean; }> | IColumn<...> | IExprSelectItem<...> | (OneSelectItem<...> & OneRowBeforeFromClause) | (O...'.",
       "category": 1,
       "code": 2345,
       "next": {

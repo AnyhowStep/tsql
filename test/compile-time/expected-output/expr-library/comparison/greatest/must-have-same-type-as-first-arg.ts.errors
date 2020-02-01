@@ -1,27 +1,27 @@
 [
   {
-    "messageText": "Argument of type '\"1\"' is not assignable to parameter of type 'number | IExpr<{ mapper: Mapper<unknown, number>; usedRef: IUsedRef<never>; isAggregate: boolean; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<...> | (IQueryBase<...> & OneRowBeforeFromClause) | (IQueryBase<...> & OneRowEmptyGroupingSet)'.",
+    "messageText": "Argument of type '\"1\"' is not assignable to parameter of type 'number | IExpr<{ mapper: Mapper<unknown, number>; usedRef: IUsedRef<never>; isAggregate: boolean; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<...> | (OneSelectItem<...> & OneRowBeforeFromClause) | (OneSelectItem<...> & OneRowEmptyGroupingSet)'.",
     "code": 2345,
     "category": 1,
     "length": 3,
     "start": 66
   },
   {
-    "messageText": "Argument of type '1' is not assignable to parameter of type 'string | IExpr<{ mapper: Mapper<unknown, string>; usedRef: IUsedRef<never>; isAggregate: boolean; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, string>; }> | IExprSelectItem<...> | (IQueryBase<...> & OneRowBeforeFromClause) | (IQueryBase<...> & OneRowEmptyGroupingSet)'.",
+    "messageText": "Argument of type '1' is not assignable to parameter of type 'string | IExpr<{ mapper: Mapper<unknown, string>; usedRef: IUsedRef<never>; isAggregate: boolean; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, string>; }> | IExprSelectItem<...> | (OneSelectItem<...> & OneRowBeforeFromClause) | (OneSelectItem<...> & OneRowEmptyGroupingSet)'.",
     "code": 2345,
     "category": 1,
     "length": 1,
     "start": 98
   },
   {
-    "messageText": "Argument of type '1' is not assignable to parameter of type 'boolean | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<never>; isAggregate: boolean; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, boolean>; }> | IExprSelectItem<...> | (IQueryBase<...> & OneRowBeforeFromClause) | (IQueryBase<...> & OneRowEmptyGroupingSet)'.",
+    "messageText": "Argument of type '1' is not assignable to parameter of type 'boolean | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<never>; isAggregate: boolean; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, boolean>; }> | IExprSelectItem<...> | (OneSelectItem<...> & OneRowBeforeFromClause) | (OneSelectItem<...> & OneRowEmptyGroupingSet)'.",
     "code": 2345,
     "category": 1,
     "length": 1,
     "start": 129
   },
   {
-    "messageText": "Argument of type '\"1\"' is not assignable to parameter of type 'boolean | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<never>; isAggregate: boolean; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, boolean>; }> | IExprSelectItem<...> | (IQueryBase<...> & OneRowBeforeFromClause) | (IQueryBase<...> & OneRowEmptyGroupingSet)'.",
+    "messageText": "Argument of type '\"1\"' is not assignable to parameter of type 'boolean | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<never>; isAggregate: boolean; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, boolean>; }> | IExprSelectItem<...> | (OneSelectItem<...> & OneRowBeforeFromClause) | (OneSelectItem<...> & OneRowEmptyGroupingSet)'.",
     "code": 2345,
     "category": 1,
     "length": 3,
