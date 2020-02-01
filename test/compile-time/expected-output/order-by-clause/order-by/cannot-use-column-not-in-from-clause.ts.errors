@@ -1,7 +1,7 @@
 [
   {
     "messageText": {
-      "messageText": "Type 'ExprImpl<boolean, IUsedRef<{ readonly otherTable: { readonly otherColumn: boolean; }; }>, false>' is not assignable to type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn\"; mapper: Mapper<unknown, boolean>; }> | IExpr<{ mapper: Mapper<unknown, unknown>; usedRef: IUsedRef<{ myTable: { myColumn: boolean; }; }>; isAggregate: boolean; }> | IExprSelectItem<...> | readonly [...]'.",
+      "messageText": "Type 'ExprImpl<boolean, IUsedRef<{ readonly otherTable: { readonly otherColumn: boolean; }; }>, false>' is not assignable to type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn\"; mapper: Mapper<unknown, boolean>; }> | IExpr<{ mapper: Mapper<unknown, unknown>; usedRef: IUsedRef<{ myTable: { myColumn: boolean; }; }>; isAggregate: false; }> | IExprSelectItem<...> | readonly [...]'.",
       "category": 1,
       "code": 2322,
       "next": {
@@ -13,11 +13,11 @@
     "code": 2322,
     "category": 1,
     "length": 81,
-    "start": 526
+    "start": 541
   },
   {
     "messageText": {
-      "messageText": "Type 'Column<{ tableAlias: \"otherTable\"; columnAlias: \"otherColumn\"; mapper: Mapper<unknown, boolean>; }>' is not assignable to type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn\"; mapper: Mapper<unknown, boolean>; }> | IExpr<{ mapper: Mapper<unknown, unknown>; usedRef: IUsedRef<{ myTable: { myColumn: boolean; }; }>; isAggregate: boolean; }> | IExprSelectItem<...> | readonly [...]'.",
+      "messageText": "Type 'Column<{ tableAlias: \"otherTable\"; columnAlias: \"otherColumn\"; mapper: Mapper<unknown, boolean>; }>' is not assignable to type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn\"; mapper: Mapper<unknown, boolean>; }> | IExpr<{ mapper: Mapper<unknown, unknown>; usedRef: IUsedRef<{ myTable: { myColumn: boolean; }; }>; isAggregate: false; }> | IExprSelectItem<...> | readonly [...]'.",
       "category": 1,
       "code": 2322,
       "next": {
@@ -39,6 +39,6 @@
     "code": 2322,
     "category": 1,
     "length": 30,
-    "start": 786
+    "start": 816
   }
 ]

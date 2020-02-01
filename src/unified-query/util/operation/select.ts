@@ -4,6 +4,9 @@ import {Query} from "../../query-impl";
 import {BeforeCompoundQueryClause} from "../helper-type";
 import {Correlate, correlate} from "./correlate";
 import {BeforeSelectClause} from "../../../query-base/util";
+import {GroupByClause} from "../../../group-by-clause";
+import {IExprSelectItem} from "../../../expr-select-item";
+import {BuiltInExprUtil} from "../../../built-in-expr";
 
 /**
  * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966
@@ -72,7 +75,15 @@ export type SelectImpl<
         compoundQueryClause : CompoundQueryClauseT,
         compoundQueryLimitClause : CompoundQueryLimitClauseT,
         mapDelegate : MapDelegateT,
-        groupByClause : GroupByClauseT,
+        groupByClause : (
+            GroupByClauseT extends GroupByClause ?
+            GroupByClauseT :
+            (
+                true extends Extract<SelectsT[number], IExprSelectItem>["isAggregate"] ?
+                [] :
+                undefined
+            )
+        ),
     }>
 );
 export type Select<
@@ -152,7 +163,24 @@ export function select<
             compoundQueryClause,
             compoundQueryLimitClause,
             mapDelegate,
-            groupByClause,
+            groupByClause : (
+                groupByClause != undefined ?
+                groupByClause :
+                selectClause.some(selectItem => (
+                    BuiltInExprUtil.isBuiltInExpr(selectItem) &&
+                    BuiltInExprUtil.isAggregate(selectItem)
+                )) ?
+                [] :
+                undefined
+            ) as (
+                QueryT["groupByClause"] extends GroupByClause ?
+                QueryT["groupByClause"] :
+                (
+                    true extends Extract<SelectsT[number], IExprSelectItem>["isAggregate"] ?
+                    [] :
+                    undefined
+                )
+            ),
         },
         query
     );

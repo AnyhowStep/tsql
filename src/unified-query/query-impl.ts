@@ -296,15 +296,16 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     }
 
     having (
+        this : Extract<this, QueryUtil.AfterGroupByClause>,
         havingDelegate : HavingDelegate<
-            this["fromClause"],
-            this["groupByClause"]
+            Extract<this, QueryUtil.AfterGroupByClause>["fromClause"],
+            Extract<this, QueryUtil.AfterGroupByClause>["groupByClause"]
         >
     ) : (
-        QueryUtil.Having<this>
+        QueryUtil.Having<Extract<this, QueryUtil.AfterGroupByClause>>
     ) {
         return QueryUtil.having<
-            this
+            Extract<this, QueryUtil.AfterGroupByClause>
         >(
             this,
             havingDelegate

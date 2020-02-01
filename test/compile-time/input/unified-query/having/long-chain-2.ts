@@ -84,6 +84,9 @@ const myTable = tsql.table("myTable")
 
 export const query = tsql.QueryUtil.newInstance()
     .from(myTable)
+    .groupBy(columns => [
+        columns.myColumn,
+    ])
     .having(() => expr)
     .having(() => expr)
     .having(() => expr)

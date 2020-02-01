@@ -11,6 +11,7 @@ tsql.OrderByClauseUtil.orderBy(
     FromClauseUtil.newInstance(),
     undefined,
     undefined,
+    undefined,
     () => [
         tsql.and(
             myTable.columns.myColumn,

@@ -47,7 +47,7 @@ export type QueryOrderByDelegate<QueryT extends IQuery> =
     (
         columns : OrderByDelegateColumns<QueryT["fromClause"], QueryT["selectClause"]>,
         subquery : Correlate<QueryT>
-    ) => OrderByDelegateReturnType<QueryT["fromClause"], QueryT["selectClause"]>
+    ) => OrderByDelegateReturnType<QueryT["fromClause"], QueryT["groupByClause"], QueryT["selectClause"]>
 ;
 export function orderBy<
     QueryT extends IQuery
@@ -59,9 +59,11 @@ export function orderBy<
 ) {
     const orderByClause = OrderByClauseUtil.orderBy<
         QueryT["fromClause"],
+        QueryT["groupByClause"],
         QueryT["selectClause"]
     >(
         query.fromClause,
+        query.groupByClause,
         query.selectClause,
         query.orderByClause,
         (columns) => {

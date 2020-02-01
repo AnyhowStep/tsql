@@ -72,6 +72,11 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 .select(columns => [
                     tsql.integer.sum(columns.testId).as("sumId"),
                 ])
+                /**
+                 * SQLite does not support `HAVING` with empty grouping set...
+                 * @todo Forbid the `HAVING` clause with empty grouping set
+                 */
+                /*
                 .having(columns => tsql.gt(
                     tsql.coalesce(
                         tsql.castAsDouble(
@@ -80,7 +85,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                         0.0
                     ),
                     6.0
-                ))
+                ))*/
                 .fetchAll(
                     connection
                 );

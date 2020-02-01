@@ -8,7 +8,7 @@ import {UsedRefUtil} from "../../../used-ref";
 import {IAnonymousColumn} from "../../../column";
 import {IAnonymousExpr, ExprUtil} from "../../../expr";
 import {BuiltInExprUtil} from "../../../built-in-expr";
-import {GroupByClause} from "../../../group-by-clause";
+import {GroupByClause, GroupByClauseUtil} from "../../../group-by-clause";
 
 /**
  * Returns the MySQL equivalent of `havingClause AND havingDelegate(columns)`
@@ -28,7 +28,7 @@ import {GroupByClause} from "../../../group-by-clause";
  */
 export function having<
     FromClauseT extends IFromClause,
-    GroupByClauseT extends GroupByClause|undefined
+    GroupByClauseT extends GroupByClause
 > (
     fromClause : FromClauseT,
     groupByClause : GroupByClauseT,
@@ -37,6 +37,8 @@ export function having<
 ) : (
     HavingClause
 ) {
+    GroupByClauseUtil.assertNonEmpty(groupByClause);
+
     const columns = allowedColumnRef(fromClause);
     const operand : (
         boolean|IAnonymousColumn<boolean>|IAnonymousExpr<boolean, boolean>
@@ -52,14 +54,7 @@ export function having<
     } else {
         UsedRefUtil.assertAllowed(
             {
-                columns : (
-                    groupByClause == undefined ?
-                    /**
-                     * For the `HAVING` clause, we assume it's the empty grouping set.
-                     */
-                    allowedNonAggregateColumnRef(fromClause, []) :
-                    allowedNonAggregateColumnRef(fromClause, groupByClause as Exclude<GroupByClauseT, undefined>)
-                )
+                columns : allowedNonAggregateColumnRef(fromClause, groupByClause),
             },
             BuiltInExprUtil.usedRef(operand)
         );

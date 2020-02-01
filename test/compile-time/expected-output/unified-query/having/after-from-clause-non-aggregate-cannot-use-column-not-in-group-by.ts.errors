@@ -1,11 +1,11 @@
 [
   {
     "messageText": {
-      "messageText": "Type 'ExprImpl<boolean, IUsedRef<{ readonly myTable: { readonly myColumn: boolean; }; }>, false>' is not assignable to type 'boolean | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{ myTable: { myColumn: boolean; }; }>; isAggregate: true; }> | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{}>; isAggregate: boolean; }>'.",
+      "messageText": "Type 'ExprImpl<boolean, IUsedRef<{ readonly myTable: { readonly myColumn: boolean; }; }>, false>' is not assignable to type 'boolean | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{ myTable: { myColumn: boolean; myColumn2: bigint; }; }>; isAggregate: true; }> | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<...>; isAggregate: boolean; }>'.",
       "category": 1,
       "code": 2322,
       "next": {
-        "messageText": "Type 'ExprImpl<boolean, IUsedRef<{ readonly myTable: { readonly myColumn: boolean; }; }>, false>' is not assignable to type 'IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{}>; isAggregate: boolean; }>'.",
+        "messageText": "Type 'ExprImpl<boolean, IUsedRef<{ readonly myTable: { readonly myColumn: boolean; }; }>, false>' is not assignable to type 'IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{ myTable: { myColumn2: bigint; }; }>; isAggregate: boolean; }>'.",
         "category": 1,
         "code": 2322,
         "next": {
@@ -13,13 +13,23 @@
           "category": 1,
           "code": 2326,
           "next": {
-            "messageText": "Type 'IUsedRef<{ readonly myTable: { readonly myColumn: boolean; }; }>' is not assignable to type 'IUsedRef<{}>'.",
+            "messageText": "Type 'IUsedRef<{ readonly myTable: { readonly myColumn: boolean; }; }>' is not assignable to type 'IUsedRef<{ myTable: { myColumn2: bigint; }; }>'.",
             "category": 1,
             "code": 2322,
             "next": {
-              "messageText": "Property 'myTable' is missing in type '{}' but required in type '{ readonly myTable: { readonly myColumn: boolean; }; }'.",
+              "messageText": "Type '{ myTable: { myColumn2: bigint; }; }' is not assignable to type '{ readonly myTable: { readonly myColumn: boolean; }; }'.",
               "category": 1,
-              "code": 2741
+              "code": 2322,
+              "next": {
+                "messageText": "Types of property 'myTable' are incompatible.",
+                "category": 1,
+                "code": 2326,
+                "next": {
+                  "messageText": "Property 'myColumn' is missing in type '{ myColumn2: bigint; }' but required in type '{ readonly myColumn: boolean; }'.",
+                  "category": 1,
+                  "code": 2741
+                }
+              }
             }
           }
         }
@@ -28,15 +38,15 @@
     "code": 2322,
     "category": 1,
     "length": 55,
-    "start": 264
+    "start": 371
   },
   {
     "messageText": {
-      "messageText": "Type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn\"; mapper: Mapper<unknown, boolean>; }>' is not assignable to type 'boolean | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{ myTable: { myColumn: boolean; }; }>; isAggregate: true; }> | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{}>; isAggregate: boolean; }>'.",
+      "messageText": "Type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn\"; mapper: Mapper<unknown, boolean>; }>' is not assignable to type 'boolean | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{ myTable: { myColumn: boolean; myColumn2: bigint; }; }>; isAggregate: true; }> | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<...>; isAggregate: boolean; }>'.",
       "category": 1,
       "code": 2322,
       "next": {
-        "messageText": "Type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn\"; mapper: Mapper<unknown, boolean>; }>' is missing the following properties from type 'IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{}>; isAggregate: boolean; }>': usedRef, isAggregate, ast",
+        "messageText": "Type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn\"; mapper: Mapper<unknown, boolean>; }>' is missing the following properties from type 'IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{ myTable: { myColumn2: bigint; }; }>; isAggregate: boolean; }>': usedRef, isAggregate, ast",
         "category": 1,
         "code": 2739
       }
@@ -44,6 +54,6 @@
     "code": 2322,
     "category": 1,
     "length": 16,
-    "start": 394
+    "start": 561
   }
 ]

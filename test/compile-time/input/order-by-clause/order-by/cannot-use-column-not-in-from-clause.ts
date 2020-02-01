@@ -19,6 +19,7 @@ tsql.OrderByClauseUtil.orderBy(
     ),
     undefined,
     undefined,
+    undefined,
     () => [
         tsql.and(
             otherTable.columns.otherColumn,
@@ -32,6 +33,7 @@ tsql.OrderByClauseUtil.orderBy(
         FromClauseUtil.newInstance(),
         myTable
     ),
+    undefined,
     undefined,
     undefined,
     () => [

@@ -1,6 +1,7 @@
 import {HavingDelegate, HavingClauseUtil} from "../../../having-clause";
 import {Query} from "../../query-impl";
 import {IQuery} from "../../query";
+import {QueryUtil} from "../..";
 
 /**
  * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966
@@ -43,7 +44,7 @@ export type Having<
     >
 );
 export function having<
-    QueryT extends IQuery
+    QueryT extends QueryUtil.AfterGroupByClause
 > (
     query : QueryT,
     havingDelegate : HavingDelegate<QueryT["fromClause"], QueryT["groupByClause"]>

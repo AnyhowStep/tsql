@@ -297,6 +297,10 @@ function orderByClauseToSql (orderByClause : OrderByClause, toSql : (ast : Ast) 
 }
 
 function groupByClauseToSql (groupByClause : GroupByClause, _toSql : (ast : Ast) => string) : string[] {
+    if (groupByClause.length == 0) {
+        return [];
+    }
+
     const result : string[] = [];
     for (const column of groupByClause) {
         if (result.length > 0) {
@@ -318,6 +322,7 @@ function groupByClauseToSql (groupByClause : GroupByClause, _toSql : (ast : Ast)
             );
         }
     }
+
     return [
         "GROUP BY",
         ...result
@@ -495,13 +500,13 @@ function queryToSql (
             result.push(whereClauseToSql(query.whereClause, toSql).join(" "));
         }
     }
-    if (query.groupByClause == undefined) {
+    if (query.groupByClause == undefined || query.groupByClause.length == 0) {
         if (query.havingClause != undefined) {
             /**
              * Workaround for `<empty grouping set>` not supported by SQLite
              */
-            result.push("GROUP BY NULL");
-            result.push(havingClauseToSql(query.havingClause, toSql).join(" "));
+            throw new Error(`SQLite does not support ... GROUP BY () HAVING ...`);
+            //result.push(havingClauseToSql(query.havingClause, toSql).join(" "));
         }
     } else {
         result.push(groupByClauseToSql(query.groupByClause, toSql).join(" "));

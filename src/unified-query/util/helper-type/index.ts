@@ -1,4 +1,5 @@
 export * from "./after-from-clause";
+export * from "./after-group-by-clause";
 export * from "./after-select-clause";
 export * from "./before-from-clause";
 export * from "./before-compound-query-clause";
