@@ -72,14 +72,12 @@ tape(__filename, async (t) => {
         await connection.transaction(async (connection) => {
             await connection.savepoint(async (connection) => {
                 await connection.savepoint(async (connection) => {
-                    await specialServerAppKey.existsByPrimaryKey(
-                        connection,
-                        {
-                            appKeyId : BigInt(1),
-                        }
-                    ).then((result) => {
-                        t.deepEqual(result, true);
-                    });
+                    await specialServerAppKey
+                        .whereEqPrimaryKey({ appKeyId : BigInt(1) })
+                        .exists(connection)
+                        .then((result) => {
+                            t.deepEqual(result, true);
+                        });
 
                     await specialServerAppKeyTpt.deleteOneByPrimaryKey(
                         connection,
@@ -92,14 +90,12 @@ tape(__filename, async (t) => {
                     t.deepEqual(commitInvoked, 0);
                     t.deepEqual(rollbackInvoked, 0);
 
-                    await specialServerAppKey.existsByPrimaryKey(
-                        connection,
-                        {
-                            appKeyId : BigInt(1),
-                        }
-                    ).then((result) => {
-                        t.deepEqual(result, false);
-                    });
+                    await specialServerAppKey
+                        .whereEqPrimaryKey({ appKeyId : BigInt(1) })
+                        .exists(connection)
+                        .then((result) => {
+                            t.deepEqual(result, false);
+                        });
 
                     await connection.rollback();
 
@@ -107,14 +103,12 @@ tape(__filename, async (t) => {
                     t.deepEqual(commitInvoked, 0);
                     t.deepEqual(rollbackInvoked, 3);
 
-                    await specialServerAppKey.existsByPrimaryKey(
-                        connection,
-                        {
-                            appKeyId : BigInt(1),
-                        }
-                    ).then((result) => {
-                        t.deepEqual(result, true);
-                    });
+                    await specialServerAppKey
+                        .whereEqPrimaryKey({ appKeyId : BigInt(1) })
+                        .exists(connection)
+                        .then((result) => {
+                            t.deepEqual(result, true);
+                        });
                 });
 
                 t.deepEqual(handlerInvoked, 3);
@@ -130,14 +124,12 @@ tape(__filename, async (t) => {
         t.deepEqual(commitInvoked, 0);
         t.deepEqual(rollbackInvoked, 3);
 
-        await specialServerAppKey.existsByPrimaryKey(
-            connection,
-            {
-                appKeyId : BigInt(1),
-            }
-        ).then((result) => {
-            t.deepEqual(result, true);
-        });
+        await specialServerAppKey
+            .whereEqPrimaryKey({ appKeyId : BigInt(1) })
+            .exists(connection)
+            .then((result) => {
+                t.deepEqual(result, true);
+            });
     });
 
     await pool.disconnect();
