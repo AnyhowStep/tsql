@@ -1,48 +1,48 @@
 [
   {
-    "messageText": "Type 'string' is not assignable to type 'number | IExpr<{ mapper: Mapper<unknown, number>; usedRef: IUsedRef<never>; isAggregate: boolean; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<...> | (IQueryBase<...> & IQueryBase<...>)'.",
+    "messageText": "Type 'string' is not assignable to type 'number | IExpr<{ mapper: Mapper<unknown, number>; usedRef: IUsedRef<never>; isAggregate: boolean; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<...> | (IQueryBase<...> & IQueryBase<...>) | (IQueryBase<...> & IQueryBase<...>)'.",
     "code": 2322,
     "category": 1,
     "length": 3,
     "start": 66
   },
   {
-    "messageText": "Type 'true' is not assignable to type 'number | IExpr<{ mapper: Mapper<unknown, number>; usedRef: IUsedRef<never>; isAggregate: boolean; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<...> | (IQueryBase<...> & IQueryBase<...>)'.",
+    "messageText": "Type 'true' is not assignable to type 'number | IExpr<{ mapper: Mapper<unknown, number>; usedRef: IUsedRef<never>; isAggregate: boolean; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<...> | (IQueryBase<...> & IQueryBase<...>) | (IQueryBase<...> & IQueryBase<...>)'.",
     "code": 2322,
     "category": 1,
     "length": 4,
     "start": 71
   },
   {
-    "messageText": "Type 'number' is not assignable to type 'string | IExpr<{ mapper: Mapper<unknown, string>; usedRef: IUsedRef<never>; isAggregate: boolean; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, string>; }> | IExprSelectItem<...> | (IQueryBase<...> & IQueryBase<...>)'.",
+    "messageText": "Type 'number' is not assignable to type 'string | IExpr<{ mapper: Mapper<unknown, string>; usedRef: IUsedRef<never>; isAggregate: boolean; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, string>; }> | IExprSelectItem<...> | (IQueryBase<...> & IQueryBase<...>) | (IQueryBase<...> & IQueryBase<...>)'.",
     "code": 2322,
     "category": 1,
     "length": 1,
     "start": 99
   },
   {
-    "messageText": "Type 'true' is not assignable to type 'string | IExpr<{ mapper: Mapper<unknown, string>; usedRef: IUsedRef<never>; isAggregate: boolean; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, string>; }> | IExprSelectItem<...> | (IQueryBase<...> & IQueryBase<...>)'.",
+    "messageText": "Type 'true' is not assignable to type 'string | IExpr<{ mapper: Mapper<unknown, string>; usedRef: IUsedRef<never>; isAggregate: boolean; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, string>; }> | IExprSelectItem<...> | (IQueryBase<...> & IQueryBase<...>) | (IQueryBase<...> & IQueryBase<...>)'.",
     "code": 2322,
     "category": 1,
     "length": 4,
     "start": 102
   },
   {
-    "messageText": "Type 'number' is not assignable to type 'boolean | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<never>; isAggregate: boolean; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, boolean>; }> | IExprSelectItem<...> | (IQueryBase<...> & IQueryBase<...>)'.",
+    "messageText": "Type 'number' is not assignable to type 'boolean | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<never>; isAggregate: boolean; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, boolean>; }> | IExprSelectItem<...> | (IQueryBase<...> & IQueryBase<...>) | (IQueryBase<...> & IQueryBase<...>)'.",
     "code": 2322,
     "category": 1,
     "length": 1,
     "start": 131
   },
   {
-    "messageText": "Type 'string' is not assignable to type 'boolean | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<never>; isAggregate: boolean; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, boolean>; }> | IExprSelectItem<...> | (IQueryBase<...> & IQueryBase<...>)'.",
+    "messageText": "Type 'string' is not assignable to type 'boolean | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<never>; isAggregate: boolean; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, boolean>; }> | IExprSelectItem<...> | (IQueryBase<...> & IQueryBase<...>) | (IQueryBase<...> & IQueryBase<...>)'.",
     "code": 2322,
     "category": 1,
     "length": 3,
     "start": 134
   },
   {
-    "messageText": "Type 'string' is not assignable to type 'boolean | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<never>; isAggregate: boolean; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, boolean>; }> | IExprSelectItem<...> | (IQueryBase<...> & IQueryBase<...>)'.",
+    "messageText": "Type 'string' is not assignable to type 'boolean | IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<never>; isAggregate: boolean; }> | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, boolean>; }> | IExprSelectItem<...> | (IQueryBase<...> & IQueryBase<...>) | (IQueryBase<...> & IQueryBase<...>)'.",
     "code": 2322,
     "category": 1,
     "length": 3,
