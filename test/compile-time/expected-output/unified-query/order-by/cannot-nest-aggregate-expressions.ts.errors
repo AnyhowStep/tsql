@@ -1,7 +1,7 @@
 [
   {
     "messageText": {
-      "messageText": "Argument of type 'ExprImpl<bigint, IUsedRef<{ readonly $aliased: { readonly x: bigint | null; }; }>, true>' is not assignable to parameter of type 'bigint | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, bigint>; }> | (IQueryBase<{ fromClause: IFromClause<FromClauseData>; selectClause: [IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<...>; }> | IExprSelectItem<...>]; ... 4 more ...; groupByClause: readonly ColumnIde...'.",
+      "messageText": "Argument of type 'ExprImpl<bigint, IUsedRef<{ readonly $aliased: { readonly x: bigint | null; }; }>, true>' is not assignable to parameter of type 'bigint | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, bigint>; }> | (OneSelectItem<bigint> & OneRowBeforeFromClause) | (OneSelectItem<bigint> & OneRowEmptyGroupingSet) | IExpr<...> | IExprSelectItem<...>'.",
       "category": 1,
       "code": 2345,
       "next": {

@@ -1,50 +1,6 @@
 [
   {
-    "messageText": {
-      "messageText": "Argument of type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>; selectClause: [IExprSelectItem<{ mapper: Mapper<unknown, null>; tableAlias: \"$aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; isAggregate: false; }>]; ... 4 more ...; groupByClause: undefined; }>' is not assignable to parameter of type 'IQueryBase<{ fromClause: IFromClause<FromClauseData>; selectClause: [IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; isAggregate: boolean; }>]; ... 4 more ...; groupB...'.",
-      "category": 1,
-      "code": 2345,
-      "next": {
-        "messageText": "Types of property 'selectClause' are incompatible.",
-        "category": 1,
-        "code": 2326,
-        "next": {
-          "messageText": "Type '[IExprSelectItem<{ mapper: Mapper<unknown, null>; tableAlias: \"$aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; isAggregate: false; }>]' is not assignable to type '[IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; isAggregate: boolean; }>]'.",
-          "category": 1,
-          "code": 2322,
-          "next": {
-            "messageText": "Type 'IExprSelectItem<{ mapper: Mapper<unknown, null>; tableAlias: \"$aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; isAggregate: false; }>' is not assignable to type 'IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; isAggregate: boolean; }>'.",
-            "category": 1,
-            "code": 2322,
-            "next": {
-              "messageText": "Type 'IExprSelectItem<{ mapper: Mapper<unknown, null>; tableAlias: \"$aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; isAggregate: false; }>' is not assignable to type 'IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; isAggregate: boolean; }>'.",
-              "category": 1,
-              "code": 2322,
-              "next": {
-                "messageText": "Type '{ mapper: Mapper<unknown, null>; tableAlias: \"$aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; isAggregate: false; }' is not assignable to type '{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; isAggregate: boolean; }'.",
-                "category": 1,
-                "code": 2322,
-                "next": {
-                  "messageText": "Types of property 'mapper' are incompatible.",
-                  "category": 1,
-                  "code": 2326,
-                  "next": {
-                    "messageText": "Type 'Mapper<unknown, null>' is not assignable to type 'Mapper<unknown, number>'.",
-                    "category": 1,
-                    "code": 2322,
-                    "next": {
-                      "messageText": "Type 'null' is not assignable to type 'number'.",
-                      "category": 1,
-                      "code": 2322
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
+    "messageText": "Argument of type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>; selectClause: [IExprSelectItem<{ mapper: Mapper<unknown, null>; tableAlias: \"$aliased\"; alias: \"value\"; usedRef: IUsedRef<never>; isAggregate: false; }>]; ... 4 more ...; groupByClause: undefined; }>' is not assignable to parameter of type 'OneSelectItem<number>'.",
     "code": 2345,
     "category": 1,
     "length": 28,
@@ -52,7 +8,7 @@
   },
   {
     "messageText": {
-      "messageText": "Argument of type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: readonly Join<{ tableAlias: \"inQueryTableNull\"; nullable: false; columns: { readonly v: Column<{ tableAlias: \"inQueryTableNull\"; columnAlias: \"v\"; mapper: Mapper<...>; }>; }; ... 4 more ...; mutableColumns: readonly []; }>[]; }>; ... 5 more ...' is not assignable to parameter of type 'IQueryBase<{ fromClause: IFromClause<FromClauseData>; selectClause: [IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; isAggregate: boolean; }>]; ... 4 more ...; groupB...'.",
+      "messageText": "Argument of type 'Query<{ fromClause: IFromClause<{ outerQueryJoins: undefined; currentJoins: readonly Join<{ tableAlias: \"inQueryTableNull\"; nullable: false; columns: { readonly v: Column<{ tableAlias: \"inQueryTableNull\"; columnAlias: \"v\"; mapper: Mapper<...>; }>; }; ... 4 more ...; mutableColumns: readonly []; }>[]; }>; ... 5 more ...' is not assignable to parameter of type 'OneSelectItem<number>'.",
       "category": 1,
       "code": 2345,
       "next": {
@@ -60,34 +16,29 @@
         "category": 1,
         "code": 2326,
         "next": {
-          "messageText": "Type '[Column<{ tableAlias: \"inQueryTableNull\"; columnAlias: \"v\"; mapper: Mapper<unknown, number | null>; }>]' is not assignable to type '[IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; isAggregate: boolean; }>]'.",
+          "messageText": "Type '[Column<{ tableAlias: \"inQueryTableNull\"; columnAlias: \"v\"; mapper: Mapper<unknown, number | null>; }>]' is not assignable to type 'readonly [IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; isAggregate: boolean; }>]'.",
           "category": 1,
           "code": 2322,
           "next": {
-            "messageText": "Type 'Column<{ tableAlias: \"inQueryTableNull\"; columnAlias: \"v\"; mapper: Mapper<unknown, number | null>; }>' is not assignable to type 'IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; isAggregate: boolean; }>'.",
+            "messageText": "Types of property '0' are incompatible.",
             "category": 1,
-            "code": 2322,
+            "code": 2326,
             "next": {
-              "messageText": "Type 'Column<{ tableAlias: \"inQueryTableNull\"; columnAlias: \"v\"; mapper: Mapper<unknown, number | null>; }>' is not assignable to type 'IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }>'.",
+              "messageText": "Type 'Column<{ tableAlias: \"inQueryTableNull\"; columnAlias: \"v\"; mapper: Mapper<unknown, number | null>; }>' is not assignable to type 'IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }> | IExprSelectItem<{ mapper: Mapper<unknown, number>; tableAlias: string; alias: string; usedRef: IUsedRef<never>; isAggregate: boolean; }>'.",
               "category": 1,
               "code": 2322,
               "next": {
-                "messageText": "Types of property 'mapper' are incompatible.",
+                "messageText": "Type 'Column<{ tableAlias: \"inQueryTableNull\"; columnAlias: \"v\"; mapper: Mapper<unknown, number | null>; }>' is not assignable to type 'IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number>; }>'.",
                 "category": 1,
-                "code": 2326,
+                "code": 2322,
                 "next": {
-                  "messageText": "Type 'Mapper<unknown, number | null>' is not assignable to type 'Mapper<unknown, number>'.",
+                  "messageText": "Types of property 'mapper' are incompatible.",
                   "category": 1,
-                  "code": 2322,
+                  "code": 2326,
                   "next": {
-                    "messageText": "Type 'number | null' is not assignable to type 'number'.",
+                    "messageText": "Type 'Mapper<unknown, number | null>' is not assignable to type 'Mapper<unknown, number>'.",
                     "category": 1,
-                    "code": 2322,
-                    "next": {
-                      "messageText": "Type 'null' is not assignable to type 'number'.",
-                      "category": 1,
-                      "code": 2322
-                    }
+                    "code": 2322
                   }
                 }
               }

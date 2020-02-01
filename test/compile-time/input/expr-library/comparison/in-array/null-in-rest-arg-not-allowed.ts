@@ -17,3 +17,39 @@ tsql.inArray(
             .limit(1)
     ]
 );
+
+/**
+ * No `FROM` clause
+ */
+tsql.inArray(
+    1,
+    [
+        tsql.selectValue(() => 1)
+    ]
+);
+
+/**
+ * Uses `GROUP BY ()`
+ */
+tsql.inArray(
+    1,
+    [
+        tsql.from(inListTable)
+            .selectValue(columns => tsql.throwIfNull(tsql.double.max(columns.v)))
+    ]
+);
+
+tsql.inArray(
+    1,
+    [
+        tsql.selectValue(() => null)
+    ]
+);
+
+tsql.inArray(
+    1,
+    [
+        tsql.from(inListTable)
+            .selectValue(columns => tsql.double.max(columns.v))
+    ]
+);
