@@ -1,7 +1,7 @@
 [
   {
     "messageText": {
-      "messageText": "Argument of type 'ExprImpl<bigint, IUsedRef<{}>, true>' is not assignable to parameter of type 'string | number | bigint | boolean | Date | Uint8Array | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, EquatableType>; }> | (IQueryBase<{ fromClause: IFromClause<FromClauseData>; ... 5 more ...; groupByClause: readonly ColumnIdentifier[] | undefined; }> & IQueryBase<...>) | ... 5 more .....'.",
+      "messageText": "Argument of type 'ExprImpl<bigint, IUsedRef<{}>, true>' is not assignable to parameter of type 'string | number | bigint | boolean | Date | Uint8Array | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, EquatableType>; }> | (IQueryBase<{ fromClause: IFromClause<FromClauseData>; ... 5 more ...; groupByClause: readonly ColumnIdentifier[] | undefined; }> & OneRowBeforeFromClause) | ... 5 ...'.",
       "category": 1,
       "code": 2345,
       "next": {
