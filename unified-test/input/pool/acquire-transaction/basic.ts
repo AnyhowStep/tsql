@@ -37,6 +37,10 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
         });
 
         await pool.acquireTransaction(async (connection) => {
+            t.deepEqual(connection.getMinimumIsolationLevel(), tsql.IsolationLevel.SERIALIZABLE);
+            t.deepEqual(connection.getTransactionAccessMode(), tsql.TransactionAccessMode.READ_WRITE);
+            t.true(connection.tryGetFullConnection() != undefined);
+
             await myTable
                 .insertAndFetch(
                     connection,

@@ -98,6 +98,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
         });
 
         await pool.acquireReadOnlyTransaction(async (connection) => {
+            t.deepEqual(connection.getMinimumIsolationLevel(), tsql.IsolationLevel.SERIALIZABLE);
+            t.deepEqual(connection.getTransactionAccessMode(), tsql.TransactionAccessMode.READ_ONLY);
+
             await tsql.from(myTable)
                 .orderBy(columns => [
                     columns.value.asc(),
