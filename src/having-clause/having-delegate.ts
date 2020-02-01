@@ -4,7 +4,7 @@ import {ColumnRefUtil} from "../column-ref";
 import {IExpr} from "../expr";
 import * as HavingClauseUtil from "./util";
 import {ColumnUtil} from "../column";
-import {GroupByClause} from "../group-by-clause";
+import {GroupByClause, GroupByClauseUtil} from "../group-by-clause";
 import {Identity} from "../type-util";
 
 export type AllowedHavingClause<
@@ -43,31 +43,21 @@ export type AllowedHavingClause<
 ;
 
 /**
- * For now, this is basically the same as `WhereDelegate<>`.
- *
- * They will diverge when,
- * + The `WHERE` clause is prevented from using aggregation functions.
- * + The `HAVING` clause enforces proper `GROUP BY` interactions.
+ * SQLite requires a non-empty `GROUP BY` clause before the `HAVING` clause.
  */
 export type HavingDelegate<
     FromClauseT extends IFromClause,
-    GroupByClauseT extends GroupByClause|undefined
+    GroupByClauseT extends GroupByClause
 > = (
     (
         columns : ColumnRefUtil.TryFlatten<
             HavingClauseUtil.AllowedColumnRef<FromClauseT>
         >
     ) => (
-        AllowedHavingClause<
+        & AllowedHavingClause<
             FromClauseT,
-            (
-                GroupByClauseT extends GroupByClause ?
-                GroupByClauseT :
-                /**
-                 * For the `HAVING` clause, we assume it's the empty grouping set.
-                 */
-                []
-            )
+            GroupByClauseT
         >
+        & GroupByClauseUtil.AssertNonEmpty<GroupByClauseT>
     )
 );

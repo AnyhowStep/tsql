@@ -7,6 +7,6 @@ CROSS JOIN
 CROSS JOIN
   "myTable3"
 GROUP BY
-  NULL
+  "myTable"."myBoolColumn"
 HAVING
   TRUE

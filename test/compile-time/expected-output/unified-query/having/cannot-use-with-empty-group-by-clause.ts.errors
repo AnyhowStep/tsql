@@ -1,0 +1,23 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type 'ExprImpl<boolean, IUsedRef<{}>, false>' is not assignable to type '(false & CompileError<\"GROUP BY clause cannot be empty\">) | (true & CompileError<\"GROUP BY clause cannot be empty\">) | (IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{ myTable: { ...; }; }>; isAggregate: true; }> & CompileError<...>) | (IExpr<...> & CompileError<...>)'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Type 'ExprImpl<boolean, IUsedRef<{}>, false>' is not assignable to type 'IExpr<{ mapper: Mapper<unknown, boolean>; usedRef: IUsedRef<{}>; isAggregate: boolean; }> & CompileError<\"GROUP BY clause cannot be empty\">'.",
+        "category": 1,
+        "code": 2322,
+        "next": {
+          "messageText": "Property '__compileError' is missing in type 'ExprImpl<boolean, IUsedRef<{}>, false>' but required in type 'CompileError<\"GROUP BY clause cannot be empty\">'.",
+          "category": 1,
+          "code": 2741
+        }
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 43,
+    "start": 282
+  }
+]

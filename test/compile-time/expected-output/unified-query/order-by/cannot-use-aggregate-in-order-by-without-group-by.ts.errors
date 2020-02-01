@@ -1,0 +1,33 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type '[ExprImpl<bigint | null, IUsedRef<{ readonly myTable: { readonly myColumn: bigint; }; }>, true>, \"ASC\"]' is not assignable to type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }> | Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn2\"; mapper: Mapper<unknown, bigint>; }> | Column<...> | Column<...> | IExpr<...> | IExprSelectItem<...> | readonly [...]'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Type '[ExprImpl<bigint | null, IUsedRef<{ readonly myTable: { readonly myColumn: bigint; }; }>, true>, \"ASC\"]' is not assignable to type 'readonly [Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }> | Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn2\"; mapper: Mapper<unknown, bigint>; }> | Column<...> | Column<...> | IExpr<...> | IExprSelectItem<...>, \"ASC\" | \"DESC\"]'.",
+        "category": 1,
+        "code": 2322,
+        "next": {
+          "messageText": "Types of property '0' are incompatible.",
+          "category": 1,
+          "code": 2326,
+          "next": {
+            "messageText": "Type 'ExprImpl<bigint | null, IUsedRef<{ readonly myTable: { readonly myColumn: bigint; }; }>, true>' is not assignable to type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"myTableId\"; mapper: Mapper<unknown, bigint>; }> | Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn2\"; mapper: Mapper<unknown, bigint>; }> | Column<...> | Column<...> | IExpr<...> | IExprSelectItem<...>'.",
+            "category": 1,
+            "code": 2322,
+            "next": {
+              "messageText": "Type 'ExprImpl<bigint | null, IUsedRef<{ readonly myTable: { readonly myColumn: bigint; }; }>, true>' is missing the following properties from type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"myColumn\"; mapper: Mapper<unknown, bigint>; }>': tableAlias, columnAlias, unaliasedAst",
+              "category": 1,
+              "code": 2739
+            }
+          }
+        }
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 40,
+    "start": 447
+  }
+]

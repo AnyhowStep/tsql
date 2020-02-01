@@ -13,14 +13,5 @@ export type GroupByDelegate<
         columns : ColumnIdentifierRefUtil.TryFlatten<
             GroupByClauseUtil.AllowedColumnIdentifierRef<FromClauseT>
         >
-    ) => (
-        & GroupByT
-        /**
-         * Must be non-empty tuple
-         *
-         * @todo Allow empty tuple.
-         * Empty tuple means empty grouping set.
-         */
-        & { "0" : unknown }
-    )
+    ) => GroupByT
 );

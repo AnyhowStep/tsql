@@ -21,6 +21,9 @@ tape(__filename, t => {
         .select(c => [c.myBoolColumn])
         .crossJoin(myTable2)
         .crossJoin(myTable3)
+        .groupBy(columns => [
+            columns.myTable.myBoolColumn,
+        ])
         .having(() => true);
 
     compareSqlPretty(__filename, t, query);

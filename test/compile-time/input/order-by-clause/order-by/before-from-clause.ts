@@ -5,6 +5,7 @@ export const orderByClause = tsql.OrderByClauseUtil.orderBy(
     FromClauseUtil.newInstance(),
     undefined,
     undefined,
+    undefined,
     () => [
         /**
          * Should default to `ASC`
@@ -15,6 +16,7 @@ export const orderByClause = tsql.OrderByClauseUtil.orderBy(
 
 export const orderByClause2 = tsql.OrderByClauseUtil.orderBy(
     FromClauseUtil.newInstance(),
+    undefined,
     undefined,
     undefined,
     () => [
@@ -29,6 +31,7 @@ export const orderByClause3 = tsql.OrderByClauseUtil.orderBy(
     FromClauseUtil.newInstance(),
     undefined,
     undefined,
+    undefined,
     () => [
         /**
          * Explicit `DESC`
@@ -39,6 +42,7 @@ export const orderByClause3 = tsql.OrderByClauseUtil.orderBy(
 
 export const orderByClause4 = tsql.OrderByClauseUtil.orderBy(
     FromClauseUtil.newInstance(),
+    undefined,
     undefined,
     undefined,
     () => [
@@ -57,6 +61,7 @@ export const orderByClause5 = tsql.OrderByClauseUtil.orderBy(
     FromClauseUtil.newInstance(),
     undefined,
     undefined,
+    undefined,
     () => [
         /**
          * Should default to `ASC`
@@ -67,6 +72,7 @@ export const orderByClause5 = tsql.OrderByClauseUtil.orderBy(
 
 export const orderByClause6 = tsql.OrderByClauseUtil.orderBy(
     FromClauseUtil.newInstance(),
+    undefined,
     undefined,
     undefined,
     () => [
@@ -81,6 +87,7 @@ export const orderByClause7 = tsql.OrderByClauseUtil.orderBy(
     FromClauseUtil.newInstance(),
     undefined,
     undefined,
+    undefined,
     () => [
         /**
          * Explicit `DESC`
@@ -91,6 +98,7 @@ export const orderByClause7 = tsql.OrderByClauseUtil.orderBy(
 
 export const orderByClause8 = tsql.OrderByClauseUtil.orderBy(
     FromClauseUtil.newInstance(),
+    undefined,
     undefined,
     undefined,
     () => [

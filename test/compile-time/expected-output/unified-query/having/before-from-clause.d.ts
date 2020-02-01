@@ -1,13 +1,10 @@
 import * as tsql from "../../../../../dist";
 export declare const query: tsql.Query<{
-    fromClause: tsql.IFromClause<{
-        outerQueryJoins: undefined;
-        currentJoins: undefined;
-    }>;
-    selectClause: undefined;
-    limitClause: undefined;
-    compoundQueryClause: undefined;
-    compoundQueryLimitClause: undefined;
-    mapDelegate: undefined;
-    groupByClause: undefined;
+    fromClause: never;
+    selectClause: never;
+    limitClause: never;
+    compoundQueryClause: never;
+    compoundQueryLimitClause: never;
+    mapDelegate: never;
+    groupByClause: never;
 }>;

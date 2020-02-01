@@ -79,7 +79,7 @@ export const test : Test = ({tape, pool}) => {
             await tsql.selectValue(() => tsql.throwIfNull(new Uint8Array([8,7,6,5,4])))
                 .fetchValue(connection)
                 .then((value) => {
-                    t.deepEqual(value, new Uint8Array([8,7,6,5,4]));
+                    t.deepEqual(value, Buffer.from([8,7,6,5,4]));
                 })
                 .catch((err) => {
                     t.fail(err.message);

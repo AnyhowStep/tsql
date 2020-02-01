@@ -1,0 +1,18 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type 'Column<{ tableAlias: \"test\"; columnAlias: \"testVal\"; mapper: Mapper<unknown, bigint>; }>' is not assignable to type 'ExprColumn<{ tableAlias: \"$aliased\"; columnAlias: \"sumId\"; mapper: Mapper<unknown, Decimal | null>; isAggregate: true; }> | IExpr<{ mapper: Mapper<unknown, unknown>; usedRef: IUsedRef<{ $aliased: { sumId: Decimal | null; }; test: { ...; }; }>; isAggregate: true; }> | IExprSelectItem<...> | IExpr<...> | IExprSelectIt...'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Property 'isAggregate' is missing in type 'Column<{ tableAlias: \"test\"; columnAlias: \"testVal\"; mapper: Mapper<unknown, bigint>; }>' but required in type 'ExprColumn<{ tableAlias: \"$aliased\"; columnAlias: \"sumId\"; mapper: Mapper<unknown, Decimal | null>; isAggregate: true; }>'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 20,
+    "start": 378
+  }
+]
