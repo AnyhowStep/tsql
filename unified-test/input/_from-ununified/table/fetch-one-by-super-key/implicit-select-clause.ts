@@ -85,13 +85,10 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.true(err instanceof tsql.RowNotFoundError);
             });
 
-            await myTable.fetchOneBySuperKey(
-                connection,
-                {
+            await myTable.whereEqSuperKey({
                     myTableId : BigInt(1),
                     createdAt : new Date("2015-01-01T00:00:00.000Z"),
-                }
-            ).then((row) => {
+                }).fetchOne(connection).then((row) => {
                 t.deepEqual(
                     row,
                     {
@@ -111,12 +108,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.pass();
             });
 
-            await myTable.fetchOneBySuperKey(
-                connection,
-                {
+            await myTable.whereEqSuperKey({
                     createdAt : new Date("2015-01-01T00:00:00.000Z"),
-                } as any
-            ).then(() => {
+                } as any).fetchOne(connection).then(() => {
                 t.fail("Should not execute");
             }).catch((err) => {
                 t.false(err instanceof tsql.RowNotFoundError);
@@ -143,13 +137,10 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.true(err instanceof tsql.RowNotFoundError);
             });
 
-            await myTable.fetchOneBySuperKey(
-                connection,
-                {
+            await myTable.whereEqSuperKey({
                     myTableId : BigInt(1),
                     createdAt : new Date("2015-01-01T00:00:00.000Z"),
-                }
-            ).then(() => {
+                }).fetchOne(connection).then(() => {
                 t.fail("Should not exist");
             }).catch((err) => {
                 t.true(err instanceof tsql.RowNotFoundError);
@@ -163,12 +154,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.true(err instanceof tsql.RowNotFoundError);
             });
 
-            await myTable.fetchOneBySuperKey(
-                connection,
-                {
+            await myTable.whereEqSuperKey({
                     createdAt : new Date("2015-01-01T00:00:00.000Z"),
-                } as any
-            ).then(() => {
+                } as any).fetchOne(connection).then(() => {
                 t.fail("Should not execute");
             }).catch((err) => {
                 t.false(err instanceof tsql.RowNotFoundError);

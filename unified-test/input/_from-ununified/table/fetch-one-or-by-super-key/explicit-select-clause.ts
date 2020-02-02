@@ -78,14 +78,10 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.fail("Should exist");
             });
 
-            await myTable.fetchOneBySuperKey(
-                connection,
-                {
+            await myTable.whereEqSuperKey({
                     myTableId : BigInt(1),
                     createdAt : new Date("2015-01-01T00:00:00.000Z"),
-                },
-                columns => [columns]
-            ).or(
+                }).fetchOne(connection, columns => [columns]).or(
                 1337
             ).then((row) => {
                 t.deepEqual(
@@ -99,14 +95,10 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.fail("Should exist");
             });
 
-            await myTable.fetchOneBySuperKey(
-                connection,
-                {
+            await myTable.whereEqSuperKey({
                     myTableId : BigInt(1),
                     createdAt : new Date("2015-01-01T00:00:00.001Z"),
-                },
-                columns => [columns]
-            ).or(
+                }).fetchOne(connection, columns => [columns]).or(
                 1337
             ).then((row) => {
                 t.deepEqual(row, 1337);
@@ -114,13 +106,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.fail("Should get defaultValue");
             });
 
-            await myTable.fetchOneBySuperKey(
-                connection,
-                {
+            await myTable.whereEqSuperKey({
                     createdAt : new Date("2015-01-01T00:00:00.000Z"),
-                } as any,
-                columns => [columns]
-            ).or(
+                } as any).fetchOne(connection, columns => [columns]).or(
                 1337
             ).then(() => {
                 t.fail("Should not execute");
