@@ -1,0 +1,28 @@
+[
+  {
+    "messageText": {
+      "messageText": "Type 'Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly outerTableIdA: Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }>; readonly outerTableIdB: Column<...>; readonly otherColumn: Column<...>; }; ... 4 more ...; mutableColumns: readonly []; }> | Join<...>' is not assignable to type '(Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly outerTableIdA: Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }>; readonly outerTableIdB: Column<...>; readonly otherColumn: Column<...>; }; ... 4 more ...; mutableColumns: readonly []; }> & CompileErr...'.",
+      "category": 1,
+      "code": 2322,
+      "next": {
+        "messageText": "Type 'Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly outerTableIdA: Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }>; readonly outerTableIdB: Column<...>; readonly otherColumn: Column<...>; }; ... 4 more ...; mutableColumns: readonly []; }>' is not assignable to type '(Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly outerTableIdA: Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }>; readonly outerTableIdB: Column<...>; readonly otherColumn: Column<...>; }; ... 4 more ...; mutableColumns: readonly []; }> & CompileErr...'.",
+        "category": 1,
+        "code": 2322,
+        "next": {
+          "messageText": "Type 'Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly outerTableIdA: Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }>; readonly outerTableIdB: Column<...>; readonly otherColumn: Column<...>; }; ... 4 more ...; mutableColumns: readonly []; }>' is not assignable to type 'Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly outerTableIdA: Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }>; readonly outerTableIdB: Column<...>; readonly otherColumn: Column<...>; }; ... 4 more ...; mutableColumns: readonly []; }> & CompileErro...'.",
+          "category": 1,
+          "code": 2322,
+          "next": {
+            "messageText": "Property '__compileError' is missing in type 'Join<{ tableAlias: \"myTable\"; nullable: false; columns: { readonly outerTableIdA: Column<{ tableAlias: \"myTable\"; columnAlias: \"outerTableIdA\"; mapper: Mapper<unknown, bigint>; }>; readonly outerTableIdB: Column<...>; readonly otherColumn: Column<...>; }; ... 4 more ...; mutableColumns: readonly []; }>' but required in type 'CompileError<[\"Union type not allowed\"]>'.",
+            "category": 1,
+            "code": 2741
+          }
+        }
+      }
+    },
+    "code": 2322,
+    "category": 1,
+    "length": 56,
+    "start": 940
+  }
+]

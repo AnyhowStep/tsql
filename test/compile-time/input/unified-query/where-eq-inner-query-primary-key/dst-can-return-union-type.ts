@@ -6,6 +6,8 @@ const myTable = tsql.table("myTable")
         outerTableIdA : tm.mysql.bigIntUnsigned(),
         outerTableIdB : tm.mysql.boolean(),
         otherColumn : tm.mysql.varChar(),
+        outerTable2IdA : tm.mysql.bigIntUnsigned(),
+        outerTable2IdB : tm.mysql.boolean(),
     });
 
 const outerTable = tsql.table("outerTable")
@@ -16,10 +18,19 @@ const outerTable = tsql.table("outerTable")
     })
     .setPrimaryKey(c => [c.outerTableIdA, c.outerTableIdB]);
 
+const outerTable2 = tsql.table("outerTable2")
+    .addColumns({
+        outerTable2IdA : tm.mysql.bigIntUnsigned(),
+        outerTable2IdB : tm.mysql.boolean(),
+        outerColumn : tm.mysql.varChar(),
+    })
+    .setPrimaryKey(c => [c.outerTable2IdA, c.outerTable2IdB]);
+
 export const query = tsql.QueryUtil.newInstance()
-    .requireOuterQueryJoins(outerTable)
-    //.from(myTable)
-    .whereEqOuterQueryPrimaryKey(
+    .requireOuterQueryJoins(myTable)
+    .from(outerTable)
+    .crossJoin(outerTable2)
+    .whereEqInnerQueryPrimaryKey(
         tables => tables.myTable,
-        outer => outer.outerTable
+        outer => Math.random() > 0.5 ? outer.outerTable : outer.outerTable2
     );

@@ -682,6 +682,41 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
         );
     }
 
+    whereEqInnerQueryPrimaryKey<
+        SrcT extends Extract<this, QueryUtil.Correlated & QueryUtil.AfterFromClause>["fromClause"]["outerQueryJoins"][number],
+        DstT extends JoinArrayUtil.ExtractWithNullSafeComparablePrimaryKey<
+            Extract<this, QueryUtil.Correlated & QueryUtil.AfterFromClause>["fromClause"]["currentJoins"],
+            SrcT["columns"]
+        >
+    > (
+        this : Extract<this, QueryUtil.Correlated & QueryUtil.AfterFromClause>,
+        srcDelegate : (
+            FromClauseUtil.WhereEqInnerQueryPrimaryKeySrcDelegate<
+                Extract<this, QueryUtil.Correlated & QueryUtil.AfterFromClause>["fromClause"],
+                SrcT
+            >
+        ),
+        dstDelegate : (
+            FromClauseUtil.WhereEqInnerQueryPrimaryKeyDstDelegate<
+                Extract<this, QueryUtil.Correlated & QueryUtil.AfterFromClause>["fromClause"],
+                SrcT,
+                DstT
+            >
+        )
+    ) : (
+        QueryUtil.WhereEqInnerQueryPrimaryKey<Extract<this, QueryUtil.Correlated & QueryUtil.AfterFromClause>>
+    ) {
+        return QueryUtil.whereEqInnerQueryPrimaryKey<
+            Extract<this, QueryUtil.Correlated & QueryUtil.AfterFromClause>,
+            SrcT,
+            DstT
+        >(
+            this,
+            srcDelegate,
+            dstDelegate
+        );
+    }
+
     whereEqOuterQueryPrimaryKey<
         SrcT extends Extract<this, QueryUtil.Correlated & QueryUtil.AfterFromClause>["fromClause"]["currentJoins"][number],
         DstT extends JoinArrayUtil.ExtractWithNullSafeComparablePrimaryKey<

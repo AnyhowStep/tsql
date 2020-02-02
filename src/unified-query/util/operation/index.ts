@@ -25,6 +25,7 @@ export * from "./select-value";
 export * from "./select";
 export * from "./where-eq-candidate-key";
 export * from "./where-eq-columns";
+export * from "./where-eq-inner-query-primary-key";
 export * from "./where-eq-outer-query-primary-key";
 export * from "./where-eq-primary-key";
 export * from "./where-eq-super-key";

@@ -16,10 +16,21 @@ const outerTable = tsql.table("outerTable")
     })
     .setPrimaryKey(c => [c.outerTableIdA, c.outerTableIdB]);
 
+/**
+ * This is a correlated subquery, referencing `outerTable` from an outer query,
+ * ```sql
+ *  --snip
+ *  FROM
+ *      myTable
+ *  WHERE
+ *      myTable.outerTableIdA <=> outerTable.outerTableIdA AND
+ *      myTable.outerTableIdB <=> outerTable.outerTableIdB
+ * ```
+ */
 export const query = tsql.QueryUtil.newInstance()
-    .requireOuterQueryJoins(outerTable)
-    //.from(myTable)
-    .whereEqOuterQueryPrimaryKey(
+    .requireOuterQueryJoins(myTable)
+    .from(outerTable)
+    .whereEqInnerQueryPrimaryKey(
         tables => tables.myTable,
         outer => outer.outerTable
     );
