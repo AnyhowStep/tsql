@@ -4,6 +4,9 @@ import * as tsql from "../../../../../dist";
 const myTable = tsql.table("myTable")
     .addColumns({
         outerTableIdA : tm.mysql.bigIntUnsigned(),
+        /**
+         * BOOLEAN
+         */
         outerTableIdB : tm.mysql.boolean(),
         otherColumn : tm.mysql.varChar(),
     });
@@ -11,15 +14,21 @@ const myTable = tsql.table("myTable")
 const outerTable = tsql.table("outerTable")
     .addColumns({
         outerTableIdA : tm.mysql.bigIntUnsigned(),
-        outerTableIdB : tm.mysql.boolean(),
+        /**
+         * DATETIME
+         */
+        outerTableIdB : tm.mysql.dateTime(),
         outerColumn : tm.mysql.varChar(),
     })
     .setPrimaryKey(c => [c.outerTableIdA, c.outerTableIdB]);
 
 export const query = tsql.QueryUtil.newInstance()
-    .requireOuterQueryJoins(outerTable)
-    //.from(myTable)
-    .whereEqOuterQueryPrimaryKey(
+    .requireOuterQueryJoins(myTable)
+    .from(outerTable)
+    .whereEqInnerQueryPrimaryKey(
         tables => tables.myTable,
+        /**
+         * Cannot compare because data types are not **null-safe** comparable
+         */
         outer => outer.outerTable
     );

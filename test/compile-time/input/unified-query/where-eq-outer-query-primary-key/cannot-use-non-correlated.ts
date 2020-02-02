@@ -21,5 +21,5 @@ export const query = tsql.QueryUtil.newInstance()
     .from(myTable)
     .whereEqOuterQueryPrimaryKey(
         tables => tables.myTable,
-        () => outerTable
+        outer => outer.outerTable
     );

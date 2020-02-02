@@ -17,9 +17,9 @@ const outerTable = tsql.table("outerTable")
     .setPrimaryKey(c => [c.outerTableIdA, c.outerTableIdB]);
 
 export const query = tsql.QueryUtil.newInstance()
-    .requireOuterQueryJoins(outerTable)
-    //.from(myTable)
-    .whereEqOuterQueryPrimaryKey(
+    //.requireOuterQueryJoins(myTable)
+    .from(outerTable)
+    .whereEqInnerQueryPrimaryKey(
         tables => tables.myTable,
         outer => outer.outerTable
     );

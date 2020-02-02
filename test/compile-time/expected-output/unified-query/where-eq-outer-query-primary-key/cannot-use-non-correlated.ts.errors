@@ -12,5 +12,12 @@
     "category": 1,
     "length": 6,
     "start": 712
+  },
+  {
+    "messageText": "Parameter 'outer' implicitly has an 'any' type.",
+    "code": 7006,
+    "category": 1,
+    "length": 5,
+    "start": 746
   }
 ]
