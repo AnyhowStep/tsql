@@ -73,12 +73,9 @@ tape(__filename, async (t) => {
         /**
          * This actually starts a transaction, if we are not in a transaction.
          */
-        await test.deleteOneByPrimaryKey(
-            connection,
-            {
+        await test.whereEqPrimaryKey({
                 testId : BigInt(4),
-            }
-        );
+            }).deleteOne(connection);
 
         t.deepEqual(eventHandled, true);
         t.deepEqual(onCommitInvoked, false);

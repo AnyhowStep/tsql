@@ -70,15 +70,13 @@ tape(__filename, async (t) => {
         t.deepEqual(onCommitInvoked, false);
         t.deepEqual(onRollbackInvoked, false);
 
-        await test.delete(
-            connection,
-            () => tsql.eqPrimaryKey(
+        await test.where(() => tsql.eqPrimaryKey(
                 test,
                 {
                     testId : BigInt(4),
                 }
             )
-        );
+        ).delete(connection);
 
         t.deepEqual(eventHandled, true);
         t.deepEqual(onCommitInvoked, false);

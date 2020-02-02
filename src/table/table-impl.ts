@@ -4,7 +4,7 @@ import * as TableUtil from "./util";
 import {MapperMap} from "../mapper-map";
 import {Ast} from "../ast";
 import {ColumnUtil} from "../column";
-import {ExecutionUtil, DeleteConnection, InsertOneConnection, InsertOneResult, DeleteResult, InsertIgnoreOneResult, InsertIgnoreOneConnection, ReplaceOneResult, ReplaceOneConnection, ReplaceManyResult, ReplaceManyConnection, InsertIgnoreManyResult, InsertIgnoreManyConnection, InsertManyResult, InsertManyConnection, IsolableDeleteConnection, UpdateConnection, UpdateResult, IsolableUpdateConnection, IsolableInsertOneConnection} from "../execution";
+import {ExecutionUtil, InsertOneConnection, InsertOneResult, InsertIgnoreOneResult, InsertIgnoreOneConnection, ReplaceOneResult, ReplaceOneConnection, ReplaceManyResult, ReplaceManyConnection, InsertIgnoreManyResult, InsertIgnoreManyConnection, InsertManyResult, InsertManyConnection, UpdateConnection, UpdateResult, IsolableUpdateConnection, IsolableInsertOneConnection} from "../execution";
 import {CandidateKey_NonUnion} from "../candidate-key";
 import {StrictUnion, AssertNonUnion} from "../type-util";
 import * as ExprLib from "../expr-library";
@@ -14,7 +14,7 @@ import {Row} from "../row";
 import {FromClauseUtil} from "../from-clause";
 import {WhereDelegate} from "../where-clause";
 import {CustomInsertRow} from "../insert";
-import {InsertOneWithAutoIncrementReturnType, InsertIgnoreOneWithAutoIncrementReturnType, DeleteOneResult, UpdateOneResult, UpdateZeroOrOneResult, ReplaceOneWithAutoIncrementReturnType} from "../execution/util";
+import {InsertOneWithAutoIncrementReturnType, InsertIgnoreOneWithAutoIncrementReturnType, UpdateOneResult, UpdateZeroOrOneResult, ReplaceOneWithAutoIncrementReturnType} from "../execution/util";
 import {AssignmentMapDelegate} from "../update";
 import {TableWhere} from "../table-where";
 
@@ -557,74 +557,6 @@ export class Table<DataT extends TableData> implements ITable {
             this,
             connection,
             rows
-        );
-    }
-
-    delete (
-        this : Extract<this, DeletableTable>,
-        connection : DeleteConnection,
-        whereDelegate : WhereDelegate<
-            FromClauseUtil.From<
-                FromClauseUtil.NewInstance,
-                Extract<this, DeletableTable>
-            >
-        >
-    ) : Promise<DeleteResult> {
-        return ExecutionUtil.delete(this, connection, whereDelegate);
-    }
-
-    deleteOne (
-        this : Extract<this, DeletableTable>,
-        connection : IsolableDeleteConnection,
-        whereDelegate : WhereDelegate<
-            FromClauseUtil.From<
-                FromClauseUtil.NewInstance,
-                Extract<this, DeletableTable>
-            >
-        >
-    ) : Promise<DeleteOneResult> {
-        return ExecutionUtil.deleteOne(this, connection, whereDelegate);
-    }
-
-    deleteOneByCandidateKey (
-        this : Extract<this, DeletableTable>,
-        connection : IsolableDeleteConnection,
-        candidateKey : StrictUnion<CandidateKey_NonUnion<this>>
-    ) : Promise<DeleteOneResult> {
-        return this.deleteOne(
-            connection,
-            () => ExprLib.eqCandidateKey(
-                this,
-                candidateKey
-            ) as any
-        );
-    }
-
-    deleteOneByPrimaryKey (
-        this : Extract<this, DeletableTable & TableWithPrimaryKey>,
-        connection : IsolableDeleteConnection,
-        primaryKey : PrimaryKey_Input<Extract<this, DeletableTable & TableWithPrimaryKey>>
-    ) : Promise<DeleteOneResult> {
-        return this.deleteOne(
-            connection,
-            () => ExprLib.eqPrimaryKey(
-                this,
-                primaryKey
-            ) as any
-        );
-    }
-
-    deleteOneBySuperKey (
-        this : Extract<this, DeletableTable>,
-        connection : IsolableDeleteConnection,
-        superKey : SuperKey_Input<this>
-    ) : Promise<DeleteOneResult> {
-        return this.deleteOne(
-            connection,
-            () => ExprLib.eqSuperKey(
-                this,
-                superKey
-            ) as any
         );
     }
 

@@ -26,13 +26,11 @@ tape(__filename, async (t) => {
                 (3,300);
         `);
 
-        await dst.deleteOne(
-            connection,
-            columns => tsql.eq(
+        await dst.where(columns => tsql.eq(
                 columns.testVal,
                 BigInt(200)
             )
-        );
+        ).deleteOne(connection);
 
         await tsql.from(dst)
             .select(columns => [columns])
