@@ -11,6 +11,7 @@ import {
     IReplaceEvent,
     IReplaceOneEvent,
     IInsertSelectEvent,
+    IReplaceSelectEvent,
 } from "../../event";
 import {IsolationLevel} from "../../isolation-level";
 import {LockCallback} from "../connection/component";
@@ -58,6 +59,7 @@ export interface IPool {
 
     readonly onReplace : IPoolEventEmitter<IReplaceEvent<ITable>>;
     readonly onReplaceOne : IPoolEventEmitter<IReplaceOneEvent<ITable>>;
+    readonly onReplaceSelect : IPoolEventEmitter<IReplaceSelectEvent<ITable>>;
 
     readonly onUpdate : IPoolEventEmitter<IUpdateEvent<ITable>>;
     readonly onUpdateAndFetch : IPoolEventEmitter<IUpdateAndFetchEvent<ITable>>;
