@@ -21,7 +21,7 @@ import {AnyBuiltInExpr} from "../built-in-expr";
 import {AssignmentMapDelegate, CustomAssignmentMap} from "../update";
 import {ExpandPick} from "../type-util";
 import {UpdateOneResult, UpdateZeroOrOneResult} from "../execution/util";
-
+import * as ExprLib from "../expr-library";
 /**
  * @todo Implement something like `TableWhereOrderBy`?
  *
@@ -59,6 +59,25 @@ export class TableWhere<TableT extends ITable> {
     ) {
         this.table = table;
         this.whereDelegate = whereDelegate;
+    }
+
+    where (
+        whereDelegate : WhereDelegate<
+            FromClauseUtil.From<
+                FromClauseUtil.NewInstance,
+                TableT
+            >
+        >
+    ) : TableWhere<TableT> {
+        return new TableWhere<TableT>(
+            this.table,
+            (columns) : any => {
+                return ExprLib.and(
+                    this.whereDelegate(columns),
+                    whereDelegate(columns)
+                );
+            }
+        );
     }
 
     assertExists (
