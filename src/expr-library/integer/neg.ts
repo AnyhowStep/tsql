@@ -9,7 +9,7 @@ import {makeOperator1DoubleElimination} from "../factory";
  *
  * -----
  *
- * ### `SIGNED BIGINT` too large (from database)
+ * ### `BIGINT SIGNED` too large (from database)
  *
  * Be careful, however,
  * ```sql
@@ -31,7 +31,7 @@ import {makeOperator1DoubleElimination} from "../factory";
  *
  * -----
  *
- * ### Double Unary Minus Elimination on Negative `SIGNED BIGINT` Literal
+ * ### Double Unary Minus Elimination on Negative `BIGINT SIGNED` Literal
  *
  * The following will not throw an error but will silently
  * cast the result,
@@ -40,7 +40,7 @@ import {makeOperator1DoubleElimination} from "../factory";
  * ```
  * Both **do not** error in MySQL and PostgreSQL.
  * PostgreSQL seems to perform double unary minus elimination and treats the result as a `DECIMAL` literal.
- * MySQL seems to perform double unary minus elimination and treats the result as an `UNSIGNED BIGINT` literal.
+ * MySQL seems to perform double unary minus elimination and treats the result as an `BIGINT UNSIGNED` literal.
  *
  * SQLite casts to `DOUBLE`
  *
@@ -54,11 +54,11 @@ import {makeOperator1DoubleElimination} from "../factory";
  *  SELECT -(-9223372036854775808 + 0); -- PostgreSQL
  *
  *  SELECT -(
- *      CAST(-9223372036854775808 AS SIGNED BIGINT)
+ *      CAST(-9223372036854775808 AS BIGINT SIGNED)
  *  ); -- MySQL
  * ```
  * The above throws an error on PostgreSQL.
- * The above silently casts to an `UNSIGNED BIGINT` on MySQL.
+ * The above silently casts to an `BIGINT UNSIGNED` on MySQL.
  *
  * SQLite casts to `DOUBLE`.
  *
@@ -69,20 +69,20 @@ import {makeOperator1DoubleElimination} from "../factory";
  *      CAST(-(-9223372036854775808) AS BIGINT); -- PostgreSQL
  *
  *  SELECT
- *      CAST(-(-9223372036854775808) AS SIGNED BIGINT); -- MySQL
+ *      CAST(-(-9223372036854775808) AS BIGINT SIGNED); -- MySQL
  * ```
  * The above throws an error on PostgreSQL.
- * The above silently casts to an `UNSIGNED BIGINT`
+ * The above silently casts to an `BIGINT UNSIGNED`
  *
  * SQLite casts to `DOUBLE`.
  *
  * -----
  *
- * MySQL seems to treat `SIGNED BIGINT` values from **columns** and **literals** differently!
+ * MySQL seems to treat `BIGINT SIGNED` values from **columns** and **literals** differently!
  *
  * -----
  *
- * ### `SIGNED BIGINT` too small.
+ * ### `BIGINT SIGNED` too small.
  *
  * MySQL-specific,
  * ```sql
@@ -91,7 +91,7 @@ import {makeOperator1DoubleElimination} from "../factory";
  *  SELECT -id FROM a;
  * ```
  *
- * `-9223372036854775809` is too small to fit in `SIGNED BIGINT`. This will throw an error.
+ * `-9223372036854775809` is too small to fit in `BIGINT SIGNED`. This will throw an error.
  *
  * -----
  *
@@ -99,7 +99,7 @@ import {makeOperator1DoubleElimination} from "../factory";
  *  SELECT -CAST(9223372036854775809 AS UNSIGNED);
  * ```
  * The above gives you a `DECIMAL` type with value `-9223372036854775809` in MySQL.
- * PostgreSQL and SQLite do not have `UNSIGNED BIGINT`.
+ * PostgreSQL and SQLite do not have `BIGINT UNSIGNED`.
  *
  * -----
  *

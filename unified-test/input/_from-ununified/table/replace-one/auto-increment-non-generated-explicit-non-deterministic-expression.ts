@@ -66,7 +66,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
             return test.replaceOne(
                 connection,
                 {
-                    testId : tsql.integer.randomSignedBigInt(),
+                    testId : tsql.integer.randomBigIntSigned(),
                     testVal : BigInt(400),
                 }
             );

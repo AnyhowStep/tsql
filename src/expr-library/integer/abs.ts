@@ -9,7 +9,7 @@ import {TypeHint} from "../../type-hint";
  *
  * -----
  *
- * ### `SIGNED BIGINT` too large
+ * ### `BIGINT SIGNED` too large
  *
  * ```sql
  *  SELECT ABS(-9223372036854775808)

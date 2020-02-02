@@ -2845,14 +2845,14 @@ export enum OperatorType {
      * ~~we're still adding this because it's too useful to give up.~~
      * Support for `BIGINT UNSIGNED` has been dropped.
      *
-     * It means that trying to use `UNSIGNED BIGINT` with other databases
+     * It means that trying to use `BIGINT UNSIGNED` with other databases
      * will produce varying behaviours, though...
      *
-     * For example, the range of `SIGNED BIGINT` is much smaller than
-     * `UNSIGNED BIGINT` if we are only looking at the non-negative range.
+     * For example, the range of `BIGINT SIGNED` is much smaller than
+     * `BIGINT UNSIGNED` if we are only looking at the non-negative range.
      *
-     * Math with `UNSIGNED BIGINT` fails if the result becomes negative.
-     * `SIGNED BIGINT` has no such inhibitions.
+     * Math with `BIGINT UNSIGNED` fails if the result becomes negative.
+     * `BIGINT SIGNED` has no such inhibitions.
      */
     //CAST_AS_UNSIGNED_BIG_INTEGER = "CAST_AS_UNSIGNED_BIG_INTEGER",
 

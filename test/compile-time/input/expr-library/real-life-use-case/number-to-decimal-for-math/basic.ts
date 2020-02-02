@@ -11,7 +11,7 @@ const numberTable = tsql.table("numberTable")
 /**
  * Similar situation encountered for money-related calculations.
  */
-export const payInMethodTypeFeeAmount = tsql.castAsSignedBigInteger(
+export const payInMethodTypeFeeAmount = tsql.castAsBigIntSigned(
     tsql.decimal.ceiling(
         tsql.decimal.mul(
             tsql.castAsDecimal(numberTable.columns.ratio, 65, 30),

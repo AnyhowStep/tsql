@@ -4,7 +4,7 @@ import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
 /**
- * Returns a random `SIGNED BIGINT` in the range,
+ * Returns a random `BIGINT SIGNED` in the range,
  * [-9223372036854775808, 9223372036854775807]
  *
  * -----
@@ -30,7 +30,7 @@ import {TypeHint} from "../../type-hint";
  *  RANDOM()
  * ```
  */
-export const randomSignedBigInt = makeOperator0<OperatorType.RANDOM, bigint>(
+export const randomBigIntSigned = makeOperator0<OperatorType.RANDOM, bigint>(
     OperatorType.RANDOM,
     tm.mysql.bigIntSigned(),
     TypeHint.BIGINT_SIGNED

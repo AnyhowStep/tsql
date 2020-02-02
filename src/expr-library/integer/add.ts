@@ -6,7 +6,7 @@ import {TypeHint} from "../../type-hint";
 /**
  * -----
  *
- * ### `SIGNED BIGINT` too large
+ * ### `BIGINT SIGNED` too large
  *
  * ```sql
  *  SELECT 9223372036854775807+9223372036854775807;
@@ -16,7 +16,7 @@ import {TypeHint} from "../../type-hint";
  *
  * -----
  *
- * ### `SIGNED BIGINT` too small
+ * ### `BIGINT SIGNED` too small
  *
  * ```sql
  *  SELECT -9223372036854775808+-9223372036854775808
@@ -26,35 +26,35 @@ import {TypeHint} from "../../type-hint";
  *
  * -----
  *
- * ### `UNSIGNED BIGINT` too large
+ * ### `BIGINT UNSIGNED` too large
  *
  * ```sql
  *  SELECT 18446744073709551615+18446744073709551615
  * ```
  * MySQL throws an error.
- * PostgreSQL has no concept of `UNSIGNED BIGINT`; this is adding two `DECIMAL`s.
- * SQLite has no concept of `UNSIGNED BIGINT`; this is adding two `DOUBLE`s.
+ * PostgreSQL has no concept of `BIGINT UNSIGNED`; this is adding two `DECIMAL`s.
+ * SQLite has no concept of `BIGINT UNSIGNED`; this is adding two `DOUBLE`s.
  *
  * -----
  *
- * ### `UNSIGNED BIGINT` too small
+ * ### `BIGINT UNSIGNED` too small
  *
  * ```sql
  *  SELECT 18446744073709551615 + -9223372036854775808 + -9223372036854775808
  * ```
  * MySQL throws an error.
- * PostgreSQL has no concept of `UNSIGNED BIGINT`; this is of type `DECIMAL` and the result is correctly `-1`.
- * SQLite has no concept of `UNSIGNED BIGINT`; this is of type `DOUBLE` and the result is **incorrectly** `0`.
+ * PostgreSQL has no concept of `BIGINT UNSIGNED`; this is of type `DECIMAL` and the result is correctly `-1`.
+ * SQLite has no concept of `BIGINT UNSIGNED`; this is of type `DOUBLE` and the result is **incorrectly** `0`.
  *
  * -----
  *
  * ### Ensuring consistent behaviour
  *
- * PostgreSQL's behaviour is perfect for `SIGNED BIGINT`.
+ * PostgreSQL's behaviour is perfect for `BIGINT SIGNED`.
  *
- * MySQL's behaviour is perfect for `SIGNED BIGINT`.
+ * MySQL's behaviour is perfect for `BIGINT SIGNED`.
  *
- * To ensure consistent behaviour across DBMS, **do not** use `UNSIGNED BIGINT` for math.
+ * To ensure consistent behaviour across DBMS, **do not** use `BIGINT UNSIGNED` for math.
  * It is fine to use it as an auto-increment identifier in MySQL.
  * Just don't perform math on it.
  *

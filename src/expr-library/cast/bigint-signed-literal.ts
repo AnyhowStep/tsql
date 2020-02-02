@@ -6,10 +6,10 @@ import {LiteralValueNodeUtil} from "../../ast/literal-value-node";
 import {expr} from "../../expr/expr-impl";
 
 /**
- * Converts `string|number|bigint|Decimal` to a `SIGNED BIGINT`
+ * Converts `string|number|bigint|Decimal` to a `BIGINT SIGNED`
  */
-export function signedBigIntLiteral (
-    rawSignedBigIntLiteral : string|number|bigint|Decimal
+export function bigIntSignedLiteral (
+    rawBigIntSignedLiteral : string|number|bigint|Decimal
 ) : (
     Expr<{
         mapper : tm.SafeMapper<bigint>,
@@ -18,14 +18,14 @@ export function signedBigIntLiteral (
     }>
 ) {
     const mapper = tm.mysql.bigIntSigned();
-    const value = mapper("rawSignedBigIntLiteral", String(rawSignedBigIntLiteral));
+    const value = mapper("rawBigIntSignedLiteral", String(rawBigIntSignedLiteral));
     return expr(
         {
             mapper,
             usedRef : UsedRefUtil.fromColumnRef({}),
             isAggregate : false,
         },
-        LiteralValueNodeUtil.signedBigIntLiteralNode(
+        LiteralValueNodeUtil.bigIntSignedLiteralNode(
             value
         )
     );
