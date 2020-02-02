@@ -137,11 +137,11 @@ export async function updateAndFetchZeroOrOneImpl<
                 const {
                     whereClause : updateWhereClause,
                     updateResult : updateZeroOrOneResult,
-                } = await updateZeroOrOneImplNoEvent(
+                } = await updateZeroOrOneImplNoEvent<TableT, AssignmentMapT>(
                     table,
                     connection,
                     updateWhereDelegate,
-                    () => assignmentMap
+                    () => assignmentMap as any
                 );
 
                 if (tm.BigIntUtil.equal(updateZeroOrOneResult.foundRowCount, tm.BigInt(0))) {

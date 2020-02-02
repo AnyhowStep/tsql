@@ -15,7 +15,7 @@ import {FromClauseUtil} from "../from-clause";
 import {WhereDelegate} from "../where-clause";
 import {CustomInsertRow} from "../insert";
 import {InsertOneWithAutoIncrementReturnType, InsertIgnoreOneWithAutoIncrementReturnType, ReplaceOneWithAutoIncrementReturnType} from "../execution/util";
-import {AssignmentMapDelegate} from "../update";
+import {AssignmentMapDelegate, CustomAssignmentMap} from "../update";
 import {TableWhere} from "../table-where";
 
 export class Table<DataT extends TableData> implements ITable {
@@ -560,7 +560,9 @@ export class Table<DataT extends TableData> implements ITable {
         );
     }
 
-    update (
+    update<
+        AssignmentMapT extends CustomAssignmentMap<this>
+    > (
         connection : UpdateConnection,
         whereDelegate : WhereDelegate<
             FromClauseUtil.From<
@@ -568,9 +570,9 @@ export class Table<DataT extends TableData> implements ITable {
                 this
             >
         >,
-        assignmentMapDelegate : AssignmentMapDelegate<this>
+        assignmentMapDelegate : AssignmentMapDelegate<this, AssignmentMapT>
     ) : Promise<UpdateResult> {
-        return ExecutionUtil.update(this, connection, whereDelegate, assignmentMapDelegate);
+        return ExecutionUtil.update<this, AssignmentMapT>(this, connection, whereDelegate, assignmentMapDelegate);
     }
 
     insertAndFetch (

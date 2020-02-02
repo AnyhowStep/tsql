@@ -1,14 +1,14 @@
 import {ITable} from "../table";
 import {CustomAssignmentMap} from "./assignment-map";
-import {Identity} from "../type-util";
+import {Identity, AssertSubsetOwnEnumerableKeys} from "../type-util";
 
 export type AssignmentMapDelegate<
     TableT extends Pick<ITable, "columns"|"mutableColumns">,
-    AssignmentMapT extends CustomAssignmentMap<TableT> = CustomAssignmentMap<TableT>
+    AssignmentMapT extends CustomAssignmentMap<TableT>
 > =
     Identity<
         (
             columns : TableT["columns"]
-        ) => AssignmentMapT
+        ) => AssignmentMapT & AssertSubsetOwnEnumerableKeys<AssignmentMapT, CustomAssignmentMap<TableT>>
     >
 ;
