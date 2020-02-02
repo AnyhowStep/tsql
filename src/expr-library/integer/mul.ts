@@ -5,7 +5,7 @@ import {TypeHint} from "../../type-hint";
 /**
  * -----
  *
- * ### `SIGNED BIGINT` too large
+ * ### `BIGINT SIGNED` too large
  *
  * ```sql
  *  SELECT 9223372036854775807*9223372036854775807;
@@ -15,7 +15,7 @@ import {TypeHint} from "../../type-hint";
  *
  * -----
  *
- * ### `SIGNED BIGINT` too small
+ * ### `BIGINT SIGNED` too small
  *
  * ```sql
  *  SELECT 9223372036854775807*-9223372036854775808
@@ -25,35 +25,35 @@ import {TypeHint} from "../../type-hint";
  *
  * -----
  *
- * ### `UNSIGNED BIGINT` too large
+ * ### `BIGINT UNSIGNED` too large
  *
  * ```sql
  *  SELECT 18446744073709551615*18446744073709551615
  * ```
  * MySQL throws an error.
- * PostgreSQL has no concept of `UNSIGNED BIGINT`; this is multiplying two `DECIMAL`s.
- * SQLite has no concept of `UNSIGNED BIGINT`; this is multiplying two `DOUBLE`s.
+ * PostgreSQL has no concept of `BIGINT UNSIGNED`; this is multiplying two `DECIMAL`s.
+ * SQLite has no concept of `BIGINT UNSIGNED`; this is multiplying two `DOUBLE`s.
  *
  * -----
  *
- * ### `UNSIGNED BIGINT` too small
+ * ### `BIGINT UNSIGNED` too small
  *
  * ```sql
  *  SELECT 18446744073709551615 * -9223372036854775808
  * ```
  * MySQL throws an error.
- * PostgreSQL has no concept of `UNSIGNED BIGINT`; this is of type `DECIMAL`.
- * SQLite has no concept of `UNSIGNED BIGINT`; this is of type `DOUBLE`.
+ * PostgreSQL has no concept of `BIGINT UNSIGNED`; this is of type `DECIMAL`.
+ * SQLite has no concept of `BIGINT UNSIGNED`; this is of type `DOUBLE`.
  *
  * -----
  *
  * ### Ensuring consistent behaviour
  *
- * PostgreSQL's behaviour is perfect for `SIGNED BIGINT`.
+ * PostgreSQL's behaviour is perfect for `BIGINT SIGNED`.
  *
- * MySQL's behaviour is perfect for `SIGNED BIGINT`.
+ * MySQL's behaviour is perfect for `BIGINT SIGNED`.
  *
- * To ensure consistent behaviour across DBMS, **do not** use `UNSIGNED BIGINT` for math.
+ * To ensure consistent behaviour across DBMS, **do not** use `BIGINT UNSIGNED` for math.
  * It is fine to use it as an auto-increment identifier in MySQL.
  * Just don't perform math on it.
  *

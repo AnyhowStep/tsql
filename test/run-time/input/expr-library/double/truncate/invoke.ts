@@ -49,7 +49,7 @@ tape(__filename, async (t) => {
         });
         await loopTest2(__filename, t, -6, 6, 0.25,
             (x, y) => {
-                const d = tsql.signedBigIntLiteral(Math.trunc(y));
+                const d = tsql.bigIntSignedLiteral(Math.trunc(y));
                 return tsql.selectValue(() => tsql.double.truncate(x, d))
                     .fetchValue(connection);
             },

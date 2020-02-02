@@ -38,7 +38,7 @@ If TypeScript started implementing unsigned types or [range types](https://githu
 
 ### Min and Max Values
 
-For maximum compatibility between databases, the minimum value for `LIMIT/OFFSET` is `0` and the maximum value is `9223372036854775807` (`SIGNED BIGINT` max value).
+For maximum compatibility between databases, the minimum value for `LIMIT/OFFSET` is `0` and the maximum value is `9223372036854775807` (`BIGINT SIGNED` max value).
 
 MySQL supports larger values for `LIMIT/OFFSET` but this library uses `9223372036854775807` for maximum compatibility between the different databases.
 

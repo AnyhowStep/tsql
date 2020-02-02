@@ -10,7 +10,7 @@ import {isDate} from "../../../date-util";
 /**
  * + `bigint` is considered a `signed bigint` by this library.
  * +`DECIMAL` is not supported by this function.
- * +`UNSIGNED BIGINT` is not supported by this function.
+ * +`BIGINT UNSIGNED` is not supported by this function.
  */
 export function buildAst (builtInExpr : AnyBuiltInExpr|QueryBaseUtil.OneSelectItem<any>) : Ast {
     //Check built-in cases first
@@ -18,7 +18,7 @@ export function buildAst (builtInExpr : AnyBuiltInExpr|QueryBaseUtil.OneSelectIt
         return LiteralValueNodeUtil.doubleLiteralNode(builtInExpr);
     }
     if (tm.TypeUtil.isBigInt(builtInExpr)) {
-        return LiteralValueNodeUtil.signedBigIntLiteralNode(builtInExpr);
+        return LiteralValueNodeUtil.bigIntSignedLiteralNode(builtInExpr);
     }
     if (typeof builtInExpr == "string") {
         return LiteralValueNodeUtil.stringLiteralNode(builtInExpr);

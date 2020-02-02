@@ -1,7 +1,7 @@
 import {LiteralValueType, BigIntSignedLiteralNode} from "../../literal-value-node";
 import * as tm from "type-mapping";
 
-export function isSignedBigInt (x : bigint) : boolean {
+export function isBigIntSigned (x : bigint) : boolean {
     const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
     return (
         //bigint signed minimum value
@@ -14,7 +14,7 @@ export function isSignedBigInt (x : bigint) : boolean {
  * @todo Remove
  * @deprecated
  */
-export function isUnsignedBigInt (x : bigint) : boolean {
+export function isBigIntUnsigned (x : bigint) : boolean {
     const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
     return (
         //bigint unsigned minimum value
@@ -24,15 +24,15 @@ export function isUnsignedBigInt (x : bigint) : boolean {
     );
 }
 
-export function isSignedBigIntLiteral (x : bigint) : boolean {
-    return isSignedBigInt(x);
+export function isBigIntSignedLiteral (x : bigint) : boolean {
+    return isBigIntSigned(x);
 }
 
 /**
  * @todo Remove
  * @deprecated
  */
-export function isUnsignedBigIntLiteral (x : bigint) : boolean {
+export function isBigIntUnsignedLiteral (x : bigint) : boolean {
     const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
     return (
         //bigint signed maximum value + 1
@@ -42,15 +42,15 @@ export function isUnsignedBigIntLiteral (x : bigint) : boolean {
     );
 }
 
-export function signedBigIntLiteralNode (literalValue : bigint) : BigIntSignedLiteralNode {
-    if (isSignedBigIntLiteral(literalValue)) {
+export function bigIntSignedLiteralNode (literalValue : bigint) : BigIntSignedLiteralNode {
+    if (isBigIntSignedLiteral(literalValue)) {
         return {
             type : "LiteralValue",
             literalValueType : LiteralValueType.BIGINT_SIGNED,
             literalValue,
         };
     }  else {
-        //Can only really be an `UNSIGNED BIGINT` or `DECIMAL` value
-        throw new Error(`Literal value is too small/large to be a signed bigint; consider using UNSIGNED BIGINT or DECIMAL`);
+        //Can only really be an `BIGINT UNSIGNED` or `DECIMAL` value
+        throw new Error(`Literal value is too small/large to be a signed bigint; consider using BIGINT UNSIGNED or DECIMAL`);
     }
 }

@@ -44,7 +44,7 @@ The MySQL-specific library may add support for `UNSIGNED` integer types.
 -----
 
 Attempting to use literal values outside the range of
-`[-9223372036854775808, 9223372036854775807]` (A signed 8-byte integer AKA `SIGNED BIGINT`)
+`[-9223372036854775808, 9223372036854775807]` (A signed 8-byte integer AKA `BIGINT SIGNED`)
 will cause a run-time error to be thrown, in general.
 
 -----
