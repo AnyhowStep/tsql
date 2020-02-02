@@ -34,11 +34,7 @@ export const businessEnabledLog = tsql.log(businessEnabled)
         c.updatedByExternalUserId
     ])
     .setCopyDefaults(({ownerPrimaryKey, connection}) => {
-        return business.fetchOneByPrimaryKey(
-            connection,
-            ownerPrimaryKey,
-            c => [c.appId]
-        );
+        return business.whereEqPrimaryKey(ownerPrimaryKey).fetchOne(connection, c => [c.appId]);
     })
     .setTrackedDefaults({
         enabled : true,
