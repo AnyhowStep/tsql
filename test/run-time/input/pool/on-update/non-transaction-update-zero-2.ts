@@ -69,14 +69,14 @@ tape(__filename, async (t) => {
         t.deepEqual(onCommitInvoked, false);
         t.deepEqual(onRollbackInvoked, false);
 
-        await test.updateZeroOrOne(
-            connection,
+        await test.where(
             () => tsql.eqPrimaryKey(
                 test,
                 {
                     testId : BigInt(999),
                 }
-            ),
+            )).updateZeroOrOne(
+            connection,
             () => {
                 return {
                     testVal : BigInt(444),

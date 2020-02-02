@@ -72,12 +72,12 @@ tape(__filename, async (t) => {
         /**
          * This actually starts a transaction, if we are not in a transaction.
          */
-        await test.updateZeroOrOne(
-            connection,
+        await test.where(
             () => tsql.eqPrimaryKey(
                 test,
                 { testId : BigInt(4) }
-            ),
+            )).updateZeroOrOne(
+            connection,
             () => {
                 return {
                     testVal : BigInt(444),

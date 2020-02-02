@@ -14,7 +14,7 @@ import {Row} from "../row";
 import {FromClauseUtil} from "../from-clause";
 import {WhereDelegate} from "../where-clause";
 import {CustomInsertRow} from "../insert";
-import {InsertOneWithAutoIncrementReturnType, InsertIgnoreOneWithAutoIncrementReturnType, UpdateOneResult, UpdateZeroOrOneResult, ReplaceOneWithAutoIncrementReturnType} from "../execution/util";
+import {InsertOneWithAutoIncrementReturnType, InsertIgnoreOneWithAutoIncrementReturnType, UpdateOneResult, ReplaceOneWithAutoIncrementReturnType} from "../execution/util";
 import {AssignmentMapDelegate} from "../update";
 import {TableWhere} from "../table-where";
 
@@ -586,19 +586,6 @@ export class Table<DataT extends TableData> implements ITable {
         return ExecutionUtil.updateOne(this, connection, whereDelegate, assignmentMapDelegate);
     }
 
-    updateZeroOrOne (
-        connection : IsolableUpdateConnection,
-        whereDelegate : WhereDelegate<
-            FromClauseUtil.From<
-                FromClauseUtil.NewInstance,
-                this
-            >
-        >,
-        assignmentMapDelegate : AssignmentMapDelegate<this>
-    ) : Promise<UpdateZeroOrOneResult> {
-        return ExecutionUtil.updateZeroOrOne(this, connection, whereDelegate, assignmentMapDelegate);
-    }
-
     updateOneByCandidateKey (
         connection : IsolableUpdateConnection,
         candidateKey : StrictUnion<CandidateKey_NonUnion<this>>,
@@ -636,52 +623,6 @@ export class Table<DataT extends TableData> implements ITable {
         assignmentMapDelegate : AssignmentMapDelegate<this>
     ) : Promise<UpdateOneResult> {
         return this.updateOne(
-            connection,
-            () => ExprLib.eqSuperKey(
-                this,
-                superKey
-            ) as any,
-            assignmentMapDelegate
-        );
-    }
-
-    updateZeroOrOneByCandidateKey (
-        connection : IsolableUpdateConnection,
-        candidateKey : StrictUnion<CandidateKey_NonUnion<this>>,
-        assignmentMapDelegate : AssignmentMapDelegate<this>
-    ) : Promise<UpdateZeroOrOneResult> {
-        return this.updateZeroOrOne(
-            connection,
-            () => ExprLib.eqCandidateKey(
-                this,
-                candidateKey
-            ) as any,
-            assignmentMapDelegate
-        );
-    }
-
-    updateZeroOrOneByPrimaryKey (
-        this : Extract<this, TableWithPrimaryKey>,
-        connection : IsolableUpdateConnection,
-        primaryKey : PrimaryKey_Input<Extract<this, TableWithPrimaryKey>>,
-        assignmentMapDelegate : AssignmentMapDelegate<this>
-    ) : Promise<UpdateZeroOrOneResult> {
-        return this.updateZeroOrOne(
-            connection,
-            () => ExprLib.eqPrimaryKey(
-                this,
-                primaryKey
-            ) as any,
-            assignmentMapDelegate
-        );
-    }
-
-    updateZeroOrOneBySuperKey (
-        connection : IsolableUpdateConnection,
-        superKey : SuperKey_Input<this>,
-        assignmentMapDelegate : AssignmentMapDelegate<this>
-    ) : Promise<UpdateZeroOrOneResult> {
-        return this.updateZeroOrOne(
             connection,
             () => ExprLib.eqSuperKey(
                 this,

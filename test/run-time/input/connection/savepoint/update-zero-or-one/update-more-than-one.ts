@@ -29,12 +29,12 @@ tape(__filename, async (t) => {
                 (3,300);
         `);
 
-        await dst.updateZeroOrOne(
-            connection,
+        await dst.where(
             columns => tsql.gtEq(
                 columns.testVal,
                 BigInt(200)
-            ),
+            )).updateZeroOrOne(
+            connection,
             () => {
                 return {
                     testVal : BigInt(999),
