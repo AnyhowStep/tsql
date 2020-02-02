@@ -15,17 +15,18 @@ const dst = tsql.table("dst")
     .addMutable(columns => [
         columns.testVal,
     ]);
-export const p = dst.updateAndFetchZeroOrOneByCandidateKey(
-    null as any,
-    {
+export const p = dst
+    .whereEqCandidateKey({
         testId : BigInt(1),
-    },
-    () => {
-        return {
-            testVal : {
-                x : 1,
-                y : 2,
-            },
-        };
-    }
-);
+    })
+    .updateAndFetchZeroOrOne(
+        null as any,
+        () => {
+            return {
+                testVal : {
+                    x : 1,
+                    y : 2,
+                },
+            };
+        }
+    );

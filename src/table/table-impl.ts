@@ -6,7 +6,7 @@ import {Ast} from "../ast";
 import {ColumnUtil} from "../column";
 import {ExecutionUtil, InsertOneConnection, InsertOneResult, InsertIgnoreOneResult, InsertIgnoreOneConnection, ReplaceOneResult, ReplaceOneConnection, ReplaceManyResult, ReplaceManyConnection, InsertIgnoreManyResult, InsertIgnoreManyConnection, InsertManyResult, InsertManyConnection, UpdateConnection, UpdateResult, IsolableUpdateConnection, IsolableInsertOneConnection} from "../execution";
 import {CandidateKey_NonUnion} from "../candidate-key";
-import {StrictUnion, AssertNonUnion} from "../type-util";
+import {StrictUnion} from "../type-util";
 import * as ExprLib from "../expr-library";
 import {PrimaryKey_Input} from "../primary-key";
 import {SuperKey_Input} from "../super-key";
@@ -702,75 +702,6 @@ export class Table<DataT extends TableData> implements ITable {
             this,
             connection,
             row
-        );
-    }
-
-    updateAndFetchZeroOrOneByCandidateKey<
-        CandidateKeyT extends StrictUnion<CandidateKey_NonUnion<this>>,
-        AssignmentMapT extends ExecutionUtil.UpdateAndFetchOneByCandidateKeyAssignmentMap<this>
-    > (
-        connection : IsolableUpdateConnection,
-        candidateKey : CandidateKeyT,// & AssertNonUnion<CandidateKeyT>,
-        assignmentMapDelegate : AssignmentMapDelegate<this, AssignmentMapT>
-    ) : Promise<ExecutionUtil.UpdateAndFetchZeroOrOneResult<this, AssignmentMapT>> {
-        return ExecutionUtil.updateAndFetchZeroOrOneByCandidateKey<
-            this,
-            CandidateKeyT,
-            AssignmentMapT
-        >(
-            this,
-            connection,
-            candidateKey,
-            assignmentMapDelegate
-        );
-    }
-
-    updateAndFetchZeroOrOneByPrimaryKey<
-        AssignmentMapT extends ExecutionUtil.UpdateAndFetchOneByPrimaryKeyAssignmentMap<
-            Extract<this, TableWithPrimaryKey>
-        >
-    > (
-        this : Extract<this, TableWithPrimaryKey>,
-        connection : IsolableUpdateConnection,
-        primaryKey : PrimaryKey_Input<
-            Extract<this, TableWithPrimaryKey>
-        >,
-        assignmentMapDelegate : AssignmentMapDelegate<
-            Extract<this, TableWithPrimaryKey>,
-            AssignmentMapT
-        >
-    ) : Promise<ExecutionUtil.UpdateAndFetchZeroOrOneResult<
-        Extract<this, TableWithPrimaryKey>,
-        AssignmentMapT
-    >> {
-        return ExecutionUtil.updateAndFetchZeroOrOneByPrimaryKey<
-            Extract<this, TableWithPrimaryKey>,
-            AssignmentMapT
-        >(
-            this,
-            connection,
-            primaryKey,
-            assignmentMapDelegate
-        );
-    }
-
-    updateAndFetchZeroOrOneBySuperKey<
-        SuperKeyT extends SuperKey_Input<this>,
-        AssignmentMapT extends ExecutionUtil.UpdateAndFetchOneBySuperKeyAssignmentMap<this>
-    > (
-        connection : IsolableUpdateConnection,
-        superKey : SuperKeyT & AssertNonUnion<SuperKeyT>,
-        assignmentMapDelegate : AssignmentMapDelegate<this, AssignmentMapT>
-    ) : Promise<ExecutionUtil.UpdateAndFetchZeroOrOneResult<this, AssignmentMapT>> {
-        return ExecutionUtil.updateAndFetchZeroOrOneBySuperKey<
-            this,
-            SuperKeyT,
-            AssignmentMapT
-        >(
-            this,
-            connection,
-            superKey,
-            assignmentMapDelegate
         );
     }
 
