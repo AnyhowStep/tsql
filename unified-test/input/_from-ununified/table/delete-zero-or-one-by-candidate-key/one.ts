@@ -62,12 +62,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     ]
                 );
 
-            return dst.deleteZeroOrOneByCandidateKey(
-                connection,
-                {
+            return dst.whereEqCandidateKey({
                     testId : BigInt(1),
-                }
-            );
+                }).deleteZeroOrOne(connection);
         });
         t.deepEqual(
             result.deletedRowCount,

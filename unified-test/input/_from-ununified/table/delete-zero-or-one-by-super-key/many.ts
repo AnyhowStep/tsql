@@ -64,13 +64,10 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     ]
                 );
 
-            return dst.deleteZeroOrOneBySuperKey(
-                connection,
-                {
+            return dst.whereEqSuperKey({
                     testId : BigInt(1),
                     testVal : BigInt(100),
-                }
-            ).then(() => {
+                }).deleteZeroOrOne(connection).then(() => {
                 t.fail("Should not delete anything");
             }).catch((err) => {
                 t.true(err instanceof tsql.TooManyRowsFoundError);
