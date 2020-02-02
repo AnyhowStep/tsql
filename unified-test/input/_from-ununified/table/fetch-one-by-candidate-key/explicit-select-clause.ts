@@ -62,13 +62,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     ]
                 );
 
-            await myTable.fetchOneByCandidateKey(
-                connection,
-                {
+            await myTable.whereEqCandidateKey({
                     myTableId : BigInt(1),
-                },
-                columns => [columns]
-            ).then((row) => {
+                }).fetchOne(connection, columns => [columns]).then((row) => {
                 t.deepEqual(
                     row,
                     {
@@ -80,13 +76,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.fail("Should exist");
             });
 
-            await myTable.fetchOneByCandidateKey(
-                connection,
-                {
+            await myTable.whereEqCandidateKey({
                     myTableId : BigInt(1),
-                },
-                columns => [columns.myTableId]
-            ).then((row) => {
+                }).fetchOne(connection, columns => [columns.myTableId]).then((row) => {
                 t.deepEqual(
                     row,
                     {
@@ -97,13 +89,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.fail("Should exist");
             });
 
-            await myTable.fetchOneByCandidateKey(
-                connection,
-                {
+            await myTable.whereEqCandidateKey({
                     myTableId : BigInt(1),
-                },
-                columns => [columns.createdAt]
-            ).then((row) => {
+                }).fetchOne(connection, columns => [columns.createdAt]).then((row) => {
                 t.deepEqual(
                     row,
                     {
@@ -114,13 +102,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.fail("Should exist");
             });
 
-            await myTable.fetchOneByCandidateKey(
-                connection,
-                {
+            await myTable.whereEqCandidateKey({
                     myTableId : BigInt(1),
-                },
-                columns => [columns.createdAt, columns.myTableId]
-            ).then((row) => {
+                }).fetchOne(connection, columns => [columns.createdAt, columns.myTableId]).then((row) => {
                 t.deepEqual(
                     row,
                     {
@@ -132,16 +116,12 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.fail("Should exist");
             });
 
-            await myTable.fetchOneByCandidateKey(
-                connection,
-                {
+            await myTable.whereEqCandidateKey({
                     myTableId : BigInt(1),
-                },
-                columns => [
+                }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("dayAfterCreation")]
-            ).then((row) => {
+                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("dayAfterCreation")]).then((row) => {
                 t.deepEqual(
                     row,
                     {
@@ -156,64 +136,44 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
 
             await myTable.where(() => true).delete(connection);
 
-            await myTable.fetchOneByCandidateKey(
-                connection,
-                {
+            await myTable.whereEqCandidateKey({
                     myTableId : BigInt(1),
-                },
-                columns => [columns]
-            ).then(() => {
+                }).fetchOne(connection, columns => [columns]).then(() => {
                 t.fail("Should not exist");
             }).catch(() => {
                 t.pass();
             });
 
-            await myTable.fetchOneByCandidateKey(
-                connection,
-                {
+            await myTable.whereEqCandidateKey({
                     myTableId : BigInt(1),
-                },
-                columns => [columns.myTableId]
-            ).then(() => {
+                }).fetchOne(connection, columns => [columns.myTableId]).then(() => {
                 t.fail("Should not exist");
             }).catch(() => {
                 t.pass();
             });
 
-            await myTable.fetchOneByCandidateKey(
-                connection,
-                {
+            await myTable.whereEqCandidateKey({
                     myTableId : BigInt(1),
-                },
-                columns => [columns.createdAt]
-            ).then(() => {
+                }).fetchOne(connection, columns => [columns.createdAt]).then(() => {
                 t.fail("Should not exist");
             }).catch(() => {
                 t.pass();
             });
 
-            await myTable.fetchOneByCandidateKey(
-                connection,
-                {
+            await myTable.whereEqCandidateKey({
                     myTableId : BigInt(1),
-                },
-                columns => [columns.createdAt, columns.myTableId]
-            ).then(() => {
+                }).fetchOne(connection, columns => [columns.createdAt, columns.myTableId]).then(() => {
                 t.fail("Should not exist");
             }).catch(() => {
                 t.pass();
             });
 
-            await myTable.fetchOneByCandidateKey(
-                connection,
-                {
+            await myTable.whereEqCandidateKey({
                     myTableId : BigInt(1),
-                },
-                columns => [
+                }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("dayAfterCreation")]
-            ).then(() => {
+                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("dayAfterCreation")]).then(() => {
                 t.fail("Should not exist");
             }).catch(() => {
                 t.pass();

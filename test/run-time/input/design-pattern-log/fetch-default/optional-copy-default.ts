@@ -34,11 +34,7 @@ export const businessEnabledLog = tsql.log(businessEnabled)
         c.updatedByExternalUserId
     ])
     .setCopyDefaults(async ({ownerPrimaryKey, connection}) => {
-        const {appId} = await business.fetchOneByPrimaryKey(
-            connection,
-            ownerPrimaryKey,
-            c => [c.appId]
-        );
+        const {appId} = await business.whereEqPrimaryKey(ownerPrimaryKey).fetchOne(connection, c => [c.appId]);
         return {
             appId : tsql.integer.add(appId, BigInt(0)),
         };

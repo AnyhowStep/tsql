@@ -92,7 +92,7 @@ tape(__filename, async (t) => {
             t.deepEqual(onRollbackInvoked, false);
 
             t.deepEqual(
-                await test.fetchOneByPrimaryKey(connection, { testId : BigInt(4) }),
+                await test.whereEqPrimaryKey({ testId : BigInt(4) }).fetchOne(connection),
                 {
                     testId : BigInt(4),
                     testVal : BigInt(444),
@@ -116,7 +116,7 @@ tape(__filename, async (t) => {
 
         await pool
             .acquire(async (connection) => {
-                return test.fetchOneByPrimaryKey(connection, { testId : BigInt(4) });
+                return test.whereEqPrimaryKey({ testId : BigInt(4) }).fetchOne(connection);
             }).then(() => {
                 t.fail("Should not exist");
             }).catch((err) => {

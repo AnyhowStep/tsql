@@ -210,11 +210,12 @@ export const lightbulbStateLog = tsql
      * When subsequent rows are added, the value of `copy` columns is copied over to the new rows.
      */
     .setCopyDefaults(({ownerPrimaryKey, connection}) : Promise<{ householdId : bigint }> => {
-        return lightbulb.fetchOneByPrimaryKey(
-            connection,
-            ownerPrimaryKey,
-            columns => [columns.householdId]
-        );
+        return lightbulb
+            .whereEqPrimaryKey(ownerPrimaryKey)
+            .fetchOne(
+                connection,
+                columns => [columns.householdId]
+            );
     })
     /**
      * Contains the default value of all tracked columns.

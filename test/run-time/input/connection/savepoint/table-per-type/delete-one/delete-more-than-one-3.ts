@@ -75,12 +75,9 @@ tape(__filename, async (t) => {
                     t.true(err instanceof tsql.TooManyRowsFoundError);
                 });
 
-                await specialServerAppKey.fetchOneByPrimaryKey(
-                    connection,
-                    {
+                await specialServerAppKey.whereEqPrimaryKey({
                         appKeyId : BigInt(1),
-                    }
-                ).then((row) => {
+                    }).fetchOne(connection).then((row) => {
                     t.deepEqual(row, {
                         appKeyId : BigInt(1),
                     });

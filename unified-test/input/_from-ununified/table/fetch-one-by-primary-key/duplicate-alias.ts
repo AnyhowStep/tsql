@@ -62,17 +62,13 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     ]
                 );
 
-            await myTable.fetchOneByPrimaryKey(
-                connection,
-                {
+            await myTable.whereEqPrimaryKey({
                     myTableId : BigInt(1),
-                },
-                columns => [
+                }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
                     tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("createdAt")
-                ]
-            ).then((row) => {
+                ]).then((row) => {
                 t.deepEqual(
                     row,
                     {
@@ -89,21 +85,17 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.fail("Should exist");
             });
 
-            await myTable.fetchOneByPrimaryKey(
-                connection,
-                {
+            await myTable.whereEqPrimaryKey({
                     myTableId : BigInt(1),
                     /**
                      * This should get ignored as it is not part of the candidate key.
                      */
                     createdAt : new Date(),
-                } as any,
-                columns => [
+                } as any).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
                     tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("createdAt")
-                ]
-            ).then((row) => {
+                ]).then((row) => {
                 t.deepEqual(
                     row,
                     {
@@ -120,17 +112,13 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.fail("Should exist");
             });
 
-            await myTable.fetchOneByPrimaryKey(
-                connection,
-                {
+            await myTable.whereEqPrimaryKey({
                     myTableId : BigInt(1),
-                },
-                columns => [
+                }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
                     tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("myTableId")
-                ]
-            ).then((row) => {
+                ]).then((row) => {
                 t.deepEqual(
                     row,
                     {
@@ -147,21 +135,17 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.fail("Should exist");
             });
 
-            await myTable.fetchOneByPrimaryKey(
-                connection,
-                {
+            await myTable.whereEqPrimaryKey({
                     myTableId : BigInt(1),
                     /**
                      * This should get ignored as it is not part of the candidate key.
                      */
                     createdAt : new Date(),
-                } as any,
-                columns => [
+                } as any).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
                     tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("myTableId")
-                ]
-            ).then((row) => {
+                ]).then((row) => {
                 t.deepEqual(
                     row,
                     {
@@ -178,17 +162,13 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.fail("Should exist");
             });
 
-            await myTable.fetchOneByPrimaryKey(
-                connection,
-                {
+            await myTable.whereEqPrimaryKey({
                     myTableId : BigInt(100),
-                },
-                columns => [
+                }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
                     tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("createdAt")
-                ]
-            ).then(() => {
+                ]).then(() => {
                 t.fail("Should not exist");
             }).catch(() => {
                 t.pass();
@@ -196,89 +176,69 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
 
             await myTable.where(() => true).delete(connection);
 
-            await myTable.fetchOneByPrimaryKey(
-                connection,
-                {
+            await myTable.whereEqPrimaryKey({
                     myTableId : BigInt(1),
-                },
-                columns => [
+                }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
                     tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("createdAt")
-                ]
-            ).then(() => {
+                ]).then(() => {
                 t.fail("Should not exist");
             }).catch(() => {
                 t.pass();
             });
 
-            await myTable.fetchOneByPrimaryKey(
-                connection,
-                {
+            await myTable.whereEqPrimaryKey({
                     myTableId : BigInt(1),
                     /**
                      * This should get ignored as it is not part of the candidate key.
                      */
                     createdAt : new Date(),
-                } as any,
-                columns => [
+                } as any).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
                     tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("createdAt")
-                ]
-            ).then(() => {
+                ]).then(() => {
                 t.fail("Should not exist");
             }).catch(() => {
                 t.pass();
             });
 
-            await myTable.fetchOneByPrimaryKey(
-                connection,
-                {
+            await myTable.whereEqPrimaryKey({
                     myTableId : BigInt(1),
-                },
-                columns => [
+                }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
                     tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("myTableId")
-                ]
-            ).then(() => {
+                ]).then(() => {
                 t.fail("Should not exist");
             }).catch(() => {
                 t.pass();
             });
 
-            await myTable.fetchOneByPrimaryKey(
-                connection,
-                {
+            await myTable.whereEqPrimaryKey({
                     myTableId : BigInt(1),
                     /**
                      * This should get ignored as it is not part of the candidate key.
                      */
                     createdAt : new Date(),
-                } as any,
-                columns => [
+                } as any).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
                     tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("myTableId")
-                ]
-            ).then(() => {
+                ]).then(() => {
                 t.fail("Should not exist");
             }).catch(() => {
                 t.pass();
             });
 
-            await myTable.fetchOneByPrimaryKey(
-                connection,
-                {
+            await myTable.whereEqPrimaryKey({
                     myTableId : BigInt(100),
-                },
-                columns => [
+                }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
                     tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("createdAt")
-                ]
-            ).then(() => {
+                ]).then(() => {
                 t.fail("Should not exist");
             }).catch(() => {
                 t.pass();

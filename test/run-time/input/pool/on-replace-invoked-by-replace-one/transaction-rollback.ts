@@ -87,7 +87,7 @@ tape(__filename, async (t) => {
 
         await pool
             .acquire(async (connection) => {
-                return test.fetchOneByPrimaryKey(connection, { testId : BigInt(4) });
+                return test.whereEqPrimaryKey({ testId : BigInt(4) }).fetchOne(connection);
             }).then(() => {
                 t.fail("Should not exist");
             }).catch((err) => {

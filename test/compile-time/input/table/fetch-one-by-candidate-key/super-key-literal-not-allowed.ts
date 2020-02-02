@@ -8,21 +8,23 @@ const myTable = tsql.table("myTable")
     })
     .setPrimaryKey(columns => [columns.myTableId]);
 
-export const fetchedRow0 = myTable.fetchOneByCandidateKey(
-    null as any,
-    {
+export const fetchedRow0 = myTable
+    .whereEqCandidateKey({
         myTableId : BigInt(1),
         createdAt : new Date(),
-    }
-);
+    })
+    .fetchOne(
+        null as any
+    );
 
-export const fetchedRow1 = myTable.fetchOneByCandidateKey(
-    null as any,
-    {
+export const fetchedRow1 = myTable
+    .whereEqCandidateKey({
         myTableId : BigInt(1),
         createdAt : new Date(),
     } as {
         myTableId : bigint,
         createdAt : Date,
-    }
-);
+    })
+    .fetchOne(
+        null as any
+    );
