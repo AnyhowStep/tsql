@@ -5,7 +5,7 @@ import {FromClauseUtil} from "../../../from-clause";
 import {IsolableUpdateConnection} from "../../connection";
 import * as impl from "./update";
 import {TooManyRowsFoundError} from "../../../error";
-import {AssignmentMapDelegate, BuiltInAssignmentMap} from "../../../update";
+import {AssignmentMapDelegate, BuiltInAssignmentMap, CustomAssignmentMap} from "../../../update";
 import {UpdateOneResult} from "./update-one";
 import {UpdateEvent} from "../../../event";
 import {IsolationLevel} from "../../../isolation-level";
@@ -35,7 +35,8 @@ export type UpdateZeroOrOneResult =
 ;
 
 export async function updateZeroOrOneImplNoEvent<
-    TableT extends ITable
+    TableT extends ITable,
+    AssignmentMapT extends CustomAssignmentMap<TableT>
 > (
     table : TableT,
     connection : IsolableUpdateConnection,
@@ -45,7 +46,7 @@ export async function updateZeroOrOneImplNoEvent<
             TableT
         >
     >,
-    assignmentMapDelegate : AssignmentMapDelegate<TableT>
+    assignmentMapDelegate : AssignmentMapDelegate<TableT, AssignmentMapT>
 ) : Promise<{
     whereClause : WhereClause,
     assignmentMap : BuiltInAssignmentMap<TableT>,
@@ -69,7 +70,7 @@ export async function updateZeroOrOneImplNoEvent<
                 whereClause,
                 assignmentMap,
                 updateResult,
-            } = await impl.updateImplNoEvent(
+            } = await impl.updateImplNoEvent<TableT, AssignmentMapT>(
                 table,
                 connection,
                 whereDelegate,
@@ -111,7 +112,8 @@ export async function updateZeroOrOneImplNoEvent<
 }
 
 export async function updateZeroOrOne<
-    TableT extends ITable
+    TableT extends ITable,
+    AssignmentMapT extends CustomAssignmentMap<TableT>
 > (
     table : TableT,
     connection : IsolableUpdateConnection,
@@ -121,14 +123,14 @@ export async function updateZeroOrOne<
             TableT
         >
     >,
-    assignmentMapDelegate : AssignmentMapDelegate<TableT>
+    assignmentMapDelegate : AssignmentMapDelegate<TableT, AssignmentMapT>
 ) : Promise<UpdateZeroOrOneResult> {
     return connection.lock(async (connection) : Promise<UpdateZeroOrOneResult> => {
         const {
             whereClause,
             assignmentMap,
             updateResult,
-        } = await updateZeroOrOneImplNoEvent(
+        } = await updateZeroOrOneImplNoEvent<TableT, AssignmentMapT>(
             table,
             connection,
             whereDelegate,

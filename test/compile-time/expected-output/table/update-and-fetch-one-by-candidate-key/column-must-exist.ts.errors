@@ -1,0 +1,23 @@
+[
+  {
+    "messageText": {
+      "messageText": "Argument of type '() => { testVal: null; doesNotExist: number; }' is not assignable to parameter of type '(columns: { readonly testId: Column<{ tableAlias: \"dst\"; columnAlias: \"testId\"; mapper: Mapper<unknown, bigint>; }>; readonly testVal: Column<{ tableAlias: \"dst\"; columnAlias: \"testVal\"; mapper: Mapper<unknown, bigint | null>; }>; }) => { ...; } & CompileError<...>'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Type '{ testVal: null; doesNotExist: number; }' is not assignable to type '{ testVal: null; doesNotExist: number; } & CompileError<[\"Extra keys found\", \"doesNotExist\"]>'.",
+        "category": 1,
+        "code": 2322,
+        "next": {
+          "messageText": "Property '__compileError' is missing in type '{ testVal: null; doesNotExist: number; }' but required in type 'CompileError<[\"Extra keys found\", \"doesNotExist\"]>'.",
+          "category": 1,
+          "code": 2741
+        }
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 7,
+    "start": 461
+  }
+]

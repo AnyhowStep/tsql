@@ -4,7 +4,7 @@ import * as TableUtil from "./util";
 import {MapperMap} from "../mapper-map";
 import {Ast} from "../ast";
 import {ColumnUtil} from "../column";
-import {ExecutionUtil, InsertOneConnection, InsertOneResult, InsertIgnoreOneResult, InsertIgnoreOneConnection, ReplaceOneResult, ReplaceOneConnection, ReplaceManyResult, ReplaceManyConnection, InsertIgnoreManyResult, InsertIgnoreManyConnection, InsertManyResult, InsertManyConnection, UpdateConnection, UpdateResult, IsolableUpdateConnection, IsolableInsertOneConnection} from "../execution";
+import {ExecutionUtil, InsertOneConnection, InsertOneResult, InsertIgnoreOneResult, InsertIgnoreOneConnection, ReplaceOneResult, ReplaceOneConnection, ReplaceManyResult, ReplaceManyConnection, InsertIgnoreManyResult, InsertIgnoreManyConnection, InsertManyResult, InsertManyConnection, IsolableInsertOneConnection} from "../execution";
 import {CandidateKey_NonUnion} from "../candidate-key";
 import {StrictUnion} from "../type-util";
 import * as ExprLib from "../expr-library";
@@ -14,8 +14,7 @@ import {Row} from "../row";
 import {FromClauseUtil} from "../from-clause";
 import {WhereDelegate} from "../where-clause";
 import {CustomInsertRow} from "../insert";
-import {InsertOneWithAutoIncrementReturnType, InsertIgnoreOneWithAutoIncrementReturnType, UpdateOneResult, ReplaceOneWithAutoIncrementReturnType} from "../execution/util";
-import {AssignmentMapDelegate} from "../update";
+import {InsertOneWithAutoIncrementReturnType, InsertIgnoreOneWithAutoIncrementReturnType, ReplaceOneWithAutoIncrementReturnType} from "../execution/util";
 import {TableWhere} from "../table-where";
 
 export class Table<DataT extends TableData> implements ITable {
@@ -557,78 +556,6 @@ export class Table<DataT extends TableData> implements ITable {
             this,
             connection,
             rows
-        );
-    }
-
-    update (
-        connection : UpdateConnection,
-        whereDelegate : WhereDelegate<
-            FromClauseUtil.From<
-                FromClauseUtil.NewInstance,
-                this
-            >
-        >,
-        assignmentMapDelegate : AssignmentMapDelegate<this>
-    ) : Promise<UpdateResult> {
-        return ExecutionUtil.update(this, connection, whereDelegate, assignmentMapDelegate);
-    }
-
-    updateOne (
-        connection : IsolableUpdateConnection,
-        whereDelegate : WhereDelegate<
-            FromClauseUtil.From<
-                FromClauseUtil.NewInstance,
-                this
-            >
-        >,
-        assignmentMapDelegate : AssignmentMapDelegate<this>
-    ) : Promise<UpdateOneResult> {
-        return ExecutionUtil.updateOne(this, connection, whereDelegate, assignmentMapDelegate);
-    }
-
-    updateOneByCandidateKey (
-        connection : IsolableUpdateConnection,
-        candidateKey : StrictUnion<CandidateKey_NonUnion<this>>,
-        assignmentMapDelegate : AssignmentMapDelegate<this>
-    ) : Promise<UpdateOneResult> {
-        return this.updateOne(
-            connection,
-            () => ExprLib.eqCandidateKey(
-                this,
-                candidateKey
-            ) as any,
-            assignmentMapDelegate
-        );
-    }
-
-    updateOneByPrimaryKey (
-        this : Extract<this, TableWithPrimaryKey>,
-        connection : IsolableUpdateConnection,
-        primaryKey : PrimaryKey_Input<Extract<this, TableWithPrimaryKey>>,
-        assignmentMapDelegate : AssignmentMapDelegate<this>
-    ) : Promise<UpdateOneResult> {
-        return this.updateOne(
-            connection,
-            () => ExprLib.eqPrimaryKey(
-                this,
-                primaryKey
-            ) as any,
-            assignmentMapDelegate
-        );
-    }
-
-    updateOneBySuperKey (
-        connection : IsolableUpdateConnection,
-        superKey : SuperKey_Input<this>,
-        assignmentMapDelegate : AssignmentMapDelegate<this>
-    ) : Promise<UpdateOneResult> {
-        return this.updateOne(
-            connection,
-            () => ExprLib.eqSuperKey(
-                this,
-                superKey
-            ) as any,
-            assignmentMapDelegate
         );
     }
 

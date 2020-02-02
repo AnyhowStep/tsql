@@ -18,7 +18,7 @@ import {FromClauseUtil} from "../from-clause";
 import {QueryUtil} from "../unified-query";
 import {TableUtil} from "../table";
 import {AnyBuiltInExpr} from "../built-in-expr";
-import {AssignmentMapDelegate} from "../update";
+import {AssignmentMapDelegate, CustomAssignmentMap} from "../update";
 import {ExpandPick} from "../type-util";
 import {UpdateOneResult, UpdateZeroOrOneResult} from "../execution/util";
 
@@ -207,11 +207,13 @@ export class TableWhere<TableT extends ITable> {
         );
     }
 
-    update (
+    update<
+        AssignmentMapT extends CustomAssignmentMap<TableT>
+    > (
         connection : UpdateConnection,
-        assignmentMapDelegate : AssignmentMapDelegate<ExpandPick<TableT, "columns"|"mutableColumns">>
+        assignmentMapDelegate : AssignmentMapDelegate<ExpandPick<TableT, "columns"|"mutableColumns">, AssignmentMapT>
     ) : Promise<UpdateResult> {
-        return ExecutionUtil.update<TableT>(
+        return ExecutionUtil.update<TableT, AssignmentMapT>(
             this.table,
             connection,
             this.whereDelegate,
@@ -219,11 +221,13 @@ export class TableWhere<TableT extends ITable> {
         );
     }
 
-    updateOne (
+    updateOne<
+        AssignmentMapT extends CustomAssignmentMap<TableT>
+    > (
         connection : IsolableUpdateConnection,
-        assignmentMapDelegate : AssignmentMapDelegate<ExpandPick<TableT, "columns"|"mutableColumns">>
+        assignmentMapDelegate : AssignmentMapDelegate<ExpandPick<TableT, "columns"|"mutableColumns">, AssignmentMapT>
     ) : Promise<UpdateOneResult> {
-        return ExecutionUtil.updateOne<TableT>(
+        return ExecutionUtil.updateOne<TableT, AssignmentMapT>(
             this.table,
             connection,
             this.whereDelegate,
@@ -231,11 +235,13 @@ export class TableWhere<TableT extends ITable> {
         );
     }
 
-    updateZeroOrOne (
+    updateZeroOrOne<
+        AssignmentMapT extends CustomAssignmentMap<TableT>
+    > (
         connection : IsolableUpdateConnection,
-        assignmentMapDelegate : AssignmentMapDelegate<ExpandPick<TableT, "columns"|"mutableColumns">>
+        assignmentMapDelegate : AssignmentMapDelegate<ExpandPick<TableT, "columns"|"mutableColumns">, AssignmentMapT>
     ) : Promise<UpdateZeroOrOneResult> {
-        return ExecutionUtil.updateZeroOrOne<TableT>(
+        return ExecutionUtil.updateZeroOrOne<TableT, AssignmentMapT>(
             this.table,
             connection,
             this.whereDelegate,

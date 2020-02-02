@@ -31,12 +31,12 @@ tape(__filename, async (t) => {
 
         await connection.transaction(async (connection) => {
             await connection.savepoint(async (connection) => {
-                await dst.updateOne(
-                    connection,
+                await dst.where(
                     columns => tsql.gtEq(
                         columns.testVal,
                         BigInt(200)
-                    ),
+                    )).updateOne(
+                    connection,
                     () => {
                         return {
                             testVal : BigInt(999),

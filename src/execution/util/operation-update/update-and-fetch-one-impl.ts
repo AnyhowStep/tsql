@@ -102,11 +102,11 @@ export async function updateAndFetchOneImpl<
                 const {
                     whereClause : updateWhereClause,
                     updateResult : updateOneResult,
-                } = await updateOneImplNoEvent(
+                } = await updateOneImplNoEvent<TableT, AssignmentMapT>(
                     table,
                     connection,
                     updateWhereDelegate,
-                    () => assignmentMap
+                    () => assignmentMap as any
                 );
                 const row = await TableUtil.__fetchOneHelper(
                     table,
