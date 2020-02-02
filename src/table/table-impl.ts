@@ -14,7 +14,7 @@ import {Row} from "../row";
 import {FromClauseUtil} from "../from-clause";
 import {WhereDelegate} from "../where-clause";
 import {CustomInsertRow} from "../insert";
-import {InsertOneWithAutoIncrementReturnType, InsertIgnoreOneWithAutoIncrementReturnType, DeleteOneResult, DeleteZeroOrOneResult, UpdateOneResult, UpdateZeroOrOneResult, ReplaceOneWithAutoIncrementReturnType} from "../execution/util";
+import {InsertOneWithAutoIncrementReturnType, InsertIgnoreOneWithAutoIncrementReturnType, DeleteOneResult, UpdateOneResult, UpdateZeroOrOneResult, ReplaceOneWithAutoIncrementReturnType} from "../execution/util";
 import {AssignmentMapDelegate} from "../update";
 import {TableWhere} from "../table-where";
 
@@ -586,19 +586,6 @@ export class Table<DataT extends TableData> implements ITable {
         return ExecutionUtil.deleteOne(this, connection, whereDelegate);
     }
 
-    deleteZeroOrOne (
-        this : Extract<this, DeletableTable>,
-        connection : IsolableDeleteConnection,
-        whereDelegate : WhereDelegate<
-            FromClauseUtil.From<
-                FromClauseUtil.NewInstance,
-                Extract<this, DeletableTable>
-            >
-        >
-    ) : Promise<DeleteZeroOrOneResult> {
-        return ExecutionUtil.deleteZeroOrOne(this, connection, whereDelegate);
-    }
-
     deleteOneByCandidateKey (
         this : Extract<this, DeletableTable>,
         connection : IsolableDeleteConnection,
@@ -633,48 +620,6 @@ export class Table<DataT extends TableData> implements ITable {
         superKey : SuperKey_Input<this>
     ) : Promise<DeleteOneResult> {
         return this.deleteOne(
-            connection,
-            () => ExprLib.eqSuperKey(
-                this,
-                superKey
-            ) as any
-        );
-    }
-
-    deleteZeroOrOneByCandidateKey (
-        this : Extract<this, DeletableTable>,
-        connection : IsolableDeleteConnection,
-        candidateKey : StrictUnion<CandidateKey_NonUnion<this>>
-    ) : Promise<DeleteZeroOrOneResult> {
-        return this.deleteZeroOrOne(
-            connection,
-            () => ExprLib.eqCandidateKey(
-                this,
-                candidateKey
-            ) as any
-        );
-    }
-
-    deleteZeroOrOneByPrimaryKey (
-        this : Extract<this, DeletableTable & TableWithPrimaryKey>,
-        connection : IsolableDeleteConnection,
-        primaryKey : PrimaryKey_Input<Extract<this, DeletableTable & TableWithPrimaryKey>>
-    ) : Promise<DeleteZeroOrOneResult> {
-        return this.deleteZeroOrOne(
-            connection,
-            () => ExprLib.eqPrimaryKey(
-                this,
-                primaryKey
-            ) as any
-        );
-    }
-
-    deleteZeroOrOneBySuperKey (
-        this : Extract<this, DeletableTable>,
-        connection : IsolableDeleteConnection,
-        superKey : SuperKey_Input<this>
-    ) : Promise<DeleteZeroOrOneResult> {
-        return this.deleteZeroOrOne(
             connection,
             () => ExprLib.eqSuperKey(
                 this,

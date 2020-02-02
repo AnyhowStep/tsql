@@ -32,13 +32,10 @@ tape(__filename, async (t) => {
          * which should rollback to savepoint,
          * causing no rows to be deleted
          */
-        await dst.deleteZeroOrOne(
-            connection,
-            columns => tsql.gt(
+        await dst.where(columns => tsql.gt(
                 columns.testVal,
                 BigInt(100)
-            )
-        ).then(() => {
+            )).deleteZeroOrOne(connection).then(() => {
             t.fail("Should not be able to delete two rows");
         }).catch((err) => {
             t.true(err instanceof tsql.TooManyRowsFoundError);

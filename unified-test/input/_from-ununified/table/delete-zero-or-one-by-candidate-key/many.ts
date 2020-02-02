@@ -64,12 +64,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     ]
                 );
 
-            return dst.deleteZeroOrOneByCandidateKey(
-                connection,
-                {
+            return dst.whereEqCandidateKey({
                     testId : BigInt(1),
-                }
-            ).then(() => {
+                }).deleteZeroOrOne(connection).then(() => {
                 t.fail("Should not delete anything");
             }).catch((err) => {
                 t.true(err instanceof tsql.TooManyRowsFoundError);
