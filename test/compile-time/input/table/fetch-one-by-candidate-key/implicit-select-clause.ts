@@ -11,9 +11,10 @@ const myTable = tsql.table("myTable")
     })
     .setPrimaryKey(columns => [columns.myTableId]);
 
-export const fetchedRow = myTable.fetchOneByCandidateKey(
-    null as any,
-    {
+export const fetchedRow = myTable
+    .whereEqCandidateKey({
         myTableId : BigInt(1),
-    }
-);
+    })
+    .fetchOne(
+        null as any
+    );

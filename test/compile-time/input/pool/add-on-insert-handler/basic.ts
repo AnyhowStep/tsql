@@ -25,18 +25,20 @@ pool.onInsertOne.addHandler(async (event) => {
 
     event.addOnCommitListener(async () => {
         await event.pool.acquire((connection) => {
-            return joined1.fetchOneByCandidateKey(
-                connection,
-                candidateKey
-            );
+            return joined1
+                .whereEqCandidateKey(candidateKey)
+                .fetchOne(
+                    connection
+                );
         });
     });
     event.addOnRollbackListener(async () => {
         await event.pool.acquire((connection) => {
-            return joined1.fetchOneByCandidateKey(
-                connection,
-                candidateKey
-            );
+            return joined1
+                .whereEqCandidateKey(candidateKey)
+                .fetchOne(
+                    connection
+                );
         });
     });
 

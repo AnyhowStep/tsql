@@ -41,11 +41,12 @@ export const businessInformationLog = tsql.log(businessInformation)
         c.updatedByExternalUserId
     ])
     .setCopyDefaults(({ownerPrimaryKey, connection}) => {
-        return business.fetchOneByPrimaryKey(
-            connection,
-            ownerPrimaryKey,
-            c => [c.appId, c.countryId]
-        );
+        return business
+            .whereEqPrimaryKey(ownerPrimaryKey)
+            .fetchOne(
+                connection,
+                c => [c.appId, c.countryId]
+            );
     })
     .setTrackedDefaults({
         name : undefined,

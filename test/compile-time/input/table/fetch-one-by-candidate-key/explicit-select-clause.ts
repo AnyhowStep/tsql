@@ -8,46 +8,26 @@ const myTable = tsql.table("myTable")
     })
     .setPrimaryKey(columns => [columns.myTableId]);
 
-export const fetchedRow0 = myTable.fetchOneByCandidateKey(
-    null as any,
-    {
+export const fetchedRow0 = myTable.whereEqCandidateKey({
         myTableId : BigInt(1),
-    },
-    columns => [columns]
-);
+    }).fetchOne(null as any, columns => [columns]);
 
-export const fetchedRow1 = myTable.fetchOneByCandidateKey(
-    null as any,
-    {
+export const fetchedRow1 = myTable.whereEqCandidateKey({
         myTableId : BigInt(1),
-    },
-    columns => [columns.myTableId]
-);
+    }).fetchOne(null as any, columns => [columns.myTableId]);
 
-export const fetchedRow2 = myTable.fetchOneByCandidateKey(
-    null as any,
-    {
+export const fetchedRow2 = myTable.whereEqCandidateKey({
         myTableId : BigInt(1),
-    },
-    columns => [columns.createdAt]
-);
+    }).fetchOne(null as any, columns => [columns.createdAt]);
 
-export const fetchedRow3 = myTable.fetchOneByCandidateKey(
-    null as any,
-    {
+export const fetchedRow3 = myTable.whereEqCandidateKey({
         myTableId : BigInt(1),
-    },
-    columns => [columns.createdAt, columns.myTableId]
-);
+    }).fetchOne(null as any, columns => [columns.createdAt, columns.myTableId]);
 
-export const fetchedRow4 = myTable.fetchOneByCandidateKey(
-    null as any,
-    {
+export const fetchedRow4 = myTable.whereEqCandidateKey({
         myTableId : BigInt(1),
-    },
-    columns => [
+    }).fetchOne(null as any, columns => [
         columns.createdAt,
         columns.myTableId,
         tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("dayAfterCreation")
-    ]
-);
+    ]);
