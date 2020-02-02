@@ -31,12 +31,9 @@ tape(__filename, async (t) => {
 
         await connection.transaction(async (connection) => {
             await connection.savepoint(async (connection) => {
-                await dst.updateAndFetchOneByPrimaryKey(
-                    connection,
-                    {
+                await dst.whereEqPrimaryKey({
                         testId : BigInt(2),
-                    },
-                    () => {
+                    }).updateAndFetchOne(connection, () => {
                         return {
                             testVal : BigInt(222),
                         };
