@@ -72,15 +72,13 @@ tape(__filename, async (t) => {
         t.deepEqual(onCommitInvoked, false);
         t.deepEqual(onRollbackInvoked, false);
 
-        await test.delete(
-            connection,
-            () => tsql.eqPrimaryKey(
+        await test.where(() => tsql.eqPrimaryKey(
                 test,
                 {
                     testId : BigInt(4),
                 }
             )
-        ).then(() => {
+        ).delete(connection).then(() => {
             t.fail("Should throw");
         }).catch((err) => {
             t.deepEqual(err.message, "Async throw");

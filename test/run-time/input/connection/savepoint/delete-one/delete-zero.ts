@@ -33,13 +33,11 @@ tape(__filename, async (t) => {
              * which should rollback to savepoint,
              * causing no rows to be deleted
              */
-            await dst.deleteOne(
-                connection,
-                columns => tsql.gt(
+            await dst.where(columns => tsql.gt(
                     columns.testVal,
                     BigInt(300)
                 )
-            ).then(() => {
+            ).deleteOne(connection).then(() => {
                 t.fail("Should not be able to delete zero rows");
             }).catch((err) => {
                 t.true(err instanceof tsql.RowNotFoundError);

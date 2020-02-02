@@ -50,13 +50,11 @@ tape(__filename, async (t) => {
                 /**
                  * This should delete exactly one row.
                  */
-                await dst.deleteOne(
-                    connection,
-                    columns => tsql.eq(
+                await dst.where(columns => tsql.eq(
                         columns.testVal,
                         BigInt(200)
                     )
-                );
+                ).deleteOne(connection);
                 t.deepEqual(handlerInvoked, true);
                 t.deepEqual(commitInvoked, false);
                 t.deepEqual(rollbackInvoked, false);
