@@ -80,14 +80,12 @@ tape(__filename, async (t) => {
             t.deepEqual(commitInvoked, 0);
             t.deepEqual(rollbackInvoked, 1);
 
-            await specialServerAppKey.existsByPrimaryKey(
-                connection,
-                {
-                    appKeyId : BigInt(1),
-                }
-            ).then((result) => {
-                t.deepEqual(result, false);
-            });
+            await specialServerAppKey
+                .whereEqPrimaryKey({ appKeyId : BigInt(1) })
+                .exists(connection)
+                .then((result) => {
+                    t.deepEqual(result, false);
+                });
 
         });
 
@@ -95,14 +93,12 @@ tape(__filename, async (t) => {
         t.deepEqual(commitInvoked, 0);
         t.deepEqual(rollbackInvoked, 1);
 
-        await specialServerAppKey.existsByPrimaryKey(
-            connection,
-            {
-                appKeyId : BigInt(1),
-            }
-        ).then((result) => {
-            t.deepEqual(result, false);
-        });
+        await specialServerAppKey
+            .whereEqPrimaryKey({ appKeyId : BigInt(1) })
+            .exists(connection)
+            .then((result) => {
+                t.deepEqual(result, false);
+            });
     });
 
     await pool.disconnect();

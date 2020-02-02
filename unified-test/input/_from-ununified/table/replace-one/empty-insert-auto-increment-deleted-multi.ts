@@ -102,11 +102,15 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
 
         await pool
             .acquire(async (connection) => {
-                await test.existsByPrimaryKey(connection, { testId : BigInt(2) })
+                await test
+                .whereEqPrimaryKey({ testId : BigInt(2) })
+                .exists(connection)
                     .then((result) => {
                         t.deepEqual(result, false);
                     });
-                await test.existsByPrimaryKey(connection, { testId : BigInt(3) })
+                await test
+                    .whereEqPrimaryKey({ testId : BigInt(3) })
+                    .exists(connection)
                     .then((result) => {
                         t.deepEqual(result, false);
                     });

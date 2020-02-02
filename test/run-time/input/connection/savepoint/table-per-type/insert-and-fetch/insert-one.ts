@@ -72,14 +72,12 @@ tape(__filename, async (t) => {
         t.deepEqual(commitInvoked, 3);
         t.deepEqual(rollbackInvoked, 0);
 
-        await specialServerAppKey.existsByPrimaryKey(
-            connection,
-            {
-                appKeyId : BigInt(1),
-            }
-        ).then((result) => {
-            t.deepEqual(result, true);
-        });
+        await specialServerAppKey
+            .whereEqPrimaryKey({ appKeyId : BigInt(1) })
+            .exists(connection)
+            .then((result) => {
+                t.deepEqual(result, true);
+            });
     });
 
     await pool.disconnect();
