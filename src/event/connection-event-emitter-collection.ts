@@ -10,11 +10,13 @@ import {IUpdateEvent} from "./update-event";
 import {IUpdateAndFetchEvent} from "./update-and-fetch-event";
 import {IDeleteEvent} from "./delete-event";
 import {IReplaceOneEvent} from "./replace-one-event";
+import {IInsertSelectEvent} from "./insert-select-event";
 
 export interface IConnectionEventEmitterCollection {
     readonly onInsert : IConnectionEventEmitter<IInsertEvent<ITable>>;
     readonly onInsertOne : IConnectionEventEmitter<IInsertOneEvent<ITable>>;
     readonly onInsertAndFetch : IConnectionEventEmitter<IInsertAndFetchEvent<ITable>>;
+    readonly onInsertSelect : IConnectionEventEmitter<IInsertSelectEvent<ITable>>;
 
     readonly onReplace : IConnectionEventEmitter<IReplaceEvent<ITable>>;
     readonly onReplaceOne : IConnectionEventEmitter<IReplaceOneEvent<ITable>>;
@@ -123,6 +125,7 @@ export class ConnectionEventEmitterCollection implements IConnectionEventEmitter
     readonly onInsert : IConnectionEventEmitter<IInsertEvent<ITable>>;
     readonly onInsertOne : ConnectionEventEmitter<IInsertOneEvent<ITable>>;
     readonly onInsertAndFetch : IConnectionEventEmitter<IInsertAndFetchEvent<ITable>>;
+    readonly onInsertSelect : IConnectionEventEmitter<IInsertSelectEvent<ITable>>;
 
     readonly onReplace : IConnectionEventEmitter<IReplaceEvent<ITable>>;
     readonly onReplaceOne : IConnectionEventEmitter<IReplaceOneEvent<ITable>>;
@@ -163,6 +166,10 @@ export class ConnectionEventEmitterCollection implements IConnectionEventEmitter
         );
         this.onInsertAndFetch = new ConnectionEventEmitter<IInsertAndFetchEvent<ITable>>(
             pool.onInsertAndFetch,
+            this.addTransactionListenerCollectionImpl
+        );
+        this.onInsertSelect = new ConnectionEventEmitter<IInsertSelectEvent<ITable>>(
+            pool.onInsertSelect,
             this.addTransactionListenerCollectionImpl
         );
 
