@@ -11,13 +11,10 @@ const dst = tsql.table("dst")
         columns.testId,
         columns.testVal,
     ]);
-export const p = dst.updateAndFetchOneBySuperKey(
-    null as any,
-    {
+export const p = dst.whereEqSuperKey({
         testId : BigInt(1),
         testVal : BigInt(1),
-    },
-    () => {
+    }).updateAndFetchOne(null as any, () => {
         return {
             testId : BigInt(123456),
             testVal : BigInt(654321),

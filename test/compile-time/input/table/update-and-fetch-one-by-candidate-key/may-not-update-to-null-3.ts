@@ -10,12 +10,9 @@ const dst = tsql.table("dst")
     .addMutable(columns => [
         columns.testVal,
     ]);
-export const p = dst.updateAndFetchOneByCandidateKey(
-    null as any,
-    {
+export const p = dst.whereEqCandidateKey({
         testId : BigInt(1),
-    },
-    () => {
+    }).updateAndFetchOne(null as any, () => {
         return Math.random() > 0.5 ?
             {} :
             {

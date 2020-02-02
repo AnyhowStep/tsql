@@ -9,13 +9,10 @@ const dst = tsql.table("dst")
     .addCandidateKey(columns => [columns.idA, columns.idB])
     .addAllMutable();
 
-export const p = dst.updateAndFetchOneByCandidateKey(
-    null as any,
-    {
+export const p = dst.whereEqCandidateKey({
         idA : BigInt(1),
         idB : BigInt(1),
-    },
-    () => {
+    }).updateAndFetchOne(null as any, () => {
         return {
             idA : BigInt(123456),
             idB : BigInt(654321),
