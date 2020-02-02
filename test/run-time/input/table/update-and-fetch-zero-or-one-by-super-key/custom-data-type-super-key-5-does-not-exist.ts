@@ -58,9 +58,7 @@ tape(__filename, async (t) => {
             );
         `);
 
-        return test.updateAndFetchZeroOrOneBySuperKey(
-            connection,
-            {
+        return test.whereEqSuperKey({
                 testId : {
                     x : 100,
                     y : 200,
@@ -69,8 +67,7 @@ tape(__filename, async (t) => {
                     x : 1,
                     y : 2,
                 },
-            },
-            (columns) => {
+            }).updateAndFetchZeroOrOne(connection, (columns) => {
                 return {
                     testId : replaceX(columns.testId, 1111),
                     testVal : replaceX(columns.testVal, 111),

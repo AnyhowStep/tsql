@@ -73,12 +73,9 @@ tape(__filename, async (t) => {
         t.deepEqual(onCommitInvoked, false);
         t.deepEqual(onRollbackInvoked, false);
 
-        await test.updateAndFetchZeroOrOneByCandidateKey(
-            connection,
-            {
+        await test.whereEqCandidateKey({
                 testId : BigInt(4),
-            },
-            () => {
+            }).updateAndFetchZeroOrOne(connection, () => {
                 return {
                     testVal : BigInt(444),
                 };

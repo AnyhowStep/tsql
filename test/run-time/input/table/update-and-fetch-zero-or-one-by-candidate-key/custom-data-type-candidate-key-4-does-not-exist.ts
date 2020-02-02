@@ -58,15 +58,12 @@ tape(__filename, async (t) => {
             );
         `);
 
-        return test.updateAndFetchZeroOrOneByCandidateKey(
-            connection,
-            {
+        return test.whereEqCandidateKey({
                 testId : {
                     x : 100,
                     y : 200,
                 },
-            },
-            (columns) => {
+            }).updateAndFetchZeroOrOne(connection, (columns) => {
                 return {
                     testId : replaceX(columns.testId, 1111),
                     testVal : replaceX(columns.testVal, 111),

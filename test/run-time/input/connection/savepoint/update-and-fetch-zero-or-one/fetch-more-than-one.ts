@@ -31,12 +31,9 @@ tape(__filename, async (t) => {
                 (9,999);
         `);
 
-        await dst.updateAndFetchZeroOrOneByPrimaryKey(
-            connection,
-            {
+        await dst.whereEqPrimaryKey({
                 testId : BigInt(2),
-            },
-            () => {
+            }).updateAndFetchZeroOrOne(connection, () => {
                 return {
                     testId : BigInt(9),
                 };
