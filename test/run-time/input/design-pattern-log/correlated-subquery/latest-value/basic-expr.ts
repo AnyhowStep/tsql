@@ -81,19 +81,13 @@ tape(__filename, async (t) => {
             }
         ]);
 
-        await business.fetchValueByPrimaryKey(
-            connection,
-            { businessId : BigInt(2) },
-            () => businessEnabledLog
+        await business.whereEqPrimaryKey({ businessId : BigInt(2) }).fetchValue(connection, () => businessEnabledLog
                 .correlatedSubquery
                 .latestValue(columns => tsql.not(columns.businessEnabled.enabled))
         ).then((result) => {
             t.deepEqual(result, null);
         });
-        await business.fetchValueByPrimaryKey(
-            connection,
-            { businessId : BigInt(1) },
-            () => businessEnabledLog
+        await business.whereEqPrimaryKey({ businessId : BigInt(1) }).fetchValue(connection, () => businessEnabledLog
                 .correlatedSubquery
                 .latestValue(columns => tsql.not(columns.businessEnabled.enabled))
         ).then((result) => {
@@ -111,19 +105,13 @@ tape(__filename, async (t) => {
                 updatedByExternalUserId : "test",
             }
         );
-        await business.fetchValueByPrimaryKey(
-            connection,
-            { businessId : BigInt(2) },
-            () => businessEnabledLog
+        await business.whereEqPrimaryKey({ businessId : BigInt(2) }).fetchValue(connection, () => businessEnabledLog
                 .correlatedSubquery
                 .latestValue(columns => tsql.not(columns.businessEnabled.enabled))
         ).then((result) => {
             t.deepEqual(result, false);
         });
-        await business.fetchValueByPrimaryKey(
-            connection,
-            { businessId : BigInt(1) },
-            () => businessEnabledLog
+        await business.whereEqPrimaryKey({ businessId : BigInt(1) }).fetchValue(connection, () => businessEnabledLog
                 .correlatedSubquery
                 .latestValue(columns => tsql.not(columns.businessEnabled.enabled))
         ).then((result) => {
@@ -141,19 +129,13 @@ tape(__filename, async (t) => {
                 updatedByExternalUserId : "test2",
             }
         );
-        await business.fetchValueByPrimaryKey(
-            connection,
-            { businessId : BigInt(2) },
-            () => businessEnabledLog
+        await business.whereEqPrimaryKey({ businessId : BigInt(2) }).fetchValue(connection, () => businessEnabledLog
                 .correlatedSubquery
                 .latestValue(columns => tsql.not(columns.businessEnabled.enabled))
         ).then((result) => {
             t.deepEqual(result, true);
         });
-        await business.fetchValueByPrimaryKey(
-            connection,
-            { businessId : BigInt(1) },
-            () => businessEnabledLog
+        await business.whereEqPrimaryKey({ businessId : BigInt(1) }).fetchValue(connection, () => businessEnabledLog
                 .correlatedSubquery
                 .latestValue(columns => tsql.not(columns.businessEnabled.enabled))
         ).then((result) => {

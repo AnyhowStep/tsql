@@ -114,11 +114,12 @@ tape(__filename, async (t) => {
 
     await pool
         .acquire(async (connection) => {
-            return test.fetchValue(
-                connection,
-                () => true,
-                () => tsql.countAll()
-            );
+            return test
+                .where(() => true)
+                .fetchValue(
+                    connection,
+                    () => tsql.countAll()
+                );
         })
         .then((row) => {
             t.deepEqual(

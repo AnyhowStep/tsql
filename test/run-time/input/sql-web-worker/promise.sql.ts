@@ -610,13 +610,14 @@ export class Connection {
     }
 
     private async fetchTableStructure (tableName : string) {
-        const sql = await sqlite_master.fetchValueByPrimaryKey(
-            this,
-            {
+        const sql = await sqlite_master
+            .whereEqPrimaryKey({
                 name : tableName,
-            },
-            columns => columns.sql
-        );
+            })
+            .fetchValue(
+                this,
+                columns => columns.sql
+            );
         if (sql == undefined) {
             throw new Error(`Table ${tableName} should have SQL string`);
         }

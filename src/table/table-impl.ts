@@ -4,18 +4,15 @@ import * as TableUtil from "./util";
 import {MapperMap} from "../mapper-map";
 import {Ast} from "../ast";
 import {ColumnUtil} from "../column";
-import {SelectConnection, ExecutionUtil, DeleteConnection, InsertOneConnection, InsertOneResult, DeleteResult, InsertIgnoreOneResult, InsertIgnoreOneConnection, ReplaceOneResult, ReplaceOneConnection, ReplaceManyResult, ReplaceManyConnection, InsertIgnoreManyResult, InsertIgnoreManyConnection, InsertManyResult, InsertManyConnection, IsolableDeleteConnection, UpdateConnection, UpdateResult, IsolableUpdateConnection, IsolableInsertOneConnection} from "../execution";
+import {ExecutionUtil, DeleteConnection, InsertOneConnection, InsertOneResult, DeleteResult, InsertIgnoreOneResult, InsertIgnoreOneConnection, ReplaceOneResult, ReplaceOneConnection, ReplaceManyResult, ReplaceManyConnection, InsertIgnoreManyResult, InsertIgnoreManyConnection, InsertManyResult, InsertManyConnection, IsolableDeleteConnection, UpdateConnection, UpdateResult, IsolableUpdateConnection, IsolableInsertOneConnection} from "../execution";
 import {CandidateKey_NonUnion} from "../candidate-key";
-import {QueryUtil} from "../unified-query";
 import {StrictUnion, AssertNonUnion} from "../type-util";
 import * as ExprLib from "../expr-library";
 import {PrimaryKey_Input} from "../primary-key";
 import {SuperKey_Input} from "../super-key";
 import {Row} from "../row";
-import {SelectValueDelegate, SelectClauseUtil} from "../select-clause";
 import {FromClauseUtil} from "../from-clause";
 import {WhereDelegate} from "../where-clause";
-import {AnyBuiltInExpr} from "../built-in-expr";
 import {CustomInsertRow} from "../insert";
 import {InsertOneWithAutoIncrementReturnType, InsertIgnoreOneWithAutoIncrementReturnType, DeleteOneResult, DeleteZeroOrOneResult, UpdateOneResult, UpdateZeroOrOneResult, ReplaceOneWithAutoIncrementReturnType} from "../execution/util";
 import {AssignmentMapDelegate} from "../update";
@@ -477,139 +474,6 @@ export class Table<DataT extends TableData> implements ITable {
         TableUtil.PickColumns<this, NewColumnsT>
     ) {
         return TableUtil.pickColumns(this, delegate);
-    }
-
-    fetchValue<
-        BuiltInExprT extends AnyBuiltInExpr
-    > (
-        connection : SelectConnection,
-        whereDelegate : WhereDelegate<
-            FromClauseUtil.From<
-                FromClauseUtil.NewInstance,
-                this
-            >
-        >,
-        selectValueDelegate : SelectValueDelegate<
-            FromClauseUtil.From<
-                FromClauseUtil.NewInstance,
-                this
-            >,
-            undefined,
-            BuiltInExprT
-        >
-    ) : ExecutionUtil.FetchValueReturnType<
-        /**
-         * @todo Report assignability bug to TS issues page
-         */
-        /*
-            QueryUtil.SelectValue<
-                QueryUtil.From<
-                    QueryUtil.NewInstance,
-                    this
-                >,
-                BuiltInExprT
-            >
-        */
-        QueryUtil.SelectNoSelectClause<
-            QueryUtil.From<
-                QueryUtil.NewInstance,
-                this
-            >,
-            SelectClauseUtil.ValueFromBuiltInExpr<BuiltInExprT>
-        >
-    > {
-        return TableUtil.fetchValue<this, BuiltInExprT>(
-            this,
-            connection,
-            whereDelegate,
-            selectValueDelegate
-        );
-    }
-
-    fetchValueByCandidateKey<
-        BuiltInExprT extends AnyBuiltInExpr
-    > (
-        connection : SelectConnection,
-        candidateKey : StrictUnion<CandidateKey_NonUnion<this>>,
-        selectValueDelegate : SelectValueDelegate<
-            FromClauseUtil.From<
-                FromClauseUtil.NewInstance,
-                this
-            >,
-            undefined,
-            BuiltInExprT
-        >
-    ) : ExecutionUtil.FetchValueReturnType<
-        QueryUtil.SelectNoSelectClause<
-            QueryUtil.From<
-                QueryUtil.NewInstance,
-                this
-            >,
-            SelectClauseUtil.ValueFromBuiltInExpr<BuiltInExprT>
-        >
-    > {
-        return this.fetchValue(
-            connection,
-            () => ExprLib.eqCandidateKey(this, candidateKey) as any,
-            selectValueDelegate
-        );
-    }
-    fetchValueByPrimaryKey<
-        BuiltInExprT extends AnyBuiltInExpr
-    > (
-        this : Extract<this, TableWithPrimaryKey>,
-        connection : SelectConnection,
-        primaryKey : PrimaryKey_Input<Extract<this, TableWithPrimaryKey>>,
-        selectValueDelegate : SelectValueDelegate<
-            FromClauseUtil.From<
-                FromClauseUtil.NewInstance,
-                Extract<this, TableWithPrimaryKey>
-            >,
-            undefined,
-            BuiltInExprT
-        >
-    ) : ExecutionUtil.FetchValueReturnType<
-        QueryUtil.SelectNoSelectClause<
-            QueryUtil.From<
-                QueryUtil.NewInstance,
-                Extract<this, TableWithPrimaryKey>
-            >,
-            SelectClauseUtil.ValueFromBuiltInExpr<BuiltInExprT>
-        >
-    > {
-        return this.fetchValue(
-            connection,
-            () => ExprLib.eqPrimaryKey(this, primaryKey) as any,
-            selectValueDelegate
-        );
-    }
-    fetchValueBySuperKey<
-        BuiltInExprT extends AnyBuiltInExpr
-    > (
-        connection : SelectConnection,
-        superKey : SuperKey_Input<this>,
-        selectValueDelegate : SelectValueDelegate<
-            FromClauseUtil.From<
-                FromClauseUtil.NewInstance,
-                this
-            >,
-            undefined,
-            BuiltInExprT
-        >
-    ) : ExecutionUtil.FetchValueReturnType<
-        QueryUtil.SelectNoSelectClause<
-            QueryUtil.From<
-                QueryUtil.NewInstance,
-                this
-            >,
-            SelectClauseUtil.ValueFromBuiltInExpr<BuiltInExprT>
-        >
-    > {
-        return this.fetchValue(
-            connection,
-            () => ExprLib.eqSuperKey(this, superKey) as any,
-            selectValueDelegate
-        );
     }
 
     insertOne (
