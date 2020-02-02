@@ -4,7 +4,7 @@ import * as TableUtil from "./util";
 import {MapperMap} from "../mapper-map";
 import {Ast} from "../ast";
 import {ColumnUtil} from "../column";
-import {ExecutionUtil, InsertOneConnection, InsertOneResult, InsertIgnoreOneResult, InsertIgnoreOneConnection, ReplaceOneResult, ReplaceOneConnection, ReplaceManyResult, ReplaceManyConnection, InsertIgnoreManyResult, InsertIgnoreManyConnection, InsertManyResult, InsertManyConnection, UpdateConnection, UpdateResult, IsolableInsertOneConnection} from "../execution";
+import {ExecutionUtil, InsertOneConnection, InsertOneResult, InsertIgnoreOneResult, InsertIgnoreOneConnection, ReplaceOneResult, ReplaceOneConnection, ReplaceManyResult, ReplaceManyConnection, InsertIgnoreManyResult, InsertIgnoreManyConnection, InsertManyResult, InsertManyConnection, IsolableInsertOneConnection} from "../execution";
 import {CandidateKey_NonUnion} from "../candidate-key";
 import {StrictUnion} from "../type-util";
 import * as ExprLib from "../expr-library";
@@ -15,7 +15,6 @@ import {FromClauseUtil} from "../from-clause";
 import {WhereDelegate} from "../where-clause";
 import {CustomInsertRow} from "../insert";
 import {InsertOneWithAutoIncrementReturnType, InsertIgnoreOneWithAutoIncrementReturnType, ReplaceOneWithAutoIncrementReturnType} from "../execution/util";
-import {AssignmentMapDelegate, CustomAssignmentMap} from "../update";
 import {TableWhere} from "../table-where";
 
 export class Table<DataT extends TableData> implements ITable {
@@ -558,21 +557,6 @@ export class Table<DataT extends TableData> implements ITable {
             connection,
             rows
         );
-    }
-
-    update<
-        AssignmentMapT extends CustomAssignmentMap<this>
-    > (
-        connection : UpdateConnection,
-        whereDelegate : WhereDelegate<
-            FromClauseUtil.From<
-                FromClauseUtil.NewInstance,
-                this
-            >
-        >,
-        assignmentMapDelegate : AssignmentMapDelegate<this, AssignmentMapT>
-    ) : Promise<UpdateResult> {
-        return ExecutionUtil.update<this, AssignmentMapT>(this, connection, whereDelegate, assignmentMapDelegate);
     }
 
     insertAndFetch (
