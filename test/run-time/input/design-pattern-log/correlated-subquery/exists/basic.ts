@@ -81,17 +81,11 @@ tape(__filename, async (t) => {
             }
         ]);
 
-        await business.fetchValueByPrimaryKey(
-            connection,
-            { businessId : BigInt(2) },
-            () => businessEnabledLog.correlatedSubquery.exists()
+        await business.whereEqPrimaryKey({ businessId : BigInt(2) }).fetchValue(connection, () => businessEnabledLog.correlatedSubquery.exists()
         ).then((result) => {
             t.deepEqual(result, false);
         });
-        await business.fetchValueByPrimaryKey(
-            connection,
-            { businessId : BigInt(1) },
-            () => businessEnabledLog.correlatedSubquery.exists()
+        await business.whereEqPrimaryKey({ businessId : BigInt(1) }).fetchValue(connection, () => businessEnabledLog.correlatedSubquery.exists()
         ).then((result) => {
             t.deepEqual(result, false);
         });
@@ -107,17 +101,11 @@ tape(__filename, async (t) => {
                 updatedByExternalUserId : "test",
             }
         );
-        await business.fetchValueByPrimaryKey(
-            connection,
-            { businessId : BigInt(2) },
-            () => businessEnabledLog.correlatedSubquery.exists()
+        await business.whereEqPrimaryKey({ businessId : BigInt(2) }).fetchValue(connection, () => businessEnabledLog.correlatedSubquery.exists()
         ).then((result) => {
             t.deepEqual(result, true);
         });
-        await business.fetchValueByPrimaryKey(
-            connection,
-            { businessId : BigInt(1) },
-            () => businessEnabledLog.correlatedSubquery.exists()
+        await business.whereEqPrimaryKey({ businessId : BigInt(1) }).fetchValue(connection, () => businessEnabledLog.correlatedSubquery.exists()
         ).then((result) => {
             t.deepEqual(result, false);
         });
@@ -133,17 +121,11 @@ tape(__filename, async (t) => {
                 updatedByExternalUserId : "test2",
             }
         );
-        await business.fetchValueByPrimaryKey(
-            connection,
-            { businessId : BigInt(2) },
-            () => businessEnabledLog.correlatedSubquery.exists()
+        await business.whereEqPrimaryKey({ businessId : BigInt(2) }).fetchValue(connection, () => businessEnabledLog.correlatedSubquery.exists()
         ).then((result) => {
             t.deepEqual(result, true);
         });
-        await business.fetchValueByPrimaryKey(
-            connection,
-            { businessId : BigInt(1) },
-            () => businessEnabledLog.correlatedSubquery.exists()
+        await business.whereEqPrimaryKey({ businessId : BigInt(1) }).fetchValue(connection, () => businessEnabledLog.correlatedSubquery.exists()
         ).then((result) => {
             t.deepEqual(result, false);
         });
@@ -159,17 +141,11 @@ tape(__filename, async (t) => {
                 updatedByExternalUserId : "test3",
             }
         );
-        await business.fetchValueByPrimaryKey(
-            connection,
-            { businessId : BigInt(2) },
-            () => businessEnabledLog.correlatedSubquery.exists()
+        await business.whereEqPrimaryKey({ businessId : BigInt(2) }).fetchValue(connection, () => businessEnabledLog.correlatedSubquery.exists()
         ).then((result) => {
             t.deepEqual(result, true);
         });
-        await business.fetchValueByPrimaryKey(
-            connection,
-            { businessId : BigInt(1) },
-            () => businessEnabledLog.correlatedSubquery.exists()
+        await business.whereEqPrimaryKey({ businessId : BigInt(1) }).fetchValue(connection, () => businessEnabledLog.correlatedSubquery.exists()
         ).then((result) => {
             t.deepEqual(result, true);
         });
