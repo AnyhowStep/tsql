@@ -48,13 +48,10 @@ tape(__filename, async (t) => {
         await connection.transaction(async (connection) => {
             await connection.savepoint(async (connection) => {
                 await connection.savepoint(async (connection) => {
-                    await dst.deleteZeroOrOne(
-                        connection,
-                        columns => tsql.eq(
+                    await dst.where(columns => tsql.eq(
                             columns.testVal,
                             BigInt(200)
-                        )
-                    );
+                        )).deleteZeroOrOne(connection);
                     t.deepEqual(handlerInvoked, true);
                     t.deepEqual(commitInvoked, false);
                     t.deepEqual(rollbackInvoked, false);
