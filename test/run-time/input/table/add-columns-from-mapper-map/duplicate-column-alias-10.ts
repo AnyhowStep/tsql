@@ -39,12 +39,11 @@ tape(__filename, async (t) => {
             })
             .setPrimaryKey(columns => [columns.testId]);
 
-        await test.fetchOne(
-            connection,
-            columns => tsql.eq(
-                columns.testVal,
-                BigInt(200)
-            )
+        await test.where(columns => tsql.eq(
+            columns.testVal,
+            BigInt(200)
+        )).fetchOne(
+            connection
         ).then((row) => {
             console.log(row);
             t.fail("Should not fetch");

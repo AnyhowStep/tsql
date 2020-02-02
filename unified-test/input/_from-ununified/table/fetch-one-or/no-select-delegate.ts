@@ -62,12 +62,11 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     ]
                 );
 
-            await test.fetchOne(
-                connection,
-                columns => tsql.gt(
-                    columns.testVal,
-                    BigInt(255)
-                )
+            await test.where(columns => tsql.gt(
+                columns.testVal,
+                BigInt(255)
+            )).fetchOne(
+                connection
             ).or(
                 1337
             ).then((row) => {
@@ -83,12 +82,11 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.fail("Should not throw");
             });
 
-            await test.fetchOne(
-                connection,
-                columns => tsql.gt(
-                    columns.testVal,
-                    BigInt(300)
-                )
+            await test.where(columns => tsql.gt(
+                columns.testVal,
+                BigInt(300)
+            )).fetchOne(
+                connection
             ).or(
                 1337
             ).then((row) => {
@@ -98,12 +96,11 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.fail("Should not throw");
             });
 
-            await test.fetchOne(
-                connection,
-                columns => tsql.gt(
-                    columns.testVal,
-                    BigInt(100)
-                )
+            await test.where(columns => tsql.gt(
+                columns.testVal,
+                BigInt(100)
+            )).fetchOne(
+                connection
             ).or(
                 1337
             ).then(() => {
