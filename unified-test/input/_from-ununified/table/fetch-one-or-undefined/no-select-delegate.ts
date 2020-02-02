@@ -62,12 +62,11 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     ]
                 );
 
-            await test.fetchOne(
-                connection,
-                columns => tsql.gt(
-                    columns.testVal,
-                    BigInt(255)
-                )
+            await test.where(columns => tsql.gt(
+                columns.testVal,
+                BigInt(255)
+            )).fetchOne(
+                connection
             ).orUndefined(
             ).then((row) => {
                 t.deepEqual(
@@ -82,12 +81,12 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.fail("Should not throw");
             });
 
-            await test.fetchOne(
-                connection,
+            await test.where(
                 columns => tsql.gt(
                     columns.testVal,
                     BigInt(300)
-                )
+                )).fetchOne(
+                connection
             ).orUndefined(
             ).then((row) => {
                 t.deepEqual(row, undefined);
@@ -96,12 +95,12 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.fail("Should not throw");
             });
 
-            await test.fetchOne(
-                connection,
+            await test.where(
                 columns => tsql.gt(
                     columns.testVal,
                     BigInt(100)
-                )
+                )).fetchOne(
+                connection
             ).orUndefined(
             ).then(() => {
                 t.fail("Should not fetch anything");

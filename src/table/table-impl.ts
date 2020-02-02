@@ -11,8 +11,8 @@ import {StrictUnion, AssertNonUnion} from "../type-util";
 import * as ExprLib from "../expr-library";
 import {PrimaryKey_Input} from "../primary-key";
 import {SuperKey_Input} from "../super-key";
-import {Row_NonUnion, Row} from "../row";
-import {SelectClause, SelectDelegate, SelectValueDelegate, SelectClauseUtil} from "../select-clause";
+import {Row} from "../row";
+import {SelectValueDelegate, SelectClauseUtil} from "../select-clause";
 import {FromClauseUtil} from "../from-clause";
 import {WhereDelegate} from "../where-clause";
 import {AnyBuiltInExpr} from "../built-in-expr";
@@ -477,61 +477,6 @@ export class Table<DataT extends TableData> implements ITable {
         TableUtil.PickColumns<this, NewColumnsT>
     ) {
         return TableUtil.pickColumns(this, delegate);
-    }
-
-    fetchOne (
-        connection : SelectConnection,
-        whereDelegate : WhereDelegate<
-            FromClauseUtil.From<
-                FromClauseUtil.NewInstance,
-                this
-            >
-        >
-    ) : ExecutionUtil.FetchOnePromise<Row_NonUnion<this>>;
-    fetchOne<
-        SelectsT extends SelectClause
-    > (
-        connection : SelectConnection,
-        whereDelegate : WhereDelegate<
-            FromClauseUtil.From<
-                FromClauseUtil.NewInstance,
-                this
-            >
-        >,
-        selectDelegate : SelectDelegate<
-            FromClauseUtil.From<
-                FromClauseUtil.NewInstance,
-                this
-            >,
-            undefined,
-            undefined,
-            SelectsT
-        >
-    ) : ExecutionUtil.FetchOneReturnType<
-        QueryUtil.Select<
-            QueryUtil.From<
-                QueryUtil.NewInstance,
-                this
-            >,
-            SelectsT
-        >
-    >;
-    fetchOne (
-        connection : SelectConnection,
-        whereDelegate : WhereDelegate<
-            FromClauseUtil.From<
-                FromClauseUtil.NewInstance,
-                this
-            >
-        >,
-        selectDelegate? : (...args : any[]) => any[]
-    ) : ExecutionUtil.FetchOnePromise<any> {
-        return TableUtil.__fetchOneHelper(
-            this,
-            connection,
-            whereDelegate,
-            selectDelegate
-        );
     }
 
     fetchValue<
