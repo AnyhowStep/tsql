@@ -16,12 +16,9 @@ const dst = tsql.table("dst")
         columns.testId,
         columns.testVal,
     ]);
-export const p = dst.updateAndFetchOneByPrimaryKey(
-    null as any,
-    {
+export const p = dst.whereEqPrimaryKey({
         testId : BigInt(1),
-    },
-    () => {
+    }).updateAndFetchOne(null as any, () => {
         return {
             testVal : {
                 x : 1,
@@ -31,12 +28,9 @@ export const p = dst.updateAndFetchOneByPrimaryKey(
     }
 );
 
-export const p2 = dst.updateAndFetchOneByPrimaryKey(
-    null as any,
-    {
+export const p2 = dst.whereEqPrimaryKey({
         testId : BigInt(1),
-    },
-    () => {
+    }).updateAndFetchOne(null as any, () => {
         return {
             testId : 3n as const,
             testVal : null,

@@ -72,15 +72,12 @@ tape(__filename, async (t) => {
             }
         );
 
-        return test.updateAndFetchOneByPrimaryKey(
-            connection,
-            {
+        return test.whereEqPrimaryKey({
                 testId : {
                     x : 100,
                     y : 200,
                 },
-            },
-            (columns) => {
+            }).updateAndFetchOne(connection, (columns) => {
                 return {
                     testVal : replaceX(columns.testVal, 111)
                 };

@@ -10,12 +10,9 @@ const dst = tsql.table("dst")
     .addMutable(columns => [
         columns.testId,
     ]);
-export const p = dst.updateAndFetchOneBySuperKey(
-    null as any,
-    {
+export const p = dst.whereEqSuperKey({
         testId : BigInt(1),
-    },
-    () => {
+    }).updateAndFetchOne(null as any, () => {
         return {
             testId : BigInt(123456),
         };

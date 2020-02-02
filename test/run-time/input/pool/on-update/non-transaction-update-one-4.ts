@@ -72,10 +72,7 @@ tape(__filename, async (t) => {
         /**
          * This actually starts a transaction, if we are not in a transaction.
          */
-        await test.updateAndFetchOneByPrimaryKey(
-            connection,
-            { testId : BigInt(4) },
-            () => {
+        await test.whereEqPrimaryKey({ testId : BigInt(4) }).updateAndFetchOne(connection, () => {
                 return {
                     testVal : BigInt(444),
                 };

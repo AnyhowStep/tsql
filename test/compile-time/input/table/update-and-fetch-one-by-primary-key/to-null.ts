@@ -10,12 +10,9 @@ const dst = tsql.table("dst")
     .addMutable(columns => [
         columns.testVal,
     ]);
-export const p = dst.updateAndFetchOneByPrimaryKey(
-    null as any,
-    {
+export const p = dst.whereEqPrimaryKey({
         testId : BigInt(1),
-    },
-    () => {
+    }).updateAndFetchOne(null as any, () => {
         return {
             testVal : null,
         };
