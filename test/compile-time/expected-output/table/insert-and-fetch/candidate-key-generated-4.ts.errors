@@ -1,34 +1,34 @@
 [
   {
     "messageText": {
-      "messageText": "Argument of type '{ testId: bigint; }' is not assignable to parameter of type '{} & { readonly testVal?: bigint | IExpr<{ mapper: Mapper<unknown, bigint>; usedRef: IUsedRef<{}>; isAggregate: boolean; }> | IExprSelectItem<{ mapper: Mapper<unknown, bigint>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; isAggregate: boolean; }> | (OneSelectItem<...> & ... 1 more ... & IQueryBase<...>...'.",
+      "messageText": "Argument of type '{ testId: bigint; }' is not assignable to parameter of type '{ testId: bigint; } & CompileError<[\"Extra keys found\", \"testId\"]>'.",
       "category": 1,
       "code": 2345,
       "next": {
-        "messageText": "Object literal may only specify known properties, and 'testId' does not exist in type '{} & { readonly testVal?: bigint | IExpr<{ mapper: Mapper<unknown, bigint>; usedRef: IUsedRef<{}>; isAggregate: boolean; }> | IExprSelectItem<{ mapper: Mapper<unknown, bigint>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; isAggregate: boolean; }> | (OneSelectItem<...> & ... 1 more ... & IQueryBase<...>...'.",
+        "messageText": "Property '__compileError' is missing in type '{ testId: bigint; }' but required in type 'CompileError<[\"Extra keys found\", \"testId\"]>'.",
         "category": 1,
-        "code": 2353
+        "code": 2741
       }
     },
     "code": 2345,
     "category": 1,
-    "length": 11,
-    "start": 569
+    "length": 126,
+    "start": 461
   },
   {
     "messageText": {
-      "messageText": "Argument of type '{ testId: bigint; testVal: bigint; }' is not assignable to parameter of type '{} & { readonly testVal?: bigint | IExpr<{ mapper: Mapper<unknown, bigint>; usedRef: IUsedRef<{}>; isAggregate: boolean; }> | IExprSelectItem<{ mapper: Mapper<unknown, bigint>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; isAggregate: boolean; }> | (OneSelectItem<...> & ... 1 more ... & IQueryBase<...>...'.",
+      "messageText": "Argument of type '{ testId: bigint; testVal: bigint; }' is not assignable to parameter of type '{ testId: bigint; testVal: bigint; } & CompileError<[\"Extra keys found\", \"testId\"]>'.",
       "category": 1,
       "code": 2345,
       "next": {
-        "messageText": "Object literal may only specify known properties, and 'testId' does not exist in type '{} & { readonly testVal?: bigint | IExpr<{ mapper: Mapper<unknown, bigint>; usedRef: IUsedRef<{}>; isAggregate: boolean; }> | IExprSelectItem<{ mapper: Mapper<unknown, bigint>; tableAlias: string; alias: string; usedRef: IUsedRef<...>; isAggregate: boolean; }> | (OneSelectItem<...> & ... 1 more ... & IQueryBase<...>...'.",
+        "messageText": "Property '__compileError' is missing in type '{ testId: bigint; testVal: bigint; }' but required in type 'CompileError<[\"Extra keys found\", \"testId\"]>'.",
         "category": 1,
-        "code": 2353
+        "code": 2741
       }
     },
     "code": 2345,
     "category": 1,
-    "length": 11,
-    "start": 760
+    "length": 148,
+    "start": 652
   }
 ]
