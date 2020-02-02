@@ -81,10 +81,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
 
         await pool
             .acquire(async (connection) => {
-                return test.fetchOneByPrimaryKey(
-                    connection,
-                    insertResult
-                );
+                return test.whereEqPrimaryKey(insertResult).fetchOne(connection);
             })
             .then((row) => {
                 t.deepEqual(

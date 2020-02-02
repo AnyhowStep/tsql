@@ -31,12 +31,11 @@ tape(__filename, async (t) => {
             return leaky;
         });
 
-        await src.fetchOneByPrimaryKey(
-            leaky,
+        await src.whereEqPrimaryKey(
             {
                 testId : BigInt(1),
             }
-        ).then(() => {
+        ).fetchOne(leaky).then(() => {
             t.fail("Should not be able to use leaked locked connection");
         }).catch((err) => {
             t.true(err instanceof tsql.AsyncQueueStoppingError);

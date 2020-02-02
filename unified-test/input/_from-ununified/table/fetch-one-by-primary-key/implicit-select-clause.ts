@@ -76,16 +76,13 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.fail("Should exist");
             });
 
-            await myTable.fetchOneByPrimaryKey(
-                connection,
-                {
+            await myTable.whereEqPrimaryKey({
                     myTableId : BigInt(1),
                     /**
                      * This should get ignored as it is not part of the primary key.
                      */
                     createdAt : new Date(),
-                } as any
-            ).then((row) => {
+                } as any).fetchOne(connection).then((row) => {
                 t.deepEqual(
                     row,
                     {
@@ -105,12 +102,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.pass();
             });
 
-            await myTable.fetchOneByPrimaryKey(
-                connection,
-                {
+            await myTable.whereEqPrimaryKey({
                     createdAt : new Date("2015-01-01T00:00:00.000Z"),
-                } as any
-            ).then(() => {
+                } as any).fetchOne(connection).then(() => {
                 t.fail("Should not execute");
             }).catch(() => {
                 t.pass();
@@ -126,16 +120,13 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.pass();
             });
 
-            await myTable.fetchOneByPrimaryKey(
-                connection,
-                {
+            await myTable.whereEqPrimaryKey({
                     myTableId : BigInt(1),
                     /**
                      * This should get ignored as it is not part of the primary key.
                      */
                     createdAt : new Date(),
-                } as any
-            ).then(() => {
+                } as any).fetchOne(connection).then(() => {
                 t.fail("Should not exist");
             }).catch(() => {
                 t.pass();
@@ -149,12 +140,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.pass();
             });
 
-            await myTable.fetchOneByPrimaryKey(
-                connection,
-                {
+            await myTable.whereEqPrimaryKey({
                     createdAt : new Date("2015-01-01T00:00:00.000Z"),
-                } as any
-            ).then(() => {
+                } as any).fetchOne(connection).then(() => {
                 t.fail("Should not execute");
             }).catch(() => {
                 t.pass();
