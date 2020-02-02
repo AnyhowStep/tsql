@@ -108,15 +108,12 @@ tape(__filename, async (t) => {
 
     await pool
         .acquire(async (connection) => {
-            return test.fetchOneByCandidateKey(
-                connection,
-                {
+            return test.whereEqCandidateKey({
                     testId : {
                         x : 1111,
                         y : 200,
                     }
-                }
-            );
+                }).fetchOne(connection);
         })
         .then((row) => {
             t.deepEqual(

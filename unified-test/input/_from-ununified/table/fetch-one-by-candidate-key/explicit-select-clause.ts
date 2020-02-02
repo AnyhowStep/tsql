@@ -62,13 +62,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     ]
                 );
 
-            await myTable.fetchOneByCandidateKey(
-                connection,
-                {
+            await myTable.whereEqCandidateKey({
                     myTableId : BigInt(1),
-                },
-                columns => [columns]
-            ).then((row) => {
+                }).fetchOne(connection, columns => [columns]).then((row) => {
                 t.deepEqual(
                     row,
                     {
@@ -156,13 +152,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
 
             await myTable.where(() => true).delete(connection);
 
-            await myTable.fetchOneByCandidateKey(
-                connection,
-                {
+            await myTable.whereEqCandidateKey({
                     myTableId : BigInt(1),
-                },
-                columns => [columns]
-            ).then(() => {
+                }).fetchOne(connection, columns => [columns]).then(() => {
                 t.fail("Should not exist");
             }).catch(() => {
                 t.pass();

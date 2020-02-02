@@ -63,15 +63,12 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     ]
                 );
 
-            await myTable.fetchOneByPrimaryKey(
-                connection,
-                {
+            await myTable.whereEqPrimaryKey({
                     myTableId : {
                         x : 1,
                         y : 2,
                     },
-                }
-            ).then((row) => {
+                }).fetchOne(connection).then((row) => {
                 t.deepEqual(
                     row,
                     {
@@ -114,15 +111,12 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.fail("Should exist");
             });
 
-            await myTable.fetchOneByPrimaryKey(
-                connection,
-                {
+            await myTable.whereEqPrimaryKey({
                     myTableId : {
                         x : 100,
                         y : 2,
                     },
-                }
-            ).then(() => {
+                }).fetchOne(connection).then(() => {
                 t.fail("Should not exist");
             }).catch(() => {
                 t.pass();
@@ -141,15 +135,12 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
 
             await myTable.where(() => true).delete(connection);
 
-            await myTable.fetchOneByPrimaryKey(
-                connection,
-                {
+            await myTable.whereEqPrimaryKey({
                     myTableId : {
                         x : 1,
                         y : 2,
                     },
-                }
-            ).then(() => {
+                }).fetchOne(connection).then(() => {
                 t.fail("Should not exist");
             }).catch(() => {
                 t.pass();
@@ -173,15 +164,12 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.pass();
             });
 
-            await myTable.fetchOneByPrimaryKey(
-                connection,
-                {
+            await myTable.whereEqPrimaryKey({
                     myTableId : {
                         x : 100,
                         y : 2,
                     },
-                }
-            ).then(() => {
+                }).fetchOne(connection).then(() => {
                 t.fail("Should not exist");
             }).catch(() => {
                 t.pass();

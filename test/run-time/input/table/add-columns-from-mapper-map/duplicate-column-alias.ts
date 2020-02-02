@@ -32,12 +32,9 @@ tape(__filename, async (t) => {
             })
             .setPrimaryKey(columns => [columns.testId]);
 
-        await test.fetchOneByPrimaryKey(
-            connection,
-            {
+        await test.whereEqPrimaryKey({
                 testId : BigInt(1)
-            }
-        ).then((row) => {
+            }).fetchOne(connection).then((row) => {
             t.deepEqual(
                 row,
                 {

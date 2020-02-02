@@ -114,7 +114,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     .then((result) => {
                         t.deepEqual(result, false);
                     });
-                return test.fetchOneByPrimaryKey(connection, { testId : BigInt(4) });
+                return test.whereEqPrimaryKey({ testId : BigInt(4) }).fetchOne(connection);
             })
             .then((row) => {
                 t.deepEqual(

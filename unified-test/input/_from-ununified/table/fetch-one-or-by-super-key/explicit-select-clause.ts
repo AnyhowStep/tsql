@@ -62,13 +62,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     ]
                 );
 
-            await myTable.fetchOneBySuperKey(
-                connection,
-                {
+            await myTable.whereEqSuperKey({
                     myTableId : BigInt(1),
-                },
-                columns => [columns]
-            ).or(
+                }).fetchOne(connection, columns => [columns]).or(
                 1337
             ).then((row) => {
                 t.deepEqual(
@@ -133,13 +129,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.false(err instanceof tsql.TooManyRowsFoundError);
             });
 
-            await myTable.fetchOneBySuperKey(
-                connection,
-                {
+            await myTable.whereEqSuperKey({
                     myTableId : BigInt(1),
-                },
-                columns => [columns.myTableId]
-            ).or(
+                }).fetchOne(connection, columns => [columns.myTableId]).or(
                 1337
             ).then((row) => {
                 t.deepEqual(
@@ -152,13 +144,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.fail("Should exist");
             });
 
-            await myTable.fetchOneBySuperKey(
-                connection,
-                {
+            await myTable.whereEqSuperKey({
                     myTableId : BigInt(1),
-                },
-                columns => [columns.createdAt]
-            ).or(
+                }).fetchOne(connection, columns => [columns.createdAt]).or(
                 1337
             ).then((row) => {
                 t.deepEqual(
@@ -171,13 +159,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.fail("Should exist");
             });
 
-            await myTable.fetchOneBySuperKey(
-                connection,
-                {
+            await myTable.whereEqSuperKey({
                     myTableId : BigInt(1),
-                },
-                columns => [columns.createdAt, columns.myTableId]
-            ).or(
+                }).fetchOne(connection, columns => [columns.createdAt, columns.myTableId]).or(
                 1337
             ).then((row) => {
                 t.deepEqual(
@@ -191,16 +175,12 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.fail("Should exist");
             });
 
-            await myTable.fetchOneBySuperKey(
-                connection,
-                {
+            await myTable.whereEqSuperKey({
                     myTableId : BigInt(1),
-                },
-                columns => [
+                }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("dayAfterCreation")]
-            ).or(
+                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("dayAfterCreation")]).or(
                 1337
             ).then((row) => {
                 t.deepEqual(
@@ -217,13 +197,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
 
             await myTable.where(() => true).delete(connection);
 
-            await myTable.fetchOneBySuperKey(
-                connection,
-                {
+            await myTable.whereEqSuperKey({
                     myTableId : BigInt(1),
-                },
-                columns => [columns]
-            ).or(
+                }).fetchOne(connection, columns => [columns]).or(
                 1337
             ).then((row) => {
                 t.deepEqual(row, 1337);
@@ -231,13 +207,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.fail("Should get defaultValue");
             });
 
-            await myTable.fetchOneBySuperKey(
-                connection,
-                {
+            await myTable.whereEqSuperKey({
                     myTableId : BigInt(1),
-                },
-                columns => [columns.myTableId]
-            ).or(
+                }).fetchOne(connection, columns => [columns.myTableId]).or(
                 1337
             ).then((row) => {
                 t.deepEqual(row, 1337);
@@ -245,13 +217,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.fail("Should get defaultValue");
             });
 
-            await myTable.fetchOneBySuperKey(
-                connection,
-                {
+            await myTable.whereEqSuperKey({
                     myTableId : BigInt(1),
-                },
-                columns => [columns.createdAt]
-            ).or(
+                }).fetchOne(connection, columns => [columns.createdAt]).or(
                 1337
             ).then((row) => {
                 t.deepEqual(row, 1337);
@@ -259,13 +227,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.fail("Should get defaultValue");
             });
 
-            await myTable.fetchOneBySuperKey(
-                connection,
-                {
+            await myTable.whereEqSuperKey({
                     myTableId : BigInt(1),
-                },
-                columns => [columns.createdAt, columns.myTableId]
-            ).or(
+                }).fetchOne(connection, columns => [columns.createdAt, columns.myTableId]).or(
                 1337
             ).then((row) => {
                 t.deepEqual(row, 1337);
@@ -273,16 +237,12 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.fail("Should get defaultValue");
             });
 
-            await myTable.fetchOneBySuperKey(
-                connection,
-                {
+            await myTable.whereEqSuperKey({
                     myTableId : BigInt(1),
-                },
-                columns => [
+                }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("dayAfterCreation")]
-            ).or(
+                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("dayAfterCreation")]).or(
                 1337
             ).then((row) => {
                 t.deepEqual(row, 1337);

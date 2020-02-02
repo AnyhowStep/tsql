@@ -62,12 +62,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     ]
                 );
 
-            await myTable.fetchOneByPrimaryKey(
-                connection,
-                {
+            await myTable.whereEqPrimaryKey({
                     myTableId : BigInt(1),
-                }
-            ).or(
+                }).fetchOne(connection).or(
                 1337
             ).then((row) => {
                 t.deepEqual(
@@ -104,12 +101,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.fail("Should exist");
             });
 
-            await myTable.fetchOneByPrimaryKey(
-                connection,
-                {
+            await myTable.whereEqPrimaryKey({
                     myTableId : BigInt(100),
-                }
-            ).or(
+                }).fetchOne(connection).or(
                 1337
             ).then((row) => {
                 t.deepEqual(row, 1337);
@@ -132,12 +126,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
 
             await myTable.where(() => true).delete(connection);
 
-            await myTable.fetchOneByPrimaryKey(
-                connection,
-                {
+            await myTable.whereEqPrimaryKey({
                     myTableId : BigInt(1),
-                }
-            ).or(
+                }).fetchOne(connection).or(
                 1337
             ).then((row) => {
                 t.deepEqual(row, 1337);
@@ -162,12 +153,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.fail("Should get defaultValue");
             });
 
-            await myTable.fetchOneByPrimaryKey(
-                connection,
-                {
+            await myTable.whereEqPrimaryKey({
                     myTableId : BigInt(100),
-                }
-            ).or(
+                }).fetchOne(connection).or(
                 1337
             ).then((row) => {
                 t.deepEqual(row, 1337);

@@ -62,12 +62,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     ]
                 );
 
-            await myTable.fetchOneByCandidateKey(
-                connection,
-                {
+            await myTable.whereEqCandidateKey({
                     myTableId : BigInt(1),
-                }
-            ).or(
+                }).fetchOne(connection).or(
                 1337
             ).then((row) => {
                 t.deepEqual(
@@ -104,12 +101,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.fail("Should exist");
             });
 
-            await myTable.fetchOneByCandidateKey(
-                connection,
-                {
+            await myTable.whereEqCandidateKey({
                     myTableId : BigInt(100),
-                }
-            ).or(
+                }).fetchOne(connection).or(
                 1337
             ).then((row) => {
                 t.deepEqual(row, 1337);
@@ -132,12 +126,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
 
             await myTable.where(() => true).delete(connection);
 
-            await myTable.fetchOneByCandidateKey(
-                connection,
-                {
+            await myTable.whereEqCandidateKey({
                     myTableId : BigInt(1),
-                }
-            ).or(
+                }).fetchOne(connection).or(
                 1337
             ).then((row) => {
                 t.deepEqual(row, 1337);
@@ -162,12 +153,9 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 t.fail("Should get defaultValue");
             });
 
-            await myTable.fetchOneByCandidateKey(
-                connection,
-                {
+            await myTable.whereEqCandidateKey({
                     myTableId : BigInt(100),
-                }
-            ).or(
+                }).fetchOne(connection).or(
                 1337
             ).then((row) => {
                 t.deepEqual(row, 1337);
