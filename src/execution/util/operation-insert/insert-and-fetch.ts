@@ -1,13 +1,14 @@
 import {ITable, TableWithAutoIncrement, InsertableTable, TableUtil} from "../../../table";
 import {IsolableInsertOneConnection, InsertOneResult} from "../../connection";
 import {CustomInsertRow, CustomInsertRowWithCandidateKey, BuiltInInsertRow} from "../../../insert";
-import {Row} from "../../../row";
 import {InsertOneWithAutoIncrementReturnType, insertOneImplNoEvent, createInsertOneEvents} from "./insert-one";
 import * as ExprLib from "../../../expr-library";
 import {DataTypeUtil} from "../../../data-type";
 import {TryEvaluateColumnsResult} from "../../../data-type/util";
 import {InsertAndFetchEvent} from "../../../event";
 import {IsolationLevel} from "../../../isolation-level";
+import {Identity, AssertSubsetOwnEnumerableKeys} from "../../../type-util";
+import {CustomExprUtil} from "../../../custom-expr";
 
 export type InsertAndFetchRow<
     TableT extends InsertableTable
@@ -17,12 +18,32 @@ export type InsertAndFetchRow<
     CustomInsertRowWithCandidateKey<TableT>
 ;
 
+export type InsertedAndFetchedRow<
+    TableT extends InsertableTable,
+    RowT extends InsertAndFetchRow<TableT>
+> =
+    Identity<{
+        readonly [columnAlias in TableUtil.ColumnAlias<TableT>] : (
+            columnAlias extends keyof RowT ?
+            (
+                undefined extends RowT[columnAlias] ?
+                TableUtil.ColumnType<TableT, columnAlias> :
+                CustomExprUtil.TypeOf<
+                    RowT[columnAlias]
+                >
+            ) :
+            TableUtil.ColumnType<TableT, columnAlias>
+        )
+    }>
+;
+
 async function insertAndFetchImplNoEvent<
-    TableT extends ITable & InsertableTable
+    TableT extends ITable & InsertableTable,
+    RowT extends InsertAndFetchRow<TableT>
 > (
     table : TableT,
     connection : IsolableInsertOneConnection,
-    row : InsertAndFetchRow<TableT>
+    row : RowT & AssertSubsetOwnEnumerableKeys<RowT, InsertAndFetchRow<TableT>>
 ) : (
     Promise<{
         insertRow : BuiltInInsertRow<TableT>,
@@ -31,7 +52,7 @@ async function insertAndFetchImplNoEvent<
             InsertOneWithAutoIncrementReturnType<TableT> :
             InsertOneResult
         ),
-        fetchedRow : Row<TableT>,
+        fetchedRow : InsertedAndFetchedRow<TableT, RowT>,
     }>
 ) {
     TableUtil.assertInsertEnabled(table);
@@ -50,7 +71,7 @@ async function insertAndFetchImplNoEvent<
                 InsertOneWithAutoIncrementReturnType<TableT> :
                 InsertOneResult
             ),
-            fetchedRow : Row<TableT>,
+            fetchedRow : InsertedAndFetchedRow<TableT, RowT>,
         }>
     ) => {
         return connection.savepoint(async (connection) : (
@@ -61,7 +82,7 @@ async function insertAndFetchImplNoEvent<
                     InsertOneWithAutoIncrementReturnType<TableT> :
                     InsertOneResult
                 ),
-                fetchedRow : Row<TableT>,
+                fetchedRow : InsertedAndFetchedRow<TableT, RowT>,
             }>
         ) => {
             if (
@@ -89,7 +110,7 @@ async function insertAndFetchImplNoEvent<
                         table,
                         candidateKeyResult.outputRow as any
                     ) as any
-                );
+                ) as unknown as InsertedAndFetchedRow<TableT, RowT>;
                 return {
                     ...insertOneImplResult,
                     fetchedRow,
@@ -112,7 +133,7 @@ async function insertAndFetchImplNoEvent<
                             [table.autoIncrement as string] : insertOneImplResult.insertResult.autoIncrementId,
                         } as any
                     ) as any
-                );
+                ) as unknown as InsertedAndFetchedRow<TableT, RowT>;
                 return {
                     ...insertOneImplResult,
                     fetchedRow,
@@ -141,24 +162,25 @@ export interface InsertAndFetchOptions {
  * ```
  */
 export async function insertAndFetch<
-    TableT extends ITable & InsertableTable
+    TableT extends ITable & InsertableTable,
+    RowT extends InsertAndFetchRow<TableT>
 > (
     table : TableT,
     connection : IsolableInsertOneConnection,
-    row : InsertAndFetchRow<TableT>,
+    row : RowT & AssertSubsetOwnEnumerableKeys<RowT, InsertAndFetchRow<TableT>>,
     insertAndFetchOptions? : InsertAndFetchOptions
 ) : (
-    Promise<Row<TableT>>
+    Promise<InsertedAndFetchedRow<TableT, RowT>>
 ) {
     TableUtil.assertInsertEnabled(table);
     TableUtil.assertHasCandidateKey(table);
 
-    return connection.lock(async (connection) : Promise<Row<TableT>> => {
+    return connection.lock(async (connection) : Promise<InsertedAndFetchedRow<TableT, RowT>> => {
         const {
             insertRow,
             insertResult,
             fetchedRow,
-        } = await insertAndFetchImplNoEvent<TableT>(
+        } = await insertAndFetchImplNoEvent<TableT, RowT>(
             (
                 insertAndFetchOptions == undefined ?
                 table :

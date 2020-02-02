@@ -6,11 +6,10 @@ import {Ast} from "../ast";
 import {ColumnUtil} from "../column";
 import {ExecutionUtil, InsertOneConnection, InsertOneResult, InsertIgnoreOneResult, InsertIgnoreOneConnection, ReplaceOneResult, ReplaceOneConnection, ReplaceManyResult, ReplaceManyConnection, InsertIgnoreManyResult, InsertIgnoreManyConnection, InsertManyResult, InsertManyConnection, IsolableInsertOneConnection} from "../execution";
 import {CandidateKey_NonUnion} from "../candidate-key";
-import {StrictUnion} from "../type-util";
+import {StrictUnion, AssertSubsetOwnEnumerableKeys} from "../type-util";
 import * as ExprLib from "../expr-library";
 import {PrimaryKey_Input} from "../primary-key";
 import {SuperKey_Input} from "../super-key";
-import {Row} from "../row";
 import {FromClauseUtil} from "../from-clause";
 import {WhereDelegate} from "../where-clause";
 import {CustomInsertRow} from "../insert";
@@ -559,14 +558,27 @@ export class Table<DataT extends TableData> implements ITable {
         );
     }
 
-    insertAndFetch (
+    insertAndFetch<
+        RowT extends ExecutionUtil.InsertAndFetchRow<Extract<this, InsertableTable>>
+    > (
         this : Extract<this, InsertableTable>,
         connection : IsolableInsertOneConnection,
-        row : ExecutionUtil.InsertAndFetchRow<
-            Extract<this, InsertableTable>
+        row : (
+            & RowT
+            & AssertSubsetOwnEnumerableKeys<
+                RowT,
+                ExecutionUtil.InsertAndFetchRow<Extract<this, InsertableTable>>
+            >
+        )
+    ) : (
+        Promise<
+            ExecutionUtil.InsertedAndFetchedRow<
+                Extract<this, InsertableTable>,
+                RowT
+            >
         >
-    ) : Promise<Row<Extract<this, InsertableTable>>> {
-        return ExecutionUtil.insertAndFetch<Extract<this, InsertableTable>>(
+    ) {
+        return ExecutionUtil.insertAndFetch<Extract<this, InsertableTable>, RowT>(
             this,
             connection,
             row
