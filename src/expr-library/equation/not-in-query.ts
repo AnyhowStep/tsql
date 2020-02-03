@@ -84,7 +84,7 @@ export function notInQuery<
             usedRef : BuiltInExprUtil.intersectUsedRef(builtInExpr, query),
             isAggregate : BuiltInExprUtil.isAggregate(builtInExpr),
         },
-        OperatorNodeUtil.operatorNode2(OperatorType.NOT_IN, [
+        OperatorNodeUtil.operatorNode2(OperatorType.NOT_IN_QUERY, [
             BuiltInExprUtil.buildAst(builtInExpr),
             BuiltInExprUtil.buildAst(query)
         ], undefined)

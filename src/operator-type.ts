@@ -118,7 +118,20 @@ export enum OperatorType {
      * + PostgreSQL   : `IN`
      * + SQLite       : `IN`
      */
-    IN = "IN",
+    IN_ARRAY = "IN_ARRAY",
+
+    /**
+     * + https://dev.mysql.com/doc/refman/8.0/en/comparison-operators.html#operator_in
+     * + https://www.postgresql.org/docs/9.0/functions-subquery.html#AEN16806
+     * + https://www.sqlite.org/lang_expr.html#in_op
+     *
+     * -----
+     *
+     * + MySQL        : `IN`
+     * + PostgreSQL   : `IN`
+     * + SQLite       : `IN`
+     */
+    IN_QUERY = "IN_QUERY",
 
     /*
      * Appears to be MySQL-specific,
@@ -359,7 +372,20 @@ export enum OperatorType {
      * + PostgreSQL   : `NOT IN`
      * + SQLite       : `NOT IN`
      */
-    NOT_IN = "NOT_IN",
+    NOT_IN_ARRAY = "NOT_IN_ARRAY",
+
+    /**
+     * + https://dev.mysql.com/doc/refman/8.0/en/comparison-operators.html#operator_not-in
+     * + https://www.postgresql.org/docs/9.0/functions-subquery.html#AEN16831
+     * + https://www.sqlite.org/lang_expr.html#in_op
+     *
+     * -----
+     *
+     * + MySQL        : `NOT IN`
+     * + PostgreSQL   : `NOT IN`
+     * + SQLite       : `NOT IN`
+     */
+    NOT_IN_QUERY = "NOT_IN_QUERY",
 
     /**
      * + https://dev.mysql.com/doc/refman/8.0/en/string-comparison-functions.html#operator_not-like

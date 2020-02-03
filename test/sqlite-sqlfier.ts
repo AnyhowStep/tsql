@@ -33,9 +33,9 @@ import {
     DateTimeUtil,
     utcStringToTimestamp,
     TypeHint,
-    Parentheses,
     pascalStyleEscapeString,
     parentheses,
+    Parentheses,
 } from "../dist";
 import {LiteralValueType, LiteralValueNodeUtil} from "../dist/ast/literal-value-node";
 
@@ -593,18 +593,24 @@ export const sqliteSqlfier : Sqlfier = {
         [OperatorType.GREATER_THAN] : ({operands}) => insertBetween(operands, ">"),
         [OperatorType.LESS_THAN_OR_EQUAL] : ({operands}) => insertBetween(operands, "<="),
         [OperatorType.GREATER_THAN_OR_EQUAL] : ({operands}) => insertBetween(operands, ">="),
-        [OperatorType.IN] : ({operands : [x, y, ...rest]}) => {
-            if (rest.length == 0 && Parentheses.IsParentheses(y) && QueryBaseUtil.isQuery(y.ast)) {
-                return [
-                    x,
-                    functionCall("IN", [y.ast])
-                ];
-            } else {
-                return [
-                    x,
-                    functionCall("IN", [y, ...rest])
-                ];
-            }
+        [OperatorType.IN_ARRAY] : ({operands : [x, ...rest]}) => {
+            return [
+                x,
+                functionCall("IN", [...rest])
+            ];
+        },
+        [OperatorType.IN_QUERY] : ({operands : [x, y]}) => {
+            /**
+             * https://github.com/AnyhowStep/tsql/issues/198
+             */
+            return [
+                x,
+                functionCall("IN", [
+                    Parentheses.IsParentheses(y) ?
+                    y.ast :
+                    y
+                ])
+            ];
         },
         [OperatorType.IS_NOT_NULL] : ({operands}) => [operands[0], "IS NOT NULL"],
         [OperatorType.IS_NULL] : ({operands}) => [operands[0], "IS NULL"],
@@ -957,7 +963,9 @@ export const sqliteSqlfier : Sqlfier = {
         },
     },
     queryBaseSqlfier : (rawQuery, toSql) => {
-        return queryToSql(rawQuery, toSql, false);
+        const sql = queryToSql(rawQuery, toSql, false);
+        //console.log(sql);
+        return sql;
     },
     caseValueSqlfier : (node) => {
         const result : Ast[] = [

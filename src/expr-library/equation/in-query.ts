@@ -80,7 +80,7 @@ export function inQuery<
             usedRef : BuiltInExprUtil.intersectUsedRef(builtInExpr, query),
             isAggregate : BuiltInExprUtil.isAggregate(builtInExpr),
         },
-        OperatorNodeUtil.operatorNode2(OperatorType.IN, [
+        OperatorNodeUtil.operatorNode2(OperatorType.IN_QUERY, [
             BuiltInExprUtil.buildAst(builtInExpr),
             BuiltInExprUtil.buildAst(query)
         ], undefined)

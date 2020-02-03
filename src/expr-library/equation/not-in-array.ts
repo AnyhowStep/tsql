@@ -8,8 +8,8 @@ import {NonNullEquatableType, EquatableTypeUtil} from "../../equatable-type";
 import {BuiltInExpr, BuiltInExprUtil} from "../../built-in-expr";
 import {ExprUtil} from "../../expr";
 
-const notInArrayImpl : Equation2ToN = makeEquation2ToN<OperatorType.NOT_IN>(
-    OperatorType.NOT_IN
+const notInArrayImpl : Equation2ToN = makeEquation2ToN<OperatorType.NOT_IN_ARRAY>(
+    OperatorType.NOT_IN_ARRAY
 );
 /**
  * The `NOT IN` operator has two overloads.
