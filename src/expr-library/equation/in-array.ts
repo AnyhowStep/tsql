@@ -4,8 +4,8 @@ import {NonNullEquatableType, EquatableTypeUtil} from "../../equatable-type";
 import {BuiltInExpr, BuiltInExprUtil} from "../../built-in-expr";
 import {ExprUtil} from "../../expr";
 
-const inArrayImpl : Equation2ToN = makeEquation2ToN<OperatorType.IN>(
-    OperatorType.IN
+const inArrayImpl : Equation2ToN = makeEquation2ToN<OperatorType.IN_ARRAY>(
+    OperatorType.IN_ARRAY
 );
 /**
  * The `IN` operator has two overloads.
