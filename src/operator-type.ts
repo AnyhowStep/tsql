@@ -615,8 +615,7 @@ export enum OperatorType {
      *
      * + MySQL          : `BIT_LENGTH(x)`
      * + PostgreSQL     : `BIT_LENGTH(x)`
-     * + SQLite         : None. Implement with, `new Blob([x]).size * 8`
-     *   + https://stackoverflow.com/questions/2219526/how-many-bytes-in-a-javascript-string/29955838
+     * + SQLite         : `LENGTH(CAST(x AS BLOB)) * 8`
      */
     BIT_LENGTH = "BIT_LENGTH",
 

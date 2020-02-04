@@ -712,6 +712,17 @@ export const sqliteSqlfier : Sqlfier = {
         */
         [OperatorType.ASCII] : ({operands}) => functionCall("ASCII", operands),
         [OperatorType.BIN] : ({operands}) => functionCall("BIN", operands),
+        [OperatorType.BIT_LENGTH] : ({operands}) => (
+            [
+                functionCall(
+                    "LENGTH",
+                    [
+                        functionCall("CAST", [[operands, "AS BLOB"]])
+                    ]
+                ),
+                "* 8"
+            ]
+        ),
         [OperatorType.CONCAT] : ({operands}) => insertBetween(operands, "||"),
 
         /*
