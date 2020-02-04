@@ -27,7 +27,8 @@ tape(__filename, async (t) => {
             .selectValue(columns => columns.myColumn)
             .where(columns => tsql.like(
                 columns.myColumn,
-                "%a%i%"
+                "%a%i%",
+                "'"
             ))
             .orderBy(columns => [
                 columns.myColumn.asc(),

@@ -34,14 +34,14 @@ export type OperatorOperand = {
     [OperatorType.LEAST]                    : Operand2ToN,
     [OperatorType.LESS_THAN]                : Operand2,
     [OperatorType.LESS_THAN_OR_EQUAL]       : Operand2,
-    [OperatorType.LIKE]                     : Operand2,
+    //[OperatorType.LIKE]                     : Operand2,
     [OperatorType.LIKE_ESCAPE]              : Operand3,
     [OperatorType.NOT_BETWEEN_AND]          : Operand3,
     [OperatorType.NOT_EQUAL]                : Operand2,
     [OperatorType.NOT_NULL_SAFE_EQUAL]      : Operand2,
     [OperatorType.NOT_IN_ARRAY]             : Operand2ToN,
     [OperatorType.NOT_IN_QUERY]             : Operand2,
-    [OperatorType.NOT_LIKE]                 : Operand2,
+    //[OperatorType.NOT_LIKE]                 : Operand2,
     [OperatorType.NOT_LIKE_ESCAPE]          : Operand3,
 
     /*

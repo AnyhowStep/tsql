@@ -614,14 +614,28 @@ export const sqliteSqlfier : Sqlfier = {
         },
         [OperatorType.IS_NOT_NULL] : ({operands}) => [operands[0], "IS NOT NULL"],
         [OperatorType.IS_NULL] : ({operands}) => [operands[0], "IS NULL"],
-        [OperatorType.LIKE] : ({operands}) => insertBetween(operands, "LIKE"),
-        [OperatorType.LIKE_ESCAPE] : ({operands : [expr, pattern, escapeChar]}) => [
-            expr, "LIKE", pattern, "ESCAPE", escapeChar
-        ],
-        [OperatorType.NOT_LIKE] : ({operands}) => insertBetween(operands, "NOT LIKE"),
-        [OperatorType.NOT_LIKE_ESCAPE] : ({operands : [expr, pattern, escapeChar]}) => [
-            expr, "NOT LIKE", pattern, "ESCAPE", escapeChar
-        ],
+        [OperatorType.LIKE_ESCAPE] : ({operands : [expr, pattern, escapeChar]}) => {
+            if (LiteralValueNodeUtil.isLiteralValueNode(escapeChar) && escapeChar.literalValue === "") {
+                return [
+                    expr, "LIKE", pattern
+                ];
+            } else {
+                return [
+                    expr, "LIKE", pattern, "ESCAPE", escapeChar
+                ];
+            }
+        },
+        [OperatorType.NOT_LIKE_ESCAPE] : ({operands : [expr, pattern, escapeChar]}) => {
+            if (LiteralValueNodeUtil.isLiteralValueNode(escapeChar) && escapeChar.literalValue === "") {
+                return [
+                    expr, "NOT LIKE", pattern
+                ];
+            } else {
+                return [
+                    expr, "NOT LIKE", pattern, "ESCAPE", escapeChar
+                ];
+            }
+        },
         [OperatorType.NOT_EQUAL] : ({operands}) => insertBetween(operands, "<>"),
 
         /*

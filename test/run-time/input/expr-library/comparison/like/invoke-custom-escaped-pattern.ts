@@ -29,8 +29,9 @@ tape(__filename, async (t) => {
             .selectValue(columns => columns.myColumn)
             .where(columns => tsql.like(
                 columns.myColumn,
-                "%b?_b%??"
-            ).escape("?"))
+                "%b?_b%??",
+                "?"
+            ))
             .orderBy(columns => [
                 columns.myColumn.asc(),
             ])

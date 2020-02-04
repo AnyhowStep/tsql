@@ -10,7 +10,8 @@ tape(__filename, t => {
         });
     const expr = tsql.like(
         myTable.columns.myColumn,
-        "%D_v_d%"
+        "%D_v_d%",
+        "'"
     );
 
     compareSqlPretty(__filename, t, expr.ast);
