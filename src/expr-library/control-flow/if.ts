@@ -1,14 +1,14 @@
 import * as tm from "type-mapping";
-import {BuiltInExpr, BuiltInExprUtil} from "../../built-in-expr";
-import {EquatableType, EquatableTypeUtil} from "../../equatable-type";
+import {BuiltInExpr, BuiltInExprUtil, AnyBuiltInExpr} from "../../built-in-expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
 import {ExprUtil} from "../../expr";
+import {BaseType} from "../../type-util";
 
 function ifConstructor<
     ConditionT extends BuiltInExpr<boolean>,
-    ThenT extends BuiltInExpr<EquatableType>,
-    ElseT extends BuiltInExpr<EquatableTypeUtil.BaseEquatableType<BuiltInExprUtil.TypeOf<ThenT>>|null>
+    ThenT extends AnyBuiltInExpr,
+    ElseT extends BuiltInExpr<BaseType<BuiltInExprUtil.TypeOf<ThenT>>|null>
 > (
     condition : ConditionT,
     then : ThenT,

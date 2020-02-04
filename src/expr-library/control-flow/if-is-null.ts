@@ -1,17 +1,16 @@
 import * as tm from "type-mapping";
 import {IColumn, ColumnUtil} from "../../column";
-import {BuiltInExpr, BuiltInExprUtil} from "../../built-in-expr";
+import {BuiltInExpr, BuiltInExprUtil, AnyBuiltInExpr} from "../../built-in-expr";
 import {Expr} from "../../expr/expr-impl";
 import {isNull} from "../null-safe-equation";
-import {AssertNonUnion} from "../../type-util";
+import {AssertNonUnion, BaseType} from "../../type-util";
 import {UsedRefUtil} from "../../used-ref";
-import {EquatableType, EquatableTypeUtil} from "../../equatable-type";
 import * as ifImpl from "./if";
 
 export function ifIsNull<
     ColumnT extends IColumn,
-    ThenT extends BuiltInExpr<EquatableType>,
-    ElseT extends BuiltInExpr<EquatableTypeUtil.BaseEquatableType<BuiltInExprUtil.TypeOf<ThenT>>|null>
+    ThenT extends AnyBuiltInExpr,
+    ElseT extends BuiltInExpr<BaseType<BuiltInExprUtil.TypeOf<ThenT>>|null>
 >(
     column : ColumnT & AssertNonUnion<ColumnT>,
     then : ThenT,
@@ -49,7 +48,7 @@ export function ifIsNull<
                     [columnAlias in ColumnT["columnAlias"]] : ColumnUtil.ToNonNullable<ColumnT>
                 }
             )
-        )
+        ) as any
     ) as (
         Expr<{
             mapper : tm.SafeMapper<BuiltInExprUtil.TypeOf<ThenT|ElseT>>,

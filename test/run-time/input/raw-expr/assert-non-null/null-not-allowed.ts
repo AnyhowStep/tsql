@@ -31,7 +31,7 @@ tape(__filename, t => {
     });
 
     t.doesNotThrow(() => {
-        tsql.BuiltInExprUtil.assertNonNull(`x`, tsql.ifNull(null, 2));
+        tsql.BuiltInExprUtil.assertNonNull(`x`, tsql.ifNull(null as null|number, 2));
     });
 
     t.throws(() => {

@@ -1,14 +1,15 @@
 //import * as tm from "type-mapping";
-import {AnyBuiltInExpr, BuiltInExprUtil} from "../../built-in-expr";
+import {AnyBuiltInExpr, BuiltInExprUtil, BuiltInExpr} from "../../built-in-expr";
 import {CoalesceExpr, coalesceMapper} from "./coalesce";
 import {ExprUtil} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
 import {TypeOfCoalesce} from "./type-of-coalesce";
+import {BaseType} from "../../type-util";
 
 export function ifNull<
     Arg0T extends AnyBuiltInExpr,
-    Arg1T extends AnyBuiltInExpr
+    Arg1T extends BuiltInExpr<BaseType<BuiltInExprUtil.TypeOf<Arg0T>>|null>
 > (
     arg0 : Arg0T,
     arg1 : Arg1T
