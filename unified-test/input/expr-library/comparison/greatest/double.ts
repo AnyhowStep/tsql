@@ -10,7 +10,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, 0);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.greatest(0, 1))
@@ -19,7 +19,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, 1);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.greatest(1, 0))
@@ -28,7 +28,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, 1);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.greatest(1, 1))
@@ -37,7 +37,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, 1);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.greatest(-0.5, 0, -0.7, 1, 2, 0.3))
@@ -46,7 +46,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, 2);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.greatest(-0.5, -0, -0.7, -1, -2, -0.3))
@@ -55,7 +55,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, 0);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
         });
 

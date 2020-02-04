@@ -70,7 +70,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
         }).then(() => {
             t.fail("Should not insert anything");
         }).catch((err) => {
-            t.pass(err.message);
+            t.fail(err.message);
         });
 
         await pool

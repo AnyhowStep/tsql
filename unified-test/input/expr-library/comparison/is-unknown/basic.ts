@@ -16,7 +16,7 @@ export const test : Test = ({tape, pool}) => {
                         t.deepEqual(value, a === null);
                     })
                     .catch((err) => {
-                        t.pass(err.message);
+                        t.fail(err.message);
                     });
             }
         });

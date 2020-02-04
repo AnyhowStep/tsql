@@ -557,7 +557,12 @@ export const sqliteSqlfier : Sqlfier = {
                 scale
             ).ast
         )*/,
-        [LiteralValueType.STRING] : ({literalValue}) => pascalStyleEscapeString(literalValue),
+        [LiteralValueType.STRING] : ({literalValue}) => {
+            if (literalValue.includes('\0')) {
+                throw new Error(`String literal may not contain null characters`);
+            }
+            return pascalStyleEscapeString(literalValue);
+        },
         [LiteralValueType.DOUBLE] : ({literalValue}) => escapeValue(literalValue),
         [LiteralValueType.BIGINT_SIGNED] : ({literalValue}) => escapeValue(literalValue),
         /**
@@ -586,9 +591,17 @@ export const sqliteSqlfier : Sqlfier = {
             "AND",
             operands[2]
         ],
+        [OperatorType.NOT_BETWEEN_AND] : ({operands}) => [
+            operands[0],
+            "NOT BETWEEN",
+            operands[1],
+            "AND",
+            operands[2]
+        ],
         [OperatorType.COALESCE] : ({operatorType, operands}) => functionCall(operatorType, operands),
         [OperatorType.EQUAL] : ({operands}) => insertBetween(operands, "="),
         [OperatorType.NULL_SAFE_EQUAL] : ({operands}) => insertBetween(operands, "IS"),
+        [OperatorType.NOT_NULL_SAFE_EQUAL] : ({operands}) => insertBetween(operands, "IS NOT"),
         [OperatorType.LESS_THAN] : ({operands}) => insertBetween(operands, "<"),
         [OperatorType.GREATER_THAN] : ({operands}) => insertBetween(operands, ">"),
         [OperatorType.LESS_THAN_OR_EQUAL] : ({operands}) => insertBetween(operands, "<="),
@@ -612,8 +625,33 @@ export const sqliteSqlfier : Sqlfier = {
                 ])
             ];
         },
+        [OperatorType.NOT_IN_ARRAY] : ({operands : [x, ...rest]}) => {
+            return [
+                x,
+                functionCall("NOT IN", [...rest])
+            ];
+        },
+        [OperatorType.NOT_IN_QUERY] : ({operands : [x, y]}) => {
+            /**
+             * https://github.com/AnyhowStep/tsql/issues/198
+             */
+            return [
+                x,
+                functionCall("NOT IN", [
+                    Parentheses.IsParentheses(y) ?
+                    y.ast :
+                    y
+                ])
+            ];
+        },
         [OperatorType.IS_NOT_NULL] : ({operands}) => [operands[0], "IS NOT NULL"],
         [OperatorType.IS_NULL] : ({operands}) => [operands[0], "IS NULL"],
+        [OperatorType.IS_UNKNOWN] : ({operands}) => [operands[0], "IS NULL"],
+        [OperatorType.IS_NOT_UNKNOWN] : ({operands}) => [operands[0], "IS NOT NULL"],
+        [OperatorType.IS_TRUE] : ({operands}) => [operands[0], "IS TRUE"],
+        [OperatorType.IS_NOT_TRUE] : ({operands}) => [operands[0], "IS NOT TRUE"],
+        [OperatorType.IS_FALSE] : ({operands}) => [operands[0], "IS FALSE"],
+        [OperatorType.IS_NOT_FALSE] : ({operands}) => [operands[0], "IS NOT FALSE"],
         [OperatorType.LIKE_ESCAPE] : ({operands : [expr, pattern, escapeChar]}) => {
             if (LiteralValueNodeUtil.isLiteralValueNode(escapeChar) && escapeChar.literalValue === "") {
                 return [
@@ -637,6 +675,8 @@ export const sqliteSqlfier : Sqlfier = {
             }
         },
         [OperatorType.NOT_EQUAL] : ({operands}) => insertBetween(operands, "<>"),
+        [OperatorType.LEAST] : ({operands}) => functionCall("MIN", operands),
+        [OperatorType.GREATEST] : ({operands}) => functionCall("MAX", operands),
 
         /*
             Logical Operators
@@ -663,11 +703,14 @@ export const sqliteSqlfier : Sqlfier = {
             c,
             "END"
         ],
+        [OperatorType.IF_NULL] : ({operands}) => functionCall("IFNULL", operands),
+        [OperatorType.NULL_IF_EQUAL] : ({operands}) => functionCall("NULLIF", operands),
 
         /*
             String Functions and Operators
             https://dev.mysql.com/doc/refman/8.0/en/string-functions.html
         */
+        [OperatorType.ASCII] : ({operands}) => functionCall("ASCII", operands),
         [OperatorType.CONCAT] : ({operands}) => insertBetween(operands, "||"),
 
         /*

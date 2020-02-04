@@ -10,7 +10,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, false);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.between(2, 2, 3))
@@ -19,7 +19,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, true);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.between(2.5, 2, 3))
@@ -28,7 +28,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, true);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.between(3, 2, 3))
@@ -37,7 +37,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, true);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.between(3.5, 2, 3))
@@ -46,7 +46,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, false);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
         });
 

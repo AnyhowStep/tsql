@@ -10,7 +10,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, 6.282);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.ifNull(9001, 6.282))
@@ -19,7 +19,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, 9001);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.ifNull(null as null|number, 9001))
@@ -28,7 +28,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, 9001);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.ifNull(9001, null))
@@ -37,7 +37,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, 9001);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.ifNull(-42, null))
@@ -46,7 +46,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, -42);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.ifNull(null as null|number, -42))
@@ -55,7 +55,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, -42);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.ifNull(null, null))
@@ -64,7 +64,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, null);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.ifNull(null, null))
@@ -73,7 +73,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, null);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
         });
 
