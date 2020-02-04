@@ -21,11 +21,7 @@ export const test : Test = ({tape, pool}) => {
                     t.fail(err.message);
                 });
 
-            /**
-             * @todo MySQL can't seem to handle [128. 255].
-             * It always gives back the wrong value.
-             */
-            for (let i=1; i<=127; ++i) {
+            for (let i=1; i<=255; ++i) {
                 await tsql.selectValue(() => String.fromCharCode(i))
                     .fetchValue(connection)
                     .then((value) => {
@@ -34,7 +30,19 @@ export const test : Test = ({tape, pool}) => {
                     .catch((err) => {
                         t.fail(err.message);
                     });
+            }
 
+            /**
+             * We do not test 128-255 because the character set of the string can
+             * affect the results.
+             *
+             * For example, on MySQL,
+             * + `ASCII(CHAR(128 USING latin1)` is `128`
+             *   + `CHAR(128 USING latin1)` takes up **1** byte
+             * + `ASCII(CHAR(128 USING utf8mb4)` is `194`
+             *   + `CHAR(128 USING utf8mb4)` takes up **2** bytes
+             */
+            for (let i=1; i<=127; ++i) {
                 await tsql.selectValue(() => tsql.ascii(String.fromCharCode(i)))
                     .fetchValue(connection)
                     .then((value) => {
