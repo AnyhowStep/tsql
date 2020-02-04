@@ -1882,7 +1882,12 @@ export class Pool implements tsql.IPool {
             });
             await connection.createFunction("FROM_BASE64", (x) => {
                 if (typeof x == "string") {
-                    return Buffer.from(x, "base64");
+                    const result = Buffer.from(x, "base64");
+                    if (x.toUpperCase() == result.toString("base64").toUpperCase()) {
+                        return result;
+                    } else {
+                        throw new Error(`Invalid Base64 string ${x}`);
+                    }
                 } else {
                     throw new Error(`FROM_BASE64 only implemented for string`);
                 }

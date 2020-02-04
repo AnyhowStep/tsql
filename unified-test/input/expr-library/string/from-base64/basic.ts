@@ -40,6 +40,21 @@ export const test : Test = ({tape, pool}) => {
                 .catch((err) => {
                     t.fail(err.message);
                 });
+
+            await tsql
+                .selectValue(() => tsql.fromBase64("~"))
+                .fetchValue(connection)
+                .then((value) => {
+                    if (value === null) {
+                        t.pass(`Returning NULL is acceptable`);
+                    } else {
+                        t.fail(`FROM_BASE64('~') should fail; received [${[...value.values()].join(", ")}]`);
+                    }
+                })
+                .catch((err) => {
+                    //Throwing is acceptable
+                    t.pass(err.message);
+                });
         });
 
         t.end();
