@@ -711,6 +711,7 @@ export const sqliteSqlfier : Sqlfier = {
             https://dev.mysql.com/doc/refman/8.0/en/string-functions.html
         */
         [OperatorType.ASCII] : ({operands}) => functionCall("ASCII", operands),
+        [OperatorType.BIN] : ({operands}) => functionCall("BIN", operands),
         [OperatorType.CONCAT] : ({operands}) => insertBetween(operands, "||"),
 
         /*

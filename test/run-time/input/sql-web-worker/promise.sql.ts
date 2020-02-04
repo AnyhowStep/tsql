@@ -1823,6 +1823,26 @@ export class Pool implements tsql.IPool {
                     throw new Error(`ASCII only implemented for string`);
                 }
             });
+            await connection.createFunction("BIN", (x) => {
+                if (tm.TypeUtil.isBigInt(x)) {
+                    if (tm.BigIntUtil.greaterThanOrEqual(x, 0)) {
+                        return tm.BigIntUtil.toString(
+                            x,
+                            2
+                        );
+                    } else {
+                        return tm.BigIntUtil.toString(
+                            tm.BigIntUtil.add(
+                                tm.BigIntUtil.leftShift(tm.BigInt(1), 64),
+                                x
+                            ),
+                            2
+                        );
+                    }
+                } else {
+                    throw new Error(`BIN only implemented for bigint`);
+                }
+            });
         }).then(
             () => {},
             (err) => {
