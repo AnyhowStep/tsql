@@ -1,6 +1,7 @@
 export * from "./assert-non-never";
 export * from "./assert-same-own-enumerable-keys";
 export * from "./assert-subset-own-enumerable-keys";
+export * from "./base-type";
 export * from "./better-return-type";
 export * from "./identity";
 export * from "./is-comparable";
