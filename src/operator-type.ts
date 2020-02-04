@@ -937,9 +937,7 @@ export enum OperatorType {
      *
      * + MySQL          : `OCTET_LENGTH(x)`
      * + PostgreSQL     : `OCTET_LENGTH(x)`
-     * + SQLite         : None. Implement with `(new Blob([x])).size`
-     *   + https://stackoverflow.com/questions/2219526/how-many-bytes-in-a-javascript-string/29955838
-     *   + In `node`, `Buffer.from(x).length`
+     * + SQLite         : `LENGTH(CAST(x AS BLOB))`
      */
     OCTET_LENGTH = "OCTET_LENGTH",
 

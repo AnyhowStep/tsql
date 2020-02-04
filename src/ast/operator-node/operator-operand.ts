@@ -76,7 +76,7 @@ export type OperatorOperand = {
     [OperatorType.ASCII]                    : Operand1,
     [OperatorType.BIN]                      : Operand1,
     [OperatorType.BIT_LENGTH]               : Operand1,
-    [OperatorType.CHAR_LENGTH]               : Operand1,
+    [OperatorType.CHAR_LENGTH]              : Operand1,
     [OperatorType.CONCAT]                   : Operand1ToN,
     [OperatorType.NULL_SAFE_CONCAT]         : Operand1ToN,
     [OperatorType.CONCAT_WS]                : Operand2ToN,
