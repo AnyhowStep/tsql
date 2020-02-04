@@ -10,7 +10,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, true);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.notInArray(1, [1]))
@@ -19,7 +19,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, false);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.notInArray(1, [2]))
@@ -28,7 +28,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, true);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.notInArray(1, [5, 1]))
@@ -37,7 +37,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, false);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.notInArray(1, [5, 8]))
@@ -46,7 +46,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, true);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.notInArray(1, [7, 1, 4]))
@@ -55,7 +55,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, false);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.notInArray(1, [7, 9, 4]))
@@ -64,7 +64,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, true);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
         });
 

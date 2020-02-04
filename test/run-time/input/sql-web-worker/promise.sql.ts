@@ -375,6 +375,7 @@ export class Connection {
                 return selectResult;
             })
             .catch((err) => {
+                //console.log(sql);
                 //console.error("error encountered", sql);
                 throw err;
             });
@@ -1810,6 +1811,16 @@ export class Pool implements tsql.IPool {
                     }
                 } else {
                     throw new Error(`Precision and scale must be bigint`);
+                }
+            });
+            await connection.createFunction("ASCII", (x) => {
+                if (typeof x == "string") {
+                    if (x == "") {
+                        return 0;
+                    }
+                    return x.charCodeAt(0);
+                } else {
+                    throw new Error(`ASCII only implemented for string`);
                 }
             });
         }).then(

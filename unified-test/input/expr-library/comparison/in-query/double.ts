@@ -39,7 +39,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     t.deepEqual(value, false);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
         });
 
@@ -63,7 +63,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     t.deepEqual(value, false);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
         });
 
@@ -87,7 +87,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     t.deepEqual(value, true);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await connection.rollback();
@@ -113,7 +113,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     t.deepEqual(value, false);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
         });
 
@@ -137,7 +137,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     t.deepEqual(value, true);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await connection.rollback();

@@ -31,7 +31,7 @@ export const test : Test = ({tape, pool}) => {
                             t.deepEqual(value, regex.test(a));
                         })
                         .catch((err) => {
-                            t.pass(err.message);
+                            t.fail(err.message);
                         });
                 }
             }

@@ -10,7 +10,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, null);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.coalesce(9001))
@@ -19,7 +19,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, 9001);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.coalesce(null))
@@ -28,7 +28,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, null);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.coalesce(1,2,3,4))
@@ -37,7 +37,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, 1);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.coalesce(null,2,3,4))
@@ -46,7 +46,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, 2);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.coalesce(null,null,3,4))
@@ -55,7 +55,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, 3);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.coalesce(null,null,null,4))
@@ -64,7 +64,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, 4);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
 
             await tsql.selectValue(() => tsql.coalesce(null,null,null,null))
@@ -73,7 +73,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, null);
                 })
                 .catch((err) => {
-                    t.pass(err.message);
+                    t.fail(err.message);
                 });
         });
 
