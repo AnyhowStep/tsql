@@ -731,6 +731,12 @@ export const sqliteSqlfier : Sqlfier = {
             ]
         ),
         [OperatorType.CONCAT] : ({operands}) => insertBetween(operands, "||"),
+        [OperatorType.NULL_SAFE_CONCAT] : ({operands}) => (
+            insertBetween(
+                operands.map(operand => functionCall("COALESCE", [operand, "''"])),
+                "||"
+            )
+        ),
 
         /*
             Arithmetic Operators

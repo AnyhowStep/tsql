@@ -4,7 +4,7 @@ import * as tsql from "../../../../../dist";
 export const test : Test = ({tape, pool}) => {
     tape(__filename, async (t) => {
         await pool.acquire(async (connection) => {
-            await tsql.selectValue(() => tsql.concat(""))
+            await tsql.selectValue(() => tsql.nullSafeConcat(""))
                 .fetchValue(connection)
                 .then((value) => {
                     t.deepEqual(value, "");
@@ -13,7 +13,7 @@ export const test : Test = ({tape, pool}) => {
                     t.fail(err.message);
                 });
 
-            await tsql.selectValue(() => tsql.concat("a"))
+            await tsql.selectValue(() => tsql.nullSafeConcat("a"))
                 .fetchValue(connection)
                 .then((value) => {
                     t.deepEqual(value, "a");
@@ -22,7 +22,7 @@ export const test : Test = ({tape, pool}) => {
                     t.fail(err.message);
                 });
 
-            await tsql.selectValue(() => tsql.concat("", ""))
+            await tsql.selectValue(() => tsql.nullSafeConcat("", ""))
                 .fetchValue(connection)
                 .then((value) => {
                     t.deepEqual(value, "");
@@ -31,7 +31,7 @@ export const test : Test = ({tape, pool}) => {
                     t.fail(err.message);
                 });
 
-            await tsql.selectValue(() => tsql.concat("", "a"))
+            await tsql.selectValue(() => tsql.nullSafeConcat("", "a"))
                 .fetchValue(connection)
                 .then((value) => {
                     t.deepEqual(value, "a");
@@ -40,7 +40,7 @@ export const test : Test = ({tape, pool}) => {
                     t.fail(err.message);
                 });
 
-            await tsql.selectValue(() => tsql.concat("a", ""))
+            await tsql.selectValue(() => tsql.nullSafeConcat("a", ""))
                 .fetchValue(connection)
                 .then((value) => {
                     t.deepEqual(value, "a");
@@ -49,7 +49,7 @@ export const test : Test = ({tape, pool}) => {
                     t.fail(err.message);
                 });
 
-            await tsql.selectValue(() => tsql.concat("a", "b"))
+            await tsql.selectValue(() => tsql.nullSafeConcat("a", "b"))
                 .fetchValue(connection)
                 .then((value) => {
                     t.deepEqual(value, "ab");
@@ -58,7 +58,7 @@ export const test : Test = ({tape, pool}) => {
                     t.fail(err.message);
                 });
 
-            await tsql.selectValue(() => tsql.concat("a", "", "b"))
+                await tsql.selectValue(() => tsql.nullSafeConcat("a", "", "b"))
                 .fetchValue(connection)
                 .then((value) => {
                     t.deepEqual(value, "ab");
@@ -67,16 +67,7 @@ export const test : Test = ({tape, pool}) => {
                     t.fail(err.message);
                 });
 
-            await tsql.selectValue(() => tsql.concat("a", "b", "c"))
-                .fetchValue(connection)
-                .then((value) => {
-                    t.deepEqual(value, "abc");
-                })
-                .catch((err) => {
-                    t.fail(err.message);
-                });
-
-            await tsql.selectValue(() => tsql.concat("a", "", "b", "", "c"))
+            await tsql.selectValue(() => tsql.nullSafeConcat("a", "", "b", "", "c"))
                 .fetchValue(connection)
                 .then((value) => {
                     t.deepEqual(value, "abc");

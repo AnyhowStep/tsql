@@ -28,6 +28,10 @@ import {TypeHint} from "../../type-hint";
  * > that returns the character string made by joining its character string operands in the order given.
  *
  * MySQL actually treats `||` as the boolean `OR` operator.
+ *
+ * -----
+ *
+ * @see nullSafeConcat
  */
 export const concat = makeOperator1ToN<OperatorType.CONCAT, string, string>(
     OperatorType.CONCAT,
