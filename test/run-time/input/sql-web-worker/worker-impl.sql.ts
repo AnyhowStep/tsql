@@ -134,6 +134,7 @@ export function initWorker (
                 const impl = indirectEval("(" + data.impl + ")");
                 db.create_function(
                     data.functionName,
+                    data.options,
                     impl
                 );
                 postMessage({

@@ -17,7 +17,7 @@ tape(__filename, async (t) => {
     `);
     t.deepEqual(insertResult2, []);
 
-    const createFunctionResult = db.create_function("customAdd", (a, b) => {
+    const createFunctionResult = db.create_function("customAdd", {}, (a, b) => {
         return Number(a) + Number(b);
     });
     t.true(createFunctionResult == db);

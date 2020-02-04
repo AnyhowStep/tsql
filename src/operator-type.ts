@@ -615,8 +615,7 @@ export enum OperatorType {
      *
      * + MySQL          : `BIT_LENGTH(x)`
      * + PostgreSQL     : `BIT_LENGTH(x)`
-     * + SQLite         : None. Implement with, `new Blob([x]).size * 8`
-     *   + https://stackoverflow.com/questions/2219526/how-many-bytes-in-a-javascript-string/29955838
+     * + SQLite         : `LENGTH(CAST(x AS BLOB)) * 8`
      */
     BIT_LENGTH = "BIT_LENGTH",
 
@@ -629,10 +628,11 @@ export enum OperatorType {
      */
     //CHAR = "CHAR",
 
-    /*
+    /**
      * + https://dev.mysql.com/doc/refman/8.0/en/string-functions.html#function_char-length
      * + https://www.postgresql.org/docs/9.4/functions-string.html#FUNCTIONS-STRING-SQL
      * + https://www.sqlite.org/lang_corefunc.html#length
+     * + https://dmitripavlutin.com/what-every-javascript-developer-should-know-about-unicode/#33-string-length
      *
      * -----
      *
@@ -640,12 +640,10 @@ export enum OperatorType {
      *   + `CHAR_LENGTH('cafȩ́')` returns 6
      * + PostgreSQL     : `CHAR_LENGTH(x)`
      *   + `CHAR_LENGTH('cafȩ́')` returns 8
-     * + SQLite         : Maybe use `LENGTH(x)`. Or implement with, `[...x].length`
+     * + SQLite         : `LENGTH(x)`
      *   + `LENGTH('cafȩ́')` returns 6
-     *   + `[...'cafȩ́'].length` returns 6
-     *   + https://dmitripavlutin.com/what-every-javascript-developer-should-know-about-unicode/#33-string-length
      */
-    //CHAR_LENGTH = "CHAR_LENGTH",
+    CHAR_LENGTH = "CHAR_LENGTH",
 
     /**
      * + https://dev.mysql.com/doc/refman/8.0/en/string-functions.html#function_concat
@@ -939,9 +937,7 @@ export enum OperatorType {
      *
      * + MySQL          : `OCTET_LENGTH(x)`
      * + PostgreSQL     : `OCTET_LENGTH(x)`
-     * + SQLite         : None. Implement with `(new Blob([x])).size`
-     *   + https://stackoverflow.com/questions/2219526/how-many-bytes-in-a-javascript-string/29955838
-     *   + In `node`, `Buffer.from(x).length`
+     * + SQLite         : `LENGTH(CAST(x AS BLOB))`
      */
     OCTET_LENGTH = "OCTET_LENGTH",
 

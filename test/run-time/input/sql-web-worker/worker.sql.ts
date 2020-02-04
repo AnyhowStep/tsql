@@ -85,6 +85,7 @@ export type ToSqliteMessage = DistributeMerge<
         | {
             action : SqliteAction.CREATE_FUNCTION,
             functionName : string,
+            options : { isVarArg? : boolean, },
             /**
              * ```ts
              * ((a, b) => a+b).toString()

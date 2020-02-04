@@ -925,7 +925,7 @@ Database = (function() {
     db.functions[name] = func_ptr;
     return func_ptr;
   }
-  Database.prototype['create_function'] = function(name, func) {
+  Database.prototype['create_function'] = function(name, options, func) {
     const wrapped_func = function(cx, argc, argv) {
       const args = parseFunctionArguments(argc, argv);
       const result = invokeWithFunctionArguments(cx, func, args);
@@ -946,7 +946,11 @@ Database = (function() {
       /**
        * @todo Implement vararg function
        */
-      func.length,
+      (
+        options.isVarArg === true ?
+        -1 :
+        func.length
+      ),
       //eTextRep
       SQLite.UTF8,
       //pApp

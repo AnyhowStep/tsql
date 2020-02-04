@@ -3,6 +3,7 @@ export * from "./aggregate";
 export * from "./ascii";
 export * from "./bin";
 export * from "./bit-length";
+export * from "./char-length";
 export * from "./concat-ws";
 export * from "./concat";
 export * from "./escape-like-pattern";

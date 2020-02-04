@@ -279,6 +279,36 @@ export class Connection {
                 SqliteAction.CREATE_FUNCTION,
                 {
                     functionName,
+                    options : {
+                        isVarArg : false,
+                    },
+                    impl : impl.toString(),
+                },
+                () => {},
+            );
+        });
+    }
+    /**
+     * The `impl` function will be stringified using `impl.toString()`.
+     *
+     * Then, the function will be "rebuilt" using `eval()`.
+     *
+     * This means your `impl` cannot rely on anything outside its scope.
+     * It must be a "pure" function.
+     *
+     * Also, you really shouldn't pass user input to this method.
+     */
+    createVarArgFunction (functionName : string, impl : (...args : unknown[]) => unknown) {
+        return this.asyncQueue.enqueue((worker) => {
+            return postMessage(
+                worker,
+                this.allocateId(),
+                SqliteAction.CREATE_FUNCTION,
+                {
+                    functionName,
+                    options : {
+                        isVarArg : true,
+                    },
                     impl : impl.toString(),
                 },
                 () => {},
@@ -1821,6 +1851,33 @@ export class Pool implements tsql.IPool {
                     return x.charCodeAt(0);
                 } else {
                     throw new Error(`ASCII only implemented for string`);
+                }
+            });
+            await connection.createFunction("BIN", (x) => {
+                if (tm.TypeUtil.isBigInt(x)) {
+                    if (tm.BigIntUtil.greaterThanOrEqual(x, 0)) {
+                        return tm.BigIntUtil.toString(
+                            x,
+                            2
+                        );
+                    } else {
+                        return tm.BigIntUtil.toString(
+                            tm.BigIntUtil.add(
+                                tm.BigIntUtil.leftShift(tm.BigInt(1), 64),
+                                x
+                            ),
+                            2
+                        );
+                    }
+                } else {
+                    throw new Error(`BIN only implemented for bigint`);
+                }
+            });
+            await connection.createVarArgFunction("CONCAT_WS", (separator, ...args) => {
+                if (typeof separator == "string") {
+                    return args.filter(arg => arg !== null).join(separator);
+                } else {
+                    throw new Error(`CONCAT_WS only implemented for string`);
                 }
             });
         }).then(
