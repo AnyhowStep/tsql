@@ -279,6 +279,36 @@ export class Connection {
                 SqliteAction.CREATE_FUNCTION,
                 {
                     functionName,
+                    options : {
+                        isVarArg : false,
+                    },
+                    impl : impl.toString(),
+                },
+                () => {},
+            );
+        });
+    }
+    /**
+     * The `impl` function will be stringified using `impl.toString()`.
+     *
+     * Then, the function will be "rebuilt" using `eval()`.
+     *
+     * This means your `impl` cannot rely on anything outside its scope.
+     * It must be a "pure" function.
+     *
+     * Also, you really shouldn't pass user input to this method.
+     */
+    createVarArgFunction (functionName : string, impl : (...args : unknown[]) => unknown) {
+        return this.asyncQueue.enqueue((worker) => {
+            return postMessage(
+                worker,
+                this.allocateId(),
+                SqliteAction.CREATE_FUNCTION,
+                {
+                    functionName,
+                    options : {
+                        isVarArg : true,
+                    },
                     impl : impl.toString(),
                 },
                 () => {},
@@ -1841,6 +1871,13 @@ export class Pool implements tsql.IPool {
                     }
                 } else {
                     throw new Error(`BIN only implemented for bigint`);
+                }
+            });
+            await connection.createVarArgFunction("CONCAT_WS", (separator, ...args) => {
+                if (typeof separator == "string") {
+                    return args.filter(arg => arg !== null).join(separator);
+                } else {
+                    throw new Error(`CONCAT_WS only implemented for string`);
                 }
             });
         }).then(
