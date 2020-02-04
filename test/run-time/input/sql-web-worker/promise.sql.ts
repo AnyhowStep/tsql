@@ -1880,6 +1880,13 @@ export class Pool implements tsql.IPool {
                     throw new Error(`CONCAT_WS only implemented for string`);
                 }
             });
+            await connection.createFunction("FROM_BASE64", (x) => {
+                if (typeof x == "string") {
+                    return Buffer.from(x, "base64");
+                } else {
+                    throw new Error(`FROM_BASE64 only implemented for string`);
+                }
+            });
         }).then(
             () => {},
             (err) => {

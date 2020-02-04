@@ -738,6 +738,7 @@ export const sqliteSqlfier : Sqlfier = {
             )
         ),
         [OperatorType.CONCAT_WS] : ({operands}) => functionCall("CONCAT_WS", operands),
+        [OperatorType.FROM_BASE64] : ({operands}) => functionCall("FROM_BASE64", operands),
 
         /*
             Arithmetic Operators

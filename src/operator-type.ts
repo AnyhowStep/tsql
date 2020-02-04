@@ -726,7 +726,7 @@ export enum OperatorType {
      */
     //FIELD = "FIELD",
 
-    /**
+    /*
      * Appears to be MySQL-specific,
      * https://dev.mysql.com/doc/refman/8.0/en/string-functions.html#function_find-in-set
      *
@@ -743,6 +743,8 @@ export enum OperatorType {
      *      str
      *  )
      * ```
+     *
+     * @todo Decide if we should add this
      */
     //FIND_IN_SET = "FIND_IN_SET",
 

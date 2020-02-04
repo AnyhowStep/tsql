@@ -3,8 +3,29 @@ import {makeOperator1} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
-export const fromBase64 = makeOperator1<OperatorType.FROM_BASE64, string, string|null>(
+/**
+ * Takes a string encoded with the base-64,
+ * and returns the decoded result as a `BLOB/bytea`.
+ *
+ * + https://dev.mysql.com/doc/refman/8.0/en/string-functions.html#function_from-base64
+ * + https://www.postgresql.org/docs/7.4/functions-string.html#FUNCTIONS-STRING-OTHER
+ *
+ * -----
+ *
+ * + MySQL          : `FROM_BASE64(x)`
+ *   + `FROM_BASE64('~')` === `NULL`
+ * + PostgreSQL     : `DECODE(x, 'base64')`
+ *   + `DECODE('~', 'base64')` throws an error
+ * + SQLite         : None, implement with user-defined function `atob()`
+ *   + `atob('~')` throws an error
+ *
+ * -----
+ *
+ * If the input is not a valid base-64 string, some databses throw an error.
+ * Others return `NULL`.
+ */
+export const fromBase64 = makeOperator1<OperatorType.FROM_BASE64, string, Uint8Array|null>(
     OperatorType.FROM_BASE64,
-    tm.orNull(tm.string()),
+    tm.orNull(tm.instanceOfUint8Array()),
     TypeHint.STRING
 );
