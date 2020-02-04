@@ -628,10 +628,11 @@ export enum OperatorType {
      */
     //CHAR = "CHAR",
 
-    /*
+    /**
      * + https://dev.mysql.com/doc/refman/8.0/en/string-functions.html#function_char-length
      * + https://www.postgresql.org/docs/9.4/functions-string.html#FUNCTIONS-STRING-SQL
      * + https://www.sqlite.org/lang_corefunc.html#length
+     * + https://dmitripavlutin.com/what-every-javascript-developer-should-know-about-unicode/#33-string-length
      *
      * -----
      *
@@ -639,12 +640,10 @@ export enum OperatorType {
      *   + `CHAR_LENGTH('cafȩ́')` returns 6
      * + PostgreSQL     : `CHAR_LENGTH(x)`
      *   + `CHAR_LENGTH('cafȩ́')` returns 8
-     * + SQLite         : Maybe use `LENGTH(x)`. Or implement with, `[...x].length`
+     * + SQLite         : `LENGTH(x)`
      *   + `LENGTH('cafȩ́')` returns 6
-     *   + `[...'cafȩ́'].length` returns 6
-     *   + https://dmitripavlutin.com/what-every-javascript-developer-should-know-about-unicode/#33-string-length
      */
-    //CHAR_LENGTH = "CHAR_LENGTH",
+    CHAR_LENGTH = "CHAR_LENGTH",
 
     /**
      * + https://dev.mysql.com/doc/refman/8.0/en/string-functions.html#function_concat

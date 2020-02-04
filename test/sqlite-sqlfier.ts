@@ -723,6 +723,7 @@ export const sqliteSqlfier : Sqlfier = {
                 "* 8"
             ]
         ),
+        [OperatorType.CHAR_LENGTH] : ({operands}) => functionCall("LENGTH", operands),
         [OperatorType.CONCAT] : ({operands}) => insertBetween(operands, "||"),
 
         /*
