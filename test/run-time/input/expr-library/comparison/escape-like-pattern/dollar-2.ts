@@ -11,7 +11,8 @@ tape(__filename, t => {
     const expr = tsql.like(
         myTable.columns.myColumn,
         tsql.escapeLikePattern("%D_v_d%", "$"),
-    ).escape("$");
+        "$"
+    );
 
     compareSqlPretty(__filename, t, expr.ast);
 

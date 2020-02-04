@@ -10,8 +10,9 @@ tape(__filename, t => {
         });
     const expr = tsql.like(
         myTable.columns.myColumn,
-        tsql.escapeLikePattern("%D_v_d%"),
-    ).escape("\\");
+        tsql.escapeLikePattern("%D_v_d%", "\\"),
+        "\\"
+    );
 
     compareSqlPretty(__filename, t, expr.ast);
 

@@ -1,1 +1,1 @@
-("myTable"."myColumn" LIKE '%D_v_d%')
+("myTable"."myColumn" LIKE '%D_v_d%' ESCAPE '''')

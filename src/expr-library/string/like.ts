@@ -1,68 +1,67 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {makeOperator2} from "../factory";
 import {makeOperator3} from "../factory/make-operator-3";
-import {BuiltInExpr, BuiltInExprUtil} from "../../built-in-expr";
-import {ExprImpl} from "../../expr/expr-impl";
-import {IUsedRef} from "../../used-ref";
+import {BuiltInExpr} from "../../built-in-expr";
+import {ExprUtil} from "../../expr";
 
-/**
- * SQLite requires the `escapeChar` be exactly of length `1`
- */
-export function assertValidEscapeChar (escapeChar : string) {
+export function assertValidLikeEscapeChar (escapeChar : string) {
     tm.stringExactLength(1)("escapeChar", escapeChar);
 }
 
-export const likeImpl = makeOperator2<OperatorType.LIKE, string, boolean>(
-    OperatorType.LIKE,
-    tm.mysql.boolean(),
-    TypeHint.STRING
-);
-
-export const likeEscapeImpl = makeOperator3<OperatorType.LIKE_ESCAPE, string, string, string, boolean>(
+const likeEscapeImpl = makeOperator3<OperatorType.LIKE_ESCAPE, string, string, string, boolean>(
     OperatorType.LIKE_ESCAPE,
     tm.mysql.boolean(),
     TypeHint.STRING
 );
 
-export interface LikeExpr<
-    UsedRefT extends IUsedRef,
-    IsAggregateT extends boolean
-> extends ExprImpl<boolean, UsedRefT, IsAggregateT> {
-    /**
-     * SQLite requires the `escapeChar` be exactly of length `1`
-     */
-    escape : (escapeChar : string) => ExprImpl<boolean, UsedRefT, IsAggregateT>;
-}
+/**
+ * + The escape character must always be specified, with this unified library.
+ * + The escape character must be of length `1`.
+ *
+ * -----
+ *
+ * Different databases, and collations, may cause the `LIKE` operator to handle case-sensitivity differently.
+ *
+ * -----
+ *
+ * This library requires the escape character to always be specified
+ * because different databases have different defaults.
+ *
+ * Forcing an explicit escape character helps keep behaviour more consistent
+ * across databases.
+ *
+ * Default escape characters per database,
+ * + MySQL      : backslash (`\`)
+ * + PostgreSQL : backslash (`\`)
+ * + SQLite     : no-escape-character
+ *
+ * -----
+ *
+ * This library requires the escape character to have length `1` because
+ * specifying the empty string has different behaviour on different databases,
+ * + MySQL      : backslash (`\`) (Seems impossible to have no-escape-character)
+ * + PostgreSQL : no-escape-character
+ * + SQLite     : throws error (Use `x LIKE y` to have no-escape-character)
+ *
+ * @param str - The target of the search
+ * @param pattern - The pattern to search for, may use wildcard characters like `%` and `_`
+ * @param escapeChar - The escape character to use on the `pattern`
+ */
 export function like<
-    ExprT extends BuiltInExpr<string>,
+    StrT extends BuiltInExpr<string>,
     PatternT extends BuiltInExpr<string>
 > (
-    builtInExpr : ExprT,
-    pattern : PatternT
+    str : StrT,
+    pattern : PatternT,
+    escapeChar : string
 ) : (
-    LikeExpr<
-        BuiltInExprUtil.IntersectUsedRef<ExprT|PatternT>,
-        BuiltInExprUtil.IsAggregate<ExprT|PatternT>
-    >
+    ExprUtil.Intersect<boolean, StrT|PatternT>
 ) {
-    const result = likeImpl<ExprT, PatternT>(builtInExpr, pattern) as unknown as (
-        LikeExpr<
-            BuiltInExprUtil.IntersectUsedRef<ExprT|PatternT>,
-            BuiltInExprUtil.IsAggregate<ExprT|PatternT>
-        >
-    );
-    result.escape = (escapeChar : string) : ReturnType<typeof result.escape> => {
-        /**
-         * SQLite requires the `escapeChar` be exactly of length `1`
-         */
-        assertValidEscapeChar(escapeChar);
-        const escapedExpr = likeEscapeImpl<ExprT, PatternT, string>(builtInExpr, pattern, escapeChar);
-        /**
-         * @todo Investigate assignability
-         */
-        return escapedExpr as unknown as ReturnType<typeof result.escape>;
-    };
-    return result;
+    assertValidLikeEscapeChar(escapeChar);
+    return likeEscapeImpl<StrT, PatternT, string>(
+        str,
+        pattern,
+        escapeChar
+    ) as ExprUtil.Intersect<boolean, StrT|PatternT>;
 }

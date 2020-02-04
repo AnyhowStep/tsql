@@ -1,4 +1,4 @@
-import {assertValidEscapeChar} from "./like";
+import {assertValidLikeEscapeChar} from "./like";
 
 //TODO-FEATURE Create a version using MySQL/PostgreSQL/SQLite queries
 //REGEXP_REPLACE(pattern, '(\\%|\\_)', '\\$1', 1, 0, 'm') or something
@@ -10,11 +10,9 @@ import {assertValidEscapeChar} from "./like";
  *
  * This function just prepends `escapeChar` to each of the above characters.
  * It also prepends `escapeChar` to itself.
- *
- * If no `escapeChar` is given, backslash is assumed.
  */
-export function escapeLikePattern (pattern : string, escapeChar : string = "\\") {
-    assertValidEscapeChar(escapeChar);
+export function escapeLikePattern (pattern : string, escapeChar : string) {
+    assertValidLikeEscapeChar(escapeChar);
     /**
      * Escape occurrences of the `escapeChar`
      */

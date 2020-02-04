@@ -297,7 +297,7 @@ export enum OperatorType {
      */
     LESS_THAN_OR_EQUAL = "LESS_THAN_OR_EQUAL",
 
-    /**
+    /*
      * + https://dev.mysql.com/doc/refman/8.0/en/string-comparison-functions.html#operator_like
      * + https://www.postgresql.org/docs/9.0/functions-matching.html#FUNCTIONS-LIKE
      * + https://www.sqlite.org/lang_expr.html#like
@@ -308,7 +308,12 @@ export enum OperatorType {
      * + PostgreSQL   : `LIKE`
      * + SQLite       : `LIKE`
      */
-    LIKE = "LIKE",
+    /*
+     * The `LIKE` operator has different default escape behaviours across databases.
+     * By default, SQLite does not have an escape character.
+     * By default, MySQL's is the backslash.
+     */
+    //LIKE = "LIKE",
 
     /**
      * + https://dev.mysql.com/doc/refman/8.0/en/string-comparison-functions.html#operator_like
@@ -387,7 +392,7 @@ export enum OperatorType {
      */
     NOT_IN_QUERY = "NOT_IN_QUERY",
 
-    /**
+    /*
      * + https://dev.mysql.com/doc/refman/8.0/en/string-comparison-functions.html#operator_not-like
      * + https://www.postgresql.org/docs/9.0/functions-matching.html#FUNCTIONS-LIKE
      * + https://www.sqlite.org/lang_expr.html#like
@@ -398,7 +403,12 @@ export enum OperatorType {
      * + PostgreSQL   : `NOT LIKE`
      * + SQLite       : `NOT LIKE`
      */
-    NOT_LIKE = "NOT_LIKE",
+    /*
+     * The `LIKE` operator has different default escape behaviours across databases.
+     * By default, SQLite does not have an escape character.
+     * By default, MySQL's is the backslash.
+     */
+    //NOT_LIKE = "NOT_LIKE",
 
     /**
      * + https://dev.mysql.com/doc/refman/8.0/en/string-comparison-functions.html#operator_not-like

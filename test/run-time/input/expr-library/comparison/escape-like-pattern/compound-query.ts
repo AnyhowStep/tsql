@@ -17,8 +17,9 @@ tape(__filename, t => {
     const expr = tsql.and(
         tsql.like(
             myTable.columns.myColumn,
-            tsql.escapeLikePattern("%D\\_v\\_d%"),
-        ).escape("\\"),
+            tsql.escapeLikePattern("%D\\_v\\_d%", "\\"),
+            "\\"
+        ),
         tsql.gt(32, 12)
     );
 

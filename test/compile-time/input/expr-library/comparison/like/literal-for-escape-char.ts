@@ -8,4 +8,5 @@ const likeTable = tsql.table("likeTable")
 export const expr0 = tsql.like(
     likeTable.columns.v,
     likeTable.columns.v2,
-).escape("\\");
+    "\\"
+);

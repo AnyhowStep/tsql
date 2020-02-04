@@ -11,7 +11,8 @@ tape(__filename, t => {
     const expr = tsql.notLike(
         myTable.columns.myColumn,
         "%D?_v?_d%",
-    ).escape("?");
+        "?"
+    );
 
     compareSqlPretty(__filename, t, expr.ast);
 
