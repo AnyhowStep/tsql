@@ -1,3 +1,4 @@
+export * from "./make-any-operator-1";
 export * from "./make-chainable-decimal-operator";
 export * from "./make-chainable-operator";
 export * from "./make-comparison-1-to-n";

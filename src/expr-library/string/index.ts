@@ -18,7 +18,7 @@ export * from "./not-like";
 export * from "./null-safe-concat";
 export * from "./octet-length";
 export * from "./position";
-export * from "./quote";
+//export * from "./quote";
 export * from "./r-pad";
 export * from "./r-trim";
 export * from "./repeat";

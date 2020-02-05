@@ -1880,6 +1880,95 @@ export class Pool implements tsql.IPool {
                     throw new Error(`CONCAT_WS only implemented for string`);
                 }
             });
+            await connection.createFunction("FROM_BASE64", (x) => {
+                if (typeof x == "string") {
+                    const result = Buffer.from(x, "base64");
+                    if (x.toUpperCase() == result.toString("base64").toUpperCase()) {
+                        return result;
+                    } else {
+                        throw new Error(`Invalid Base64 string ${x}`);
+                    }
+                } else {
+                    throw new Error(`FROM_BASE64 only implemented for string`);
+                }
+            });
+            await connection.createFunction("LPAD", (str, len, pad) => {
+                if (
+                    typeof str == "string" &&
+                    tm.TypeUtil.isBigInt(len) &&
+                    typeof pad == "string"
+                ) {
+                    if (str.length > Number(len)) {
+                        return str.substr(0, Number(len));
+                    } else if (str.length == Number(len)) {
+                        return str;
+                    } else {
+                        return str.padStart(Number(len), pad);
+                    }
+                } else {
+                    throw new Error(`LPAD only implemented for (string, bigint, string)`);
+                }
+            });
+            await connection.createFunction("RPAD", (str, len, pad) => {
+                if (
+                    typeof str == "string" &&
+                    tm.TypeUtil.isBigInt(len) &&
+                    typeof pad == "string"
+                ) {
+                    if (str.length > Number(len)) {
+                        return str.substr(0, Number(len));
+                    } else if (str.length == Number(len)) {
+                        return str;
+                    } else {
+                        return str.padEnd(Number(len), pad);
+                    }
+                } else {
+                    throw new Error(`RPAD only implemented for (string, bigint, string)`);
+                }
+            });
+            await connection.createFunction("REPEAT", (str, count) => {
+                if (
+                    typeof str == "string" &&
+                    tm.TypeUtil.isBigInt(count)
+                ) {
+                    if (Number(count) < 0) {
+                        return "";
+                    }
+                    return str.repeat(Number(count));
+                } else {
+                    throw new Error(`REPEAT only implemented for (string, bigint)`);
+                }
+            });
+            await connection.createFunction("REVERSE", (str) => {
+                if (
+                    typeof str == "string"
+                ) {
+                    return [...str].reverse().join("");
+                } else {
+                    throw new Error(`REVERSE only implemented for (string)`);
+                }
+            });
+            await connection.createFunction("TO_BASE64", (blob) => {
+                if (
+                    blob instanceof Uint8Array
+                ) {
+                    return Buffer.from(blob).toString("base64");
+                } else {
+                    throw new Error(`TO_BASE64 only implemented for (Uint8Array)`);
+                }
+            });
+            await connection.createFunction("UNHEX", (x) => {
+                if (typeof x == "string") {
+                    const result = Buffer.from(x, "hex");
+                    if (x.toUpperCase() == result.toString("hex").toUpperCase()) {
+                        return result;
+                    } else {
+                        throw new Error(`Invalid Hex string ${x}`);
+                    }
+                } else {
+                    throw new Error(`UNHEX only implemented for string`);
+                }
+            });
         }).then(
             () => {},
             (err) => {
