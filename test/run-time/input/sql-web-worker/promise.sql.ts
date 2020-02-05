@@ -1948,6 +1948,15 @@ export class Pool implements tsql.IPool {
                     throw new Error(`REVERSE only implemented for (string)`);
                 }
             });
+            await connection.createFunction("TO_BASE64", (blob) => {
+                if (
+                    blob instanceof Uint8Array
+                ) {
+                    return Buffer.from(blob).toString("base64");
+                } else {
+                    throw new Error(`TO_BASE64 only implemented for (Uint8Array)`);
+                }
+            });
         }).then(
             () => {},
             (err) => {
