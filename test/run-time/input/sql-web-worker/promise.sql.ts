@@ -1909,6 +1909,23 @@ export class Pool implements tsql.IPool {
                     throw new Error(`LPAD only implemented for (string, bigint, string)`);
                 }
             });
+            await connection.createFunction("RPAD", (str, len, pad) => {
+                if (
+                    typeof str == "string" &&
+                    tm.TypeUtil.isBigInt(len) &&
+                    typeof pad == "string"
+                ) {
+                    if (str.length > Number(len)) {
+                        return str.substr(0, Number(len));
+                    } else if (str.length == Number(len)) {
+                        return str;
+                    } else {
+                        return str.padEnd(Number(len), pad);
+                    }
+                } else {
+                    throw new Error(`RPAD only implemented for (string, bigint, string)`);
+                }
+            });
         }).then(
             () => {},
             (err) => {

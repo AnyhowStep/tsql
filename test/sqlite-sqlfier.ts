@@ -742,6 +742,7 @@ export const sqliteSqlfier : Sqlfier = {
         [OperatorType.HEX] : ({operands}) => functionCall("HEX", operands),
         [OperatorType.IN_STR] : ({operands}) => functionCall("INSTR", operands),
         [OperatorType.LPAD] : ({operands}) => functionCall("LPAD", operands),
+        [OperatorType.RPAD] : ({operands}) => functionCall("RPAD", operands),
 
         /*
             Arithmetic Operators
