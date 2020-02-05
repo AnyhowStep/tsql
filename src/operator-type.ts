@@ -900,8 +900,10 @@ export enum OperatorType {
      *
      * + MySQL          : `LPAD(str, len, padstr)`
      *   + `LPAD('123', 4, '98')` === `'9123'`
+     *   + `LPAD('123', 2, '98')` === `'12'`
      * + PostgreSQL     : `LPAD(str, len, padstr)`
      *   + `LPAD('123', 4, '98')` === `'9123'`
+     *   + `LPAD('123', 2, '98')` === `'12'`
      * + SQLite         : None. Implement with user-defined function.
      */
     LPAD = "LPAD",

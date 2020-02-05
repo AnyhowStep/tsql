@@ -1892,6 +1892,23 @@ export class Pool implements tsql.IPool {
                     throw new Error(`FROM_BASE64 only implemented for string`);
                 }
             });
+            await connection.createFunction("LPAD", (str, len, pad) => {
+                if (
+                    typeof str == "string" &&
+                    tm.TypeUtil.isBigInt(len) &&
+                    typeof pad == "string"
+                ) {
+                    if (str.length > Number(len)) {
+                        return str.substr(0, Number(len));
+                    } else if (str.length == Number(len)) {
+                        return str;
+                    } else {
+                        return str.padStart(Number(len), pad);
+                    }
+                } else {
+                    throw new Error(`LPAD only implemented for (string, bigint, string)`);
+                }
+            });
         }).then(
             () => {},
             (err) => {
