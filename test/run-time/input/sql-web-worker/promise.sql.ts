@@ -1957,6 +1957,18 @@ export class Pool implements tsql.IPool {
                     throw new Error(`TO_BASE64 only implemented for (Uint8Array)`);
                 }
             });
+            await connection.createFunction("UNHEX", (x) => {
+                if (typeof x == "string") {
+                    const result = Buffer.from(x, "hex");
+                    if (x.toUpperCase() == result.toString("hex").toUpperCase()) {
+                        return result;
+                    } else {
+                        throw new Error(`Invalid Hex string ${x}`);
+                    }
+                } else {
+                    throw new Error(`UNHEX only implemented for string`);
+                }
+            });
         }).then(
             () => {},
             (err) => {

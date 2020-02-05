@@ -4,7 +4,7 @@ import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
 /**
- * Takes a string encoded with the base-64,
+ * Takes a base-64 encoded string,
  * and returns the decoded result as a `BLOB/bytea`.
  *
  * + https://dev.mysql.com/doc/refman/8.0/en/string-functions.html#function_from-base64
@@ -21,7 +21,7 @@ import {TypeHint} from "../../type-hint";
  *
  * -----
  *
- * If the input is not a valid base-64 string, some databses throw an error.
+ * If the input is not a valid base-64 string, some databases throw an error.
  * Others return `NULL`.
  */
 export const fromBase64 = makeOperator1<OperatorType.FROM_BASE64, string, Uint8Array|null>(
