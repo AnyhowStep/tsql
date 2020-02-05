@@ -747,6 +747,7 @@ export const sqliteSqlfier : Sqlfier = {
         [OperatorType.RTRIM] : ({operands}) => functionCall("RTRIM", operands),
         [OperatorType.TRIM] : ({operands}) => functionCall("TRIM", operands),
         [OperatorType.POSITION] : ({operands}) => functionCall("INSTR", [operands[1], operands[0]]),
+        [OperatorType.REPEAT] : ({operands}) => functionCall("REPEAT", operands),
 
         /*
             Arithmetic Operators

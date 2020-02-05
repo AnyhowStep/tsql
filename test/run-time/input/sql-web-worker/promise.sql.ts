@@ -1926,6 +1926,19 @@ export class Pool implements tsql.IPool {
                     throw new Error(`RPAD only implemented for (string, bigint, string)`);
                 }
             });
+            await connection.createFunction("REPEAT", (str, count) => {
+                if (
+                    typeof str == "string" &&
+                    tm.TypeUtil.isBigInt(count)
+                ) {
+                    if (Number(count) < 0) {
+                        return "";
+                    }
+                    return str.repeat(Number(count));
+                } else {
+                    throw new Error(`REPEAT only implemented for (string, bigint)`);
+                }
+            });
         }).then(
             () => {},
             (err) => {
