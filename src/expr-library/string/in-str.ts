@@ -25,6 +25,8 @@ import {TypeHint} from "../../type-hint";
  *
  * If the substring is not found, it returns `0`.
  * Remember that string indices are one-based; not zero-based.
+ *
+ * @see position
  */
 export const inStr = makeOperator2<OperatorType.IN_STR, string, string, bigint>(
     OperatorType.IN_STR,
