@@ -58,7 +58,7 @@ export const rPadUnsafe = makeOperator3<OperatorType.RPAD, string, bigint, strin
  * If input string is longer than the specified length,
  * the return value is shortened to the specified length.
  *
- * + https://dev.mysql.com/doc/refman/8.0/en/string-functions.html#function_lpad
+ * + https://dev.mysql.com/doc/refman/8.0/en/string-functions.html#function_rpad
  * + https://www.postgresql.org/docs/9.4/functions-string.html#FUNCTIONS-STRING-OTHER
  *
  * -----

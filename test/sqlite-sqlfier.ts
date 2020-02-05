@@ -743,6 +743,9 @@ export const sqliteSqlfier : Sqlfier = {
         [OperatorType.IN_STR] : ({operands}) => functionCall("INSTR", operands),
         [OperatorType.LPAD] : ({operands}) => functionCall("LPAD", operands),
         [OperatorType.RPAD] : ({operands}) => functionCall("RPAD", operands),
+        [OperatorType.LTRIM] : ({operands}) => functionCall("LTRIM", operands),
+        [OperatorType.RTRIM] : ({operands}) => functionCall("RTRIM", operands),
+        [OperatorType.TRIM] : ({operands}) => functionCall("TRIM", operands),
 
         /*
             Arithmetic Operators
