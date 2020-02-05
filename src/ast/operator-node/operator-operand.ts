@@ -88,7 +88,7 @@ export type OperatorOperand = {
     [OperatorType.LTRIM]                    : Operand1,
     [OperatorType.OCTET_LENGTH]             : Operand1,
     [OperatorType.POSITION]                 : Operand2,
-    [OperatorType.QUOTE]                    : Operand1,
+    //[OperatorType.QUOTE]                    : Operand1,
     [OperatorType.REPEAT]                   : Operand2,
     [OperatorType.REPLACE]                  : Operand3,
     [OperatorType.REVERSE]                  : Operand1,

@@ -963,7 +963,7 @@ export enum OperatorType {
      */
     POSITION = "POSITION",
 
-    /**
+    /*
      * + https://dev.mysql.com/doc/refman/8.0/en/string-functions.html#function_quote
      * + https://www.postgresql.org/docs/9.4/functions-string.html#FUNCTIONS-STRING-OTHER
      * + https://www.sqlite.org/lang_corefunc.html#quote
@@ -973,8 +973,12 @@ export enum OperatorType {
      * + MySQL          : `QUOTE(x)`
      * + PostgreSQL     : `QUOTE_NULLABLE(x)`
      * + SQLite         : `QUOTE(x)`
+     *
+     * SQLite seems to not return just strings...
+     * SQLite can return string|Uint8Array|number|bigint|...
+     * So, we can't unify this.
      */
-    QUOTE = "QUOTE",
+    //QUOTE = "QUOTE",
 
     /*
      * + https://dev.mysql.com/doc/refman/8.0/en/regexp.html#operator_regexp

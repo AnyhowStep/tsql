@@ -1,0 +1,24 @@
+import * as tm from "type-mapping";
+import {makeAnyOperator1} from "../factory";
+import {OperatorType} from "../../operator-type";
+
+/**
+ * + https://dev.mysql.com/doc/refman/8.0/en/string-functions.html#function_quote
+ * + https://www.postgresql.org/docs/9.4/functions-string.html#FUNCTIONS-STRING-OTHER
+ * + https://www.sqlite.org/lang_corefunc.html#quote
+ *
+ * -----
+ *
+ * + MySQL          : `QUOTE(x)`
+ * + PostgreSQL     : `QUOTE_NULLABLE(x)`
+ * + SQLite         : `QUOTE(x)`
+ *
+ * -----
+ *
+ * Different databases quote certain values differently.
+ * SQLite seems to not return strings all the time.
+ */
+export const quote = makeAnyOperator1<OperatorType.QUOTE, string>(
+    OperatorType.QUOTE,
+    tm.string()
+);
