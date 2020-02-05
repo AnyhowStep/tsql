@@ -1939,6 +1939,15 @@ export class Pool implements tsql.IPool {
                     throw new Error(`REPEAT only implemented for (string, bigint)`);
                 }
             });
+            await connection.createFunction("REVERSE", (str) => {
+                if (
+                    typeof str == "string"
+                ) {
+                    return [...str].reverse().join("");
+                } else {
+                    throw new Error(`REVERSE only implemented for (string)`);
+                }
+            });
         }).then(
             () => {},
             (err) => {

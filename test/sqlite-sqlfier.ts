@@ -749,6 +749,7 @@ export const sqliteSqlfier : Sqlfier = {
         [OperatorType.POSITION] : ({operands}) => functionCall("INSTR", [operands[1], operands[0]]),
         [OperatorType.REPEAT] : ({operands}) => functionCall("REPEAT", operands),
         [OperatorType.REPLACE] : ({operands}) => functionCall("REPLACE", operands),
+        [OperatorType.REVERSE] : ({operands}) => functionCall("REVERSE", operands),
 
         /*
             Arithmetic Operators
