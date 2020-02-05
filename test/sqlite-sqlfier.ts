@@ -752,6 +752,8 @@ export const sqliteSqlfier : Sqlfier = {
         [OperatorType.REVERSE] : ({operands}) => functionCall("REVERSE", operands),
         [OperatorType.TO_BASE64] : ({operands}) => functionCall("TO_BASE64", operands),
         [OperatorType.UNHEX] : ({operands}) => functionCall("UNHEX", operands),
+        [OperatorType.UPPER] : ({operands}) => functionCall("UPPER", operands),
+        [OperatorType.LOWER] : ({operands}) => functionCall("LOWER", operands),
 
         /*
             Arithmetic Operators
