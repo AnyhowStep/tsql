@@ -43,7 +43,7 @@ tape(__filename, t => {
     });
 
     t.throws(() => {
-        tsql.BuiltInExprUtil.assertNonNull(`x`, tsql.groupConcatDistinct("hi", ","));
+        tsql.BuiltInExprUtil.assertNonNull(`x`, tsql.groupConcatDistinct("hi"));
     });
 
     t.throws(() => {
