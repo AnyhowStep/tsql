@@ -833,7 +833,13 @@ export const sqliteSqlfier : Sqlfier = {
                 return insertBetween(operands, "*");
             }
         },
-        [OperatorType.UNARY_MINUS] : ({operands}) => ["-", operands[0]],
+        [OperatorType.UNARY_MINUS] : ({operands, typeHint}) => {
+            if (typeHint == TypeHint.BIGINT_SIGNED) {
+                return functionCall("bigint_neg", operands);
+            } else {
+                return ["-", operands[0]];
+            }
+        },
 
         /*
             Mathematical Functions
@@ -1028,6 +1034,16 @@ export const sqliteSqlfier : Sqlfier = {
                 throw new Error(`${operatorType} only implemented for 2 args`);
             }
         },
+        [OperatorType.AGGREGATE_GROUP_CONCAT_DISTINCT] : ({operands}) => functionCall(
+            "GROUP_CONCAT",
+            [
+                ["DISTINCT", operands[0]]
+            ]
+        ),
+        [OperatorType.AGGREGATE_GROUP_CONCAT_ALL] : ({operands}) => functionCall(
+            "GROUP_CONCAT",
+            operands
+        ),
 
         [OperatorType.EXISTS] : ({operands : [query]}, toSql) => {
             if (QueryBaseUtil.isAfterFromClause(query)) {

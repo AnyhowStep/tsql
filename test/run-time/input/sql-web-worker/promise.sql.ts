@@ -77,7 +77,7 @@ function postMessage<ActionT extends SqliteAction, ResultT> (
     return new Promise<ResultT>((innerResolve, originalInnerReject) => {
         const innerReject = (error : any) => {
             if (error instanceof Error) {
-                if (error.message.startsWith("DataOutOfRangeError")) {
+                if (error.message.startsWith("DataOutOfRangeError") || error.message.includes("overflow")) {
                     const newErr = new DataOutOfRangeError(error.message);
                     Object.defineProperty(
                         newErr,
@@ -1809,6 +1809,20 @@ export class Pool implements tsql.IPool {
                     return result;
                 } else {
                     throw new Error(`Can only mul two bigint values`);
+                }
+            });
+            await connection.createFunction("bigint_neg", (a) => {
+                if (tm.TypeUtil.isBigInt(a)) {
+                    const result = tm.BigIntUtil.sub(0, a);
+                    if (tm.BigIntUtil.lessThan(result, BigInt("-9223372036854775808"))) {
+                        throw new Error(`DataOutOfRangeError: bigint_neg result was ${String(result)}`);
+                    }
+                    if (tm.BigIntUtil.greaterThan(result, BigInt("9223372036854775807"))) {
+                        throw new Error(`DataOutOfRangeError: bigint_neg result was ${String(result)}`);
+                    }
+                    return result;
+                } else {
+                    throw new Error(`Can only neg bigint values`);
                 }
             });
             await connection.createFunction("bigint_div", (a, b) => {
