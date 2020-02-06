@@ -24,7 +24,12 @@ import {makeAggregateOperator1, makeAggregateOperator2} from "../../aggregate-fa
  * for the DB-unified implementation.
  *
  * Unless we modify the SQLite implementation with a user-defined function?
- * @todo Investigate
+ *
+ * -----
+ *
+ * @param arg - The expression to aggregate
+ *
+ * @todo Investigate replacing SQLite `GROUP_CONCAT()` with user-defined function
  */
 export const groupConcatDistinct = makeAggregateOperator1<
     OperatorType.AGGREGATE_GROUP_CONCAT_DISTINCT,
