@@ -833,7 +833,13 @@ export const sqliteSqlfier : Sqlfier = {
                 return insertBetween(operands, "*");
             }
         },
-        [OperatorType.UNARY_MINUS] : ({operands}) => ["-", operands[0]],
+        [OperatorType.UNARY_MINUS] : ({operands, typeHint}) => {
+            if (typeHint == TypeHint.BIGINT_SIGNED) {
+                return functionCall("bigint_neg", operands);
+            } else {
+                return ["-", operands[0]];
+            }
+        },
 
         /*
             Mathematical Functions
