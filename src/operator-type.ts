@@ -3136,10 +3136,11 @@ export enum OperatorType {
      * + https://www.postgresql.org/docs/9.2/functions-aggregate.html#FUNCTIONS-AGGREGATE-TABLE
      * + https://www.sqlite.org/lang_aggfunc.html#groupconcat
      *
-     * + MySQL      : `GROUP_CONCAT(DISTINCT expr SEPARATOR separator)/GROUP_CONCAT(expr SEPARATOR separator)`
-     * + PostgreSQL : `STRING_AGG(DISTINCT expr, separator)/STRING_AGG(expr, separator)`
-     * + SQLite     : `GROUP_CONCAT(DISTINCT expr)/GROUP_CONCAT(expr, separator)`
+     * + MySQL      : `GROUP_CONCAT(DISTINCT expr SEPARATOR separator)`
+     * + PostgreSQL : `STRING_AGG(DISTINCT expr, separator)`
+     * + SQLite     : `GROUP_CONCAT(DISTINCT expr)`
      *   + The order of the concatenated elements is arbitrary.
+     *   + Uses comma as separator
      *
      * -----
      *
@@ -3149,7 +3150,18 @@ export enum OperatorType {
      * Unless we modify the SQLite implementation with a user-defined function?
      * @todo Investigate
      */
-    AGGREGATE_GROUP_CONCAT = "AGGREGATE_GROUP_CONCAT",
+    AGGREGATE_GROUP_CONCAT_DISTINCT = "AGGREGATE_GROUP_CONCAT_DISTINCT",
+    /**
+     * + https://dev.mysql.com/doc/refman/8.0/en/group-by-functions.html#function_group-concat
+     * + https://www.postgresql.org/docs/9.2/functions-aggregate.html#FUNCTIONS-AGGREGATE-TABLE
+     * + https://www.sqlite.org/lang_aggfunc.html#groupconcat
+     *
+     * + MySQL      : `GROUP_CONCAT(expr SEPARATOR separator)`
+     * + PostgreSQL : `STRING_AGG(expr, separator)`
+     * + SQLite     : `GROUP_CONCAT(expr, separator)`
+     *   + The order of the concatenated elements is arbitrary.
+     */
+    AGGREGATE_GROUP_CONCAT_ALL = "AGGREGATE_GROUP_CONCAT_ALL",
 
     /*
      * Appears to be MySQL-specific,

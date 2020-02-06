@@ -1,38 +1,65 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../../operator-type";
 import {TypeHint} from "../../../type-hint";
-import {makeAggregateOperator3, AggregateOperator2} from "../../aggregate-factory";
-import {BuiltInExpr_NonAggregate} from "../../../built-in-expr";
-import {ExprUtil} from "../../../expr";
+import {makeAggregateOperator1, makeAggregateOperator2} from "../../aggregate-factory";
 
-const groupConcatImpl = makeAggregateOperator3<OperatorType.AGGREGATE_GROUP_CONCAT, boolean, string, string, string|null>(
-    OperatorType.AGGREGATE_GROUP_CONCAT,
+/**
+ * Returns a string result with the concatenated non-`NULL` values from a group.
+ *
+ * It returns `NULL` if there are no non-`NULL` values.
+ *
+ * + https://dev.mysql.com/doc/refman/8.0/en/group-by-functions.html#function_group-concat
+ * + https://www.postgresql.org/docs/9.2/functions-aggregate.html#FUNCTIONS-AGGREGATE-TABLE
+ * + https://www.sqlite.org/lang_aggfunc.html#groupconcat
+ *
+ * + MySQL      : `GROUP_CONCAT(DISTINCT expr SEPARATOR separator)`
+ * + PostgreSQL : `STRING_AGG(DISTINCT expr, separator)`
+ * + SQLite     : `GROUP_CONCAT(DISTINCT expr)`
+ *   + The order of the concatenated elements is arbitrary.
+ *   + Uses comma as separator
+ *
+ * -----
+ *
+ * Seems like `GROUP_CONCAT()` with `DISTINCT` cannot take a separator
+ * for the DB-unified implementation.
+ *
+ * Unless we modify the SQLite implementation with a user-defined function?
+ * @todo Investigate
+ */
+export const groupConcatDistinct = makeAggregateOperator1<
+    OperatorType.AGGREGATE_GROUP_CONCAT_DISTINCT,
+    string|null,
+    string|null
+>(
+    OperatorType.AGGREGATE_GROUP_CONCAT_DISTINCT,
     tm.orNull(tm.string()),
     TypeHint.STRING
 );
 
-export const groupConcatDistinct : AggregateOperator2<string, string, string|null> = <
-    BuiltInExprT extends BuiltInExpr_NonAggregate<string>,
-    PatternT extends BuiltInExpr_NonAggregate<string>,
+/**
+ * Returns a string result with the concatenated non-`NULL` values from a group.
+ *
+ * It returns `NULL` if there are no non-`NULL` values.
+ *
+ * + https://dev.mysql.com/doc/refman/8.0/en/group-by-functions.html#function_group-concat
+ * + https://www.postgresql.org/docs/9.2/functions-aggregate.html#FUNCTIONS-AGGREGATE-TABLE
+ * + https://www.sqlite.org/lang_aggfunc.html#groupconcat
+ *
+ * + MySQL      : `GROUP_CONCAT(expr SEPARATOR separator)`
+ * + PostgreSQL : `STRING_AGG(expr, separator)`
+ * + SQLite     : `GROUP_CONCAT(expr, separator)`
+ *   + The order of the concatenated elements is arbitrary.
+ *
+ * @param left  - The expression to aggregate
+ * @param right - The separator between expressions
+ */
+export const groupConcatAll = makeAggregateOperator2<
+    OperatorType.AGGREGATE_GROUP_CONCAT_ALL,
+    string|null,
+    string,
+    string|null
 >(
-    builtInExpr : BuiltInExprT,
-    pattern : PatternT
-) : (
-    ExprUtil.AggregateIntersect<string|null, BuiltInExprT|PatternT>
-) => {
-    const result = groupConcatImpl<true, BuiltInExprT, PatternT>(true, builtInExpr, pattern);
-    return result as ExprUtil.AggregateIntersect<string|null, BuiltInExprT|PatternT>;
-};
-
-export const groupConcatAll : AggregateOperator2<string, string, string|null> = <
-    BuiltInExprT extends BuiltInExpr_NonAggregate<string>,
-    PatternT extends BuiltInExpr_NonAggregate<string>,
->(
-    builtInExpr : BuiltInExprT,
-    pattern : PatternT
-) : (
-    ExprUtil.AggregateIntersect<string|null, BuiltInExprT|PatternT>
-) => {
-    const result = groupConcatImpl<false, BuiltInExprT, PatternT>(false, builtInExpr, pattern);
-    return result as ExprUtil.AggregateIntersect<string|null, BuiltInExprT|PatternT>;
-};
+    OperatorType.AGGREGATE_GROUP_CONCAT_ALL,
+    tm.orNull(tm.string()),
+    TypeHint.STRING
+);

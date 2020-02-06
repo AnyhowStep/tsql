@@ -1028,6 +1028,16 @@ export const sqliteSqlfier : Sqlfier = {
                 throw new Error(`${operatorType} only implemented for 2 args`);
             }
         },
+        [OperatorType.AGGREGATE_GROUP_CONCAT_DISTINCT] : ({operands}) => functionCall(
+            "GROUP_CONCAT",
+            [
+                ["DISTINCT", operands[0]]
+            ]
+        ),
+        [OperatorType.AGGREGATE_GROUP_CONCAT_ALL] : ({operands}) => functionCall(
+            "GROUP_CONCAT",
+            operands
+        ),
 
         [OperatorType.EXISTS] : ({operands : [query]}, toSql) => {
             if (QueryBaseUtil.isAfterFromClause(query)) {
