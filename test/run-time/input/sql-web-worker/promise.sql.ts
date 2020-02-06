@@ -77,7 +77,7 @@ function postMessage<ActionT extends SqliteAction, ResultT> (
     return new Promise<ResultT>((innerResolve, originalInnerReject) => {
         const innerReject = (error : any) => {
             if (error instanceof Error) {
-                if (error.message.startsWith("DataOutOfRangeError")) {
+                if (error.message.startsWith("DataOutOfRangeError") || error.message.includes("overflow")) {
                     const newErr = new DataOutOfRangeError(error.message);
                     Object.defineProperty(
                         newErr,
