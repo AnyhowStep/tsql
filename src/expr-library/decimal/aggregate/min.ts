@@ -1,38 +1,26 @@
 import {decimalMapper} from "../decimal-mapper";
+import {Decimal} from "../../../decimal";
 import {OperatorType} from "../../../operator-type";
 import {TypeHint} from "../../../type-hint";
-import {makeAggregateOperator2, AggregateOperator1} from "../../aggregate-factory";
-import {BuiltInExpr_NonAggregate} from "../../../built-in-expr";
-import {ExprUtil} from "../../../expr";
-import {Decimal} from "../../../decimal";
+import {makeAggregateOperator1} from "../../aggregate-factory";
 
-const minImpl = makeAggregateOperator2<OperatorType.AGGREGATE_MIN, boolean, Decimal, Decimal|null>(
+/**
+ * Returns the min value of non-`NULL` values from a group.
+ *
+ * It returns `NULL` if there are no non-`NULL` values.
+ *
+ * + https://dev.mysql.com/doc/refman/8.0/en/group-by-functions.html#function_min
+ * + https://www.postgresql.org/docs/9.2/functions-aggregate.html#FUNCTIONS-AGGREGATE-TABLE
+ * + https://www.sqlite.org/lang_corefunc.html#minoreunc
+ *
+ * -----
+ *
+ * + MySQL      : `MIN(x)`
+ * + PostgreSQL : `MIN(x)`
+ * + SQLite     : `MIN(x)`
+ */
+export const min = makeAggregateOperator1<OperatorType.AGGREGATE_MIN, Decimal|null, Decimal|null>(
     OperatorType.AGGREGATE_MIN,
     decimalMapper.orNull(),
     TypeHint.DECIMAL
 );
-
-/**
- * @todo Figure out what the difference is between `MIN(DISTINCT x)` and `MIN(x)`
- */
-export const minDistinct : AggregateOperator1<Decimal, Decimal|null> = <
-    ArgT extends BuiltInExpr_NonAggregate<Decimal>
->(
-    arg : ArgT
-) : (
-    ExprUtil.AggregateIntersect<Decimal|null, ArgT>
-) => {
-    return minImpl(true, arg) as ExprUtil.AggregateIntersect<Decimal|null, ArgT>;
-};
-
-export const minAll : AggregateOperator1<Decimal, Decimal|null> = <
-    ArgT extends BuiltInExpr_NonAggregate<Decimal>
->(
-    arg : ArgT
-) : (
-    ExprUtil.AggregateIntersect<Decimal|null, ArgT>
-) => {
-    return minImpl(false, arg) as ExprUtil.AggregateIntersect<Decimal|null, ArgT>;
-};
-
-export const min = minAll;

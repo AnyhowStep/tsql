@@ -1,38 +1,26 @@
 import {decimalMapper} from "../decimal-mapper";
+import {Decimal} from "../../../decimal";
 import {OperatorType} from "../../../operator-type";
 import {TypeHint} from "../../../type-hint";
-import {makeAggregateOperator2, AggregateOperator1} from "../../aggregate-factory";
-import {BuiltInExpr_NonAggregate} from "../../../built-in-expr";
-import {ExprUtil} from "../../../expr";
-import {Decimal} from "../../../decimal";
+import {makeAggregateOperator1} from "../../aggregate-factory";
 
-const maxImpl = makeAggregateOperator2<OperatorType.AGGREGATE_MAX, boolean, Decimal, Decimal|null>(
+/**
+ * Returns the max value of non-`NULL` values from a group.
+ *
+ * It returns `NULL` if there are no non-`NULL` values.
+ *
+ * + https://dev.mysql.com/doc/refman/8.0/en/group-by-functions.html#function_max
+ * + https://www.postgresql.org/docs/9.2/functions-aggregate.html#FUNCTIONS-AGGREGATE-TABLE
+ * + https://www.sqlite.org/lang_corefunc.html#maxoreunc
+ *
+ * -----
+ *
+ * + MySQL      : `MAX(x)`
+ * + PostgreSQL : `MAX(x)`
+ * + SQLite     : `MAX(x)`
+ */
+export const max = makeAggregateOperator1<OperatorType.AGGREGATE_MAX, Decimal|null, Decimal|null>(
     OperatorType.AGGREGATE_MAX,
     decimalMapper.orNull(),
     TypeHint.DECIMAL
 );
-
-/**
- * @todo Figure out what the difference is between `MAX(DISTINCT x)` and `MAX(x)`
- */
-export const maxDistinct : AggregateOperator1<Decimal, Decimal|null> = <
-    ArgT extends BuiltInExpr_NonAggregate<Decimal>
->(
-    arg : ArgT
-) : (
-    ExprUtil.AggregateIntersect<Decimal|null, ArgT>
-) => {
-    return maxImpl(true, arg) as ExprUtil.AggregateIntersect<Decimal|null, ArgT>;
-};
-
-export const maxAll : AggregateOperator1<Decimal, Decimal|null> = <
-    ArgT extends BuiltInExpr_NonAggregate<Decimal>
->(
-    arg : ArgT
-) : (
-    ExprUtil.AggregateIntersect<Decimal|null, ArgT>
-) => {
-    return maxImpl(false, arg) as ExprUtil.AggregateIntersect<Decimal|null, ArgT>;
-};
-
-export const max = maxAll;

@@ -1004,35 +1004,11 @@ export const sqliteSqlfier : Sqlfier = {
                 throw new Error(`${operatorType} only implemented for 2 args`);
             }
         },
-        [OperatorType.AGGREGATE_MAX] : ({operands, operatorType}) => {
-            if (operands.length == 2) {
-                const [isDistinct, expr] = operands;
-                if (
-                    LiteralValueNodeUtil.isLiteralValueNode(isDistinct) &&
-                    isDistinct.literalValue === true
-                ) {
-                    return functionCall("MAX", [["DISTINCT", expr]]);
-                } else {
-                    return functionCall("MAX", [expr]);
-                }
-            } else {
-                throw new Error(`${operatorType} only implemented for 2 args`);
-            }
+        [OperatorType.AGGREGATE_MAX] : ({operands}) => {
+            return functionCall("MAX", operands);
         },
-        [OperatorType.AGGREGATE_MIN] : ({operands, operatorType}) => {
-            if (operands.length == 2) {
-                const [isDistinct, expr] = operands;
-                if (
-                    LiteralValueNodeUtil.isLiteralValueNode(isDistinct) &&
-                    isDistinct.literalValue === true
-                ) {
-                    return functionCall("MIN", [["DISTINCT", expr]]);
-                } else {
-                    return functionCall("MIN", [expr]);
-                }
-            } else {
-                throw new Error(`${operatorType} only implemented for 2 args`);
-            }
+        [OperatorType.AGGREGATE_MIN] : ({operands}) => {
+            return functionCall("MIN", operands);
         },
         [OperatorType.AGGREGATE_SUM] : ({operands, operatorType}) => {
             if (operands.length == 2) {
