@@ -954,6 +954,21 @@ export const sqliteSqlfier : Sqlfier = {
         [OperatorType.CAST_AS_SIGNED_BIG_INTEGER] : ({operands}, toSql) => functionCall("CAST", [`${toSql(operands)} AS BIGINT`]),
 
         /*
+            Bit Functions and Operators
+            https://dev.mysql.com/doc/refman/8.0/en/bit-functions.html
+        */
+        [OperatorType.BITWISE_AND] : ({operands}) => insertBetween(operands, "&"),
+        [OperatorType.BITWISE_OR] : ({operands}) => insertBetween(operands, "|"),
+        [OperatorType.BITWISE_XOR] : ({operands}) => [
+            ["~", parentheses(insertBetween(operands, "&"), false)],
+            "&",
+            parentheses(insertBetween(operands, "|"), false)
+        ],
+        [OperatorType.BITWISE_NOT] : ({operands}) => ["~", operands],
+        [OperatorType.BITWISE_LEFT_SHIFT] : ({operands}) => insertBetween(operands, "<<"),
+        [OperatorType.BITWISE_RIGHT_SHIFT] : ({operands}) => insertBetween(operands, ">>"),
+
+        /*
             Aggregate (GROUP BY) Function Descriptions
             https://dev.mysql.com/doc/refman/8.0/en/group-by-functions.html
         */
