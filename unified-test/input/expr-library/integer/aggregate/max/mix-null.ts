@@ -58,7 +58,6 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     });
             }
 
-            //Insert duplicate rows, but `DISTINCT` will filter them out
             for (let i=0; i<10; ++i) {
                 await myTable.insertOne(
                     connection,

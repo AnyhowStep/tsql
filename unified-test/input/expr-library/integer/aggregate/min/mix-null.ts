@@ -37,15 +37,21 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                         myTableVal : BigInt(i),
                     }
                 );
+                await myTable.insertOne(
+                    connection,
+                    {
+                        myTableVal : null,
+                    }
+                );
 
                 await myTable
                     .where(() => true)
                     .fetchValue(
                         connection,
-                        columns => tsql.integer.max(columns.myTableVal)
+                        columns => tsql.integer.min(columns.myTableVal)
                     )
                     .then((value) => {
-                        t.deepEqual(value, BigInt(i));
+                        t.deepEqual(value, BigInt(0));
                     })
                     .catch((err) => {
                         t.fail(err.message);
@@ -59,15 +65,21 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                         myTableVal : BigInt(i),
                     }
                 );
+                await myTable.insertOne(
+                    connection,
+                    {
+                        myTableVal : null,
+                    }
+                );
 
                 await myTable
                     .where(() => true)
                     .fetchValue(
                         connection,
-                        columns => tsql.integer.max(columns.myTableVal)
+                        columns => tsql.integer.min(columns.myTableVal)
                     )
                     .then((value) => {
-                        t.deepEqual(value, BigInt(9));
+                        t.deepEqual(value, BigInt(0));
                     })
                     .catch((err) => {
                         t.fail(err.message);

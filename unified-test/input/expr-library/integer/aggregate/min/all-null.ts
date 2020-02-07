@@ -31,47 +31,24 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
             );
 
             for (let i=0; i<10; ++i) {
-                await myTable.insertOne(
-                    connection,
-                    {
-                        myTableVal : BigInt(i),
-                    }
-                );
-
                 await myTable
                     .where(() => true)
                     .fetchValue(
                         connection,
-                        columns => tsql.integer.max(columns.myTableVal)
+                        columns => tsql.integer.min(columns.myTableVal)
                     )
                     .then((value) => {
-                        t.deepEqual(value, BigInt(i));
+                        t.deepEqual(value, null);
                     })
                     .catch((err) => {
                         t.fail(err.message);
                     });
-            }
-
-            for (let i=0; i<10; ++i) {
                 await myTable.insertOne(
                     connection,
                     {
-                        myTableVal : BigInt(i),
+                        myTableVal : null,
                     }
                 );
-
-                await myTable
-                    .where(() => true)
-                    .fetchValue(
-                        connection,
-                        columns => tsql.integer.max(columns.myTableVal)
-                    )
-                    .then((value) => {
-                        t.deepEqual(value, BigInt(9));
-                    })
-                    .catch((err) => {
-                        t.fail(err.message);
-                    });
             }
         });
 
