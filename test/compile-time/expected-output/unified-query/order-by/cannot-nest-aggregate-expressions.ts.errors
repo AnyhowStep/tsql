@@ -1,11 +1,11 @@
 [
   {
     "messageText": {
-      "messageText": "Argument of type 'ExprImpl<bigint, IUsedRef<{ readonly $aliased: { readonly x: bigint | null; }; }>, true>' is not assignable to parameter of type 'bigint | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, bigint>; }> | (OneSelectItem<bigint> & OneRowBeforeFromClause) | (OneSelectItem<bigint> & OneRowEmptyGroupingSet) | IExpr<...> | IExprSelectItem<...>'.",
+      "messageText": "Argument of type 'ExprImpl<bigint, IUsedRef<{ readonly $aliased: { readonly x: bigint | null; }; }>, true>' is not assignable to parameter of type 'bigint | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, bigint | null>; }> | (OneSelectItem<bigint | null> & OneRowBeforeFromClause) | (OneSelectItem<bigint | null> & OneRowEmptyGroupingSet) | ... 4 more ... | null'.",
       "category": 1,
       "code": 2345,
       "next": {
-        "messageText": "Type 'ExprImpl<bigint, IUsedRef<{ readonly $aliased: { readonly x: bigint | null; }; }>, true>' is not assignable to type 'IExpr<{ mapper: Mapper<unknown, bigint>; usedRef: IUsedRef<never>; isAggregate: false; }>'.",
+        "messageText": "Type 'ExprImpl<bigint, IUsedRef<{ readonly $aliased: { readonly x: bigint | null; }; }>, true>' is not assignable to type 'IExpr<{ mapper: Mapper<unknown, bigint | null>; usedRef: IUsedRef<never>; isAggregate: false; }>'.",
         "category": 1,
         "code": 2322,
         "next": {

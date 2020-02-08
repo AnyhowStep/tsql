@@ -38,7 +38,7 @@ tape(__filename, async (t) => {
                 t.deepEqual(value, 300.789);
             });
         await tsql.from(test)
-            .selectValue(columns => tsql.double.maxDistinct(columns.testVal))
+            .selectValue(columns => tsql.double.max(columns.testVal))
             .fetchValue(connection)
             .then((value) => {
                 t.deepEqual(value, 300.789);

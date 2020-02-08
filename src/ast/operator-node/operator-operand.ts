@@ -216,18 +216,18 @@ export type OperatorOperand = {
         Aggregate (GROUP BY) Function Descriptions
         https://dev.mysql.com/doc/refman/8.0/en/group-by-functions.html
     */
-    [OperatorType.AGGREGATE_AVERAGE]        : Operand2|Operand3,
-    [OperatorType.AGGREGATE_COUNT_EXPR]     : Operand2|Operand3,
-    [OperatorType.AGGREGATE_COUNT_ALL]      : Operand0|Operand1,
+    [OperatorType.AGGREGATE_AVERAGE]        : Operand2,
+    [OperatorType.AGGREGATE_COUNT_EXPR]     : Operand2,
+    [OperatorType.AGGREGATE_COUNT_ALL]      : Operand0,
     [OperatorType.AGGREGATE_GROUP_CONCAT_DISTINCT]   : Operand1,
     [OperatorType.AGGREGATE_GROUP_CONCAT_ALL]        : Operand2,
-    [OperatorType.AGGREGATE_MAX]            : Operand2|Operand3,
-    [OperatorType.AGGREGATE_MIN]            : Operand2|Operand3,
-    [OperatorType.AGGREGATE_POPULATION_STANDARD_DEVIATION]  : Operand1|Operand2,
-    [OperatorType.AGGREGATE_SAMPLE_STANDARD_DEVIATION]      : Operand1|Operand2,
-    [OperatorType.AGGREGATE_SUM]            : Operand2|Operand3,
-    [OperatorType.AGGREGATE_POPULATION_VARIANCE]    : Operand1|Operand2,
-    [OperatorType.AGGREGATE_SAMPLE_VARIANCE]        : Operand1|Operand2,
+    [OperatorType.AGGREGATE_MAX]            : Operand1,
+    [OperatorType.AGGREGATE_MIN]            : Operand1,
+    [OperatorType.AGGREGATE_POPULATION_STANDARD_DEVIATION]  : Operand1,
+    [OperatorType.AGGREGATE_SAMPLE_STANDARD_DEVIATION]      : Operand1,
+    [OperatorType.AGGREGATE_SUM]            : Operand2,
+    [OperatorType.AGGREGATE_POPULATION_VARIANCE]    : Operand1,
+    [OperatorType.AGGREGATE_SAMPLE_VARIANCE]        : Operand1,
 
     /*
         https://dev.mysql.com/doc/refman/5.5/en/exists-and-not-exists-subqueries.html

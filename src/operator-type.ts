@@ -3057,11 +3057,7 @@ export enum OperatorType {
      *
      * + MySQL      : `AVG(DISTINCT x)/AVG(x)/AVG(x) OVER()`
      * + PostgreSQL : `AVG(DISTINCT x)/AVG(x)/AVG(x) OVER()`
-     *   + PostgreSQL has to cast `x` to `DECIMAL` if `x` is an integer
-     *     to get the same result as MySQL.
      * + SQLite     : `AVG(DISTINCT x)/AVG(x)/AVG(x) OVER()`
-     *   + A `DECIMAL` polyfill should be added to SQLite and `x` should be casted
-     *     to `DECIMAL` if `x` is an integer to get the same result as MySQL.
      */
     AGGREGATE_AVERAGE = "AGGREGATE_AVERAGE",
 

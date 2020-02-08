@@ -1,37 +1,25 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../../operator-type";
 import {TypeHint} from "../../../type-hint";
-import {makeAggregateOperator2, AggregateOperator1} from "../../aggregate-factory";
-import {BuiltInExpr_NonAggregate} from "../../../built-in-expr";
-import {ExprUtil} from "../../../expr";
+import {makeAggregateOperator1} from "../../aggregate-factory";
 
-const maxImpl = makeAggregateOperator2<OperatorType.AGGREGATE_MAX, boolean, bigint, bigint|null>(
+/**
+ * Returns the max value of non-`NULL` values from a group.
+ *
+ * It returns `NULL` if there are no non-`NULL` values.
+ *
+ * + https://dev.mysql.com/doc/refman/8.0/en/group-by-functions.html#function_max
+ * + https://www.postgresql.org/docs/9.2/functions-aggregate.html#FUNCTIONS-AGGREGATE-TABLE
+ * + https://www.sqlite.org/lang_corefunc.html#maxoreunc
+ *
+ * -----
+ *
+ * + MySQL      : `MAX(x)`
+ * + PostgreSQL : `MAX(x)`
+ * + SQLite     : `MAX(x)`
+ */
+export const max = makeAggregateOperator1<OperatorType.AGGREGATE_MAX, bigint|null, bigint|null>(
     OperatorType.AGGREGATE_MAX,
     tm.mysql.bigIntSigned().orNull(),
     TypeHint.BIGINT_SIGNED
 );
-
-/**
- * @todo Figure out what the difference is between `MAX(DISTINCT x)` and `MAX(x)`
- */
-export const maxDistinct : AggregateOperator1<bigint, bigint|null> = <
-    ArgT extends BuiltInExpr_NonAggregate<bigint>
->(
-    arg : ArgT
-) : (
-    ExprUtil.AggregateIntersect<bigint|null, ArgT>
-) => {
-    return maxImpl(true, arg) as ExprUtil.AggregateIntersect<bigint|null, ArgT>;
-};
-
-export const maxAll : AggregateOperator1<bigint, bigint|null> = <
-    ArgT extends BuiltInExpr_NonAggregate<bigint>
->(
-    arg : ArgT
-) : (
-    ExprUtil.AggregateIntersect<bigint|null, ArgT>
-) => {
-    return maxImpl(false, arg) as ExprUtil.AggregateIntersect<bigint|null, ArgT>;
-};
-
-export const max = maxAll;
