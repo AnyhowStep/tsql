@@ -60,9 +60,9 @@ export const avgDistinct : AggregateOperator1<bigint|null, Decimal|null> = <
  *
  * -----
  *
- * + MySQL      : `AVG(DISTINCT x)`
- * + PostgreSQL : `AVG(DISTINCT x)`
- * + SQLite     : `AVG(DISTINCT x)`
+ * + MySQL      : `AVG(x)`
+ * + PostgreSQL : `AVG(x)`
+ * + SQLite     : `AVG(x)`
  *
  * -----
  *
@@ -94,9 +94,9 @@ export const avgAll : AggregateOperator1<bigint|null, Decimal|null> = <
  *
  * -----
  *
- * + MySQL      : `AVG(DISTINCT x)`
- * + PostgreSQL : `AVG(DISTINCT x)`
- * + SQLite     : `AVG(DISTINCT x)`
+ * + MySQL      : `AVG(x)`
+ * + PostgreSQL : `AVG(x)`
+ * + SQLite     : `AVG(x)`
  *
  * -----
  *
