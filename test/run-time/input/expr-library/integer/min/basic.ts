@@ -42,7 +42,7 @@ tape(__filename, async (t) => {
                 t.deepEqual(value, BigInt("-9223372036854775808"));
             });
         await tsql.from(test)
-            .selectValue(columns => tsql.integer.minDistinct(columns.testVal))
+            .selectValue(columns => tsql.integer.min(columns.testVal))
             .fetchValue(connection)
             .then((value) => {
                 t.deepEqual(value, BigInt("-9223372036854775808"));
