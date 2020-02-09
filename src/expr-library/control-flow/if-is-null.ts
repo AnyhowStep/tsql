@@ -10,6 +10,9 @@ import * as ifImpl from "./if";
 /**
  * A special compile-time type-narrowing function.
  *
+ * Narrows a column from `T|null` to `T` in the else-branch.
+ *
+ * Translated to SQL, we get,
  * ```sql
  *  IF(
  *      myColumn IS NULL,
@@ -21,9 +24,9 @@ import * as ifImpl from "./if";
  * ```
  *
  *
- * @param column
- * @param then
- * @param elseDelegate
+ * @param column - The column to narrow from `T|null` to `T`
+ * @param then - The result of the expression, if the `column` is `null`
+ * @param elseDelegate - The result of the expression, if the `column` is `T`
  */
 export function ifIsNull<
     ColumnT extends IColumn,
@@ -52,7 +55,7 @@ export function ifIsNull<
                 >
             >
         ),
-        isAggregate : BuiltInExprUtil.IsAggregate<ThenT|ElseT>,
+        isAggregate : BuiltInExprUtil.IsAggregate<ColumnT|ThenT|ElseT>,
     }>
 ) {
     return ifImpl.if(
@@ -84,7 +87,7 @@ export function ifIsNull<
                     >
                 >
             ),
-            isAggregate : BuiltInExprUtil.IsAggregate<ThenT|ElseT>,
+            isAggregate : BuiltInExprUtil.IsAggregate<ColumnT|ThenT|ElseT>,
         }>
     );
 }
