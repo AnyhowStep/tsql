@@ -6,10 +6,23 @@ import {OperatorType} from "../../operator-type";
 import {BaseType} from "../../type-util";
 
 /**
+ * Returns `null` if both arguments are null-safe equal.
+ *
+ * Otherwise, returns the first argument.
+ *
  * This is equivalent to `IF(arg0 <null-safe-eq> arg1, null, arg0)`
  *
- * @param arg0
- * @param arg1
+ * + https://dev.mysql.com/doc/refman/8.0/en/control-flow-functions.html#function_nullif
+ * + https://www.postgresql.org/docs/9.2/functions-conditional.html#FUNCTIONS-NULLIF
+ * + https://www.sqlite.org/lang_corefunc.html#nullif
+ *
+ * -----
+ *
+ * + MySQL        : `NULLIF(x, y)`
+ * + PostgreSQL   : `NULLIF(x, y)`
+ * + SQLite       : `NULLIF(x, y)`
+ *
+ * @see nullIfEqual
  */
 export function nullIf<
     Arg0T extends AnyBuiltInExpr,
@@ -36,7 +49,26 @@ export function nullIf<
         )
     );
 }
+
 /**
- * Synonym for `NULLIF(x, y)`
+ * Synonym for `NULLIF(x, y)`.
+ *
+ * Returns `null` if both arguments are null-safe equal.
+ *
+ * Otherwise, returns the first argument.
+ *
+ * This is equivalent to `IF(arg0 <null-safe-eq> arg1, null, arg0)`
+ *
+ * + https://dev.mysql.com/doc/refman/8.0/en/control-flow-functions.html#function_nullif
+ * + https://www.postgresql.org/docs/9.2/functions-conditional.html#FUNCTIONS-NULLIF
+ * + https://www.sqlite.org/lang_corefunc.html#nullif
+ *
+ * -----
+ *
+ * + MySQL        : `NULLIF(x, y)`
+ * + PostgreSQL   : `NULLIF(x, y)`
+ * + SQLite       : `NULLIF(x, y)`
+ *
+ * @see nullIf
  */
 export const nullIfEqual : typeof nullIf = nullIf;

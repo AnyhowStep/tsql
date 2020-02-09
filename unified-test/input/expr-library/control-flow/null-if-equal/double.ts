@@ -4,6 +4,24 @@ import * as tsql from "../../../../../dist";
 export const test : Test = ({tape, pool}) => {
     tape(__filename, async (t) => {
         await pool.acquire(async (connection) => {
+            await tsql.selectValue(() => tsql.nullIf(6.282, 6.282))
+                .fetchValue(connection)
+                .then((value) => {
+                    t.deepEqual(value, null);
+                })
+                .catch((err) => {
+                    t.fail(err.message);
+                });
+
+            await tsql.selectValue(() => tsql.nullIf(9001, 9001))
+                .fetchValue(connection)
+                .then((value) => {
+                    t.deepEqual(value, null);
+                })
+                .catch((err) => {
+                    t.fail(err.message);
+                });
+
             await tsql.selectValue(() => tsql.nullIf(6.282, 9001))
                 .fetchValue(connection)
                 .then((value) => {
