@@ -4,7 +4,7 @@ import {NonNullEquatableType, EquatableTypeUtil} from "../../equatable-type";
 import {UninitializedCaseConditionBuilder, caseCondition} from "./case-condition";
 
 /**
- * Behaves like a `switch` statement in most programming languages.
+ * Behaves like a `switch` statement from most programming languages.
  *
  * + https://dev.mysql.com/doc/refman/5.7/en/control-flow-functions.html#operator_case
  * + https://www.postgresql.org/docs/8.4/functions-conditional.html#AEN15225
@@ -43,7 +43,7 @@ function caseConstructor<
 );
 
 /**
- * Behaves like an `if` statement in most programming languages.
+ * Behaves like an `if` statement from most programming languages.
  *
  * + https://dev.mysql.com/doc/refman/5.7/en/control-flow-functions.html#operator_case
  * + https://www.postgresql.org/docs/8.4/functions-conditional.html#AEN15225
