@@ -40,7 +40,7 @@ export async function replaceOneImplNoEvent<
     /**
      * Should contain only `BuiltInExpr` now
      */
-    row = InsertUtil.cleanInsertRow(table, row);
+    row = InsertUtil.cleanInsertRow(table, row) as any;
 
     if (table.autoIncrement == undefined) {
         return {
