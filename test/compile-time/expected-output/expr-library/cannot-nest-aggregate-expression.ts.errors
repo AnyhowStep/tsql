@@ -1,11 +1,11 @@
 [
   {
     "messageText": {
-      "messageText": "Argument of type 'ExprImpl<bigint, IUsedRef<{}>, true>' is not assignable to parameter of type 'string | number | bigint | boolean | Date | Uint8Array | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, EquatableType>; }> | (OneSelectItem<EquatableType> & OneRowBeforeFromClause) | ... 5 more ... | null'.",
+      "messageText": "Argument of type 'ExprImpl<bigint, IUsedRef<{}>, true>' is not assignable to parameter of type 'string | number | bigint | boolean | Date | Uint8Array | (OneSelectItem<unknown> & OneRowBeforeFromClause) | (OneSelectItem<unknown> & OneRowEmptyGroupingSet) | (OneSelectItem<unknown> & IQueryBase<...>) | ... 4 more ... | null'.",
       "category": 1,
       "code": 2345,
       "next": {
-        "messageText": "Type 'ExprImpl<bigint, IUsedRef<{}>, true>' is not assignable to type 'IExpr<{ mapper: Mapper<unknown, EquatableType>; usedRef: IUsedRef<never>; isAggregate: false; }>'.",
+        "messageText": "Type 'ExprImpl<bigint, IUsedRef<{}>, true>' is not assignable to type 'IExpr<{ mapper: Mapper<unknown, unknown>; usedRef: IUsedRef<never>; isAggregate: false; }>'.",
         "category": 1,
         "code": 2322,
         "next": {

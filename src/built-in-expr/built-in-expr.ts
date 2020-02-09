@@ -101,6 +101,11 @@ import {ColumnMap} from "../column-map";
  */
 export type BuiltInExpr<TypeT> = (
     | (
+        unknown extends TypeT ?
+        BuiltInValueExpr :
+        never
+    )
+    | (
         TypeT extends BuiltInValueExpr ?
         TypeT :
         never
@@ -183,6 +188,11 @@ export type AnyBuiltInExpr_NonCorrelated =
 
 export type BuiltInExpr_NonCorrelated<TypeT> =
     | (
+        unknown extends TypeT ?
+        BuiltInValueExpr :
+        never
+    )
+    | (
         TypeT extends BuiltInValueExpr ?
         TypeT :
         never
@@ -240,6 +250,11 @@ export type BuiltInExpr_MapCorrelatedOrUndefined<
 
 export type BuiltInExpr_NonAggregate<TypeT> = (
     | (
+        unknown extends TypeT ?
+        BuiltInValueExpr :
+        never
+    )
+    | (
         TypeT extends BuiltInValueExpr ?
         TypeT :
         never
@@ -286,6 +301,11 @@ export type AnyBuiltInExpr_NonCorrelated_NonAggregate =
 ;
 
 export type BuiltInExpr_NonCorrelated_NonAggregate<TypeT> =
+    | (
+        unknown extends TypeT ?
+        BuiltInValueExpr :
+        never
+    )
     | (
         TypeT extends BuiltInValueExpr ?
         TypeT :
