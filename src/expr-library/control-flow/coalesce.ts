@@ -41,7 +41,20 @@ export function coalesceMapper<ArgsT extends readonly AnyBuiltInExpr[]> (
 }
 
 /**
- * https://dev.mysql.com/doc/refman/8.0/en/comparison-operators.html#function_coalesce
+ * Returns the first non-`NULL` value in the list,
+ * or `NULL` if there are no non-`NULL` values.
+ *
+ * + https://dev.mysql.com/doc/refman/8.0/en/comparison-operators.html#function_coalesce
+ * + https://www.postgresql.org/docs/9.5/functions-conditional.html#FUNCTIONS-COALESCE-NVL-IFNULL
+ * + https://www.sqlite.org/lang_corefunc.html#coalesce
+ *
+ * -----
+ *
+ * + MySQL        : `COALESCE(x, ...)`
+ * + PostgreSQL   : `COALESCE(x, ...)`
+ * + SQLite       : `COALESCE(x, ...)`
+ *
+ * -----
  *
  * `COALESCE()` with zero args is just the `NULL` constant.
  */
