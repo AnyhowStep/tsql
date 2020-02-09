@@ -1,4 +1,4 @@
-export type BaseType<T extends unknown> = (
+export type BaseType<T extends unknown> =
     T extends bigint ?
     bigint :
     T extends number ?
@@ -9,4 +9,4 @@ export type BaseType<T extends unknown> = (
     boolean :
     //Everything else does not have a literal type
     T
-);
+;

@@ -7,6 +7,27 @@ import {AssertNonUnion, BaseType} from "../../type-util";
 import {UsedRefUtil} from "../../used-ref";
 import * as ifImpl from "./if";
 
+/**
+ * A special compile-time type-narrowing function.
+ *
+ * Narrows a column from `T|null` to `T` in the else-branch.
+ *
+ * Translated to SQL, we get,
+ * ```sql
+ *  IF(
+ *      myColumn IS NULL,
+ *      thenExpr,
+ *      -- The `elseExpr` is free to use `myColumn` as a non-nullable column
+ *      -- because we know `myColumn` is NOT NULL in the else-branch.
+ *      elseExpr
+ *  )
+ * ```
+ *
+ *
+ * @param column - The column to narrow from `T|null` to `T`
+ * @param then - The result of the expression, if the `column` is `null`
+ * @param elseDelegate - The result of the expression, if the `column` is `T`
+ */
 export function ifIsNull<
     ColumnT extends IColumn,
     ThenT extends AnyBuiltInExpr,
@@ -34,7 +55,7 @@ export function ifIsNull<
                 >
             >
         ),
-        isAggregate : BuiltInExprUtil.IsAggregate<ThenT|ElseT>,
+        isAggregate : BuiltInExprUtil.IsAggregate<ColumnT|ThenT|ElseT>,
     }>
 ) {
     return ifImpl.if(
@@ -66,7 +87,7 @@ export function ifIsNull<
                     >
                 >
             ),
-            isAggregate : BuiltInExprUtil.IsAggregate<ThenT|ElseT>,
+            isAggregate : BuiltInExprUtil.IsAggregate<ColumnT|ThenT|ElseT>,
         }>
     );
 }

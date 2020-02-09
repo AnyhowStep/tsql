@@ -99,7 +99,7 @@ import {ColumnMap} from "../column-map";
  *
  * It is inferred as `boolean`, when it should be `false`.
  */
-export type BuiltInExpr<TypeT> = (
+export type BuiltInExpr<TypeT> =
     | (
         unknown extends TypeT ?
         BuiltInValueExpr :
@@ -118,7 +118,7 @@ export type BuiltInExpr<TypeT> = (
         (QueryBaseUtil.OneSelectItem<TypeT> & QueryBaseUtil.OneRow)
     )
     | IAnonymousExprSelectItem<TypeT, boolean>
-);
+;
 
 export type AnySubqueryExpr = (QueryBaseUtil.OneSelectItem<any> & QueryBaseUtil.ZeroOrOneRow);
 export type AnyBuiltInExpr =

@@ -1,7 +1,7 @@
 [
   {
     "messageText": {
-      "messageText": "Argument of type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"someColumn03\"; mapper: Mapper<unknown, string>; }>' is not assignable to parameter of type 'number | IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, number | null>; }> | (OneSelectItem<number | null> & OneRowBeforeFromClause) | (OneSelectItem<number | null> & OneRowEmptyGroupingSet) | ... 4 more ... | null'.",
+      "messageText": "Argument of type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"someColumn03\"; mapper: Mapper<unknown, string>; }>' is not assignable to parameter of type 'BuiltInExpr<number | null>'.",
       "category": 1,
       "code": 2345,
       "next": {
