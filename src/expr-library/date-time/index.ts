@@ -1,5 +1,5 @@
 export * from "./current-date";
-export * from "./current-time";
+//export * from "./current-time";
 export * from "./current-timestamp";
 export * from "./extract";
 export * from "./last-day";

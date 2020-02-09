@@ -1741,7 +1741,9 @@ export enum OperatorType {
     CURRENT_DATE = "CURRENT_DATE",
 
     /**
-     * + https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_current-date
+     * Cannot use JS `Date` to represent SQL `TIME`.
+     *
+     * + https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_current-time
      * + https://www.postgresql.org/docs/9.4/functions-datetime.html#FUNCTIONS-DATETIME-TABLE
      * + https://www.sqlite.org/lang_datefunc.html
      *
@@ -1754,7 +1756,9 @@ export enum OperatorType {
     CURRENT_TIME_0 = "CURRENT_TIME_0",
 
     /**
-     * + https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_current-date
+     * Cannot use JS `Date` to represent SQL `TIME`.
+     *
+     * + https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_current-time
      * + https://www.postgresql.org/docs/9.4/functions-datetime.html#FUNCTIONS-DATETIME-TABLE
      * + https://www.sqlite.org/lang_datefunc.html
      *
@@ -1767,7 +1771,9 @@ export enum OperatorType {
     CURRENT_TIME_1 = "CURRENT_TIME_1",
 
     /**
-     * + https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_current-date
+     * Cannot use JS `Date` to represent SQL `TIME`.
+     *
+     * + https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_current-time
      * + https://www.postgresql.org/docs/9.4/functions-datetime.html#FUNCTIONS-DATETIME-TABLE
      * + https://www.sqlite.org/lang_datefunc.html
      *
@@ -1780,7 +1786,9 @@ export enum OperatorType {
     CURRENT_TIME_2 = "CURRENT_TIME_2",
 
     /**
-     * + https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_current-date
+     * Cannot use JS `Date` to represent SQL `TIME`.
+     *
+     * + https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_current-time
      * + https://www.postgresql.org/docs/9.4/functions-datetime.html#FUNCTIONS-DATETIME-TABLE
      * + https://www.sqlite.org/lang_datefunc.html
      *
