@@ -3,6 +3,33 @@ import {UninitializedCaseValueBuilder, caseValue} from "./case-value";
 import {NonNullEquatableType, EquatableTypeUtil} from "../../equatable-type";
 import {UninitializedCaseConditionBuilder, caseCondition} from "./case-condition";
 
+/**
+ * Behaves like a `switch` statement in most programming languages.
+ *
+ * + https://dev.mysql.com/doc/refman/5.7/en/control-flow-functions.html#operator_case
+ * + https://www.postgresql.org/docs/8.4/functions-conditional.html#AEN15225
+ * + https://www.sqlite.org/lang_expr.html#case
+ *
+ * -----
+ *
+ * This version of the `CASE` expression does not allow `null` values.
+ * This reduces the probability of a mistake. Consider,
+ * ```sql
+ *  SELECT
+ *      CASE NULL
+ *          WHEN NULL THEN 1
+ *          ELSE 2
+ *      END
+ *  ;
+ *  > 2 -- The result is `2` and not `1`
+ * ```
+ *
+ * -----
+ *
+ * @param valueExpr - The expression to compare against; must not be nullable
+ *
+ * @see caseValue
+ */
 function caseConstructor<
     ValueExprT extends BuiltInExpr<NonNullEquatableType>
 > (
@@ -14,6 +41,16 @@ function caseConstructor<
         BuiltInExprUtil.IsAggregate<ValueExprT>
     >
 );
+
+/**
+ * Behaves like an `if` statement in most programming languages.
+ *
+ * + https://dev.mysql.com/doc/refman/5.7/en/control-flow-functions.html#operator_case
+ * + https://www.postgresql.org/docs/8.4/functions-conditional.html#AEN15225
+ * + https://www.sqlite.org/lang_expr.html#case
+ *
+ * @see caseCondition
+ */
 function caseConstructor () : (
     UninitializedCaseConditionBuilder
 );
