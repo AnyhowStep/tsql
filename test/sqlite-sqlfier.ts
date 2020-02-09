@@ -891,6 +891,48 @@ export const sqliteSqlfier : Sqlfier = {
                 pascalStyleEscapeString("now")
             ]
         ),
+        [OperatorType.CURRENT_TIMESTAMP_0] : () => functionCall(
+            "strftime",
+            [
+                pascalStyleEscapeString("%Y-%m-%d %H:%M:%S"),
+                pascalStyleEscapeString("now")
+            ]
+        ),
+        [OperatorType.CURRENT_TIMESTAMP_1] : () => functionCall(
+            "substr",
+            [
+                functionCall(
+                    "strftime",
+                    [
+                        pascalStyleEscapeString("%Y-%m-%d %H:%M:%f"),
+                        pascalStyleEscapeString("now")
+                    ]
+                ),
+                "1",
+                "21"
+            ]
+        ),
+        [OperatorType.CURRENT_TIMESTAMP_2] : () => functionCall(
+            "substr",
+            [
+                functionCall(
+                    "strftime",
+                    [
+                        pascalStyleEscapeString("%Y-%m-%d %H:%M:%f"),
+                        pascalStyleEscapeString("now")
+                    ]
+                ),
+                "1",
+                "22"
+            ]
+        ),
+        [OperatorType.CURRENT_TIMESTAMP_3] : () => functionCall(
+            "strftime",
+            [
+                pascalStyleEscapeString("%Y-%m-%d %H:%M:%f"),
+                pascalStyleEscapeString("now")
+            ]
+        ),
         [OperatorType.TIMESTAMPADD_MILLISECOND] : ({operands}) => functionCall(
             "strftime",
             [
