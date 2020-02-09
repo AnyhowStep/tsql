@@ -1,6 +1,6 @@
 import {NonNullEquatableType} from "../../equatable-type";
 
-export type BaseNonNullEquatableType<T extends NonNullEquatableType> = (
+export type BaseNonNullEquatableType<T extends NonNullEquatableType> =
     T extends bigint ?
     bigint :
     T extends number ?
@@ -11,4 +11,4 @@ export type BaseNonNullEquatableType<T extends NonNullEquatableType> = (
     boolean :
     //Date|Uint8Array|Decimal|CustomEquatableType do not have literal types
     T
-);
+;

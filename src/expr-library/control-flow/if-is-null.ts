@@ -7,6 +7,24 @@ import {AssertNonUnion, BaseType} from "../../type-util";
 import {UsedRefUtil} from "../../used-ref";
 import * as ifImpl from "./if";
 
+/**
+ * A special compile-time type-narrowing function.
+ *
+ * ```sql
+ *  IF(
+ *      myColumn IS NULL,
+ *      thenExpr,
+ *      -- The `elseExpr` is free to use `myColumn` as a non-nullable column
+ *      -- because we know `myColumn` is NOT NULL in the else-branch.
+ *      elseExpr
+ *  )
+ * ```
+ *
+ *
+ * @param column
+ * @param then
+ * @param elseDelegate
+ */
 export function ifIsNull<
     ColumnT extends IColumn,
     ThenT extends AnyBuiltInExpr,

@@ -6,7 +6,7 @@ import {IColumn} from "../../../column";
 import {IExprSelectItem} from "../../../expr-select-item";
 import {QueryBaseUtil} from "../../../query-base";
 
-export type TypeOf<BuiltInExprT extends AnyBuiltInExpr> = (
+export type TypeOf<BuiltInExprT extends AnyBuiltInExpr> =
     BuiltInExprT extends BuiltInValueExpr ?
     BuiltInExprT :
     BuiltInExprT extends IExpr ?
@@ -18,4 +18,4 @@ export type TypeOf<BuiltInExprT extends AnyBuiltInExpr> = (
     BuiltInExprT extends IExprSelectItem ?
     tm.OutputOf<BuiltInExprT["mapper"]> :
     never
-);
+;
