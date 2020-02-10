@@ -24,7 +24,7 @@ export const result = serverAppKeyTpt.updateAndFetchOneByPrimaryKey(
                     columns.appKey.disabledAt,
                     new Date(0)
                 ),
-                5
+                5n
             ),
         };
     }
