@@ -978,6 +978,66 @@ export const sqliteSqlfier : Sqlfier = {
                 ]
             ]
         ),
+        [OperatorType.EXTRACT_HOUR] : ({operands}) => functionCall(
+            "CAST",
+            [
+                [
+                    functionCall(
+                        "strftime",
+                        [
+                            pascalStyleEscapeString("%H"),
+                            operands[0]
+                        ]
+                    ),
+                    "AS BIGINT"
+                ]
+            ]
+        ),
+        [OperatorType.EXTRACT_MINUTE] : ({operands}) => functionCall(
+            "CAST",
+            [
+                [
+                    functionCall(
+                        "strftime",
+                        [
+                            pascalStyleEscapeString("%M"),
+                            operands[0]
+                        ]
+                    ),
+                    "AS BIGINT"
+                ]
+            ]
+        ),
+        [OperatorType.EXTRACT_INTEGER_SECOND] : ({operands}) => functionCall(
+            "CAST",
+            [
+                [
+                    functionCall(
+                        "strftime",
+                        [
+                            pascalStyleEscapeString("%S"),
+                            operands[0]
+                        ]
+                    ),
+                    "AS BIGINT"
+                ]
+            ]
+        ),
+        [OperatorType.EXTRACT_FRACTIONAL_SECOND_3] : ({operands}) => functionCall(
+            "CAST",
+            [
+                [
+                    functionCall(
+                        "strftime",
+                        [
+                            pascalStyleEscapeString("%f"),
+                            operands[0]
+                        ]
+                    ),
+                    "AS DOUBLE"
+                ]
+            ]
+        ),
         [OperatorType.TIMESTAMPADD_MILLISECOND] : ({operands}) => functionCall(
             "strftime",
             [

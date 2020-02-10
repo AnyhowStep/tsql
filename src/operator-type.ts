@@ -2075,7 +2075,7 @@ export enum OperatorType {
      *  > 32.4560
      * ```
      * + PostgreSQL     : `FLOOR(EXTRACT(SECOND FROM datetime) * 1000) / 1000`
-     * + SQLite         : `strftime('%S', datetime)`
+     * + SQLite         : `strftime('%f', datetime)`
      * ```sql
      *  SELECT
      *      strftime('%f', '2010-03-27 14:45:32.456789')
@@ -2083,8 +2083,15 @@ export enum OperatorType {
      *  -- The result is rounded, not truncated.
      *  -- If it were truncated, we would get 32.456
      * ```
+     * ```sql
+     *  SELECT
+     *      strftime('%f', '2010-03-27 23:59:59.999999')
+     *  > 59.999
+     *  -- The result is truncated, not rounded.
+     *  -- If it were rounded, we would get 60
+     * ```
      *
-     * @todo Make behaviour consistent
+     * @todo Make behaviour consistent?
      */
     EXTRACT_FRACTIONAL_SECOND_3 = "EXTRACT_FRACTIONAL_SECOND_3",
 
