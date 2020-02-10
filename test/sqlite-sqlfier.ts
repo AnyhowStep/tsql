@@ -1071,6 +1071,18 @@ export const sqliteSqlfier : Sqlfier = {
                 ]
             ]
         ),
+        [OperatorType.TIMESTAMPADD_MONTH] : ({operands}) => functionCall(
+            "strftime",
+            [
+                pascalStyleEscapeString("%Y-%m-%d %H:%M:%f"),
+                operands[1],
+                [
+                    operands[0],
+                    "||",
+                    pascalStyleEscapeString(" month")
+                ]
+            ]
+        ),
         [OperatorType.TIMESTAMPADD_MILLISECOND] : ({operands}) => functionCall(
             "strftime",
             [

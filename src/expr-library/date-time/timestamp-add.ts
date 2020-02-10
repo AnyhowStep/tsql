@@ -56,6 +56,8 @@ export const timestampAddDay = makeOperator2<OperatorType.TIMESTAMPADD_DAY, Date
 /**
  * Adds the specified number of months to the date-time.
  *
+ * May return `null`, or throw on overflow.
+ *
  * + https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_timestampadd
  * + https://www.postgresql.org/docs/9.4/functions-datetime.html#OPERATORS-DATETIME-TABLE
  * + https://www.sqlite.org/lang_datefunc.html
@@ -72,10 +74,15 @@ export const timestampAddDay = makeOperator2<OperatorType.TIMESTAMPADD_DAY, Date
  *      x || ' month'
  *  );
  * ```
+ *
+ * -----
+ *
+ * @param left - The number of months to add; following MySQL convention
+ * @param right - The date-time to add months to; following MySQL convention
  */
-export const timestampAddMonth = makeOperator2<OperatorType.TIMESTAMPADD_MONTH, Date, bigint, Date>(
+export const timestampAddMonth = makeOperator2<OperatorType.TIMESTAMPADD_MONTH, bigint, Date, Date|null>(
     OperatorType.TIMESTAMPADD_MONTH,
-    tm.mysql.dateTime(3),
+    tm.mysql.dateTime(3).orNull(),
     TypeHint.DATE_TIME
 );
 
