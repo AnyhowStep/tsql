@@ -2174,6 +2174,10 @@ export enum OperatorType {
     EXTRACT_YEAR = "EXTRACT_YEAR",
 
     /**
+     * + https://dev.mysql.com/doc/refman/5.7/en/date-and-time-functions.html#function_last-day
+     *
+     * -----
+     *
      * + MySQL          : `LAST_DAY(datetime)`
      * ```sql
      *  SELECT
