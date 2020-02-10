@@ -67,7 +67,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("createdAt")
+                    tsql.timestampAddDay(BigInt(1), columns.createdAt).as("createdAt")
                 ]).or(
                 1337
             ).then((row) => {
@@ -93,7 +93,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("createdAt")
+                    tsql.timestampAddDay(BigInt(1), columns.createdAt).as("createdAt")
                 ]).or(
                 1337
             ).then((row) => {
@@ -119,7 +119,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("createdAt")
+                    tsql.timestampAddDay(BigInt(1), columns.createdAt).as("createdAt")
                 ]).or(
                 1337
             ).then((row) => {
@@ -133,7 +133,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 } as any).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("createdAt")
+                    tsql.timestampAddDay(BigInt(1), columns.createdAt).as("createdAt")
                 ]).or(
                 1337
             ).then(() => {
@@ -148,7 +148,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("myTableId")
+                    tsql.timestampAddDay(BigInt(1), columns.createdAt).as("myTableId")
                 ]).or(
                 1337
             ).then((row) => {
@@ -174,7 +174,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("myTableId")
+                    tsql.timestampAddDay(BigInt(1), columns.createdAt).as("myTableId")
                 ]).or(
                 1337
             ).then((row) => {
@@ -199,7 +199,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("createdAt")
+                    tsql.timestampAddDay(BigInt(1), columns.createdAt).as("createdAt")
                 ]).or(
                 1337
             ).then((row) => {
@@ -215,7 +215,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("createdAt")
+                    tsql.timestampAddDay(BigInt(1), columns.createdAt).as("createdAt")
                 ]).or(
                 1337
             ).then((row) => {
@@ -230,7 +230,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("createdAt")
+                    tsql.timestampAddDay(BigInt(1), columns.createdAt).as("createdAt")
                 ]).or(
                 1337
             ).then((row) => {
@@ -244,7 +244,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("myTableId")
+                    tsql.timestampAddDay(BigInt(1), columns.createdAt).as("myTableId")
                 ]).or(
                 1337
             ).then((row) => {
@@ -259,7 +259,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("myTableId")
+                    tsql.timestampAddDay(BigInt(1), columns.createdAt).as("myTableId")
                 ]).or(
                 1337
             ).then((row) => {
@@ -273,7 +273,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("createdAt")
+                    tsql.timestampAddDay(BigInt(1), columns.createdAt).as("createdAt")
                 ]).or(
                 1337
             ).then((row) => {

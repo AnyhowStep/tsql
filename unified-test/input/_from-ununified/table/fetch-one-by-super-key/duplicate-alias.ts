@@ -67,7 +67,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("createdAt")
+                    tsql.timestampAddDay(BigInt(1), columns.createdAt).as("createdAt")
                 ]).then((row) => {
                 t.deepEqual(
                     row,
@@ -91,7 +91,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("createdAt")
+                    tsql.timestampAddDay(BigInt(1), columns.createdAt).as("createdAt")
                 ]).then((row) => {
                 t.deepEqual(
                     row,
@@ -115,7 +115,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("createdAt")
+                    tsql.timestampAddDay(BigInt(1), columns.createdAt).as("createdAt")
                 ]).then(() => {
                 t.fail("Should not exist");
             }).catch((err) => {
@@ -127,7 +127,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 } as any).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("createdAt")
+                    tsql.timestampAddDay(BigInt(1), columns.createdAt).as("createdAt")
                 ]).then(() => {
                 t.fail("Should not execute");
             }).catch((err) => {
@@ -140,7 +140,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("myTableId")
+                    tsql.timestampAddDay(BigInt(1), columns.createdAt).as("myTableId")
                 ]).then((row) => {
                 t.deepEqual(
                     row,
@@ -164,7 +164,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("myTableId")
+                    tsql.timestampAddDay(BigInt(1), columns.createdAt).as("myTableId")
                 ]).then((row) => {
                 t.deepEqual(
                     row,
@@ -187,7 +187,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("createdAt")
+                    tsql.timestampAddDay(BigInt(1), columns.createdAt).as("createdAt")
                 ]).then(() => {
                 t.fail("Should not exist");
             }).catch(() => {
@@ -201,7 +201,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("createdAt")
+                    tsql.timestampAddDay(BigInt(1), columns.createdAt).as("createdAt")
                 ]).then(() => {
                 t.fail("Should not exist");
             }).catch(() => {
@@ -214,7 +214,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("createdAt")
+                    tsql.timestampAddDay(BigInt(1), columns.createdAt).as("createdAt")
                 ]).then(() => {
                 t.fail("Should not exist");
             }).catch(() => {
@@ -226,7 +226,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("myTableId")
+                    tsql.timestampAddDay(BigInt(1), columns.createdAt).as("myTableId")
                 ]).then(() => {
                 t.fail("Should not exist");
             }).catch(() => {
@@ -239,7 +239,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("myTableId")
+                    tsql.timestampAddDay(BigInt(1), columns.createdAt).as("myTableId")
                 ]).then(() => {
                 t.fail("Should not exist");
             }).catch(() => {
@@ -251,7 +251,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("createdAt")
+                    tsql.timestampAddDay(BigInt(1), columns.createdAt).as("createdAt")
                 ]).then(() => {
                 t.fail("Should not exist");
             }).catch(() => {
