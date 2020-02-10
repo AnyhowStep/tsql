@@ -83,7 +83,7 @@ tape(__filename, async (t) => {
                             columns.appKey.disabledAt,
                             new Date(0)
                         ),
-                        5
+                        BigInt(5)
                     ),
                 };
             }

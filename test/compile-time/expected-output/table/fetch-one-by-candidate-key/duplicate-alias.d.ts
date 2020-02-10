@@ -5,7 +5,7 @@ export declare const fetchedRow0: tsql.ExecutionUtil.FetchOnePromise<{
         readonly myTableId: bigint;
     };
     readonly $aliased: {
-        readonly createdAt: Date;
+        readonly createdAt: Date | null;
     };
 }>;
 export declare const fetchedRow1: tsql.ExecutionUtil.FetchOnePromise<{
@@ -14,6 +14,6 @@ export declare const fetchedRow1: tsql.ExecutionUtil.FetchOnePromise<{
         readonly myTableId: bigint;
     };
     readonly $aliased: {
-        readonly myTableId: Date;
+        readonly myTableId: Date | null;
     };
 }>;
