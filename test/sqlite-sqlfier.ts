@@ -933,6 +933,51 @@ export const sqliteSqlfier : Sqlfier = {
                 pascalStyleEscapeString("now")
             ]
         ),
+        [OperatorType.EXTRACT_YEAR] : ({operands}) => functionCall(
+            "CAST",
+            [
+                [
+                    functionCall(
+                        "strftime",
+                        [
+                            pascalStyleEscapeString("%Y"),
+                            operands[0]
+                        ]
+                    ),
+                    "AS BIGINT"
+                ]
+            ]
+        ),
+        [OperatorType.EXTRACT_MONTH] : ({operands}) => functionCall(
+            "CAST",
+            [
+                [
+                    functionCall(
+                        "strftime",
+                        [
+                            pascalStyleEscapeString("%m"),
+                            operands[0]
+                        ]
+                    ),
+                    "AS BIGINT"
+                ]
+            ]
+        ),
+        [OperatorType.EXTRACT_DAY] : ({operands}) => functionCall(
+            "CAST",
+            [
+                [
+                    functionCall(
+                        "strftime",
+                        [
+                            pascalStyleEscapeString("%d"),
+                            operands[0]
+                        ]
+                    ),
+                    "AS BIGINT"
+                ]
+            ]
+        ),
         [OperatorType.TIMESTAMPADD_MILLISECOND] : ({operands}) => functionCall(
             "strftime",
             [
