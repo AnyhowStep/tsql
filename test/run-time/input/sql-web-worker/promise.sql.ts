@@ -1983,6 +1983,24 @@ export class Pool implements tsql.IPool {
                     throw new Error(`UNHEX only implemented for string`);
                 }
             });
+            await connection.createFunction("FLOOR", (x) => {
+                if (tm.TypeUtil.isBigInt(x)) {
+                    return x;
+                } else if (typeof x == "number") {
+                    return Math.floor(x);
+                } else {
+                    throw new Error(`Can only FLOOR bigint or double`);
+                }
+            });
+            await connection.createFunction("CEILING", (x) => {
+                if (tm.TypeUtil.isBigInt(x)) {
+                    return x;
+                } else if (typeof x == "number") {
+                    return Math.ceil(x);
+                } else {
+                    throw new Error(`Can only CEILING bigint or double`);
+                }
+            });
         }).then(
             () => {},
             (err) => {

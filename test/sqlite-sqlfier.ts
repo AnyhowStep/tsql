@@ -36,6 +36,7 @@ import {
     pascalStyleEscapeString,
     parentheses,
     Parentheses,
+    OperatorNodeUtil,
 } from "../dist";
 import {LiteralValueType, LiteralValueNodeUtil} from "../dist/ast/literal-value-node";
 
@@ -1071,18 +1072,118 @@ export const sqliteSqlfier : Sqlfier = {
                 ]
             ]
         ),
-        [OperatorType.TIMESTAMPADD_MONTH] : ({operands}) => functionCall(
-            "strftime",
-            [
-                pascalStyleEscapeString("%Y-%m-%d %H:%M:%f"),
-                operands[1],
+        /**
+         * @todo Just use a polyfill, rather than trying to emulate with SQLite built-ins.
+         * Seriously. But, for now, this actually works, which surprises me.
+         */
+        [OperatorType.TIMESTAMPADD_MONTH] : ({operands}, toSql, sqlfier) => {
+            /*
+                The following gives SQLite's and JS' understanding of what
+                "adding months" means. However, it is different from what
+                MySQL understands as "adding months".
+
+                Since the function is named for MySQL's `TIMESTAMPADD()`,
+                we follow MySQL's convention, and emultate MySQL's behaviour.
+
+                functionCall(
+                    "strftime",
+                    [
+                        pascalStyleEscapeString("%Y-%m-%d %H:%M:%f"),
+                        operands[1],
+                        [
+                            operands[0],
+                            "||",
+                            pascalStyleEscapeString(" month")
+                        ]
+                    ]
+                )
+            */
+            const rawDeltaMonth = operands[0];
+            const dateTime = operands[1];
+            const curYear = sqlfier.operatorSqlfier[OperatorType.EXTRACT_YEAR](
+                OperatorNodeUtil.operatorNode1(
+                    OperatorType.EXTRACT_YEAR,
+                    [dateTime],
+                    TypeHint.DATE_TIME
+                ),
+                toSql,
+                sqlfier
+            );
+            const curMonth = sqlfier.operatorSqlfier[OperatorType.EXTRACT_MONTH](
+                OperatorNodeUtil.operatorNode1(
+                    OperatorType.EXTRACT_MONTH,
+                    [dateTime],
+                    TypeHint.DATE_TIME
+                ),
+                toSql,
+                sqlfier
+            );
+            const curDay = sqlfier.operatorSqlfier[OperatorType.EXTRACT_DAY](
+                OperatorNodeUtil.operatorNode1(
+                    OperatorType.EXTRACT_DAY,
+                    [dateTime],
+                    TypeHint.DATE_TIME
+                ),
+                toSql,
+                sqlfier
+            );
+            const curTimeComponent = functionCall(
+                "strftime",
                 [
-                    operands[0],
-                    "||",
-                    pascalStyleEscapeString(" month")
+                    pascalStyleEscapeString(" %H:%M:%f"),
+                    dateTime
                 ]
-            ]
-        ),
+            );
+
+            function lastDay (year : Ast, month : Ast) {
+                return parentheses(
+                    [
+                        "CASE",
+                        "WHEN", month, "= 2 THEN (CASE WHEN", year, "%4 = 0 THEN 29 ELSE 28 END)",
+                        "WHEN", month, "IN(1,3,5,7,8,10,12) THEN 31",
+                        "ELSE 30",
+                        "END"
+                    ],
+                    false
+                );
+
+            }
+            function setYearMonth (resultYear : Ast, resultMonth : Ast) {
+                const lastDayOfResult = lastDay(resultYear, resultMonth);
+                const lastDayOfAdd = parentheses(
+                    ["CASE WHEN", curDay, ">", lastDayOfResult, "THEN", lastDayOfResult, "ELSE", curDay, "END"],
+                    false
+                );
+
+                /**
+                 * @todo Instead of `LPAD()`, use this?
+                 * https://stackoverflow.com/a/9603175
+                 */
+                return [
+                    functionCall("LPAD", [functionCall("CAST", [[resultYear, "AS TEXT"]]), "4", "'0'"]),
+                    "|| '-' ||",
+                    functionCall("LPAD", [functionCall("CAST", [[resultMonth, "AS TEXT"]]), "2", "'0'"]),
+                    "|| '-' ||",
+                    functionCall("LPAD", [functionCall("CAST", [[lastDayOfAdd, "AS TEXT"]]), "2", "'0'"]),
+                    "||",
+                    curTimeComponent
+                ];
+            }
+
+            const monthsSince_0000_01 = parentheses(
+                [curYear, "* 12 + (", curMonth, "-1) +", rawDeltaMonth],
+                false
+            );
+            const resultYear = functionCall("FLOOR", [[monthsSince_0000_01, "/12"]]);
+            const resultMonth = parentheses([monthsSince_0000_01, "%12 + 1"], false);
+
+            return [
+                "CASE",
+                "WHEN", monthsSince_0000_01, "BETWEEN 0 AND 119999 THEN", setYearMonth(resultYear, resultMonth),
+                "ELSE NULL",
+                "END"
+            ];
+        },
         [OperatorType.TIMESTAMPADD_MILLISECOND] : ({operands}) => functionCall(
             "strftime",
             [

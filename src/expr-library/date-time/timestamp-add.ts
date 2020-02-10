@@ -30,6 +30,8 @@ export const timestampAddHour = makeOperator2<OperatorType.TIMESTAMPADD_HOUR, Da
 /**
  * Adds the specified number of days to the date-time.
  *
+ * May return `null`, or throw on overflow.
+ *
  * + https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_timestampadd
  * + https://www.postgresql.org/docs/9.4/functions-datetime.html#OPERATORS-DATETIME-TABLE
  * + https://www.sqlite.org/lang_datefunc.html
@@ -46,10 +48,15 @@ export const timestampAddHour = makeOperator2<OperatorType.TIMESTAMPADD_HOUR, Da
  *      x || ' day'
  *  );
  * ```
+ *
+ * -----
+ *
+ * @param left - The number of days to add; following MySQL convention
+ * @param right - The date-time to add days to; following MySQL convention
  */
-export const timestampAddDay = makeOperator2<OperatorType.TIMESTAMPADD_DAY, Date, bigint, Date>(
+export const timestampAddDay = makeOperator2<OperatorType.TIMESTAMPADD_DAY, bigint, Date, Date|null>(
     OperatorType.TIMESTAMPADD_DAY,
-    tm.mysql.dateTime(3),
+    tm.mysql.dateTime(3).orNull(),
     TypeHint.DATE_TIME
 );
 

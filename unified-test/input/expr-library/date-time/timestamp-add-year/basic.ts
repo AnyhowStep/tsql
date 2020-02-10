@@ -16,7 +16,7 @@ export const test : Test = ({tape, pool}) => {
                 2000,
                 2018,
             ];
-            for(const year of arr) {
+            for (const year of arr) {
                 await tsql
                     .selectValue(() => tsql.timestampAddYear(
                         BigInt(year),
@@ -30,7 +30,7 @@ export const test : Test = ({tape, pool}) => {
                         t.fail(err.message);
                     });
             }
-            for(const year of arr) {
+            for (const year of arr) {
                 await tsql
                     .selectValue(() => tsql.timestampAddYear(
                         BigInt(-year),

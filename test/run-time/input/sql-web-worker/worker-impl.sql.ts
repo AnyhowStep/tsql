@@ -64,6 +64,7 @@ export function initWorker (
             }
             case SqliteAction.EXEC: {
                 const db = await getOrCreateDb();
+                //console.log(data.sql);
                 const execResult = db.exec(data.sql);
                 postMessage({
                     id : data.id,
