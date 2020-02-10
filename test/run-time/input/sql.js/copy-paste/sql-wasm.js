@@ -254,6 +254,7 @@ Statement = (function() {
      */
     const str = sqlite3_column_text(this.stmt, pos);
     if (str[0] != "{") {
+      //console.log(str);
       return str;
     }
     try {

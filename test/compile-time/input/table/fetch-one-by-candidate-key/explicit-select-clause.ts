@@ -29,5 +29,5 @@ export const fetchedRow4 = myTable.whereEqCandidateKey({
     }).fetchOne(null as any, columns => [
         columns.createdAt,
         columns.myTableId,
-        tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("dayAfterCreation")
+        tsql.timestampAddDay(BigInt(1), columns.createdAt).as("dayAfterCreation")
     ]);

@@ -17,7 +17,7 @@ export const fetchedRow0 = myTable
         columns => [
             columns.createdAt,
             columns.myTableId,
-            tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("createdAt")
+            tsql.timestampAddDay(BigInt(1), columns.createdAt).as("createdAt")
         ]
     );
 
@@ -30,6 +30,6 @@ export const fetchedRow1 = myTable
         columns => [
             columns.createdAt,
             columns.myTableId,
-            tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("myTableId")
+            tsql.timestampAddDay(BigInt(1), columns.createdAt).as("myTableId")
         ]
     );

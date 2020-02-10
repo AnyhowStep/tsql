@@ -16,5 +16,5 @@ export declare const fetchedRow3: tsql.ExecutionUtil.FetchOnePromise<{
 export declare const fetchedRow4: tsql.ExecutionUtil.FetchOnePromise<{
     readonly createdAt: Date;
     readonly myTableId: bigint;
-    readonly dayAfterCreation: Date;
+    readonly dayAfterCreation: Date | null;
 }>;

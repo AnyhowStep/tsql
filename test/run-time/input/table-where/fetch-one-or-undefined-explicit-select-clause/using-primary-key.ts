@@ -133,7 +133,7 @@ tape(__filename, async (t) => {
                 columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("dayAfterCreation")
+                    tsql.timestampAddDay(BigInt(1), columns.createdAt).as("dayAfterCreation")
                 ]
             )
             .orUndefined()
@@ -248,7 +248,7 @@ tape(__filename, async (t) => {
                 columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("dayAfterCreation")
+                    tsql.timestampAddDay(BigInt(1), columns.createdAt).as("dayAfterCreation")
                 ]
             )
             .orUndefined()

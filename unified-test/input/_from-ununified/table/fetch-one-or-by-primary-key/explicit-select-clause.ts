@@ -129,7 +129,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("dayAfterCreation")
+                    tsql.timestampAddDay(BigInt(1), columns.createdAt).as("dayAfterCreation")
                 ]).or(
                 1337
             ).then((row) => {
@@ -192,7 +192,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 }).fetchOne(connection, columns => [
                     columns.createdAt,
                     columns.myTableId,
-                    tsql.timestampAddDay(columns.createdAt, BigInt(1)).as("dayAfterCreation")]).or(
+                    tsql.timestampAddDay(BigInt(1), columns.createdAt).as("dayAfterCreation")]).or(
                 1337
             ).then((row) => {
                 t.deepEqual(row, 1337);
