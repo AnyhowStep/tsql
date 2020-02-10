@@ -1038,6 +1038,27 @@ export const sqliteSqlfier : Sqlfier = {
                 ]
             ]
         ),
+        [OperatorType.LAST_DAY] : ({operands}) => functionCall(
+            "strftime",
+            [
+                pascalStyleEscapeString("%Y-%m-%d"),
+                operands[0],
+                pascalStyleEscapeString("+1 month"),
+                [
+                    pascalStyleEscapeString("-"),
+                    "||",
+                    functionCall(
+                        "strftime",
+                        [
+                            pascalStyleEscapeString("%d"),
+                            operands[0]
+                        ]
+                    ),
+                    "||",
+                    pascalStyleEscapeString(" day")
+                ]
+            ]
+        ),
         [OperatorType.TIMESTAMPADD_MILLISECOND] : ({operands}) => functionCall(
             "strftime",
             [
