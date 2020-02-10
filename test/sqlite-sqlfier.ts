@@ -1212,10 +1212,10 @@ export const sqliteSqlfier : Sqlfier = {
             "strftime",
             [
                 pascalStyleEscapeString("%Y-%m-%d %H:%M:%f"),
-                operands[0],
+                operands[1],
                 insertBetween(
                     [
-                        operands[1],
+                        operands[0],
                         pascalStyleEscapeString(" day")
                     ],
                     "||"
