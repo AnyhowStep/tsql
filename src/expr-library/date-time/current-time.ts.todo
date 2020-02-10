@@ -4,6 +4,20 @@ import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
 /**
+ * Returns the current time, accurate to 1-second.
+ *
+ * + https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_current-time
+ * + https://www.postgresql.org/docs/9.4/functions-datetime.html#FUNCTIONS-DATETIME-TABLE
+ * + https://www.sqlite.org/lang_datefunc.html
+ *
+ * -----
+ *
+ * + MySQL          : `CURRENT_TIME(0)`
+ * + PostgreSQL     : `CURRENT_TIME(0)`
+ * + SQLite         : `strftime('%H:%M:%S', 'now')`
+ *
+ * -----
+ *
  * Sets year, month, day, to the unix epoch
  */
 export const currentTime0 = makeOperator0<OperatorType.CURRENT_TIME_0, Date>(

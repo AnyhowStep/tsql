@@ -884,6 +884,55 @@ export const sqliteSqlfier : Sqlfier = {
             Date and Time Functions
             https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html
         */
+        [OperatorType.CURRENT_DATE] : () => functionCall(
+            "strftime",
+            [
+                pascalStyleEscapeString("%Y-%m-%d"),
+                pascalStyleEscapeString("now")
+            ]
+        ),
+        [OperatorType.CURRENT_TIMESTAMP_0] : () => functionCall(
+            "strftime",
+            [
+                pascalStyleEscapeString("%Y-%m-%d %H:%M:%S"),
+                pascalStyleEscapeString("now")
+            ]
+        ),
+        [OperatorType.CURRENT_TIMESTAMP_1] : () => functionCall(
+            "substr",
+            [
+                functionCall(
+                    "strftime",
+                    [
+                        pascalStyleEscapeString("%Y-%m-%d %H:%M:%f"),
+                        pascalStyleEscapeString("now")
+                    ]
+                ),
+                "1",
+                "21"
+            ]
+        ),
+        [OperatorType.CURRENT_TIMESTAMP_2] : () => functionCall(
+            "substr",
+            [
+                functionCall(
+                    "strftime",
+                    [
+                        pascalStyleEscapeString("%Y-%m-%d %H:%M:%f"),
+                        pascalStyleEscapeString("now")
+                    ]
+                ),
+                "1",
+                "22"
+            ]
+        ),
+        [OperatorType.CURRENT_TIMESTAMP_3] : () => functionCall(
+            "strftime",
+            [
+                pascalStyleEscapeString("%Y-%m-%d %H:%M:%f"),
+                pascalStyleEscapeString("now")
+            ]
+        ),
         [OperatorType.TIMESTAMPADD_MILLISECOND] : ({operands}) => functionCall(
             "strftime",
             [
