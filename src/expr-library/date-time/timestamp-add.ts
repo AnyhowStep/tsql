@@ -53,6 +53,8 @@ export const timestampAddHour = makeOperator2<OperatorType.TIMESTAMPADD_HOUR, Da
  *
  * @param left - The number of days to add; following MySQL convention
  * @param right - The date-time to add days to; following MySQL convention
+ *
+ * @todo Unify negative overflow behaviour.
  */
 export const timestampAddDay = makeOperator2<OperatorType.TIMESTAMPADD_DAY, bigint, Date, Date|null>(
     OperatorType.TIMESTAMPADD_DAY,
@@ -73,14 +75,7 @@ export const timestampAddDay = makeOperator2<OperatorType.TIMESTAMPADD_DAY, bigi
  *
  * + MySQL          : `TIMESTAMPADD(MONTH, x, datetime)`
  * + PostgreSQL     : `datetime + concat(x, ' month')::interval`
- * + SQLite         :
- * ```sql
- *  strftime(
- *      '%Y-%m-%d %H:%M:%f',
- *      datetime,
- *      x || ' month'
- *  );
- * ```
+ * + SQLite         : Complicated implementation.
  *
  * -----
  *
