@@ -79,11 +79,11 @@ tape(__filename, async (t) => {
                         "-y"
                     ),
                     disabledAt : tsql.timestampAddMillisecond(
+                        BigInt(5),
                         tsql.coalesce(
                             columns.appKey.disabledAt,
                             new Date(0)
-                        ),
-                        BigInt(5)
+                        )
                     ),
                 };
             }

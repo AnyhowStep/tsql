@@ -20,11 +20,11 @@ export const result = serverAppKeyTpt.updateAndFetchZeroOrOneByPrimaryKey(
                 "-y"
             ),
             disabledAt : tsql.timestampAddMillisecond(
+                5n,
                 tsql.coalesce(
                     columns.appKey.disabledAt,
                     new Date(0)
-                ),
-                5n
+                )
             ),
         };
     }

@@ -1184,30 +1184,6 @@ export const sqliteSqlfier : Sqlfier = {
                 "END"
             ];
         },
-        [OperatorType.TIMESTAMPADD_MILLISECOND] : ({operands}) => functionCall(
-            "strftime",
-            [
-                pascalStyleEscapeString("%Y-%m-%d %H:%M:%f"),
-                operands[0],
-                insertBetween(
-                    [
-                        parentheses(
-                            insertBetween(
-                                [
-                                    operands[1],
-                                    "1000e0"
-                                ],
-                                "/"
-                            ),
-                            //canUnwrap
-                            false
-                        ),
-                        pascalStyleEscapeString(" second")
-                    ],
-                    "||"
-                )
-            ]
-        ),
         [OperatorType.TIMESTAMPADD_DAY] : ({operands}) => functionCall(
             "strftime",
             [
@@ -1217,6 +1193,72 @@ export const sqliteSqlfier : Sqlfier = {
                     [
                         operands[0],
                         pascalStyleEscapeString(" day")
+                    ],
+                    "||"
+                )
+            ]
+        ),
+        [OperatorType.TIMESTAMPADD_HOUR] : ({operands}) => functionCall(
+            "strftime",
+            [
+                pascalStyleEscapeString("%Y-%m-%d %H:%M:%f"),
+                operands[1],
+                insertBetween(
+                    [
+                        operands[0],
+                        pascalStyleEscapeString(" hour")
+                    ],
+                    "||"
+                )
+            ]
+        ),
+        [OperatorType.TIMESTAMPADD_MINUTE] : ({operands}) => functionCall(
+            "strftime",
+            [
+                pascalStyleEscapeString("%Y-%m-%d %H:%M:%f"),
+                operands[1],
+                insertBetween(
+                    [
+                        operands[0],
+                        pascalStyleEscapeString(" minute")
+                    ],
+                    "||"
+                )
+            ]
+        ),
+        [OperatorType.TIMESTAMPADD_SECOND] : ({operands}) => functionCall(
+            "strftime",
+            [
+                pascalStyleEscapeString("%Y-%m-%d %H:%M:%f"),
+                operands[1],
+                insertBetween(
+                    [
+                        operands[0],
+                        pascalStyleEscapeString(" second")
+                    ],
+                    "||"
+                )
+            ]
+        ),
+        [OperatorType.TIMESTAMPADD_MILLISECOND] : ({operands}) => functionCall(
+            "strftime",
+            [
+                pascalStyleEscapeString("%Y-%m-%d %H:%M:%f"),
+                operands[1],
+                insertBetween(
+                    [
+                        parentheses(
+                            insertBetween(
+                                [
+                                    operands[0],
+                                    "1000e0"
+                                ],
+                                "/"
+                            ),
+                            //canUnwrap
+                            false
+                        ),
+                        pascalStyleEscapeString(" second")
                     ],
                     "||"
                 )
