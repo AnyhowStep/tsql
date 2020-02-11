@@ -1184,6 +1184,34 @@ export const sqliteSqlfier : Sqlfier = {
                 "END"
             ];
         },
+        [OperatorType.TIMESTAMPADD_DAY] : ({operands}) => functionCall(
+            "strftime",
+            [
+                pascalStyleEscapeString("%Y-%m-%d %H:%M:%f"),
+                operands[1],
+                insertBetween(
+                    [
+                        operands[0],
+                        pascalStyleEscapeString(" day")
+                    ],
+                    "||"
+                )
+            ]
+        ),
+        [OperatorType.TIMESTAMPADD_HOUR] : ({operands}) => functionCall(
+            "strftime",
+            [
+                pascalStyleEscapeString("%Y-%m-%d %H:%M:%f"),
+                operands[1],
+                insertBetween(
+                    [
+                        operands[0],
+                        pascalStyleEscapeString(" hour")
+                    ],
+                    "||"
+                )
+            ]
+        ),
         [OperatorType.TIMESTAMPADD_MILLISECOND] : ({operands}) => functionCall(
             "strftime",
             [
@@ -1203,20 +1231,6 @@ export const sqliteSqlfier : Sqlfier = {
                             false
                         ),
                         pascalStyleEscapeString(" second")
-                    ],
-                    "||"
-                )
-            ]
-        ),
-        [OperatorType.TIMESTAMPADD_DAY] : ({operands}) => functionCall(
-            "strftime",
-            [
-                pascalStyleEscapeString("%Y-%m-%d %H:%M:%f"),
-                operands[1],
-                insertBetween(
-                    [
-                        operands[0],
-                        pascalStyleEscapeString(" day")
                     ],
                     "||"
                 )

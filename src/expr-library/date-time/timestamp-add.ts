@@ -21,9 +21,37 @@ export const timestampAddMinute = makeOperator2<OperatorType.TIMESTAMPADD_MINUTE
     TypeHint.DATE_TIME
 );
 
-export const timestampAddHour = makeOperator2<OperatorType.TIMESTAMPADD_HOUR, Date, bigint, Date>(
+/**
+ * Adds the specified number of hours to the date-time.
+ *
+ * May return `null`, or throw on overflow.
+ *
+ * + https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_timestampadd
+ * + https://www.postgresql.org/docs/9.4/functions-datetime.html#OPERATORS-DATETIME-TABLE
+ * + https://www.sqlite.org/lang_datefunc.html
+ *
+ * -----
+ *
+ * + MySQL          : `TIMESTAMPADD(HOUR, x, datetime)`
+ * + PostgreSQL     : `datetime + concat(x, ' hour')::interval`
+ * + SQLite         :
+ * ```sql
+ *  strftime(
+ *      '%Y-%m-%d %H:%M:%f',
+ *      datetime,
+ *      x || ' hour'
+ *  );
+ * ```
+ *
+ * -----
+ *
+ * @param left - The number of hours to add; following MySQL convention
+ * @param right - The date-time to add hours to; following MySQL convention
+ *
+ */
+export const timestampAddHour = makeOperator2<OperatorType.TIMESTAMPADD_HOUR, bigint, Date, Date|null>(
     OperatorType.TIMESTAMPADD_HOUR,
-    tm.mysql.dateTime(3),
+    tm.mysql.dateTime(3).orNull(),
     TypeHint.DATE_TIME
 );
 
