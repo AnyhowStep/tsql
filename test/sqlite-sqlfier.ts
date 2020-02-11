@@ -1212,6 +1212,20 @@ export const sqliteSqlfier : Sqlfier = {
                 )
             ]
         ),
+        [OperatorType.TIMESTAMPADD_MINUTE] : ({operands}) => functionCall(
+            "strftime",
+            [
+                pascalStyleEscapeString("%Y-%m-%d %H:%M:%f"),
+                operands[1],
+                insertBetween(
+                    [
+                        operands[0],
+                        pascalStyleEscapeString(" minute")
+                    ],
+                    "||"
+                )
+            ]
+        ),
         [OperatorType.TIMESTAMPADD_MILLISECOND] : ({operands}) => functionCall(
             "strftime",
             [

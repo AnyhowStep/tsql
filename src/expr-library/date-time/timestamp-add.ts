@@ -15,9 +15,38 @@ export const timestampAddSecond = makeOperator2<OperatorType.TIMESTAMPADD_SECOND
     TypeHint.DATE_TIME
 );
 
-export const timestampAddMinute = makeOperator2<OperatorType.TIMESTAMPADD_MINUTE, Date, bigint, Date>(
+/**
+ * Adds the specified number of minutes to the date-time.
+ *
+ * May return `null`, or throw on overflow.
+ *
+ * + https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_timestampadd
+ * + https://www.postgresql.org/docs/9.4/functions-datetime.html#OPERATORS-DATETIME-TABLE
+ * + https://www.sqlite.org/lang_datefunc.html
+ *
+ * -----
+ *
+ * + MySQL          : `TIMESTAMPADD(MINUTE, x, datetime)`
+ * + PostgreSQL     : `datetime + concat(x, ' minute')::interval`
+ * + SQLite         :
+ * ```sql
+ *  strftime(
+ *      '%Y-%m-%d %H:%M:%f',
+ *      datetime,
+ *      x || ' minute'
+ *  );
+ * ```
+ *
+ * -----
+ *
+ * @param left - The number of minutes to add; following MySQL convention
+ * @param right - The date-time to add minutes to; following MySQL convention
+ *
+ * @todo Unify negative overflow behaviour.
+ */
+export const timestampAddMinute = makeOperator2<OperatorType.TIMESTAMPADD_MINUTE, bigint, Date, Date|null>(
     OperatorType.TIMESTAMPADD_MINUTE,
-    tm.mysql.dateTime(3),
+    tm.mysql.dateTime(3).orNull(),
     TypeHint.DATE_TIME
 );
 
@@ -48,6 +77,7 @@ export const timestampAddMinute = makeOperator2<OperatorType.TIMESTAMPADD_MINUTE
  * @param left - The number of hours to add; following MySQL convention
  * @param right - The date-time to add hours to; following MySQL convention
  *
+ * @todo Unify negative overflow behaviour.
  */
 export const timestampAddHour = makeOperator2<OperatorType.TIMESTAMPADD_HOUR, bigint, Date, Date|null>(
     OperatorType.TIMESTAMPADD_HOUR,
@@ -109,6 +139,8 @@ export const timestampAddDay = makeOperator2<OperatorType.TIMESTAMPADD_DAY, bigi
  *
  * @param left - The number of months to add; following MySQL convention
  * @param right - The date-time to add months to; following MySQL convention
+ *
+ * @todo Unify negative overflow behaviour.
  */
 export const timestampAddMonth = makeOperator2<OperatorType.TIMESTAMPADD_MONTH, bigint, Date, Date|null>(
     OperatorType.TIMESTAMPADD_MONTH,
@@ -142,6 +174,8 @@ export const timestampAddMonth = makeOperator2<OperatorType.TIMESTAMPADD_MONTH, 
  *
  * @param left - The number of years to add; following MySQL convention
  * @param right - The date-time to add years to; following MySQL convention
+ *
+ * @todo Unify negative overflow behaviour.
  */
 export const timestampAddYear = makeOperator2<OperatorType.TIMESTAMPADD_YEAR, bigint, Date, Date|null>(
     OperatorType.TIMESTAMPADD_YEAR,
