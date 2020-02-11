@@ -8,21 +8,22 @@ export const test : Test = ({tape, pool}) => {
             const month = 2;
             const day = 29;
             const hour = 22;
-            for (let minute=0; minute<=59; ++minute) {
-                for (let deltaMinute=-500; deltaMinute<=500; ++deltaMinute) {
+            const minute = 58;
+            for (let second=0; second<=59; ++second) {
+                for (let deltaSecond=-500; deltaSecond<=500; ++deltaSecond) {
                     const dateStr = `${year}-${String(month).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
-                    const timeStr = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}:23.756`;
+                    const timeStr = `${String(hour).padStart(2, "0")}:${String(minute).padStart(2, "0")}:${String(second).padStart(2, "0")}.756`;
                     await tsql
-                        .selectValue(() => tsql.timestampAddMinute(
-                            BigInt(deltaMinute),
+                        .selectValue(() => tsql.timestampAddSecond(
+                            BigInt(deltaSecond),
                             tsql.utcStringToTimestamp(`${dateStr} ${timeStr}`)
                         ))
                         .fetchValue(connection)
                         .then((value) => {
                             const startDateTime = new Date(`${dateStr}T${timeStr}Z`);
                             const startTimestamp = startDateTime.getTime();
-                            const expected = new Date(startTimestamp + (deltaMinute * 60 * 1000));
-                            t.deepEqual(value, expected, `TIMESTAMPADD(MINUTE, ${deltaMinute}, '${dateStr} ${timeStr}') = ${expected.toISOString()}`);
+                            const expected = new Date(startTimestamp + (deltaSecond * 1000));
+                            t.deepEqual(value, expected, `TIMESTAMPADD(SECOND, ${deltaSecond}, '${dateStr} ${timeStr}') = ${expected.toISOString()}`);
                         })
                         .catch((err) => {
                             t.fail(String(err));

@@ -9,9 +9,37 @@ export const timestampAddMillisecond = makeOperator2<OperatorType.TIMESTAMPADD_M
     TypeHint.DATE_TIME
 );
 
-export const timestampAddSecond = makeOperator2<OperatorType.TIMESTAMPADD_SECOND, Date, bigint, Date>(
+/**
+ * Adds the specified number of seconds to the date-time.
+ *
+ * May return `null`, or throw on overflow.
+ *
+ * + https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_timestampadd
+ * + https://www.postgresql.org/docs/9.4/functions-datetime.html#OPERATORS-DATETIME-TABLE
+ * + https://www.sqlite.org/lang_datefunc.html
+ *
+ * -----
+ *
+ * + MySQL          : `TIMESTAMPADD(SECOND, x, datetime)`
+ * + PostgreSQL     : `datetime + concat(x, ' second')::interval`
+ * + SQLite         :
+ * ```sql
+ *  strftime(
+ *      '%Y-%m-%d %H:%M:%f',
+ *      datetime,
+ *      x || ' second'
+ *  );
+ * ```
+ * -----
+ *
+ * @param left - The number of seconds to add; following MySQL convention
+ * @param right - The date-time to add seconds to; following MySQL convention
+ *
+ * @todo Unify negative overflow behaviour.
+ */
+export const timestampAddSecond = makeOperator2<OperatorType.TIMESTAMPADD_SECOND, bigint, Date, Date|null>(
     OperatorType.TIMESTAMPADD_SECOND,
-    tm.mysql.dateTime(3),
+    tm.mysql.dateTime(3).orNull(),
     TypeHint.DATE_TIME
 );
 
