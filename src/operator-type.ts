@@ -2403,48 +2403,49 @@ export enum OperatorType {
     //TIMESTAMPDIFF_MICROSECOND = "TIMESTAMPDIFF_MICROSECOND",
 
     /**
-     * + MySQL          : `FLOOR(TIMESTAMPDIFF(MICROSECOND, from, to)/1000e0)`
-     *   + Should be casted to `BIGINT` after `FLOOR()`
-     * + PostgreSQL     : `EXTRACT(DAY FROM (to - from))*24*60*60*1000 + EXTRACT(HOUR FROM (to - from))*60*60*1000 + EXTRACT(MINUTE FROM (to - from))*60*1000 + FLOOR(EXTRACT(SECOND FROM (to - from))*1000)`
-     *   + The `FLOOR()` at the end is necessary
+     * + MySQL          : `CAST(TIMESTAMPDIFF(MICROSECOND, from, to)/1000.0 AS SIGNED INTEGER)`
+     * + PostgreSQL     : `EXTRACT(DAY FROM (to - from))*24*60*60*1000 + EXTRACT(HOUR FROM (to - from))*60*60*1000 + EXTRACT(MINUTE FROM (to - from))*60*1000 + TRUNC(EXTRACT(SECOND FROM (to - from))*1000)`
+     *   + The `TRUNC()` at the end is necessary
      *   + Extracting `SECOND` gives a number with decimal places for milliseconds
-     *   + Every `EXTRACT()/FLOOR()` should be wrapped with a cast to `BIGINT`
-     * + SQLite         : `FLOOR((strftime('%J', to) - strftime('%J', from)) * 24 * 60 * 60 * 1000)`
-     *   + We don't need to `FLOOR()` the result but it keeps the results consistent across the databases
+     *   + Every `EXTRACT()/TRUNC()` should be wrapped with a cast to `BIGINT`
+     * + SQLite         : `CAST( (strftime('%J', to) - strftime('%J', from)) * 24 * 60 * 60 * 1000 AS BIGINT)`
+     *   + We cast to `BIGINT` to be consistent with MySQL
      */
     TIMESTAMPDIFF_MILLISECOND = "TIMESTAMPDIFF_MILLISECOND",
 
     /**
      * + MySQL          : `TIMESTAMPDIFF(SECOND, from, to)`
-     * + PostgreSQL     : `EXTRACT(DAY FROM (to - from))*24*60*60 + EXTRACT(HOUR FROM (to - from))*60*60 + EXTRACT(MINUTE FROM (to - from))*60 + FLOOR(EXTRACT(SECOND FROM (to - from)))`
-     *   + The `FLOOR()` at the end is necessary
+     * + PostgreSQL     : `EXTRACT(DAY FROM (to - from))*24*60*60 + EXTRACT(HOUR FROM (to - from))*60*60 + EXTRACT(MINUTE FROM (to - from))*60 + TRUNC(EXTRACT(SECOND FROM (to - from)))`
+     *   + The `TRUNC()` at the end is necessary
      *   + Extracting `SECOND` gives a number with decimal places for milliseconds
-     * + SQLite         : `FLOOR((strftime('%J', to) - strftime('%J', from)) * 24 * 60 * 60)`
-     *   + We don't need to `FLOOR()` the result but it keeps the results consistent across the databases
+     * + SQLite         : `CAST( (strftime('%J', to) - strftime('%J', from)) * 24 * 60 * 60 AS BIGINT)`
+     *   + We cast to `BIGINT` to be consistent with MySQL
      */
     TIMESTAMPDIFF_SECOND = "TIMESTAMPDIFF_SECOND",
 
     /**
      * + MySQL          : `TIMESTAMPDIFF(MINUTE, from, to)`
      * + PostgreSQL     : `EXTRACT(DAY FROM (to - from))*24*60 + EXTRACT(HOUR FROM (to - from))*60 + EXTRACT(MINUTE FROM (to - from))`
-     * + SQLite         : `FLOOR((strftime('%J', to) - strftime('%J', from)) * 24 * 60)`
-     *   + We don't need to `FLOOR()` the result but it keeps the results consistent across the databases
+     * + SQLite         : `CAST( (strftime('%J', to) - strftime('%J', from)) * 24 * 60 AS BIGINT)`
+     *   + We cast to `BIGINT` to be consistent with MySQL
      */
     TIMESTAMPDIFF_MINUTE = "TIMESTAMPDIFF_MINUTE",
 
     /**
      * + MySQL          : `TIMESTAMPDIFF(HOUR, from, to)`
      * + PostgreSQL     : `EXTRACT(DAY FROM (to - from))*24 + EXTRACT(HOUR FROM (to - from))`
-     * + SQLite         : `FLOOR((strftime('%J', to) - strftime('%J', from)) * 24)`
-     *   + We don't need to `FLOOR()` the result but it keeps the results consistent across the databases
+     * + SQLite         : `CAST( (strftime('%J', to) - strftime('%J', from)) * 24 AS BIGINT)`
+     *   + We cast to `BIGINT` to be consistent with MySQL
      */
     TIMESTAMPDIFF_HOUR = "TIMESTAMPDIFF_HOUR",
 
     /**
+     * + https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_timestampdiff
+     *
      * + MySQL          : `TIMESTAMPDIFF(DAY, from, to)`
      * + PostgreSQL     : `EXTRACT(DAY FROM (to - from))`
-     * + SQLite         : `FLOOR(strftime('%J', to) - strftime('%J', from))`
-     *   + We don't need to `FLOOR()` the result but it keeps the results consistent across the databases
+     * + SQLite         : `CAST(strftime('%J', to) - strftime('%J', from) AS BIGINT)`
+     *   + We cast to `BIGINT` to be consistent with MySQL
      */
     TIMESTAMPDIFF_DAY = "TIMESTAMPDIFF_DAY",
 
