@@ -33,9 +33,9 @@ export const test : Test = ({tape, pool}) => {
 
                 await tsql
                     .select(() => [
-                        tsql.extractYear(tsql.utcStringToTimestamp(dateStr)).as("year"),
-                        tsql.extractMonth(tsql.utcStringToTimestamp(dateStr)).as("month"),
-                        tsql.extractDay(tsql.utcStringToTimestamp(dateStr)).as("day")
+                        tsql.extractYear(tsql.throwIfNull(tsql.utcStringToTimestamp(dateStr))).as("year"),
+                        tsql.extractMonth(tsql.throwIfNull(tsql.utcStringToTimestamp(dateStr))).as("month"),
+                        tsql.extractDay(tsql.throwIfNull(tsql.utcStringToTimestamp(dateStr))).as("day")
                     ])
                     .fetchOne(connection)
                     .then((row) => {

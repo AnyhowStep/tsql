@@ -9,7 +9,7 @@ export const test : Test = ({tape, pool}) => {
                 const dateStr = `0002-${monthStr}-01`;
 
                 await tsql
-                    .selectValue(() => tsql.extractMonth(tsql.utcStringToTimestamp(dateStr)))
+                    .selectValue(() => tsql.extractMonth(tsql.throwIfNull(tsql.utcStringToTimestamp(dateStr))))
                     .fetchValue(connection)
                     .then((value) => {
                         t.deepEqual(value, BigInt(month));
