@@ -157,7 +157,7 @@ export type OperatorOperand = {
     [OperatorType.CURRENT_TIMESTAMP_2]      : Operand0,
     [OperatorType.CURRENT_TIMESTAMP_3]      : Operand0,
     [OperatorType.UTC_STRING_TO_TIMESTAMP_CONSTRUCTOR]      : Operand1,
-    [OperatorType.LOCAL_STRING_TO_TIMESTAMP_CONSTRUCTOR]    : Operand1,
+    //[OperatorType.LOCAL_STRING_TO_TIMESTAMP_CONSTRUCTOR]    : Operand1,
     [OperatorType.EXTRACT_FRACTIONAL_SECOND_3]  : Operand1,
     [OperatorType.EXTRACT_INTEGER_SECOND]   : Operand1,
     [OperatorType.EXTRACT_MINUTE]           : Operand1,

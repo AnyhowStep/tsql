@@ -2018,7 +2018,7 @@ export enum OperatorType {
      */
     UTC_STRING_TO_TIMESTAMP_CONSTRUCTOR = "UTC_STRING_TO_TIMESTAMP_CONSTRUCTOR",
 
-    /**
+    /*
      *
      * -----
      *
@@ -2058,7 +2058,7 @@ export enum OperatorType {
      * Treat `x` as representing a `local` timestamp.
      *
      */
-    LOCAL_STRING_TO_TIMESTAMP_CONSTRUCTOR = "LOCAL_STRING_TO_TIMESTAMP_CONSTRUCTOR",
+    //LOCAL_STRING_TO_TIMESTAMP_CONSTRUCTOR = "LOCAL_STRING_TO_TIMESTAMP_CONSTRUCTOR",
 
     /**
      * + https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_extract
