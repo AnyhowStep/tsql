@@ -3,18 +3,77 @@ import {makeOperator2} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
+/**
+ * Returns the number of milliseconds between two date-times.
+ *
+ * + https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_timestampdiff
+ *
+ * -----
+ *
+ * + MySQL          : `CAST(TIMESTAMPDIFF(MICROSECOND, from, to)/1000.0 AS SIGNED INTEGER)`
+ * + PostgreSQL     : `EXTRACT(DAY FROM (to - from))*24*60*60*1000 + EXTRACT(HOUR FROM (to - from))*60*60*1000 + EXTRACT(MINUTE FROM (to - from))*60*1000 + TRUNC(EXTRACT(SECOND FROM (to - from))*1000)`
+ *   + The `TRUNC()` at the end is necessary
+ *   + Extracting `SECOND` gives a number with decimal places for milliseconds
+ *   + Every `EXTRACT()/TRUNC()` should be wrapped with a cast to `BIGINT`
+ * + SQLite         : `CAST( (strftime('%J', to) - strftime('%J', from)) * 24 * 60 * 60 * 1000 AS BIGINT)`
+ *   + We cast to `BIGINT` to be consistent with MySQL
+ *
+ * -----
+ *
+ * @param left - The start date-time
+ * @param right - The end date-time
+ * @returns - Returns `right - left` in milliseconds
+ */
 export const timestampDiffMillisecond = makeOperator2<OperatorType.TIMESTAMPDIFF_MILLISECOND, Date, Date, bigint>(
     OperatorType.TIMESTAMPDIFF_MILLISECOND,
     tm.mysql.bigIntSigned(),
     TypeHint.DATE_TIME
 );
 
+/**
+ * Returns the number of seconds between two date-times.
+ *
+ * + https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_timestampdiff
+ *
+ * -----
+ *
+ * + MySQL          : `TIMESTAMPDIFF(SECOND, from, to)`
+ * + PostgreSQL     : `EXTRACT(DAY FROM (to - from))*24*60*60 + EXTRACT(HOUR FROM (to - from))*60*60 + EXTRACT(MINUTE FROM (to - from))*60 + TRUNC(EXTRACT(SECOND FROM (to - from)))`
+ *   + The `TRUNC()` at the end is necessary
+ *   + Extracting `SECOND` gives a number with decimal places for milliseconds
+ * + SQLite         : `CAST( (strftime('%J', to) - strftime('%J', from)) * 24 * 60 * 60 AS BIGINT)`
+ *   + We cast to `BIGINT` to be consistent with MySQL
+ *
+ * -----
+ *
+ * @param left - The start date-time
+ * @param right - The end date-time
+ * @returns - Returns `right - left` in seconds
+ */
 export const timestampDiffSecond = makeOperator2<OperatorType.TIMESTAMPDIFF_SECOND, Date, Date, bigint>(
     OperatorType.TIMESTAMPDIFF_SECOND,
     tm.mysql.bigIntSigned(),
     TypeHint.DATE_TIME
 );
 
+/**
+ * Returns the number of minutes between two date-times.
+ *
+ * + https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_timestampdiff
+ *
+ * -----
+ *
+ * + MySQL          : `TIMESTAMPDIFF(MINUTE, from, to)`
+ * + PostgreSQL     : `EXTRACT(DAY FROM (to - from))*24*60 + EXTRACT(HOUR FROM (to - from))*60 + EXTRACT(MINUTE FROM (to - from))`
+ * + SQLite         : `CAST( (strftime('%J', to) - strftime('%J', from)) * 24 * 60 AS BIGINT)`
+ *   + We cast to `BIGINT` to be consistent with MySQL
+ *
+ * -----
+ *
+ * @param left - The start date-time
+ * @param right - The end date-time
+ * @returns - Returns `right - left` in minutes
+ */
 export const timestampDiffMinute = makeOperator2<OperatorType.TIMESTAMPDIFF_MINUTE, Date, Date, bigint>(
     OperatorType.TIMESTAMPDIFF_MINUTE,
     tm.mysql.bigIntSigned(),
@@ -22,7 +81,7 @@ export const timestampDiffMinute = makeOperator2<OperatorType.TIMESTAMPDIFF_MINU
 );
 
 /**
- * Returns the number of days between two date-times.
+ * Returns the number of hours between two date-times.
  *
  * + https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_timestampdiff
  *
@@ -37,7 +96,7 @@ export const timestampDiffMinute = makeOperator2<OperatorType.TIMESTAMPDIFF_MINU
  *
  * @param left - The start date-time
  * @param right - The end date-time
- * @returns - Returns `right - left` in days
+ * @returns - Returns `right - left` in hours
  */
 export const timestampDiffHour = makeOperator2<OperatorType.TIMESTAMPDIFF_HOUR, Date, Date, bigint>(
     OperatorType.TIMESTAMPDIFF_HOUR,

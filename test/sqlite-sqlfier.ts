@@ -1315,6 +1315,246 @@ export const sqliteSqlfier : Sqlfier = {
                 ]
             ]
         ),
+        [OperatorType.TIMESTAMPDIFF_MINUTE] : ({operands}) => functionCall(
+            "CAST",
+            [
+                [
+                    parentheses(
+                        [
+                            functionCall(
+                                "strftime",
+                                [
+                                    pascalStyleEscapeString("%J"),
+                                    operands[1]
+                                ]
+                            ),
+                            "-",
+                            functionCall(
+                                "strftime",
+                                [
+                                    pascalStyleEscapeString("%J"),
+                                    operands[0]
+                                ]
+                            )
+                        ],
+                        false
+                    ),
+                    "* 24 * 60 AS BIGINT"
+                ]
+            ]
+        ),
+        [OperatorType.TIMESTAMPDIFF_SECOND] : ({operands}) => functionCall(
+            "CAST",
+            [
+                [
+                    parentheses(
+                        [
+                            functionCall(
+                                "strftime",
+                                [
+                                    pascalStyleEscapeString("%J"),
+                                    operands[1]
+                                ]
+                            ),
+                            "-",
+                            functionCall(
+                                "strftime",
+                                [
+                                    pascalStyleEscapeString("%J"),
+                                    operands[0]
+                                ]
+                            )
+                        ],
+                        false
+                    ),
+                    "* 24 * 60 * 60 AS BIGINT"
+                ]
+            ]
+        ),
+        [OperatorType.TIMESTAMPDIFF_MILLISECOND] : ({operands}) => {
+            /*
+                This naive implementation suffers from precision problems,
+                functionCall(
+                    "CAST",
+                    [
+                        [
+                            parentheses(
+                                [
+                                    functionCall(
+                                        "strftime",
+                                        [
+                                            pascalStyleEscapeString("%J"),
+                                            operands[1]
+                                        ]
+                                    ),
+                                    "-",
+                                    functionCall(
+                                        "strftime",
+                                        [
+                                            pascalStyleEscapeString("%J"),
+                                            operands[0]
+                                        ]
+                                    )
+                                ],
+                                false
+                            ),
+                            "* 24 * 60 * 60 * 1000 AS BIGINT"
+                        ]
+                    ]
+                )
+            */
+            function castAsBigInt (x : Ast) {
+                return functionCall("CAST", [[x, "AS BIGINT"]]);
+            }
+            const diffDate = [
+                parentheses(
+                    [
+                        functionCall(
+                            "strftime",
+                            [
+                                pascalStyleEscapeString("%J"),
+                                functionCall(
+                                    "strftime",
+                                    [
+                                        pascalStyleEscapeString("%Y-%m-%d"),
+                                        operands[1]
+                                    ]
+                                )
+                            ]
+                        ),
+                        "-",
+                        functionCall(
+                            "strftime",
+                            [
+                                pascalStyleEscapeString("%J"),
+                                functionCall(
+                                    "strftime",
+                                    [
+                                        pascalStyleEscapeString("%Y-%m-%d"),
+                                        operands[0]
+                                    ]
+                                )
+                            ]
+                        )
+                    ],
+                    false
+                ),
+                "* 24 * 60 * 60 * 1000"
+            ];
+            const diffHour = [
+                parentheses(
+                    [
+                        functionCall(
+                            "strftime",
+                            [
+                                pascalStyleEscapeString("%H"),
+                                operands[1]
+                            ]
+                        ),
+                        "-",
+                        functionCall(
+                            "strftime",
+                            [
+                                pascalStyleEscapeString("%H"),
+                                operands[0]
+                            ]
+                        )
+                    ],
+                    false
+                ),
+                "* 60 * 60 * 1000"
+            ];
+            const diffMinute = [
+                parentheses(
+                    [
+                        functionCall(
+                            "strftime",
+                            [
+                                pascalStyleEscapeString("%M"),
+                                operands[1]
+                            ]
+                        ),
+                        "-",
+                        functionCall(
+                            "strftime",
+                            [
+                                pascalStyleEscapeString("%M"),
+                                operands[0]
+                            ]
+                        )
+                    ],
+                    false
+                ),
+                "* 60 * 1000"
+            ];
+            const diffSecond = [
+                parentheses(
+                    [
+                        functionCall(
+                            "strftime",
+                            [
+                                pascalStyleEscapeString("%S"),
+                                operands[1]
+                            ]
+                        ),
+                        "-",
+                        functionCall(
+                            "strftime",
+                            [
+                                pascalStyleEscapeString("%S"),
+                                operands[0]
+                            ]
+                        )
+                    ],
+                    false
+                ),
+                "* 1000"
+            ];
+            const diffMillisecond = [
+                parentheses(
+                    [
+                        functionCall(
+                            "substr",
+                            [
+                                functionCall(
+                                    "strftime",
+                                    [
+                                        pascalStyleEscapeString("%f"),
+                                        operands[1]
+                                    ]
+                                ),
+                                "4"
+                            ]
+                        ),
+                        "-",
+                        functionCall(
+                            "substr",
+                            [
+                                functionCall(
+                                    "strftime",
+                                    [
+                                        pascalStyleEscapeString("%f"),
+                                        operands[0]
+                                    ]
+                                ),
+                                "4"
+                            ]
+                        )
+                    ],
+                    false
+                )
+            ];
+            return castAsBigInt(insertBetween(
+                [
+                    diffDate,
+                    diffHour,
+                    diffMinute,
+                    diffSecond,
+                    diffMillisecond
+                ],
+                "+"
+            ));
+        },
         [OperatorType.UTC_STRING_TO_TIMESTAMP_CONSTRUCTOR] : ({operands}) => functionCall(
             "strftime",
             [
