@@ -1287,6 +1287,34 @@ export const sqliteSqlfier : Sqlfier = {
                 ]
             ]
         ),
+        [OperatorType.TIMESTAMPDIFF_HOUR] : ({operands}) => functionCall(
+            "CAST",
+            [
+                [
+                    parentheses(
+                        [
+                            functionCall(
+                                "strftime",
+                                [
+                                    pascalStyleEscapeString("%J"),
+                                    operands[1]
+                                ]
+                            ),
+                            "-",
+                            functionCall(
+                                "strftime",
+                                [
+                                    pascalStyleEscapeString("%J"),
+                                    operands[0]
+                                ]
+                            )
+                        ],
+                        false
+                    ),
+                    "* 24 AS BIGINT"
+                ]
+            ]
+        ),
         [OperatorType.UTC_STRING_TO_TIMESTAMP_CONSTRUCTOR] : ({operands}) => functionCall(
             "strftime",
             [
