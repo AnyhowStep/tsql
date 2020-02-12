@@ -17,7 +17,7 @@ export const test : Test = ({tape, pool}) => {
                     await tsql
                         .selectValue(() => tsql.timestampAddMillisecond(
                             BigInt(deltaMillisecond),
-                            tsql.utcStringToTimestamp(`${dateStr} ${timeStr}`)
+                            tsql.throwIfNull(tsql.utcStringToTimestamp(`${dateStr} ${timeStr}`))
                         ))
                         .fetchValue(connection)
                         .then((value) => {

@@ -13,7 +13,7 @@ export const test : Test = ({tape, pool}) => {
                             await tsql
                                 .selectValue(() => tsql.timestampAddDay(
                                     BigInt(deltaDay),
-                                    tsql.utcStringToTimestamp(`${year}-${String(month).padStart(2, "0")}-${String(curDay).padStart(2, "0")} 16:43:23.756`)
+                                    tsql.throwIfNull(tsql.utcStringToTimestamp(`${year}-${String(month).padStart(2, "0")}-${String(curDay).padStart(2, "0")} 16:43:23.756`))
                                 ))
                                 .fetchValue(connection)
                                 .then((value) => {

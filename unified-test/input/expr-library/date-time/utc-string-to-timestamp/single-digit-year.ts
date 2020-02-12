@@ -5,16 +5,13 @@ export const test : Test = ({tape, pool}) => {
     tape(__filename, async (t) => {
         await pool.acquire(async (connection) => {
             await tsql
-                .selectValue(() => tsql.timestampAddMillisecond(
-                    BigInt(1),
-                    tsql.throwIfNull(tsql.utcStringToTimestamp(`9999-12-31 23:59:59.999`))
-                ))
+                .selectValue(() => tsql.utcStringToTimestamp("0003-05-23 14:42:55.829"))
                 .fetchValue(connection)
                 .then((value) => {
-                    t.deepEqual(value, null);
+                    t.deepEqual(value, new Date("0003-05-23T14:42:55.829Z"));
                 })
                 .catch((err) => {
-                    t.true(err instanceof tsql.DataOutOfRangeError, String(err));
+                    t.fail(err.message);
                 });
         });
 

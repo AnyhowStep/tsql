@@ -1271,6 +1271,13 @@ export const sqliteSqlfier : Sqlfier = {
                 operands[0]
             ]
         ),
+        [OperatorType.UNIX_TIMESTAMP_NOW] : () => functionCall(
+            "strftime",
+            [
+                pascalStyleEscapeString("%s"),
+                pascalStyleEscapeString("now")
+            ]
+        ),
 
         /*
             Cast Functions and Operators

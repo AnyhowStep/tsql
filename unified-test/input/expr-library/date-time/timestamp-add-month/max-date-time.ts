@@ -7,7 +7,7 @@ export const test : Test = ({tape, pool}) => {
             await tsql
                 .selectValue(() => tsql.timestampAddMonth(
                     BigInt(2),
-                    tsql.utcStringToTimestamp(`9999-10-31 23:59:59.999`)
+                    tsql.throwIfNull(tsql.utcStringToTimestamp(`9999-10-31 23:59:59.999`))
                 ))
                 .fetchValue(connection)
                 .then((value) => {

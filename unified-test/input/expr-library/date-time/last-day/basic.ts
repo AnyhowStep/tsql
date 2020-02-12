@@ -30,7 +30,7 @@ export const test : Test = ({tape, pool}) => {
                     const dateStr = `${yearStr}-${monthStr}-${dayStr}`;
 
                     await tsql
-                        .selectValue(() => tsql.lastDay(tsql.utcStringToTimestamp(dateStr)))
+                        .selectValue(() => tsql.lastDay(tsql.throwIfNull(tsql.utcStringToTimestamp(dateStr))))
                         .fetchValue(connection)
                         .then((value) => {
                             const lastDayStr = String(lastDay).padStart(2, "0");

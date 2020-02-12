@@ -9,7 +9,7 @@ export const test : Test = ({tape, pool}) => {
                 const dateStr = `3001-09-14 23:59:${secondStr}`;
 
                 await tsql
-                    .selectValue(() => tsql.extractIntegerSecond(tsql.utcStringToTimestamp(dateStr)))
+                    .selectValue(() => tsql.extractIntegerSecond(tsql.throwIfNull(tsql.utcStringToTimestamp(dateStr))))
                     .fetchValue(connection)
                     .then((value) => {
                         t.deepEqual(value, BigInt(second));

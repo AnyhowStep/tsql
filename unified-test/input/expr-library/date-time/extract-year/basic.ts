@@ -22,7 +22,7 @@ export const test : Test = ({tape, pool}) => {
                 const dateStr = `${yearStr}-01-01`;
 
                 await tsql
-                    .selectValue(() => tsql.extractYear(tsql.utcStringToTimestamp(dateStr)))
+                    .selectValue(() => tsql.extractYear(tsql.throwIfNull(tsql.utcStringToTimestamp(dateStr))))
                     .fetchValue(connection)
                     .then((value) => {
                         t.deepEqual(value, BigInt(year));

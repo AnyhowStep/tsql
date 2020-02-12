@@ -2,6 +2,14 @@ import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {makeOperator1} from "../factory";
 
+/*
+    Local to... What?
+    The database's timezone?
+    The client's timezone?
+
+    We can already convert a JS `Date` to a database TIMESTAMP/DATETIME.
+    So, we don't need this, I think.
+*/
 export const localStringToTimestamp = makeOperator1<OperatorType.LOCAL_STRING_TO_TIMESTAMP_CONSTRUCTOR, string, Date>(
     OperatorType.LOCAL_STRING_TO_TIMESTAMP_CONSTRUCTOR,
     tm.mysql.dateTime(3)

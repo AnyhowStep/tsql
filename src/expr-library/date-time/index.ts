@@ -3,7 +3,7 @@ export * from "./current-date";
 export * from "./current-timestamp";
 export * from "./extract";
 export * from "./last-day";
-export * from "./local-string-to-timestamp";
+//export * from "./local-string-to-timestamp";
 export * from "./timestamp-add";
 export * from "./timestamp-diff";
 export * from "./unix-timestamp-now";

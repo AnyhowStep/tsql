@@ -1980,12 +1980,12 @@ export enum OperatorType {
      *
      * -----
      *
-     * + MySQL          : `CONVERT_TZ(TIMESTAMP(x), '+00:00', @@session.time_zone)`
+     * + MySQL          : `CONVERT_TZ(x, '+00:00', @@session.time_zone)`
      * ```sql
      *  SET @@session.time_zone = 'EST';
      *  SELECT
-     *      CONVERT_TZ(TIMESTAMP('1970-01-01 03:00:00.123'), '+00:00', @@session.time_zone),
-     *      FLOOR(UNIX_TIMESTAMP(CONVERT_TZ(TIMESTAMP('1970-01-01 03:00:00.123'), '+00:00', @@session.time_zone)));
+     *      CONVERT_TZ('1970-01-01 03:00:00.123', '+00:00', @@session.time_zone),
+     *      FLOOR(UNIX_TIMESTAMP(CONVERT_TZ('1970-01-01 03:00:00.123', '+00:00', @@session.time_zone)));
      *  > 1969-12-31 22:00:00.123
      *  > 10800
      * ```
@@ -2018,7 +2018,7 @@ export enum OperatorType {
      */
     UTC_STRING_TO_TIMESTAMP_CONSTRUCTOR = "UTC_STRING_TO_TIMESTAMP_CONSTRUCTOR",
 
-    /**
+    /*
      *
      * -----
      *
@@ -2058,7 +2058,7 @@ export enum OperatorType {
      * Treat `x` as representing a `local` timestamp.
      *
      */
-    LOCAL_STRING_TO_TIMESTAMP_CONSTRUCTOR = "LOCAL_STRING_TO_TIMESTAMP_CONSTRUCTOR",
+    //LOCAL_STRING_TO_TIMESTAMP_CONSTRUCTOR = "LOCAL_STRING_TO_TIMESTAMP_CONSTRUCTOR",
 
     /**
      * + https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_extract
