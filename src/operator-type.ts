@@ -2441,10 +2441,12 @@ export enum OperatorType {
     TIMESTAMPDIFF_HOUR = "TIMESTAMPDIFF_HOUR",
 
     /**
+     * + https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_timestampdiff
+     *
      * + MySQL          : `TIMESTAMPDIFF(DAY, from, to)`
      * + PostgreSQL     : `EXTRACT(DAY FROM (to - from))`
-     * + SQLite         : `FLOOR(strftime('%J', to) - strftime('%J', from))`
-     *   + We don't need to `FLOOR()` the result but it keeps the results consistent across the databases
+     * + SQLite         : `CAST(strftime('%J', to) - strftime('%J', from) AS BIGINT)`
+     *   + We cast to `BIGINT` to be consistent with MySQL
      */
     TIMESTAMPDIFF_DAY = "TIMESTAMPDIFF_DAY",
 

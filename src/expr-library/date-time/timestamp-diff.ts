@@ -27,6 +27,24 @@ export const timestampDiffHour = makeOperator2<OperatorType.TIMESTAMPDIFF_HOUR, 
     TypeHint.DATE_TIME
 );
 
+/**
+ * Returns the number of days between two date-times.
+ *
+ * + https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_timestampdiff
+ *
+ * -----
+ *
+ * + MySQL          : `TIMESTAMPDIFF(DAY, from, to)`
+ * + PostgreSQL     : `EXTRACT(DAY FROM (to - from))`
+ * + SQLite         : `CAST(strftime('%J', to) - strftime('%J', from) AS BIGINT)`
+ *   + We cast to `BIGINT` to be consistent with MySQL
+ *
+ * -----
+ *
+ * @param left - The start date-time
+ * @param right - The end date-time
+ * @returns - Returns `right - left` in days
+ */
 export const timestampDiffDay = makeOperator2<OperatorType.TIMESTAMPDIFF_DAY, Date, Date, bigint>(
     OperatorType.TIMESTAMPDIFF_DAY,
     tm.mysql.bigIntSigned(),
