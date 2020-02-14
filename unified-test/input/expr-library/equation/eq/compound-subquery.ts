@@ -20,6 +20,7 @@ export const test : Test = ({tape, pool}) => {
                 })
                 .catch((err) => {
                     t.fail(err.message);
+                    t.fail(err.sql);
                 });
             await tsql
                 .selectValue(() => tsql.eq(
@@ -37,6 +38,7 @@ export const test : Test = ({tape, pool}) => {
                 })
                 .catch((err) => {
                     t.fail(err.message);
+                    t.fail(err.sql);
                 });
         });
 
