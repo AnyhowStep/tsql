@@ -4,15 +4,20 @@ import {ExprUtil} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
 
+export type ThrowIfNullExpr<
+    ArgT extends AnyBuiltInExpr
+> =
+    ExprUtil.Intersect<
+        Exclude<BuiltInExprUtil.TypeOf<ArgT>, null>,
+        ArgT
+    >
+;
 export function throwIfNull<
     ArgT extends AnyBuiltInExpr
 > (
     arg : ArgT
 ) : (
-    ExprUtil.Intersect<
-        Exclude<BuiltInExprUtil.TypeOf<ArgT>, null>,
-        ArgT
-    >
+    ThrowIfNullExpr<ArgT>
 ) {
     return ExprUtil.intersect<Exclude<BuiltInExprUtil.TypeOf<ArgT>, null>, ArgT>(
         tm.notNull(BuiltInExprUtil.mapper(arg)),

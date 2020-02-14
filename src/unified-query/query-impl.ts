@@ -1052,6 +1052,31 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     /**
      * Convenience method for,
      * ```ts
+     *  tsql.throwIfNull(myQuery.limit(1));
+     * ```
+     *
+     * Usage,
+     * ```ts
+     *  myQuery.limit(1).throwIfNull();
+     * ```
+     */
+    throwIfNull (
+        this : Extract<this, AnySubqueryExpr>
+    ) : (
+        QueryBaseUtil.ThrowIfNull<
+            Extract<this, AnySubqueryExpr>
+        >
+    ) {
+        return QueryBaseUtil.throwIfNull<
+            Extract<this, AnySubqueryExpr>
+        >(
+            this
+        );
+    }
+
+    /**
+     * Convenience method for,
+     * ```ts
      *  myQuery.limit(1).coalesce(null).asc();
      * ```
      *
