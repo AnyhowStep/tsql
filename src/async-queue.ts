@@ -1,5 +1,7 @@
 import {invokeAsyncCallbackSafely} from "./promise-util";
 
+const emptyPromise = Promise.resolve();
+
 export class AsyncQueueStoppingError extends Error {
     constructor (message : string) {
         super(message);
@@ -30,7 +32,7 @@ export class AsyncQueue<ItemT> {
     }
 
     private shouldStop = false;
-    private lastPromise : Promise<unknown> = Promise.resolve();
+    private lastPromise : Promise<unknown> = emptyPromise;
 
     private deallocateErr : any = undefined;
 
@@ -53,6 +55,11 @@ export class AsyncQueue<ItemT> {
             return Promise.reject(this.deallocateErr);
         }
 
+        const tryResetQueue = () => {
+            if (this.lastPromise == callbackPromise) {
+                this.lastPromise = emptyPromise;
+            }
+        };
         const runCallback = () : Promise<ResultT> => {
             /**
              * It's okay if this throws because we execute
@@ -65,8 +72,12 @@ export class AsyncQueue<ItemT> {
                 (result) => {
                     return invokeAsyncCallbackSafely(
                         deallocate,
-                        () => result,
+                        () => {
+                            tryResetQueue();
+                            return result;
+                        },
                         (deallocateErr) => {
+                            tryResetQueue();
                             this.deallocateErr = deallocateErr;
                             return result;
                         }
@@ -75,8 +86,12 @@ export class AsyncQueue<ItemT> {
                 (callbackErr) => {
                     return invokeAsyncCallbackSafely(
                         deallocate,
-                        () => Promise.reject(callbackErr),
+                        () => {
+                            tryResetQueue();
+                            return Promise.reject(callbackErr);
+                        },
                         (deallocateErr) => {
+                            tryResetQueue();
                             this.deallocateErr = deallocateErr;
                             return Promise.reject(callbackErr);
                         }
@@ -134,6 +149,11 @@ export class AsyncQueue<ItemT> {
             return Promise.reject(this.deallocateErr);
         }
 
+        const tryResetQueue = () => {
+            if (this.lastPromise == callbackPromise) {
+                this.lastPromise = emptyPromise;
+            }
+        };
         const runCallback = () : Promise<ResultT> => {
             const nestedAsyncQueue = new AsyncQueue(this.allocateDelegate);
 
@@ -141,6 +161,7 @@ export class AsyncQueue<ItemT> {
                 () => callback(nestedAsyncQueue),
                 (result) => {
                     const onStop = () => {
+                        tryResetQueue();
                         /**
                          * Copy over the `deallocateErr` because
                          * they share the same `allocateDelegate`
@@ -160,6 +181,7 @@ export class AsyncQueue<ItemT> {
                 },
                 (callbackErr) => {
                     const onStop = () => {
+                        tryResetQueue();
                         /**
                          * Copy over the `deallocateErr` because
                          * they share the same `allocateDelegate`
