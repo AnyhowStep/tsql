@@ -1711,7 +1711,14 @@ export const sqliteSqlfier : Sqlfier = {
             but can be implemented using standard SQL.
         */
         [OperatorType.THROW_IF_NULL] : ({operands : [arg]}) => {
-            return functionCall("COALESCE", [arg, "(SELECT NULL UNION ALL SELECT NULL)"]);
+            return functionCall("COALESCE", [
+                arg,
+                /**
+                 * We do not use `ABS(-9223372036854775808)` because of,
+                 * https://github.com/AnyhowStep/tsql/issues/233
+                 */
+                "(SELECT SUM(9223372036854775807) FROM (SELECT NULL UNION ALL SELECT NULL))"
+            ]);
         },
     },
     queryBaseSqlfier : (rawQuery, toSql) => {

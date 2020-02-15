@@ -30,7 +30,6 @@ export const test : Test = ({tape, pool}) => {
                             tsql.selectValue(() => null)
                         )
                         .compoundQueryLimit(1)
-                        .throwIfNull()
                 ))
                 .fetchValue(connection)
                 .then((value) => {
@@ -48,7 +47,6 @@ export const test : Test = ({tape, pool}) => {
                             tsql.selectValue(() => null)
                         )
                         .compoundQueryLimit(1)
-                        .throwIfNull()
                 ))
                 .fetchValue(connection)
                 .then((value) => {
