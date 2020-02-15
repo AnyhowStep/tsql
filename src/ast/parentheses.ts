@@ -83,7 +83,15 @@ export class Parentheses {
         /**
          * @todo Investigate this logic
          */
-        const sqlAst = AstUtil.toSqlAst(this.ast, sqlfier);
+        const sqlAst = (
+            sqlfier.parenthesesSqlfier == undefined ?
+            AstUtil.toSqlAst(this.ast, sqlfier) :
+            sqlfier.parenthesesSqlfier(
+                this,
+                (ast2) => AstUtil.toSql(ast2, sqlfier),
+                sqlfier
+            )
+        );
         if (!this.canUnwrap || shouldWrap(sqlAst, this.canUnwrap)) {
             return `(${AstUtil.toSql(sqlAst, sqlfier)})`;
         } else {

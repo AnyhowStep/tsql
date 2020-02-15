@@ -108,6 +108,11 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                             },
                         ]
                     );
+                })
+                .catch((err) => {
+                    console.error(err);
+                    console.error(err.sql);
+                    t.fail(err.message);
                 });
         });
 

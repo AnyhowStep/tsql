@@ -231,6 +231,12 @@ function fromClauseToSql (
             result.push("(", queryToSql(join.tableAst, toSql, true), ")");
             result.push("AS");
             result.push(escapeIdentifierWithDoubleQuotes(join.tableAlias));
+        } else if (Parentheses.IsParentheses(join.tableAst) && QueryBaseUtil.isQuery(join.tableAst.ast)) {
+            const subQuery = join.tableAst.ast;
+
+            result.push("(", queryToSql(subQuery, toSql, true), ")");
+            result.push("AS");
+            result.push(escapeIdentifierWithDoubleQuotes(join.tableAlias));
         } else {
             result.push("(", toSql(join.tableAst), ")");
             result.push("AS");

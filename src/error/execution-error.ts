@@ -120,3 +120,23 @@ export class InvalidInsertColumnError extends Error {
     }
 }
 InvalidInsertColumnError.prototype.name = "InvalidInsertColumnError";
+
+export class ParseError extends Error {
+    /**
+     * The SQL string that caused this error.
+     *
+     * + We assign to it using `defineProperty`.
+     * + It is non-enumerable.
+     */
+    readonly sql! : string;
+    constructor (message : string, sql : string) {
+        super(message);
+        Object.setPrototypeOf(this, ParseError.prototype);
+        Object.defineProperty(this, "sql", {
+            value : sql,
+            enumerable : false,
+            writable : true,
+        });
+    }
+}
+ParseError.prototype.name = "ParseError";

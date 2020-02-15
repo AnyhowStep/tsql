@@ -208,6 +208,7 @@ export class Connection {
         });
     }
     exec (sql : string) {
+        //console.log(sql);
         return this.asyncQueue.enqueue((worker) => {
             return postMessage(
                 worker,
