@@ -17,7 +17,14 @@ export function mapper<BuiltInExprT extends AnyBuiltInExpr> (
 ) {
     //Check built-in cases first
     if (typeof builtInExpr == "number") {
-        return tm.mysql.double() as tm.AnySafeMapper as Mapper<BuiltInExprT>;
+        /**
+         * The SQL standard forbids NaN, Infinity, -Infinity.
+         * However, SQLite supports infinities.
+         *
+         * The job of throwing on these 3 values will have to
+         * fall to the sqlfiers.
+         */
+        return tm.toUnsafeNumber() as tm.AnySafeMapper as Mapper<BuiltInExprT>;
     }
     if (tm.TypeUtil.isBigInt(builtInExpr)) {
         return tm.toBigInt() as tm.AnySafeMapper as Mapper<BuiltInExprT>;

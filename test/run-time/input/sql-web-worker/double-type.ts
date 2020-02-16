@@ -56,43 +56,43 @@ tape(__filename, async (t) => {
         t.deepEqual(result5.execResult[0].values, [ ["real", 1.047197551196598, 1.047197551196598] ]);
 
         await connection.exec("SELECT typeof(-1e309), takes1(-1e309), -1e309")
-            .then(() => {
-                t.fail("Should result in -Infinity and throw error");
+            .then((result) => {
+                t.deepEqual(result.execResult[0].values[0], ["real", -Infinity, -Infinity]);
             })
-            .catch(() => {
-                t.pass();
+            .catch((err) => {
+                t.fail(err.message);
             });
 
         await connection.exec("SELECT typeof(1e309), takes1(1e309), 1e309")
-            .then(() => {
-                t.fail("Should result in +Infinity and throw error");
+            .then((result) => {
+                t.deepEqual(result.execResult[0].values[0], ["real", Infinity, Infinity]);
             })
-            .catch(() => {
-                t.pass();
+            .catch((err) => {
+                t.fail(err.message);
             });
 
         await connection.exec("SELECT typeof(-1e309), -1e309")
-            .then(() => {
-                t.fail("Should result in -Infinity and throw error");
+            .then((result) => {
+                t.deepEqual(result.execResult[0].values[0], ["real", -Infinity]);
             })
-            .catch(() => {
-                t.pass();
+            .catch((err) => {
+                t.fail(err.message);
             });
 
         await connection.exec("SELECT typeof(1e309), 1e309")
-            .then(() => {
-                t.fail("Should result in +Infinity and throw error");
+            .then((result) => {
+                t.deepEqual(result.execResult[0].values[0], ["real", Infinity]);
             })
-            .catch(() => {
-                t.pass();
+            .catch((err) => {
+                t.fail(err.message);
             });
 
         await connection.exec("SELECT 1e0/0e0")
             .then((r) => {
                 t.deepEqual(r.execResult[0].values, [[null]]);
             })
-            .catch(() => {
-                t.fail("Should result in null");
+            .catch((err) => {
+                t.fail(err.message);
             });
 
     });

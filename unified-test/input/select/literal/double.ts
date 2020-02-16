@@ -56,15 +56,30 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, 1.234567e98);
                 });
 
-            t.throws(() => {
-                tsql.selectValue(() => NaN);
-            });
-            t.throws(() => {
-                tsql.selectValue(() => Infinity);
-            });
-            t.throws(() => {
-                tsql.selectValue(() => -Infinity);
-            });
+            await tsql.selectValue(() => NaN)
+                .fetchValue(connection)
+                .then((value) => {
+                    t.fail(`Expected to throw; received ${value}`);
+                })
+                .catch((err) => {
+                    t.true(err instanceof tsql.DataOutOfRangeError);
+                });
+            await tsql.selectValue(() => Infinity)
+                .fetchValue(connection)
+                .then((value) => {
+                    t.deepEqual(value, Infinity);
+                })
+                .catch((err) => {
+                    t.true(err instanceof tsql.DataOutOfRangeError);
+                });
+            await tsql.selectValue(() => -Infinity)
+                .fetchValue(connection)
+                .then((value) => {
+                    t.deepEqual(value, -Infinity);
+                })
+                .catch((err) => {
+                    t.true(err instanceof tsql.DataOutOfRangeError);
+                });
         });
 
         t.end();

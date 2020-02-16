@@ -8,7 +8,12 @@ tape(__filename, async (t) => {
     await pool.acquire(async (connection) => {
         await connection.createFunction("log10", (x) => {
             if (typeof x == "number") {
-                return Math.log10(x);
+                const result = Math.log10(x);
+                if (result == -Infinity) {
+                    return null;
+                } else {
+                    return result;
+                }
             } else {
                 throw new Error(`log10(${typeof x}) not implmented`);
             }
@@ -18,10 +23,10 @@ tape(__filename, async (t) => {
                 await tsql.selectValue(() => tsql.double.log10(x))
                     .fetchValue(connection)
                     .then((value) => {
-                        t.fail(`log10(${x}) === ${value}`);
+                        t.deepEqual(value, null);
                     })
-                    .catch((_err) => {
-                        t.pass();
+                    .catch((err) => {
+                        t.fail(`${x}: ${err.message}`);
                     });
             } else {
                 await tsql.selectValue(() => tsql.double.log10(x))
