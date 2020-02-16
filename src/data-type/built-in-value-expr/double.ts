@@ -20,9 +20,15 @@ export function makeDoubleDataType (
  *
  * + MySQL      : `DOUBLE`
  * + PostgreSQL : `double precision`
- * + SQLite     : `REAL`
+ * + SQLite     : `REAL`; is actually 8-byte floating point number
+ *
+ * The SQL standard forbids NaN, Infinity, -Infinity.
+ * However, SQLite supports infinities.
+ *
+ * The job of throwing on these 3 values will have to
+ * fall to the sqlfiers.
  */
-export const dtDouble = makeDoubleDataType(tm.mysql.double());
+export const dtDouble = makeDoubleDataType(tm.toUnsafeNumber());
 
 /**
  * 4-byte floating point number.
@@ -32,6 +38,12 @@ export const dtDouble = makeDoubleDataType(tm.mysql.double());
  *
  * + MySQL      : `FLOAT`
  * + PostgreSQL : `real`
- * + SQLite     : `REAL`
+ * + SQLite     : `REAL`; does not actually have 4-byte floating point numbers
+ *
+ * The SQL standard forbids NaN, Infinity, -Infinity.
+ * However, SQLite supports infinities.
+ *
+ * The job of throwing on these 3 values will have to
+ * fall to the sqlfiers.
  */
-export const dtFloat = makeDoubleDataType(tm.mysql.float());
+export const dtFloat = makeDoubleDataType(tm.toUnsafeNumber());

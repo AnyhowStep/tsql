@@ -37,6 +37,7 @@ import {
     parentheses,
     Parentheses,
     OperatorNodeUtil,
+    DataOutOfRangeError,
 } from "../dist";
 import {LiteralValueType, LiteralValueNodeUtil} from "../dist/ast/literal-value-node";
 
@@ -570,7 +571,18 @@ export const sqliteSqlfier : Sqlfier = {
             }
             return pascalStyleEscapeString(literalValue);
         },
-        [LiteralValueType.DOUBLE] : ({literalValue}) => escapeValue(literalValue),
+        [LiteralValueType.DOUBLE] : ({literalValue}) => {
+            if (isNaN(literalValue)) {
+                throw new DataOutOfRangeError(`Literal ${literalValue} not allowed`);
+            }
+            if (literalValue == Infinity) {
+                return "(1e999)";
+            }
+            if (literalValue == -Infinity) {
+                return "(-1e999)";
+            }
+            return escapeValue(literalValue);
+        },
         [LiteralValueType.BIGINT_SIGNED] : ({literalValue}) => escapeValue(literalValue),
         /**
          * @deprecated

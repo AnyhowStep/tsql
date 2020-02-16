@@ -216,24 +216,14 @@ Statement = (function() {
     const text = sqlite3_column_text(this.stmt, pos);
     if (text.indexOf("e") >= 0) {
       const float = parseFloat(text);
-      if (isFinite(float)) {
-        return float;
-      } else {
-        const name = sqlite3_column_name(this.stmt, pos);
-        throw new Error(`DOUBLE value out is out of range for ${name}; cannot be -Infinity, +Infinity, or NaN`);
-      }
+      return float;
     }
 
     const d = sqlite3_column_double(this.stmt, pos);
 
     //console.log("getNumber()", text, d);
     //const float = parseFloat(text);
-    if (isFinite(d)) {
-      return d;
-    } else {
-      const name = sqlite3_column_name(this.stmt, pos);
-      throw new Error(`DOUBLE value out is out of range for ${name}; cannot be -Infinity, +Infinity, or NaN`);
-    }
+    return d;
   };
   const BigInt = tm.TypeUtil.getBigIntFactoryFunctionOrError();
   Statement.prototype.getBigInt = function(pos) {
