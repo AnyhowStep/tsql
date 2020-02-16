@@ -1597,7 +1597,7 @@ export const sqliteSqlfier : Sqlfier = {
 
         [OperatorType.CAST_AS_DOUBLE] : ({operands}, toSql) => functionCall("CAST", [`${toSql(operands)} AS DOUBLE`]),
 
-        [OperatorType.CAST_AS_SIGNED_BIG_INTEGER] : ({operands}, toSql) => functionCall("CAST", [`${toSql(operands)} AS BIGINT`]),
+        [OperatorType.CAST_AS_BIGINT_SIGNED] : ({operands}, toSql) => functionCall("CAST", [`${toSql(operands)} AS BIGINT`]),
 
         /*
             Bit Functions and Operators

@@ -148,10 +148,10 @@ export type OperatorOperand = {
         https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html
     */
     [OperatorType.CURRENT_DATE]             : Operand0,
-    [OperatorType.CURRENT_TIME_0]           : Operand0,
-    [OperatorType.CURRENT_TIME_1]           : Operand0,
-    [OperatorType.CURRENT_TIME_2]           : Operand0,
-    [OperatorType.CURRENT_TIME_3]           : Operand0,
+    //[OperatorType.CURRENT_TIME_0]           : Operand0,
+    //[OperatorType.CURRENT_TIME_1]           : Operand0,
+    //[OperatorType.CURRENT_TIME_2]           : Operand0,
+    //[OperatorType.CURRENT_TIME_3]           : Operand0,
     [OperatorType.CURRENT_TIMESTAMP_0]      : Operand0,
     [OperatorType.CURRENT_TIMESTAMP_1]      : Operand0,
     [OperatorType.CURRENT_TIMESTAMP_2]      : Operand0,
@@ -192,13 +192,13 @@ export type OperatorOperand = {
         Cast Functions and Operators
         https://dev.mysql.com/doc/refman/8.0/en/cast-functions.html
     */
-    [OperatorType.CAST_AS_BYTE_ARRAY]       : Operand1,
+    [OperatorType.CAST_AS_BINARY]       : Operand1,
     [OperatorType.CAST_AS_VARCHAR]          : Operand1|Operand2,
     [OperatorType.CAST_AS_DECIMAL]          : Operand3,
     [OperatorType.CAST_AS_DOUBLE]           : Operand1,
     [OperatorType.CAST_AS_JSON]             : Operand1,
-    [OperatorType.CAST_AS_N_CHAR]            : Operand1,
-    [OperatorType.CAST_AS_SIGNED_BIG_INTEGER]   : Operand1,
+    //[OperatorType.CAST_AS_N_CHAR]            : Operand1,
+    [OperatorType.CAST_AS_BIGINT_SIGNED]   : Operand1,
     //[OperatorType.CAST_AS_UNSIGNED_BIG_INTEGER] : Operand1,
 
     /*
