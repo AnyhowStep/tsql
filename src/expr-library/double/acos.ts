@@ -24,6 +24,6 @@ import {TypeHint} from "../../type-hint";
  */
 export const acos = makeOperator1<OperatorType.ARC_COSINE, number, number|null>(
     OperatorType.ARC_COSINE,
-    tm.orNull(tm.toUnsafeNumber()),
+    tm.mysql.double().orNull(),
     TypeHint.DOUBLE
 );
