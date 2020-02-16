@@ -869,11 +869,7 @@ Database = (function() {
         sqlite3_result_int(cx, result ? 1 : 0);
         break;
       case 'number':
-        if (isFinite(result)) {
-          sqlite3_result_double(cx, result);
-        } else {
-          sqlite3_result_error(cx, "DOUBLE value is out of range in "+name+"(); cannot be -Infinity, +Infinity, or NaN", -1);
-        }
+        sqlite3_result_double(cx, result);
         break;
       case 'string':
         sqlite3_result_text(cx, result, -1, -1);
