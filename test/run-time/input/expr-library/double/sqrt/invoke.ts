@@ -21,10 +21,10 @@ tape(__filename, async (t) => {
                 await tsql.selectValue(() => tsql.double.sqrt(x))
                     .fetchValue(connection)
                     .then((value) => {
-                        t.fail(`sqrt(${x}) === ${value}`);
+                        t.deepEqual(value, null);
                     })
-                    .catch(() => {
-                        t.pass();
+                    .catch((err) => {
+                        t.fail(err.message);
                     });
             } else {
                 await tsql.selectValue(() => tsql.double.sqrt(x))

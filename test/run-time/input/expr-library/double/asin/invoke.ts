@@ -27,10 +27,10 @@ tape(__filename, async (t) => {
         await tsql.selectValue(() => tsql.double.asin(-123.456))
             .fetchValue(connection)
             .then((value) => {
-                t.fail(`Should not be able to calculate asin() == ${value}`);
+                t.deepEqual(value, null);
             })
             .catch((err) => {
-                t.pass(err.message);
+                t.fail(err.message);
             });
     });
 

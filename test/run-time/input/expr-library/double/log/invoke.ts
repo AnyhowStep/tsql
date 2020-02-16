@@ -8,11 +8,18 @@ tape(__filename, async (t) => {
     await pool.acquire(async (connection) => {
         await connection.createFunction("log", (base, x) => {
             if (typeof base == "number" && typeof x == "number") {
+                const dividend = Math.log(x);
+                if (dividend == -Infinity) {
+                    return null;
+                }
                 const divisor = Math.log(base);
+                if (divisor == 0) {
+                    return null;
+                }
                 if (isFinite(divisor)) {
-                    return Math.log(x) / divisor;
+                    return dividend / divisor;
                 } else {
-                    return NaN;
+                    return null;
                 }
             } else {
                 throw new Error(`log(${typeof base}/${typeof x}) not implmented`);
@@ -24,10 +31,10 @@ tape(__filename, async (t) => {
                     await tsql.selectValue(() => tsql.double.log(base, x))
                         .fetchValue(connection)
                         .then((value) => {
-                            t.fail(`log(${base}, ${x}) === ${value}`);
+                            t.deepEqual(value, null);
                         })
-                        .catch((_err) => {
-                            t.pass();
+                        .catch((err) => {
+                            t.fail(`${base}, ${x}: ${err.message}`);
                         });
                 } else {
                     await tsql.selectValue(() => tsql.double.log(base, x))

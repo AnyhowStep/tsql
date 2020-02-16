@@ -30,11 +30,11 @@ tape(__filename, async (t) => {
             });
         await tsql.selectValue(() => tsql.double.acos(-123.456))
             .fetchValue(connection)
-            .then(() => {
-                t.fail("Should not be able to calculate acos()");
+            .then((value) => {
+                t.deepEqual(value, null);
             })
             .catch((err) => {
-                t.pass(err.message);
+                t.fail(err.message);
             });
     });
 
