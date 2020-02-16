@@ -10,3 +10,13 @@ export type AssertNonUnion<T> =
         "Union type not allowed"
     ]>
 ;
+
+export type AssertNonUnionExceptBoolean<T> =
+    [T] extends [boolean] ?
+    unknown :
+    [T] extends [UnionToIntersection<T>] ?
+    unknown :
+    CompileError<[
+        "Union type not allowed"
+    ]>
+;

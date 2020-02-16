@@ -12,6 +12,13 @@ export type ValueFromBuiltInExpr<BuiltInExprT extends AnyBuiltInExpr> =
      *
      * The `IColumn|IExprSelectItem` may have different aliases and we want to be sure to check that.
      */
+    [BuiltInExprT] extends [boolean] ?
+    [
+        ExprUtil.As<
+            ExprUtil.FromBuiltInExpr<BuiltInExprT>,
+            typeof SELECT_VALUE_ALIAS
+        >
+    ] :
     BuiltInExprT extends IColumn ?
     [BuiltInExprT] :
     BuiltInExprT extends IExprSelectItem ?
