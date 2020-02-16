@@ -241,7 +241,7 @@ export type OperatorOperand = {
 
         Information Functions
     */
-    [OperatorType.CURRENT_DATABASE]     : Operand0,
+    [OperatorType.CURRENT_SCHEMA]     : Operand0,
     [OperatorType.CURRENT_USER]         : Operand0,
 
     /*
