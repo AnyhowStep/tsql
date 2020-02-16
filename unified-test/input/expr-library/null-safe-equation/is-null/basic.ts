@@ -5,6 +5,11 @@ export const test : Test = ({tape, pool}) => {
     tape(__filename, async (t) => {
         await pool.acquire(async (connection) => {
             const arr = [
+                1,
+                BigInt(32),
+                "test",
+                new Uint8Array([9,5,6]),
+                new Date(),
                 true,
                 false,
                 null,
