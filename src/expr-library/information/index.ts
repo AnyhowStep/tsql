@@ -1,2 +1,2 @@
-export * from "./current-database";
+export * from "./current-schema";
 export * from "./current-user";

@@ -1705,6 +1705,13 @@ export const sqliteSqlfier : Sqlfier = {
         },
 
         /*
+            https://dev.mysql.com/doc/refman/5.7/en/information-functions.html
+
+            Information Functions
+        */
+        [OperatorType.CURRENT_SCHEMA] : () => pascalStyleEscapeString("main"),
+        [OperatorType.CURRENT_USER] : () => "NULL",
+        /*
             Custom library functions
 
             These functions are not standard SQL,

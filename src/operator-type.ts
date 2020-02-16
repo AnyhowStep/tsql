@@ -3318,26 +3318,27 @@ export enum OperatorType {
     /**
      * + https://dev.mysql.com/doc/refman/8.0/en/information-functions.html#function_database
      * + https://www.postgresql.org/docs/9.2/functions-info.html
+     * + https://www.sqlite.org/lang_attach.html
      *
      * -----
      *
      * + MySQL      : `DATABASE()`
-     * + PostgreSQL : `CURRENT_DATABASE()`
-     * + SQLite     : None. It does not make sense to ask what the current database is.
-     *   + Maybe just return dummy data like `"sqliteDb"`
+     * + PostgreSQL : `CURRENT_SCHEMA`
+     * + SQLite     : `'main'` should always be the current database.
+     *   + There's also `'temp'`, I guess
      */
-    CURRENT_DATABASE = "CURRENT_DATABASE",
+    CURRENT_SCHEMA = "CURRENT_SCHEMA",
 
     /**
      * + https://dev.mysql.com/doc/refman/5.7/en/information-functions.html#function_current-user
      * + https://www.postgresql.org/docs/9.2/functions-info.html
+     * + https://stackoverflow.com/questions/16658880/sqlite-user-password-security/28566503
      *
      * -----
      *
      * + MySQL      : `CURRENT_USER`
      * + PostgreSQL : `CURRENT_USER`
      * + SQLite     : None. It does not make sense to ask what the current user is.
-     *   + Maybe just return dummy data like `"sqliteUser"`
      */
     CURRENT_USER = "CURRENT_USER",
 
