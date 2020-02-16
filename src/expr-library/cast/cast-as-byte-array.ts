@@ -4,7 +4,7 @@ import {OperatorType} from "../../operator-type";
 import {BuiltInValueExpr} from "../../built-in-value-expr";
 import {Decimal} from "../../decimal";
 
-export const castAsByteArray = makeOperator1Idempotent<OperatorType.CAST_AS_BYTE_ARRAY, BuiltInValueExpr|Decimal, Uint8Array|null>(
-    OperatorType.CAST_AS_BYTE_ARRAY,
+export const castAsBinary = makeOperator1Idempotent<OperatorType.CAST_AS_BINARY, BuiltInValueExpr|Decimal, Uint8Array|null>(
+    OperatorType.CAST_AS_BINARY,
     tm.instanceOfUint8Array().orNull()
 );

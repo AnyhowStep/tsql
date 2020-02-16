@@ -3,7 +3,7 @@ export * from "./cast-as-byte-array";
 export * from "./cast-as-decimal";
 export * from "./cast-as-double";
 export * from "./cast-as-json";
-export * from "./cast-as-n-char";
+//export * from "./cast-as-n-char";
 export * from "./cast-as-bigint-signed";
 export * from "./cast-as-var-char";
 export * from "./decimal-literal";

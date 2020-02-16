@@ -1740,7 +1740,7 @@ export enum OperatorType {
      */
     CURRENT_DATE = "CURRENT_DATE",
 
-    /**
+    /* *
      * Cannot use JS `Date` to represent SQL `TIME`.
      *
      * + https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_current-time
@@ -1753,9 +1753,9 @@ export enum OperatorType {
      * + PostgreSQL     : `CURRENT_TIME(0)`
      * + SQLite         : `strftime('%H:%M:%S', 'now')`
      */
-    CURRENT_TIME_0 = "CURRENT_TIME_0",
+    //CURRENT_TIME_0 = "CURRENT_TIME_0",
 
-    /**
+    /* *
      * Cannot use JS `Date` to represent SQL `TIME`.
      *
      * + https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_current-time
@@ -1768,9 +1768,9 @@ export enum OperatorType {
      * + PostgreSQL     : `CURRENT_TIME(1)`
      * + SQLite         : `substr(strftime('%H:%M:%f', 'now'), 1, 10)`
      */
-    CURRENT_TIME_1 = "CURRENT_TIME_1",
+    //CURRENT_TIME_1 = "CURRENT_TIME_1",
 
-    /**
+    /* *
      * Cannot use JS `Date` to represent SQL `TIME`.
      *
      * + https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_current-time
@@ -1783,9 +1783,9 @@ export enum OperatorType {
      * + PostgreSQL     : `CURRENT_TIME(2)`
      * + SQLite         : `substr(strftime('%H:%M:%f', 'now'), 1, 11)`
      */
-    CURRENT_TIME_2 = "CURRENT_TIME_2",
+    //CURRENT_TIME_2 = "CURRENT_TIME_2",
 
-    /**
+    /* *
      * Cannot use JS `Date` to represent SQL `TIME`.
      *
      * + https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_current-time
@@ -1798,7 +1798,7 @@ export enum OperatorType {
      * + PostgreSQL     : `CURRENT_TIME(3)`
      * + SQLite         : `strftime('%H:%M:%f', 'now')`
      */
-    CURRENT_TIME_3 = "CURRENT_TIME_3",
+    //CURRENT_TIME_3 = "CURRENT_TIME_3",
 
     /**
      * + https://dev.mysql.com/doc/refman/8.0/en/date-and-time-functions.html#function_current-timestamp
@@ -2647,7 +2647,7 @@ export enum OperatorType {
      * + PostgreSQL     : `CAST(x AS bytea)`
      * + SQLite         : `CAST(x AS BLOB)`
      */
-    CAST_AS_BYTE_ARRAY = "CAST_AS_BYTE_ARRAY",
+    CAST_AS_BINARY = "CAST_AS_BINARY",
 
     /**
      * + https://dev.mysql.com/doc/refman/8.0/en/cast-functions.html#function_cast
@@ -2839,7 +2839,7 @@ export enum OperatorType {
      */
     CAST_AS_JSON = "CAST_AS_JSON",
 
-    /**
+    /* *
      * + https://dev.mysql.com/doc/refman/8.0/en/cast-functions.html#function_cast
      * + https://www.postgresql.org/docs/9.2/datatype.html#DATATYPE-TABLE
      * + https://www.sqlite.org/datatype3.html
@@ -2854,7 +2854,7 @@ export enum OperatorType {
      * + SQLite         : `CAST(x AS TEXT)`
      *   + SQLite does not have character sets
      */
-    CAST_AS_N_CHAR = "CAST_AS_N_CHAR",
+    //CAST_AS_N_CHAR = "CAST_AS_N_CHAR",
 
     /*
      * The behaviour is too unpredictable on MySQL.
@@ -2878,7 +2878,7 @@ export enum OperatorType {
      * + SQLite         : `CAST(x AS BIGINT)`
      *   + Trying to cast `'123e2'` gives `123`
      */
-    CAST_AS_SIGNED_BIG_INTEGER = "CAST_AS_SIGNED_BIG_INTEGER",
+    CAST_AS_BIGINT_SIGNED = "CAST_AS_BIGINT_SIGNED",
 
     /*
      * Use one of the `TIMESTAMP` constructors instead
