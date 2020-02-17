@@ -2009,6 +2009,19 @@ export class Pool implements tsql.IPool {
                     throw new Error(`CBRT(${typeof x}) not implmented`);
                 }
             });
+            await connection.createFunction("COT", (x) => {
+                if (typeof x == "number") {
+                    const divisor = Math.cos(x);
+                    const dividend = Math.sin(x);
+                    if (dividend == 0) {
+                        return null;
+                    } else {
+                        return divisor/dividend;
+                    }
+                } else {
+                    throw new Error(`COT(${typeof x}) not implmented`);
+                }
+            });
         }).then(
             () => {},
             (err) => {
