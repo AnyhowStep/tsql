@@ -780,22 +780,15 @@ export const sqliteSqlfier : Sqlfier = {
         */
         [OperatorType.SUBTRACTION] : ({operands}) => insertBetween(operands, "-"),
         [OperatorType.FRACTIONAL_DIVISION] : ({operands}) => insertBetween(operands, "/"),
-        [OperatorType.INTEGER_DIVISION] : ({operands, typeHint}, toSql) => {
+        [OperatorType.INTEGER_DIVISION] : ({operands, typeHint}) => {
             if (typeHint == TypeHint.DOUBLE) {
                 return functionCall(
                     "CAST",
                     [
-                        toSql(
-                            insertBetween(
-                                operands.map(op => functionCall(
-                                    "CAST",
-                                    [
-                                        toSql(op) + " AS INTEGER"
-                                    ]
-                                )),
-                                "/"
-                            )
-                        ) + " AS DOUBLE"
+                        [
+                            insertBetween(operands, "/"),
+                            "AS BIGINT"
+                        ]
                     ]
                 );
             } else if (typeHint == TypeHint.BIGINT_SIGNED) {

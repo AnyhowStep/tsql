@@ -1207,8 +1207,10 @@ export enum OperatorType {
      * -----
      *
      * + MySQL        : `DIV`
-     * + PostgreSQL   : `/` (Maybe `CAST(CAST(x AS DECIMAL)  / CAST(y AS DECIMAL) AS INTEGER)`)
-     * + SQLite       : `CAST(x / y AS INTEGER)`
+     * + PostgreSQL   : `CAST(TRUNCATE(CAST(x AS NUMERIC) / CAST(y AS NUMERIC), 0) AS BIGINT)`
+     * + SQLite       : `CAST(x/y AS BIGINT)`
+     *   + SQLite does not have `DECIMAL` data type support...
+     *
      */
     INTEGER_DIVISION = "INTEGER_DIVISION",
 
