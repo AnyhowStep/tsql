@@ -108,6 +108,7 @@ export type OperatorOperand = {
     [OperatorType.FRACTIONAL_DIVISION]      : Operand2,
     [OperatorType.SUBTRACTION]              : Operand1ToN,
     [OperatorType.INTEGER_REMAINDER]        : Operand2,
+    [OperatorType.FRACTIONAL_REMAINDER]     : Operand2,
     [OperatorType.ADDITION]                 : Operand1ToN,
     [OperatorType.MULTIPLICATION]           : Operand1ToN,
     [OperatorType.UNARY_MINUS]              : Operand1,

@@ -14,10 +14,7 @@ export * from "./degrees";
 export * from "./exp";
 export * from "./floor";
 export * from "./fractional-div";
-/**
- * PostgreSQL and SQLite do not support fractional remainder `frem(x, y)`
- */
-//export * from "./fractional-remainder";
+export * from "./fractional-remainder";
 export * from "./integer-div";
 export * from "./integer-remainder";
 export * from "./ln";

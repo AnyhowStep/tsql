@@ -15,7 +15,7 @@ import {makeOperator2} from "../factory";
  * -----
  *
  * + MySQL        : `DIV`
- * + PostgreSQL   : `CAST(TRUNCATE(CAST(x AS NUMERIC) / CAST(y AS NUMERIC), 0) AS BIGINT)`
+ * + PostgreSQL   : `CAST(TRUNC(CAST(x AS NUMERIC) / CAST(y AS NUMERIC), 0) AS BIGINT)`
  * + SQLite       : `CAST(x/y AS BIGINT)`
  *   + SQLite does not have `DECIMAL` data type support...
  *
@@ -51,7 +51,9 @@ import {makeOperator2} from "../factory";
  * + PostgreSQL : `9223372036854770000`
  * + SQLite     : `9223372036854776000` (Because `CAST(9223372036854775808e0 AS BIGINT)` is `9223372036854776000`)
  *
+ * -----
  *
+ * @todo Maybe just... Remove this.
  */
 export const integerDiv = makeOperator2<OperatorType.INTEGER_DIVISION, number, bigint|null>(
     OperatorType.INTEGER_DIVISION,

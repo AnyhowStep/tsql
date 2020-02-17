@@ -824,6 +824,45 @@ export const sqliteSqlfier : Sqlfier = {
                 throw new Error(`INTEGER_REMAINDER not implemented for ${typeHint}`);
             }
         },
+        [OperatorType.FRACTIONAL_REMAINDER] : ({operands, typeHint}) => {
+            if (typeHint == TypeHint.DOUBLE) {
+                function naiveFractionalRemainder (dividend : Ast) {
+                    const divisor = operands[1];
+                    const absDivisor = functionCall("ABS", [divisor]);
+
+                    return parentheses(
+                        [
+                            dividend,
+                            "-",
+                            functionCall(
+                                "FLOOR",
+                                [
+                                    [
+                                        dividend,
+                                        "/",
+                                        absDivisor
+                                    ]
+                                ]
+                            ),
+                            "*",
+                            absDivisor
+                        ],
+                        false
+                    );
+                }
+                const dividend = operands[0];
+
+                return [
+                    "CASE",
+                    "WHEN", dividend, ">= 0 THEN", naiveFractionalRemainder(dividend),
+                    "ELSE",
+                    "-", naiveFractionalRemainder(parentheses(["-", dividend], false)),
+                    "END"
+                ];
+            } else {
+                throw new Error(`FRACTIONAL_REMAINDER not implemented for ${typeHint}`);
+            }
+        },
         [OperatorType.ADDITION] : ({operands, typeHint}) => {
             if (typeHint == TypeHint.BIGINT_SIGNED) {
                 return functionCall("bigint_add", operands);
