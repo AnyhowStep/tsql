@@ -15,9 +15,16 @@ import {makeOperator2} from "../factory";
  * -----
  *
  * + MySQL      : `dividend % divisor`
- * + PostgreSQL : `dividend - FLOOR(dividend / divisor) * divisor`
- * + SQLite     : `dividend - FLOOR(dividend / divisor) * divisor`
+ * + PostgreSQL : See algorithm below
+ * + SQLite     : See algorithm below
  *
+ * ```sql
+ *  IF(
+ *      dividend >= 0,
+ *      dividend - FLOOR(dividend / divisor) * divisor,
+ *      -((-dividend) - FLOOR((-dividend) / divisor) * divisor)
+ *  )
+ * ```
  */
 export const fractionalRemainder = makeOperator2<OperatorType.FRACTIONAL_REMAINDER, number, number|null>(
     OperatorType.FRACTIONAL_REMAINDER,
