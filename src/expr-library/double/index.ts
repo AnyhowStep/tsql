@@ -15,8 +15,18 @@ export * from "./exp";
 export * from "./floor";
 export * from "./fractional-div";
 export * from "./fractional-remainder";
-export * from "./integer-div";
-export * from "./integer-remainder";
+/**
+ * MySQL's `DIV` is just too... Unintuitive.
+ * One would think it converts operands to int before performing int-div.
+ * Instead, it performs fractional-div, then converts result to int.
+ *
+ * If you really want integer-div, just cast and divide yourself.
+ */
+//export * from "./integer-div";
+/**
+ * For the same reason that integer-div is removed.
+ */
+//export * from "./integer-remainder";
 export * from "./ln";
 export * from "./log";
 export * from "./log2";
