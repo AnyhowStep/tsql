@@ -34,7 +34,7 @@ function shouldWrap (ast : Ast, canUnwrap : boolean) : boolean {
         if (ast.length == 0) {
             throw new Error(`Attempt to add parentheses around empty query tree`);
         } else if (ast.length == 1) {
-            return false;
+            return shouldWrap(ast[0], canUnwrap);
         } else {
             return true;
         }
