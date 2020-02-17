@@ -12,7 +12,9 @@ import {makeOperator1} from "../factory";
  *
  * -----
  *
- * + MySQL        : `IF(x >= 0, POWER(x, 1.0/3.0), -POWER(-x, 1.0/3.0))` The `.0` parts are important!
+ * + MySQL        : `IF(x >= 0, POWER(x, 1.0/3.0), -POWER(-(x), 1.0/3.0))`
+ *   + The `.0` parts are important!
+ *   + MySQL's `POWER()` function throws on negative numbers
  * + PostgreSQL   : `||/` or `CBRT(x)` (Lets not use the ugly `||/` operator)
  * + SQLite       : Requres creating a `CBRT(x)` user-defined function
  *
