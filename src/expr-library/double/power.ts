@@ -16,7 +16,8 @@ import {makeOperator2} from "../factory";
  *
  * + MySQL        : `POWER(base, exponent)`
  * + PostgreSQL   : `^` or `POWER(base, exponent)` (Let's not use the ugly `^` operator)
- * + SQLite       : Requres creating a `POWER(base, exponent)` user-defined function
+ * + SQLite         : None, implement with user-defined function
+ *   + `extension-functions.c` from https://www.sqlite.org/contrib returns `null` for `POWER(-1, 0.5)`
  *
  * -----
  *
