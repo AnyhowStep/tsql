@@ -37,6 +37,6 @@ import {makeOperator1} from "../factory";
  */
 export const cbrt = makeOperator1<OperatorType.CUBE_ROOT, number, number>(
     OperatorType.CUBE_ROOT,
-    tm.mysql.double(),
+    tm.toUnsafeNumber(),
     TypeHint.DOUBLE
 );
