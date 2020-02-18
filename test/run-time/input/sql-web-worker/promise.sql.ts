@@ -10,7 +10,8 @@ import {
     IsolationLevelUtil,
     TransactionAccessModeUtil,
     DataOutOfRangeError,
-    DivideByZeroError
+    DivideByZeroError,
+    SqlError
 } from "../../../../dist";
 import {sqliteSqlfier} from "../../../sqlite-sqlfier";
 import {
@@ -76,32 +77,37 @@ function postMessage<ActionT extends SqliteAction, ResultT> (
 ) {
     return new Promise<ResultT>((innerResolve, originalInnerReject) => {
         const innerReject = (error : any) => {
+            const sql = (
+                "sql" in data ?
+                (data as any).sql :
+                undefined
+            );
             if (error instanceof Error) {
                 if (error.message.startsWith("DataOutOfRangeError") || error.message.includes("overflow")) {
-                    const newErr = new DataOutOfRangeError(error.message);
-                    Object.defineProperty(
-                        newErr,
-                        "stack",
-                        {
-                            value : error.stack
-                        }
-                    );
+                    const newErr = new DataOutOfRangeError({
+                        innerError : error,
+                        sql,
+                    });
                     originalInnerReject(newErr);
                 } else if (error.message.startsWith("DivideByZeroError")) {
-                    const newErr = new DivideByZeroError(error.message);
-                    Object.defineProperty(
-                        newErr,
-                        "stack",
-                        {
-                            value : error.stack
-                        }
-                    );
+                    const newErr = new DivideByZeroError({
+                        innerError : error,
+                        sql,
+                    });
                     originalInnerReject(newErr);
                 } else {
-                    originalInnerReject(error);
+                    const newErr = new SqlError({
+                        innerError : error,
+                        sql,
+                    });
+                    originalInnerReject(newErr);
                 }
             } else {
-                originalInnerReject(error);
+                const newErr = new SqlError({
+                    innerError : error,
+                    sql,
+                });
+                originalInnerReject(newErr);
             }
         };
         worker.onmessage = ({data}) => {

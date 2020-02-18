@@ -6,7 +6,7 @@ import {BuiltInExprUtil} from "../../../built-in-expr";
 import {QueryBaseUtil} from "../../../query-base";
 import {ExprUtil} from "../../../expr";
 import {ExprSelectItemUtil} from "../../../expr-select-item";
-import {MissingRequiredInsertColumnError, NullableRequiredInsertColumnError} from "../../../error";
+import {MissingRequiredInsertColumnError, PotentialNullInRequiredInsertColumnError} from "../../../error";
 import {ColumnUtil, IColumn} from "../../../column";
 import {ColumnRefUtil} from "../../../column-ref";
 import {ColumnIdentifierRefUtil} from "../../../column-identifier-ref";
@@ -63,11 +63,11 @@ export function cleanInsertSelectColumn<
     );
     if (customExpr === undefined) {
         if (required) {
-            throw new MissingRequiredInsertColumnError(
-                `Expected value for ${table.alias}.${columnAlias}; received undefined`,
+            throw new MissingRequiredInsertColumnError({
+                message : `Expected value for ${table.alias}.${columnAlias}; received undefined`,
                 table,
                 columnAlias
-            );
+            });
         } else {
             return undefined;
         }
@@ -92,11 +92,11 @@ export function cleanInsertSelectColumn<
             QueryBaseUtil.isZeroOrOneRow(customExpr) &&
             !tm.canOutputNull(table.columns[columnAlias].mapper)
         ) {
-            throw new NullableRequiredInsertColumnError(
-                `Cannot INSERT possibly NULL subquery expression to ${table.alias}.${columnAlias}`,
+            throw new PotentialNullInRequiredInsertColumnError({
+                message : `Cannot INSERT possibly NULL subquery expression to ${table.alias}.${columnAlias}`,
                 table,
                 columnAlias
-            );
+            });
         }
         return customExpr as any;
     } else {

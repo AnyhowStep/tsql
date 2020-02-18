@@ -103,10 +103,10 @@ export async function updateZeroOrOneImplNoEvent<
                     throw new Error(`Expected to update zero or one row of ${table.alias}; updated ${updateResult.updatedRowCount}`);
                 }
             }
-            throw new TooManyRowsFoundError(
-                `Expected to find one row of ${table.alias}; found ${updateResult.foundRowCount} rows`,
-                updateResult.query.sql
-            );
+            throw new TooManyRowsFoundError({
+                message : `Expected to find one row of ${table.alias}; found ${updateResult.foundRowCount} rows`,
+                sql : updateResult.query.sql,
+            });
         });
     });
 }

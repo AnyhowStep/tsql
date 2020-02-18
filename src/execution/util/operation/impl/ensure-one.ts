@@ -18,17 +18,29 @@ export function ensureOne<
     const resultSet = fetched.resultSet;
     if (resultSet.length == 0) {
         if (query.fromClause.currentJoins == undefined || query.fromClause.currentJoins.length == 0) {
-            throw new RowNotFoundError(`Expected one row, found zero`, fetched.sql);
+            throw new RowNotFoundError({
+                message : `Expected one row, found zero`,
+                sql : fetched.sql,
+            });
         } else {
-            throw new RowNotFoundError(`Expected one row from ${query.fromClause.currentJoins[0].tableAlias}, found zero`, fetched.sql);
+            throw new RowNotFoundError({
+                message : `Expected one row from ${query.fromClause.currentJoins[0].tableAlias}, found zero`,
+                sql : fetched.sql,
+            });
         }
     } else if (resultSet.length == 1) {
         return resultSet[0];
     } else {
         if (query.fromClause.currentJoins == undefined || query.fromClause.currentJoins.length == 0) {
-            throw new TooManyRowsFoundError(`Expected one row, found more than that`, fetched.sql);
+            throw new TooManyRowsFoundError({
+                message : `Expected one row, found more than that`,
+                sql : fetched.sql,
+            });
         } else {
-            throw new TooManyRowsFoundError(`Expected one row from ${query.fromClause.currentJoins[0].tableAlias}, found more than that`, fetched.sql);
+            throw new TooManyRowsFoundError({
+                message : `Expected one row from ${query.fromClause.currentJoins[0].tableAlias}, found more than that`,
+                sql : fetched.sql,
+            });
         }
     }
 }

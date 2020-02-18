@@ -72,10 +72,10 @@ export async function updateOneImplNoEvent<
                 assignmentMapDelegate
             );
             if (tm.BigIntUtil.equal(updateResult.foundRowCount, tm.BigInt(0))) {
-                throw new RowNotFoundError(
-                    `Expected to find one row of ${table.alias}; found ${updateResult.foundRowCount} rows`,
-                    updateResult.query.sql
-                );
+                throw new RowNotFoundError({
+                    message : `Expected to find one row of ${table.alias}; found ${updateResult.foundRowCount} rows`,
+                    sql : updateResult.query.sql,
+                });
             }
             if (tm.BigIntUtil.equal(updateResult.foundRowCount, tm.BigInt(1))) {
                 if (
@@ -92,10 +92,10 @@ export async function updateOneImplNoEvent<
                     throw new Error(`Expected to update zero or one row of ${table.alias}; updated ${updateResult.updatedRowCount}`);
                 }
             }
-            throw new TooManyRowsFoundError(
-                `Expected to find one row of ${table.alias}; found ${updateResult.foundRowCount} rows`,
-                updateResult.query.sql
-            );
+            throw new TooManyRowsFoundError({
+                message : `Expected to find one row of ${table.alias}; found ${updateResult.foundRowCount} rows`,
+                sql : updateResult.query.sql,
+            });
         });
     });
 }
