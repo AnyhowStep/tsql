@@ -6,6 +6,8 @@ import {TypeHint} from "../../type-hint";
 /**
  * Returns the addition of the double values
  *
+ * The precision of the result is not guaranteed.
+ *
  * + https://dev.mysql.com/doc/refman/8.0/en/arithmetic-functions.html#operator_plus
  *
  * -----
