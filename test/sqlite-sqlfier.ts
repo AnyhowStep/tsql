@@ -826,8 +826,7 @@ export const sqliteSqlfier : Sqlfier = {
         },
         [OperatorType.FRACTIONAL_REMAINDER] : ({operands, typeHint}) => {
             if (typeHint == TypeHint.DOUBLE) {
-                function naiveFractionalRemainder (dividend : Ast) {
-                    const divisor = operands[1];
+                function naiveFractionalRemainder (dividend : Ast, divisor : Ast) {
                     const absDivisor = functionCall("ABS", [divisor]);
 
                     return parentheses(
@@ -851,12 +850,19 @@ export const sqliteSqlfier : Sqlfier = {
                     );
                 }
                 const dividend = operands[0];
+                const divisor = operands[1];
 
                 return [
                     "CASE",
-                    "WHEN", dividend, ">= 0 THEN", naiveFractionalRemainder(dividend),
+                    "WHEN", dividend, "= 1e999 THEN NULL",
+                    "WHEN", dividend, "= -1e999 THEN NULL",
+                    "WHEN", divisor, "= 1e999 THEN",
+                    dividend,
+                    "WHEN", divisor, "= -1e999 THEN",
+                    dividend,
+                    "WHEN", dividend, ">= 0 THEN", naiveFractionalRemainder(dividend, divisor),
                     "ELSE",
-                    "-", naiveFractionalRemainder(parentheses(["-", dividend], false)),
+                    "-", naiveFractionalRemainder(parentheses(["-", dividend], false), divisor),
                     "END"
                 ];
             } else {
