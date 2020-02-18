@@ -22,6 +22,6 @@ import {makeOperator1} from "../factory";
  */
 export const degrees = makeOperator1<OperatorType.DEGREES, number, number>(
     OperatorType.DEGREES,
-    tm.mysql.double(),
+    tm.toUnsafeNumber(),
     TypeHint.DOUBLE
 );
