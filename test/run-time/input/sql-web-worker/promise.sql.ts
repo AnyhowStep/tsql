@@ -2024,7 +2024,11 @@ export class Pool implements tsql.IPool {
             });
             await connection.createFunction("LN", (x) => {
                 if (typeof x == "number") {
-                    return Math.log(x);
+                    if (x == 0) {
+                        return null;
+                    }
+                    const result = Math.log(x);
+                    return result;
                 } else {
                     throw new Error(`LN(${typeof x}) not implmented`);
                 }

@@ -10,11 +10,12 @@ export const test : Test = ({tape, pool}) => {
                     const expected = null;
                     t.deepEqual(
                         value,
-                        null,
+                        expected,
                         `LN(${0}) ~= ${expected} ~/= ${value}`
                     );
                 })
                 .catch((err) => {
+                    //@todo Cannot take logarithm of zero error
                     t.fail(err.message);
                 });
         });
