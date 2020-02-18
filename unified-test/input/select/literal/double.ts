@@ -80,6 +80,16 @@ export const test : Test = ({tape, pool}) => {
                 .catch((err) => {
                     t.true(err instanceof tsql.DataOutOfRangeError);
                 });
+
+            //Almost 1, Used by `double.random()` impl
+            await tsql.selectValue(() => 0.999999999999999)
+                .fetchValue(connection)
+                .then((value) => {
+                    t.deepEqual(value, 0.999999999999999);
+                })
+                .catch((err) => {
+                    t.fail(err.message);
+                });
         });
 
         t.end();

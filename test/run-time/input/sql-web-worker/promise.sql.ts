@@ -2074,6 +2074,9 @@ export class Pool implements tsql.IPool {
                     throw new Error(`LOG10(${typeof x}) not implmented`);
                 }
             });
+            await connection.createFunction("FRANDOM", () => {
+                return Math.random();
+            });
         }).then(
             () => {},
             (err) => {
