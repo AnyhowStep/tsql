@@ -4,11 +4,23 @@ import {TypeHint} from "../../type-hint";
 import {makeOperator1DoubleElimination} from "../factory";
 
 /**
+ * Returns the unary minus of the double value
+ *
+ * + https://dev.mysql.com/doc/refman/8.0/en/arithmetic-functions.html#operator_unary-minus
+ *
+ * -----
+ *
+ * + MySQL        : `-`
+ * + PostgreSQL   : `-`
+ * + SQLite       : `-`
+ *
+ * -----
+ *
  * This function has the double elimination property.
  * `NEG(NEG(x)) == x`
  */
 export const neg = makeOperator1DoubleElimination<OperatorType.UNARY_MINUS, number, number>(
     OperatorType.UNARY_MINUS,
-    tm.mysql.double(),
+    tm.toUnsafeNumber(),
     TypeHint.DOUBLE
 );
