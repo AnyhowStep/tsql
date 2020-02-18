@@ -28,6 +28,12 @@ export const test : Test = ({tape, pool}) => {
                     .fetchValue(connection)
                     .then((value) => {
                         const expected = Math.cos(a);
+                        if (value == null) {
+                            t.fail(
+                                `COS(${a}) ~= ${expected} ~/= ${value}`
+                            );
+                            return;
+                        }
                         const margin = 0.000000000000001;
                         t.true(
                             Math.abs(value - expected) <= margin,
