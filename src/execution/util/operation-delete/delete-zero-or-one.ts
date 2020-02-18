@@ -72,10 +72,10 @@ export async function deleteZeroOrOne<
                         deleteResult : deleteResult as DeleteZeroOrOneResult,
                     };
                 }
-                throw new TooManyRowsFoundError(
-                    `Expected to delete zero or one row of ${table.alias}; found ${deleteResult.deletedRowCount} rows`,
-                    deleteResult.query.sql
-                );
+                throw new TooManyRowsFoundError({
+                    message : `Expected to delete zero or one row of ${table.alias}; found ${deleteResult.deletedRowCount} rows`,
+                    sql : deleteResult.query.sql,
+                });
             });
         });
 

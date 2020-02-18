@@ -64,10 +64,10 @@ export async function deleteOne<
                     whereDelegate
                 );
                 if (tm.BigIntUtil.equal(deleteResult.deletedRowCount, tm.BigInt(0))) {
-                    throw new RowNotFoundError(
-                        `Expected to delete one row of ${table.alias}; found ${deleteResult.deletedRowCount} rows`,
-                        deleteResult.query.sql
-                    );
+                    throw new RowNotFoundError({
+                        message : `Expected to delete one row of ${table.alias}; found ${deleteResult.deletedRowCount} rows`,
+                        sql : deleteResult.query.sql,
+                    });
                 }
                 if (tm.BigIntUtil.equal(deleteResult.deletedRowCount, tm.BigInt(1))) {
                     return {
@@ -75,10 +75,10 @@ export async function deleteOne<
                         deleteResult : deleteResult as DeleteOneResult,
                     };
                 }
-                throw new TooManyRowsFoundError(
-                    `Expected to delete one row of ${table.alias}; found ${deleteResult.deletedRowCount} rows`,
-                    deleteResult.query.sql
-                );
+                throw new TooManyRowsFoundError({
+                    message : `Expected to delete one row of ${table.alias}; found ${deleteResult.deletedRowCount} rows`,
+                    sql : deleteResult.query.sql,
+                });
             });
         });
 

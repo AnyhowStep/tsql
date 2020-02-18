@@ -11,7 +11,7 @@ export const test : Test = ({tape, pool}) => {
                     t.deepEqual(value, null);
                 })
                 .catch((err) => {
-                    t.true(err instanceof tsql.InvalidSyntaxError);
+                    t.true(err instanceof tsql.InvalidInputError);
                 });
         });
 

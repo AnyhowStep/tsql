@@ -24,9 +24,15 @@ export function ensureOneOr<
         return resultSet[0];
     } else {
         if (query.fromClause.currentJoins == undefined || query.fromClause.currentJoins.length == 0) {
-            throw new TooManyRowsFoundError(`Expected zero or one row, found more than that`, fetched.sql);
+            throw new TooManyRowsFoundError({
+                message : `Expected zero or one row, found more than that`,
+                sql : fetched.sql,
+            });
         } else {
-            throw new TooManyRowsFoundError(`Expected zero or one row from ${query.fromClause.currentJoins[0].tableAlias}, found more than that`, fetched.sql);
+            throw new TooManyRowsFoundError({
+                message : `Expected zero or one row from ${query.fromClause.currentJoins[0].tableAlias}, found more than that`,
+                sql : fetched.sql,
+            });
         }
     }
 }

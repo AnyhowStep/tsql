@@ -84,9 +84,15 @@ export async function count (
     } else {
         //This should never happen...
         if (query.fromClause.currentJoins == undefined || query.fromClause.currentJoins.length == 0) {
-            throw new CannotCountError(`Cannot get count`);
+            throw new CannotCountError({
+                message : `Cannot get count`,
+                sql : undefined,
+            });
         } else {
-            throw new CannotCountError(`Cannot get count of ${query.fromClause.currentJoins[0].tableAlias}`);
+            throw new CannotCountError({
+                message : `Cannot get count of ${query.fromClause.currentJoins[0].tableAlias}`,
+                sql : undefined,
+            });
         }
     }
 }

@@ -10,9 +10,15 @@ export async function assertExists (
     const result = await existsImpl(query, connection);
     if (!result.exists) {
         if (query.fromClause.currentJoins == undefined || query.fromClause.currentJoins.length == 0) {
-            throw new RowNotFoundError(`Row does not exist`, result.sql);
+            throw new RowNotFoundError({
+                message : `Row does not exist`,
+                sql : result.sql,
+            });
         } else {
-            throw new RowNotFoundError(`Row of ${query.fromClause.currentJoins[0].tableAlias} does not exist`, result.sql);
+            throw new RowNotFoundError({
+                message : `Row of ${query.fromClause.currentJoins[0].tableAlias} does not exist`,
+                sql : result.sql,
+            });
         }
     }
 }

@@ -573,7 +573,13 @@ export const sqliteSqlfier : Sqlfier = {
         },
         [LiteralValueType.DOUBLE] : ({literalValue}) => {
             if (isNaN(literalValue)) {
-                throw new DataOutOfRangeError(`Literal ${literalValue} not allowed`);
+                throw new DataOutOfRangeError({
+                    message : `Literal ${literalValue} not allowed`,
+                    /**
+                     * @todo Figure out how to get the entire SQL, then throw?
+                     */
+                    sql : undefined,
+                });
             }
             if (literalValue == Infinity) {
                 return "(1e999)";
