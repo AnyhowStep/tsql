@@ -14,14 +14,15 @@ import {makeOperator1} from "../factory";
  * + MySQL          : `COS(x)`
  * + PostgreSQL     : `COS(x)`
  * + SQLite         : None, implement with user-defined function
+ *   + `extension-functions.c` from https://www.sqlite.org/contrib returns `null` for `COS(1e999)`
  *
  * -----
  *
  * @param arg - Radians
  * @returns The cosine
  */
-export const cos = makeOperator1<OperatorType.COSINE, number, number>(
+export const cos = makeOperator1<OperatorType.COSINE, number, number|null>(
     OperatorType.COSINE,
-    tm.mysql.double(),
+    tm.mysql.double().orNull(),
     TypeHint.DOUBLE
 );

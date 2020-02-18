@@ -23,6 +23,6 @@ import {makeOperator1} from "../factory";
  */
 export const exp = makeOperator1<OperatorType.NATURAL_EXPONENTIATION, number, number>(
     OperatorType.NATURAL_EXPONENTIATION,
-    tm.mysql.double(),
+    tm.toUnsafeNumber(),
     TypeHint.DOUBLE
 );

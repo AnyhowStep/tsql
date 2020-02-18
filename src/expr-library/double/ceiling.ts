@@ -33,6 +33,6 @@ import {makeOperator1Idempotent} from "../factory";
  */
 export const ceiling = makeOperator1Idempotent<OperatorType.CEILING, number, number>(
     OperatorType.CEILING,
-    tm.mysql.double(),
+    tm.toUnsafeNumber(),
     TypeHint.DOUBLE
 );

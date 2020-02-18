@@ -2022,6 +2022,17 @@ export class Pool implements tsql.IPool {
                     throw new Error(`COT(${typeof x}) not implmented`);
                 }
             });
+            await connection.createFunction("LN", (x) => {
+                if (typeof x == "number") {
+                    if (x == 0) {
+                        return null;
+                    }
+                    const result = Math.log(x);
+                    return result;
+                } else {
+                    throw new Error(`LN(${typeof x}) not implmented`);
+                }
+            });
         }).then(
             () => {},
             (err) => {

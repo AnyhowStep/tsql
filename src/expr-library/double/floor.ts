@@ -33,6 +33,6 @@ import {makeOperator1Idempotent} from "../factory";
  */
 export const floor = makeOperator1Idempotent<OperatorType.FLOOR, number, number>(
     OperatorType.FLOOR,
-    tm.mysql.double(),
+    tm.toUnsafeNumber(),
     TypeHint.DOUBLE
 );
