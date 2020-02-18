@@ -926,7 +926,7 @@ export const sqliteSqlfier : Sqlfier = {
         [OperatorType.LOG10] : ({operands}) => functionCall("LOG10", operands),
         [OperatorType.PI] : () => functionCall("PI", []),
         [OperatorType.POWER] : ({operands}) => functionCall("POWER", operands),
-        [OperatorType.RADIANS] : ({operands}) => functionCall("RADIANS", operands),
+        [OperatorType.RADIANS] : ({operands}) => [operands[0], "* (3.141592653589793/180.0)"],
         [OperatorType.RANDOM] : ({operands, typeHint}) => {
             if (typeHint == TypeHint.DOUBLE) {
                 return functionCall("FRANDOM", operands);
