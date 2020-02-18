@@ -780,22 +780,15 @@ export const sqliteSqlfier : Sqlfier = {
         */
         [OperatorType.SUBTRACTION] : ({operands}) => insertBetween(operands, "-"),
         [OperatorType.FRACTIONAL_DIVISION] : ({operands}) => insertBetween(operands, "/"),
-        [OperatorType.INTEGER_DIVISION] : ({operands, typeHint}, toSql) => {
+        [OperatorType.INTEGER_DIVISION] : ({operands, typeHint}) => {
             if (typeHint == TypeHint.DOUBLE) {
                 return functionCall(
                     "CAST",
                     [
-                        toSql(
-                            insertBetween(
-                                operands.map(op => functionCall(
-                                    "CAST",
-                                    [
-                                        toSql(op) + " AS INTEGER"
-                                    ]
-                                )),
-                                "/"
-                            )
-                        ) + " AS DOUBLE"
+                        [
+                            insertBetween(operands, "/"),
+                            "AS BIGINT"
+                        ]
                     ]
                 );
             } else if (typeHint == TypeHint.BIGINT_SIGNED) {
@@ -829,6 +822,45 @@ export const sqliteSqlfier : Sqlfier = {
                 return insertBetween(operands, "%");
             } else {
                 throw new Error(`INTEGER_REMAINDER not implemented for ${typeHint}`);
+            }
+        },
+        [OperatorType.FRACTIONAL_REMAINDER] : ({operands, typeHint}) => {
+            if (typeHint == TypeHint.DOUBLE) {
+                function naiveFractionalRemainder (dividend : Ast) {
+                    const divisor = operands[1];
+                    const absDivisor = functionCall("ABS", [divisor]);
+
+                    return parentheses(
+                        [
+                            dividend,
+                            "-",
+                            functionCall(
+                                "FLOOR",
+                                [
+                                    [
+                                        dividend,
+                                        "/",
+                                        absDivisor
+                                    ]
+                                ]
+                            ),
+                            "*",
+                            absDivisor
+                        ],
+                        false
+                    );
+                }
+                const dividend = operands[0];
+
+                return [
+                    "CASE",
+                    "WHEN", dividend, ">= 0 THEN", naiveFractionalRemainder(dividend),
+                    "ELSE",
+                    "-", naiveFractionalRemainder(parentheses(["-", dividend], false)),
+                    "END"
+                ];
+            } else {
+                throw new Error(`FRACTIONAL_REMAINDER not implemented for ${typeHint}`);
             }
         },
         [OperatorType.ADDITION] : ({operands, typeHint}) => {
@@ -873,7 +905,7 @@ export const sqliteSqlfier : Sqlfier = {
         [OperatorType.CEILING] : ({operands}) => functionCall("CEILING", operands),
         [OperatorType.COSINE] : ({operands}) => functionCall("COS", operands),
         [OperatorType.COTANGENT] : ({operands}) => functionCall("COT", operands),
-        [OperatorType.DEGREES] : ({operands}) => functionCall("DEGREES", operands),
+        [OperatorType.DEGREES] : ({operands}) => [operands[0], "* (180.0/3.141592653589793)"],
         [OperatorType.NATURAL_EXPONENTIATION] : ({operands}) => functionCall("EXP", operands),
         [OperatorType.FLOOR] : ({operands}) => functionCall("FLOOR", operands),
         [OperatorType.LN] : ({operands}) => functionCall("LN", operands),

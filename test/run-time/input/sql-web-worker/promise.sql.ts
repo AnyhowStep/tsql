@@ -2002,6 +2002,26 @@ export class Pool implements tsql.IPool {
                     throw new Error(`Can only CEILING bigint or double`);
                 }
             });
+            await connection.createFunction("CBRT", (x) => {
+                if (typeof x == "number") {
+                    return Math.cbrt(x);
+                } else {
+                    throw new Error(`CBRT(${typeof x}) not implmented`);
+                }
+            });
+            await connection.createFunction("COT", (x) => {
+                if (typeof x == "number") {
+                    const divisor = Math.cos(x);
+                    const dividend = Math.sin(x);
+                    if (dividend == 0) {
+                        return null;
+                    } else {
+                        return divisor/dividend;
+                    }
+                } else {
+                    throw new Error(`COT(${typeof x}) not implmented`);
+                }
+            });
         }).then(
             () => {},
             (err) => {

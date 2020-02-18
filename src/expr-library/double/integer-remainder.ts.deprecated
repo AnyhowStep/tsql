@@ -22,6 +22,9 @@ import {makeOperator2} from "../factory";
  * integerRemainder(-5,  3); //-2
  * integerRemainder(-5, -3); //-2
  * ```
+ * -----
+ *
+ * @todo Maybe just... Remove this.
  */
 export const integerRemainder = makeOperator2<OperatorType.INTEGER_REMAINDER, number, number|null>(
     OperatorType.INTEGER_REMAINDER,

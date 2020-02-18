@@ -1207,8 +1207,10 @@ export enum OperatorType {
      * -----
      *
      * + MySQL        : `DIV`
-     * + PostgreSQL   : `/` (Maybe `CAST(CAST(x AS DECIMAL)  / CAST(y AS DECIMAL) AS INTEGER)`)
-     * + SQLite       : `CAST(x / y AS INTEGER)`
+     * + PostgreSQL   : `CAST(TRUNC(CAST(x AS NUMERIC) / CAST(y AS NUMERIC), 0) AS BIGINT)`
+     * + SQLite       : `CAST(x/y AS BIGINT)`
+     *   + SQLite does not have `DECIMAL` data type support...
+     *
      */
     INTEGER_DIVISION = "INTEGER_DIVISION",
 
@@ -1261,7 +1263,7 @@ export enum OperatorType {
      * + PostgreSQL   : Not supported
      * + SQLite       : Not supported
      */
-    //FRACTIONAL_REMAINDER = "FRACTIONAL_REMAINDER",
+    FRACTIONAL_REMAINDER = "FRACTIONAL_REMAINDER",
 
     /**
      * + https://dev.mysql.com/doc/refman/8.0/en/arithmetic-functions.html#operator_plus

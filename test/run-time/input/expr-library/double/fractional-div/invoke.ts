@@ -12,10 +12,10 @@ tape(__filename, async (t) => {
                     await tsql.selectValue(() => tsql.double.fractionalDiv(x, y))
                         .fetchValue(connection)
                         .then((value) => {
-                            t.fail(value.toString());
+                            t.deepEqual(value, null);
                         })
-                        .catch(() => {
-                            t.pass();
+                        .catch((err) => {
+                            t.fail(err.message);
                         });
                 } else {
                     await tsql.selectValue(() => tsql.double.fractionalDiv(x, y))
