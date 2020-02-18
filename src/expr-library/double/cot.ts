@@ -14,6 +14,7 @@ import {makeOperator1} from "../factory";
  * + MySQL          : `COT(x)`
  * + PostgreSQL     : `COT(x)`
  * + SQLite         : None, implement with user-defined function
+ *   + `extension-functions.c` from https://www.sqlite.org/contrib returns `null` for `COT(1e999)`
  *
  * -----
  *
