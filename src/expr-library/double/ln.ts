@@ -16,8 +16,14 @@ import {makeOperator1} from "../factory";
  * + SQLite         : None, implment with user-defined function
  *
  * -----
+ *
  * + MySQL      : `LN(0)` === `NULL`
  * + PostgreSQL : `LN(0)` throws error
+ *
+ * -----
+ *
+ * + MySQL      : `LN(-1)` === `NULL`
+ * + PostgreSQL : `LN(-1)` throws error
  */
 export const ln = makeOperator1<OperatorType.LN, number, number|null>(
     OperatorType.LN,

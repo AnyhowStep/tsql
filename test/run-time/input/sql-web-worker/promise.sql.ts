@@ -2039,6 +2039,41 @@ export class Pool implements tsql.IPool {
                     throw new Error(`LN(${typeof x}) not implmented`);
                 }
             });
+            await connection.createFunction("LOG", (x, y) => {
+                if (typeof x == "number" && typeof y == "number") {
+                    if (x <= 0 || x == 1) {
+                        return null;
+                    }
+                    if (y == 0) {
+                        return null;
+                    }
+                    return Math.log(y) / Math.log(x);
+                } else {
+                    throw new Error(`LOG(${typeof x}, ${typeof y}) not implmented`);
+                }
+            });
+            await connection.createFunction("LOG2", (x) => {
+                if (typeof x == "number") {
+                    if (x == 0) {
+                        return null;
+                    }
+                    const result = Math.log2(x);
+                    return result;
+                } else {
+                    throw new Error(`LOG2(${typeof x}) not implmented`);
+                }
+            });
+            await connection.createFunction("LOG10", (x) => {
+                if (typeof x == "number") {
+                    if (x == 0) {
+                        return null;
+                    }
+                    const result = Math.log10(x);
+                    return result;
+                } else {
+                    throw new Error(`LOG10(${typeof x}) not implmented`);
+                }
+            });
         }).then(
             () => {},
             (err) => {
