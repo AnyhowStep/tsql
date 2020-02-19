@@ -905,7 +905,13 @@ export const sqliteSqlfier : Sqlfier = {
             if (typeHint == TypeHint.BIGINT_SIGNED) {
                 return functionCall("bigint_mul", operands);
             } else {
-                return insertBetween(operands, "*");
+                return functionCall(
+                    "COALESCE",
+                    [
+                        insertBetween(operands, "*"),
+                        THROW_AST
+                    ]
+                );
             }
         },
         [OperatorType.UNARY_MINUS] : ({operands, typeHint}) => {
