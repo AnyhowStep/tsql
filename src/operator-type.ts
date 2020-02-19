@@ -1608,7 +1608,7 @@ export enum OperatorType {
      *
      * + MySQL          : `SIGN(x)`
      * + PostgreSQL     : `SIGN(x)`
-     * + SQLite         : `CASE WHEN x > 0 THEN 1 WHEN x < 0 THEN -1 ELSE 0 END`
+     * + SQLite         : `CASE WHEN x > 0 THEN 1e0 WHEN x < 0 THEN -1e0 ELSE 0e0 END`
      */
     SIGN = "SIGN",
 
