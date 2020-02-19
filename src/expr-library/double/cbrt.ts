@@ -6,6 +6,8 @@ import {makeOperator1} from "../factory";
 /**
  * Returns the cube root
  *
+ * The precision of the result is not guaranteed.
+ *
  * + https://dev.mysql.com/doc/refman/5.7/en/mathematical-functions.html#function_pow
  * + https://www.postgresql.org/docs/9.0/functions-math.html
  * + https://stackoverflow.com/questions/13190064/how-to-find-power-of-a-number-in-sqlite
