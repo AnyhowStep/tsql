@@ -106,7 +106,7 @@ export type OperatorOperand = {
     */
     [OperatorType.INTEGER_DIVISION]         : Operand2,
     [OperatorType.FRACTIONAL_DIVISION]      : Operand2,
-    [OperatorType.SUBTRACTION]              : Operand1ToN,
+    [OperatorType.SUBTRACTION]              : Operand2|Operand1ToN,
     [OperatorType.INTEGER_REMAINDER]        : Operand2,
     [OperatorType.FRACTIONAL_REMAINDER]     : Operand2,
     [OperatorType.ADDITION]                 : Operand1ToN,

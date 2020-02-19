@@ -11,12 +11,12 @@ tape(__filename, t => {
 
     const expr = tsql.double.add(
         myTable.columns.myColumn,
-        tsql.double.sub(myTable.columns.myColumn, myTable.columns.myColumn),
+        tsql.coalesce(tsql.double.sub(myTable.columns.myColumn, myTable.columns.myColumn), 1),
         myTable.columns.myColumn
     );
     t.deepEqual(
         tsql.AstUtil.toSql(expr.ast, sqliteSqlfier),
-        `("myTable"."myColumn" + ("myTable"."myColumn" - "myTable"."myColumn") + "myTable"."myColumn")`
+        `("myTable"."myColumn" + COALESCE("myTable"."myColumn" - "myTable"."myColumn", 1e0) + "myTable"."myColumn")`
     );
 
     t.end();
