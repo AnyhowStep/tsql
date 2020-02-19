@@ -1776,6 +1776,9 @@ export class Pool implements tsql.IPool {
         );
         this.acquire = this.asyncQueue.enqueue as AsyncQueue<tsql.IConnection & Connection>["enqueue"];
         this.acquire(async (connection) => {
+            /**
+             * @todo Use `createVarArgFunction()`
+             */
             await connection.createFunction("bigint_add", (a, b) => {
                 if (tm.TypeUtil.isBigInt(a) && tm.TypeUtil.isBigInt(b)) {
                     const result = tm.BigIntUtil.add(a, b);
@@ -1790,6 +1793,9 @@ export class Pool implements tsql.IPool {
                     throw new Error(`Can only add two bigint values`);
                 }
             });
+            /**
+             * @todo Use `createVarArgFunction()`
+             */
             await connection.createFunction("bigint_sub", (a, b) => {
                 if (tm.TypeUtil.isBigInt(a) && tm.TypeUtil.isBigInt(b)) {
                     const result = tm.BigIntUtil.sub(a, b);
@@ -1804,6 +1810,9 @@ export class Pool implements tsql.IPool {
                     throw new Error(`Can only sub two bigint values`);
                 }
             });
+            /**
+             * @todo Use `createVarArgFunction()`
+             */
             await connection.createFunction("bigint_mul", (a, b) => {
                 if (tm.TypeUtil.isBigInt(a) && tm.TypeUtil.isBigInt(b)) {
                     const result = tm.BigIntUtil.mul(a, b);
@@ -1818,6 +1827,9 @@ export class Pool implements tsql.IPool {
                     throw new Error(`Can only mul two bigint values`);
                 }
             });
+            /**
+             * @todo Use `createVarArgFunction()`
+             */
             await connection.createFunction("bigint_neg", (a) => {
                 if (tm.TypeUtil.isBigInt(a)) {
                     const result = tm.BigIntUtil.sub(0, a);
@@ -1832,6 +1844,9 @@ export class Pool implements tsql.IPool {
                     throw new Error(`Can only neg bigint values`);
                 }
             });
+            /**
+             * @todo Use `createVarArgFunction()`
+             */
             await connection.createFunction("bigint_div", (a, b) => {
                 if (tm.TypeUtil.isBigInt(a) && tm.TypeUtil.isBigInt(b)) {
                     if (tm.BigIntUtil.equal(b, tm.BigInt(0))) {

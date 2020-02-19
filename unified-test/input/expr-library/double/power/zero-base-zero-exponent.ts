@@ -17,7 +17,7 @@ export const test : Test = ({tape, pool}) => {
                     );
                 })
                 .catch((err) => {
-                    t.true(err instanceof tsql.DataOutOfRangeError);
+                    t.fail(err.message);
                 });
         });
 

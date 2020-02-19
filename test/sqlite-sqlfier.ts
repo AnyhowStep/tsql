@@ -790,7 +790,6 @@ export const sqliteSqlfier : Sqlfier = {
             Arithmetic Operators
             https://dev.mysql.com/doc/refman/8.0/en/arithmetic-functions.html
         */
-        [OperatorType.SUBTRACTION] : ({operands}) => insertBetween(operands, "-"),
         [OperatorType.FRACTIONAL_DIVISION] : ({operands}) => insertBetween(operands, "/"),
         [OperatorType.INTEGER_DIVISION] : ({operands, typeHint}) => {
             if (typeHint == TypeHint.DOUBLE) {
@@ -898,7 +897,13 @@ export const sqliteSqlfier : Sqlfier = {
             if (typeHint == TypeHint.BIGINT_SIGNED) {
                 return functionCall("bigint_sub", operands);
             } else {
-                return insertBetween(operands, "-");
+                return functionCall(
+                    "COALESCE",
+                    [
+                        insertBetween(operands, "-"),
+                        THROW_AST
+                    ]
+                );
             }
         },
         [OperatorType.MULTIPLICATION] : ({operands, typeHint}) => {
