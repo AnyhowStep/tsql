@@ -41,6 +41,12 @@ import {
 } from "../dist";
 import {LiteralValueType, LiteralValueNodeUtil} from "../dist/ast/literal-value-node";
 
+/**
+* We do not use `ABS(-9223372036854775808)` because of,
+* https://github.com/AnyhowStep/tsql/issues/233
+*/
+const THROW_AST = "(SELECT SUM(9223372036854775807) FROM (SELECT NULL UNION ALL SELECT NULL))";
+
 const insertBetween = AstUtil.insertBetween;
 
 function normalizeOrderByAndLimitClauses (query : IQueryBase) : IQueryBase {
@@ -879,7 +885,13 @@ export const sqliteSqlfier : Sqlfier = {
             if (typeHint == TypeHint.BIGINT_SIGNED) {
                 return functionCall("bigint_add", operands);
             } else {
-                return insertBetween(operands, "+");
+                return functionCall(
+                    "COALESCE",
+                    [
+                        insertBetween(operands, "+"),
+                        THROW_AST
+                    ]
+                );
             }
         },
         [OperatorType.SUBTRACTION] : ({operands, typeHint}) => {
@@ -1776,11 +1788,7 @@ export const sqliteSqlfier : Sqlfier = {
         [OperatorType.THROW_IF_NULL] : ({operands : [arg]}) => {
             return functionCall("COALESCE", [
                 arg,
-                /**
-                 * We do not use `ABS(-9223372036854775808)` because of,
-                 * https://github.com/AnyhowStep/tsql/issues/233
-                 */
-                "(SELECT SUM(9223372036854775807) FROM (SELECT NULL UNION ALL SELECT NULL))"
+                THROW_AST
             ]);
         },
     },
