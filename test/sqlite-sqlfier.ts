@@ -45,7 +45,7 @@ import {LiteralValueType, LiteralValueNodeUtil} from "../dist/ast/literal-value-
 * We do not use `ABS(-9223372036854775808)` because of,
 * https://github.com/AnyhowStep/tsql/issues/233
 */
-const THROW_AST = "(SELECT SUM(9223372036854775807) FROM (SELECT NULL UNION ALL SELECT NULL))";
+export const THROW_AST = "(SELECT SUM(9223372036854775807) FROM (SELECT NULL UNION ALL SELECT NULL))";
 
 const insertBetween = AstUtil.insertBetween;
 
