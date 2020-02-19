@@ -3,8 +3,26 @@ import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 import {makeOperator1} from "../factory";
 
-export const tan = makeOperator1<OperatorType.TANGENT, number, number>(
+/**
+ * Returns the tangent
+ *
+ * + https://dev.mysql.com/doc/refman/8.0/en/mathematical-functions.html#function_tan
+ * + https://www.postgresql.org/docs/9.1/functions-math.html#FUNCTIONS-MATH-TRIG-TABLE
+ *
+ * -----
+ *
+ * + MySQL          : `TAN(x)`
+ * + PostgreSQL     : `TAN(x)`
+ * + SQLite         : None, implement with user-defined function
+ *   + `extension-functions.c` from https://www.sqlite.org/contrib returns `null` for `TAN(1e999)`
+ *
+ * -----
+ *
+ * @param arg - Radians
+ * @returns The tangent
+ */
+export const tan = makeOperator1<OperatorType.TANGENT, number, number|null>(
     OperatorType.TANGENT,
-    tm.mysql.double(),
+    tm.mysql.double().orNull(),
     TypeHint.DOUBLE
 );
