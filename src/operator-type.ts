@@ -1587,7 +1587,7 @@ export enum OperatorType {
      */
     RANDOM = "RANDOM",
 
-    /**
+    /*
      * + https://dev.mysql.com/doc/refman/8.0/en/mathematical-functions.html#function_round
      * + https://www.postgresql.org/docs/9.1/functions-math.html#FUNCTIONS-MATH-FUNC-TABLE
      * + https://www.sqlite.org/lang_corefunc.html#round
@@ -1598,7 +1598,7 @@ export enum OperatorType {
      * + PostgreSQL     : `ROUND(x)` or `ROUND(x, y)`
      * + SQLite         : `ROUND(x)` or `ROUND(x, y)`
      */
-    ROUND = "ROUND",
+    //ROUND = "ROUND",
 
     /**
      * + https://dev.mysql.com/doc/refman/8.0/en/mathematical-functions.html#function_sign

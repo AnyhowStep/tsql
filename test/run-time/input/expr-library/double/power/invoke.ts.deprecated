@@ -28,10 +28,14 @@ tape(__filename, async (t) => {
                     await tsql.selectValue(() => tsql.double.power(x, y))
                         .fetchValue(connection)
                         .then((value) => {
-                            t.fail(`power(${x}, ${y}) === ${value}`);
+                            t.deepEqual(
+                                value,
+                                Infinity,
+                                `power(${x}, ${y}) === ${value}`
+                            );
                         })
-                        .catch(() => {
-                            t.pass();
+                        .catch((err) => {
+                            t.fail(err.message);
                         });
                 } else {
                     await tsql.selectValue(() => tsql.double.power(x, y))

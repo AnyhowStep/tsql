@@ -6,6 +6,8 @@ import {makeOperator1} from "../factory";
 /**
  * Converts from radians to degrees.
  *
+ * The precision of the result is not guaranteed.
+ *
  * + https://dev.mysql.com/doc/refman/8.0/en/mathematical-functions.html#function_degrees
  * + https://www.postgresql.org/docs/9.1/functions-math.html#FUNCTIONS-MATH-FUNC-TABLE
  *

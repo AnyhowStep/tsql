@@ -8,26 +8,26 @@ const myTable = tsql.table("myTable")
         someColumnC : tm.mysql.double(),
     });
 
-export const expr = tsql.double.power(
-    tsql.double.power(
-        tsql.double.power(
-            tsql.double.power(
-                tsql.double.power(
-                    tsql.double.power(
-                        tsql.double.power(
-                            tsql.double.power(
-                                tsql.double.power(
-                                    tsql.double.power(
-                                        tsql.double.power(
-                                            tsql.double.power(
-                                                tsql.double.power(
-                                                    tsql.double.power(
-                                                        tsql.double.power(
-                                                            tsql.double.power(
-                                                                tsql.double.power(
-                                                                    tsql.double.power(
-                                                                        tsql.double.power(
-                                                                            tsql.double.power(
+export const expr = tsql.double.atan2(
+    tsql.double.atan2(
+        tsql.double.atan2(
+            tsql.double.atan2(
+                tsql.double.atan2(
+                    tsql.double.atan2(
+                        tsql.double.atan2(
+                            tsql.double.atan2(
+                                tsql.double.atan2(
+                                    tsql.double.atan2(
+                                        tsql.double.atan2(
+                                            tsql.double.atan2(
+                                                tsql.double.atan2(
+                                                    tsql.double.atan2(
+                                                        tsql.double.atan2(
+                                                            tsql.double.atan2(
+                                                                tsql.double.atan2(
+                                                                    tsql.double.atan2(
+                                                                        tsql.double.atan2(
+                                                                            tsql.double.atan2(
                                                                                 myTable.columns.someColumnA,
                                                                                 myTable.columns.someColumnB,
                                                                             ),
@@ -70,26 +70,26 @@ export const expr = tsql.double.power(
     myTable.columns.someColumnC
 );
 
-export const expr2 = tsql.double.power(
-    tsql.double.power(
-        tsql.double.power(
-            tsql.double.power(
-                tsql.double.power(
-                    tsql.double.power(
-                        tsql.double.power(
-                            tsql.double.power(
-                                tsql.double.power(
-                                    tsql.double.power(
-                                        tsql.double.power(
-                                            tsql.double.power(
-                                                tsql.double.power(
-                                                    tsql.double.power(
-                                                        tsql.double.power(
-                                                            tsql.double.power(
-                                                                tsql.double.power(
-                                                                    tsql.double.power(
-                                                                        tsql.double.power(
-                                                                            tsql.double.power(
+export const expr2 = tsql.double.atan2(
+    tsql.double.atan2(
+        tsql.double.atan2(
+            tsql.double.atan2(
+                tsql.double.atan2(
+                    tsql.double.atan2(
+                        tsql.double.atan2(
+                            tsql.double.atan2(
+                                tsql.double.atan2(
+                                    tsql.double.atan2(
+                                        tsql.double.atan2(
+                                            tsql.double.atan2(
+                                                tsql.double.atan2(
+                                                    tsql.double.atan2(
+                                                        tsql.double.atan2(
+                                                            tsql.double.atan2(
+                                                                tsql.double.atan2(
+                                                                    tsql.double.atan2(
+                                                                        tsql.double.atan2(
+                                                                            tsql.double.atan2(
                                                                                 expr,
                                                                                 myTable.columns.someColumnA,
                                                                             ),
@@ -132,26 +132,26 @@ export const expr2 = tsql.double.power(
     myTable.columns.someColumnB
 );
 
-export const expr3 = tsql.double.power(
-    tsql.double.power(
-        tsql.double.power(
-            tsql.double.power(
-                tsql.double.power(
-                    tsql.double.power(
-                        tsql.double.power(
-                            tsql.double.power(
-                                tsql.double.power(
-                                    tsql.double.power(
-                                        tsql.double.power(
-                                            tsql.double.power(
-                                                tsql.double.power(
-                                                    tsql.double.power(
-                                                        tsql.double.power(
-                                                            tsql.double.power(
-                                                                tsql.double.power(
-                                                                    tsql.double.power(
-                                                                        tsql.double.power(
-                                                                            tsql.double.power(
+export const expr3 = tsql.double.atan2(
+    tsql.double.atan2(
+        tsql.double.atan2(
+            tsql.double.atan2(
+                tsql.double.atan2(
+                    tsql.double.atan2(
+                        tsql.double.atan2(
+                            tsql.double.atan2(
+                                tsql.double.atan2(
+                                    tsql.double.atan2(
+                                        tsql.double.atan2(
+                                            tsql.double.atan2(
+                                                tsql.double.atan2(
+                                                    tsql.double.atan2(
+                                                        tsql.double.atan2(
+                                                            tsql.double.atan2(
+                                                                tsql.double.atan2(
+                                                                    tsql.double.atan2(
+                                                                        tsql.double.atan2(
+                                                                            tsql.double.atan2(
                                                                                 expr2,
                                                                                 myTable.columns.someColumnA,
                                                                             ),
@@ -194,26 +194,26 @@ export const expr3 = tsql.double.power(
     myTable.columns.someColumnB
 );
 
-export const expr4 = tsql.double.power(
-    tsql.double.power(
-        tsql.double.power(
-            tsql.double.power(
-                tsql.double.power(
-                    tsql.double.power(
-                        tsql.double.power(
-                            tsql.double.power(
-                                tsql.double.power(
-                                    tsql.double.power(
-                                        tsql.double.power(
-                                            tsql.double.power(
-                                                tsql.double.power(
-                                                    tsql.double.power(
-                                                        tsql.double.power(
-                                                            tsql.double.power(
-                                                                tsql.double.power(
-                                                                    tsql.double.power(
-                                                                        tsql.double.power(
-                                                                            tsql.double.power(
+export const expr4 = tsql.double.atan2(
+    tsql.double.atan2(
+        tsql.double.atan2(
+            tsql.double.atan2(
+                tsql.double.atan2(
+                    tsql.double.atan2(
+                        tsql.double.atan2(
+                            tsql.double.atan2(
+                                tsql.double.atan2(
+                                    tsql.double.atan2(
+                                        tsql.double.atan2(
+                                            tsql.double.atan2(
+                                                tsql.double.atan2(
+                                                    tsql.double.atan2(
+                                                        tsql.double.atan2(
+                                                            tsql.double.atan2(
+                                                                tsql.double.atan2(
+                                                                    tsql.double.atan2(
+                                                                        tsql.double.atan2(
+                                                                            tsql.double.atan2(
                                                                                 expr3,
                                                                                 myTable.columns.someColumnA,
                                                                             ),
@@ -256,26 +256,26 @@ export const expr4 = tsql.double.power(
     myTable.columns.someColumnB
 );
 
-export const expr5 = tsql.double.power(
-    tsql.double.power(
-        tsql.double.power(
-            tsql.double.power(
-                tsql.double.power(
-                    tsql.double.power(
-                        tsql.double.power(
-                            tsql.double.power(
-                                tsql.double.power(
-                                    tsql.double.power(
-                                        tsql.double.power(
-                                            tsql.double.power(
-                                                tsql.double.power(
-                                                    tsql.double.power(
-                                                        tsql.double.power(
-                                                            tsql.double.power(
-                                                                tsql.double.power(
-                                                                    tsql.double.power(
-                                                                        tsql.double.power(
-                                                                            tsql.double.power(
+export const expr5 = tsql.double.atan2(
+    tsql.double.atan2(
+        tsql.double.atan2(
+            tsql.double.atan2(
+                tsql.double.atan2(
+                    tsql.double.atan2(
+                        tsql.double.atan2(
+                            tsql.double.atan2(
+                                tsql.double.atan2(
+                                    tsql.double.atan2(
+                                        tsql.double.atan2(
+                                            tsql.double.atan2(
+                                                tsql.double.atan2(
+                                                    tsql.double.atan2(
+                                                        tsql.double.atan2(
+                                                            tsql.double.atan2(
+                                                                tsql.double.atan2(
+                                                                    tsql.double.atan2(
+                                                                        tsql.double.atan2(
+                                                                            tsql.double.atan2(
                                                                                 expr4,
                                                                                 myTable.columns.someColumnA,
                                                                             ),

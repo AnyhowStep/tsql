@@ -136,7 +136,7 @@ export type OperatorOperand = {
     [OperatorType.POWER]                    : Operand2,
     [OperatorType.RADIANS]                  : Operand1,
     [OperatorType.RANDOM]                   : Operand0,
-    [OperatorType.ROUND]                    : Operand1|Operand2,
+    //[OperatorType.ROUND]                    : Operand1|Operand2,
     [OperatorType.SIGN]                     : Operand1,
     [OperatorType.SINE]                     : Operand1,
     [OperatorType.SQUARE_ROOT]              : Operand1,
