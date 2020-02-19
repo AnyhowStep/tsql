@@ -1,0 +1,47 @@
+/**
+ * SQLite and MySQL/PostgreSQL don't seem to agree on which rounding algorithm to use.
+ * https://github.com/AnyhowStep/tsql/issues/254
+ *
+ */
+import * as tm from "type-mapping";
+import {OperatorType} from "../../operator-type";
+import {TypeHint} from "../../type-hint";
+import {makeOperator1Idempotent} from "../factory";
+
+/**
+ * Rounds to zero decimal places.
+ *
+ * + https://dev.mysql.com/doc/refman/8.0/en/mathematical-functions.html#function_round
+ * + https://www.postgresql.org/docs/9.1/functions-math.html#FUNCTIONS-MATH-FUNC-TABLE
+ * + https://www.sqlite.org/lang_corefunc.html#round
+ *
+ * -----
+ *
+ * + MySQL          : `ROUND(x)`
+ * + PostgreSQL     : `ROUND(x)`
+ * + SQLite         : `ROUND(x)`
+ *
+ * -----
+ *
+ * There is another variant of `ROUND()` with two arguments.
+ *
+ * It behaves differently across SQLite and MySQL/PostgreSQL.
+ *
+ * So, it is not included in this library.
+ *
+ * ```sql
+ *  SELECT ROUND(24.567, -2)
+ *  > 25 -- On SQLite
+ *  > 0  -- On MySQL/PostgreSQL
+ * ```
+ *
+ * -----
+ *
+ * This function is idempotent.
+ * `ROUND(ROUND(x)) == ROUND(x)`
+ */
+export const round = makeOperator1Idempotent<OperatorType.ROUND, number, number>(
+    OperatorType.ROUND,
+    tm.toUnsafeNumber(),
+    TypeHint.DOUBLE
+);

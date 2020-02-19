@@ -37,7 +37,7 @@ export * from "./pi";
 export * from "./power";
 export * from "./radians";
 export * from "./random";
-export * from "./round";
+//export * from "./round";
 export * from "./sign";
 export * from "./sin";
 export * from "./sqrt";

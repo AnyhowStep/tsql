@@ -936,7 +936,7 @@ export const sqliteSqlfier : Sqlfier = {
                 throw new Error(`RANDOM not implemented for ${typeHint}`);
             }
         },
-        [OperatorType.ROUND] : ({operands}) => functionCall("ROUND", operands),
+        //[OperatorType.ROUND] : ({operands}) => functionCall("ROUND", operands),
         [OperatorType.SIGN] : ({operands}) => functionCall("SIGN", operands),
         [OperatorType.SINE] : ({operands}) => functionCall("SIN", operands),
         [OperatorType.SQUARE_ROOT] : ({operands}) => functionCall("SQRT", operands),
