@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {ChainableOperator, makeChainableOperator} from "../factory";
+import {makeOperator2} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -60,9 +60,8 @@ import {TypeHint} from "../../type-hint";
  * SQLite should have a special `bigintSub()` polyfill that does not cast to `DOUBLE`
  * and throws an error on overflow.
  */
-export const sub : ChainableOperator<bigint> = makeChainableOperator<OperatorType.SUBTRACTION, bigint>(
+export const sub = makeOperator2<OperatorType.SUBTRACTION, bigint, bigint, bigint>(
     OperatorType.SUBTRACTION,
-    tm.BigInt(0),
     tm.mysql.bigIntSigned(),
     TypeHint.BIGINT_SIGNED
 );
