@@ -1,0 +1,46 @@
+/*
+    The algorithm is a bit more nuanced than I care to emulate
+*/
+import * as tm from "type-mapping";
+import {OperatorType} from "../../operator-type";
+import {TypeHint} from "../../type-hint";
+import {makeOperator2} from "../factory";
+
+/**
+ * Returns the number truncated to the specified number of decimal places.
+ *
+ * + If positive decimal places is specified,
+ *   the result will have that many decimal places in its fractional part.
+ *
+ * + If zero decimal places is specified,
+ *   the result will have no fractional part.
+ *
+ * + If negative decimal places is specified,
+ *   the result will have no fractional part,
+ *   and the specified number of trailing integer digits will be zero.
+ *
+ * -----
+ *
+ * + https://dev.mysql.com/doc/refman/8.0/en/mathematical-functions.html#function_truncate
+ * + https://www.postgresql.org/docs/9.0/functions-math.html
+ *
+ * -----
+ *
+ * + MySQL          : `TRUNCATE(x, d)`
+ * + PostgreSQL     : `TRUNC(x, d)`
+ * + SQLite         : None, implement with `Math.trunc(x * Math.pow(10, d)) / Math.pow(10, d)`
+ *
+ * -----
+ *
+ * The second argument is the number of decimal places; an integer.
+ *
+ * -----
+ *
+ * @param left  - The number to truncate
+ * @param right - The number of decimal places
+ */
+export const truncate = makeOperator2<OperatorType.TRUNCATE, number, bigint, number>(
+    OperatorType.TRUNCATE,
+    tm.mysql.double(),
+    TypeHint.DOUBLE
+);

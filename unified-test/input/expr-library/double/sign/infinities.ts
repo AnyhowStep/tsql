@@ -9,14 +9,20 @@ export const test : Test = ({tape, pool}) => {
                 Infinity,
             ];
             for (const a of arr) {
-                await tsql.selectValue(() => tsql.double.cos(a))
+                await tsql.selectValue(() => tsql.double.sign(a))
                     .fetchValue(connection)
                     .then((value) => {
-                        const expected = null;
+                        const expected = (
+                            a > 0 ?
+                            1 :
+                            a < 0 ?
+                            -1 :
+                            0
+                        );
                         t.deepEqual(
                             value,
                             expected,
-                            `COS(${a}) ~= ${expected} ~/= ${value}`
+                            `SIGN(${a}) ~= ${expected} ~/= ${value}`
                         );
                     })
                     .catch((err) => {

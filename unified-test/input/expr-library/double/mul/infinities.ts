@@ -16,7 +16,13 @@ export const test : Test = ({tape, pool}) => {
                 Infinity,
             ];
             for (const a of arr) {
+                if (a == 0) {
+                    continue;
+                }
                 for (const b of arr) {
+                    if (a == 0) {
+                        continue;
+                    }
                     if (isFinite(a) && isFinite(b)) {
                         continue;
                     }

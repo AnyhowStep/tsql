@@ -1,7 +1,7 @@
 import * as tape from "tape";
 import * as tm from "type-mapping";
 import * as tsql from "../../../../../../dist";
-import {sqliteSqlfier} from "../../../../../sqlite-sqlfier";
+import {sqliteSqlfier, THROW_AST} from "../../../../../sqlite-sqlfier";
 
 tape(__filename, t => {
     const myTable = tsql.table("myTable")
@@ -18,7 +18,7 @@ tape(__filename, t => {
     );
     t.deepEqual(
         tsql.AstUtil.toSql(expr.ast, sqliteSqlfier),
-        `("myTable"."myColumn" + 1e0 + -1e0 + 32e0)`
+        `COALESCE("myTable"."myColumn" + 1e0 + -1e0 + 32e0, ${THROW_AST})`
     );
 
     t.end();

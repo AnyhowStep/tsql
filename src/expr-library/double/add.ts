@@ -21,6 +21,17 @@ import {TypeHint} from "../../type-hint";
  * + SQLite       : `+`
  *   + `1e308+1e308 = Infinity`
  *   + `(-1e308)+(-1e308) = -Infinity`
+ *
+ * -----
+ *
+ * In SQLite, addition with doubles may return `null`,
+ * ```sql
+ *  SELECT 1e999 + -1e999;
+ *  > null
+ * ```
+ *
+ * This particular function will be emulated in SQLite such that
+ * it'll throw an error, instead of returning `null`.
  */
 export const add : ChainableOperator<number> = makeChainableOperator<OperatorType.ADDITION, number>(
     OperatorType.ADDITION,

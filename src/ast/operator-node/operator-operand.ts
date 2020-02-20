@@ -106,7 +106,7 @@ export type OperatorOperand = {
     */
     [OperatorType.INTEGER_DIVISION]         : Operand2,
     [OperatorType.FRACTIONAL_DIVISION]      : Operand2,
-    [OperatorType.SUBTRACTION]              : Operand1ToN,
+    [OperatorType.SUBTRACTION]              : Operand2,
     [OperatorType.INTEGER_REMAINDER]        : Operand2,
     [OperatorType.FRACTIONAL_REMAINDER]     : Operand2,
     [OperatorType.ADDITION]                 : Operand1ToN,
@@ -142,7 +142,7 @@ export type OperatorOperand = {
     [OperatorType.SQUARE_ROOT]              : Operand1,
     [OperatorType.CUBE_ROOT]                : Operand1,
     [OperatorType.TANGENT]                  : Operand1,
-    [OperatorType.TRUNCATE]                 : Operand2,
+    //[OperatorType.TRUNCATE]                 : Operand2,
 
     /*
         Date and Time Functions

@@ -4,20 +4,19 @@ import * as tsql from "../../../../../dist";
 export const test : Test = ({tape, pool}) => {
     tape(__filename, async (t) => {
         await pool.acquire(async (connection) => {
-            const a = 0;
-            const b = 0;
-            await tsql.selectValue(() => tsql.double.power(a, b))
+            const a = -Infinity;
+            await tsql.selectValue(() => tsql.double.sqrt(a))
                 .fetchValue(connection)
                 .then((value) => {
-                    const expected = 1;
+                    const expected = null;
                     t.deepEqual(
                         value,
                         expected,
-                        `POWER(${a}, ${b}) ~= ${expected} ~/= ${value}`
+                        `SQRT(${a}) ~= ${expected} ~/= ${value}`
                     );
                 })
                 .catch((err) => {
-                    t.fail(err.message);
+                    t.true(err instanceof tsql.DataOutOfRangeError);
                 });
         });
 

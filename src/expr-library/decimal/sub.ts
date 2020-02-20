@@ -1,11 +1,11 @@
 import {decimalMapper} from "./decimal-mapper";
-import {ChainableDecimalOperator, makeChainableDecimalOperator} from "../factory";
+import {makeOperator2} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
+import {Decimal} from "../../decimal";
 
-export const sub : ChainableDecimalOperator = makeChainableDecimalOperator<OperatorType.SUBTRACTION>(
+export const sub = makeOperator2<OperatorType.SUBTRACTION, Decimal, Decimal, Decimal>(
     OperatorType.SUBTRACTION,
-    0,
     decimalMapper,
     TypeHint.DECIMAL
 );

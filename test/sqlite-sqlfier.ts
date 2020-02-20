@@ -41,6 +41,12 @@ import {
 } from "../dist";
 import {LiteralValueType, LiteralValueNodeUtil} from "../dist/ast/literal-value-node";
 
+/**
+* We do not use `ABS(-9223372036854775808)` because of,
+* https://github.com/AnyhowStep/tsql/issues/233
+*/
+export const THROW_AST = "(SELECT SUM(9223372036854775807) FROM (SELECT NULL UNION ALL SELECT NULL))";
+
 const insertBetween = AstUtil.insertBetween;
 
 function normalizeOrderByAndLimitClauses (query : IQueryBase) : IQueryBase {
@@ -784,7 +790,6 @@ export const sqliteSqlfier : Sqlfier = {
             Arithmetic Operators
             https://dev.mysql.com/doc/refman/8.0/en/arithmetic-functions.html
         */
-        [OperatorType.SUBTRACTION] : ({operands}) => insertBetween(operands, "-"),
         [OperatorType.FRACTIONAL_DIVISION] : ({operands}) => insertBetween(operands, "/"),
         [OperatorType.INTEGER_DIVISION] : ({operands, typeHint}) => {
             if (typeHint == TypeHint.DOUBLE) {
@@ -879,21 +884,39 @@ export const sqliteSqlfier : Sqlfier = {
             if (typeHint == TypeHint.BIGINT_SIGNED) {
                 return functionCall("bigint_add", operands);
             } else {
-                return insertBetween(operands, "+");
+                return functionCall(
+                    "COALESCE",
+                    [
+                        insertBetween(operands, "+"),
+                        THROW_AST
+                    ]
+                );
             }
         },
         [OperatorType.SUBTRACTION] : ({operands, typeHint}) => {
             if (typeHint == TypeHint.BIGINT_SIGNED) {
                 return functionCall("bigint_sub", operands);
             } else {
-                return insertBetween(operands, "-");
+                return functionCall(
+                    "COALESCE",
+                    [
+                        insertBetween(operands, "-"),
+                        THROW_AST
+                    ]
+                );
             }
         },
         [OperatorType.MULTIPLICATION] : ({operands, typeHint}) => {
             if (typeHint == TypeHint.BIGINT_SIGNED) {
                 return functionCall("bigint_mul", operands);
             } else {
-                return insertBetween(operands, "*");
+                return functionCall(
+                    "COALESCE",
+                    [
+                        insertBetween(operands, "*"),
+                        THROW_AST
+                    ]
+                );
             }
         },
         [OperatorType.UNARY_MINUS] : ({operands, typeHint}) => {
@@ -941,7 +964,7 @@ export const sqliteSqlfier : Sqlfier = {
         [OperatorType.SINE] : ({operands}) => functionCall("SIN", operands),
         [OperatorType.SQUARE_ROOT] : ({operands}) => functionCall("SQRT", operands),
         [OperatorType.TANGENT] : ({operands}) => functionCall("TAN", operands),
-        [OperatorType.TRUNCATE] : ({operands}) => functionCall("TRUNCATE", operands),
+        //[OperatorType.TRUNCATE] : ({operands}) => functionCall("TRUNCATE", operands),
 
         /*
             Date and Time Functions
@@ -1776,11 +1799,7 @@ export const sqliteSqlfier : Sqlfier = {
         [OperatorType.THROW_IF_NULL] : ({operands : [arg]}) => {
             return functionCall("COALESCE", [
                 arg,
-                /**
-                 * We do not use `ABS(-9223372036854775808)` because of,
-                 * https://github.com/AnyhowStep/tsql/issues/233
-                 */
-                "(SELECT SUM(9223372036854775807) FROM (SELECT NULL UNION ALL SELECT NULL))"
+                THROW_AST
             ]);
         },
     },

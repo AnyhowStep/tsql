@@ -21,13 +21,25 @@ import {makeOperator2} from "../factory";
  *
  * -----
  *
- * MySQL throws if base is negative, and exponent is non-integer.
+ * If base is negative, and exponent is fractional,
+ * + MySQL throws
+ * + PostgreSQL throws
+ * + SQLite reutrns `null` (`extension-functions.c`)
+ *
+ * -----
+ *
+ * If base is zero, and exponent is negative,
+ * + MySQL throws
+ * + PostgreSQL throws
+ * + SQLite reutrns `Infinity` (`extension-functions.c`)
  *
  * -----
  *
  * @param left  - The base
  * @param right - The exponent
  * @returns base^exponent
+ *
+ * @todo Decide if we should make SQLite throw instead of return `null`
  */
 export const power = makeOperator2<OperatorType.POWER, number, number|null>(
     OperatorType.POWER,
