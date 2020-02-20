@@ -142,7 +142,7 @@ export type OperatorOperand = {
     [OperatorType.SQUARE_ROOT]              : Operand1,
     [OperatorType.CUBE_ROOT]                : Operand1,
     [OperatorType.TANGENT]                  : Operand1,
-    [OperatorType.TRUNCATE]                 : Operand2,
+    //[OperatorType.TRUNCATE]                 : Operand2,
 
     /*
         Date and Time Functions

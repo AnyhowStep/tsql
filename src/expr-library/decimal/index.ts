@@ -36,4 +36,4 @@ export * from "./sin";
 export * from "./sqrt";
 export * from "./sub";
 export * from "./tan";
-export * from "./truncate";
+//export * from "./truncate";

@@ -1675,7 +1675,7 @@ export enum OperatorType {
      */
     TANGENT = "TANGENT",
 
-    /**
+    /*
      * + https://dev.mysql.com/doc/refman/8.0/en/mathematical-functions.html#function_truncate
      * + https://www.postgresql.org/docs/9.0/functions-math.html
      *
@@ -1683,9 +1683,9 @@ export enum OperatorType {
      *
      * + MySQL          : `TRUNCATE(x, d)`
      * + PostgreSQL     : `TRUNC(x, d)`
-     * + SQLite         : None, implement with `Math.floor(x * Math.pow(10, d)) / Math.pow(10, d)`
+     * + SQLite         : None, implement with `Math.trunc(x * Math.pow(10, d)) / Math.pow(10, d)`
      */
-    TRUNCATE = "TRUNCATE",
+    //TRUNCATE = "TRUNCATE",
 
     /*
         Date and Time Functions
