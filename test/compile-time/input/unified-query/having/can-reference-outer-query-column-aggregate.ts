@@ -82,7 +82,7 @@ export const query = tsql.requireOuterQueryJoins(otherTable)
      */
     .having(columns => tsql.nullSafeEq(
         columns.myTable.myColumn,
-        tsql.castAsBigIntSigned(
+        tsql.unsafeCastAsBigIntSigned(
             tsql.integer.sum(columns.otherTable.otherColumn)
         )
     ));
