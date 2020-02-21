@@ -2815,7 +2815,6 @@ export enum OperatorType {
      * -----
      *
      * + MySQL 5.7      : `x + 0e0`
-     * + MySQL 8.0.17   : `CAST(x AS DOUBLE)` (Allegedly)
      * + PostgreSQL     : `CAST(x AS DOUBLE PRECISION)`
      * + SQLite         : `CAST(x AS DOUBLE)`
      */

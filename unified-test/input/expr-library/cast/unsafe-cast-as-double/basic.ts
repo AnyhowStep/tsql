@@ -6,18 +6,21 @@ export const test : Test = ({tape, pool}) => {
     tape(__filename, async (t) => {
         await pool.acquire(async (connection) => {
             const arr = [
-                "-123e0",
-                "-1.456",
-                "123e0",
-                "1.456",
-                tm.BigInt(876),
-                tm.BigInt(-999),
+                -1234,
+                -3
+                -2,
+                -1,
+                0,
+                1,
+                2,
+                3,
+                1234,
             ];
             for (const a of arr) {
-                await tsql.selectValue(() => tsql.unsafeCastAsDouble(a))
+                await tsql.selectValue(() => tsql.unsafeCastAsBigIntSigned(a))
                     .fetchValue(connection)
                     .then((value) => {
-                        t.deepEqual(value, Number(a));
+                        t.deepEqual(value, tm.BigInt(a));
                     })
                     .catch((err) => {
                         t.fail(err.message);
