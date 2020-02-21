@@ -1678,6 +1678,8 @@ export const sqliteSqlfier : Sqlfier = {
 
         [OperatorType.CAST_AS_BIGINT_SIGNED] : ({operands}, toSql) => functionCall("CAST", [`${toSql(operands)} AS BIGINT`]),
 
+        [OperatorType.CAST_AS_BINARY] : ({operands}) => functionCall("CAST", [[operands[0], `AS BLOB`]]),
+
         /*
             Bit Functions and Operators
             https://dev.mysql.com/doc/refman/8.0/en/bit-functions.html

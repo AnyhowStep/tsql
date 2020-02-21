@@ -1,8 +1,6 @@
 import * as tm from "type-mapping";
 import {makeOperator1Idempotent} from "../factory";
 import {OperatorType} from "../../operator-type";
-import {BuiltInValueExpr} from "../../built-in-value-expr";
-import {Decimal} from "../../decimal";
 
 /**
  * Attempts to cast to `BIGINT SIGNED`.
@@ -29,7 +27,7 @@ import {Decimal} from "../../decimal";
  * + https://github.com/AnyhowStep/tsql/issues/244
  * + https://github.com/AnyhowStep/tsql/issues/245
  */
-export const unsafeCastAsBigIntSigned = makeOperator1Idempotent<OperatorType.CAST_AS_BIGINT_SIGNED, BuiltInValueExpr|Decimal, bigint|null>(
+export const unsafeCastAsBigIntSigned = makeOperator1Idempotent<OperatorType.CAST_AS_BIGINT_SIGNED, unknown, bigint|null>(
     OperatorType.CAST_AS_BIGINT_SIGNED,
     tm.mysql.bigIntSigned().orNull()
 );
