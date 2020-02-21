@@ -1680,6 +1680,8 @@ export const sqliteSqlfier : Sqlfier = {
 
         [OperatorType.CAST_AS_BINARY] : ({operands}) => functionCall("CAST", [[operands[0], `AS BLOB`]]),
 
+        [OperatorType.CAST_AS_VARCHAR] : ({operands}) => functionCall("CAST", [[operands[0], `AS VARCHAR`]]),
+
         /*
             Bit Functions and Operators
             https://dev.mysql.com/doc/refman/8.0/en/bit-functions.html
