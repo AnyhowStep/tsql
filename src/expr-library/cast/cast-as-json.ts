@@ -15,8 +15,10 @@ import {OperatorType} from "../../operator-type";
  *
  * + MySQL          : `CAST(x AS JSON)`
  *   + `CAST(1 AS JSON)` returns `'1'`
+ *   + `CAST('{  "x"  :  "y"  }' AS JSON)` returns `'{"x": "y"}'`
  * + PostgreSQL     : `CAST(x AS JSON)`
  *   + `CAST(1 AS JSON)` throws
+ *   + `CAST('{  "x"  :  "y"  }' AS JSON)` returns `'{"x":"y"}'`
  * + SQLite         : `CAST(x AS TEXT)`
  *   + Or implement with user-defined function.
  *   + Or the `JSON()` function?
@@ -24,6 +26,7 @@ import {OperatorType} from "../../operator-type";
  *   + SQLite does not have a `JSON` data type; `TEXT` is used for `JSON` values.
  *   + `JSON(1)` returns `'1'`
  *   + `CAST(1 AS TEXT)` returns `'1'`
+ *   + `JSON('{  "x"  :  "y"  }')` returns `'{"x":"y"}'`
  *
  * -----
  *

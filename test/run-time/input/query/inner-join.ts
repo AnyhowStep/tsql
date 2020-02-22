@@ -35,7 +35,7 @@ tape(__filename, t => {
             myTable3,
             columns => tsql.nullSafeEq(
                 columns.myTable2.column2,
-                tsql.castAsDouble(columns.myTable3.column3)
+                tsql.unsafeCastAsDouble(columns.myTable3.column3)
             )
         )
         .select(c => [c.myTable2.column2]);
