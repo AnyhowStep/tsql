@@ -29,5 +29,5 @@ import {OperatorType} from "../../operator-type";
  */
 export const unsafeCastAsVarChar = makeOperator1Idempotent<OperatorType.CAST_AS_VARCHAR, unknown, string|null>(
     OperatorType.CAST_AS_VARCHAR,
-    tm.mysql.longText().orNull()
+    tm.orNull(tm.string())
 );

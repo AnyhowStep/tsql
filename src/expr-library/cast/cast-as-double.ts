@@ -32,5 +32,5 @@ import {OperatorType} from "../../operator-type";
  */
 export const unsafeCastAsDouble = makeOperator1Idempotent<OperatorType.CAST_AS_DOUBLE, unknown, number|null>(
     OperatorType.CAST_AS_DOUBLE,
-    tm.mysql.double().orNull()
+    tm.orNull(tm.toUnsafeNumber())
 );
