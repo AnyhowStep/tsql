@@ -36,13 +36,13 @@ tape(__filename, async (t) => {
             .setPrimaryKey(columns => [columns.testId]);
 
         await tsql.from(test)
-            .selectValue(columns => tsql.castAsBigIntSigned(tsql.integer.sum(columns.testVal)))
+            .selectValue(columns => tsql.unsafeCastAsBigIntSigned(tsql.integer.sum(columns.testVal)))
             .fetchValue(connection)
             .then((value) => {
                 t.deepEqual(value, BigInt("99000000000001198"));
             });
         await tsql.from(test)
-            .selectValue(columns => tsql.castAsBigIntSigned(tsql.integer.sumDistinct(columns.testVal)))
+            .selectValue(columns => tsql.unsafeCastAsBigIntSigned(tsql.integer.sumDistinct(columns.testVal)))
             .fetchValue(connection)
             .then((value) => {
                 t.deepEqual(value, BigInt("99000000000000598"));
