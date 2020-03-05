@@ -1,16 +1,16 @@
 import * as tm from "type-mapping";
-import {BuiltInExpr, BuiltInExprUtil} from "../../built-in-expr";
+import {BuiltInExpr, BuiltInExprUtil, AnyBuiltInExpr} from "../../built-in-expr";
 import {ExprUtil} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {NonNullEquatableType, EquatableTypeUtil} from "../../equatable-type";
 import {makeOperator2ToN} from "./make-operator-2-to-n";
+import {BaseType} from "../../type-util";
 
 export type Equation2ToNReturn<
-    Arg0T extends BuiltInExpr<NonNullEquatableType>,
-    Arg1T extends BuiltInExpr<EquatableTypeUtil.BaseNonNullEquatableType<BuiltInExprUtil.TypeOf<Arg0T>>>,
-    ArgsT extends readonly BuiltInExpr<EquatableTypeUtil.BaseNonNullEquatableType<BuiltInExprUtil.TypeOf<Arg0T>>>[]
+    Arg0T extends AnyBuiltInExpr,
+    Arg1T extends BuiltInExpr<BaseType<BuiltInExprUtil.TypeOf<Arg0T>>>,
+    ArgsT extends readonly BuiltInExpr<BaseType<BuiltInExprUtil.TypeOf<Arg0T>>>[]
 > =
     ExprUtil.Intersect<
         boolean,
@@ -19,11 +19,11 @@ export type Equation2ToNReturn<
 ;
 export type Equation2ToN =
     <
-        Arg0T extends BuiltInExpr<NonNullEquatableType>,
-        Arg1T extends BuiltInExpr<EquatableTypeUtil.BaseNonNullEquatableType<BuiltInExprUtil.TypeOf<Arg0T>>>,
-        ArgsT extends readonly BuiltInExpr<EquatableTypeUtil.BaseNonNullEquatableType<BuiltInExprUtil.TypeOf<Arg0T>>>[]
+        Arg0T extends AnyBuiltInExpr,
+        Arg1T extends BuiltInExpr<BaseType<BuiltInExprUtil.TypeOf<Arg0T>>>,
+        ArgsT extends readonly BuiltInExpr<BaseType<BuiltInExprUtil.TypeOf<Arg0T>>>[]
     > (
-        arg0 : Arg0T,
+        arg0 : Arg0T & BuiltInExprUtil.AssertNonNull<Arg0T>,
         arg1 : Arg1T,
         ...args : ArgsT
     ) => (
@@ -43,5 +43,5 @@ export function makeEquation2ToN<
         operatorType,
         tm.mysql.boolean(),
         typeHint
-    );
+    ) as Equation2ToN;
 }

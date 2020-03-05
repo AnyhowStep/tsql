@@ -1,0 +1,34 @@
+[
+  {
+    "messageText": {
+      "messageText": "Argument of type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"someColumnA\"; mapper: Mapper<unknown, boolean | null>; }>' is not assignable to parameter of type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"someColumnA\"; mapper: Mapper<unknown, boolean | null>; }> & CompileError<[\"Expression must not be nullable\", boolean | null]>'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Property '__compileError' is missing in type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"someColumnA\"; mapper: Mapper<unknown, boolean | null>; }>' but required in type 'CompileError<[\"Expression must not be nullable\", boolean | null]>'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 27,
+    "start": 424
+  },
+  {
+    "messageText": {
+      "messageText": "Argument of type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"someColumnB\"; mapper: Mapper<unknown, { readonly myCustom: \"data type\"; } | null>; }>' is not assignable to parameter of type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"someColumnB\"; mapper: Mapper<unknown, { readonly myCustom: \"data type\"; } | null>; }> & CompileError<[\"Expression must not be nullable\", { readonly myCustom: \"data type\"; } | null]>'.",
+      "category": 1,
+      "code": 2345,
+      "next": {
+        "messageText": "Property '__compileError' is missing in type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"someColumnB\"; mapper: Mapper<unknown, { readonly myCustom: \"data type\"; } | null>; }>' but required in type 'CompileError<[\"Expression must not be nullable\", { readonly myCustom: \"data type\"; } | null]>'.",
+        "category": 1,
+        "code": 2741
+      }
+    },
+    "code": 2345,
+    "category": 1,
+    "length": 27,
+    "start": 532
+  }
+]
