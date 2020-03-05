@@ -4,9 +4,9 @@
  */
 import {makeEquation2ToN, Equation2ToN, Equation1ToNReturn} from "../factory";
 import {OperatorType} from "../../operator-type";
-import {NonNullEquatableType, EquatableTypeUtil} from "../../equatable-type";
-import {BuiltInExpr, BuiltInExprUtil} from "../../built-in-expr";
+import {BuiltInExpr, BuiltInExprUtil, AnyBuiltInExpr} from "../../built-in-expr";
 import {ExprUtil} from "../../expr";
+import {BaseType} from "../../type-util";
 
 const notInArrayImpl : Equation2ToN = makeEquation2ToN<OperatorType.NOT_IN_ARRAY>(
     OperatorType.NOT_IN_ARRAY
@@ -43,10 +43,10 @@ const notInArrayImpl : Equation2ToN = makeEquation2ToN<OperatorType.NOT_IN_ARRAY
  * https://dev.mysql.com/doc/refman/8.0/en/any-in-some-subqueries.html
  */
 export function notInArray<
-    Arg0T extends BuiltInExpr<NonNullEquatableType>,
-    ArgsT extends readonly BuiltInExpr<EquatableTypeUtil.BaseNonNullEquatableType<BuiltInExprUtil.TypeOf<Arg0T>>>[]
+    Arg0T extends AnyBuiltInExpr,
+    ArgsT extends readonly BuiltInExpr<BaseType<BuiltInExprUtil.TypeOf<Arg0T>>>[]
 > (
-    arg0 : Arg0T,
+    arg0 : Arg0T & BuiltInExprUtil.AssertNonNull<Arg0T>,
     args : ArgsT
 ) : (
     Equation1ToNReturn<Arg0T, ArgsT>

@@ -6,9 +6,9 @@ import * as tm from "type-mapping";
 import {QueryBaseUtil} from "../../query-base";
 import {Expr, expr} from "../../expr";
 import {OperatorType} from "../../operator-type";
-import {BuiltInExpr, BuiltInExprUtil} from "../../built-in-expr";
-import {NonNullEquatableType, EquatableTypeUtil} from "../../equatable-type";
+import {BuiltInExprUtil, AnyBuiltInExpr} from "../../built-in-expr";
 import {OperatorNodeUtil} from "../../ast";
+import {BaseType} from "../../type-util";
 
 /**
  * The `NOT IN` operator has two overloads.
@@ -59,10 +59,10 @@ import {OperatorNodeUtil} from "../../ast";
  * ```
  */
 export function notInQuery<
-    BuiltInExprT extends BuiltInExpr<NonNullEquatableType>,
-    QueryT extends QueryBaseUtil.OneSelectItem<EquatableTypeUtil.BaseNonNullEquatableType<BuiltInExprUtil.TypeOf<BuiltInExprT>>>
+    BuiltInExprT extends AnyBuiltInExpr,
+    QueryT extends QueryBaseUtil.OneSelectItem<BaseType<BuiltInExprUtil.TypeOf<BuiltInExprT>>>
 > (
-    builtInExpr : BuiltInExprT,
+    builtInExpr : BuiltInExprT & BuiltInExprUtil.AssertNonNull<BuiltInExprT>,
     query : QueryT
 ) : (
     Expr<{
@@ -81,7 +81,7 @@ export function notInQuery<
     return expr(
         {
             mapper : tm.mysql.boolean(),
-            usedRef : BuiltInExprUtil.intersectUsedRef(builtInExpr, query),
+            usedRef : BuiltInExprUtil.intersectUsedRef(builtInExpr as BuiltInExprT, query),
             isAggregate : BuiltInExprUtil.isAggregate(builtInExpr),
         },
         OperatorNodeUtil.operatorNode2(OperatorType.NOT_IN_QUERY, [

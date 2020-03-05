@@ -1,15 +1,14 @@
 import * as tm from "type-mapping";
 import {ExprUtil} from "../../expr";
-import {BuiltInExpr} from "../../built-in-expr";
+import {AnyBuiltInExpr} from "../../built-in-expr";
 import {BuiltInExprUtil} from "../../built-in-expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {EquatableType} from "../../equatable-type";
 
 export type NullSafeEquation1 =
     <
-        BuiltInExprT extends BuiltInExpr<EquatableType>
+        BuiltInExprT extends AnyBuiltInExpr
     >(
         builtInExpr : BuiltInExprT
     ) => (
@@ -25,7 +24,7 @@ export function makeNullSafeEquation1<OperatorTypeT extends OperatorType> (
     typeHint? : TypeHint
 ) : NullSafeEquation1 {
     const result : NullSafeEquation1 = <
-        BuiltInExprT extends BuiltInExpr<EquatableType>
+        BuiltInExprT extends AnyBuiltInExpr
     >(
         builtInExpr : BuiltInExprT
     ) : (

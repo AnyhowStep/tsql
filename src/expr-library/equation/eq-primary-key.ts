@@ -68,7 +68,7 @@ export function eqPrimaryKey<
          * just to be super safe
          */
         const expr = eq(
-            table.columns[columnAlias],
+            table.columns[columnAlias] as any,
             BuiltInExprUtil.fromValueExpr<unknown>(
                 table.columns[columnAlias],
                 primaryKey[columnAlias as keyof PrimaryKey_Output<TableT>]

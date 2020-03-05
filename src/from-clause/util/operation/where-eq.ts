@@ -201,7 +201,7 @@ export function whereEq<
              * @todo Investigate assignability
              */
             () => ExprLib.eq(
-                column,
+                column as any,
                 BuiltInExprUtil.fromValueExpr(column, value)
             ) as any
         ),
