@@ -2,11 +2,11 @@ import {BuiltInExpr, BuiltInExprUtil} from "../../../built-in-expr";
 import {ExprImpl} from "../../../expr/expr-impl";
 import {IUsedRef, UsedRefUtil} from "../../../used-ref";
 import {UninitializedCaseValueBuilderImpl} from "./uninitialized-case-value-builder-impl";
-import {NonNullEquatableType, EquatableTypeUtil, EquatableType} from "../../../equatable-type";
+import {BaseType} from "../../../type-util";
 
 export interface CaseValueBuilder<
-    ValueT extends NonNullEquatableType,
-    ResultT extends EquatableType,
+    ValueT extends unknown,
+    ResultT extends unknown,
     UsedRefT extends IUsedRef,
     IsAggregateT extends boolean
 > {
@@ -14,7 +14,7 @@ export interface CaseValueBuilder<
 
     when<
         CompareValueT extends BuiltInExpr<ValueT>,
-        ThenT extends BuiltInExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
+        ThenT extends BuiltInExpr<BaseType<ResultT>|null>
     > (
         compareValue : CompareValueT,
         then : ThenT
@@ -43,7 +43,7 @@ export interface CaseValueBuilder<
      */
     end () : ExprImpl<ResultT|null, UsedRefT, IsAggregateT>;
     else<
-        ElseT extends BuiltInExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
+        ElseT extends BuiltInExpr<BaseType<ResultT>|null>
     > (
         elseResult : ElseT
     ) : (
@@ -60,7 +60,7 @@ export interface CaseValueBuilder<
     );
 }
 export interface UninitializedCaseValueBuilder<
-    ValueT extends NonNullEquatableType,
+    ValueT extends unknown,
     UsedRefT extends IUsedRef,
     IsAggregateT extends boolean
 > {
@@ -68,7 +68,7 @@ export interface UninitializedCaseValueBuilder<
 
     when<
         CompareValueT extends BuiltInExpr<ValueT>,
-        ThenT extends BuiltInExpr<EquatableType>
+        ThenT extends BuiltInExpr<unknown>
     > (
         compareValue : CompareValueT,
         then : ThenT
@@ -85,18 +85,18 @@ export interface UninitializedCaseValueBuilder<
     );
 }
 export function caseValue<
-    ValueExprT extends BuiltInExpr<NonNullEquatableType>
+    ValueExprT extends BuiltInExpr<unknown>
 > (
-    valueExpr : ValueExprT
+    valueExpr : ValueExprT & BuiltInExprUtil.AssertNonNull<ValueExprT>
 ) : (
     UninitializedCaseValueBuilder<
-        EquatableTypeUtil.BaseNonNullEquatableType<BuiltInExprUtil.TypeOf<ValueExprT>>,
+        BaseType<BuiltInExprUtil.TypeOf<ValueExprT>>,
         BuiltInExprUtil.UsedRef<ValueExprT>,
         BuiltInExprUtil.IsAggregate<ValueExprT>
     >
 ) {
     return new UninitializedCaseValueBuilderImpl<
-        EquatableTypeUtil.BaseNonNullEquatableType<BuiltInExprUtil.TypeOf<ValueExprT>>,
+        BaseType<BuiltInExprUtil.TypeOf<ValueExprT>>,
         BuiltInExprUtil.UsedRef<ValueExprT>,
         BuiltInExprUtil.IsAggregate<ValueExprT>
     >(
@@ -108,7 +108,7 @@ export function caseValue<
          * @todo Investigate type instantiation exessively deep error
          */
         UninitializedCaseValueBuilder<
-            EquatableTypeUtil.BaseNonNullEquatableType<BuiltInExprUtil.TypeOf<ValueExprT>>,
+            BaseType<BuiltInExprUtil.TypeOf<ValueExprT>>,
             BuiltInExprUtil.UsedRef<ValueExprT>,
             BuiltInExprUtil.IsAggregate<ValueExprT>
         >

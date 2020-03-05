@@ -4,7 +4,7 @@ import {ExprImpl, expr} from "../../../expr/expr-impl";
 import {IUsedRef, UsedRefUtil} from "../../../used-ref";
 import {CaseValueNode} from "../../../ast";
 import {CaseValueBuilder} from "./case-value";
-import {NonNullEquatableType, EquatableType, EquatableTypeUtil} from "../../../equatable-type";
+import {BaseType} from "../../../type-util";
 
 /**
  * Workaround for,
@@ -26,8 +26,8 @@ declare global {
 }
 
 export class CaseValueBuilderImpl<
-    ValueT extends NonNullEquatableType,
-    ResultT extends EquatableType,
+    ValueT extends unknown,
+    ResultT extends unknown,
     UsedRefT extends IUsedRef,
     IsAggregateT extends boolean
 > implements CaseValueBuilder<ValueT, ResultT, UsedRefT, IsAggregateT> {
@@ -51,7 +51,7 @@ export class CaseValueBuilderImpl<
 
     when<
         CompareValueT extends BuiltInExpr<ValueT>,
-        ThenT extends BuiltInExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
+        ThenT extends BuiltInExpr<BaseType<ResultT>|null>
     > (
         compareValue : CompareValueT,
         then : ThenT
@@ -130,7 +130,7 @@ export class CaseValueBuilderImpl<
         );
     }
     else<
-        ElseT extends BuiltInExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
+        ElseT extends BuiltInExpr<BaseType<ResultT>|null>
     > (
         elseResult : ElseT
     ) : (

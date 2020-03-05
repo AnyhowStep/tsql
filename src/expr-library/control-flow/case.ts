@@ -1,7 +1,7 @@
 import {BuiltInExprUtil, BuiltInExpr} from "../../built-in-expr";
 import {UninitializedCaseValueBuilder, caseValue} from "./case-value";
-import {NonNullEquatableType, EquatableTypeUtil} from "../../equatable-type";
 import {UninitializedCaseConditionBuilder, caseCondition} from "./case-condition";
+import {BaseType} from "../../type-util";
 
 /**
  * Behaves like a `switch` statement from most programming languages.
@@ -31,12 +31,12 @@ import {UninitializedCaseConditionBuilder, caseCondition} from "./case-condition
  * @see caseValue
  */
 function caseConstructor<
-    ValueExprT extends BuiltInExpr<NonNullEquatableType>
+    ValueExprT extends BuiltInExpr<unknown>
 > (
-    valueExpr : ValueExprT
+    valueExpr : ValueExprT & BuiltInExprUtil.AssertNonNull<ValueExprT>
 ) : (
     UninitializedCaseValueBuilder<
-        EquatableTypeUtil.BaseNonNullEquatableType<BuiltInExprUtil.TypeOf<ValueExprT>>,
+        BaseType<BuiltInExprUtil.TypeOf<ValueExprT>>,
         BuiltInExprUtil.UsedRef<ValueExprT>,
         BuiltInExprUtil.IsAggregate<ValueExprT>
     >

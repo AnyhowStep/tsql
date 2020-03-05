@@ -3,10 +3,9 @@ import {IUsedRef, UsedRefUtil} from "../../../used-ref";
 import {Ast} from "../../../ast";
 import {CaseValueBuilder, UninitializedCaseValueBuilder} from "./case-value";
 import {CaseValueBuilderImpl} from "./case-value-builder-impl";
-import {NonNullEquatableType, EquatableType} from "../../../equatable-type";
 
 export class UninitializedCaseValueBuilderImpl<
-    ValueT extends NonNullEquatableType,
+    ValueT extends unknown,
     UsedRefT extends IUsedRef,
     IsAggregateT extends boolean
 > implements UninitializedCaseValueBuilder<ValueT, UsedRefT, IsAggregateT> {
@@ -24,7 +23,7 @@ export class UninitializedCaseValueBuilderImpl<
 
     when<
         CompareValueT extends BuiltInExpr<ValueT>,
-        ThenT extends BuiltInExpr<EquatableType>
+        ThenT extends BuiltInExpr<unknown>
     > (
         compareValue : CompareValueT,
         then : ThenT

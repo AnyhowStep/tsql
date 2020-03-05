@@ -2,10 +2,10 @@ import {BuiltInExpr, BuiltInExprUtil} from "../../../built-in-expr";
 import {ExprImpl} from "../../../expr/expr-impl";
 import {IUsedRef, UsedRefUtil} from "../../../used-ref";
 import {UninitializedCaseConditionBuilderImpl} from "./uninitialized-case-condition-builder-impl";
-import {EquatableTypeUtil, EquatableType} from "../../../equatable-type";
+import {BaseType} from "../../../type-util";
 
 export interface CaseConditionBuilder<
-    ResultT extends EquatableType,
+    ResultT extends unknown,
     UsedRefT extends IUsedRef,
     IsAggregateT extends boolean
 > {
@@ -13,7 +13,7 @@ export interface CaseConditionBuilder<
 
     when<
         ConditionT extends BuiltInExpr<boolean>,
-        ThenT extends BuiltInExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
+        ThenT extends BuiltInExpr<BaseType<ResultT>|null>
     > (
         condition : ConditionT,
         then : ThenT
@@ -41,7 +41,7 @@ export interface CaseConditionBuilder<
      */
     end () : ExprImpl<ResultT|null, UsedRefT, IsAggregateT>;
     else<
-        ElseT extends BuiltInExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
+        ElseT extends BuiltInExpr<BaseType<ResultT>|null>
     > (
         elseResult : ElseT
     ) : (
@@ -60,7 +60,7 @@ export interface CaseConditionBuilder<
 export interface UninitializedCaseConditionBuilder {
     when<
         ConditionT extends BuiltInExpr<boolean>,
-        ThenT extends BuiltInExpr<EquatableType>
+        ThenT extends BuiltInExpr<unknown>
     > (
         condition : ConditionT,
         then : ThenT
