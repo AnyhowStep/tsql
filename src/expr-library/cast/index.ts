@@ -1,5 +1,5 @@
 export * from "./bigint-signed-literal";
-export * from "./cast-as-decimal";
+export * from "./unsafe-cast-as-decimal";
 //export * from "./cast-as-n-char";
 export * from "./decimal-literal";
 export * from "./unsafe-cast-as-bigint-signed";

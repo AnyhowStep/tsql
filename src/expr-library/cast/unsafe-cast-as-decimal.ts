@@ -125,7 +125,7 @@ export type NonNullDecimalCastableType = Exclude<DecimalCastableType, null>;
  * + Uint8Array = Error
  * + null       = NULL
  */
-export function castAsDecimal<
+export function unsafeCastAsDecimal<
     ArgT extends BuiltInExpr<NonNullDecimalCastableType|Decimal>,
 > (
     arg : ArgT,
@@ -150,7 +150,7 @@ export function castAsDecimal<
         isAggregate : BuiltInExprUtil.IsAggregate<ArgT>,
     }>
 );
-export function castAsDecimal<
+export function unsafeCastAsDecimal<
     ArgT extends BuiltInExpr<DecimalCastableType|Decimal>,
 > (
     arg : ArgT,
@@ -175,7 +175,7 @@ export function castAsDecimal<
         isAggregate : BuiltInExprUtil.IsAggregate<ArgT>,
     }>
 );
-export function castAsDecimal<
+export function unsafeCastAsDecimal<
     ArgT extends BuiltInExpr<DecimalCastableType|Decimal>,
 > (
     arg : ArgT,
