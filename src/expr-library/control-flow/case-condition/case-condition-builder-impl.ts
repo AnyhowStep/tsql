@@ -4,10 +4,10 @@ import {ExprImpl, expr} from "../../../expr/expr-impl";
 import {IUsedRef, UsedRefUtil} from "../../../used-ref";
 import {CaseConditionNode} from "../../../ast";
 import {CaseConditionBuilder} from "./case-condition";
-import {EquatableType, EquatableTypeUtil} from "../../../equatable-type";
+import {BaseType} from "../../../type-util";
 
 export class CaseConditionBuilderImpl<
-    ResultT extends EquatableType,
+    ResultT extends unknown,
     UsedRefT extends IUsedRef,
     IsAggregateT extends boolean
 > implements CaseConditionBuilder<ResultT, UsedRefT, IsAggregateT> {
@@ -31,7 +31,7 @@ export class CaseConditionBuilderImpl<
 
     when<
         ConditionT extends BuiltInExpr<boolean>,
-        ThenT extends BuiltInExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
+        ThenT extends BuiltInExpr<BaseType<ResultT>|null>
     > (
         condition : ConditionT,
         then : ThenT
@@ -106,7 +106,7 @@ export class CaseConditionBuilderImpl<
         );
     }
     else<
-        ElseT extends BuiltInExpr<EquatableTypeUtil.BaseEquatableType<ResultT>|null>
+        ElseT extends BuiltInExpr<BaseType<ResultT>|null>
     > (
         elseResult : ElseT
     ) : (

@@ -1,33 +1,13 @@
 [
   {
     "messageText": {
-      "messageText": "Argument of type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"someColumn00\"; mapper: Mapper<unknown, 1 | null>; }>' is not assignable to parameter of type 'BuiltInExpr<string | number | bigint | boolean | Date | Uint8Array | Decimal | CustomEquatableType>'.",
+      "messageText": "Argument of type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"someColumn00\"; mapper: Mapper<unknown, 1 | null>; }>' is not assignable to parameter of type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"someColumn00\"; mapper: Mapper<unknown, 1 | null>; }> & CompileError<[\"Expression must not be nullable\", 1 | null]>'.",
       "category": 1,
       "code": 2345,
       "next": {
-        "messageText": "Type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"someColumn00\"; mapper: Mapper<unknown, 1 | null>; }>' is not assignable to type 'IColumn<{ tableAlias: string; columnAlias: string; mapper: Mapper<unknown, string | number | bigint | boolean | Date | Uint8Array | Decimal | CustomEquatableType>; }>'.",
+        "messageText": "Property '__compileError' is missing in type 'Column<{ tableAlias: \"myTable\"; columnAlias: \"someColumn00\"; mapper: Mapper<unknown, 1 | null>; }>' but required in type 'CompileError<[\"Expression must not be nullable\", 1 | null]>'.",
         "category": 1,
-        "code": 2322,
-        "next": {
-          "messageText": "Types of property 'mapper' are incompatible.",
-          "category": 1,
-          "code": 2326,
-          "next": {
-            "messageText": "Type 'Mapper<unknown, 1 | null>' is not assignable to type 'Mapper<unknown, string | number | bigint | boolean | Date | Uint8Array | Decimal | CustomEquatableType>'.",
-            "category": 1,
-            "code": 2322,
-            "next": {
-              "messageText": "Type '1 | null' is not assignable to type 'string | number | bigint | boolean | Date | Uint8Array | Decimal | CustomEquatableType'.",
-              "category": 1,
-              "code": 2322,
-              "next": {
-                "messageText": "Type 'null' is not assignable to type 'string | number | bigint | boolean | Date | Uint8Array | Decimal | CustomEquatableType'.",
-                "category": 1,
-                "code": 2322
-              }
-            }
-          }
-        }
+        "code": 2741
       }
     },
     "code": 2345,

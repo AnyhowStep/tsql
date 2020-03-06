@@ -1,7 +1,6 @@
 import {BuiltInExpr, BuiltInExprUtil} from "../../../built-in-expr";
 import {CaseConditionBuilder, UninitializedCaseConditionBuilder} from "./case-condition";
 import {CaseConditionBuilderImpl} from "./case-condition-builder-impl";
-import {EquatableType} from "../../../equatable-type";
 
 export class UninitializedCaseConditionBuilderImpl implements UninitializedCaseConditionBuilder {
     constructor () {
@@ -9,7 +8,7 @@ export class UninitializedCaseConditionBuilderImpl implements UninitializedCaseC
 
     when<
         ConditionT extends BuiltInExpr<boolean>,
-        ThenT extends BuiltInExpr<EquatableType>
+        ThenT extends BuiltInExpr<unknown>
     > (
         condition : ConditionT,
         then : ThenT
