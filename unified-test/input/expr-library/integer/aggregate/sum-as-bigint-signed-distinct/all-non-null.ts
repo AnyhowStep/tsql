@@ -44,7 +44,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     .where(() => true)
                     .fetchValue(
                         connection,
-                        columns => tsql.integer.sumDistinct(columns.myTableVal)
+                        columns => tsql.integer.sumAsBigIntSignedDistinct(columns.myTableVal)
                     )
                     .then((value) => {
                         const expected = tm.FixedPointUtil.tryParse(String(total));
@@ -77,7 +77,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     .where(() => true)
                     .fetchValue(
                         connection,
-                        columns => tsql.integer.sumDistinct(columns.myTableVal)
+                        columns => tsql.integer.sumAsBigIntSignedDistinct(columns.myTableVal)
                     )
                     .then((value) => {
                         const expected = tm.FixedPointUtil.tryParse(String(total));

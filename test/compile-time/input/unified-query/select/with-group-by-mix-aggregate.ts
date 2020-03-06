@@ -36,7 +36,7 @@ tsql
     ])
     .select((columns) => [
         //aggregate ref
-        tsql.integer.sum(columns.myTable.myTableId).as("x"),
+        tsql.integer.sumAsDecimal(columns.myTable.myTableId).as("x"),
         //non-aggregate no-ref
         tsql.double.add(1, 2, 3).as("y"),
     ]);
@@ -49,7 +49,7 @@ tsql
     ])
     .select((columns) => [
         //aggregate ref
-        tsql.integer.sum(columns.myTable.myTableId).as("x"),
+        tsql.integer.sumAsDecimal(columns.myTable.myTableId).as("x"),
         //non-aggregate ref
         tsql.integer.add(columns.myTable.myTableId).as("y"),
     ]);

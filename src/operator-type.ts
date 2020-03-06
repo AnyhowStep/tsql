@@ -3265,6 +3265,32 @@ export enum OperatorType {
     AGGREGATE_SUM = "AGGREGATE_SUM",
 
     /**
+     * + https://dev.mysql.com/doc/refman/8.0/en/group-by-functions.html#function_min
+     * + https://www.postgresql.org/docs/9.2/functions-aggregate.html#FUNCTIONS-AGGREGATE-TABLE
+     * + https://www.sqlite.org/lang_corefunc.html#minoreunc
+     *
+     * -----
+     *
+     * + MySQL      : `SUM(DISTINCT x)/SUM(x)/SUM(x) OVER()`
+     * + PostgreSQL : `SUM(DISTINCT x)/SUM(x)/SUM(x) OVER()`
+     * + SQLite     : `SUM(DISTINCT x)/SUM(x)/SUM(x) OVER()`
+     */
+    AGGREGATE_SUM_AS_DECIMAL = "AGGREGATE_SUM",
+
+    /**
+     * + https://dev.mysql.com/doc/refman/8.0/en/group-by-functions.html#function_min
+     * + https://www.postgresql.org/docs/9.2/functions-aggregate.html#FUNCTIONS-AGGREGATE-TABLE
+     * + https://www.sqlite.org/lang_corefunc.html#minoreunc
+     *
+     * -----
+     *
+     * + MySQL      : `SUM(DISTINCT x)/SUM(x)/SUM(x) OVER()`
+     * + PostgreSQL : `SUM(DISTINCT x)/SUM(x)/SUM(x) OVER()`
+     * + SQLite     : `SUM(DISTINCT x)/SUM(x)/SUM(x) OVER()`
+     */
+    AGGREGATE_SUM_AS_BIGINT_SIGNED = "AGGREGATE_SUM",
+
+    /**
      * + https://dev.mysql.com/doc/refman/8.0/en/group-by-functions.html#function_var-pop
      * + https://www.postgresql.org/docs/9.2/functions-aggregate.html#FUNCTIONS-AGGREGATE-TABLE
      *

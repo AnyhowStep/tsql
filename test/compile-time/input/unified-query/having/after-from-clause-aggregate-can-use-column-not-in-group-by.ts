@@ -13,6 +13,6 @@ tsql.QueryUtil.newInstance()
         columns.myColumn2,
     ])
     .having(columns => tsql.gt(
-        tsql.coalesce(tsql.integer.sum(columns.myColumn), 0n),
+        tsql.coalesce(tsql.integer.sumAsDecimal(columns.myColumn), 0n),
         1n
     ));

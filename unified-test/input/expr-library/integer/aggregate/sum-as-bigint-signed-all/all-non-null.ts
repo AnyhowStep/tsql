@@ -38,19 +38,13 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                         myTableVal : BigInt(i),
                     }
                 );
-                await myTable.insertOne(
-                    connection,
-                    {
-                        myTableVal : null,
-                    }
-                );
                 total += i;
 
                 await myTable
                     .where(() => true)
                     .fetchValue(
                         connection,
-                        columns => tsql.integer.sumDistinct(columns.myTableVal)
+                        columns => tsql.integer.sumAsBigIntSignedAll(columns.myTableVal)
                     )
                     .then((value) => {
                         const expected = tm.FixedPointUtil.tryParse(String(total));
@@ -78,18 +72,13 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                         myTableVal : BigInt(i),
                     }
                 );
-                await myTable.insertOne(
-                    connection,
-                    {
-                        myTableVal : null,
-                    }
-                );
+                total += i;
 
                 await myTable
                     .where(() => true)
                     .fetchValue(
                         connection,
-                        columns => tsql.integer.sumDistinct(columns.myTableVal)
+                        columns => tsql.integer.sumAsBigIntSignedAll(columns.myTableVal)
                     )
                     .then((value) => {
                         const expected = tm.FixedPointUtil.tryParse(String(total));

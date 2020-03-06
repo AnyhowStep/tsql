@@ -74,7 +74,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     columns.testVal,
                 ])
                 .select(columns => [
-                    tsql.integer.sum(columns.testId).as("sumId"),
+                    tsql.integer.sumAsDecimal(columns.testId).as("sumId"),
                     tsql.integer.integerDiv(columns.testVal, BigInt(2)).as("valDiv"),
                 ])
                 .orderBy(columns => [
