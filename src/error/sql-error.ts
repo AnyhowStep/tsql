@@ -60,3 +60,17 @@ export class SqlError extends Error {
     }
 }
 SqlError.prototype.name = "SqlError";
+
+export function isSqlError (mixed : unknown) : mixed is SqlError {
+    /**
+     * @todo Should we check prototype.name or nah?
+     */
+    return (
+        mixed instanceof Error &&
+        (
+            (mixed as Partial<SqlError>).sql === undefined ||
+            typeof (mixed as Partial<SqlError>).sql == "string"
+        ) &&
+        "innerError" in mixed
+    );
+}
