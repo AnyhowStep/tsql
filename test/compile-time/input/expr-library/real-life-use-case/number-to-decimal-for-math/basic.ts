@@ -14,10 +14,10 @@ const numberTable = tsql.table("numberTable")
 export const payInMethodTypeFeeAmount = tsql.unsafeCastAsBigIntSigned(
     tsql.decimal.ceiling(
         tsql.decimal.mul(
-            tsql.castAsDecimal(numberTable.columns.ratio, 65, 30),
+            tsql.unsafeCastAsDecimal(numberTable.columns.ratio, 65, 30),
             tsql.decimal.add(
-                tsql.castAsDecimal(numberTable.columns.baseAmount, 65, 30),
-                tsql.castAsDecimal(numberTable.columns.otherBaseAmount, 65, 30)
+                tsql.unsafeCastAsDecimal(numberTable.columns.baseAmount, 65, 30),
+                tsql.unsafeCastAsDecimal(numberTable.columns.otherBaseAmount, 65, 30)
             )
         )
     )
