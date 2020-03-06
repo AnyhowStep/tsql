@@ -7,7 +7,7 @@ import {ExprUtil} from "../../../expr";
 
 const sumImpl = makeAggregateOperator2<OperatorType.AGGREGATE_SUM, boolean, number|null, number|null>(
     OperatorType.AGGREGATE_SUM,
-    tm.mysql.double().orNull(),
+    tm.orNull(tm.toUnsafeNumber()),
     TypeHint.DOUBLE
 );
 

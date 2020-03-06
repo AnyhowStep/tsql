@@ -326,7 +326,7 @@ export class Connection {
         functionName : string,
         init : () => StateT,
         step : (state : StateT, ...args : unknown[]) => void,
-        finalize : (state : StateT) => unknown
+        finalize : (state : StateT|undefined) => unknown
     ) {
         return this.asyncQueue.enqueue((worker) => {
             return postMessage(
@@ -2092,6 +2092,45 @@ export class Pool implements tsql.IPool {
             await connection.createFunction("FRANDOM", () => {
                 return Math.random();
             });
+            await connection.createAggregate(
+                "STDDEV_POP",
+                () => {
+                    return {
+                        values : [] as number[],
+                    };
+                },
+                (state, x) => {
+                    if (x === null) {
+                        return;
+                    }
+                    if (typeof x == "number") {
+                        state.values.push(x);
+                    } else {
+                        throw new Error(`STDDEV_POP(${typeof x}) not implmented`);
+                    }
+                },
+                (state) => {
+                    if (state == undefined) {
+                        return null;
+                    }
+                    const sum = state.values.reduce(
+                        (sum, value) => sum + value,
+                        0
+                    );
+                    const count = state.values.length;
+                    const avg = sum/count;
+                    const squaredErrors = state.values.map(value => {
+                        return Math.pow(value - avg, 2);
+                    });
+                    const sumSquaredErrors = squaredErrors.reduce(
+                        (sumSquaredErrors, squaredError) => sumSquaredErrors + squaredError,
+                        0
+                    );
+                    return Math.sqrt(
+                        sumSquaredErrors / count
+                    );
+                }
+            );
         }).then(
             () => {},
             (err) => {

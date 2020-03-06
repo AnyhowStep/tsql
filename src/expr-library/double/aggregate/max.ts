@@ -20,6 +20,6 @@ import {makeAggregateOperator1} from "../../aggregate-factory";
  */
 export const max = makeAggregateOperator1<OperatorType.AGGREGATE_MAX, number|null, number|null>(
     OperatorType.AGGREGATE_MAX,
-    tm.mysql.double().orNull(),
+    tm.orNull(tm.toUnsafeNumber()),
     TypeHint.DOUBLE
 );

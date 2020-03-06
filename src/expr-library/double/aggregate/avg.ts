@@ -7,7 +7,7 @@ import {ExprUtil} from "../../../expr";
 
 const avgImpl = makeAggregateOperator2<OperatorType.AGGREGATE_AVERAGE, boolean, number|null, number|null>(
     OperatorType.AGGREGATE_AVERAGE,
-    tm.mysql.double().orNull(),
+    tm.orNull(tm.toUnsafeNumber()),
     TypeHint.DOUBLE
 );
 
