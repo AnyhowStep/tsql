@@ -1,5 +1,5 @@
 import {BuiltInValueExpr} from "../../built-in-value-expr";
-import {BaseBuiltInType} from "../query";
+import {BaseType} from "../../../type-util";
 
 /**
  * Assuming case-insensitive equality,
@@ -23,5 +23,5 @@ export type NullSafeCaseInsensitiveNarrow<
 > = (
     Extract<A, string|Uint8Array|Date> extends never ?
     B :
-    BaseBuiltInType<B>
+    BaseType<B>
 );
