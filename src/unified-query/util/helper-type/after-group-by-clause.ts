@@ -1,7 +1,6 @@
 import {QueryBaseUtil} from "../../../query-base";
 import {IQuery} from "../../query";
 
-export type AfterGroupByClause =
-    & QueryBaseUtil.AfterGroupByClause
-    & IQuery
-;
+export interface AfterGroupByClause extends QueryBaseUtil.AfterGroupByClause, IQuery {
+
+}

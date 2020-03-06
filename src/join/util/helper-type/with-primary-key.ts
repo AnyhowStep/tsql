@@ -2,20 +2,20 @@ import {IJoin} from "../../join";
 import {ColumnMap} from "../../../column-map";
 import {Key} from "../../../key";
 
-export type WithPrimaryKey = (
-    IJoin<{
-        tableAlias : string,
-        nullable : boolean,
-        columns : ColumnMap,
+export interface WithPrimaryKey extends IJoin<{
+    tableAlias : string,
+    nullable : boolean,
+    columns : ColumnMap,
 
-        originalColumns : ColumnMap,
+    originalColumns : ColumnMap,
 
-        primaryKey : Key;
+    primaryKey : Key;
 
-        candidateKeys : readonly Key[];
+    candidateKeys : readonly Key[];
 
-        deleteEnabled : boolean,
+    deleteEnabled : boolean,
 
-        mutableColumns : readonly string[];
-    }>
-);
+    mutableColumns : readonly string[];
+}> {
+
+}

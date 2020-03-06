@@ -1,7 +1,6 @@
 import {QueryBaseUtil} from "../../../query-base";
 import {IQuery} from "../../query";
 
-export type BeforeFromClause = (
-    & QueryBaseUtil.BeforeFromClause
-    & IQuery
-);
+export interface BeforeFromClause extends QueryBaseUtil.BeforeFromClause, IQuery<QueryBaseUtil.BeforeFromClauseData> {
+
+}
