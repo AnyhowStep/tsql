@@ -4,6 +4,7 @@ import {Decimal} from "../../decimal";
 import {BuiltInExpr, BuiltInExprUtil} from "../../built-in-expr";
 import {Expr, expr} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
+import {CustomDecimalCastableTypeMap} from "../../augmentable";
 
 /**
  * @todo Move this elsewhere?
@@ -44,14 +45,8 @@ export function assertValidDecimalPrecisionAndScale (
     };
 }
 
-/**
- * Any type with this tag can be converted to `DECIMAL`.
- *
- * @todo Monitor this PR
- *
- * https://github.com/microsoft/TypeScript/pull/33290
- */
-export type CustomDecimalCastableType = { dbDecimalCastable : void };
+export type CustomDecimalCastableType = CustomDecimalCastableTypeMap[keyof CustomDecimalCastableTypeMap];
+
 /**
  * These types can be casted to `DECIMAL`, in general.
  *
