@@ -55,6 +55,39 @@ export class TablePerType<DataT extends TablePerTypeData> implements ITablePerTy
         );
     }
 
+    fetchOneByCandidateKey (
+        connection : SelectConnection,
+        candidateKey : StrictUnion<CandidateKey_NonUnion<this["childTable"]>>
+    ) : ExecutionUtil.FetchOnePromise<TablePerTypeUtil.Row<this>> {
+        return TablePerTypeUtil.fetchOneByCandidateKey(
+            this,
+            connection,
+            candidateKey
+        );
+    }
+
+    fetchOneByPrimaryKey (
+        connection : SelectConnection,
+        primaryKey : PrimaryKey_Input<this["childTable"]>
+    ) : ExecutionUtil.FetchOnePromise<TablePerTypeUtil.Row<this>> {
+        return TablePerTypeUtil.fetchOneByPrimaryKey(
+            this,
+            connection,
+            primaryKey
+        );
+    }
+
+    fetchOneBySuperKey (
+        connection : SelectConnection,
+        superKey : TablePerTypeUtil.SuperKey<this>
+    ) : ExecutionUtil.FetchOnePromise<TablePerTypeUtil.Row<this>> {
+        return TablePerTypeUtil.fetchOneBySuperKey(
+            this,
+            connection,
+            superKey
+        );
+    }
+
     insertAndFetch<
         RowT extends TablePerTypeUtil.InsertAndFetchRow<
             Extract<this, InsertableTablePerType>
