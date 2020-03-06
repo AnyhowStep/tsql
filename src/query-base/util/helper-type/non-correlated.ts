@@ -15,17 +15,17 @@ import {GroupByClause} from "../../../group-by-clause";
  *
  * https://dev.mysql.com/doc/refman/8.0/en/correlated-subqueries.html
  */
-export type NonCorrelated = (
-    IQueryBase<{
-        fromClause : FromClauseUtil.NonCorrelated,
-        selectClause : SelectClause|undefined,
+export interface NonCorrelated extends IQueryBase<{
+    fromClause : FromClauseUtil.NonCorrelated,
+    selectClause : SelectClause|undefined,
 
-        limitClause : LimitClause|undefined,
+    limitClause : LimitClause|undefined,
 
-        compoundQueryClause : CompoundQueryClause|undefined,
-        compoundQueryLimitClause : LimitClause|undefined,
+    compoundQueryClause : CompoundQueryClause|undefined,
+    compoundQueryLimitClause : LimitClause|undefined,
 
-        mapDelegate : MapDelegate|undefined,
-        groupByClause : GroupByClause|undefined,
-    }>
-);
+    mapDelegate : MapDelegate|undefined,
+    groupByClause : GroupByClause|undefined,
+}> {
+
+}

@@ -6,17 +6,17 @@ import {LimitClause} from "../../../limit-clause";
 import {MapDelegate} from "../../../map-delegate";
 import {GroupByClause} from "../../../group-by-clause";
 
-export type BeforeFromClause = (
-    IQueryBase<{
-        fromClause : FromClauseUtil.BeforeFromClause,
-        selectClause : SelectClause|undefined,
+export interface BeforeFromClause extends IQueryBase<{
+    fromClause : FromClauseUtil.BeforeFromClause,
+    selectClause : SelectClause|undefined,
 
-        limitClause : LimitClause|undefined,
+    limitClause : LimitClause|undefined,
 
-        compoundQueryClause : CompoundQueryClause|undefined,
-        compoundQueryLimitClause : LimitClause|undefined,
+    compoundQueryClause : CompoundQueryClause|undefined,
+    compoundQueryLimitClause : LimitClause|undefined,
 
-        mapDelegate : MapDelegate|undefined,
-        groupByClause : GroupByClause|undefined,
-    }>
-);
+    mapDelegate : MapDelegate|undefined,
+    groupByClause : GroupByClause|undefined,
+}> {
+
+}
