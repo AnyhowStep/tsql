@@ -1,5 +1,5 @@
-export function stdDevPop (values : readonly number[]) {
-    if (values.length == 0) {
+export function stdDevSamp (values : readonly number[]) {
+    if (values.length == 0 || values.length == 1) {
         return null;
     }
     const sum = values.reduce(
@@ -16,6 +16,6 @@ export function stdDevPop (values : readonly number[]) {
         0
     );
     return Math.sqrt(
-        sumSquaredErrors / count
+        sumSquaredErrors / (count-1)
     );
 }

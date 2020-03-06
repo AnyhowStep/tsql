@@ -20,6 +20,8 @@ import {makeAggregateOperator1} from "../../aggregate-factory";
  *   + Returns `double precision` if argument is `double precision`; `numeric` otherwise
  * + SQLite     : None. Implement with user-defined function.
  *
+ * Should only be provided for `double` because MySQL treats all `x` as `double`.
+ *
  * -----
  *
  * The population standard deviation is,
