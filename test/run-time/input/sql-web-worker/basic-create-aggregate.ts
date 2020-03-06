@@ -41,7 +41,7 @@ tape(__filename, async (t) => {
                         throw new Error(`Arguments must be integer`);
                     }
                 },
-                (state) => state.sum
+                (state) => state == undefined ? BigInt(0) : state.sum
             ),
             connection.exec("SELECT customAggregate(a, b) FROM testTable ORDER BY a DESC"),
         ]);
