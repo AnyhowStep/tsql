@@ -86,3 +86,12 @@ export {
     TupleUtil,
     TypeUtil,
 };
+
+/**
+ * Augmentable types **MUST** be exported in this specific way.
+ *
+ * https://github.com/microsoft/TypeScript/issues/18877#issuecomment-476921038
+ */
+export {
+    CustomDecimalCastableTypeMap,
+} from "./augmentable";
