@@ -1,17 +1,13 @@
+import * as tm from "type-mapping";
 import {OperatorType} from "../../../operator-type";
 import {TypeHint} from "../../../type-hint";
 import {makeAggregateOperator2, AggregateOperator1} from "../../aggregate-factory";
-import {Decimal} from "../../../decimal";
 import {BuiltInExpr_NonAggregate} from "../../../built-in-expr";
 import {ExprUtil} from "../../../expr";
-import {decimalMapper} from "../../decimal/decimal-mapper";
 
-/**
- * The return type being `DECIMAL` is intentional.
- */
-const sumImpl = makeAggregateOperator2<OperatorType.AGGREGATE_SUM, boolean, bigint|null, Decimal|null>(
-    OperatorType.AGGREGATE_SUM,
-    decimalMapper.orNull(),
+const sumAsBigIntSignedImpl = makeAggregateOperator2<OperatorType.AGGREGATE_SUM_AS_BIGINT_SIGNED, boolean, bigint|null, bigint|null>(
+    OperatorType.AGGREGATE_SUM_AS_BIGINT_SIGNED,
+    tm.mysql.bigIntSigned().orNull(),
     TypeHint.BIGINT_SIGNED
 );
 
@@ -26,26 +22,22 @@ const sumImpl = makeAggregateOperator2<OperatorType.AGGREGATE_SUM, boolean, bigi
  *
  * -----
  *
- * + MySQL      : `SUM(DISTINCT x)`
+ * + MySQL      : `CAST(SUM(DISTINCT x) AS SIGNED)`
+ *   + Will clamp between min and max bigint signed, instead of throwing on overflow!
  * + PostgreSQL : `SUM(DISTINCT x)`
+ *   + Throws on integer overflow
  * + SQLite     : `SUM(DISTINCT x)`
+ *   + Throws on integer overflow
  *
- * -----
- *
- * No guarantees are made about the precision of the return type.
- * + MySQL, PostgreSQL use `DECIMAL`
- * + SQLite throws on integer overflow
- *
- * @todo Some kind of `DECIMAL` polyfill for SQLite.
  */
-export const sumDistinct : AggregateOperator1<bigint|null, Decimal|null> = <
+export const sumAsBigIntSignedDistinct : AggregateOperator1<bigint|null, bigint|null> = <
     ArgT extends BuiltInExpr_NonAggregate<bigint|null>
 >(
     arg : ArgT
 ) : (
-    ExprUtil.AggregateIntersect<Decimal|null, ArgT>
+    ExprUtil.AggregateIntersect<bigint|null, ArgT>
 ) => {
-    return sumImpl(true, arg) as ExprUtil.AggregateIntersect<Decimal|null, ArgT>;
+    return sumAsBigIntSignedImpl(true, arg) as ExprUtil.AggregateIntersect<bigint|null, ArgT>;
 };
 
 /**
@@ -59,26 +51,22 @@ export const sumDistinct : AggregateOperator1<bigint|null, Decimal|null> = <
  *
  * -----
  *
- * + MySQL      : `SUM(x)`
+ * + MySQL      : `CAST(SUM(x) AS SIGNED)`
+ *   + Will clamp between min and max bigint signed, instead of throwing on overflow!
  * + PostgreSQL : `SUM(x)`
+ *   + Throws on integer overflow
  * + SQLite     : `SUM(x)`
+ *   + Throws on integer overflow
  *
- * -----
- *
- * No guarantees are made about the precision of the return type.
- * + MySQL, PostgreSQL use `DECIMAL`
- * + SQLite throws on integer overflow
- *
- * @todo Some kind of `DECIMAL` polyfill for SQLite.
  */
-export const sumAll : AggregateOperator1<bigint|null, Decimal|null> = <
+export const sumAsBigIntSignedAll : AggregateOperator1<bigint|null, bigint|null> = <
     ArgT extends BuiltInExpr_NonAggregate<bigint|null>
 >(
     arg : ArgT
 ) : (
-    ExprUtil.AggregateIntersect<Decimal|null, ArgT>
+    ExprUtil.AggregateIntersect<bigint|null, ArgT>
 ) => {
-    return sumImpl(false, arg) as ExprUtil.AggregateIntersect<Decimal|null, ArgT>;
+    return sumAsBigIntSignedImpl(false, arg) as ExprUtil.AggregateIntersect<bigint|null, ArgT>;
 };
 
 /**
@@ -92,16 +80,12 @@ export const sumAll : AggregateOperator1<bigint|null, Decimal|null> = <
  *
  * -----
  *
- * + MySQL      : `SUM(x)`
+ * + MySQL      : `CAST(SUM(x) AS SIGNED)`
+ *   + Will clamp between min and max bigint signed, instead of throwing on overflow!
  * + PostgreSQL : `SUM(x)`
+ *   + Throws on integer overflow
  * + SQLite     : `SUM(x)`
+ *   + Throws on integer overflow
  *
- * -----
- *
- * No guarantees are made about the precision of the return type.
- * + MySQL, PostgreSQL use `DECIMAL`
- * + SQLite throws on integer overflow
- *
- * @todo Some kind of `DECIMAL` polyfill for SQLite.
  */
-export const sum = sumAll;
+export const sumAsBigIntSigned = sumAsBigIntSignedAll;

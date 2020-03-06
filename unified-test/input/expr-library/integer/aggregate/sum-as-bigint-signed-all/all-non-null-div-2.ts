@@ -38,22 +38,22 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                         myTableVal : BigInt(i),
                     }
                 );
-                await myTable.insertOne(
-                    connection,
-                    {
-                        myTableVal : null,
-                    }
-                );
                 total += i;
 
                 await myTable
                     .where(() => true)
                     .fetchValue(
                         connection,
-                        columns => tsql.integer.sumAll(columns.myTableVal)
+                        columns => tsql.integer.integerDiv(
+                            tsql.coalesce(
+                                tsql.integer.sumAsBigIntSignedAll(columns.myTableVal),
+                                BigInt(0)
+                            ),
+                            BigInt(2)
+                        )
                     )
                     .then((value) => {
-                        const expected = tm.FixedPointUtil.tryParse(String(total));
+                        const expected = tm.FixedPointUtil.tryParse(String(Math.floor(total/2)));
                         if (expected == undefined) {
                             t.notDeepEqual(expected, undefined);
                             return;
@@ -78,22 +78,22 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                         myTableVal : BigInt(i),
                     }
                 );
-                await myTable.insertOne(
-                    connection,
-                    {
-                        myTableVal : null,
-                    }
-                );
                 total += i;
 
                 await myTable
                     .where(() => true)
                     .fetchValue(
                         connection,
-                        columns => tsql.integer.sumAll(columns.myTableVal)
+                        columns => tsql.integer.integerDiv(
+                            tsql.coalesce(
+                                tsql.integer.sumAsBigIntSignedAll(columns.myTableVal),
+                                BigInt(0)
+                            ),
+                            BigInt(2)
+                        )
                     )
                     .then((value) => {
-                        const expected = tm.FixedPointUtil.tryParse(String(total));
+                        const expected = tm.FixedPointUtil.tryParse(String(Math.floor(total/2)));
                         if (expected == undefined) {
                             t.notDeepEqual(expected, undefined);
                             return;

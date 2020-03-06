@@ -34,5 +34,5 @@ tsql
     ])
     .select((columns) => [
         //aggregate ExprSelectItem, referencing a column
-        tsql.integer.sum(columns.myTable.myTableId).as("x"),
+        tsql.integer.sumAsDecimal(columns.myTable.myTableId).as("x"),
     ]);

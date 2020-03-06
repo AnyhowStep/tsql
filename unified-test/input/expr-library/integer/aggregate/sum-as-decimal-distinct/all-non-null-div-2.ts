@@ -44,10 +44,16 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     .where(() => true)
                     .fetchValue(
                         connection,
-                        columns => tsql.integer.sumAll(columns.myTableVal)
+                        columns => tsql.decimal.fractionalDiv(
+                            tsql.coalesce(
+                                tsql.integer.sumAsDecimalDistinct(columns.myTableVal),
+                                tsql.decimalLiteral("0", 10, 0)
+                            ),
+                            tsql.decimalLiteral("2", 10, 0)
+                        )
                     )
                     .then((value) => {
-                        const expected = tm.FixedPointUtil.tryParse(String(total));
+                        const expected = tm.FixedPointUtil.tryParse(String(total/2));
                         if (expected == undefined) {
                             t.notDeepEqual(expected, undefined);
                             return;
@@ -72,16 +78,21 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                         myTableVal : BigInt(i),
                     }
                 );
-                total += i;
 
                 await myTable
                     .where(() => true)
                     .fetchValue(
                         connection,
-                        columns => tsql.integer.sumAll(columns.myTableVal)
+                        columns => tsql.decimal.fractionalDiv(
+                            tsql.coalesce(
+                                tsql.integer.sumAsDecimalDistinct(columns.myTableVal),
+                                tsql.decimalLiteral("0", 10, 0)
+                            ),
+                            tsql.decimalLiteral("2", 10, 0)
+                        )
                     )
                     .then((value) => {
-                        const expected = tm.FixedPointUtil.tryParse(String(total));
+                        const expected = tm.FixedPointUtil.tryParse(String(total/2));
                         if (expected == undefined) {
                             t.notDeepEqual(expected, undefined);
                             return;

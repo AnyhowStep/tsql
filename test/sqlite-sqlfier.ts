@@ -1756,6 +1756,53 @@ export const sqliteSqlfier : Sqlfier = {
                 throw new Error(`${operatorType} only implemented for 2 args`);
             }
         },
+        [OperatorType.AGGREGATE_SUM_AS_BIGINT_SIGNED] : ({operands, operatorType}) => {
+            if (operands.length == 2) {
+                const [isDistinct, expr] = operands;
+                if (
+                    LiteralValueNodeUtil.isLiteralValueNode(isDistinct) &&
+                    isDistinct.literalValue === true
+                ) {
+                    return functionCall("SUM", [["DISTINCT", expr]]);
+                } else {
+                    return functionCall("SUM", [expr]);
+                }
+            } else {
+                throw new Error(`${operatorType} only implemented for 2 args`);
+            }
+        },
+        [OperatorType.AGGREGATE_SUM_AS_DECIMAL] : ({operands, operatorType}) => {
+            if (operands.length == 2) {
+                const [isDistinct, expr] = operands;
+                if (
+                    LiteralValueNodeUtil.isLiteralValueNode(isDistinct) &&
+                    isDistinct.literalValue === true
+                ) {
+                    return functionCall(
+                        "SUM",
+                        [
+                            [
+                                "DISTINCT",
+                                functionCall("CAST", [
+                                    [expr, "AS NUMERIC"]
+                                ])
+                            ]
+                        ]
+                    );
+                } else {
+                    return functionCall(
+                        "SUM",
+                        [
+                            functionCall("CAST", [
+                                [expr, "AS NUMERIC"]
+                            ])
+                        ]
+                    );
+                }
+            } else {
+                throw new Error(`${operatorType} only implemented for 2 args`);
+            }
+        },
         [OperatorType.AGGREGATE_GROUP_CONCAT_DISTINCT] : ({operands}) => functionCall(
             "GROUP_CONCAT",
             [

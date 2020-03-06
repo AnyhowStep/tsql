@@ -10,7 +10,7 @@ const test = tsql.table("test")
 tsql
     .from(test)
     .select(columns => [
-        tsql.integer.sum(columns.testId).as("sumId"),
+        tsql.integer.sumAsDecimal(columns.testId).as("sumId"),
     ])
     .orderBy(columns => [
         columns.test.testVal,

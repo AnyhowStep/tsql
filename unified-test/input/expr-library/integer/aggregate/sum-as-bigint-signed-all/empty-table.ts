@@ -30,26 +30,18 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 }
             );
 
-            for (let i=0; i<10; ++i) {
-                await myTable
-                    .where(() => true)
-                    .fetchValue(
-                        connection,
-                        columns => tsql.integer.sumAll(columns.myTableVal)
-                    )
-                    .then((value) => {
-                        t.deepEqual(value, null);
-                    })
-                    .catch((err) => {
-                        t.fail(err.message);
-                    });
-                await myTable.insertOne(
+            await myTable
+                .where(() => true)
+                .fetchValue(
                     connection,
-                    {
-                        myTableVal : null,
-                    }
-                );
-            }
+                    columns => tsql.integer.sumAsBigIntSignedAll(columns.myTableVal)
+                )
+                .then((value) => {
+                    t.deepEqual(value, null);
+                })
+                .catch((err) => {
+                    t.fail(err.message);
+                });
         });
 
         t.end();

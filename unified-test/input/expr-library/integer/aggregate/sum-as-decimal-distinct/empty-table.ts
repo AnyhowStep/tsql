@@ -34,7 +34,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                 .where(() => true)
                 .fetchValue(
                     connection,
-                    columns => tsql.integer.sumAll(columns.myTableVal)
+                    columns => tsql.integer.sumAsDecimalDistinct(columns.myTableVal)
                 )
                 .then((value) => {
                     t.deepEqual(value, null);
