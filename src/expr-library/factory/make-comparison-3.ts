@@ -1,16 +1,17 @@
 import * as tm from "type-mapping";
 import {ExprUtil} from "../../expr";
 import {BuiltInExpr} from "../../built-in-expr";
-import {NonNullComparableType, ComparableTypeUtil} from "../../comparable-type";
+import {NonNullComparableType} from "../../comparable-type";
 import {BuiltInExprUtil} from "../../built-in-expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
+import {BaseType} from "../../type-util";
 
 export type Comparison3Return<
     LeftT extends BuiltInExpr<NonNullComparableType>,
-    MidT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<BuiltInExprUtil.TypeOf<LeftT>>>,
-    RightT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<BuiltInExprUtil.TypeOf<LeftT>>>
+    MidT extends BuiltInExpr<BaseType<BuiltInExprUtil.TypeOf<LeftT>>>,
+    RightT extends BuiltInExpr<BaseType<BuiltInExprUtil.TypeOf<LeftT>>>
 > =
     ExprUtil.Intersect<
         boolean,
@@ -20,14 +21,14 @@ export type Comparison3Return<
 export type Comparison3 =
     <
         LeftT extends BuiltInExpr<NonNullComparableType>,
-        MidT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<BuiltInExprUtil.TypeOf<LeftT>>>,
+        MidT extends BuiltInExpr<BaseType<BuiltInExprUtil.TypeOf<LeftT>>>,
         /**
          * https://github.com/microsoft/TypeScript/issues/33002#issuecomment-523651736
          *
          * @todo Investigate
          */
         //RightT extends BuiltInExpr<BuiltInExprUtil.TypeOf<LeftT>>
-        RightT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<BuiltInExprUtil.TypeOf<LeftT>>>
+        RightT extends BuiltInExpr<BaseType<BuiltInExprUtil.TypeOf<LeftT>>>
     >(
         left : LeftT,
         mid : MidT,
@@ -48,8 +49,8 @@ export function makeComparison3<OperatorTypeT extends OperatorType> (
 ) : Comparison3 {
     const result : Comparison3 = <
         LeftT extends BuiltInExpr<NonNullComparableType>,
-        MidT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<BuiltInExprUtil.TypeOf<LeftT>>>,
-        RightT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<BuiltInExprUtil.TypeOf<LeftT>>>
+        MidT extends BuiltInExpr<BaseType<BuiltInExprUtil.TypeOf<LeftT>>>,
+        RightT extends BuiltInExpr<BaseType<BuiltInExprUtil.TypeOf<LeftT>>>
     >(left : LeftT, mid : MidT, right : RightT) : (
         ExprUtil.Intersect<
             boolean,

@@ -1,15 +1,16 @@
 import * as tm from "type-mapping";
 import {ExprUtil} from "../../expr";
 import {BuiltInExpr} from "../../built-in-expr";
-import {NonNullComparableType, ComparableTypeUtil} from "../../comparable-type";
+import {NonNullComparableType} from "../../comparable-type";
 import {BuiltInExprUtil} from "../../built-in-expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
+import {BaseType} from "../../type-util";
 
 export type Comparison2Return<
     LeftT extends BuiltInExpr<NonNullComparableType>,
-    RightT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<BuiltInExprUtil.TypeOf<LeftT>>>
+    RightT extends BuiltInExpr<BaseType<BuiltInExprUtil.TypeOf<LeftT>>>
 > =
     ExprUtil.Intersect<
         boolean,
@@ -25,7 +26,7 @@ export type Comparison2 =
          * @todo Investigate
          */
         //RightT extends BuiltInExpr<BuiltInExprUtil.TypeOf<LeftT>>
-        RightT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<BuiltInExprUtil.TypeOf<LeftT>>>
+        RightT extends BuiltInExpr<BaseType<BuiltInExprUtil.TypeOf<LeftT>>>
     >(
         left : LeftT,
         right : RightT
@@ -45,7 +46,7 @@ export function makeComparison2<OperatorTypeT extends OperatorType> (
 ) : Comparison2 {
     const result : Comparison2 = <
         LeftT extends BuiltInExpr<NonNullComparableType>,
-        RightT extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<BuiltInExprUtil.TypeOf<LeftT>>>
+        RightT extends BuiltInExpr<BaseType<BuiltInExprUtil.TypeOf<LeftT>>>
     >(left : LeftT, right : RightT) : (
         Comparison2Return<LeftT, RightT>
     ) => {

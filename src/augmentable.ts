@@ -14,3 +14,18 @@
 export interface CustomDecimalCastableTypeMap {
 
 }
+
+/**
+ * Each type here has comparison operators implemented for it.
+ *
+ * Comparison operators include,
+ * + less than
+ * + less than or equal
+ * + greater than
+ * + greater than or equal
+ * + BETWEEN
+ * + etc.
+ */
+export interface CustomComparableTypeMap {
+
+}

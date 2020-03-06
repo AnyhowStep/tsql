@@ -4,12 +4,13 @@ import {ExprUtil} from "../../expr";
 import {OperatorNodeUtil} from "../../ast";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {NonNullComparableType, ComparableTypeUtil} from "../../comparable-type";
+import {NonNullComparableType} from "../../comparable-type";
+import {BaseType} from "../../type-util";
 
 export type ComparisonProjection2ToNReturn<
     Arg0T extends BuiltInExpr<NonNullComparableType>,
-    Arg1T extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<BuiltInExprUtil.TypeOf<Arg0T>>>,
-    ArgsT extends readonly BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<BuiltInExprUtil.TypeOf<Arg0T>>>[]
+    Arg1T extends BuiltInExpr<BaseType<BuiltInExprUtil.TypeOf<Arg0T>>>,
+    ArgsT extends readonly BuiltInExpr<BaseType<BuiltInExprUtil.TypeOf<Arg0T>>>[]
 > =
     ExprUtil.Intersect<
         BuiltInExprUtil.TypeOf<Arg0T|Arg1T|ArgsT[number]>,
@@ -19,8 +20,8 @@ export type ComparisonProjection2ToNReturn<
 export type ComparisonProjection2ToN =
     <
         Arg0T extends BuiltInExpr<NonNullComparableType>,
-        Arg1T extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<BuiltInExprUtil.TypeOf<Arg0T>>>,
-        ArgsT extends readonly BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<BuiltInExprUtil.TypeOf<Arg0T>>>[]
+        Arg1T extends BuiltInExpr<BaseType<BuiltInExprUtil.TypeOf<Arg0T>>>,
+        ArgsT extends readonly BuiltInExpr<BaseType<BuiltInExprUtil.TypeOf<Arg0T>>>[]
     > (
         arg0 : Arg0T,
         arg1 : Arg1T,
@@ -45,8 +46,8 @@ export function makeComparisonProjection2ToN<
 ) {
     const result : ComparisonProjection2ToN = <
         Arg0T extends BuiltInExpr<NonNullComparableType>,
-        Arg1T extends BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<BuiltInExprUtil.TypeOf<Arg0T>>>,
-        ArgsT extends readonly BuiltInExpr<ComparableTypeUtil.BaseNonNullComparableType<BuiltInExprUtil.TypeOf<Arg0T>>>[]
+        Arg1T extends BuiltInExpr<BaseType<BuiltInExprUtil.TypeOf<Arg0T>>>,
+        ArgsT extends readonly BuiltInExpr<BaseType<BuiltInExprUtil.TypeOf<Arg0T>>>[]
     > (
         arg0 : Arg0T,
         arg1 : Arg1T,
