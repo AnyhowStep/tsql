@@ -1819,6 +1819,12 @@ export const sqliteSqlfier : Sqlfier = {
         [OperatorType.AGGREGATE_SAMPLE_STANDARD_DEVIATION] : ({operands}) => {
             return functionCall("STDDEV_SAMP", operands);
         },
+        [OperatorType.AGGREGATE_POPULATION_VARIANCE] : ({operands}) => {
+            return functionCall("VAR_POP", operands);
+        },
+        [OperatorType.AGGREGATE_SAMPLE_VARIANCE] : ({operands}) => {
+            return functionCall("VAR_SAMP", operands);
+        },
 
         [OperatorType.EXISTS] : ({operands : [query]}, toSql) => {
             if (QueryBaseUtil.isAfterFromClause(query)) {
