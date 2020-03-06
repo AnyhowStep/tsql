@@ -1,13 +1,14 @@
-import {NonNullBuiltInValueExpr, BuiltInValueExprUtil} from "../built-in-value-expr";
+import {NonNullBuiltInValueExpr} from "../built-in-value-expr";
 import {IsStrictSameType} from "./is-strict-same-type";
+import {BaseType} from "./base-type";
 
 export type IsNonNullBuiltInValueExprComparable<
     T extends NonNullBuiltInValueExpr,
     U extends NonNullBuiltInValueExpr
 > =
     IsStrictSameType<
-        BuiltInValueExprUtil.BaseNonNullBuiltInType<T>,
-        BuiltInValueExprUtil.BaseNonNullBuiltInType<U>
+        BaseType<T>,
+        BaseType<U>
     >
 ;
 
