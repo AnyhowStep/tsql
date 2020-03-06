@@ -1,6 +1,6 @@
 [
   {
-    "messageText": "Argument of type 'null' is not assignable to parameter of type 'BuiltInExpr<string | number | bigint | boolean | Date | Uint8Array | Decimal | CustomComparableType>'.",
+    "messageText": "Argument of type 'null' is not assignable to parameter of type 'BuiltInExpr<string | number | bigint | boolean | Date | Uint8Array | Decimal>'.",
     "code": 2345,
     "category": 1,
     "length": 4,
@@ -21,14 +21,14 @@
     "start": 119
   },
   {
-    "messageText": "Argument of type 'null' is not assignable to parameter of type 'BuiltInExpr<string | number | bigint | boolean | Date | Uint8Array | Decimal | CustomComparableType>'.",
+    "messageText": "Argument of type 'null' is not assignable to parameter of type 'BuiltInExpr<string | number | bigint | boolean | Date | Uint8Array | Decimal>'.",
     "code": 2345,
     "category": 1,
     "length": 4,
     "start": 141
   },
   {
-    "messageText": "Argument of type 'null' is not assignable to parameter of type 'BuiltInExpr<string | number | bigint | boolean | Date | Uint8Array | Decimal | CustomComparableType>'.",
+    "messageText": "Argument of type 'null' is not assignable to parameter of type 'BuiltInExpr<string | number | bigint | boolean | Date | Uint8Array | Decimal>'.",
     "code": 2345,
     "category": 1,
     "length": 4,
@@ -42,14 +42,14 @@
     "start": 203
   },
   {
-    "messageText": "Argument of type 'null' is not assignable to parameter of type 'BuiltInExpr<string | number | bigint | boolean | Date | Uint8Array | Decimal | CustomComparableType>'.",
+    "messageText": "Argument of type 'null' is not assignable to parameter of type 'BuiltInExpr<string | number | bigint | boolean | Date | Uint8Array | Decimal>'.",
     "code": 2345,
     "category": 1,
     "length": 4,
     "start": 231
   },
   {
-    "messageText": "Argument of type 'null' is not assignable to parameter of type 'BuiltInExpr<string | number | bigint | boolean | Date | Uint8Array | Decimal | CustomComparableType>'.",
+    "messageText": "Argument of type 'null' is not assignable to parameter of type 'BuiltInExpr<string | number | bigint | boolean | Date | Uint8Array | Decimal>'.",
     "code": 2345,
     "category": 1,
     "length": 4,

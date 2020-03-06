@@ -1,14 +1,8 @@
 import {BuiltInValueExpr} from "../built-in-value-expr";
 import {Decimal} from "../decimal";
+import {CustomComparableTypeMap} from "../augmentable";
 
-/**
- * Any type with this tag is comparable.
- *
- * @todo Monitor this PR
- *
- * https://github.com/microsoft/TypeScript/pull/33290
- */
-export type CustomComparableType = { dbEquatable : void, dbComparable : void };
+export type CustomComparableType = CustomComparableTypeMap[keyof CustomComparableTypeMap];
 
 /**
  * These types support the following operators,
@@ -19,5 +13,10 @@ export type CustomComparableType = { dbEquatable : void, dbComparable : void };
  * + Equal to
  * + Not Equal to
  */
-export type ComparableType = BuiltInValueExpr|Decimal|CustomComparableType;
+export type ComparableType =
+    | BuiltInValueExpr
+    | Decimal
+    | CustomComparableType
+;
+
 export type NonNullComparableType = Exclude<ComparableType, null>;

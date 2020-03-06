@@ -91,4 +91,5 @@ export {
  */
 export {
     CustomDecimalCastableTypeMap,
+    CustomComparableTypeMap,
 } from "./augmentable";
