@@ -2113,6 +2113,9 @@ export class Pool implements tsql.IPool {
                     if (state == undefined) {
                         return null;
                     }
+                    if (state.values.length == 0) {
+                        return null;
+                    }
                     const sum = state.values.reduce(
                         (sum, value) => sum + value,
                         0
@@ -2128,6 +2131,51 @@ export class Pool implements tsql.IPool {
                     );
                     return Math.sqrt(
                         sumSquaredErrors / count
+                    );
+                }
+            );
+            await connection.createAggregate(
+                "STDDEV_SAMP",
+                () => {
+                    return {
+                        values : [] as number[],
+                    };
+                },
+                (state, x) => {
+                    if (x === null) {
+                        return;
+                    }
+                    if (typeof x == "number") {
+                        state.values.push(x);
+                    } else {
+                        throw new Error(`STDDEV_SAMP(${typeof x}) not implmented`);
+                    }
+                },
+                (state) => {
+                    if (state == undefined) {
+                        return null;
+                    }
+                    if (state.values.length == 0) {
+                        return null;
+                    }
+                    if (state.values.length == 1) {
+                        return null;
+                    }
+                    const sum = state.values.reduce(
+                        (sum, value) => sum + value,
+                        0
+                    );
+                    const count = state.values.length;
+                    const avg = sum/count;
+                    const squaredErrors = state.values.map(value => {
+                        return Math.pow(value - avg, 2);
+                    });
+                    const sumSquaredErrors = squaredErrors.reduce(
+                        (sumSquaredErrors, squaredError) => sumSquaredErrors + squaredError,
+                        0
+                    );
+                    return Math.sqrt(
+                        sumSquaredErrors / (count-1)
                     );
                 }
             );

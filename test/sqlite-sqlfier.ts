@@ -1816,6 +1816,9 @@ export const sqliteSqlfier : Sqlfier = {
         [OperatorType.AGGREGATE_POPULATION_STANDARD_DEVIATION] : ({operands}) => {
             return functionCall("STDDEV_POP", operands);
         },
+        [OperatorType.AGGREGATE_SAMPLE_STANDARD_DEVIATION] : ({operands}) => {
+            return functionCall("STDDEV_SAMP", operands);
+        },
 
         [OperatorType.EXISTS] : ({operands : [query]}, toSql) => {
             if (QueryBaseUtil.isAfterFromClause(query)) {
