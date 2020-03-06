@@ -20,6 +20,6 @@ import {makeAggregateOperator1} from "../../aggregate-factory";
  */
 export const min = makeAggregateOperator1<OperatorType.AGGREGATE_MIN, number|null, number|null>(
     OperatorType.AGGREGATE_MIN,
-    tm.mysql.double().orNull(),
+    tm.orNull(tm.toUnsafeNumber()),
     TypeHint.DOUBLE
 );
