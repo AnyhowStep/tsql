@@ -6,26 +6,26 @@ import {LimitClause} from "../../../limit-clause";
 import {MapDelegate} from "../../../map-delegate";
 import {GroupByClause} from "../../../group-by-clause";
 
-export type ZeroOrOneRowUsingCompoundQueryLimit = (
-    IQueryBase<{
-        fromClause : IFromClause,
-        selectClause : SelectClause|undefined,
+export interface ZeroOrOneRowUsingCompoundQueryLimit extends IQueryBase<{
+    fromClause : IFromClause,
+    selectClause : SelectClause|undefined,
 
-        limitClause : LimitClause|undefined,
+    limitClause : LimitClause|undefined,
 
-        compoundQueryClause : CompoundQueryClause|undefined,
-        /**
-         * If `LIMIT` occurs within a subquery and also is applied in the outer query,
-         * the outermost `LIMIT` takes precedence.
-         *
-         * https://dev.mysql.com/doc/refman/8.0/en/select.html
-         */
-        compoundQueryLimitClause : {
-            readonly maxRowCount : 0n|1n,
-            readonly offset : bigint,
-        },
+    compoundQueryClause : CompoundQueryClause|undefined,
+    /**
+     * If `LIMIT` occurs within a subquery and also is applied in the outer query,
+     * the outermost `LIMIT` takes precedence.
+     *
+     * https://dev.mysql.com/doc/refman/8.0/en/select.html
+     */
+    compoundQueryLimitClause : {
+        readonly maxRowCount : 0n|1n,
+        readonly offset : bigint,
+    },
 
-        mapDelegate : MapDelegate|undefined,
-        groupByClause : GroupByClause|undefined,
-    }>
-);
+    mapDelegate : MapDelegate|undefined,
+    groupByClause : GroupByClause|undefined,
+}> {
+
+}
