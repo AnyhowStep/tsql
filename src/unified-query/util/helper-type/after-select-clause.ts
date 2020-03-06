@@ -1,7 +1,6 @@
 import {QueryBaseUtil} from "../../../query-base";
 import {IQuery} from "../../query";
 
-export type AfterSelectClause = (
-    & QueryBaseUtil.AfterSelectClause
-    & IQuery
-);
+export interface AfterSelectClause extends QueryBaseUtil.AfterSelectClause, IQuery {
+
+}

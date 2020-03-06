@@ -135,10 +135,6 @@ export const query = tsql.QueryUtil.newInstance()
     .whereEq(
         columns => columns.myTableId,
         1337n
-    )
-    .whereEq(
-        columns => columns.myTableId,
-        1337n
     );
 /**
  * @todo Find a way to increase the limit to 60 or more

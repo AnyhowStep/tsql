@@ -5,7 +5,7 @@ import {CompoundQueryClause} from "../../../compound-query-clause";
 import {LimitClause} from "../../../limit-clause";
 import {GroupByClause} from "../../../group-by-clause";
 
-export interface Unmapped extends IQueryBase<{
+export interface UnmappedData {
     fromClause : IFromClause,
     selectClause : SelectClause|undefined,
 
@@ -16,6 +16,8 @@ export interface Unmapped extends IQueryBase<{
 
     mapDelegate : undefined,
     groupByClause : GroupByClause|undefined,
-}> {
+}
+
+export interface Unmapped extends IQueryBase<UnmappedData> {
 
 }

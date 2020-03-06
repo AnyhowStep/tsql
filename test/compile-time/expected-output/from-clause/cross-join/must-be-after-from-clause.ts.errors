@@ -1,22 +1,17 @@
 [
   {
     "messageText": {
-      "messageText": "Argument of type 'IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>' is not assignable to parameter of type 'IFromClause<{ outerQueryJoins: readonly IJoin<JoinData>[] | undefined; currentJoins: readonly IJoin<JoinData>[]; }>'.",
+      "messageText": "Argument of type 'IFromClause<{ outerQueryJoins: undefined; currentJoins: undefined; }>' is not assignable to parameter of type 'AfterFromClause'.",
       "category": 1,
       "code": 2345,
       "next": {
-        "messageText": "Type '{ outerQueryJoins: undefined; currentJoins: undefined; }' is not assignable to type '{ outerQueryJoins: readonly IJoin<JoinData>[] | undefined; currentJoins: readonly IJoin<JoinData>[]; }'.",
+        "messageText": "Types of property 'currentJoins' are incompatible.",
         "category": 1,
-        "code": 2322,
+        "code": 2326,
         "next": {
-          "messageText": "Types of property 'currentJoins' are incompatible.",
+          "messageText": "Type 'undefined' is not assignable to type 'readonly IJoin<JoinData>[]'.",
           "category": 1,
-          "code": 2326,
-          "next": {
-            "messageText": "Type 'undefined' is not assignable to type 'readonly IJoin<JoinData>[]'.",
-            "category": 1,
-            "code": 2322
-          }
+          "code": 2322
         }
       }
     },

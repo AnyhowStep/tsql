@@ -10,9 +10,9 @@ import {IJoin} from "../../../join";
  *
  * https://dev.mysql.com/doc/refman/8.0/en/correlated-subqueries.html
  */
-export type NonCorrelated = (
-    IFromClause<{
-        outerQueryJoins : undefined,
-        currentJoins : (readonly IJoin[])|undefined,
-    }>
-);
+export interface NonCorrelated extends IFromClause<{
+    outerQueryJoins : undefined,
+    currentJoins : (readonly IJoin[])|undefined,
+}> {
+
+}

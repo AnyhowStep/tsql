@@ -6,9 +6,9 @@ import {IJoin} from "../../../join";
  *
  * https://dev.mysql.com/doc/refman/8.0/en/correlated-subqueries.html
  */
-export type Correlated = (
-    IFromClause<{
-        outerQueryJoins : readonly IJoin[],
-        currentJoins : (readonly IJoin[])|undefined,
-    }>
-);
+export interface Correlated extends IFromClause<{
+    outerQueryJoins : readonly IJoin[],
+    currentJoins : (readonly IJoin[])|undefined,
+}> {
+
+}

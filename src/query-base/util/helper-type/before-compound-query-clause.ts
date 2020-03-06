@@ -5,7 +5,7 @@ import {LimitClause} from "../../../limit-clause";
 import {MapDelegate} from "../../../map-delegate";
 import {GroupByClause} from "../../../group-by-clause";
 
-export interface BeforeCompoundQueryClause extends IQueryBase<{
+export interface BeforeCompoundQueryClauseData {
     fromClause : IFromClause,
     selectClause : SelectClause|undefined,
 
@@ -16,6 +16,8 @@ export interface BeforeCompoundQueryClause extends IQueryBase<{
 
     mapDelegate : MapDelegate|undefined,
     groupByClause : GroupByClause|undefined,
-}> {
+}
+
+export interface BeforeCompoundQueryClause extends IQueryBase<BeforeCompoundQueryClauseData> {
 
 }
