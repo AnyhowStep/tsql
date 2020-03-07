@@ -1,6 +1,6 @@
 {
   "name": "@squill/squill",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "A SQL query-builder/ORM",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
