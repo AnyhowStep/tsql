@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
-import {makeOperator1} from "../factory";
+import {makeOperator1, Operator1} from "../factory";
 
 /**
  *
@@ -42,7 +42,7 @@ import {makeOperator1} from "../factory";
  * Treat `x` as representing a `UTC` timestamp.
  *
  */
-export const utcStringToTimestamp = makeOperator1<OperatorType.UTC_STRING_TO_TIMESTAMP_CONSTRUCTOR, string, Date|null>(
+export const utcStringToTimestamp : Operator1<string, Date|null> = makeOperator1<OperatorType.UTC_STRING_TO_TIMESTAMP_CONSTRUCTOR, string, Date|null>(
     OperatorType.UTC_STRING_TO_TIMESTAMP_CONSTRUCTOR,
     tm.mysql.dateTime(3).orNull()
 );

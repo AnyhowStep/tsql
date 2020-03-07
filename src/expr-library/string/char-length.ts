@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator1} from "../factory";
+import {makeOperator1, Operator1} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -24,7 +24,7 @@ import {TypeHint} from "../../type-hint";
  *
  * Surrogate pairs may cause results to differ across databases.
  */
-export const charLength = makeOperator1<OperatorType.CHAR_LENGTH, string, bigint>(
+export const charLength : Operator1<string, bigint> = makeOperator1<OperatorType.CHAR_LENGTH, string, bigint>(
     OperatorType.CHAR_LENGTH,
     /**
      * Should not return a value less than zero

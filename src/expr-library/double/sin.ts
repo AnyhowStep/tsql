@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {makeOperator1} from "../factory";
+import {makeOperator1, Operator1} from "../factory";
 
 /**
  * Returns the sine
@@ -21,7 +21,7 @@ import {makeOperator1} from "../factory";
  * @param arg - Radians
  * @returns The sine
  */
-export const sin = makeOperator1<OperatorType.SINE, number, number|null>(
+export const sin : Operator1<number, number|null> = makeOperator1<OperatorType.SINE, number, number|null>(
     OperatorType.SINE,
     tm.mysql.double().orNull(),
     TypeHint.DOUBLE

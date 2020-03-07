@@ -7,8 +7,7 @@ export type Latest<LogT extends ILog> = (
         QueryUtil.OrderBy<
             QueryUtil.Where<
                 QueryUtil.From<
-                    QueryUtil.RequireOuterQueryJoins<
-                        QueryUtil.NewInstance,
+                    QueryUtil.NewInstanceWithOuterQueryJoins<
                         [LogT["ownerTable"]]
                     >,
                     LogT["logTable"]

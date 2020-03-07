@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {makeOperator1} from "../factory";
+import {makeOperator1, Operator1} from "../factory";
 
 /**
  * Converts from degrees to radians.
@@ -22,7 +22,7 @@ import {makeOperator1} from "../factory";
  * @param arg - degrees
  * @returns radians
  */
-export const radians = makeOperator1<OperatorType.RADIANS, number, number>(
+export const radians : Operator1<number, number> = makeOperator1<OperatorType.RADIANS, number, number>(
     OperatorType.RADIANS,
     tm.toUnsafeNumber(),
     TypeHint.DOUBLE

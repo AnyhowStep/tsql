@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator1Idempotent} from "../factory";
+import {makeOperator1Idempotent, Operator1} from "../factory";
 import {OperatorType} from "../../operator-type";
 
 /**
@@ -27,7 +27,7 @@ import {OperatorType} from "../../operator-type";
  * + https://github.com/AnyhowStep/tsql/issues/244
  * + https://github.com/AnyhowStep/tsql/issues/245
  */
-export const unsafeCastAsBigIntSigned = makeOperator1Idempotent<OperatorType.CAST_AS_BIGINT_SIGNED, unknown, bigint|null>(
+export const unsafeCastAsBigIntSigned : Operator1<unknown, bigint|null> = makeOperator1Idempotent<OperatorType.CAST_AS_BIGINT_SIGNED, unknown, bigint|null>(
     OperatorType.CAST_AS_BIGINT_SIGNED,
     tm.mysql.bigIntSigned().orNull()
 );

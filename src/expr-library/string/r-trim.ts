@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator1} from "../factory";
+import {makeOperator1, Operator1} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -20,7 +20,7 @@ import {TypeHint} from "../../type-hint";
  *
  * Does not remove other trailing whitespace. Only removes trailing spaces.
  */
-export const rTrim = makeOperator1<OperatorType.RTRIM, string, string>(
+export const rTrim : Operator1<string, string> = makeOperator1<OperatorType.RTRIM, string, string>(
     OperatorType.RTRIM,
     tm.string(),
     TypeHint.STRING

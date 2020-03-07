@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator0} from "../factory";
+import {makeOperator0, Operator0} from "../factory";
 import {OperatorType} from "../../operator-type";
 
 /**
@@ -32,7 +32,7 @@ import {OperatorType} from "../../operator-type";
  * + PostgreSQL : `CURRENT_USER`
  * + SQLite     : None. It does not make sense to ask what the current user is.
  */
-export const currentUser = makeOperator0<OperatorType.CURRENT_USER, string|null>(
+export const currentUser : Operator0<string|null> = makeOperator0<OperatorType.CURRENT_USER, string|null>(
     OperatorType.CURRENT_USER,
     tm.orNull(tm.string())
 );

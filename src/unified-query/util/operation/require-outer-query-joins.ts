@@ -2,7 +2,24 @@ import {IAliasedTable} from "../../../aliased-table";
 import {FromClauseUtil} from "../../../from-clause";
 import {IQuery} from "../../query";
 import {Query} from "../../query-impl";
+import {NewInstance} from "../constructor";
 
+export type NewInstanceWithOuterQueryJoins<
+    AliasedTablesT extends readonly IAliasedTable[]
+> =
+    Query<{
+        fromClause : FromClauseUtil.NewInstanceWithOuterQueryJoins<false, AliasedTablesT>,
+        selectClause : NewInstance["selectClause"],
+
+        limitClause : NewInstance["limitClause"],
+
+        compoundQueryClause : NewInstance["compoundQueryClause"],
+        compoundQueryLimitClause : NewInstance["compoundQueryLimitClause"],
+
+        mapDelegate : NewInstance["mapDelegate"],
+        groupByClause : NewInstance["groupByClause"],
+    }>
+;
 export type RequireOuterQueryJoins<
     QueryT extends IQuery,
     AliasedTablesT extends readonly IAliasedTable[]

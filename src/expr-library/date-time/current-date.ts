@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator0} from "../factory";
+import {makeOperator0, Operator0} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -20,7 +20,7 @@ import {TypeHint} from "../../type-hint";
  *
  * Sets hour, minute, second, millisecond to zero.
  */
-export const currentDate = makeOperator0<OperatorType.CURRENT_DATE, Date>(
+export const currentDate : Operator0<Date> = makeOperator0<OperatorType.CURRENT_DATE, Date>(
     OperatorType.CURRENT_DATE,
     tm.mysql.dateTime(0),
     TypeHint.DATE_TIME

@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator3} from "../factory";
+import {makeOperator3, Operator3} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -24,7 +24,7 @@ import {TypeHint} from "../../type-hint";
  * @param mid   - The string to look for
  * @param right - The replacement string
  */
-export const replace = makeOperator3<OperatorType.REPLACE, string, string, string, string>(
+export const replace : Operator3<string, string, string, string> = makeOperator3<OperatorType.REPLACE, string, string, string, string>(
     OperatorType.REPLACE,
     tm.string(),
     TypeHint.STRING

@@ -1,4 +1,4 @@
-import {makeEquation2} from "../factory";
+import {makeEquation2, Equation2} from "../factory";
 import {OperatorType} from "../../operator-type";
 
 /**
@@ -8,6 +8,6 @@ import {OperatorType} from "../../operator-type";
  *
  * For null-safe equality, @see {@link nullSafeEq}
  */
-export const eq = makeEquation2(
+export const eq : Equation2 = makeEquation2(
     OperatorType.EQUAL
 );

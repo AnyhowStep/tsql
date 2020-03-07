@@ -1,4 +1,4 @@
-import {makeNullSafeEquation1} from "../factory";
+import {makeNullSafeEquation1, NullSafeEquation1} from "../factory";
 import {OperatorType} from "../../operator-type";
 
 /**
@@ -11,6 +11,6 @@ import {OperatorType} from "../../operator-type";
  *         -> 0, 0, 1
  * ```
  */
-export const isNull = makeNullSafeEquation1(
+export const isNull : NullSafeEquation1 = makeNullSafeEquation1(
     OperatorType.IS_NULL
 );

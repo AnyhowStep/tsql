@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator2} from "../factory";
+import {makeOperator2, Operator2} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -24,7 +24,7 @@ import {TypeHint} from "../../type-hint";
  * @param right - The end date-time
  * @returns - Returns `right - left` in milliseconds
  */
-export const timestampDiffMillisecond = makeOperator2<OperatorType.TIMESTAMPDIFF_MILLISECOND, Date, Date, bigint>(
+export const timestampDiffMillisecond : Operator2<Date, Date, bigint> = makeOperator2<OperatorType.TIMESTAMPDIFF_MILLISECOND, Date, Date, bigint>(
     OperatorType.TIMESTAMPDIFF_MILLISECOND,
     tm.mysql.bigIntSigned(),
     TypeHint.DATE_TIME
@@ -50,7 +50,7 @@ export const timestampDiffMillisecond = makeOperator2<OperatorType.TIMESTAMPDIFF
  * @param right - The end date-time
  * @returns - Returns `right - left` in seconds
  */
-export const timestampDiffSecond = makeOperator2<OperatorType.TIMESTAMPDIFF_SECOND, Date, Date, bigint>(
+export const timestampDiffSecond : Operator2<Date, Date, bigint> = makeOperator2<OperatorType.TIMESTAMPDIFF_SECOND, Date, Date, bigint>(
     OperatorType.TIMESTAMPDIFF_SECOND,
     tm.mysql.bigIntSigned(),
     TypeHint.DATE_TIME
@@ -74,7 +74,7 @@ export const timestampDiffSecond = makeOperator2<OperatorType.TIMESTAMPDIFF_SECO
  * @param right - The end date-time
  * @returns - Returns `right - left` in minutes
  */
-export const timestampDiffMinute = makeOperator2<OperatorType.TIMESTAMPDIFF_MINUTE, Date, Date, bigint>(
+export const timestampDiffMinute : Operator2<Date, Date, bigint> = makeOperator2<OperatorType.TIMESTAMPDIFF_MINUTE, Date, Date, bigint>(
     OperatorType.TIMESTAMPDIFF_MINUTE,
     tm.mysql.bigIntSigned(),
     TypeHint.DATE_TIME
@@ -98,7 +98,7 @@ export const timestampDiffMinute = makeOperator2<OperatorType.TIMESTAMPDIFF_MINU
  * @param right - The end date-time
  * @returns - Returns `right - left` in hours
  */
-export const timestampDiffHour = makeOperator2<OperatorType.TIMESTAMPDIFF_HOUR, Date, Date, bigint>(
+export const timestampDiffHour : Operator2<Date, Date, bigint> = makeOperator2<OperatorType.TIMESTAMPDIFF_HOUR, Date, Date, bigint>(
     OperatorType.TIMESTAMPDIFF_HOUR,
     tm.mysql.bigIntSigned(),
     TypeHint.DATE_TIME
@@ -122,7 +122,7 @@ export const timestampDiffHour = makeOperator2<OperatorType.TIMESTAMPDIFF_HOUR, 
  * @param right - The end date-time
  * @returns - Returns `right - left` in days
  */
-export const timestampDiffDay = makeOperator2<OperatorType.TIMESTAMPDIFF_DAY, Date, Date, bigint>(
+export const timestampDiffDay : Operator2<Date, Date, bigint> = makeOperator2<OperatorType.TIMESTAMPDIFF_DAY, Date, Date, bigint>(
     OperatorType.TIMESTAMPDIFF_DAY,
     tm.mysql.bigIntSigned(),
     TypeHint.DATE_TIME

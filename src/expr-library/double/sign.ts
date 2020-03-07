@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {makeOperator1Idempotent} from "../factory";
+import {makeOperator1Idempotent, Operator1} from "../factory";
 
 /**
  * + If the argument is negative, returns -1
@@ -24,7 +24,7 @@ import {makeOperator1Idempotent} from "../factory";
  * This function is idempotent.
  * `SIGN(SIGN(x)) == SIGN(x)`
 */
-export const sign = makeOperator1Idempotent<OperatorType.SIGN, number, number>(
+export const sign : Operator1<number, number> = makeOperator1Idempotent<OperatorType.SIGN, number, number>(
     OperatorType.SIGN,
     tm.mysql.double(),
     TypeHint.DOUBLE

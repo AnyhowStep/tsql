@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {makeOperator2} from "../factory";
+import {makeOperator2, Operator2} from "../factory";
 
 /**
  * Returns `base^exponent`
@@ -41,7 +41,7 @@ import {makeOperator2} from "../factory";
  *
  * @todo Decide if we should make SQLite throw instead of return `null`
  */
-export const power = makeOperator2<OperatorType.POWER, number, number|null>(
+export const power : Operator2<number, number, number|null> = makeOperator2<OperatorType.POWER, number, number|null>(
     OperatorType.POWER,
     tm.orNull(tm.toUnsafeNumber()),
     TypeHint.DOUBLE

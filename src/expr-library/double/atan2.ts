@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator2} from "../factory";
+import {makeOperator2, Operator2} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -24,7 +24,7 @@ import {TypeHint} from "../../type-hint";
  * @param left  - The Y of the vector
  * @param right - The X of the vector
  */
-export const atan2 = makeOperator2<OperatorType.ARC_TANGENT_2, number, number>(
+export const atan2 : Operator2<number, number, number> = makeOperator2<OperatorType.ARC_TANGENT_2, number, number>(
     OperatorType.ARC_TANGENT_2,
     tm.mysql.double(),
     TypeHint.DOUBLE

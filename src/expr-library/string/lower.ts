@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator1} from "../factory";
+import {makeOperator1, Operator1} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -16,7 +16,7 @@ import {TypeHint} from "../../type-hint";
  * + PostgreSQL     : `LOWER(x)`
  * + SQLite         : `LOWER(x)`
  */
-export const lower = makeOperator1<OperatorType.LOWER, string, string>(
+export const lower : Operator1<string, string> = makeOperator1<OperatorType.LOWER, string, string>(
     OperatorType.LOWER,
     tm.string(),
     TypeHint.STRING

@@ -1,12 +1,12 @@
 import {decimalMapper} from "../decimal-mapper";
 import {OperatorType} from "../../../operator-type";
 import {TypeHint} from "../../../type-hint";
-import {makeAggregateOperator2, AggregateOperator1} from "../../aggregate-factory";
+import {makeAggregateOperator2, AggregateOperator2, AggregateOperator1} from "../../aggregate-factory";
 import {Decimal} from "../../../decimal";
 import {BuiltInExpr_NonAggregate} from "../../../built-in-expr";
 import {ExprUtil} from "../../../expr";
 
-const avgImpl = makeAggregateOperator2<OperatorType.AGGREGATE_AVERAGE, boolean, Decimal, Decimal|null>(
+const avgImpl : AggregateOperator2<boolean, Decimal, Decimal|null> = makeAggregateOperator2<OperatorType.AGGREGATE_AVERAGE, boolean, Decimal, Decimal|null>(
     OperatorType.AGGREGATE_AVERAGE,
     decimalMapper.orNull(),
     TypeHint.DECIMAL

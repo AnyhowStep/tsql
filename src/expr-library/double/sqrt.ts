@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {makeOperator1} from "../factory";
+import {makeOperator1, Operator1} from "../factory";
 
 /**
  * Returns the square root
@@ -23,7 +23,7 @@ import {makeOperator1} from "../factory";
  * + MySQL      : `SQRT(-5)` === `null`
  * + PostgreSQL : `SQRT(-5)` throws error
  */
-export const sqrt = makeOperator1<OperatorType.SQUARE_ROOT, number, number|null>(
+export const sqrt : Operator1<number, number|null> = makeOperator1<OperatorType.SQUARE_ROOT, number, number|null>(
     OperatorType.SQUARE_ROOT,
     tm.orNull(tm.toUnsafeNumber()),
     TypeHint.DOUBLE

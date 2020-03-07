@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator2} from "../../factory";
+import {makeOperator2, Operator2} from "../../factory";
 import {OperatorType} from "../../../operator-type";
 import {TypeHint} from "../../../type-hint";
 import {BuiltInExpr, BuiltInExprUtil} from "../../../built-in-expr";
@@ -36,7 +36,7 @@ import {OperatorNodeUtil} from "../../../ast";
  *
  * @see bitwiseLeftShift
  */
-export const bitwiseLeftShiftUnsafe = makeOperator2<OperatorType.BITWISE_LEFT_SHIFT, bigint, bigint>(
+export const bitwiseLeftShiftUnsafe : Operator2<bigint, bigint, bigint> = makeOperator2<OperatorType.BITWISE_LEFT_SHIFT, bigint, bigint>(
     OperatorType.BITWISE_LEFT_SHIFT,
     tm.mysql.bigIntSigned(),
     TypeHint.BIGINT_SIGNED

@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator1ToN} from "../factory";
+import {makeOperator1ToN, Operator1ToN} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -31,7 +31,7 @@ import {TypeHint} from "../../type-hint";
  *
  * @see concat
  */
-export const nullSafeConcat = makeOperator1ToN<OperatorType.NULL_SAFE_CONCAT, string|null, string>(
+export const nullSafeConcat : Operator1ToN<string|null, string> = makeOperator1ToN<OperatorType.NULL_SAFE_CONCAT, string|null, string>(
     OperatorType.NULL_SAFE_CONCAT,
     tm.string(),
     TypeHint.STRING

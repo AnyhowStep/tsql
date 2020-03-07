@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator1} from "../factory";
+import {makeOperator1, Operator1} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -43,7 +43,7 @@ import {TypeHint} from "../../type-hint";
  *
  * @todo Make behaviour consistent?
  */
-export const extractFractionalSecond3 = makeOperator1<OperatorType.EXTRACT_FRACTIONAL_SECOND_3, Date, number>(
+export const extractFractionalSecond3 : Operator1<Date, number> = makeOperator1<OperatorType.EXTRACT_FRACTIONAL_SECOND_3, Date, number>(
     OperatorType.EXTRACT_FRACTIONAL_SECOND_3,
     tm.mysql.double(),
     TypeHint.DATE_TIME
@@ -70,7 +70,7 @@ export const extractFractionalSecond3 = makeOperator1<OperatorType.EXTRACT_FRACT
  * + PostgreSQL     : `CAST(FLOOR(EXTRACT(SECOND FROM datetime)) AS BIGINT)`
  * + SQLite         : `CAST(strftime('%S', datetime) AS BIGINT)`
  */
-export const extractIntegerSecond = makeOperator1<OperatorType.EXTRACT_INTEGER_SECOND, Date, bigint>(
+export const extractIntegerSecond : Operator1<Date, bigint> = makeOperator1<OperatorType.EXTRACT_INTEGER_SECOND, Date, bigint>(
     OperatorType.EXTRACT_INTEGER_SECOND,
     /**
      * Should not be negative
@@ -100,7 +100,7 @@ export const extractIntegerSecond = makeOperator1<OperatorType.EXTRACT_INTEGER_S
  * + PostgreSQL     : `CAST(EXTRACT(MINUTE FROM datetime) AS BIGINT)`
  * + SQLite         : `CAST(strftime('%M', datetime) AS BIGINT)`
  */
-export const extractMinute = makeOperator1<OperatorType.EXTRACT_MINUTE, Date, bigint>(
+export const extractMinute : Operator1<Date, bigint> = makeOperator1<OperatorType.EXTRACT_MINUTE, Date, bigint>(
     OperatorType.EXTRACT_MINUTE,
     /**
      * Should not be negative
@@ -130,7 +130,7 @@ export const extractMinute = makeOperator1<OperatorType.EXTRACT_MINUTE, Date, bi
  * + PostgreSQL     : `CAST(EXTRACT(HOUR FROM datetime) AS BIGINT)`
  * + SQLite         : `CAST(strftime('%H', datetime) AS BIGINT)`
  */
-export const extractHour = makeOperator1<OperatorType.EXTRACT_HOUR, Date, bigint>(
+export const extractHour : Operator1<Date, bigint> = makeOperator1<OperatorType.EXTRACT_HOUR, Date, bigint>(
     OperatorType.EXTRACT_HOUR,
     /**
      * Should not be negative
@@ -160,7 +160,7 @@ export const extractHour = makeOperator1<OperatorType.EXTRACT_HOUR, Date, bigint
  * + PostgreSQL     : `CAST(EXTRACT(DAY FROM datetime) AS BIGINT)`
  * + SQLite         : `CAST(strftime('%d', datetime) AS BIGINT)`
  */
-export const extractDay = makeOperator1<OperatorType.EXTRACT_DAY, Date, bigint>(
+export const extractDay : Operator1<Date, bigint> = makeOperator1<OperatorType.EXTRACT_DAY, Date, bigint>(
     OperatorType.EXTRACT_DAY,
     /**
      * Should not be negative
@@ -190,7 +190,7 @@ export const extractDay = makeOperator1<OperatorType.EXTRACT_DAY, Date, bigint>(
  * + PostgreSQL     : `CAST(EXTRACT(MONTH FROM datetime) AS BIGINT)`
  * + SQLite         : `CAST(strftime('%m', datetime) AS BIGINT)`
  */
-export const extractMonth = makeOperator1<OperatorType.EXTRACT_MONTH, Date, bigint>(
+export const extractMonth : Operator1<Date, bigint> = makeOperator1<OperatorType.EXTRACT_MONTH, Date, bigint>(
     OperatorType.EXTRACT_MONTH,
     /**
      * Should not be negative
@@ -220,7 +220,7 @@ export const extractMonth = makeOperator1<OperatorType.EXTRACT_MONTH, Date, bigi
  * + PostgreSQL     : `CAST(EXTRACT(YEAR FROM datetime) AS BIGINT)`
  * + SQLite         : `CAST(strftime('%Y', datetime) AS BIGINT)`
  */
-export const extractYear = makeOperator1<OperatorType.EXTRACT_YEAR, Date, bigint>(
+export const extractYear : Operator1<Date, bigint> = makeOperator1<OperatorType.EXTRACT_YEAR, Date, bigint>(
     OperatorType.EXTRACT_YEAR,
     /**
      * Should not be negative

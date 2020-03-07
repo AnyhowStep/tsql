@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {makeOperator3} from "../factory/make-operator-3";
+import {makeOperator3, Operator3} from "../factory/make-operator-3";
 import {BuiltInExpr} from "../../built-in-expr";
 import {ExprUtil} from "../../expr";
 
@@ -9,7 +9,7 @@ export function assertValidLikeEscapeChar (escapeChar : string) {
     tm.stringExactLength(1)("escapeChar", escapeChar);
 }
 
-const likeEscapeImpl = makeOperator3<OperatorType.LIKE_ESCAPE, string, string, string, boolean>(
+const likeEscapeImpl : Operator3<string, string, string, boolean> = makeOperator3<OperatorType.LIKE_ESCAPE, string, string, string, boolean>(
     OperatorType.LIKE_ESCAPE,
     tm.mysql.boolean(),
     TypeHint.STRING

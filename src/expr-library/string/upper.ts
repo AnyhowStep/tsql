@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator1} from "../factory";
+import {makeOperator1, Operator1} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -16,7 +16,7 @@ import {TypeHint} from "../../type-hint";
  * + PostgreSQL     : `UPPER(x)`
  * + SQLite         : `UPPER(x)`
  */
-export const upper = makeOperator1<OperatorType.UPPER, string, string>(
+export const upper : Operator1<string, string> = makeOperator1<OperatorType.UPPER, string, string>(
     OperatorType.UPPER,
     tm.string(),
     TypeHint.STRING

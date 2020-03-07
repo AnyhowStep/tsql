@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {makeOperator2} from "../factory";
+import {makeOperator2, Operator2} from "../factory";
 
 /**
  * The remainder after performing integer division.
@@ -26,7 +26,7 @@ import {makeOperator2} from "../factory";
  *
  * @todo Maybe just... Remove this.
  */
-export const integerRemainder = makeOperator2<OperatorType.INTEGER_REMAINDER, number, number|null>(
+export const integerRemainder : Operator2<number, number, number|null> = makeOperator2<OperatorType.INTEGER_REMAINDER, number, number|null>(
     OperatorType.INTEGER_REMAINDER,
     tm.mysql.double().orNull(),
     TypeHint.DOUBLE

@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {makeOperator1Idempotent} from "../factory";
+import {makeOperator1Idempotent, Operator1} from "../factory";
 
 /**
  * Returns the ceiling of the number
@@ -31,7 +31,7 @@ import {makeOperator1Idempotent} from "../factory";
  * This function is idempotent.
  * `CEILING(CEILING(x)) == CEILING(x)`
  */
-export const ceiling = makeOperator1Idempotent<OperatorType.CEILING, number, number>(
+export const ceiling : Operator1<number, number> = makeOperator1Idempotent<OperatorType.CEILING, number, number>(
     OperatorType.CEILING,
     tm.toUnsafeNumber(),
     TypeHint.DOUBLE

@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator1} from "../factory";
+import {makeOperator1, Operator1} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -16,7 +16,7 @@ import {TypeHint} from "../../type-hint";
  * + PostgreSQL     : `ENCODE(x, 'hex')`
  * + SQLite         : `HEX(x)`
  */
-export const hex = makeOperator1<OperatorType.HEX, Uint8Array, string>(
+export const hex : Operator1<Uint8Array, string> = makeOperator1<OperatorType.HEX, Uint8Array, string>(
     OperatorType.HEX,
     tm.string(),
     TypeHint.BUFFER

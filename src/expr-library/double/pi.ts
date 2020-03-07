@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator0} from "../factory";
+import {makeOperator0, Operator0} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -22,7 +22,7 @@ import {TypeHint} from "../../type-hint";
  *
  * In JS, `Math.PI` is `3.141592653589793`
  */
-export const pi = makeOperator0<OperatorType.PI, number>(
+export const pi : Operator0<number> = makeOperator0<OperatorType.PI, number>(
     OperatorType.PI,
     tm.mysql.double(),
     TypeHint.DOUBLE

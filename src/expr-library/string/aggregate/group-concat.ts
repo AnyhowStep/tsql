@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../../operator-type";
 import {TypeHint} from "../../../type-hint";
-import {makeAggregateOperator1, makeAggregateOperator2} from "../../aggregate-factory";
+import {makeAggregateOperator1, makeAggregateOperator2, AggregateOperator1, AggregateOperator2} from "../../aggregate-factory";
 
 /**
  * Returns a string result with the concatenated non-`NULL` values from a group.
@@ -31,7 +31,7 @@ import {makeAggregateOperator1, makeAggregateOperator2} from "../../aggregate-fa
  *
  * @todo Investigate replacing SQLite `GROUP_CONCAT()` with user-defined function
  */
-export const groupConcatDistinct = makeAggregateOperator1<
+export const groupConcatDistinct : AggregateOperator1<string|null, string|null> = makeAggregateOperator1<
     OperatorType.AGGREGATE_GROUP_CONCAT_DISTINCT,
     string|null,
     string|null
@@ -58,7 +58,7 @@ export const groupConcatDistinct = makeAggregateOperator1<
  * @param left  - The expression to aggregate
  * @param right - The separator between expressions
  */
-export const groupConcatAll = makeAggregateOperator2<
+export const groupConcatAll : AggregateOperator2<string|null, string, string|null> = makeAggregateOperator2<
     OperatorType.AGGREGATE_GROUP_CONCAT_ALL,
     string|null,
     string,

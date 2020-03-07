@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {makeOperator1} from "../factory";
+import {makeOperator1, Operator1} from "../factory";
 
 /**
  * Returns the base-10 logarithm
@@ -24,7 +24,7 @@ import {makeOperator1} from "../factory";
  * + MySQL      : `LOG10(-1)` === `NULL`
  * + PostgreSQL : `LOG(10, -1)` throws error
  */
-export const log10 = makeOperator1<OperatorType.LOG10, number, number|null>(
+export const log10 : Operator1<number, number|null> = makeOperator1<OperatorType.LOG10, number, number|null>(
     OperatorType.LOG10,
     tm.orNull(tm.toUnsafeNumber()),
     TypeHint.DOUBLE

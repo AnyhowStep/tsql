@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {makeOperator2} from "../factory";
+import {makeOperator2, Operator2} from "../factory";
 
 /**
  * The remainder after performing integer division.
@@ -33,7 +33,7 @@ import {makeOperator2} from "../factory";
  * The above gives `NULL` for MySQL and SQLite.
  * The above throws an error for PostgreSQL.
  */
-export const integerRemainder = makeOperator2<OperatorType.INTEGER_REMAINDER, bigint, bigint|null>(
+export const integerRemainder : Operator2<bigint, bigint, bigint|null> = makeOperator2<OperatorType.INTEGER_REMAINDER, bigint, bigint|null>(
     OperatorType.INTEGER_REMAINDER,
     tm.mysql.bigIntSigned().orNull(),
     TypeHint.BIGINT_SIGNED

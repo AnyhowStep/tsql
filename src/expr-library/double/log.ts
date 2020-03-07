@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {makeOperator2} from "../factory";
+import {makeOperator2, Operator2} from "../factory";
 
 /**
  * Returns the logarithm to the specified `base`.
@@ -31,7 +31,7 @@ import {makeOperator2} from "../factory";
  * @param right - The anti-logarithm
  * @returns log_{base}(anti-logarithm) = logarithm
  */
-export const log = makeOperator2<OperatorType.LOG, number, number|null>(
+export const log : Operator2<number, number, number|null> = makeOperator2<OperatorType.LOG, number, number|null>(
     OperatorType.LOG,
     tm.orNull(tm.toUnsafeNumber()),
     TypeHint.DOUBLE

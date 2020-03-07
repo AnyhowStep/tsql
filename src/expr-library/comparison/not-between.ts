@@ -1,4 +1,4 @@
-import {makeComparison3} from "../factory";
+import {makeComparison3, Comparison3} from "../factory";
 import {OperatorType} from "../../operator-type";
 
 /**
@@ -9,6 +9,6 @@ import {OperatorType} from "../../operator-type";
  * For null-safe checks, @see {@link nullSafeNotBetween}
  *
  */
-export const notBetween = makeComparison3(
+export const notBetween : Comparison3 = makeComparison3(
     OperatorType.NOT_BETWEEN_AND
 );

@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {makeOperator2} from "../factory";
+import {makeOperator2, Operator2} from "../factory";
 
 /**
  * Returns the remainder after fractional division.
@@ -26,7 +26,7 @@ import {makeOperator2} from "../factory";
  *  )
  * ```
  */
-export const fractionalRemainder = makeOperator2<OperatorType.FRACTIONAL_REMAINDER, number, number|null>(
+export const fractionalRemainder : Operator2<number, number, number|null> = makeOperator2<OperatorType.FRACTIONAL_REMAINDER, number, number|null>(
     OperatorType.FRACTIONAL_REMAINDER,
     tm.mysql.double().orNull(),
     TypeHint.DOUBLE

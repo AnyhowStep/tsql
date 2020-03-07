@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {makeOperator1} from "../factory";
+import {makeOperator1, Operator1} from "../factory";
 
 /**
  * Returns the natural logarithm
@@ -25,7 +25,7 @@ import {makeOperator1} from "../factory";
  * + MySQL      : `LN(-1)` === `NULL`
  * + PostgreSQL : `LN(-1)` throws error
  */
-export const ln = makeOperator1<OperatorType.LN, number, number|null>(
+export const ln : Operator1<number, number|null> = makeOperator1<OperatorType.LN, number, number|null>(
     OperatorType.LN,
     tm.orNull(tm.toUnsafeNumber()),
     TypeHint.DOUBLE

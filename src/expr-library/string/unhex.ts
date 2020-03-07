@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator1} from "../factory";
+import {makeOperator1, Operator1} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -23,7 +23,7 @@ import {TypeHint} from "../../type-hint";
  * If the input is not a valid hex string, some databases throw an error.
  * Others return `NULL`.
  */
-export const unhex = makeOperator1<OperatorType.UNHEX, string, Uint8Array|null>(
+export const unhex : Operator1<string, Uint8Array|null> = makeOperator1<OperatorType.UNHEX, string, Uint8Array|null>(
     OperatorType.UNHEX,
     tm.orNull(tm.instanceOfUint8Array()),
     TypeHint.STRING

@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator1} from "../factory";
+import {makeOperator1, Operator1} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -15,7 +15,7 @@ import {TypeHint} from "../../type-hint";
  * + PostgreSQL     : `REVERSE(x)`
  * + SQLite         : None. Implement with user-defined function.
  */
-export const reverse = makeOperator1<OperatorType.REVERSE, string, string>(
+export const reverse : Operator1<string, string> = makeOperator1<OperatorType.REVERSE, string, string>(
     OperatorType.REVERSE,
     tm.string(),
     TypeHint.STRING

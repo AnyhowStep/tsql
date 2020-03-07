@@ -1,10 +1,10 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
-import {makeAggregateOperator2, AggregateOperator1} from "../aggregate-factory";
+import {makeAggregateOperator2, AggregateOperator2, AggregateOperator1} from "../aggregate-factory";
 import {BuiltInExpr_NonAggregate} from "../../built-in-expr";
 import {ExprUtil} from "../../expr";
 
-const countExprImpl = makeAggregateOperator2<OperatorType.AGGREGATE_COUNT_EXPR, boolean, unknown, bigint>(
+const countExprImpl : AggregateOperator2<boolean, unknown, bigint> = makeAggregateOperator2<OperatorType.AGGREGATE_COUNT_EXPR, boolean, unknown, bigint>(
     OperatorType.AGGREGATE_COUNT_EXPR,
     /**
      * Should not return a value less than zero

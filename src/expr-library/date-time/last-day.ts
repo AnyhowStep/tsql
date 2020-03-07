@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator1} from "../factory";
+import {makeOperator1, Operator1} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -40,7 +40,7 @@ import {TypeHint} from "../../type-hint";
  *  > 2010-03-31
  * ```
  */
-export const lastDay = makeOperator1<OperatorType.LAST_DAY, Date, Date>(
+export const lastDay : Operator1<Date, Date> = makeOperator1<OperatorType.LAST_DAY, Date, Date>(
     OperatorType.LAST_DAY,
     tm.mysql.dateTime(0),
     TypeHint.DATE_TIME

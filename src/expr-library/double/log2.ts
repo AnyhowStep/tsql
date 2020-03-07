@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {makeOperator1} from "../factory";
+import {makeOperator1, Operator1} from "../factory";
 
 /**
  * Returns the base-2 logarithm
@@ -24,7 +24,7 @@ import {makeOperator1} from "../factory";
  * + MySQL      : `LOG2(-1)` === `NULL`
  * + PostgreSQL : `LOG(2, -1)` throws error
  */
-export const log2 = makeOperator1<OperatorType.LOG2, number, number|null>(
+export const log2 : Operator1<number, number|null> = makeOperator1<OperatorType.LOG2, number, number|null>(
     OperatorType.LOG2,
     tm.orNull(tm.toUnsafeNumber()),
     TypeHint.DOUBLE

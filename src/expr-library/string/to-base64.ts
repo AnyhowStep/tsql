@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator1} from "../factory";
+import {makeOperator1, Operator1} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -15,7 +15,7 @@ import {TypeHint} from "../../type-hint";
  * + PostgreSQL     : `ENCODE(x, 'base64')`
  * + SQLite         : None, implement with user-defined function `btoa()`
  */
-export const toBase64 = makeOperator1<OperatorType.TO_BASE64, Uint8Array, string>(
+export const toBase64 : Operator1<Uint8Array, string> = makeOperator1<OperatorType.TO_BASE64, Uint8Array, string>(
     OperatorType.TO_BASE64,
     tm.string(),
     TypeHint.STRING

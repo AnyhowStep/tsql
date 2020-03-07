@@ -2,7 +2,7 @@ import {decimalMapper} from "../decimal-mapper";
 import {Decimal} from "../../../decimal";
 import {OperatorType} from "../../../operator-type";
 import {TypeHint} from "../../../type-hint";
-import {makeAggregateOperator1} from "../../aggregate-factory";
+import {makeAggregateOperator1, AggregateOperator1} from "../../aggregate-factory";
 
 /**
  * Returns the max value of non-`NULL` values from a group.
@@ -19,7 +19,7 @@ import {makeAggregateOperator1} from "../../aggregate-factory";
  * + PostgreSQL : `MAX(x)`
  * + SQLite     : `MAX(x)`
  */
-export const max = makeAggregateOperator1<OperatorType.AGGREGATE_MAX, Decimal|null, Decimal|null>(
+export const max : AggregateOperator1<Decimal|null, Decimal|null> = makeAggregateOperator1<OperatorType.AGGREGATE_MAX, Decimal|null, Decimal|null>(
     OperatorType.AGGREGATE_MAX,
     decimalMapper.orNull(),
     TypeHint.DECIMAL

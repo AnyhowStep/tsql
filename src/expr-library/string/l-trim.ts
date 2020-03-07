@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator1} from "../factory";
+import {makeOperator1, Operator1} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -20,7 +20,7 @@ import {TypeHint} from "../../type-hint";
  *
  * Does not remove other leading whitespace. Only removes leading spaces.
  */
-export const lTrim = makeOperator1<OperatorType.LTRIM, string, string>(
+export const lTrim : Operator1<string, string> = makeOperator1<OperatorType.LTRIM, string, string>(
     OperatorType.LTRIM,
     tm.string(),
     TypeHint.STRING
