@@ -2,7 +2,7 @@ import {decimalMapper} from "../decimal-mapper";
 import {Decimal} from "../../../decimal";
 import {OperatorType} from "../../../operator-type";
 import {TypeHint} from "../../../type-hint";
-import {makeAggregateOperator1} from "../../aggregate-factory";
+import {makeAggregateOperator1, AggregateOperator1} from "../../aggregate-factory";
 
 /**
  * Returns the min value of non-`NULL` values from a group.
@@ -19,7 +19,7 @@ import {makeAggregateOperator1} from "../../aggregate-factory";
  * + PostgreSQL : `MIN(x)`
  * + SQLite     : `MIN(x)`
  */
-export const min = makeAggregateOperator1<OperatorType.AGGREGATE_MIN, Decimal|null, Decimal|null>(
+export const min : AggregateOperator1<Decimal|null, Decimal|null> = makeAggregateOperator1<OperatorType.AGGREGATE_MIN, Decimal|null, Decimal|null>(
     OperatorType.AGGREGATE_MIN,
     decimalMapper.orNull(),
     TypeHint.DECIMAL

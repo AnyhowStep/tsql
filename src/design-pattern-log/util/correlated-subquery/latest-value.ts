@@ -21,22 +21,22 @@ export type LatestValue<
     }>
 );
 
-export type LatestValueSelectValueDelegate<
+export interface LatestValueSelectValueDelegate<
     LogT extends ILog,
     BuiltInExprT extends AnyBuiltInExpr
-> =
-    SelectValueDelegate<
-        FromClauseUtil.From<
-            FromClauseUtil.RequireOuterQueryJoins<
-                FromClauseUtil.NewInstance,
-                [LogT["ownerTable"]]
-            >,
-            LogT["logTable"]
+> extends SelectValueDelegate<
+    FromClauseUtil.From<
+        FromClauseUtil.NewInstanceWithOuterQueryJoins<
+            false,
+            [LogT["ownerTable"]]
         >,
-        undefined,
-        BuiltInExprT
-    >
-;
+        LogT["logTable"]
+    >,
+    undefined,
+    BuiltInExprT
+> {
+
+}
 
 export function latestValue<
     LogT extends ILog,

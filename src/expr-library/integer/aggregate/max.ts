@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../../operator-type";
 import {TypeHint} from "../../../type-hint";
-import {makeAggregateOperator1} from "../../aggregate-factory";
+import {makeAggregateOperator1, AggregateOperator1} from "../../aggregate-factory";
 
 /**
  * Returns the max value of non-`NULL` values from a group.
@@ -18,7 +18,7 @@ import {makeAggregateOperator1} from "../../aggregate-factory";
  * + PostgreSQL : `MAX(x)`
  * + SQLite     : `MAX(x)`
  */
-export const max = makeAggregateOperator1<OperatorType.AGGREGATE_MAX, bigint|null, bigint|null>(
+export const max : AggregateOperator1<bigint|null, bigint|null> = makeAggregateOperator1<OperatorType.AGGREGATE_MAX, bigint|null, bigint|null>(
     OperatorType.AGGREGATE_MAX,
     tm.mysql.bigIntSigned().orNull(),
     TypeHint.BIGINT_SIGNED

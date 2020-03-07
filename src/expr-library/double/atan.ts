@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator1} from "../factory";
+import {makeOperator1, Operator1} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -15,7 +15,7 @@ import {TypeHint} from "../../type-hint";
  * + PostgreSQL     : `ATAN(x)`
  * + SQLite         : None, implement with user-defined function
  */
-export const atan = makeOperator1<OperatorType.ARC_TANGENT, number, number>(
+export const atan : Operator1<number, number> = makeOperator1<OperatorType.ARC_TANGENT, number, number>(
     OperatorType.ARC_TANGENT,
     tm.mysql.double(),
     TypeHint.DOUBLE

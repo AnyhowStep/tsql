@@ -1,6 +1,6 @@
 import {OperatorType} from "../../../operator-type";
 import {TypeHint} from "../../../type-hint";
-import {makeAggregateOperator2, AggregateOperator1} from "../../aggregate-factory";
+import {makeAggregateOperator2, AggregateOperator2, AggregateOperator1} from "../../aggregate-factory";
 import {Decimal} from "../../../decimal";
 import {BuiltInExpr_NonAggregate} from "../../../built-in-expr";
 import {ExprUtil} from "../../../expr";
@@ -9,7 +9,7 @@ import {decimalMapper} from "../../decimal/decimal-mapper";
 /**
  * The return type being `DECIMAL` is intentional.
  */
-const sumAsDecimalImpl = makeAggregateOperator2<OperatorType.AGGREGATE_SUM_AS_DECIMAL, boolean, bigint|null, Decimal|null>(
+const sumAsDecimalImpl : AggregateOperator2<boolean, bigint|null, Decimal|null> = makeAggregateOperator2<OperatorType.AGGREGATE_SUM_AS_DECIMAL, boolean, bigint|null, Decimal|null>(
     OperatorType.AGGREGATE_SUM_AS_DECIMAL,
     decimalMapper.orNull(),
     TypeHint.BIGINT_SIGNED

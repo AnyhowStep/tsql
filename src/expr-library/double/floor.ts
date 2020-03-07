@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {makeOperator1Idempotent} from "../factory";
+import {makeOperator1Idempotent, Operator1} from "../factory";
 
 /**
  * Returns the floor of the number
@@ -31,7 +31,7 @@ import {makeOperator1Idempotent} from "../factory";
  * This function is idempotent.
  * `FLOOR(FLOOR(x)) == FLOOR(x)`
  */
-export const floor = makeOperator1Idempotent<OperatorType.FLOOR, number, number>(
+export const floor : Operator1<number, number> = makeOperator1Idempotent<OperatorType.FLOOR, number, number>(
     OperatorType.FLOOR,
     tm.toUnsafeNumber(),
     TypeHint.DOUBLE

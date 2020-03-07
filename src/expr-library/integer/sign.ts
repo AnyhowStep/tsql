@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {makeOperator1Idempotent} from "../factory";
+import {makeOperator1Idempotent, Operator1} from "../factory";
 
 /**
  * This function is idempotent.
@@ -9,7 +9,7 @@ import {makeOperator1Idempotent} from "../factory";
  *
  * Will return -1, 0, 1
  */
-export const sign = makeOperator1Idempotent<OperatorType.SIGN, bigint, bigint>(
+export const sign : Operator1<bigint, bigint> = makeOperator1Idempotent<OperatorType.SIGN, bigint, bigint>(
     OperatorType.SIGN,
     tm.mysql.bigIntSigned(),
     TypeHint.BIGINT_SIGNED

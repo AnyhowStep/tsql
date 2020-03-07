@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {makeOperator1} from "../factory";
+import {makeOperator1, Operator1} from "../factory";
 
 /**
  * Returns the cosine
@@ -21,7 +21,7 @@ import {makeOperator1} from "../factory";
  * @param arg - Radians
  * @returns The cosine
  */
-export const cos = makeOperator1<OperatorType.COSINE, number, number|null>(
+export const cos : Operator1<number, number|null> = makeOperator1<OperatorType.COSINE, number, number|null>(
     OperatorType.COSINE,
     tm.mysql.double().orNull(),
     TypeHint.DOUBLE

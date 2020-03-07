@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator2} from "../factory";
+import {makeOperator2, Operator2} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -28,7 +28,7 @@ import {TypeHint} from "../../type-hint";
  * @see inStr
  * @todo Remove `inStr()` and keep `position()`?
  */
-export const position = makeOperator2<OperatorType.POSITION, string, string, bigint>(
+export const position : Operator2<string, string, bigint> = makeOperator2<OperatorType.POSITION, string, string, bigint>(
     OperatorType.POSITION,
     tm.mysql.bigIntUnsigned(),
     TypeHint.STRING

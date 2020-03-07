@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {makeOperator1DoubleElimination} from "../factory";
+import {makeOperator1DoubleElimination, Operator1} from "../factory";
 
 /**
  * Returns the unary minus of the double value
@@ -19,7 +19,7 @@ import {makeOperator1DoubleElimination} from "../factory";
  * This function has the double elimination property.
  * `NEG(NEG(x)) == x`
  */
-export const neg = makeOperator1DoubleElimination<OperatorType.UNARY_MINUS, number, number>(
+export const neg : Operator1<number, number> = makeOperator1DoubleElimination<OperatorType.UNARY_MINUS, number, number>(
     OperatorType.UNARY_MINUS,
     tm.toUnsafeNumber(),
     TypeHint.DOUBLE

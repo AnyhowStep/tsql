@@ -1,5 +1,5 @@
 import * as tm from "type-mapping/fluent";
-import {makeOperator1Idempotent} from "../factory";
+import {makeOperator1Idempotent, Operator1} from "../factory";
 import {OperatorType} from "../../operator-type";
 
 /**
@@ -26,7 +26,7 @@ import {OperatorType} from "../../operator-type";
  *
  * + https://github.com/AnyhowStep/tsql/issues/15
  */
-export const unsafeCastAsBinary = makeOperator1Idempotent<OperatorType.CAST_AS_BINARY, unknown, Uint8Array|null>(
+export const unsafeCastAsBinary : Operator1<unknown, Uint8Array|null> = makeOperator1Idempotent<OperatorType.CAST_AS_BINARY, unknown, Uint8Array|null>(
     OperatorType.CAST_AS_BINARY,
     tm.instanceOfUint8Array().orNull()
 );

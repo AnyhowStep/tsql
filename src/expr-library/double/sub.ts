@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator2} from "../factory";
+import {makeOperator2, Operator2} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -33,7 +33,7 @@ import {TypeHint} from "../../type-hint";
  * This particular function will be emulated in SQLite such that
  * it'll throw an error, instead of returning `null`.
  */
-export const sub = makeOperator2<OperatorType.SUBTRACTION, number, number, number>(
+export const sub : Operator2<number, number, number> = makeOperator2<OperatorType.SUBTRACTION, number, number, number>(
     OperatorType.SUBTRACTION,
     tm.toUnsafeNumber(),
     TypeHint.DOUBLE

@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator2ToN} from "../factory";
+import {makeOperator2ToN, Operator2ToN} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -21,7 +21,7 @@ import {TypeHint} from "../../type-hint";
  *   + Ignores `NULL` arguments after the separator
  * + SQLite         : None. Implement with user-defined function.
  */
-export const concatWs = makeOperator2ToN<OperatorType.CONCAT_WS, string, string|null, string|null, string>(
+export const concatWs : Operator2ToN<string, string|null, string|null, string> = makeOperator2ToN<OperatorType.CONCAT_WS, string, string|null, string|null, string>(
     OperatorType.CONCAT_WS,
     tm.string(),
     TypeHint.STRING

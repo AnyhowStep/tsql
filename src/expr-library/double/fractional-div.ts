@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {makeOperator2} from "../factory";
+import {makeOperator2, Operator2} from "../factory";
 
 /**
  * Performs regular floating-point division
@@ -67,7 +67,7 @@ import {makeOperator2} from "../factory";
  *  > 0.5039834654517689
  * ```
  */
-export const fractionalDiv = makeOperator2<OperatorType.FRACTIONAL_DIVISION, number, number|null>(
+export const fractionalDiv : Operator2<number, number, number|null> = makeOperator2<OperatorType.FRACTIONAL_DIVISION, number, number|null>(
     OperatorType.FRACTIONAL_DIVISION,
     tm.orNull(tm.toUnsafeNumber()),
     TypeHint.DOUBLE

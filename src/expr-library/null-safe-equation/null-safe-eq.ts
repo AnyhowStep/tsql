@@ -1,4 +1,4 @@
-import {makeNullSafeEquation2} from "../factory";
+import {makeNullSafeEquation2, NullSafeEquation2} from "../factory";
 import {OperatorType} from "../../operator-type";
 
 /**
@@ -13,6 +13,6 @@ import {OperatorType} from "../../operator-type";
  *
  * For regular equality, @see {@link eq}
  */
-export const nullSafeEq = makeNullSafeEquation2(
+export const nullSafeEq : NullSafeEquation2 = makeNullSafeEquation2(
     OperatorType.NULL_SAFE_EQUAL
 );

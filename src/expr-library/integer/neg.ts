@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {makeOperator1DoubleElimination} from "../factory";
+import {makeOperator1DoubleElimination, Operator1} from "../factory";
 
 /**
  * This function has the double elimination property.
@@ -119,7 +119,7 @@ import {makeOperator1DoubleElimination} from "../factory";
  * SQLite should have a special `bigintNeg()` polyfill that does not cast to `DOUBLE`
  * and throws an error on overflow.
  */
-export const neg = makeOperator1DoubleElimination<OperatorType.UNARY_MINUS, bigint, bigint>(
+export const neg : Operator1<bigint, bigint> = makeOperator1DoubleElimination<OperatorType.UNARY_MINUS, bigint, bigint>(
     OperatorType.UNARY_MINUS,
     tm.mysql.bigIntSigned(),
     TypeHint.BIGINT_SIGNED

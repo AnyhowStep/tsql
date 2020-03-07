@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator1Idempotent} from "../factory";
+import {makeOperator1Idempotent, Operator1} from "../factory";
 import {OperatorType} from "../../operator-type";
 
 /**
@@ -32,7 +32,7 @@ import {OperatorType} from "../../operator-type";
  *
  * + https://github.com/AnyhowStep/tsql/issues/15
  */
-export const unsafeCastAsJson = makeOperator1Idempotent<OperatorType.CAST_AS_JSON, unknown, string|null>(
+export const unsafeCastAsJson : Operator1<unknown, string|null> = makeOperator1Idempotent<OperatorType.CAST_AS_JSON, unknown, string|null>(
     OperatorType.CAST_AS_JSON,
     tm.orNull(tm.string())
 );

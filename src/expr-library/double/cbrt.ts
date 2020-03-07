@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {makeOperator1} from "../factory";
+import {makeOperator1, Operator1} from "../factory";
 
 /**
  * Returns the cube root
@@ -37,7 +37,7 @@ import {makeOperator1} from "../factory";
  * > 3
  * ```
  */
-export const cbrt = makeOperator1<OperatorType.CUBE_ROOT, number, number>(
+export const cbrt : Operator1<number, number> = makeOperator1<OperatorType.CUBE_ROOT, number, number>(
     OperatorType.CUBE_ROOT,
     tm.toUnsafeNumber(),
     TypeHint.DOUBLE

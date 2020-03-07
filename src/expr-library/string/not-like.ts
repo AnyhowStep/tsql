@@ -1,12 +1,12 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {makeOperator3} from "../factory/make-operator-3";
+import {makeOperator3, Operator3} from "../factory/make-operator-3";
 import {BuiltInExpr} from "../../built-in-expr";
 import {ExprUtil} from "../../expr";
 import {assertValidLikeEscapeChar} from "./like";
 
-const notLikeEscapeImpl = makeOperator3<OperatorType.NOT_LIKE_ESCAPE, string, string, string, boolean>(
+const notLikeEscapeImpl : Operator3<string, string, string, boolean> = makeOperator3<OperatorType.NOT_LIKE_ESCAPE, string, string, string, boolean>(
     OperatorType.NOT_LIKE_ESCAPE,
     tm.mysql.boolean(),
     TypeHint.STRING

@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator3} from "../factory";
+import {makeOperator3, Operator3} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 import {BuiltInExpr, BuiltInExprUtil} from "../../built-in-expr";
@@ -46,7 +46,7 @@ import {OperatorNodeUtil} from "../../ast";
  *
  * @see rPad
  */
-export const rPadUnsafe = makeOperator3<OperatorType.RPAD, string, bigint, string, string|null>(
+export const rPadUnsafe : Operator3<string, bigint, string, string|null> = makeOperator3<OperatorType.RPAD, string, bigint, string, string|null>(
     OperatorType.RPAD,
     tm.orNull(tm.string()),
     TypeHint.STRING

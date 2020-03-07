@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator1} from "../factory";
+import {makeOperator1, Operator1} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -24,7 +24,7 @@ import {TypeHint} from "../../type-hint";
  * If the input is not a valid base-64 string, some databases throw an error.
  * Others return `NULL`.
  */
-export const fromBase64 = makeOperator1<OperatorType.FROM_BASE64, string, Uint8Array|null>(
+export const fromBase64 : Operator1<string, Uint8Array|null> = makeOperator1<OperatorType.FROM_BASE64, string, Uint8Array|null>(
     OperatorType.FROM_BASE64,
     tm.orNull(tm.instanceOfUint8Array()),
     TypeHint.STRING

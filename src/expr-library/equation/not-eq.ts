@@ -1,4 +1,4 @@
-import {makeEquation2} from "../factory";
+import {makeEquation2, Equation2} from "../factory";
 import {OperatorType} from "../../operator-type";
 
 /**
@@ -9,6 +9,6 @@ import {OperatorType} from "../../operator-type";
  * For null-safe inequality, @see {@link nullSafeNotEq}
  *
  */
-export const notEq = makeEquation2(
+export const notEq : Equation2 = makeEquation2(
     OperatorType.NOT_EQUAL
 );

@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator1} from "../factory";
+import {makeOperator1, Operator1} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -27,7 +27,7 @@ import {TypeHint} from "../../type-hint";
  * (2n**64n + BigInt(x)).toString(2)
  * ```
  */
-export const bin = makeOperator1<OperatorType.BIN, bigint, string>(
+export const bin : Operator1<bigint, string> = makeOperator1<OperatorType.BIN, bigint, string>(
     OperatorType.BIN,
     tm.match(/^[01]+$/),
     TypeHint.BIGINT_SIGNED

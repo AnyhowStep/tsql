@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator0} from "../factory";
+import {makeOperator0, Operator0} from "../factory";
 import {OperatorType} from "../../operator-type";
 
 /**
@@ -24,7 +24,7 @@ import {OperatorType} from "../../operator-type";
  * + SQLite     : `'main'` should always be the current database.
  *   + There's also `'temp'`, I guess
  */
-export const currentSchema = makeOperator0<OperatorType.CURRENT_SCHEMA, string|null>(
+export const currentSchema : Operator0<string|null> = makeOperator0<OperatorType.CURRENT_SCHEMA, string|null>(
     OperatorType.CURRENT_SCHEMA,
     tm.orNull(tm.string())
 );

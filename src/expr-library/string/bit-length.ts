@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator1} from "../factory";
+import {makeOperator1, Operator1} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -29,7 +29,7 @@ import {TypeHint} from "../../type-hint";
  *
  * https://www.db-fiddle.com/f/bmj7sAFhiPpFGNVAhBdi3Q/3
  */
-export const bitLength = makeOperator1<OperatorType.BIT_LENGTH, string, bigint>(
+export const bitLength : Operator1<string, bigint> = makeOperator1<OperatorType.BIT_LENGTH, string, bigint>(
     OperatorType.BIT_LENGTH,
     /**
      * Should not return a value less than zero

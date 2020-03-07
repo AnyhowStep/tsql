@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator1} from "../factory";
+import {makeOperator1, Operator1} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -31,7 +31,7 @@ import {TypeHint} from "../../type-hint";
  *
  * https://www.db-fiddle.com/f/bmj7sAFhiPpFGNVAhBdi3Q/2
  */
-export const ascii = makeOperator1<OperatorType.ASCII, string, bigint>(
+export const ascii : Operator1<string, bigint> = makeOperator1<OperatorType.ASCII, string, bigint>(
     OperatorType.ASCII,
     /**
      * Should not return a value less than zero

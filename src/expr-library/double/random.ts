@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator0} from "../factory";
+import {makeOperator0, Operator0} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -32,7 +32,7 @@ import {TypeHint} from "../../type-hint";
  *  )
  * ```
  */
-export const random = makeOperator0<OperatorType.RANDOM, number>(
+export const random : Operator0<number> = makeOperator0<OperatorType.RANDOM, number>(
     OperatorType.RANDOM,
     tm.mysql.double(),
     TypeHint.DOUBLE

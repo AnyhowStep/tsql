@@ -6,7 +6,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {makeOperator1Idempotent} from "../factory";
+import {makeOperator1Idempotent, Operator1} from "../factory";
 
 /**
  * Rounds to zero decimal places.
@@ -40,7 +40,7 @@ import {makeOperator1Idempotent} from "../factory";
  * This function is idempotent.
  * `ROUND(ROUND(x)) == ROUND(x)`
  */
-export const round = makeOperator1Idempotent<OperatorType.ROUND, number, number>(
+export const round : Operator1<number, number> = makeOperator1Idempotent<OperatorType.ROUND, number, number>(
     OperatorType.ROUND,
     tm.toUnsafeNumber(),
     TypeHint.DOUBLE

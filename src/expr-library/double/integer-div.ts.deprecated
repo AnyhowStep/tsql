@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
-import {makeOperator2} from "../factory";
+import {makeOperator2, Operator2} from "../factory";
 
 /**
  * Performs fractional division **first**.
@@ -55,7 +55,7 @@ import {makeOperator2} from "../factory";
  *
  * @todo Maybe just... Remove this.
  */
-export const integerDiv = makeOperator2<OperatorType.INTEGER_DIVISION, number, bigint|null>(
+export const integerDiv : Operator2<number, number, bigint|null> = makeOperator2<OperatorType.INTEGER_DIVISION, number, bigint|null>(
     OperatorType.INTEGER_DIVISION,
     tm.mysql.bigIntSigned().orNull(),
     TypeHint.DOUBLE

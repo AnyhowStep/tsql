@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../../operator-type";
 import {TypeHint} from "../../../type-hint";
-import {makeAggregateOperator1} from "../../aggregate-factory";
+import {makeAggregateOperator1, AggregateOperator1} from "../../aggregate-factory";
 
 /**
  * Returns the population variance of non-`NULL` values from a group.
@@ -35,7 +35,7 @@ import {makeAggregateOperator1} from "../../aggregate-factory";
  * Of course, you can't use the above expression because you cannot nest aggregate functions.
  * (Cannot use `AVG()` inside of `SUM()`)
  */
-export const varPop = makeAggregateOperator1<OperatorType.AGGREGATE_POPULATION_VARIANCE, number|null, number|null>(
+export const varPop : AggregateOperator1<number|null, number|null> = makeAggregateOperator1<OperatorType.AGGREGATE_POPULATION_VARIANCE, number|null, number|null>(
     OperatorType.AGGREGATE_POPULATION_VARIANCE,
     tm.orNull(tm.toUnsafeNumber()),
     TypeHint.DOUBLE

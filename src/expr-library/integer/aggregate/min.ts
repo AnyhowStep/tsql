@@ -1,7 +1,7 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../../operator-type";
 import {TypeHint} from "../../../type-hint";
-import {makeAggregateOperator1} from "../../aggregate-factory";
+import {makeAggregateOperator1, AggregateOperator1} from "../../aggregate-factory";
 
 /**
  * Returns the min value of non-`NULL` values from a group.
@@ -18,7 +18,7 @@ import {makeAggregateOperator1} from "../../aggregate-factory";
  * + PostgreSQL : `MIN(x)`
  * + SQLite     : `MIN(x)`
  */
-export const min = makeAggregateOperator1<OperatorType.AGGREGATE_MIN, bigint|null, bigint|null>(
+export const min : AggregateOperator1<bigint|null, bigint|null> = makeAggregateOperator1<OperatorType.AGGREGATE_MIN, bigint|null, bigint|null>(
     OperatorType.AGGREGATE_MIN,
     tm.mysql.bigIntSigned().orNull(),
     TypeHint.BIGINT_SIGNED

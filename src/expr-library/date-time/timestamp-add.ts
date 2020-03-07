@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator2} from "../factory";
+import {makeOperator2, Operator2} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -32,7 +32,7 @@ import {TypeHint} from "../../type-hint";
  *
  * @todo Unify negative overflow behaviour.
  */
-export const timestampAddMillisecond = makeOperator2<OperatorType.TIMESTAMPADD_MILLISECOND, bigint, Date, Date|null>(
+export const timestampAddMillisecond : Operator2<bigint, Date, Date|null> = makeOperator2<OperatorType.TIMESTAMPADD_MILLISECOND, bigint, Date, Date|null>(
     OperatorType.TIMESTAMPADD_MILLISECOND,
     tm.mysql.dateTime(3).orNull(),
     TypeHint.DATE_TIME
@@ -67,7 +67,7 @@ export const timestampAddMillisecond = makeOperator2<OperatorType.TIMESTAMPADD_M
  *
  * @todo Unify negative overflow behaviour.
  */
-export const timestampAddSecond = makeOperator2<OperatorType.TIMESTAMPADD_SECOND, bigint, Date, Date|null>(
+export const timestampAddSecond : Operator2<bigint, Date, Date|null> = makeOperator2<OperatorType.TIMESTAMPADD_SECOND, bigint, Date, Date|null>(
     OperatorType.TIMESTAMPADD_SECOND,
     tm.mysql.dateTime(3).orNull(),
     TypeHint.DATE_TIME
@@ -102,7 +102,7 @@ export const timestampAddSecond = makeOperator2<OperatorType.TIMESTAMPADD_SECOND
  *
  * @todo Unify negative overflow behaviour.
  */
-export const timestampAddMinute = makeOperator2<OperatorType.TIMESTAMPADD_MINUTE, bigint, Date, Date|null>(
+export const timestampAddMinute : Operator2<bigint, Date, Date|null> = makeOperator2<OperatorType.TIMESTAMPADD_MINUTE, bigint, Date, Date|null>(
     OperatorType.TIMESTAMPADD_MINUTE,
     tm.mysql.dateTime(3).orNull(),
     TypeHint.DATE_TIME
@@ -137,7 +137,7 @@ export const timestampAddMinute = makeOperator2<OperatorType.TIMESTAMPADD_MINUTE
  *
  * @todo Unify negative overflow behaviour.
  */
-export const timestampAddHour = makeOperator2<OperatorType.TIMESTAMPADD_HOUR, bigint, Date, Date|null>(
+export const timestampAddHour : Operator2<bigint, Date, Date|null> = makeOperator2<OperatorType.TIMESTAMPADD_HOUR, bigint, Date, Date|null>(
     OperatorType.TIMESTAMPADD_HOUR,
     tm.mysql.dateTime(3).orNull(),
     TypeHint.DATE_TIME
@@ -172,7 +172,7 @@ export const timestampAddHour = makeOperator2<OperatorType.TIMESTAMPADD_HOUR, bi
  *
  * @todo Unify negative overflow behaviour.
  */
-export const timestampAddDay = makeOperator2<OperatorType.TIMESTAMPADD_DAY, bigint, Date, Date|null>(
+export const timestampAddDay : Operator2<bigint, Date, Date|null> = makeOperator2<OperatorType.TIMESTAMPADD_DAY, bigint, Date, Date|null>(
     OperatorType.TIMESTAMPADD_DAY,
     tm.mysql.dateTime(3).orNull(),
     TypeHint.DATE_TIME
@@ -200,7 +200,7 @@ export const timestampAddDay = makeOperator2<OperatorType.TIMESTAMPADD_DAY, bigi
  *
  * @todo Unify negative overflow behaviour.
  */
-export const timestampAddMonth = makeOperator2<OperatorType.TIMESTAMPADD_MONTH, bigint, Date, Date|null>(
+export const timestampAddMonth : Operator2<bigint, Date, Date|null> = makeOperator2<OperatorType.TIMESTAMPADD_MONTH, bigint, Date, Date|null>(
     OperatorType.TIMESTAMPADD_MONTH,
     tm.mysql.dateTime(3).orNull(),
     TypeHint.DATE_TIME
@@ -235,7 +235,7 @@ export const timestampAddMonth = makeOperator2<OperatorType.TIMESTAMPADD_MONTH, 
  *
  * @todo Unify negative overflow behaviour.
  */
-export const timestampAddYear = makeOperator2<OperatorType.TIMESTAMPADD_YEAR, bigint, Date, Date|null>(
+export const timestampAddYear : Operator2<bigint, Date, Date|null> = makeOperator2<OperatorType.TIMESTAMPADD_YEAR, bigint, Date, Date|null>(
     OperatorType.TIMESTAMPADD_YEAR,
     tm.mysql.dateTime(3).orNull(),
     TypeHint.DATE_TIME

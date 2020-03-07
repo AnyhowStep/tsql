@@ -38,6 +38,7 @@ export * from "./join-map";
 export * from "./key";
 export * from "./limit-clause";
 export * from "./map-delegate";
+export * from "./mapper-map";
 export * from "./on-clause";
 export * from "./order";
 export * from "./order-by-clause";

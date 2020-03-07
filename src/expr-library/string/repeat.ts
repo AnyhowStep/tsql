@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator2} from "../factory";
+import {makeOperator2, Operator2} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -24,7 +24,7 @@ import {TypeHint} from "../../type-hint";
  * @param left  - The string to repeat
  * @param right - The amount of times to repeat the string
  */
-export const repeat = makeOperator2<OperatorType.REPEAT, string, bigint, string>(
+export const repeat : Operator2<string, bigint, string> = makeOperator2<OperatorType.REPEAT, string, bigint, string>(
     OperatorType.REPEAT,
     tm.string(),
     TypeHint.STRING

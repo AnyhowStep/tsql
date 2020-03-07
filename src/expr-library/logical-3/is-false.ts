@@ -1,5 +1,5 @@
 import * as tm from "type-mapping";
-import {makeOperator1} from "../factory";
+import {makeOperator1, Operator1} from "../factory";
 import {OperatorType} from "../../operator-type";
 import {TypeHint} from "../../type-hint";
 
@@ -22,7 +22,7 @@ import {TypeHint} from "../../type-hint";
  * @todo Monitor this PR,
  * https://github.com/microsoft/TypeScript/issues/33561
  */
-export const isFalse = makeOperator1<OperatorType.IS_FALSE, boolean|null, boolean>(
+export const isFalse : Operator1<boolean|null, boolean> = makeOperator1<OperatorType.IS_FALSE, boolean|null, boolean>(
     OperatorType.IS_FALSE,
     tm.mysql.boolean(),
     TypeHint.BOOLEAN

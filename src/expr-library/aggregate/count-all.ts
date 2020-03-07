@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {OperatorType} from "../../operator-type";
-import {makeAggregateOperator0} from "../aggregate-factory";
+import {makeAggregateOperator0, AggregateOperator0} from "../aggregate-factory";
 
 /**
  * Returns a count of the number of rows
@@ -18,7 +18,7 @@ import {makeAggregateOperator0} from "../aggregate-factory";
  * @todo Rename to `count`? or `countRow`?
  * @todo Or add a function `count()` with overloads for `countExpr` and `countAll`?
  */
-export const countAll = makeAggregateOperator0<OperatorType.AGGREGATE_COUNT_ALL, bigint>(
+export const countAll : AggregateOperator0<bigint> = makeAggregateOperator0<OperatorType.AGGREGATE_COUNT_ALL, bigint>(
     OperatorType.AGGREGATE_COUNT_ALL,
     /**
      * Should not return a value less than zero
