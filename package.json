@@ -1,9 +1,13 @@
 {
-  "name": "@tsql/tsql",
-  "version": "0.0.0",
+  "name": "@squill/squill",
+  "version": "0.0.3",
   "description": "A SQL query-builder/ORM",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
   "scripts": {
     "test": "ts-node -P ./test/run-time/tsconfig.json -r ./test/run-time/tape-stream.ts -r ./test/run-time/bluebird-promise.ts",
     "test-bigint-polyfill": "ts-node -P ./test/run-time/tsconfig.json -r ./test/run-time/tape-stream.ts -r ./test/run-time/bigint-polyfill.ts -r ./test/run-time/bluebird-promise.ts",
