@@ -42,7 +42,16 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     }
                 )
                 .then((row) => {
-                    t.deepEqual(row, { value : Buffer.from("hello, world") });
+                    t.deepEqual(
+                        row,
+                        row.value instanceof Buffer ?
+                        { value : Buffer.from("hello, world") } :
+                        {
+                            value : new Uint8Array(
+                                "hello, world".split("").map(s => s.charCodeAt(0))
+                            )
+                        }
+                    );
                 });
 
             await myTable
@@ -53,7 +62,12 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     }
                 )
                 .then((row) => {
-                    t.deepEqual(row, { value : Buffer.from([1,2,3]) });
+                    t.deepEqual(
+                        row,
+                        row.value instanceof Buffer ?
+                        { value : Buffer.from([1,2,3]) } :
+                        { value : new Uint8Array([1,2,3]) }
+                    );
                 });
 
             await myTable
@@ -64,7 +78,12 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                     }
                 )
                 .then((row) => {
-                    t.deepEqual(row, { value : Buffer.from([4,5,6]) });
+                    t.deepEqual(
+                        row,
+                        row.value instanceof Buffer ?
+                        { value : Buffer.from([4,5,6]) } :
+                        { value : new Uint8Array([4,5,6]) }
+                    );
                 });
         });
 

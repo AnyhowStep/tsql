@@ -3275,7 +3275,7 @@ export enum OperatorType {
      * + PostgreSQL : `SUM(DISTINCT x)/SUM(x)/SUM(x) OVER()`
      * + SQLite     : `SUM(DISTINCT x)/SUM(x)/SUM(x) OVER()`
      */
-    AGGREGATE_SUM_AS_DECIMAL = "AGGREGATE_SUM",
+    AGGREGATE_SUM_AS_DECIMAL = "AGGREGATE_SUM_AS_DECIMAL",
 
     /**
      * + https://dev.mysql.com/doc/refman/8.0/en/group-by-functions.html#function_min
@@ -3288,7 +3288,7 @@ export enum OperatorType {
      * + PostgreSQL : `SUM(DISTINCT x)/SUM(x)/SUM(x) OVER()`
      * + SQLite     : `SUM(DISTINCT x)/SUM(x)/SUM(x) OVER()`
      */
-    AGGREGATE_SUM_AS_BIGINT_SIGNED = "AGGREGATE_SUM",
+    AGGREGATE_SUM_AS_BIGINT_SIGNED = "AGGREGATE_SUM_AS_BIGINT_SIGNED",
 
     /**
      * + https://dev.mysql.com/doc/refman/8.0/en/group-by-functions.html#function_var-pop

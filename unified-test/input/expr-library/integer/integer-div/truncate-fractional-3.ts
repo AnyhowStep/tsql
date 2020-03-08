@@ -12,6 +12,9 @@ export const test : Test = ({tape, pool}) => {
                 .fetchValue(connection)
                 .then((value) => {
                     t.deepEqual(value, BigInt("3074457345618258602"));
+                })
+                .catch((err) => {
+                    t.fail(err.message);
                 });
 
             await tsql
@@ -22,6 +25,9 @@ export const test : Test = ({tape, pool}) => {
                 .fetchValue(connection)
                 .then((value) => {
                     t.deepEqual(value, BigInt("-3074457345618258602"));
+                })
+                .catch((err) => {
+                    t.fail(err.message);
                 });
 
             await tsql
@@ -32,6 +38,9 @@ export const test : Test = ({tape, pool}) => {
                 .fetchValue(connection)
                 .then((value) => {
                     t.deepEqual(value, BigInt("-3074457345618258602"));
+                })
+                .catch((err) => {
+                    t.fail(err.message);
                 });
 
             await tsql
@@ -42,6 +51,9 @@ export const test : Test = ({tape, pool}) => {
                 .fetchValue(connection)
                 .then((value) => {
                     t.deepEqual(value, BigInt("3074457345618258602"));
+                })
+                .catch((err) => {
+                    t.fail(err.message);
                 });
 
         });
