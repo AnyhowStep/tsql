@@ -227,6 +227,8 @@ export type OperatorOperand = {
     [OperatorType.AGGREGATE_POPULATION_STANDARD_DEVIATION]  : Operand1,
     [OperatorType.AGGREGATE_SAMPLE_STANDARD_DEVIATION]      : Operand1,
     [OperatorType.AGGREGATE_SUM]            : Operand2,
+    [OperatorType.AGGREGATE_SUM_AS_BIGINT_SIGNED]   : Operand2,
+    [OperatorType.AGGREGATE_SUM_AS_DECIMAL]         : Operand2,
     [OperatorType.AGGREGATE_POPULATION_VARIANCE]    : Operand1,
     [OperatorType.AGGREGATE_SAMPLE_VARIANCE]        : Operand1,
 

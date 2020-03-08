@@ -106,7 +106,7 @@ export const test : Test = ({tape, pool, createTemporarySchema}) => {
                         );
                     })
                     .catch((err) => {
-                        t.fail(err.message);
+                        t.fail(err.sql + "\n" + err.message);
                     });
             }
         });

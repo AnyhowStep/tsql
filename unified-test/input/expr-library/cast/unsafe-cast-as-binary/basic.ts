@@ -16,7 +16,14 @@ export const test : Test = ({tape, pool}) => {
                 await tsql.selectValue(() => tsql.unsafeCastAsBinary(a))
                     .fetchValue(connection)
                     .then((value) => {
-                        t.deepEqual(value, Buffer.from(a));
+                        t.deepEqual(
+                            value,
+                            value instanceof Buffer ?
+                            Buffer.from(a) :
+                            new Uint8Array(
+                                a.split("").map(s => s.charCodeAt(0))
+                            )
+                        );
                     })
                     .catch((err) => {
                         t.fail(err.message);

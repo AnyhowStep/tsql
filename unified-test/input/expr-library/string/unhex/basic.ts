@@ -16,7 +16,9 @@ export const test : Test = ({tape, pool}) => {
                         } else {
                             t.deepEqual(
                                 value,
-                                bytes,
+                                value instanceof Buffer ?
+                                bytes :
+                                new Uint8Array(bytes),
                                 `UNHEX(${str}) = ${bytes}`
                             );
                         }
@@ -34,7 +36,13 @@ export const test : Test = ({tape, pool}) => {
                     if (value == undefined) {
                         t.fail(`Expected Uint8Array for UNHEX(${str})`);
                     } else {
-                        t.deepEqual(value, Buffer.from(bytes), `UNHEX(${str}) = ${bytes.join(", ")}`);
+                        t.deepEqual(
+                            value,
+                            value instanceof Buffer ?
+                            Buffer.from(bytes) :
+                            new Uint8Array(bytes),
+                            `UNHEX(${str}) = ${bytes.join(", ")}`
+                        );
                     }
                 })
                 .catch((err) => {

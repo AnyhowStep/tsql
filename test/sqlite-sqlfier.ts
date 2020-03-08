@@ -5,7 +5,6 @@ import {
     AstUtil,
     functionCall,
     escapeIdentifierWithDoubleQuotes,
-    notImplementedSqlfier,
     SelectClause,
     Ast,
     ColumnUtil,
@@ -610,7 +609,6 @@ export const sqliteSqlfier : Sqlfier = {
         ),
     },
     operatorSqlfier : {
-        ...notImplementedSqlfier.operatorSqlfier,
         /*
             Comparison Functions and Operators
             https://dev.mysql.com/doc/refman/8.0/en/comparison-operators.html
