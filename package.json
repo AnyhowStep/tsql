@@ -51,7 +51,7 @@
     "bluebird": "^3.5.5",
     "c8": "^5.0.4",
     "diff": "^4.0.1",
-    "eslint": "^5.16.0",
+    "eslint": "^6.8.0",
     "eslint-utils": "^1.4.1",
     "handlebars": "^4.5.3",
     "sql.js": "^1.0.0",

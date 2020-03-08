@@ -15,6 +15,19 @@ export const test : Test = ({tape, pool}) => {
         await pool.acquire(async (connection) => {
             await tsql
                 .selectValue(() => tsql.integer.integerDiv(
+                    BigInt("-9223372036854775808"),
+                    BigInt(0)
+                ))
+                .fetchValue(connection)
+                .then((value) => {
+                    t.deepEqual(value, null);
+                })
+                .catch((err) => {
+                    t.true(err instanceof tsql.DivideByZeroError);
+                });
+
+            await tsql
+                .selectValue(() => tsql.integer.integerDiv(
                     BigInt("9223372036854775807"),
                     BigInt(0)
                 ))
