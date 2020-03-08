@@ -1776,22 +1776,35 @@ export class Pool implements tsql.IPool {
         );
         this.acquire = this.asyncQueue.enqueue as AsyncQueue<tsql.IConnection & Connection>["enqueue"];
         this.acquire(async (connection) => {
-            /**
-             * @todo Use `createVarArgFunction()`
-             */
-            await connection.createFunction("bigint_add", (a, b) => {
-                if (tm.TypeUtil.isBigInt(a) && tm.TypeUtil.isBigInt(b)) {
-                    const result = tm.BigIntUtil.add(a, b);
-                    if (tm.BigIntUtil.lessThan(result, BigInt("-9223372036854775808"))) {
-                        throw new Error(`DataOutOfRangeError: bigint_add result was ${String(result)}`);
-                    }
-                    if (tm.BigIntUtil.greaterThan(result, BigInt("9223372036854775807"))) {
-                        throw new Error(`DataOutOfRangeError: bigint_add result was ${String(result)}`);
-                    }
-                    return result;
-                } else {
-                    throw new Error(`Can only add two bigint values`);
+            await connection.createVarArgFunction("bigint_add", (...args) => {
+                if (args.length == 0) {
+                    return BigInt(0);
                 }
+                if (args.length == 1) {
+                    return BigInt(args[0]);
+                }
+                const [a, b, ...rest] = args;
+                if (!tm.TypeUtil.isBigInt(a) || !tm.TypeUtil.isBigInt(b)) {
+                    throw new Error(`Can only add bigint values`);
+                }
+
+                const sum = tm.BigIntUtil.add(a, b);
+                const result = rest.reduce<bigint>(
+                    (sum, x) => {
+                        if (!tm.TypeUtil.isBigInt(x)) {
+                            throw new Error(`Can only add bigint values`);
+                        }
+                        return tm.BigIntUtil.add(sum, x);
+                    },
+                    sum
+                );
+                if (tm.BigIntUtil.lessThan(result, BigInt("-9223372036854775808"))) {
+                    throw new Error(`DataOutOfRangeError: bigint_add result was ${String(result)}`);
+                }
+                if (tm.BigIntUtil.greaterThan(result, BigInt("9223372036854775807"))) {
+                    throw new Error(`DataOutOfRangeError: bigint_add result was ${String(result)}`);
+                }
+                return result;
             });
             /**
              * @todo Use `createVarArgFunction()`
@@ -1810,22 +1823,35 @@ export class Pool implements tsql.IPool {
                     throw new Error(`Can only sub two bigint values`);
                 }
             });
-            /**
-             * @todo Use `createVarArgFunction()`
-             */
-            await connection.createFunction("bigint_mul", (a, b) => {
-                if (tm.TypeUtil.isBigInt(a) && tm.TypeUtil.isBigInt(b)) {
-                    const result = tm.BigIntUtil.mul(a, b);
-                    if (tm.BigIntUtil.lessThan(result, BigInt("-9223372036854775808"))) {
-                        throw new Error(`DataOutOfRangeError: bigint_mul result was ${String(result)}`);
-                    }
-                    if (tm.BigIntUtil.greaterThan(result, BigInt("9223372036854775807"))) {
-                        throw new Error(`DataOutOfRangeError: bigint_mul result was ${String(result)}`);
-                    }
-                    return result;
-                } else {
-                    throw new Error(`Can only mul two bigint values`);
+            await connection.createVarArgFunction("bigint_mul", (...args) => {
+                if (args.length == 0) {
+                    return BigInt(0);
                 }
+                if (args.length == 1) {
+                    return BigInt(args[0]);
+                }
+                const [a, b, ...rest] = args;
+                if (!tm.TypeUtil.isBigInt(a) || !tm.TypeUtil.isBigInt(b)) {
+                    throw new Error(`Can only mul bigint values`);
+                }
+
+                const product = tm.BigIntUtil.mul(a, b);
+                const result = rest.reduce<bigint>(
+                    (sum, x) => {
+                        if (!tm.TypeUtil.isBigInt(x)) {
+                            throw new Error(`Can only mul bigint values`);
+                        }
+                        return tm.BigIntUtil.mul(sum, x);
+                    },
+                    product
+                );
+                if (tm.BigIntUtil.lessThan(result, BigInt("-9223372036854775808"))) {
+                    throw new Error(`DataOutOfRangeError: bigint_mul result was ${String(result)}`);
+                }
+                if (tm.BigIntUtil.greaterThan(result, BigInt("9223372036854775807"))) {
+                    throw new Error(`DataOutOfRangeError: bigint_mul result was ${String(result)}`);
+                }
+                return result;
             });
             /**
              * @todo Use `createVarArgFunction()`
