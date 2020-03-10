@@ -3,7 +3,7 @@ export declare const result: Promise<tsql.ExecutionUtil.NotFoundUpdateAndFetchRe
     readonly key: string;
     readonly appId: bigint;
     readonly appKeyId: bigint;
-    readonly disabledAt: Date;
+    readonly disabledAt: Date | null;
     readonly createdAt: Date;
     readonly appKeyTypeId: import("../app-key-example").AppKeyTypeId.SERVER;
     readonly ipAddress: string;
