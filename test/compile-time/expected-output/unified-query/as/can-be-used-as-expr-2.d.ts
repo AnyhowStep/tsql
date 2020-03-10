@@ -1,6 +1,6 @@
 import * as tsql from "../../../../../dist";
 export declare const aliased: tsql.ExprImpl<boolean, tsql.IUsedRef<{
-    readonly somethingElse: {
+    somethingElse: {
         boop: bigint;
     };
 }>, false>;

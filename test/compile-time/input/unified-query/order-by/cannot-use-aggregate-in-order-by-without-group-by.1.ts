@@ -20,5 +20,15 @@ tsql
         tsql.integer.add(BigInt(1)).as("x"),
     ])
     .orderBy(columns => [
-        tsql.integer.max(columns.myColumn).asc(),
+        tsql.integer.max(columns.myTable.myColumn).asc(),
+    ]);
+
+tsql
+    .from(myTable)
+    .select(() => [
+        tsql.integer.add(BigInt(1)).as("x"),
+    ])
+    .orderBy(columns => [
+        //This is allowed because there is no GROUP BY clause and this is not an aggregate expr
+        columns.$aliased.x,
     ]);

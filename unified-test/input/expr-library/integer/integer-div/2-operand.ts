@@ -19,7 +19,7 @@ export const test : Test = ({tape, pool}) => {
                             t.deepEqual(value, BigInt(Math.trunc(a/b)), `${a}/${b} = ${Math.trunc(a/b)}`);
                         })
                         .catch((err) => {
-                            t.fail(err.message);
+                            t.fail(err.sql + "\n" + err.message);
                         });
                 }
             }
