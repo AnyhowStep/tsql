@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {ExtraQueryData, QueryData, IQuery} from "./query";
-import {WhereClause, WhereDelegate} from "../where-clause";
+import {WhereClause} from "../where-clause";
 import {GroupByDelegate, GroupByClauseUtil} from "../group-by-clause";
 import {HavingClause, HavingDelegate} from "../having-clause";
 import {OrderByClause} from "../order-by-clause";
@@ -11,7 +11,7 @@ import {BuiltInExpr_NonAggregate, AnyBuiltInExpr, AnySubqueryExpr} from "../buil
 import {OnDelegate, OnClauseUtil} from "../on-clause";
 import {ITable, TableUtil, TableWithPrimaryKey, InsertableTable, DeletableTable} from "../table";
 import {ColumnUtil} from "../column";
-import {JoinArrayUtil} from "../join";
+import {JoinArrayUtil, IJoin} from "../join";
 import {SuperKey_NonUnion} from "../super-key";
 import {PrimaryKey_NonUnion} from "../primary-key";
 import {PartialRow_NonUnion} from "../partial-row";
@@ -342,7 +342,12 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     }
 
     innerJoinUsingPrimaryKey<
-        SrcT extends Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"][number],
+        /**
+         * @todo Investigate this.
+         * This the `three-table-different-pks.ts` test to break, for some reason.
+         */
+        //SrcT extends Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"][number],
+        SrcT extends IJoin,
         DstT extends TableWithPrimaryKey
     > (
         this : Extract<this, QueryUtil.AfterFromClause>,
@@ -429,7 +434,12 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     }
 
     leftJoinUsingPrimaryKey<
-        SrcT extends Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"][number],
+        /**
+         * @todo Investigate this.
+         * This the `three-table-different-pks.ts` test to break, for some reason.
+         */
+        //SrcT extends Extract<this, QueryUtil.AfterFromClause>["fromClause"]["currentJoins"][number],
+        SrcT extends IJoin,
         DstT extends TableWithPrimaryKey
     > (
         this : Extract<this, QueryUtil.AfterFromClause>,
@@ -976,8 +986,8 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     }
 
     where (
-        whereDelegate : WhereDelegate<
-            this["fromClause"]
+        whereDelegate : QueryUtil.QueryWhereDelegate<
+            this
         >
     ) : (
         QueryUtil.Where<this>

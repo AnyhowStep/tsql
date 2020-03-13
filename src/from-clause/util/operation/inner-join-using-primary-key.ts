@@ -49,8 +49,8 @@ export type InnerJoinUsingPrimaryKey<
  * to trigger max depth/max count errors.
  */
 export type InnerJoinUsingPrimaryKeySrcDelegateImpl<
-    SrcT extends CurrentJoinsT[number],
-    CurrentJoinsT extends AfterFromClause["currentJoins"]
+    CurrentJoinsT extends AfterFromClause["currentJoins"],
+    SrcT extends CurrentJoinsT[number]
 > = (
     (
         /**
@@ -64,8 +64,8 @@ export type InnerJoinUsingPrimaryKeySrcDelegate<
     SrcT extends FromClauseT["currentJoins"][number]
 > = (
     InnerJoinUsingPrimaryKeySrcDelegateImpl<
-        SrcT,
-        FromClauseT["currentJoins"]
+        FromClauseT["currentJoins"],
+        SrcT
     >
 );
 /**
