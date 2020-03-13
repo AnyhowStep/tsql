@@ -49,8 +49,8 @@ export type LeftJoinUsingPrimaryKey<
  * to trigger max depth/max count errors.
  */
 export type LeftJoinUsingPrimaryKeySrcDelegateImpl<
-    SrcT extends CurrentJoinsT[number],
-    CurrentJoinsT extends AfterFromClause["currentJoins"]
+    CurrentJoinsT extends AfterFromClause["currentJoins"],
+    SrcT extends CurrentJoinsT[number]
 > = (
     (
         /**
@@ -64,8 +64,8 @@ export type LeftJoinUsingPrimaryKeySrcDelegate<
     SrcT extends FromClauseT["currentJoins"][number]
 > = (
     LeftJoinUsingPrimaryKeySrcDelegateImpl<
-        SrcT,
-        FromClauseT["currentJoins"]
+        FromClauseT["currentJoins"],
+        SrcT
     >
 );
 /**
