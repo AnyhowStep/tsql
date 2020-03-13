@@ -18,14 +18,14 @@ export const test : Test = ({tape, pool}) => {
                     if (b == 0) {
                         continue;
                     }
+                    const expected = (
+                        !isFinite(a) ?
+                        null :
+                        a%b
+                    );
                     await tsql.selectValue(() => tsql.double.fractionalRemainder(a, b))
                         .fetchValue(connection)
                         .then((value) => {
-                            const expected = (
-                                !isFinite(a) ?
-                                null :
-                                a%b
-                            );
                             t.deepEqual(
                                 value,
                                 expected,
@@ -33,6 +33,9 @@ export const test : Test = ({tape, pool}) => {
                             );
                         })
                         .catch((err) => {
+                            if (!(err instanceof tsql.DataOutOfRangeError)) {
+                                t.fail(`(${a}%${b}) ~= ${expected}` + "\n" + err.message + "\n" + err.stack);
+                            }
                             t.true(err instanceof tsql.DataOutOfRangeError);
                         });
                 }

@@ -1,6 +1,7 @@
-import {WhereDelegate, WhereClauseUtil} from "../../../where-clause";
+import {WhereClauseUtil, WhereDelegateColumns, WhereDelegateReturnType} from "../../../where-clause";
 import {Query} from "../../query-impl";
 import {IQuery} from "../../query";
+import {Correlate, correlate} from "./correlate";
 
 /**
  * https://github.com/microsoft/TypeScript/issues/32707#issuecomment-518347966
@@ -42,11 +43,22 @@ export type Where<
         QueryT["groupByClause"]
     >
 );
+
+export type QueryWhereDelegate<
+    QueryT extends IQuery
+> =
+    (
+        columns : WhereDelegateColumns<QueryT["fromClause"]>,
+        subquery : Correlate<QueryT>
+    ) => WhereDelegateReturnType<QueryT["fromClause"]>
+;
+
+
 export function where<
     QueryT extends IQuery
 > (
     query : QueryT,
-    whereDelegate : WhereDelegate<QueryT["fromClause"]>
+    whereDelegate : QueryWhereDelegate<QueryT>
 ) : (
     Where<QueryT>
 ) {
@@ -55,7 +67,9 @@ export function where<
     >(
         query.fromClause,
         query.whereClause,
-        whereDelegate
+        (columns) => {
+            return whereDelegate(columns, correlate<QueryT>(query));
+        }
     );
 
     const {

@@ -4,15 +4,12 @@ import {ColumnRefUtil} from "../column-ref";
 import {IExpr} from "../expr";
 import * as WhereClauseUtil from "./util";
 import {ColumnUtil} from "../column";
+import {Identity} from "../type-util";
 
-export type WhereDelegate<
+export type WhereDelegateReturnType<
     FromClauseT extends IFromClause
-> = (
-    (
-        columns : ColumnRefUtil.TryFlatten<
-            WhereClauseUtil.AllowedColumnRef<FromClauseT>
-        >
-    ) => (
+> =
+    Identity<
         | boolean
         | IExpr<{
             mapper : tm.SafeMapper<boolean>,
@@ -25,5 +22,21 @@ export type WhereDelegate<
             >,
             boolean
         >
-    )
-);
+    >
+;
+
+export type WhereDelegateColumns<
+    FromClauseT extends IFromClause
+> =
+    ColumnRefUtil.TryFlatten<
+        WhereClauseUtil.AllowedColumnRef<FromClauseT>
+    >
+;
+
+export type WhereDelegate<
+    FromClauseT extends IFromClause
+> =
+    (
+        columns : WhereDelegateColumns<FromClauseT>
+    ) => WhereDelegateReturnType<FromClauseT>
+;

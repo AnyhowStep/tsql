@@ -1,6 +1,6 @@
 import * as tm from "type-mapping";
 import {ExtraQueryData, QueryData, IQuery} from "./query";
-import {WhereClause, WhereDelegate} from "../where-clause";
+import {WhereClause} from "../where-clause";
 import {GroupByDelegate, GroupByClauseUtil} from "../group-by-clause";
 import {HavingClause, HavingDelegate} from "../having-clause";
 import {OrderByClause} from "../order-by-clause";
@@ -976,8 +976,8 @@ export class Query<DataT extends QueryData> implements IQuery<DataT> {
     }
 
     where (
-        whereDelegate : WhereDelegate<
-            this["fromClause"]
+        whereDelegate : QueryUtil.QueryWhereDelegate<
+            this
         >
     ) : (
         QueryUtil.Where<this>
