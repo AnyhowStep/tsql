@@ -24,6 +24,10 @@ You may add support for additional data types by creating custom data types.
 
 -----
 
+Data types in this library have the `dt` prefix.
+
+-----
+
 ### `null`
 
 TypeScript has `null` and `undefined` types. However, only `null` is allowed.
@@ -39,3 +43,46 @@ You may make a data type nullable by using the `.orNull()` method.
 -----
 
 ### `bigint`
+
+MySQL has `UNSIGNED` integers but PostgreSQL and SQLite do not.
+Therefore, this library does not support `UNSIGNED` integer types.
+The MySQL-specific library may add support for `UNSIGNED` integer types.
+
+-----
+
+Attempting to use literal values outside the range of
+`[-9223372036854775808, 9223372036854775807]` (A signed 8-byte integer AKA `BIGINT SIGNED`)
+will cause a run-time error to be thrown, in general.
+
+-----
+
+Database    | `SIGNED INTEGER` types
+------------|-----------------------
+MySQL       | 1,2,3,4,8 byte signed integer (`TINYINT`, `SMALLINT`, `MEDIUMINT`, `INT`, `BIGINT`)
+PostgreSQL  | 2,4,8 byte signed integer (`SMALLINT`, `INT`, `BIGINT`)
+SQLite      | 1,2,3,4,6,8 byte signed integer (`INTEGER`) on disk. 8 byte signed integer in memory.
+
+References:
++ https://dev.mysql.com/doc/refman/5.7/en/integer-types.html
++ https://www.postgresql.org/docs/9.4/datatype-numeric.html#DATATYPE-INT
++ https://www.sqlite.org/datatype3.html#storage_classes_and_datatypes
+
+-----
+
+All `SIGNED INTEGER` types **SHOULD** have a Typescript type of `bigint`. Even 1 byte signed integers.
+
+If this convention is not followed, this library makes no guarantees regarding the consistency of query results.
+
+-----
+
+The following `bigint` data types are supported,
+
+| `@squill/squill`      | MySQL              | PostgreSQL | SQLite    | Size   | Min Value | Max Value |
+|-----------------------|--------------------|------------|-----------|--------|-----------|-----------|
+| `dtTinyIntSigned()`   | `TINYINT SIGNED`   | `smallint` | `INTEGER` | 1 byte |-128; `-(2^7)` | 127; `(2^7)-1`
+| `dtSmallIntSigned()`  | `SMALLINT SIGNED`  | `smallint` | `INTEGER` | 2 byte | -32,768; `-(2^15)` | 32,767; `(2^15)-1`
+| `dyMediumIntSigned()` | `MEDIUMINT SIGNED` | `integer`  | `INTEGER` | 3 byte | -8,388,608; `-(2^23)` | 8,388,607; `(2^23)-1`
+| `dtIntSigned()`       | `INT SIGNED`       | `integer`  | `INTEGER` | 4 byte | -2,147,483,648; `-(2^31)`| 2,147,483,647; `(2^31)-1`
+| `dtBigIntSigned()`    | `BIGINT SIGNED`    | `bigint`   | `INTEGER` | 8 byte | -9,223,372,036,854,775,808; `-(2^63)` | 9,223,372,036,854,775,807; `(2^63)-1`
+
+[Code Sample](https://anyhowstep.github.io/tsql-sqlite3-browser/test-playground/public/#pre-ts/CIJQ8gCgBAKgggIQDIFEoEkBiUUA10DKMBUADgPbkBOEAplQM7kB2A3AFADCIKcMa8ZGgrU6jFlAAU7KGUo16TZugAmGAHL8A4ihBQIIdAFk4IAJpQA0igtwAqjDDp13FEZSao6sDC92kSAA0MlDMAIYAtrRQAGqmnAASppIALAAMAJwAbACUXj5+AcGyALQlUADq0QDuAJYANvVQAK4M0SoALjC1zACe6MwdBLUA5sy0KpJ5HeRQAG5h9bUqYR3RHQAWtQwhZV7ka1Cbq0cb0VRhzCPRAMZnNwDWUCz1vVC0AB7bHQzPzKe3Ja0Qa7cqXNTMA4AqArDphABGYTaADpUSEbkiNmBmAlwRptLp8r51P4kFAAPQAKkSKE4lmkAEgMQwsTi8QA+AC8UBKAEYAEwADigcHUwCgzNZuOYagAPNyBQB2EI5Snk9g5DjsUgXEYRMJHBH1WgAfS+zAAZuRJCIFOJmJqgA#ts/PQKgUABFEIIDZwgewGYQC4AsCWBnCeEAhgMYkCmuu2ARnORAOZxI1EICeBAdhjvgAU4RDowBOSAK7cAJgDowkaNgC2AByRj0EEMXy4AjohQSVEAEQABQ5OwJgNu3HMBuJVFUatOvRENxsdHIAZggTJDMrR3t-QJCAWhoJAHdccjFXdwgZchJhMQYSJG5cbQ0kRAAuPwM44LkBJAq3EGAwIpKyprEBdNxiiABeGrg5dCI6cgAKc3KevuLzAEosuSIZGQBhCskVEqmAbyzoCDnesX7uAEkZCGr-ORl0ACFsRivudABlN+5yGSmSwANMdoNwiCoGPcjI90AA1IhiTaYRFTACMQIgABYAAwATgAbMDQVBgMA0QAmADsEBURAAHiSICQiLhMAB5bgACSIsjuI1hABVsNwOB9vr9-oCQScAL4rE5yNLoGCSdBID4kAqQz5TIpwXYlIYAPmZOz2uDkZwW1xkSzcYHKo1IBlsBSmrI43BIED1xT+JHQ2GKSxNECOJzJQlIDHYiBkRHGbDSzLj+BF1ByEEw6XIWSIySIgVO3XOlzkGfS6E50yZHQDQeKMpO0AjLfb4Mh-PMz1Y5mb7cjwEamggvZoQymTJOLLZnJ5fOqr3euspRIHLdlWXtihOBaLXU0ZeKFZKVZrU8HZu4DeD3A3JzbV6gnahFkFEX70+gUe6EA-ZiDJez5QLOHLcrytxLm84rotSxJXluJw7lk6BiFwT4tvuxbWhcJ6VloF7fqB-q5I297EeGlEnK+3YANLkNwX4ge2ZIMbwaHYJQGBIBAlAsmoDAaAAblWHCYjQaphEWcC4NR0BgfOkH8susGUgAHAhLFIYOO5yqm6AkJgvrpGIoaYUOgo5tkiYTKyDDJFIcC3CionEGQ5BqEEtwaUyZKSdoeRcZ88SZgwwnsNgCbkX46pqIJtyBAoV5klySDJOQoliJigQAOT4DQlDaOqxBwIWHD4BFATRXmKXAFgIqMPgAxYAw0V2SmNBcJI1DcIwfn1dZYhvJg2jtRgHCCZio6bFyACimx0depRiEWnxyVeHT9PQcimZowEgeYmwBIx6ChVF4WRdFd7SXY-zMSxplMnp0BbmA8puEAA#post-ts/LTAEBEEsCcFMGMAuAbAnqWAPBBXRtQBlARQBkAaUAOwHtR5lJYrFgBnSAEwIDcBDRpz6JINKqGg4qAKACSAOUIBRAEoAVUArUB5UAAcaNaAAVY0NmNAAKaQEgqfALaxy00KFvw+bABbaqABJ8VJzSAJSgAGoAgqQAqkqE0lYA5EHwANZmjsEplACchUVFYQDc0tLKpEoAwhoAVKAAYiraALL6hiZmFlTlQA)
