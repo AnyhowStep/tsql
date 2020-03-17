@@ -4,8 +4,9 @@ export function doubleLiteralNode (
     literalValue : number
 ) : DoubleLiteralNode {
     /**
-     * The SQL standard forbids NaN, Infinity, -Infinity.
-     * However, SQLite supports infinities.
+     * SQLite and PostgreSQL support infinities; MySQL does not.
+     *
+     * PostgreSQL supports `NaN`; SQLite and MySQL use `null` for `NaN`.
      *
      * The job of throwing on these 3 values will have to
      * fall to the sqlfiers.
