@@ -22,8 +22,9 @@ export function makeDoubleDataType (
  * + PostgreSQL : `double precision`
  * + SQLite     : `REAL`; is actually 8-byte floating point number
  *
- * The SQL standard forbids NaN, Infinity, -Infinity.
- * However, SQLite supports infinities.
+ * SQLite and PostgreSQL support infinities; MySQL does not.
+ *
+ * PostgreSQL supports `NaN`; SQLite and MySQL use `null` for `NaN`.
  *
  * The job of throwing on these 3 values will have to
  * fall to the sqlfiers.
@@ -40,8 +41,9 @@ export const dtDouble = makeDoubleDataType(tm.toUnsafeNumber());
  * + PostgreSQL : `real`
  * + SQLite     : `REAL`; does not actually have 4-byte floating point numbers
  *
- * The SQL standard forbids NaN, Infinity, -Infinity.
- * However, SQLite supports infinities.
+ * SQLite and PostgreSQL support infinities; MySQL does not.
+ *
+ * PostgreSQL supports `NaN`; SQLite and MySQL use `null` for `NaN`.
  *
  * The job of throwing on these 3 values will have to
  * fall to the sqlfiers.
