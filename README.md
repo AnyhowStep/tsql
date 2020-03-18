@@ -1,9 +1,11 @@
 [![Build Status](https://travis-ci.org/AnyhowStep/tsql.svg?branch=master)](https://travis-ci.org/AnyhowStep/tsql) [![codecov](https://codecov.io/gh/AnyhowStep/tsql/branch/master/graph/badge.svg)](https://codecov.io/gh/AnyhowStep/tsql) [![npm version](https://badge.fury.io/js/%40squill%2Fsquill.svg)](https://badge.fury.io/js/%40squill%2Fsquill) [![HitCount](http://hits.dwyl.io/AnyhowStep/tsql.svg)](http://hits.dwyl.io/AnyhowStep/tsql) [![Known Vulnerabilities](https://snyk.io/test/github/AnyhowStep/tsql/badge.svg?targetFile=package.json)](https://snyk.io/test/github/AnyhowStep/tsql?targetFile=package.json) ![dependencies](https://david-dm.org/AnyhowStep/tsql.svg)
 
-This library currently has the following adapter librariies,
+This library currently has the following adapter libraries,
 + [mysql-5.7](https://github.com/anyhowstep/tsql-mysql-5.7)
++ [sqlite3 (for browser)](https://github.com/anyhowstep/tsql-sqlite3-browser)
 
------
+You may test this library (and execute SQLite3 queries!) with this playground link,
+https://anyhowstep.github.io/tsql-sqlite3-browser/test-playground/public
 
 ### Documentation
 
