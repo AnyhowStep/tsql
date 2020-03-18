@@ -89,6 +89,13 @@ The following `bigint` data types are supported,
 
 -----
 
+The `bigIntSignedLiteral(rawBigIntSignedLiteral)` function may be used
+to convert `string|number|bigint|Decimal` values into an expression of SQL type `BIGINT SIGNED` (And other integer types).
+
+[TODO Code Sample]()
+
+-----
+
 ### `number`
 
 This library makes no distinction between 4-byte and 8-byte floating-point numbers.
@@ -150,3 +157,70 @@ they may throw run-time errors when executed.
 [Code Sample](https://anyhowstep.github.io/tsql-sqlite3-browser/test-playground/public/#pre-ts/CIJQ8gCgBAKgggIQDIFEoEkBiUUA10DKMBUAzgIYCWAnuQHYDcAUAMIgpwxrzJoU30oACiYBIOuQC2AUygA1OCBYAJRUIDMANgCUUCCHQBZRQE0oAaRRmAcmBhRrAVSRIANEyhRRABwD2Ad2kAJyRpADdpABsodjgkJm1mJm8g8gBzSXIoABdyACNI6QB9AA9KOgAzXyF+WjpEoA#ts/PQKgUABFEIIDZwgewGYQC4AsCWBnCeEAhgMYkCmuu2ARnORAOZxI1EICeBAdhjvgAU4RDowBOSAK7cAJgDowkaNgC2AByRj0EEMXy4AjohQSVEAEQABQ5OwJgNu3HMBuJVFUatOvRENxsdHIAZggTJDMrR3t-QJCAWhoJAHdccjFXdwgZchJhMQYSJG5cbQ0kRAAuPwM44LkBJAq3EGAwIpLtXCJsDiJeAF4auDl0IjpyAApzbt7+8wBKLLkiGRkAYQrJFRLJgG8s6AhuIhUGav85GXQANSIxdcx7yYBGABoIYIA2BbfD6GAwBg2SkE2yRDGGA4anI-ygGmS6QAMuQAG7kKrDK7oAAioPok1+WQAvksjnI0ugAJIySZFODbEoQAYAPgg9MZuDkJzOCzcYHKI1IBlsBUmRFwHG4JAgdOK3Fy6GwxQWzLZByOgKEpAY7EQMgh4wlhT1+GwJWwOQgmHSsKORGSPS6PT63Dk5rSWhgsgAYuR0CRMJM4ez5Yrldw-kcjhro3GeecLABRMQAa3N5ijcejCORaIxEGqAE4AAwll5yd4h4lZPlZB1Ovwu-rukrpdDemR+gNBkMdBUkJXFLNx2PZ6AJwsWdbjNiZkNHXNiFHozFU7goc2BDgj6M1o51+2OwJNuZuj3tzvdwPB8f98PDkNj8fHU6J8wzyRibDzl-QJcrgW1TxOum7cNuu5HPu0CHtA6BiFwz5Ho2syuq2nodr6-o3gu0D3oOEaQdmSF-q+ZxTh+kgkNsv6kYuSCIsu+aYgAckQLFEXG0FxrBUDEuyEKBrK6RiKqJFQICAAq-AQAAys23AAOT4EuED0KuAlKdo+a8DQDAFGoBRpNwQQyBANBcLJACKSJxH2xS4BU5ByCJmjTJskhwGZ3BINoF7eKh8wfCJvEQDWpJuEAA#post-ts/MoUQMiDCAqAEBUsBiAlA8gWVgZwIYEsBPXAOwG4g)
 
 -----
+
+### `@squill/IDecimal`
+
+JavaScript does not have a native fixed-point number type.
+
+Therefore, this library uses a minimal interface to represent a SQL `DECIMAL` type,
+```ts
+interface Decimal {
+    /**
+     * This is the only method a `DECIMAL` type is expected to have.
+     * You may use the string representation to convert to a `number|string|bigint`,
+     * or use a library implementing arbitrary precision decimal types.
+     */
+    toString () : string;
+    /**
+     * A brand that marks this as a SQL `DECIMAL` type.
+     * This property will not exist during run-time.
+     */
+    $isDecimal : void;
+}
+```
+
+-----
+
+The `decimalLiteral(rawDecimalLiteral, precision, scale)` function may be used
+to convert `string|number|bigint|Decimal` values into an expression of SQL type `DECIMAL`.
+
+[Code Sample](https://anyhowstep.github.io/tsql-sqlite3-browser/test-playground/public/#pre-ts/CIJQ8gCgBAKgggIQDIFEoEkBiUUA10DKMBUAtgJ4wCGARgDYCmA3AFADCIKcMa8yaFavQZQAFCyhQAkAFoZUAOoiAzgAsA9gFc6AEyhUAbuoCWezcuMA7AOZQALqpHAUbdAFk4SKDqp2q98gAHBglpOSgAd2MHKAIARSRokRoGAGMqcxF4xLsRKLo6KAArczsoTNDZeU5PKCtlXKodABp9Sz0HY2VI4wKoACdNK3tHSvDA-rSu43VLSLyqSzsAOjH5AnVWiJFM2DwYVakDPdwYKAgQdzgQAE0oAGkUO4A5MDPngFUkJBYASlYWBMqNZSP4-MIAPoADysADN1KJBLRGP8WCwCChUGwziwpGw4ERRAByACMACYAMxEqAEqDOVweJCiABsAFZWhSAAy-X7NXHhbJJYqlKDpBrdOzqKA1LyLPR0dTKBjdCZTCyzKCOSa4-GEokU5YkgAsJNZAE4yWyKayABxmgDsZoplJtRuZlqNFIpNud9uptPpVyZbI53P+QA#ts/PQKgUABFEIIDZwgewGYQC4AsCWBnCeEAhgMYkCmuu2ARnORAOZxI1EICeBAdhjvgAU4RDowBOSAK7cAJgDowkaNgC2AByRj0EEMXy4AjohQSVEAEQABQ5OwJgNu3HMBuJVFUatOvRENxsdHIAZggTJDMrR3t-QJCAWhoJAHdccjFXdwgZchJhMQYSJG5cbQ0kRAAuPwM44LkBJAq3EGAwIpLtFQ4AFSI6BgBeGrg5dH76AApzbr6B8wBKLLkiGRkAYQrJFRLJgG8s6AgANwhq-zkZdAARXNV2SYA2AFYAGghggAYF16yAXyWRzkaXQAjE9zEHAA0uQOJMinBtiUIIMAHwQADaCKRuDkxwAugs3GByqNSAZbAVJkRcBxuCQIPDitxcuhsMUFij0QcjsBgEJSAx2IgZERxmw0hASML8NgStgchBMOlyFkOqUICkUcRkkRAhBZhNyHI5WktDBZAAxcjoEiYSaHaAdFkkNnFX5HI48z0+07nIyXO4qdgAGTiYgejp9vOAPX4BHwKk0DDUBRIeHZvCwRCzyqj0agfJkUgG2TFRAwHDUhRzEFTSGOCtVBYL5nqAEYACzt54ATgATC9gs8ABy9gDsveC-eCI87j0HneCs+n4-MHpbPpeG83Ry++aOgOjfyyRLVxVwFWNLEYkxSZ4BbiAA#post-ts/MoUQMiDCAqAEBuAaWAXAngBwKYHsBmAFPAJSwBiASgPICysAtmtAIYBGANlgNxA)
+
+-----
+
+Database    | Fixed-point number types
+------------|-----------------------
+MySQL       | Precision : [0, 65], Scale : [0, 30]
+PostgreSQL  | Precision : [1, 1000], Scale : [0, 1000]
+SQLite      | Unsupported
+
+References:
++ https://dev.mysql.com/doc/refman/5.7/en/fixed-point-types.html
++ https://www.postgresql.org/docs/9.4/datatype-numeric.html#DATATYPE-NUMERIC-DECIMAL
++ https://www.sqlite.org/datatype3.html#storage_classes_and_datatypes
+
+-----
+
+Although SQLite does not natively support `DECIMAL` types, the SQLite library should [polyfill](https://github.com/AnyhowStep/tsql/issues/28) it.
+
+This library imposes the following constraints on `DECIMAL` types, in its attempt to unify behaviour,
++ Precision : [1, 65]
++ Scale : [0, min(30, precision)]
+
+Database-specific libraries may impose a different precision/scale constraint.
+
+[Code Sample](https://anyhowstep.github.io/tsql-sqlite3-browser/test-playground/public/#pre-ts/Q#ts/PQKgUABFEIIDZwgewGYQC4AsCWBnCeEAhgMYkCmuu2ARnORAOZxI1EICeBAdhjvgAU4RDowBOSAK7cAJgDowkaNgC2AByRj0EEMXy4AjohQSVEAEQABQ5OwJgNu3HMBuJVFUatOvRENxsdHIAZggTJDMrR3t-QJCAWhoJAHdccjFXdwgZchJhMQYSJG5cbQ0kRAAuPwM44LkBJAq3EGAwdDEuAG8s-zkcklV2ABk4sXYACizoCGBgABV+AnwVTQY1AsHqYr4iXixyaeg5mSk6BhkidCIMDjVCvYgNpAA3bByjqHN6gEYAFh+AFYAJwAJgAbIDgoCABzAgDswOCoOCML+4Ihf2CqOR8PMABpPrNgAB1HD0CDg8HLYgQF7sd4QRqlcTkADKAEVhk9NnhsMVCTMZnMAJLaQjYbj0gIyHgQACyHE5wwUQuOwDZSHxfAY0mwKGw5FlASSRE6EGSTggBQAVrltFg8Kq1ZTwYKXcEAAxZACUbgAvhASFcSJgIBN0mIfRAejMiiUKuQ5JHNBGxFGA4oOt1ekZ+rkhnBRkFxnApi7iYsJSs1jyC9t9phHgciSczhTLtdbvcg49nm8PhXvnJ-kCwZDoXDEcjUejMdiYbiCUTIe61XMyXYGMEfjSbtLGcz0KzlX5g-Q10LReL8JKD7LJQqlVzneuNVqdRA9QajRATeNzUtBBrXIO0SAdfhXyFHdfQDXt0FDcNI2jWNoHjXBE2TdNU2QzN2nNVCoD6AZC2LdJJiJcxPWXCsN3JBhPT3OkGVlRVTw2et+W4S9hWAMUaTvFi5SPE8X1bd9tQOL9uH1Q1jVoACuCAxBbXtPgnSJT0eOgb0Zj9MBA2DBCwzTKMYyydDMJTMRTP0-0swI3M4HzQYVBGMYKKHajtKgUEfOJNlzwebhuCQbQaAYHBGEwdJdl4Diti4olglggz4MQ2zzLjYoMPoLCJBs3CDLAIA#post-ts/Q)
+
+-----
+
+All `DECIMAL` types **SHOULD** have a Typescript type of the `Decimal` interface.
+
+If this convention is not followed, this library makes no guarantees regarding the consistency of query results.
+
+-----
+
+| `@squill/squill`      | MySQL              | PostgreSQL         | SQLite
+|-----------------------|--------------------|--------------------|-----------
+| `dtDecimal()`         | `DECIMAL(p, s)`    | `DECIMAL(p, s)`    | Unsupported; [requires polyfill](https://github.com/AnyhowStep/tsql/issues/28)
+
+[Code Sample](https://anyhowstep.github.io/tsql-sqlite3-browser/test-playground/public/#pre-ts/CIJQ8gCgBAKgggIQDIFEoEkBiUUA10DKMBUAtgJ4wCGARgDYCmA3AFADCIKcMa8yaFavQZQAFCyhQAkAFoZUAOoiAzgAsA9gFc6AEyhUAbuoCWezcuMA7AOZQALqpHAUbdAFk4SKDqp2q98gAHBglpOSgAd2MHKAIARSRokRoGAGMqcxF4xLsRKLo6KAArczsoTNDZeU5PKCtlXKodABp9Sz0HY2VI4wKoACdNK3tHSvDA-rSu43VLSLyqSzsAOjH5AnVWiJFM2DwYVakDPdwYKAgQdzgQAE0oAGkUO4A5MDPngFUkJBYASlYWBMqNZSP4-MIAPoADysADN1KJBLRGP8WCwCChUGwziwpGw4ERRAByACMACYAMxEqAEqDOVweJCiABsAFZWhSAAy-X7NXHhbJJYqlKDpBrdOzqKA1LyLPR0dTKBjdCZTCyzKCOSa4-GEokU5YkgAsJNZAE4yWyKayABxmgDsZoplJtRuZlqNFIpNud9uptPpVyZbI53P+QA#ts/PQKgUABFEIIDZwgewGYQC4AsCWBnCeEAhgMYkCmuu2ARnORAOZxI1EICeBAdhjvgAU4RDowBOSAK7cAJgDowkaNgC2AByRj0EEMXy4AjohQSVEAEQABQ5OwJgNu3HMBuJVFUatOvRENxsdHIAZggTJDMrR3t-QJCAWhoJAHdccjFXdwgZchJhMQYSJG5cbQ0kRAAuPwM44LkBJAq3EGAwIpLtFQ4AFSI6BgBeGrg5dH76AApzbr6B8wBKLLkiGRkAYQrJFRLJgG8s6AgANwhq-zkZdAARXNV2SYA2AFYAGghggAYF16yAXyWRzkaXQAjE9zEHAA0uQOJMinBtiUIIMAHwQADaCKRuDkxwAugs3GByqNSAZbAVJkRcBxuCQIPDitxcuhsMUFij0QcjsBgEJSAx2IgZERxmw0hASML8NgStgchBMOlyFkOqUICkUcRkkRAhBZhNyHI5WktDBZAAxcjoEiYSaHaAdFkkNnFX5HI48z0+07nIyXO4qdgAGTiYgejp9vOAPX4BHwKk0DDUBRIeHZvCwRCzyqj0agfJkUgG2TFRAwHDUhRzEFTSGOCtVBYL5nqAEYACzt54ATgATC9gs8ABy9gDsveC-eCI87j0HneCs+n4-MHpbPpeG83Ry++aOgOjfyyRLVxVwFWNLEYkxSZ4BbiAA#post-ts/MoUQMiDCAqAEBuAaWAXAngBwKYHsBmAFPAJSwBiASgPICysAtmtAIYBGANlgNxA)
