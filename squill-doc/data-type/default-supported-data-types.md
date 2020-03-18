@@ -15,7 +15,7 @@ The following SQL data types are supported,
 | `number`                    | `FLOAT`/`DOUBLE`
 | `@squill/Decimal` interface | `DECIMAL`
 | `boolean`                   | `BOOLEAN`
-| `Date`                      | `DATETIME`, `TIMESTAMP`, etc.
+| JS `Date`                   | `DATETIME`, `TIMESTAMP`, etc.
 | `string`                    | `CHAR`, `VARCHAR`, `TEXT`, etc.
 | `Uint8Array`                | `BINARY`, `VARBINARY`, `BLOB`, `bytea`, etc.
 
@@ -209,6 +209,8 @@ This library imposes the following constraints on `DECIMAL` types, in its attemp
 
 Database-specific libraries may impose a different precision/scale constraint.
 
+Alternatively, you may use a custom data type to implement a `DECIMAL` data type with higher precision/scale.
+
 [Code Sample](https://anyhowstep.github.io/tsql-sqlite3-browser/test-playground/public/#pre-ts/Q#ts/PQKgUABFEIIDZwgewGYQC4AsCWBnCeEAhgMYkCmuu2ARnORAOZxI1EICeBAdhjvgAU4RDowBOSAK7cAJgDowkaNgC2AByRj0EEMXy4AjohQSVEAEQABQ5OwJgNu3HMBuJVFUatOvRENxsdHIAZggTJDMrR3t-QJCAWhoJAHdccjFXdwgZchJhMQYSJG5cbQ0kRAAuPwM44LkBJAq3EGAwdDEuAG8s-zkcklV2ABk4sXYACizoCGBgABV+AnwVTQY1AsHqYr4iXixyaeg5mSk6BhkidCIMDjVCvYgNpAA3bByjqHN6gEYAFh+AFYAJwAJgAbIDgoCABzAgDswOCoOCML+4Ihf2CqOR8PMABpPrNgAB1HD0CDg8HLYgQF7sd4QRqlcTkADKAEVhk9NnhsMVCTMZnMAJLaQjYbj0gIyHgQACyHE5wwUQuOwDZSHxfAY0mwKGw5FlASSRE6EGSTggBQAVrltFg8Kq1ZTwYKXcEAAxZACUbgAvhASFcSJgIBN0mIfRAejMiiUKuQ5JHNBGxFGA4oOt1ekZ+rkhnBRkFxnApi7iYsJSs1jyC9t9phHgciSczhTLtdbvcg49nm8PhXvnJ-kCwZDoXDEcjUejMdiYbiCUTIe61XMyXYGMEfjSbtLGcz0KzlX5g-Q10LReL8JKD7LJQqlVzneuNVqdRA9QajRATeNzUtBBrXIO0SAdfhXyFHdfQDXt0FDcNI2jWNoHjXBE2TdNU2QzN2nNVCoD6AZC2LdJJiJcxPWXCsN3JBhPT3OkGVlRVTw2et+W4S9hWAMUaTvFi5SPE8X1bd9tQOL9uH1Q1jVoACuCAxBbXtPgnSJT0eOgb0Zj9MBA2DBCwzTKMYyydDMJTMRTP0-0swI3M4HzQYVBGMYKKHajtKgUEfOJNlzwebhuCQbQaAYHBGEwdJdl4Diti4olglggz4MQ2zzLjYoMPoLCJBs3CDLAIA#post-ts/Q)
 
 -----
@@ -224,3 +226,101 @@ If this convention is not followed, this library makes no guarantees regarding t
 | `dtDecimal()`         | `DECIMAL(p, s)`    | `DECIMAL(p, s)`    | Unsupported; [requires polyfill](https://github.com/AnyhowStep/tsql/issues/28)
 
 [Code Sample](https://anyhowstep.github.io/tsql-sqlite3-browser/test-playground/public/#pre-ts/CIJQ8gCgBAKgggIQDIFEoEkBiUUA10DKMBUAtgJ4wCGARgDYCmA3AFADCIKcMa8yaFavQZQAFCyhQAkAFoZUAOoiAzgAsA9gFc6AEyhUAbuoCWezcuMA7AOZQALqpHAUbdAFk4SKDqp2q98gAHBglpOSgAd2MHKAIARSRokRoGAGMqcxF4xLsRKLo6KAArczsoTNDZeU5PKCtlXKodABp9Sz0HY2VI4wKoACdNK3tHSvDA-rSu43VLSLyqSzsAOjH5AnVWiJFM2DwYVakDPdwYKAgQdzgQAE0oAGkUO4A5MDPngFUkJBYASlYWBMqNZSP4-MIAPoADysADN1KJBLRGP8WCwCChUGwziwpGw4ERRAByACMACYAMxEqAEqDOVweJCiABsAFZWhSAAy-X7NXHhbJJYqlKDpBrdOzqKA1LyLPR0dTKBjdCZTCyzKCOSa4-GEokU5YkgAsJNZAE4yWyKayABxmgDsZoplJtRuZlqNFIpNud9uptPpVyZbI53P+QA#ts/PQKgUABFEIIDZwgewGYQC4AsCWBnCeEAhgMYkCmuu2ARnORAOZxI1EICeBAdhjvgAU4RDowBOSAK7cAJgDowkaNgC2AByRj0EEMXy4AjohQSVEAEQABQ5OwJgNu3HMBuJVFUatOvRENxsdHIAZggTJDMrR3t-QJCAWhoJAHdccjFXdwgZchJhMQYSJG5cbQ0kRAAuPwM44LkBJAq3EGAwIpLtFQ4AFSI6BgBeGrg5dH76AApzbr6B8wBKLLkiGRkAYQrJFRLJgG8s6AgANwhq-zkZdAARXNV2SYA2AFYAGghggAYF16yAXyWRzkaXQAjE9zEHAA0uQOJMinBtiUIIMAHwQADaCKRuDkxwAugs3GByqNSAZbAVJkRcBxuCQIPDitxcuhsMUFij0QcjsBgEJSAx2IgZERxmw0hASML8NgStgchBMOlyFkOqUICkUcRkkRAhBZhNyHI5WktDBZAAxcjoEiYSaHaAdFkkNnFX5HI48z0+07nIyXO4qdgAGTiYgejp9vOAPX4BHwKk0DDUBRIeHZvCwRCzyqj0agfJkUgG2TFRAwHDUhRzEFTSGOCtVBYL5nqAEYACzt54ATgATC9gs8ABy9gDsveC-eCI87j0HneCs+n4-MHpbPpeG83Ry++aOgOjfyyRLVxVwFWNLEYkxSZ4BbiAA#post-ts/MoUQMiDCAqAEBuAaWAXAngBwKYHsBmAFPAJSwBiASgPICysAtmtAIYBGANlgNxA)
+
+-----
+
+### `boolean`
+
+Although MySQL and SQLite do not **truly** have a `BOOLEAN` type,
+and emulate it with integers instead,
+the operations on this emulated type behave exactly like a `BOOLEAN` type.
+
+-----
+
+Database    | Boolean types
+------------|-----------------------
+MySQL       | `FALSE = 0`, `TRUE = 1` (`INTEGER`)
+PostgreSQL  | `BOOLEAN`
+SQLite      | `FALSE = 0`, `TRUE = 1` (`INTEGER`)
+
+References:
++ https://dev.mysql.com/doc/refman/5.7/en/boolean-literals.html
++ https://www.postgresql.org/docs/9.4/datatype-boolean.html
++ https://www.sqlite.org/datatype3.html#storage_classes_and_datatypes
+
+-----
+
+All `BOOLEAN` types (even emulated ones) **SHOULD** have a Typescript type of `boolean`.
+
+If this convention is not followed, this library makes no guarantees regarding the consistency of query results.
+
+-----
+
+| `@squill/squill`      | MySQL        | PostgreSQL   | SQLite
+|-----------------------|--------------|--------------|-----------
+| `dtBoolean()`         | `TINYINT`    | `boolean`    | `INTEGER`
+
+[Code Sample](https://anyhowstep.github.io/tsql-sqlite3-browser/test-playground/public/#pre-ts/CIJQ8gCgBAKgggIQDIFEoEkBiUUA10DKMBUANgJYDmAFgC4BGArqfQNwBQAwiCnDGvGRoKNBs3pQAFOyhQAkCLpMW6ACYYAcvwDiKEFAgh0AWTggAmlADSKS3ACqMMOg3cUxlFqgawMb-aQkABp2OQBnAHdyWgBjagBTVTAAOygEMDBUOA1vX39A9gBKDnYABwAnAENKAFtKqFpK+lJ4gH0AD3JkgDMAe0lFMRZi9nYCFFROP1CAWhmoel7elsrksKguqAIARSRo+KhK8oPjytJSAE8oACtGMNoN5Np4ynjysNCYEHsUELlMOBIcZ-WgXUrxXrdSRfH6FEFgiFQgFAlDFIA#ts/PQKgUABFEIIDZwgewGYQC4AsCWBnCeEAhgMYkCmuu2ARnORAOZxI1EICeBAdhjvgAU4RDowBOSAK7cAJgDowkaNgC2AByRj0EEMXy4AjohQSVEAEQABQ5OwJgNu3HMBuJVFUatOvRENxsdHIAZggTJDMrR3t-QJCAWhoJAHdccjFXdwgZchJhMQYSJG5cbQ0kRAAuPwM44LkBJAq3EGAwIpLtAMZMdBpJOBoIAF4auDl0IjpyAApzbt7+wfMASiy5IhkZAGEKyRUSmYBvLOgIBb6BmgBJGQhq-zkZdAAhbEZr7nQAZXfuchkMxWABpTtBcMlAiRMACAPK8B5GJ6vJr0IjcIGgs4AXzWZzkaXQMEk6CQnxIBRU5C+MyKcH2JRGAD4IHSGbg5BcljcZCs3GByuNSAZbAUZkRcBxuCQILTiv8SOhsMUVsyICczsBgEJSAx2IgZERJmw0qz9fhsCVsDkIDCClkOqU-JD0NC4dwXlcRsRkkRAud3osrnJLWktDBZAAxciuzAzMFQDoKpXFLFnaAa9NZiFQmEyeH3DBiSTkNNZ7FZPlZLUAdScEDUYkt2gABuhi+QW8CIGIjXa+OiIC2AIwthSa4At54vVHkdFAlus4oAN3S6At2lJxAgAClvhAaLP0ePoI6KuROUhGDMc7H3Z7BlWHcUnbe3fmUCgH0NRkRff6uWDUM1wjGRo1jeMs0TeVchTbgy3TTMoPBF13wLaoUHYNIEJxSs3AnOsEAbJsviHTC4DSLsez7dIB14FsAAYx2rSdpyPDEVkXDpVy0DcMCQbc9wPdiT2gkpz0va83zzWFP2-KtcTcIA#post-ts/MoUQMiDCAqAEBUAaWAXAngBwKYHsBmAFAM4DuAligMYAWWAJgPIB2AlLAGIBKDAsrADZkA5tRQAjAK78xAbiA)
+
+-----
+
+### JS `Date`
+
+Although MySQL and PostgreSQL support `DATETIME` types with microsecond precision,
+this library only really supports up to millisecond precision because JavaScript's
+`Date` type only has up to millisecond precision.
+
+SQLite also only has up to millisecond precision.
+
+-----
+
+Attempting to use microseconds with this library will cause a loss in precision.
+
+You may use a custom data type to implement a `DATETIME` data type with higher precision.
+
+-----
+
+You should avoid using the `TIMESTAMP` type with MySQL because
+it has a range of `'1970-01-01 00:00:01' UTC` to `'2038-01-19 03:14:07' UTC`.
+
+See [The Y2038 problem](https://github.com/AnyhowStep/tsql/issues/131) for more details.
+
+-----
+
+Database    | Date-Time types
+------------|-----------------------
+MySQL       | `DATETIME(p)` where `p` is one of `0,1,2,3,4,5,6` (microsecond precision)
+PostgreSQL  | `TIMESTAMP(p)` where `p` is one of `0,1,2,3,4,5,6` (microsecond precision)
+SQLite      | Unsupported. `strftime()` may be used to get a `TEXT` representing a `DATETIME` with precision up to `3` (millisecond precision)
+
+References:
++ https://dev.mysql.com/doc/refman/5.7/en/datetime.html
++ https://www.postgresql.org/docs/9.4/datatype-datetime.html#DATATYPE-DATETIME-TABLE
++ https://www.sqlite.org/datatype3.html#storage_classes_and_datatypes
++ https://www.sqlite.org/lang_datefunc.html
+
+-----
+
+All `DATETIME` types (even emulated ones) **SHOULD** have a Typescript type of `Date`.
+
+If this convention is not followed, this library makes no guarantees regarding the consistency of query results.
+
+-----
+
+| `@squill/squill`      | MySQL         | PostgreSQL     | SQLite    | Precision
+|-----------------------|---------------|----------------|-----------|-----------
+| `dtDateTime(0)`       | `DATETIME(0)` | `TIMESTAMP(0)` | Unsupported. `strftime()` can create `TEXT` representations. | second (1s)
+| `dtDateTime(1)`       | `DATETIME(1)` | `TIMESTAMP(1)` | Unsupported. `strftime()` can create `TEXT` representations. | decisecond (0.1s)
+| `dtDateTime(2)`       | `DATETIME(2)` | `TIMESTAMP(2)` | Unsupported. `strftime()` can create `TEXT` representations. | centisecond (0.01s)
+| `dtDateTime(3)`       | `DATETIME(3)` | `TIMESTAMP(3)` | Unsupported. `strftime()` can create `TEXT` representations. | millisecond (0.001s)
+
+Using `dtDateTime(3)` is recommended, as much as possible, for maximum interop with JS `Date`.
+
+-----
+
+Note that these data types will throw an error if they encounter a value with a higher precision than expected.
+
+For example, `dtDateTime(0)` will throw if it encounters `2010-02-11 14:32:46.123`
+because it is expecting the fractional part to be `.000` (precision 0) and we have `.123` (precision 3)
+
+[Code Sample](https://anyhowstep.github.io/tsql-sqlite3-browser/test-playground/public/#pre-ts/CIJQ8gCgBAKgggIQDIFEoEkBiUUA10DKMBUANgPYDmA3AFADCIKcMa8yaFlUAFLVFACQAEwCmAZwDGAJwCWABwAus8gDsoANTgh6ACW08ATAAYALAA4AlFAgh0AWW0BNKAGkULgHJgYUTwFUkJAAaWkFJCkkAa2MoYBYUGAcUHmNrb18AoNDwyKiARjiEpPsU-PSfP0CQsIjyaMMi1hKUwwrM6py66IBmJsTknh72qqDaSzpaeWkAQ0oAWxmoRRmAI1JRAH0AD1lVADNyHi4J2loCFFR6XzCAWlv+lqhJGfVV0ShReYBXUhnFUTCKAAd1kigAFlBxIppPtlPNRDxLGFobD4YiAOQAUictyx8zxQKxugAXFj7GT9hjglAMapyMCMRMgA#ts/PQKgUABFEIIDZwgewGYQC4AsCWBnCeEAhgMYkCmuu2ARnORAOZxI1EICeBAdhjvgAU4RDowBOSAK7cAJgDowkaNgC2AByRj0EEMXy4AjohQSVEAEQABQ5OwJgNu3HMBuJVFUatOvRENxsdHIAZggTJDMrR3t-QJCAWhoJAHdccjFXdwgZchJhMQYSJG5cbQ0kRAAuPwM44LkBJAq3EGAwIpLtFkYIAF4auDl0IjpyAApzbvMASiy5IhkZAGEKyRUSsYBvLOhsyhIxbDV0bGKIav85GXQANSIxJcx7sYBGABoIACYABgAWAA5pm8dtA8kgSABrb7nAZXdAAESIQQAKqpxt8gSCoGDIS8YZdroiUWjXpjdrscRDPvijHCieRUSpxp8yeTsSxIaELrTCUiGSTgqyoABfWa7ORpdACQ4qe4cADS5A4YyKcDWJT6AD4IABtVXq3BXfaHY6nbgAXWmbjAKGkJBOZ3QSHpjPI0LGACtcPSYfTpr6+RBtrsCuhJGJeNxyMkIPSxgBZJGYOQoFiaT3evlyRjkdCusb+4AQF7fUv+3QlstuYWKW3ce1mjDOvmuvEZn3VP0BoJBrKh8OR6OxvkJpMptNidtZnN5kmF4tlnyVq1gGs2u0O3hOl1o6lTnudvn+w894PQfsRiBRmNxxNYcdNSde+nZ3P5+cl8sLldr8qDUgGLYBRjEQuAcPWEAqsUUYNsU-q9NqZ5QMAwBCKQDDsIgMhIiMoGFJh+DYCU2A5BAmDpOQWQdKUEDJEgELkAAqmoMDaP017DkEBZuBSxQ0XRDHMX0xDJEQgQQN0chEWkWgwLIABiuYkJgYxYhAHQwZuwJslASE6VAOS4AcRybjC5gAOr0QwkhqOY2n6aCHJQjC24tmi3xjAJTEsegQoOZSeLVK5xJMi8nlWcxrF+fplLUkFzYheQnzhYJPnRTplJcrREU+fZbI1rsK68SUFTkHI3Qpd5K5UXx2hIGo5BRjIAAy5AoOgACiHDkAEMiscJHFxkVoK1cgDVNa17VdT1JHCUQoniZJ0npOgckyIp6DKapMXQbkWlqXp+mGcZppnNU5gAPLjeQMgQJN2jTb1dlqRSTnQvFO5Mh59WNTd92PSRUV5f5TmBU2n3kGFP0TW1nXdb1QMvY54JUi5CX8kyyXQ39sMA31vnAzFTlZdjLW4-DgPoIT0AFdAw3YnxpXlUgjBjKT-0UzI1XFTRpMAErYIwmBwzN+MDUOQ08SNnRjb9MgC0LIu9XNC1dCzUklCta0bVtakaXtZrU7pSMGcaJmNudV1yxACvCxAePPQ5yOQu94NuV9bPXfLgvC3jiNO+yKNg8FGOQ57cu20rlPpWysVoxDWNe5HfsEyb6nEzC-M+1H+NGxAtNQPT6mM-QzOs1nit49z0s0UEpREYwADKRjNbQYhyirYlq4wGsyatClKSpeu7bB3B54dOnHSapnncilAnNwPSNwAis1d1t3KjsB5SruXCQ4YFNws5MqURDqB5MfkgFNKDPvYiH8f89n2oYWX69KNxbCd8P66p-qMlb9nYQiynvA+jVH5-zUMEAsecC4QCLtRJmFU64Lybi3DeYgODVVXCuIAA#post-ts/MoUQMiDCAqBQCQAqANAgLgTwA4FMD2AZgBQDGANniQNYAMAlKvJroaRdQIwPrb7HmUqAJm5NerAdQDMdWADEASgHkAsggoBzWEoUAREAoAEAIQCaCSVSmGAgsEgBuIA)
