@@ -154,10 +154,9 @@ export const dtMediumBlob = makeBlobDataType(tm.mysql.uint8ArrayMediumBlob);
  *
  * -----
  *
- * Realistically, SQLite should support this,
+ * SQLite `BLOB` goes up to `(2^31)-1`
  * https://www.sqlite.org/limits.html
  *
- * However, it is possible that the underlying implementation
- * may be restricted from having a `Uint8Array` of that length.
+ * > The current implementation will only support a string or BLOB length up to `(2^31)-1` or `2,147,483,647`
  */
 export const dtLongBlob = makeBlobDataType(tm.mysql.uint8ArrayLongBlob);
