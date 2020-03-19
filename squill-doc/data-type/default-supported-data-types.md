@@ -324,3 +324,120 @@ For example, `dtDateTime(0)` will throw if it encounters `2010-02-11 14:32:46.12
 because it is expecting the fractional part to be `.000` (precision 0) and we have `.123` (precision 3)
 
 [Code Sample](https://anyhowstep.github.io/tsql-sqlite3-browser/test-playground/public/#pre-ts/CIJQ8gCgBAKgggIQDIFEoEkBiUUA10DKMBUANgPYDmA3AFADCIKcMa8yaFlUAFLVFACQAEwCmAZwDGAJwCWABwAus8gDsoANTgh6ACW08ATAAYALAA4AlFAgh0AWW0BNKAGkULgHJgYUTwFUkJAAaWkFJCkkAa2MoYBYUGAcUHmNrb18AoNDwyKiARjiEpPsU-PSfP0CQsIjyaMMi1hKUwwrM6py66IBmJsTknh72qqDaSzpaeWkAQ0oAWxmoRRmAI1JRAH0AD1lVADNyHi4J2loCFFR6XzCAWlv+lqhJGfVV0ShReYBXUhnFUTCKAAd1kigAFlBxIppPtlPNRDxLGFobD4YiAOQAUictyx8zxQKxugAXFj7GT9hjglAMapyMCMRMgA#ts/PQKgUABFEIIDZwgewGYQC4AsCWBnCeEAhgMYkCmuu2ARnORAOZxI1EICeBAdhjvgAU4RDowBOSAK7cAJgDowkaNgC2AByRj0EEMXy4AjohQSVEAEQABQ5OwJgNu3HMBuJVFUatOvRENxsdHIAZggTJDMrR3t-QJCAWhoJAHdccjFXdwgZchJhMQYSJG5cbQ0kRAAuPwM44LkBJAq3EGAwIpLtFkYIAF4auDl0IjpyAApzbvMASiy5IhkZAGEKyRUSsYBvLOhsyhIxbDV0bGKIav85GXQANSIxJcx7sYBGABoIACYABgAWAA5pm8dtA8kgSABrb7nAZXdAAESIQQAKqpxt8gSCoGDIS8YZdroiUWjXpjdrscRDPvijHCieRUSpxp8yeTsSxIaELrTCUiGSTgqyoABfWa7ORpdACQ4qe4cADS5A4YyKcDWJT6AD4IABtVXq3BXfaHY6nbgAXWmbjAKGkJBOZ3QSHpjPI0LGACtcPSYfTpr6+RBtrsCuhJGJeNxyMkIPSxgBZJGYOQoFiaT3evlyRjkdCusb+4AQF7fUv+3QlstuYWKW3ce1mjDOvmuvEZn3VP0BoJBrKh8OR6OxvkJpMptNidtZnN5kmF4tlnyVq1gGs2u0O3hOl1o6lTnudvn+w894PQfsRiBRmNxxNYcdNSde+nZ3P5+cl8sLldr8qDUgGLYBRjEQuAcPWEAqsUUYNsU-q9NqZ5QMAwBCKQDDsIgMhIiMoGFJh+DYCU2A5BAmDpOQWQdKUEDJEgELkAAqmoMDaP017DkEBZuBSxQ0XRDHMX0xDJEQgQQN0chEWkWgwLIABiuYkJgYxYhAHQwZuwJslASE6VAOS4AcRybjC5gAOr0QwkhqOY2n6aCHJQjC24tmi3xjAJTEsegQoOZSeLVK5xJMi8nlWcxrF+fplLUkFzYheQnzhYJPnRTplJcrREU+fZbI1rsK68SUFTkHI3Qpd5K5UXx2hIGo5BRjIAAy5AoOgACiHDkAEMiscJHFxkVoK1cgDVNa17VdT1JHCUQoniZJ0npOgckyIp6DKapMXQbkWlqXp+mGcZppnNU5gAPLjeQMgQJN2jTb1dlqRSTnQvFO5Mh59WNTd92PSRUV5f5TmBU2n3kGFP0TW1nXdb1QMvY54JUi5CX8kyyXQ39sMA31vnAzFTlZdjLW4-DgPoIT0AFdAw3YnxpXlUgjBjKT-0UzI1XFTRpMAErYIwmBwzN+MDUOQ08SNnRjb9MgC0LIu9XNC1dCzUklCta0bVtakaXtZrU7pSMGcaJmNudV1yxACvCxAePPQ5yOQu94NuV9bPXfLgvC3jiNO+yKNg8FGOQ57cu20rlPpWysVoxDWNe5HfsEyb6nEzC-M+1H+NGxAtNQPT6mM-QzOs1nit49z0s0UEpREYwADKRjNbQYhyirYlq4wGsyatClKSpeu7bB3B54dOnHSapnncilAnNwPSNwAis1d1t3KjsB5SruXCQ4YFNws5MqURDqB5MfkgFNKDPvYiH8f89n2oYWX69KNxbCd8P66p-qMlb9nYQiynvA+jVH5-zUMEAsecC4QCLtRJmFU64Lybi3DeYgODVVXCuIAA#post-ts/MoUQMiDCAqBQCQAqANAgLgTwA4FMD2AZgBQDGANniQNYAMAlKvJroaRdQIwPrb7HmUqAJm5NerAdQDMdWADEASgHkAsggoBzWEoUAREAoAEAIQCaCSVSmGAgsEgBuIA)
+
+-----
+
+### `string`
+
+Database    | String types
+------------|-----------------------
+MySQL       | `CHAR`, `VARCHAR`, `TEXT`
+PostgreSQL  | `CHAR`, `VARCHAR`, `TEXT`
+SQLite      | `TEXT`
+
+References:
++ https://dev.mysql.com/doc/refman/5.7/en/char.html
++ https://dev.mysql.com/doc/refman/5.7/en/blob.html
++ https://www.postgresql.org/docs/9.4/datatype-character.html
++ https://www.sqlite.org/datatype3.html#storage_classes_and_datatypes
+
+-----
+
+All `CHAR`,`VARCHAR`,`TEXT` types **SHOULD** have a Typescript type of `string`.
+
+If this convention is not followed, this library makes no guarantees regarding the consistency of query results.
+
+-----
+
+| `@squill/squill`      | MySQL         | PostgreSQL   | SQLite    | Maximum Length
+|-----------------------|---------------|--------------|-----------|----------------
+| `dtChar()`            | `CHAR`        | `CHAR`       | `TEXT`    | `255`; `(2^8)-1`
+| `dtVarChar()`         | `VARCHAR`     | `VARCHAR`    | `TEXT`    | `65,535`; `(2^16)-1`
+| `dtTinyText()`        | `TINY TEXT`   | `text`       | `TEXT`    | `255`; `(2^8)-1`
+| `dtText()`            | `TEXT`        | `text`       | `TEXT`    | `65,535`; `(2^16)-1`
+| `dtMediumText()`      | `MEDIUM TEXT` | `text`       | `TEXT`    | `16,777,215`; `(2^24)-1`
+| `dtLongText()`        | `LONG TEXT`   | -NA-         | -NA-      | `4,294,967,295`; `(2^32)-1`
+
+[Code Sample](https://anyhowstep.github.io/tsql-sqlite3-browser/test-playground/public/#pre-ts/CIJQ8gCgBAKgggIQDIFEoEkBiUUA10DKMBUALgO4CmlpA3AFADCIKcMa8yaF1pUAFPShQAkDxroAJhgBy7AOIoQUCCHQBZOCACaUANIpdcAKoww6GcxTqUcqDLAx7xpEgA0Q0QFovUAOoAlqQAFgD2AK58AIZQjAASKIx6UADGoQB2AM6kAE5RAemkHsIiPmTBlFCSUaQxpACeAA6VGQA29VAAblGtAdWklJlQGeWVKb2UhZ4iUZFhObFxWvwATACsawCUUAD0AFTxiXqCIsKoMvIwcfyzIaE52wB8ALxQAAxQcDLAUPSnUOdLtdbvNtgAeV7rNZ-TZ7HbFby+QJ3SJQGKHJKpDLZPIFIrTMohSr9OpNFrpdpdHp9GqDYbpUapCZTERpQqTPjxZZQ7b7DHHP5nWxA-hsgaFJ6vACMn2+v3+gKuooy4tI4MhGxhcPomwY9EaeQA5gBbOpRABGrUoAH0AB4FABmoX44jVDCAA#ts/PQKgUABFEIIDZwgewGYQC4AsCWBnCeEAhgMYkCmuu2ARnORAOZxI1EICeBAdhjvgAU4RDowBOSAK7cAJgDowkaNgC2AByRj0EEMXy4AjohQSVEAEQABQ5OwJgNu3HMBuJVFUatOvRENxsdHIAZggTJDMrR3t-QJCAWhoJAHdccjFXdwgZchJhMQYSJG5cbQ0kRAAuPwM44LkBJAq3EGAwIpLtdGTycm0AXhq4OXQiOnIACnNu3vRzAEosuSIZGQBhCskVEomAbyzoDB6+gEkZCGr-ORl0ACFsRhPudABlB+5yGQn5gBoD6GAwBU2F49G4jCw1QADP8oICVEQAB4QMEQzDVABMAFYsbDiJIsJoLkNrug1pgiGIJtisb88fCQSjyODIRAAIz0oFIpks9EQGl4jpBZ7Eq43cmUiZsn78nF0w4AX0WhzkaXQMAJSCeJAKKmZ6AmRTgWxKEH6AD4IEaTbgRsd0Gd5m4wOVhqQDLYChMiLgONwSBBDcUPiR0NhivMzZb9odAUJSAx2IgZERRmw0lak-gQdQchBMOlyFkiMkiIEjrM5Dn0ugAPIfCaC4O5MPFP6HQ4xjvdogEzBE6rmABS5E4KDwmHM7e7HaF+uJ5luxpoEDokhoU7xCqyTsUhxLZa69qrJRr9cmTe4Idb3Gn3a7M+gvcJYgXm8fhznIsHJ2IZiIvAAcUHAqFI+AzH074ztuhy7lk6BiFwD4dge5YQegJ5pFo56Nh+0AdNe4a3ninYkTOgJrAE84AG7sNgKY3n4-aSHA5wFAAVi2fB4GRPZ9gOFjxOYcgFGo5CptSWIAGzynhs7FMK2iDku66rsuUF4TBM67oqmboCQmCBukYiRshn7FLgFTkHIxmaBMxk6dA27wYhEBmU+pZoce1bYQ2vFWs2oZEXeH7uXhz79q+g4jmOE4aXJcLAJR2A0XRDFEUxUisRAHFcVgPEJeZzzzoO8WPlp3aOVACp6QZRliCZbmXpZ9A2Q1dkOW4iqKEqbhAA#post-ts/MoUQMiDCAqAEBUsBiAlA8gWVgFwO4FN9sBuIA)
+
+-----
+
+### Character Set and length
+
+This library does not perform character set validation.
+
+The data types in this library restrict the length of strings based on the JS `string.length`.
+
+This means that it may not actually perform the right kind of validation, depending on your character set!
+
+The JS `string.length` might say that your string is of length 255,
+but the database might say it's length 256, or 254.
+
+So, it might allow invalid input, or reject valid input.
+
+At the end of the day, it's best to let your database have the final say, regarding the length of strings.
+
+However, specifying the min and max length of strings in application code can still be a good first line of defence against invalid input.
+
+[Code Sample](https://anyhowstep.github.io/tsql-sqlite3-browser/test-playground/public/#pre-ts/CIJQ8gCgBAKgggIQDIFEoEkBiUUA10DKMBUALgO4CmlpA3AFADCIKcMa8yaF1pUAFPShQAkDxroAJhgBy7AOIoQUCCHQBZOCACaUANIpdcAKoww6GcxTqUcqDLAx7xpEgA0Q0QFovURgAkURj0oAGMAewA7AGdSACcAQwBLSNJoqAS4ygyoAHNw8OkkyUoEzxEEgFdSAAtwuL9-LX4AJgBWNoBKRqC9QRFhVBl5GH9+Ktr67oA+AF4oAAYoOBlgKHoBqCGRsYm6uO6AHnn2to3Oj2ERHx7gsKjYxJS0jKyc-MKoYtKNiNTKVKNZqnboBXr9Qa2Hb8P6kAGkGbzACMy1W60221GMKicNSRxOHXO9E6DHoAAdErkALYJMgJABGABtKAB9AAeKQAZuF+OIEQwgA#ts/PQKgUABFEIIDZwgewGYQC4AsCWBnCeEAhgMYkCmuu2ARnORAOZxI1EICeBAdhjvgAU4RDowBOSAK7cAJgDowkaNgC2AByRj0EEMXy4AjohQSVEAEQABQ5OwJgNu3HMBuJVFUatOvRENxsdHIAZggTJDMrR3t-QJCAWhoJAHdccjFXdwgZchJhMQYSJG5cbQ0kRAAuPwM44LkBJAq3EGAwIpLtdGTycm0AXhq4OXQiOnIACnNu3vRzAEosuSIZGQBhCskVEomAbyzoDB6+gEkZCGr-ORl0ACFsRhPudABlB+5yGQn5gBoD6GAwAA6gwVJQ0udJGpkLwsIUAuRnhAAG7sbAyIjobDFf5QIiSLCaC5Da7oABqRDEa0wlImAE4GXTfriIICQRAwVRPhAoTC+PDsIjtKiAhisTjDocOkEkZcjKSKVSaWJ6YzmYcAL6LQ5yNLoGAEpBPEgFMHPCZFOBbEoQfoAPgglutuBGx3QZ3mbjA5WGpAMtgKEyIuA43BIEAtxQ+JHF3Hmtod+0OgKEpAY7EQYrGwcKGfw2BK6IYmHS5CyRGSRECR1mcgLaS0AHkPhMWR1o7G-pLoEnu5L8YSxMTzAApcicFB4TDmLt9qXFGXaarmW5WmgQOiSGgzlkarKexSHCtVrpuusldLoZuTNtR3Kdlm9ud4gmYInLnfP6DSoXDk7EMwiF4IDig4FQpHwGY+k-Ps90OA8snQMQuCfftK2rKD0HPBsrxbFl524DtsW4Wcv1Qr8oEBAARTFszSFE0TFYi-DfSQ4HOAoACt7z4PB8L7Ac3yHZd4nMOQCjUchMQmAAmABWAA2dUKIIxdh1XLcNzXGCvzgvsD01R1MRITAI3SMR43I79ilwCpyDkczNAmcyDOgPdEOQiArLxdDT1retL2vVsVPbe9iNI59vOfQT3wsMcJynHSVNZYAaNGNh6JFdFMWY3BWPYiAuJ4rA+OS6znl-D8IrnPTu1cqANSM9ATLMsQLK828Sjshy2qcly3E1RQtTcIA#post-ts/MoUQMiDCAqAEBUsBiAlA8gWVgFwO4FN9sBuAKCA)
+
+-----
+
+As an example, consider `'cafȩ́'`.
+
+The JS `string.length` says `6`. The PostgreSQL `CHAR_LENGTH()` may say 8.
+
+-----
+
+### Character Set and characters
+
+This library does not perform character set validation.
+
+So, it is possible to write a query/expression that uses a character that is not allowed by your character set!
+(For example, trying to use emojis with an ASCII character set)
+
+When this happens, your code will compile, but your database will throw errors.
+Or worse, your code may compile but you get garbage results during run-time.
+
+-----
+
+You may create a custom data type, or use the `extraMapper` argument, to validate inputs.
+
+[Code Sample](https://anyhowstep.github.io/tsql-sqlite3-browser/test-playground/public/#pre-ts/CIJQ8gCgBAKgggIQDIFEoEkBiUUA10DKMBUALgO4CmlpA3AFADCIKcMa8yaF1pUAFPShQAkDxroAJhgBy7AOIoQUCCHQBZOCACaUANIpdcAKoww6GcxTqUcqDLAx7xpEgA0Q0QFovUAOoAlqQAFgD2AK58AIZQjAASKIx6UADGoQB2AM6kAE5RAemkHsIiPmTBlFCSUaQxpACeAA6VGQA29VAAblGtAdWklJlQGeWVKb2UhZ4iUZFhObFxWvwATACsawCUUAD0AFTxiXqCIsKoMvIwcfyzIaE52wB8ALxQAAxQcDLAUPSnUOdLtdbvNtgAeV7rNZ-TZ7HbFby+QJ3SJQGKHJKpDLZPIFIrTMohSr9OpNFrpdpdHp9GqDYbpUapCZTERpQqTPjxZZQ7b7DHHP5nWxA-hsgaFJ6vACMn2+v3+gKuooy4tI4MhGxhcPomwY9EaeQA5gBbOpRABGrUoAH0AB4FABmoX44jVDCAA#ts/PQKgUABFEIIDZwgewGYQC4AsCWBnCeEAhgMYkCmuu2ARnORAOZxI1EICeBAdhjvgAU4RDowBOSAK7cAJgDowkaNgC2AByRj0EEMXy4AjohQSVEAEQABQ5OwJgNu3HMBuJVFUatOvRENxsdHIAZggTJDMrR3t-QJCAWhoJAHdccjFXdwgZchJhMQYSJG5cbQ0kRAAuPwM44LkBJAq3EGAwFGkSdGxiiHJuZjxMeDVMIhpydBhZAGU1UnIAeW44LgAKbiIVBmrSsWwBgBoIMSJkmfQxCF3Lg8YASmu-W4GIAG8s7DQ14AA9AG0iPEAF4weIALQgAF0QAASYByIKlNanc6Xe6PD7QbEnSaSMS8VEXMRubEAXyyWBSEG45GSEAAomIJGI1gADWFvTbbMkQFSSUoQAUMBkDAK4TDEOCjcaTfBEWR+eYUfDFVZs+5uClFEradDJciTCAAXhqcER43oa3M+sN6HM9yyciIMhkAGEKpIVCU1licVBbZMAJIyJ7+OQydAAIWwjCD3HQM1jtJka3uhyy2OAwBUBwg9AGWGqAAZM9BsyoiAAPfP9RhFiAAJgArM2y1Bs2quOwZRN0PLFbhlZR28RJFhNGGjBH0G6xqyW83jnXxcNpWM+9MZHMFstVunRxW8wX65hqgBGQ856u1wtnputq9dqW9uXEQfD3CjnVBBNT82RnORCsuexyLsuYpDCMG6TFuO4UHuHAHuSjrYnIaRTOOSDxiQBTbAmaxFHAXolCaAB8EBESRuCIgawYyJqijlOapAGLYBRrEQuAcNwJAQIRxS0l0PTcI8xoUX6HbAEICxSogMhEOg4xcYU7BwPgBzUDkECYOk5BZGcRCBBgdHoHImnpOgyzkGs36Cbk3TFBm-pQJJLlQEQ46YJO1TmAAUuQnAoEM5jOe50A-v02i+VGxE0BAdCSDQoWjhS2KMZSYhcG52KGcZgZmRZWjWbZ4URfZwlOaO2I5WVEDZm6ARRRAABu7DYApjm8BKUhwKGBQAFYOXweDVS5nkTlcvkBUFQyNildU4pFf4xXFCVxQtdVpS5jHkpRikkJKazpGImJ2SUFTkHIJ2aMdzK7dAFKZdlo55XqpnmSUlklWNUA6kJXVhWVtVlRN3lTRYM2rMFEqbYtUmNdgzVtQEnUiX43mSH1uJDV0I1fvD5UJs1q1JRAVbzUD4Xbf6D1QLyJAHUdJ1ne5Oq4Jd13MrdLOko9ihkoxQA#post-ts/MoUQMiDCAqAEBUsBiAlA8gWVgFwO4FN9sBuIA)
+
+-----
+
+### JS `string` max length
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/length
+
+> ECMAScript 2016 (ed. 7) established a maximum length of 2^53 - 1 elements.
+> Previously, no maximum length was specified.
+> In Firefox, strings have a maximum length of 2**30 - 2 (~1GB).
+> In versions prior to Firefox 65, the maximum length was 2**28 - 1 (~256MB).
+
+It is possible to fetch a string from the database that will not fit in a JS `string`.
+
+Not that anyone should be trying to do so, in most cases...
+
+-----
+
+### `dtLongText()`
+
+PostgreSQL `text` supports up to 1GB. So, we cannot use `text`.
+
+https://wiki.postgresql.org/wiki/FAQ#What_is_the_maximum_size_for_a_row.2C_a_table.2C_and_a_database.3F
+
+> Maximum size for a field? 1 GB
+
+-----
+
+SQLite `text` goes up to `(2^31)-1`
+
+https://www.sqlite.org/limits.html
+
+> The current implementation will only support a string or BLOB length up to `(2^31)-1` or `2,147,483,647`
+
+-----
+
+Realistically, you wouldn't want to store or fetch strings of such large lengths, anyway.

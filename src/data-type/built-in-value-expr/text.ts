@@ -125,14 +125,14 @@ export const dtMediumText = makeTextDataType(tm.mysql.mediumText);
 /**
  * + MySQL      : `LONG TEXT`
  * + PostgreSQL : -NA-
- * + SQLite     : `TEXT`
+ * + SQLite     : -NA-
  *
  * This corresponds to MySQL's `LONG TEXT` data type.
  * + Max length: `4,294,967,295`; `(2^32)-1`
  *
  * -----
  *
- * `text` supports up to 1GB. So, we cannot use `text`.
+ * PostgreSQL `text` supports up to 1GB. So, we cannot use `text`.
  *
  * https://wiki.postgresql.org/wiki/FAQ#What_is_the_maximum_size_for_a_row.2C_a_table.2C_and_a_database.3F
  *
@@ -140,10 +140,9 @@ export const dtMediumText = makeTextDataType(tm.mysql.mediumText);
  *
  * -----
  *
- * Realistically, SQLite should support this,
+ * SQLite `text` goes up to `(2^31)-1`
  * https://www.sqlite.org/limits.html
  *
- * However, it is possible that the underlying implementation
- * may be restricted from having a `string` of that length.
+ * > The current implementation will only support a string or BLOB length up to `(2^31)-1` or `2,147,483,647`
  */
 export const dtLongText = makeTextDataType(tm.mysql.longText);
