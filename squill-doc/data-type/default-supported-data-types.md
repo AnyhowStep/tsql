@@ -351,8 +351,8 @@ If this convention is not followed, this library makes no guarantees regarding t
 
 | `@squill/squill`      | MySQL         | PostgreSQL   | SQLite    | Maximum Length
 |-----------------------|---------------|--------------|-----------|----------------
-| `dtChar()`            | `CHAR`        | `CHAR`       | `TEXT`    | `255`; `(2^8)-1`
-| `dtVarChar()`         | `VARCHAR`     | `VARCHAR`    | `TEXT`    | `65,535`; `(2^16)-1`
+| `dtChar()`            | `CHAR`        | `char`       | `TEXT`    | `255`; `(2^8)-1`
+| `dtVarChar()`         | `VARCHAR`     | `varchar`    | `TEXT`    | `65,535`; `(2^16)-1`
 | `dtTinyText()`        | `TINY TEXT`   | `text`       | `TEXT`    | `255`; `(2^8)-1`
 | `dtText()`            | `TEXT`        | `text`       | `TEXT`    | `65,535`; `(2^16)-1`
 | `dtMediumText()`      | `MEDIUM TEXT` | `text`       | `TEXT`    | `16,777,215`; `(2^24)-1`
@@ -441,3 +441,75 @@ https://www.sqlite.org/limits.html
 -----
 
 Realistically, you wouldn't want to store or fetch strings of such large lengths, anyway.
+
+-----
+
+### `Uint8Array`
+
+Database    | String types
+------------|-----------------------
+MySQL       | `BINARY`, `VARBINARY`, `BLOB`
+PostgreSQL  | `bytea`, `LO` (Large Object)
+SQLite      | `BLOB`
+
+References:
++ https://dev.mysql.com/doc/refman/5.7/en/binary-varbinary.html
++ https://dev.mysql.com/doc/refman/5.7/en/blob.html
++ https://www.postgresql.org/docs/9.4/datatype-binary.html
++ https://www.sqlite.org/datatype3.html#storage_classes_and_datatypes
+
+-----
+
+All `BINARY`,`VARBINARY`,`BLOB`, `bytea` types **SHOULD** have a Typescript type of `Uint8Array`.
+
+If this convention is not followed, this library makes no guarantees regarding the consistency of query results.
+
+-----
+
+`node` libraries may use `Buffer`. This is fine because `Buffer extends Uint8Array`.
+
+-----
+
+| `@squill/squill`      | MySQL         | PostgreSQL         | SQLite    | Maximum Length
+|-----------------------|---------------|--------------------|-----------|----------------
+| `dtBinary()`          | `BINARY`      | `bytea`            | `BLOB`    | `255`; `(2^8)-1`
+| `dtVarBinary()`       | `VARBINARY`   | `bytea`            | `BLOB`    | `65,535`; `(2^16)-1`
+| `dtTinyBlob()`        | `TINY BLOB`   | `bytea`            | `BLOB`    | `255`; `(2^8)-1`
+| `dtBlob()`            | `BLOB`        | `bytea`            | `BLOB`    | `65,535`; `(2^16)-1`
+| `dtMediumBlob()`      | `MEDIUM BLOB` | `bytea`            | `BLOB`    | `16,777,215`; `(2^24)-1`
+| `dtLongBlob()`        | `LONG BLOB`   | `LO` (Large Obect) | -NA-      | `4,294,967,295`; `(2^32)-1`
+
+[Code Sample](https://anyhowstep.github.io/tsql-sqlite3-browser/test-playground/public/#pre-ts/CIJQ8gCgBAKgggIQDIFEoEkBiUUA10DKMBUAzgKYDGATuQC4DS5AngNwBQAwiCnDGvGRoKNek2ZQAFOyhQAkCNqMW6ACYYAcvwDiKEFAgh0AWTggAmlAYpLcAKoww6DdxTGUWqBrAwvdpEgANDLyALShUADqAJZ0ABYA9gCudFAAhlCcABIonAxQlAkAdqR01GnRRXTBsnLhUPHkUKppdBl0zAAOTcUANhIAbmm90S105KRQxQ1xTZQj5FUhcgDWLAAMUMhgCFAA9ABU2bkM0nKyqBraMFmSaSmJ1ACUUAB8ALxQm3AawFDs5ygl2ut3u8QSzygAB5PgAmACs8IBTwOexqYQiMXBKXSmRyeQKxVK5Uq1WW9UazVa7S6PSK-SgQxGYwmUyKMzmCyWqxYAEYtkgdvsjvjTgCLh4QZJClVFnQXh8oPyfn9xUDJTdpcVxlUXjCoAikXIUXt2E8OOxOuUAOYAW3aaQARr1yAB9AAelQAZglJIoxCxzewgA#ts/PQKgUABFEIIDZwgewGYQC4AsCWBnCeEAhgMYkCmuu2ARnORAOZxI1EICeBAdhjvgAU4RDowBOSAK7cAJgDowkaNgC2AByRj0EEMXy4AjohQSVEAEQABQ5OwJgNu3HMBuJVFUatOvRENxsdHIAZggTJDMrR3t-QJCAWhoJAHdccjFXdwgZchJhMQYSJG5cbQ0kRAAuPwM44LkBJAq3EGAwIpLtNJIC9ABpci4AXhq4OXQiOnIACnNu3oGOcwBKLLkiGRkAYQrJFRLpgG8s6D9chcGASRkIav85GXQAIWxGS+50AGVX7nIZaeWABoTtBgMAVNhePRuIwsNUAAwgqBglREAAeEGhsMw1QATABWfFIiAAa0G8Nuowez0hRDEHGmBPxQOJKMhmPIMLhEAAjKzweiOVycRAmcSyRweZT7o8Xtw6QyeYDRYSWacAL6rU5yNLoGCSdBId49cgqTnoaZFOB7EoQIYAPggVptuB153I-SuMmWbjAYJgVD2lGICCdmDppCCYnw4YAboVw2IdjkIDQPclyJyIABteHKpkAXTAKGkJHQ2GKGCQAFVIegABwwMRiEQQaalMTS9BiSGMZYQY6nXqSMS8X7JCC1j6N5siabZuSLjsFuSotSWu2OkhyEiJ5PkGAW+HLE9udWKcpjUgGWwFaZEXAcbgkNsdX5livcfsOgdZMFCUgGHYRAZCICY2DSJ1gPwSFqBTTB0nILIiGSIhAjOE1PQ4ORYPSdAAHlfmmYk31yctimBU5TkHKjaIlClqkNKcGybFsGXMAApchOBQPBMBWSjaKoiUpUYms6xnNjZiea0aFTWSBOJc9Th9RRThQtCundLCcJKPDCJmEjinfcjuEE2iaKE6B6MpJiJNYudzEUqzThE2zxOnBz2MuYgzCIXh-OKDgVCkfB0AzD1nKE5ToFUrJuy4SyqI09D5g9RZdLSLQDOIlzoFIj8KOJajiqEsEtgCc0IFjdhsFA0y-EwKQ4BuAoACsyL4PBSro8l3OYyTHPicw5AKNRyDAxl8QANhPcy8uswZRKrAavOk2T5MkGgorymLaNUjUoPQXc23SMR+yS04OlwCpyDkM7NGmM6Dugc94vpX8rJSrTMIy3DsqInqnWMsjP3mqzLoWmyxNW2d2K4ni+J2hbkWACrsCqmqAnqz9Gua1ryA6ssutwIHXKW-r7Lh2ZkasvaqJeqB1SOk6nubC6jJKW77ubR7nrcDVFE1NwgA#post-ts/MoUQMiDCAqAEBUsBiAlA8gWVgZwKYGMAnXAFwGlcBPAbiA)
+
+-----
+
+### JS `Uint8Array` max `byteLength`/`length`
+
+Since we are using a `Uint8Array`, the `byteLength` and `length` should be the same.
+
+Since the properties are of type `number`, we can assume the max length should be around `MAX_SAFE_INTEGER` (9,007,199,254,740,991 = `2^53 - 1`), or less.
+
+-----
+
+### `dtLongBlob()`
+
+`bytea` supports up to 1GB. So, we cannot use `bytea`.
+
+https://dba.stackexchange.com/questions/127270/what-are-the-limits-of-postgresqls-large-object-facility
+> A large object cannot exceed 4TB for PostgreSQL 9.3 or newer, or 2GB for older versions.
+> This is based on the [release notes](https://www.postgresql.org/docs/9.3/release-9-3.html)
+
+From the release notes,
+> Increase the maximum size of large objects from 2GB to 4TB (Nozomi Anzai, Yugo Nagata)
+
+-----
+
+SQLite `BLOB` goes up to `(2^31)-1`
+
+https://www.sqlite.org/limits.html
+
+> The current implementation will only support a string or BLOB length up to `(2^31)-1` or `2,147,483,647`
+
+-----
+
+Realistically, you wouldn't want to store or fetch BLOBs of such large lengths, anyway.
