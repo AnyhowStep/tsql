@@ -3,6 +3,14 @@ import {IDataType} from "../../data-type";
 import {BuiltInExpr_NonCorrelated_NonAggregate} from "../../../built-in-expr";
 import {DataType} from "../../data-type-impl";
 
+/**
+ * A helper function to create an object that implements `IDataType<TypeT>`
+ *
+ * @param mapper - Deserializes data from SQL to JS
+ * @param toBuiltInExpr_NonCorrelated - Serializes a JS value to a squill expression
+ * @param isNullSafeEqual - Determines if two JS values are equal
+ * @param extraMapper - Optional argument. May be used to restrict the domain of valid values.
+ */
 export function makeDataType<TypeT>(
     mapper : tm.SafeMapper<TypeT>,
     toBuiltInExpr_NonCorrelated : (value : TypeT) => BuiltInExpr_NonCorrelated_NonAggregate<TypeT>,

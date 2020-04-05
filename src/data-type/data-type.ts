@@ -12,7 +12,12 @@ import {BuiltInExpr_NonCorrelated_NonAggregate} from "../built-in-expr";
  */
 export interface IDataType<TypeT> extends tm.SafeMapper<TypeT> {
     /**
-     * Used when a helper needs to automatically
+     * Used to serialize a value of `TypeT` to an object this library can use
+     * to build SQL queries with.
+     *
+     * -----
+     *
+     * Also used when a helper needs to automatically
      * fetch data from the database,
      * and immediately send that value back to the database
      * without any help from the programmer.
@@ -34,14 +39,20 @@ export interface IDataType<TypeT> extends tm.SafeMapper<TypeT> {
     toBuiltInExpr_NonCorrelated (value : TypeT) : BuiltInExpr_NonCorrelated_NonAggregate<TypeT>;
 
     /**
-     * At the moment, this is specifically used by `Log.track()`
-     * to determine if data for a column has changed.
+     * Used to determine if two values of `TypeT` are equal.
      *
      * Null-safe equality means if both arguments are `null`,
      * it returns `true`.
      *
      * If one argument is `null` and the other is not,
      * it returns `false`.
+     *
+     * -----
+     *
+     * This is used by `Log.track()`
+     * to determine if data for a column has changed.
+     *
+     * Also used by `TablePerType` to check that all duplicate column aliases have the same value.
      */
     isNullSafeEqual (a : TypeT, b : TypeT) : boolean;
 }
